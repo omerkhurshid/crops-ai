@@ -1,0 +1,150 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    # Warm-up phase
+    - duration: 30
+      arrivalRate: 1
+      name: "Warm-up"
+    # Ramp-up phase
+    - duration: 60
+      arrivalRate: 5
+      name: "Ramp-up"
+    # Load test phase
+    - duration: 120
+      arrivalRate: 10
+      name: "Load test"
+    # Stress test phase
+    - duration: 60
+      arrivalRate: 20
+      name: "Stress test"
+    # Spike test phase
+    - duration: 30
+      arrivalRate: 50
+      name: "Spike test"
+  
+  # Performance thresholds
+  ensure:
+    maxErrorRate: 1
+    p95: 500
+    p99: 1000
+  
+  # Plugins for enhanced reporting
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+    
+  # Variables for dynamic testing
+  variables:
+    lat:
+      - "40.7128"
+      - "34.0522" 
+      - "41.8781"
+    lng:
+      - "-74.0060"
+      - "-118.2437"
+      - "-87.6298"
+
+scenarios:
+  - name: "Health Check"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/health"
+          capture:
+            - json: "$.status"
+              as: "health_status"
+          expect:
+            - statusCode: 200
+            - hasProperty: "status"
+
+  - name: "Authentication Flow"
+    weight: 20
+    flow:
+      # Register new user
+      - post:
+          url: "/api/auth/register"
+          json:
+            email: "test-{{ $randomString() }}@example.com"
+            password: "TestPassword123!"
+            name: "Test User {{ $randomString() }}"
+          capture:
+            - json: "$.user.id"
+              as: "user_id"
+          expect:
+            - statusCode: 201
+
+  - name: "Weather API Endpoints"
+    weight: 30
+    flow:
+      # Current weather
+      - get:
+          url: "/api/weather/current?lat={{ lat }}&lng={{ lng }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: "current"
+      
+      # Weather forecast
+      - get:
+          url: "/api/weather/forecast?lat={{ lat }}&lng={{ lng }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: "forecast"
+      
+      # Agricultural weather
+      - get:
+          url: "/api/weather/agriculture?lat={{ lat }}&lng={{ lng }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Satellite API Endpoints"
+    weight: 25
+    flow:
+      # NDVI calculation
+      - get:
+          url: "/api/satellite/ndvi?lat={{ lat }}&lng={{ lng }}&zoom=14"
+          expect:
+            - statusCode: [200, 202]
+      
+      # Satellite images
+      - get:
+          url: "/api/satellite/images?lat={{ lat }}&lng={{ lng }}&zoom=14"
+          expect:
+            - statusCode: [200, 202]
+
+  - name: "Farms Management"
+    weight: 15
+    flow:
+      # Get farms list
+      - get:
+          url: "/api/farms"
+          expect:
+            - statusCode: [200, 401]
+      
+      # Create new farm (if authenticated)
+      - post:
+          url: "/api/farms"
+          json:
+            name: "Test Farm {{ $randomString() }}"
+            location: 
+              lat: "{{ lat }}"
+              lng: "{{ lng }}"
+            size: 100
+          expect:
+            - statusCode: [201, 401]
+
+  - name: "GraphQL Endpoint"
+    weight: 10
+    flow:
+      - post:
+          url: "/api/graphql"
+          json:
+            query: |
+              query {
+                healthCheck {
+                  status
+                  timestamp
+                }
+              }
+          expect:
+            - statusCode: 200
+            - hasProperty: "data"

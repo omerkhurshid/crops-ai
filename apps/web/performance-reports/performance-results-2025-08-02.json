@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-08-02T20:43:45.786Z",
+  "bundleAnalysis": {
+    "status": "failed",
+    "results": {}
+  },
+  "lighthouse": {
+    "status": "pending",
+    "results": {}
+  },
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "warnings": 1
+  }
+}

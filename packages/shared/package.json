@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "clean": "rm -rf node_modules .turbo"
   },
+  "dependencies": {
+    "@upstash/redis": "^1.25.1"
+  },
   "devDependencies": {
     "@types/node": "^20",
     "eslint": "^8",

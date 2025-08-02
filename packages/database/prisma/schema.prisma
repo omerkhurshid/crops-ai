@@ -1,0 +1,240 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [postgis]
+}
+
+enum UserRole {
+  FARM_OWNER
+  FARM_MANAGER
+  AGRONOMIST
+  ADMIN
+}
+
+enum CropStatus {
+  PLANNED
+  PLANTED
+  GROWING
+  READY_TO_HARVEST
+  HARVESTED
+  FAILED
+}
+
+enum StressLevel {
+  NONE
+  LOW
+  MODERATE
+  HIGH
+  SEVERE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(FARM_OWNER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  ownedFarms    Farm[]
+  managedFarms  FarmManager[]
+  weatherAlerts WeatherAlert[]
+
+  @@map("users")
+}
+
+model Farm {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String
+  latitude  Float
+  longitude Float
+  address   String?
+  region    String?
+  country   String   @default("US")
+  totalArea Float // in hectares
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  owner    User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  fields   Field[]
+  managers FarmManager[]
+
+  @@map("farms")
+}
+
+model FarmManager {
+  id     String @id @default(cuid())
+  farmId String
+  userId String
+
+  // Relations
+  farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([farmId, userId])
+  @@map("farm_managers")
+}
+
+model Field {
+  id          String                     @id @default(cuid())
+  farmId      String
+  name        String
+  area        Float // in hectares
+  boundary    Unsupported("geography")? // PostGIS geography type
+  soilType    String?
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
+
+  // Relations
+  farm            Farm              @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  crops           Crop[]
+  satelliteData   SatelliteData[]
+  weatherData     WeatherData[]
+  recommendations Recommendation[]
+
+  @@map("fields")
+}
+
+model Crop {
+  id                  String     @id @default(cuid())
+  fieldId             String
+  cropType            String
+  variety             String?
+  plantingDate        DateTime
+  expectedHarvestDate DateTime
+  actualHarvestDate   DateTime?
+  status              CropStatus @default(PLANNED)
+  yield               Float? // in kg/hectare
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  // Relations
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@map("crops")
+}
+
+model WeatherData {
+  id           String   @id @default(cuid())
+  fieldId      String
+  timestamp    DateTime
+  temperature  Float // in Celsius
+  humidity     Float // percentage
+  precipitation Float // in mm
+  windSpeed    Float // in m/s
+  windDirection Int // in degrees
+  pressure     Float // in hPa
+  cloudCover   Float // percentage
+  createdAt    DateTime @default(now())
+
+  // Relations
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@map("weather_data")
+}
+
+model WeatherForecast {
+  id                       String   @id @default(cuid())
+  latitude                 Float
+  longitude                Float
+  date                     DateTime
+  minTemp                  Float
+  maxTemp                  Float
+  precipitationProbability Float
+  precipitationAmount      Float?
+  conditions               String
+  createdAt                DateTime @default(now())
+
+  @@map("weather_forecasts")
+}
+
+model WeatherAlert {
+  id          String   @id @default(cuid())
+  userId      String
+  alertType   String // frost, storm, drought, etc.
+  severity    String // low, medium, high, severe
+  message     String
+  isActive    Boolean  @default(true)
+  triggeredAt DateTime @default(now())
+  expiresAt   DateTime?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("weather_alerts")
+}
+
+model SatelliteData {
+  id          String      @id @default(cuid())
+  fieldId     String
+  captureDate DateTime
+  ndvi        Float
+  ndviChange  Float?
+  stressLevel StressLevel @default(NONE)
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+
+  // Relations
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@map("satellite_data")
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  fieldId     String
+  type        String // irrigation, fertilization, planting, harvest, etc.
+  title       String
+  description String
+  priority    String   @default("medium") // low, medium, high, urgent
+  isCompleted Boolean  @default(false)
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@map("recommendations")
+}
+
+model FinancialRecord {
+  id          String   @id @default(cuid())
+  farmId      String?
+  fieldId     String?
+  category    String // input_cost, labor_cost, equipment_cost, revenue
+  subcategory String? // fertilizer, pesticide, fuel, etc.
+  amount      Float
+  currency    String   @default("USD")
+  description String?
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("financial_records")
+}
+
+model MarketPrice {
+  id        String   @id @default(cuid())
+  commodity String
+  market    String
+  price     Float
+  currency  String   @default("USD")
+  unit      String // bushel, ton, kg, etc.
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  @@map("market_prices")
+}

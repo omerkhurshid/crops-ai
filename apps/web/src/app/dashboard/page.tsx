@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth/session'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Navbar } from '@/components/navigation/navbar'
+import { getCurrentUser } from '../../lib/auth/session'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
+import { Navbar } from '../../components/navigation/navbar'
 
 export default async function DashboardPage() {
   const user = await getCurrentUser()

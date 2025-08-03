@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth/session'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Navbar } from '@/components/navigation/navbar'
+import { getCurrentUser } from '../../lib/auth/session'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
+import { Navbar } from '../../components/navigation/navbar'
 
 export default async function FarmsPage() {
   const user = await getCurrentUser()

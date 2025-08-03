@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '@/lib/auth/session'
-import { Navbar } from '@/components/navigation/navbar'
-import { WeatherDashboard } from '@/components/weather/weather-dashboard'
-import { WeatherAnalytics } from '@/components/weather/weather-analytics'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getCurrentUser } from '../../lib/auth/session'
+import { Navbar } from '../../components/navigation/navbar'
+import { WeatherDashboard } from '../../components/weather/weather-dashboard'
+import { WeatherAnalytics } from '../../components/weather/weather-analytics'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 
 export default async function WeatherPage() {
   const user = await getCurrentUser()

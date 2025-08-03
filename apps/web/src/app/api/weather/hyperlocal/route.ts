@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { hyperlocalWeather } from '../../../lib/weather/hyperlocal';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { hyperlocalWeather } from '../../../../lib/weather/hyperlocal';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 
 const hyperlocalSchema = z.object({
   latitude: z.number().min(-90).max(90),

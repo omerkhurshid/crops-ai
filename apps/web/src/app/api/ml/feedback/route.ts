@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { recommendationEngine } from '../../../lib/ml/recommendation-engine';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
-import { getCurrentUser } from '../../../lib/auth/session';
+import { recommendationEngine } from '../../../../lib/ml/recommendation-engine';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
+import { getCurrentUser } from '../../../../lib/auth/session';
 
 const feedbackSchema = z.object({
   recommendationId: z.string().min(1, 'Recommendation ID is required'),

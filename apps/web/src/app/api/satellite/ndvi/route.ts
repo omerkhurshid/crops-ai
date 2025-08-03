@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { ndviAnalysis } from '../../../lib/satellite/ndvi-analysis';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { ndviAnalysis } from '../../../../lib/satellite/ndvi-analysis';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 
 const ndviSchema = z.object({
   type: z.enum(['health', 'trends', 'compare', 'stress']),

@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { historicalWeather } from '../../../lib/weather/historical';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { historicalWeather } from '../../../../lib/weather/historical';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 
 const historicalSchema = z.object({
   latitude: z.number().min(-90).max(90),

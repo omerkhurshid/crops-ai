@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { AuthUtils } from '../../../lib/auth/utils'
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors'
-import { validateRequestBody } from '../../../lib/api/validation'
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware'
+import { AuthUtils } from '../../../../lib/auth/utils'
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors'
+import { validateRequestBody } from '../../../../lib/api/validation'
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
 import { UserRole } from '@crops-ai/shared'
 
 const registerSchema = z.object({

@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { boundaryDetector } from '../../../lib/satellite/boundary-detection';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
-import { getCurrentUser } from '../../../lib/auth/session';
-import { prisma } from '../../../lib/prisma';
+import { boundaryDetector } from '../../../../lib/satellite/boundary-detection';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
+import { getCurrentUser } from '../../../../lib/auth/session';
+import { prisma } from '../../../../lib/prisma';
 
 const boundarySchema = z.object({
   action: z.enum(['detect', 'save', 'list']),

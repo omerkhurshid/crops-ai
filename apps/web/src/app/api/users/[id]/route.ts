@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@crops-ai/database'
-import { createSuccessResponse, NotFoundError } from '../../../lib/api/errors'
-import { validateRequestBody, validatePathParam, updateUserSchema } from '../../../lib/api/validation'
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware'
+import { createSuccessResponse, NotFoundError } from '../../../../lib/api/errors'
+import { validateRequestBody, validatePathParam, updateUserSchema } from '../../../../lib/api/validation'
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
 
 interface RouteContext {
   params: { id: string }

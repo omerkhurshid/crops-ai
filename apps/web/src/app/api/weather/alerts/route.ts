@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { weatherService } from '../../../lib/weather/service';
-import { weatherAlerts } from '../../../lib/weather/alerts';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { weatherService } from '../../../../lib/weather/service';
+import { weatherAlerts } from '../../../../lib/weather/alerts';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 
 const alertsSchema = z.object({
   latitude: z.number().min(-90).max(90),

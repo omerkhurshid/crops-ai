@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { sentinelHub } from '../../../lib/satellite/sentinel-hub';
-import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { sentinelHub } from '../../../../lib/satellite/sentinel-hub';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 
 const satelliteSchema = z.object({
   west: z.number().min(-180).max(180),

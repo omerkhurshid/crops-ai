@@ -7,7 +7,7 @@
 
 import { sentinelHub } from './sentinel-hub';
 import { ndviAnalysis } from './ndvi-analysis';
-import { historicalWeather } from '@/lib/weather/historical';
+import { historicalWeather } from '../weather/historical';
 import type { 
   BoundingBox, 
   CropStressDetection,

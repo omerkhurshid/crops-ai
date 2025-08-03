@@ -8,9 +8,9 @@
 import { sentinelHub } from './sentinel-hub';
 import { ndviAnalysis } from './ndvi-analysis';
 import { queueManager } from './queue-manager';
-import { prisma } from '@/lib/prisma';
-import { redis } from '@/lib/redis';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { prisma } from '../prisma';
+import { redis } from '../redis';
+import { uploadToCloudinary } from '../cloudinary';
 import type { 
   BoundingBox, 
   SatelliteImage, 

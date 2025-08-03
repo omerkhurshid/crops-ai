@@ -2,17 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "functions": {
-    "api/ml-inference.py": {
-      "runtime": "@vercel/python"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/ml/inference",
-      "destination": "/api/ml-inference.py"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",

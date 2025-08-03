@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { Button } from '../components/ui/button'
+import { Button } from '../ui/button'
 
 export function Navbar() {
   const { data: session, status } = useSession()

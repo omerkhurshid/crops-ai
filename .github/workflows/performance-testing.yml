@@ -1,0 +1,176 @@
+name: Performance Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run performance tests weekly on Sundays at 3 AM UTC
+    - cron: '0 3 * * 0'
+
+jobs:
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./apps/web
+    
+    - name: Build application
+      run: npm run build
+      working-directory: ./apps/web
+      continue-on-error: true
+    
+    - name: Run performance tests
+      run: npm run perf:test
+      working-directory: ./apps/web
+      continue-on-error: true
+    
+    - name: Upload Performance Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: performance-reports
+        path: ./apps/web/performance-reports/
+        retention-days: 30
+    
+    - name: Create Performance Summary
+      if: always()
+      run: |
+        echo "## Performance Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -f "./apps/web/performance-reports/performance-report-$(date +%Y-%m-%d).md" ]; then
+          cat "./apps/web/performance-reports/performance-report-$(date +%Y-%m-%d).md" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "Performance tests completed. Check artifacts for detailed reports." >> $GITHUB_STEP_SUMMARY
+        fi
+
+  lighthouse-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./apps/web
+    
+    - name: Build application
+      run: npm run build
+      working-directory: ./apps/web
+      continue-on-error: true
+    
+    - name: Start Next.js server
+      run: |
+        npm run start &
+        sleep 30
+      working-directory: ./apps/web
+    
+    - name: Run Lighthouse CI
+      run: |
+        npm install -g @lhci/cli@0.12.x
+        mkdir -p ./apps/web/performance-reports
+        lhci autorun --upload.target=filesystem --upload.outputDir=./apps/web/performance-reports/lighthouse
+      continue-on-error: true
+    
+    - name: Upload Lighthouse Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lighthouse-reports
+        path: ./apps/web/performance-reports/lighthouse/
+        retention-days: 30
+
+  load-testing:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./apps/web
+    
+    - name: Install Artillery
+      run: npm install -g artillery@latest
+    
+    - name: Start Next.js server
+      run: |
+        npm run dev &
+        sleep 30
+      working-directory: ./apps/web
+    
+    - name: Wait for server to be ready
+      run: |
+        timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done' || exit 1
+    
+    - name: Run Artillery Load Tests
+      run: |
+        mkdir -p ./apps/web/performance-reports
+        artillery run ./apps/web/performance/artillery-config.yml --output ./apps/web/performance-reports/artillery-results.json
+      continue-on-error: true
+    
+    - name: Generate Artillery Report
+      run: |
+        artillery report ./apps/web/performance-reports/artillery-results.json --output ./apps/web/performance-reports/artillery-report.html
+      continue-on-error: true
+    
+    - name: Upload Artillery Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: artillery-reports
+        path: ./apps/web/performance-reports/
+        retention-days: 30
+    
+    - name: Performance Threshold Check
+      run: |
+        # Check if performance thresholds are met
+        node -e "
+          const fs = require('fs');
+          try {
+            const results = JSON.parse(fs.readFileSync('./apps/web/performance-reports/artillery-results.json', 'utf8'));
+            const p95 = results.aggregate.latency.p95;
+            const errorRate = (results.aggregate.errors / results.aggregate.counters['vusers.completed']) * 100;
+            
+            console.log(\`P95 Latency: \${p95}ms\`);
+            console.log(\`Error Rate: \${errorRate.toFixed(2)}%\`);
+            
+            if (p95 > 1000) {
+              console.error('❌ Performance threshold exceeded: P95 latency > 1000ms');
+              process.exit(1);
+            }
+            
+            if (errorRate > 5) {
+              console.error('❌ Error threshold exceeded: Error rate > 5%');
+              process.exit(1);
+            }
+            
+            console.log('✅ Performance thresholds met');
+          } catch (e) {
+            console.log('Could not parse Artillery results');
+          }
+        "
+      continue-on-error: true

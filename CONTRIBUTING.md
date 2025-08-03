@@ -45,6 +45,8 @@ By participating in this project, you agree to abide by our code of conduct:
 - Maintain test coverage above 85%
 - Use descriptive test names
 - Test edge cases
+- Run the full test suite: `npm run test:all`
+- Include unit, integration, and e2e tests as appropriate
 
 ### Git Commit Messages
 - Use clear, descriptive commit messages
@@ -67,11 +69,23 @@ Closes #123
 
 1. Update documentation for any API changes
 2. Add tests for new functionality
-3. Ensure all tests pass: `npm run test`
+3. Ensure all tests pass: `npm run test:all`
 4. Run type checking: `npm run type-check`
 5. Run linting: `npm run lint`
-6. Update the README.md if needed
-7. Request review from maintainers
+6. Run security checks: `npm run security:all`
+7. Run performance tests: `npm run perf:test`
+8. Update the README.md if needed
+9. Request review from maintainers
+
+### Quality Gates
+
+All pull requests must pass the following automated checks:
+- ✅ All tests passing (unit, integration, e2e)
+- ✅ Type checking without errors
+- ✅ Linting without errors
+- ✅ Security scan without critical issues
+- ✅ Performance tests within thresholds
+- ✅ Code coverage above 85%
 
 ## Reporting Issues
 

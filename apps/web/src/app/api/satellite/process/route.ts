@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { imageProcessor } from '@/lib/satellite/image-processor';
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors';
-import { apiMiddleware, withMethods } from '@/lib/api/middleware';
-import { getCurrentUser } from '@/lib/auth/session';
+import { imageProcessor } from '../../../lib/satellite/image-processor';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { getCurrentUser } from '../../../lib/auth/session';
 
 const processSchema = z.object({
   action: z.enum(['submit', 'status', 'batch']),

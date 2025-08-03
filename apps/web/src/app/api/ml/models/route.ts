@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { yieldPrediction } from '@/lib/ml/yield-prediction';
-import { dataPipeline } from '@/lib/ml/data-pipeline';
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors';
-import { apiMiddleware, withMethods } from '@/lib/api/middleware';
-import { getCurrentUser } from '@/lib/auth/session';
+import { yieldPrediction } from '../../../lib/ml/yield-prediction';
+import { dataPipeline } from '../../../lib/ml/data-pipeline';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { getCurrentUser } from '../../../lib/auth/session';
 
 const trainModelSchema = z.object({
   dataSource: z.enum(['pipeline', 'custom']).default('pipeline'),

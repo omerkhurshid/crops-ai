@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { queueManager } from '@/lib/satellite/queue-manager';
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors';
-import { apiMiddleware, withMethods } from '@/lib/api/middleware';
-import { getCurrentUser } from '@/lib/auth/session';
+import { queueManager } from '../../../lib/satellite/queue-manager';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { getCurrentUser } from '../../../lib/auth/session';
 
 const queueActionSchema = z.object({
   action: z.enum(['start', 'stop', 'status', 'metrics', 'retry-process']),

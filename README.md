@@ -18,12 +18,17 @@ Crops.AI democratizes access to precision agriculture tools for farms of all siz
 ## Tech Stack
 
 - **Frontend**: Next.js 14+, React, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes, Prisma ORM
+- **Backend**: Next.js API Routes, GraphQL (Apollo Server), Prisma ORM
 - **Database**: PostgreSQL with PostGIS (Supabase/Neon)
-- **Authentication**: NextAuth.js / Clerk
+- **Cache**: Upstash Redis
+- **Authentication**: NextAuth.js
 - **Hosting**: Vercel
+- **Storage**: Cloudinary
 - **Mobile**: React Native with Expo
 - **AI/ML**: Python with TensorFlow/PyTorch, deployed on Modal/Replicate
+- **Testing**: Jest, React Testing Library, Playwright
+- **Security**: ESLint Security Plugin, Snyk, OWASP
+- **Performance**: Artillery.js, Lighthouse CI
 
 ## Project Structure
 
@@ -75,11 +80,37 @@ npm run dev
 
 ### Available Scripts
 
+#### Development
 - `npm run dev` - Start all apps in development mode
 - `npm run build` - Build all apps for production
+- `npm run start` - Start production server
+- `npm run clean` - Clean build artifacts
+
+#### Code Quality
 - `npm run lint` - Run ESLint across all packages
-- `npm run test` - Run tests across all packages
 - `npm run type-check` - Run TypeScript type checking
+
+#### Testing
+- `npm run test` - Run unit tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Run tests with coverage
+- `npm run test:integration` - Run integration tests
+- `npm run test:e2e` - Run end-to-end tests
+- `npm run test:all` - Run all test suites
+
+#### Security
+- `npm run security:lint` - Run ESLint security scan
+- `npm run security:audit` - Run npm audit
+- `npm run security:snyk` - Run Snyk vulnerability scan
+- `npm run security:scan` - Run comprehensive security audit
+- `npm run security:all` - Run all security checks
+
+#### Performance
+- `npm run perf:test` - Run performance testing suite
+- `npm run perf:load` - Run Artillery load tests
+- `npm run perf:bundle` - Analyze bundle size
+- `npm run perf:lighthouse` - Run Lighthouse audit
+- `npm run perf:all` - Run all performance tests
 
 ### Contributing
 
@@ -95,10 +126,31 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ### Security
 
-- No hardcoded credentials
-- Input validation and sanitization
-- Principle of least privilege
-- Structured error handling
+- **Authentication**: Secure session management with NextAuth.js
+- **Input Validation**: Zod schemas for API validation
+- **Security Headers**: CSP, HSTS, X-Frame-Options implementation
+- **Vulnerability Scanning**: ESLint Security Plugin, npm audit, Snyk
+- **OWASP Compliance**: Top 10 security controls implemented
+- **Rate Limiting**: API endpoint protection
+- **Dependency Security**: Automated vulnerability monitoring
+
+### Testing & Quality Assurance
+
+- **Unit Testing**: Jest with React Testing Library
+- **Integration Testing**: API endpoint testing
+- **End-to-End Testing**: Playwright for user workflows
+- **Security Testing**: Comprehensive vulnerability scanning
+- **Performance Testing**: Artillery.js load testing and Lighthouse audits
+- **Code Coverage**: 85%+ coverage requirement
+- **CI/CD Integration**: Automated testing in GitHub Actions
+
+### Performance
+
+- **Bundle Optimization**: Code splitting and tree shaking
+- **Load Testing**: Artillery.js with performance thresholds
+- **Core Web Vitals**: Lighthouse CI monitoring
+- **Performance Budgets**: Automated performance regression detection
+- **Caching Strategy**: Redis caching and CDN optimization
 
 ## Roadmap
 

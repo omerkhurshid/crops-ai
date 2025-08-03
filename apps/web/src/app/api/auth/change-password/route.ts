@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { AuthUtils } from '@/lib/auth/utils'
-import { requireAuth } from '@/lib/auth/session'
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors'
-import { validateRequestBody } from '@/lib/api/validation'
-import { apiMiddleware, withMethods } from '@/lib/api/middleware'
+import { AuthUtils } from '../../../../lib/auth/utils'
+import { requireAuth } from '../../../../lib/auth/session'
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors'
+import { validateRequestBody } from '../../../../lib/api/validation'
+import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
 import { prisma } from '@crops-ai/database'
 
 const changePasswordSchema = z.object({

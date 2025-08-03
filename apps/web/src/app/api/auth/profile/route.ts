@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { requireAuth } from '@/lib/auth/session'
-import { createSuccessResponse, handleApiError } from '@/lib/api/errors'
-import { validateRequestBody } from '@/lib/api/validation'
-import { apiMiddleware, withMethods } from '@/lib/api/middleware'
+import { requireAuth } from '../../../lib/auth/session'
+import { createSuccessResponse, handleApiError } from '../../../lib/api/errors'
+import { validateRequestBody } from '../../../lib/api/validation'
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware'
 import { prisma } from '@crops-ai/database'
 
 const updateProfileSchema = z.object({

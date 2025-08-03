@@ -1,0 +1,87 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./apps/web
+    
+    - name: Run unit tests with coverage
+      run: npm run test:coverage
+      working-directory: ./apps/web
+      env:
+        CI: true
+    
+    - name: Run integration tests with coverage
+      run: npm run test:integration:coverage
+      working-directory: ./apps/web
+      env:
+        CI: true
+        DATABASE_URL: file:./test.db
+    
+    - name: Upload unit test coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./apps/web/coverage/lcov.info
+        flags: unit
+        name: unit-tests
+        fail_ci_if_error: false
+    
+    - name: Upload integration test coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./apps/web/coverage/lcov.info
+        flags: integration
+        name: integration-tests
+        fail_ci_if_error: false
+    
+    - name: Generate coverage summary
+      run: |
+        echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Unit Tests" >> $GITHUB_STEP_SUMMARY
+        cat ./apps/web/coverage/lcov-report/index.html | grep -A 4 "percentage" | head -5 >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+      if: always()
+    
+    - name: Archive coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports-${{ matrix.node-version }}
+        path: |
+          ./apps/web/coverage/lcov-report
+          ./apps/web/coverage/cobertura-coverage.xml
+        retention-days: 30
+    
+    - name: Comment PR with coverage
+      uses: ArtiomTr/jest-coverage-report-action@v2
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./apps/web
+        coverage-file: ./coverage/lcov.info
+        base-coverage-file: ./coverage/lcov.info
+        threshold: 80

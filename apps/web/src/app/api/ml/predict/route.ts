@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { yieldPrediction } from '@/lib/ml/yield-prediction';
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors';
-import { apiMiddleware, withMethods } from '@/lib/api/middleware';
-import { getCurrentUser } from '@/lib/auth/session';
+import { yieldPrediction } from '../../../lib/ml/yield-prediction';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
+import { getCurrentUser } from '../../../lib/auth/session';
 
 const yieldPredictionSchema = z.object({
   fieldId: z.string().min(1, 'Field ID is required'),

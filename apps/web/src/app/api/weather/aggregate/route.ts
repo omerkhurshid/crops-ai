@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { weatherAggregator } from '@/lib/weather/aggregator';
-import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors';
-import { apiMiddleware, withMethods } from '@/lib/api/middleware';
+import { weatherAggregator } from '../../../lib/weather/aggregator';
+import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors';
+import { apiMiddleware, withMethods } from '../../../lib/api/middleware';
 
 const aggregateSchema = z.object({
   latitude: z.number().min(-90).max(90),

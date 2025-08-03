@@ -1,9 +1,9 @@
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { NextRequest } from 'next/server'
-import { typeDefs } from '../../lib/graphql/schema'
-import { resolvers } from '../../lib/graphql/resolvers'
-import { createContext, GraphQLContext } from '../../lib/graphql/context'
+import { typeDefs } from '../../../lib/graphql/schema'
+import { resolvers } from '../../../lib/graphql/resolvers'
+import { createContext, GraphQLContext } from '../../../lib/graphql/context'
 import { Logger } from '@crops-ai/shared'
 
 // Create Apollo Server instance

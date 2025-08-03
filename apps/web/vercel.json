@@ -62,11 +62,7 @@
   "crons": [
     {
       "path": "/api/cron/weather-update",
-      "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/cron/satellite-sync",
-      "schedule": "0 2 * * *"
+      "schedule": "0 12 * * *"
     }
   ]
 }

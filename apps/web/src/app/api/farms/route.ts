@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '@crops-ai/database'
-import { createSuccessResponse } from '../../lib/api/errors'
-import { validateRequestBody, validateQueryParams, createFarmSchema, paginationSchema } from '../../lib/api/validation'
-import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../lib/api/middleware'
+import { createSuccessResponse } from '../../../lib/api/errors'
+import { validateRequestBody, validateQueryParams, createFarmSchema, paginationSchema } from '../../../lib/api/validation'
+import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
 
 // GET /api/farms - List farms with pagination
 export const GET = apiMiddleware.protected(

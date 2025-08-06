@@ -11,6 +11,9 @@ export async function GET() {
         nextauth_url: process.env.NEXTAUTH_URL || 'NOT SET',
         nextauth_secret_set: !!process.env.NEXTAUTH_SECRET,
         nextauth_secret_length: process.env.NEXTAUTH_SECRET?.length || 0,
+        nextauth_secret_preview: process.env.NEXTAUTH_SECRET ? 
+          process.env.NEXTAUTH_SECRET.substring(0, 5) + '...' + process.env.NEXTAUTH_SECRET.substring(process.env.NEXTAUTH_SECRET.length - 5) : 
+          'NOT SET',
       },
       database: {
         database_url_set: !!process.env.DATABASE_URL,
@@ -31,6 +34,12 @@ export async function GET() {
         vercel_env: process.env.VERCEL_ENV || 'NOT SET',
         vercel_url: process.env.VERCEL_URL || 'NOT SET',
       },
+      all_env_keys: Object.keys(process.env).filter(key => 
+        !key.includes('SECRET') && 
+        !key.includes('PASSWORD') && 
+        !key.includes('KEY') && 
+        !key.includes('TOKEN')
+      ).sort(),
       checks: {
         nextauth_url_matches_host: false,
         auth_can_initialize: false,

@@ -94,6 +94,10 @@ export default async function DashboardPage() {
                     <div className="font-medium text-gray-900">Generate Report</div>
                     <div className="text-sm text-gray-500">Create analysis reports</div>
                   </Link>
+                  <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
+                    <div className="font-medium text-gray-900">AI Insights</div>
+                    <div className="text-sm text-gray-500">Get intelligent recommendations</div>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

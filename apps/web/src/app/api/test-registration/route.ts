@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
         <input type="password" id="password" placeholder="Password" value="TestPass123!">
         <button onclick="testRegistration()">Test Registration</button>
         <button onclick="testRegularRegistration()">Test Regular Registration</button>
+        <button onclick="testSimpleRegistration()">Test Simple Registration</button>
     </div>
     
     <div id="result"></div>
@@ -68,6 +69,28 @@ export async function GET(request: NextRequest) {
                 
                 const data = await response.json();
                 result.innerHTML = '<h3>Regular Registration Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                result.innerHTML = '<h3>Error:</h3><pre>' + error.message + '</pre>';
+            }
+        }
+        
+        async function testSimpleRegistration() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing simple registration...';
+            
+            try {
+                const response = await fetch('/api/auth/register-simple', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        name: document.getElementById('name').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = '<h3>Simple Registration Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
             } catch (error) {
                 result.innerHTML = '<h3>Error:</h3><pre>' + error.message + '</pre>';
             }

@@ -49,6 +49,8 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
+        // Temporarily commenting out database auth for debugging
+        /*
         try {
           // Find user by email
           const user = await prisma.user.findUnique({
@@ -76,6 +78,10 @@ export const authOptions: NextAuthOptions = {
           // If database fails, only demo users work
           return null
         }
+        */
+        
+        // For debugging: only allow demo users for now
+        return null
       }
     })
   ],

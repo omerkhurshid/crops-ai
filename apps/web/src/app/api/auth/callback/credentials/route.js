@@ -1,9 +1,23 @@
-import { NextRequest } from 'next/server'
-
 export async function POST(request) {
   try {
-    const body = await request.json()
-    const { email, password } = body
+    let email, password;
+    
+    // Check content type
+    const contentType = request.headers.get('content-type');
+    
+    if (contentType?.includes('application/json')) {
+      // Handle JSON
+      const body = await request.json();
+      email = body.email;
+      password = body.password;
+    } else {
+      // Handle form data
+      const formData = await request.formData();
+      email = formData.get('email');
+      password = formData.get('password');
+    }
+
+    console.log('Login attempt:', { email, hasPassword: !!password });
 
     // Demo users
     const demoUsers = [
@@ -26,15 +40,23 @@ export async function POST(request) {
     const user = demoUsers.find(u => u.email === email && u.password === password)
 
     if (!user) {
-      return Response.json({ url: 'https://crops-ai-gray.vercel.app/api/auth/error?error=CredentialsSignin' }, { status: 401 })
+      console.log('Login failed: Invalid credentials');
+      return Response.json({ 
+        url: 'https://crops-ai-gray.vercel.app/api/auth/error?error=CredentialsSignin' 
+      })
     }
 
+    console.log('Login successful:', user.email);
+    
     // In a real implementation, set a session cookie here
-    // For now, just return success
-    return Response.json({ url: 'https://crops-ai-gray.vercel.app/dashboard' })
+    // For now, just return success redirect
+    return Response.json({ 
+      url: 'https://crops-ai-gray.vercel.app/dashboard' 
+    })
   } catch (error) {
+    console.error('Auth error:', error);
     return Response.json({ 
       url: 'https://crops-ai-gray.vercel.app/api/auth/error?error=Configuration' 
-    }, { status: 500 })
+    })
   }
 }

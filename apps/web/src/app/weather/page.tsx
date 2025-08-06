@@ -5,6 +5,8 @@ import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 
+export const dynamic = 'force-dynamic'
+
 export default async function WeatherPage() {
   const user = await getCurrentUser()
 

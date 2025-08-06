@@ -5,6 +5,8 @@ import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
 import { Navbar } from '../../components/navigation/navbar'
 
+export const dynamic = 'force-dynamic'
+
 export default async function FieldsPage() {
   const user = await getCurrentUser()
 

@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Button } from '../../components/ui/button'
 import { Navbar } from '../../components/navigation/navbar'
 
+export const dynamic = 'force-dynamic'
+
 export default async function FarmsPage() {
   const user = await getCurrentUser()
 

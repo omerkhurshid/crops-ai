@@ -3,6 +3,8 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Navbar } from '../../components/navigation/navbar'
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 

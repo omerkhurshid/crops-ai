@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Navbar } from '../../components/navigation/navbar'
@@ -81,18 +82,18 @@ export default async function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
+                  <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
                     <div className="font-medium text-gray-900">Create New Farm</div>
                     <div className="text-sm text-gray-500">Add a new farm to your portfolio</div>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
+                  </Link>
+                  <Link href="/weather" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
                     <div className="font-medium text-gray-900">View Weather Data</div>
                     <div className="text-sm text-gray-500">Check current weather conditions</div>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
+                  </Link>
+                  <Link href="/reports" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
                     <div className="font-medium text-gray-900">Generate Report</div>
                     <div className="text-sm text-gray-500">Create analysis reports</div>
-                  </button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

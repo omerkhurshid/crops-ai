@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../../../lib/prisma'
 import { createSuccessResponse, NotFoundError, AuthorizationError } from '../../../../lib/api/errors'
 import { validateRequestBody, validatePathParam, updateFarmSchema } from '../../../../lib/api/validation'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../lib/api/middleware'

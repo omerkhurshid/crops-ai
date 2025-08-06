@@ -6,7 +6,7 @@ import { createMocks } from 'node-mocks-http'
 // Test core functionality without middleware first
 describe('/api/health core functionality', () => {
   it('should test database and cache mocks directly', async () => {
-    const { prisma } = require('@crops-ai/database')
+    const { prisma } = require('../../lib/prisma')
     const { CacheService } = require('@crops-ai/shared')
 
     // Test mocks work
@@ -34,7 +34,7 @@ describe('/api/health core functionality', () => {
 
 describe('/api/health', () => {
   it('should test core health logic without middleware', async () => {
-    const { prisma } = require('@crops-ai/database')
+    const { prisma } = require('../../lib/prisma')
     const { CacheService } = require('@crops-ai/shared')
     const { createSuccessResponse } = require('../../lib/api/errors')
 
@@ -92,7 +92,7 @@ describe('/api/health', () => {
 
   it('should work with proper NextRequest mock', async () => {
     // Create a simplified version without complex middleware for now
-    const { prisma } = require('@crops-ai/database')
+    const { prisma } = require('../../lib/prisma')
     const { CacheService, PerformanceMonitor } = require('@crops-ai/shared')
     const { createSuccessResponse } = require('../../lib/api/errors')
     

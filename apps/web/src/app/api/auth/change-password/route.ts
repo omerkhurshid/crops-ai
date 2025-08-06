@@ -5,7 +5,7 @@ import { requireAuth } from '../../../../lib/auth/session'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors'
 import { validateRequestBody } from '../../../../lib/api/validation'
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../../../lib/prisma'
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../../lib/prisma'
 import { CacheService } from '@crops-ai/shared'
 import { createSuccessResponse } from '../../../lib/api/errors'
 import { apiMiddleware, withMethods } from '../../../lib/api/middleware'

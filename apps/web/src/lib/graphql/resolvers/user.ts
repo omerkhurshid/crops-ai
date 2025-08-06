@@ -1,4 +1,4 @@
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../prisma'
 import { GraphQLContext } from '../context'
 import { AuthenticationError, AuthorizationError, NotFoundError } from '../../api/errors'
 

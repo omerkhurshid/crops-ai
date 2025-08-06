@@ -4,7 +4,7 @@ import { requireAuth } from '../../../../lib/auth/session'
 import { createSuccessResponse, handleApiError } from '../../../../lib/api/errors'
 import { validateRequestBody } from '../../../../lib/api/validation'
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../../../lib/prisma'
 
 const updateProfileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),

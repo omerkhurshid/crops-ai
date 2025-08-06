@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../prisma'
 import { UserRole } from '@crops-ai/shared'
 
 export class AuthUtils {

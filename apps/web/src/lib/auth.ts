@@ -1,6 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { prisma } from '@crops-ai/database'
+import { prisma } from './prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'

@@ -1,13 +1,12 @@
 import { NextAuthOptions } from 'next-auth'
-// import { PrismaAdapter } from '@auth/prisma-adapter'
-// import { prisma } from './prisma'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { prisma } from '@crops-ai/database'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
-  // Temporarily disable adapter to test NextAuth routing
-  // adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
+  adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -49,8 +48,7 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
-        // Temporarily commenting out database auth for debugging
-        /*
+        // Try database authentication
         try {
           // Find user by email
           const user = await prisma.user.findUnique({
@@ -78,10 +76,6 @@ export const authOptions: NextAuthOptions = {
           // If database fails, only demo users work
           return null
         }
-        */
-        
-        // For debugging: only allow demo users for now
-        return null
       }
     })
   ],

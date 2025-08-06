@@ -8,6 +8,7 @@ import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Textarea } from '../../../components/ui/textarea'
 import { Navbar } from '../../../components/navigation/navbar'
+import { MapFieldSelector } from '../../../components/farm/map-field-selector'
 
 interface Field {
   id: string
@@ -56,6 +57,7 @@ export default function CreateFarmPage() {
     fields: []
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [showMapSelector, setShowMapSelector] = useState<string | null>(null)
   const router = useRouter()
 
   const addField = () => {
@@ -297,10 +299,7 @@ export default function CreateFarmPage() {
                                 type="button" 
                                 variant="outline" 
                                 className="mt-2"
-                                onClick={() => {
-                                  // This would open a map modal
-                                  alert('Map integration coming soon! For now, you can proceed without defining the perimeter.')
-                                }}
+                                onClick={() => setShowMapSelector(field.id)}
                               >
                                 Open Map
                               </Button>
@@ -439,6 +438,18 @@ export default function CreateFarmPage() {
                 </CardContent>
               </Card>
             </div>
+          )}
+
+          {/* Map Field Selector Modal */}
+          {showMapSelector && (
+            <MapFieldSelector
+              fieldId={showMapSelector}
+              onBoundariesDetected={(boundaries) => {
+                updateField(showMapSelector, { perimeter: boundaries })
+                setShowMapSelector(null)
+              }}
+              onClose={() => setShowMapSelector(null)}
+            />
           )}
         </div>
       </main>

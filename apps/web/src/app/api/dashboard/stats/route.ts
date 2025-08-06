@@ -15,7 +15,7 @@ export const GET = apiMiddleware.protected(
       }
 
       // Get user's farms and fields data
-      const [farms, fields, recentActivity, weatherAlerts] = await Promise.all([
+      const [farms, fields, , weatherAlerts] = await Promise.all([
         // Get farms count and basic info
         prisma.farm.findMany({
           where: { ownerId: user.id },
@@ -24,7 +24,16 @@ export const GET = apiMiddleware.protected(
               select: {
                 id: true,
                 name: true,
-                area: true
+                area: true,
+                satelliteData: {
+                  where: {
+                    captureDate: {
+                      gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+                    }
+                  },
+                  orderBy: { captureDate: 'desc' },
+                  take: 5
+                }
               }
             }
           }
@@ -37,26 +46,8 @@ export const GET = apiMiddleware.protected(
           }
         }),
 
-        // Get recent activity (last 30 days)
-        prisma.farm.findMany({
-          where: { ownerId: user.id },
-          include: {
-            fields: {
-              include: {
-                satelliteData: {
-                  where: {
-                    captureDate: {
-                      gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-                    }
-                  },
-                  orderBy: { captureDate: 'desc' },
-                  take: 5
-                }
-              }
-            }
-          },
-          take: 5
-        }),
+        // Placeholder for recent activity (data already included in farms query above)
+        Promise.resolve(null),
 
         // Simulate weather alerts count (would be real API call)
         Promise.resolve(Math.floor(Math.random() * 3)) // 0-2 alerts

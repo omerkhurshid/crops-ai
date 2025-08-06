@@ -2,17 +2,12 @@ import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@crops-ai/database'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import GoogleProvider from 'next-auth/providers/google'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -103,27 +98,8 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account, profile }) {
-      if (account?.provider === 'google') {
-        // Handle Google OAuth sign in
-        if (!user.email) return false
-        
-        // Check if user exists, create if not
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email }
-        })
-        
-        if (!existingUser) {
-          // Create new user with default role
-          await prisma.user.create({
-            data: {
-              email: user.email,
-              name: user.name || 'Unknown User',
-              role: 'FARM_OWNER' // Default role
-            }
-          })
-        }
-      }
-      return true
+      // Only allow credentials provider for now
+      return account?.provider === 'credentials'
     }
   },
   pages: {

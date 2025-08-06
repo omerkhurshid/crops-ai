@@ -43,9 +43,9 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
     }
   }
 
-  const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl })
-  }
+  // const handleGoogleSignIn = () => {
+  //   signIn('google', { callbackUrl })
+  // }
 
   return (
     <Card className="w-full max-w-md">
@@ -91,6 +91,8 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
           </Button>
         </form>
         
+        {/* Google OAuth temporarily disabled */}
+        {/* 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -108,6 +110,7 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
         >
           Sign in with Google
         </Button>
+        */}
 
         {/* Demo Credentials Info */}
         <div className="mt-4 p-4 bg-blue-50 rounded-md border border-blue-200">

@@ -52,6 +52,18 @@ export function Navbar() {
                 >
                   AI Insights
                 </Link>
+                <Link
+                  href="/crop-health"
+                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Crop Health
+                </Link>
+                <Link
+                  href="/weather/alerts"
+                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Weather Alerts
+                </Link>
               </div>
             )}
           </div>

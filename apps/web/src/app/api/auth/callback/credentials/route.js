@@ -48,11 +48,25 @@ export async function POST(request) {
 
     console.log('Login successful:', user.email);
     
-    // In a real implementation, set a session cookie here
-    // For now, just return success redirect
-    return Response.json({ 
+    // Create a simple session token
+    const sessionData = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+    }
+    
+    const sessionToken = Buffer.from(JSON.stringify(sessionData)).toString('base64')
+    
+    // Set session cookie and redirect
+    const response = Response.json({ 
       url: 'https://crops-ai-gray.vercel.app/dashboard' 
     })
+    
+    response.headers.set('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`)
+    
+    return response
   } catch (error) {
     console.error('Auth error:', error);
     return Response.json({ 

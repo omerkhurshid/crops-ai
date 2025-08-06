@@ -17,17 +17,43 @@ export interface SessionUser {
  */
 export async function getCurrentUser(): Promise<SessionUser | null> {
   try {
+    // Try NextAuth first (for when it's working)
     const session = await getServerSession(authOptions)
     
-    if (!session?.user) {
+    if (session?.user) {
+      return {
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        role: session.user.role
+      }
+    }
+
+    // Fallback to our simple session cookie
+    const { cookies } = await import('next/headers')
+    const sessionCookie = cookies().get('session')
+    
+    if (!sessionCookie) {
       return null
     }
 
-    return {
-      id: session.user.id,
-      email: session.user.email,
-      name: session.user.name,
-      role: session.user.role
+    try {
+      const sessionData = JSON.parse(Buffer.from(sessionCookie.value, 'base64').toString())
+      
+      // Check if session is expired
+      if (Date.now() > sessionData.exp) {
+        return null
+      }
+
+      return {
+        id: sessionData.id,
+        email: sessionData.email,
+        name: sessionData.name,
+        role: sessionData.role as UserRole
+      }
+    } catch (cookieError) {
+      console.error('Error parsing session cookie:', cookieError)
+      return null
     }
   } catch (error) {
     console.error('Error getting current user:', error)

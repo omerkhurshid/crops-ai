@@ -6,7 +6,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
-import { MapPin, Move, Square, Polygon, RotateCcw, Check, X } from 'lucide-react'
+import { MapPin, Move, Square, RotateCcw, Check, X, Shapes } from 'lucide-react'
 
 interface InteractiveFieldMapProps {
   fieldId: string
@@ -453,7 +453,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   {mode === 'manual' && points.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-white bg-opacity-90 rounded-lg p-4 text-center">
-                        <Polygon className="h-8 w-8 mx-auto mb-2 text-gray-600" />
+                        <Shapes className="h-8 w-8 mx-auto mb-2 text-gray-600" />
                         <p className="font-medium text-gray-800">Click to add points</p>
                         <p className="text-sm text-gray-600">Create your field boundary</p>
                       </div>

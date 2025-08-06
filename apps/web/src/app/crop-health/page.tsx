@@ -238,7 +238,7 @@ export default function CropHealthPage() {
                 <option value="">Select a field...</option>
                 {fields.map((field) => (
                   <option key={field.id} value={field.id}>
-                    {field.displayName} {field.crop ? `(${field.crop})` : ''}
+                    {field.displayName} {field.area ? `(${field.area} ha)` : ''}
                   </option>
                 ))}
               </select>

@@ -24,9 +24,7 @@ export const GET = apiMiddleware.protected(
               select: {
                 id: true,
                 name: true,
-                crop: true,
-                size: true,
-                isActive: true
+                area: true
               }
             }
           }
@@ -35,8 +33,7 @@ export const GET = apiMiddleware.protected(
         // Get active fields count
         prisma.field.count({
           where: {
-            farm: { ownerId: user.id },
-            isActive: true
+            farm: { ownerId: user.id }
           }
         }),
 
@@ -123,7 +120,7 @@ export const GET = apiMiddleware.protected(
 
       // Calculate total farm area
       const totalArea = farms.reduce((sum, farm) => {
-        return sum + farm.fields.reduce((fieldSum, field) => fieldSum + (field.size || 0), 0)
+        return sum + farm.fields.reduce((fieldSum, field) => fieldSum + (field.area || 0), 0)
       }, 0)
 
       // Health score simulation (would be from actual satellite analysis)
@@ -141,13 +138,11 @@ export const GET = apiMiddleware.protected(
         farms: farms.map(farm => ({
           id: farm.id,
           name: farm.name,
-          description: farm.description,
-          type: farm.type,
+          totalArea: farm.totalArea,
           fieldsCount: farm.fields.length,
-          activeFieldsCount: farm.fields.filter(f => f.isActive).length,
-          totalArea: Math.round(farm.fields.reduce((sum, field) => sum + (field.size || 0), 0) * 100) / 100,
-          createdAt: farm.createdAt,
-          crops: farm.fields.map(f => f.crop).filter(Boolean)
+          activeFieldsCount: farm.fields.length, // All fields are considered active for now
+          fieldsTotalArea: Math.round(farm.fields.reduce((sum, field) => sum + (field.area || 0), 0) * 100) / 100,
+          createdAt: farm.createdAt
         })),
         recentActivity: recentActivities.map(activity => ({
           ...activity,

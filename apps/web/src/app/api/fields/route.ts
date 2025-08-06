@@ -27,9 +27,8 @@ export const GET = apiMiddleware.protected(
         whereConditions.farmId = farmId
       }
 
-      if (!includeInactive) {
-        whereConditions.isActive = true
-      }
+      // Note: isActive field doesn't exist in current schema
+      // All fields are considered active for now
 
       // Fetch fields with farm information
       const fields = await prisma.field.findMany({
@@ -38,8 +37,7 @@ export const GET = apiMiddleware.protected(
           farm: {
             select: {
               id: true,
-              name: true,
-              type: true
+              name: true
             }
           },
           satelliteData: {
@@ -64,10 +62,8 @@ export const GET = apiMiddleware.protected(
         name: field.name,
         farmId: field.farmId,
         farmName: field.farm?.name || 'Unknown Farm',
-        crop: field.crop,
-        size: field.size,
-        isActive: field.isActive,
-        location: field.location,
+        area: field.area,
+        soilType: field.soilType,
         createdAt: field.createdAt,
         displayName: `${field.farm?.name || 'Unknown'} - ${field.name}`,
         lastAnalysis: field.satelliteData?.[0] ? {
@@ -92,9 +88,9 @@ export const GET = apiMiddleware.protected(
         fieldsByFarm,
         summary: {
           totalFields: transformedFields.length,
-          activeFields: transformedFields.filter(f => f.isActive).length,
+          activeFields: transformedFields.length, // All fields considered active
           farmsCount: Object.keys(fieldsByFarm).length,
-          crops: [...new Set(transformedFields.map(f => f.crop).filter(Boolean))]
+          totalArea: transformedFields.reduce((sum, field) => sum + (field.area || 0), 0)
         },
         message: `Retrieved ${transformedFields.length} fields`
       })
@@ -116,7 +112,7 @@ export const POST = apiMiddleware.protected(
       }
 
       const body = await request.json()
-      const { farmId, name, crop, size, location, perimeter } = body
+      const { farmId, name, area, soilType, location, perimeter } = body
 
       // Verify farm ownership
       const farm = await prisma.farm.findFirst({
@@ -135,18 +131,15 @@ export const POST = apiMiddleware.protected(
         data: {
           farmId,
           name,
-          crop,
-          size: parseFloat(size) || 0,
-          location: location || null,
-          isActive: true,
-          // Note: perimeter would need additional schema changes to store
+          area: parseFloat(area) || 0,
+          soilType: soilType || null
+          // Note: location and perimeter would need additional schema changes to store
         },
         include: {
           farm: {
             select: {
               id: true,
-              name: true,
-              type: true
+              name: true
             }
           }
         }
@@ -158,10 +151,8 @@ export const POST = apiMiddleware.protected(
           name: field.name,
           farmId: field.farmId,
           farmName: field.farm?.name,
-          crop: field.crop,
-          size: field.size,
-          isActive: field.isActive,
-          location: field.location,
+          area: field.area,
+          soilType: field.soilType,
           createdAt: field.createdAt
         },
         message: 'Field created successfully'

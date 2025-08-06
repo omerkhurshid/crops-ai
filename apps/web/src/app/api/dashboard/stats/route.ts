@@ -68,7 +68,17 @@ export const GET = apiMiddleware.protected(
       const totalFields = farms.reduce((sum, farm) => sum + farm.fields.length, 0)
       
       // Generate recent activity from satellite data and farm operations
-      const activityItems = []
+      const activityItems: Array<{
+        id: string
+        type: string
+        title: string
+        description: string
+        timestamp: Date
+        farmId: string
+        farmName: string
+        fieldId?: string
+        fieldName?: string
+      }> = []
       
       // Add farm creation activities
       farms.forEach(farm => {

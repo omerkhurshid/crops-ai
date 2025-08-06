@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
@@ -64,14 +65,52 @@ interface StressData {
 export default function CropHealthPage() {
   const [healthData, setHealthData] = useState<FieldHealthData | null>(null)
   const [stressData, setStressData] = useState<StressData | null>(null)
+  const [fields, setFields] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [fieldsLoading, setFieldsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedField, setSelectedField] = useState('demo-field-1')
+  const [selectedField, setSelectedField] = useState('')
   const [activeTab, setActiveTab] = useState<'overview' | 'indices' | 'stress' | 'recommendations'>('overview')
 
   useEffect(() => {
-    fetchHealthData()
+    fetchFields()
+  }, [])
+
+  useEffect(() => {
+    if (selectedField) {
+      fetchHealthData()
+    }
   }, [selectedField])
+
+  const fetchFields = async () => {
+    try {
+      setFieldsLoading(true)
+      const response = await fetch('/api/fields')
+      
+      if (!response.ok) throw new Error('Failed to fetch fields')
+      
+      const data = await response.json()
+      const userFields = data.fields || []
+      
+      setFields(userFields)
+      
+      // Auto-select first field if available
+      if (userFields.length > 0 && !selectedField) {
+        setSelectedField(userFields[0].id)
+      }
+    } catch (err) {
+      console.error('Error fetching fields:', err)
+      // Fallback to demo fields if API fails
+      setFields([
+        { id: 'demo-field-1', displayName: 'Demo Field 1', farmName: 'Demo Farm' },
+        { id: 'demo-field-2', displayName: 'Demo Field 2', farmName: 'Demo Farm' },
+        { id: 'demo-field-3', displayName: 'Demo Field 3', farmName: 'Demo Farm' }
+      ])
+      setSelectedField('demo-field-1')
+    } finally {
+      setFieldsLoading(false)
+    }
+  }
 
   const fetchHealthData = async () => {
     try {
@@ -140,13 +179,13 @@ export default function CropHealthPage() {
 
   const formatIndex = (value: number) => value.toFixed(3)
 
-  if (loading) {
+  if (fieldsLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-pulse text-gray-500">Loading crop health data...</div>
+            <div className="animate-pulse text-gray-500">Loading fields...</div>
           </div>
         </main>
       </div>
@@ -188,15 +227,26 @@ export default function CropHealthPage() {
 
           {/* Field Selection */}
           <div className="mb-6">
-            <select
-              value={selectedField}
-              onChange={(e) => setSelectedField(e.target.value)}
-              className="block w-48 rounded-md border-gray-300 shadow-sm focus:border-crops-green-500 focus:ring-crops-green-500"
-            >
-              <option value="demo-field-1">Demo Field 1</option>
-              <option value="demo-field-2">Demo Field 2</option>
-              <option value="demo-field-3">Demo Field 3</option>
-            </select>
+            {fieldsLoading ? (
+              <div className="animate-pulse bg-gray-200 h-10 w-48 rounded-md"></div>
+            ) : fields.length > 0 ? (
+              <select
+                value={selectedField}
+                onChange={(e) => setSelectedField(e.target.value)}
+                className="block w-64 rounded-md border-gray-300 shadow-sm focus:border-crops-green-500 focus:ring-crops-green-500"
+              >
+                <option value="">Select a field...</option>
+                {fields.map((field) => (
+                  <option key={field.id} value={field.id}>
+                    {field.displayName} {field.crop ? `(${field.crop})` : ''}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div className="text-gray-500 text-sm">
+                No fields found. <Link href="/farms/create" className="text-crops-green-600 hover:underline">Create a farm</Link> to get started.
+              </div>
+            )}
           </div>
 
           {/* Tab Navigation */}
@@ -224,8 +274,29 @@ export default function CropHealthPage() {
             </nav>
           </div>
 
+          {/* Loading State */}
+          {loading && selectedField && (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-pulse text-gray-500">Loading crop health data...</div>
+            </div>
+          )}
+
+          {/* No Field Selected */}
+          {!selectedField && !loading && (
+            <div className="text-center py-16">
+              <Leaf className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Field Selected</h3>
+              <p className="text-gray-500 mb-4">Select a field from the dropdown above to view crop health analytics</p>
+              {fields.length === 0 && (
+                <Link href="/farms/create" className="text-crops-green-600 hover:underline">
+                  Create your first farm to get started
+                </Link>
+              )}
+            </div>
+          )}
+
           {/* Tab Content */}
-          {activeTab === 'overview' && healthData && (
+          {!loading && selectedField && activeTab === 'overview' && healthData && (
             <div className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -316,7 +387,7 @@ export default function CropHealthPage() {
             </div>
           )}
 
-          {activeTab === 'indices' && healthData && (
+          {!loading && selectedField && activeTab === 'indices' && healthData && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -370,7 +441,7 @@ export default function CropHealthPage() {
             </div>
           )}
 
-          {activeTab === 'stress' && stressData && healthData && (
+          {!loading && selectedField && activeTab === 'stress' && stressData && healthData && (
             <div className="space-y-6">
               {/* Overall Stress */}
               <Card>
@@ -478,7 +549,7 @@ export default function CropHealthPage() {
             </div>
           )}
 
-          {activeTab === 'recommendations' && healthData && stressData && (
+          {!loading && selectedField && activeTab === 'recommendations' && healthData && stressData && (
             <div className="space-y-6">
               {stressData.recommendations.length > 0 && (
                 <Card>

@@ -8,7 +8,7 @@ import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Textarea } from '../../../components/ui/textarea'
 import { Navbar } from '../../../components/navigation/navbar'
-import { MapFieldSelector } from '../../../components/farm/map-field-selector'
+import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
 
 interface Field {
   id: string
@@ -301,7 +301,7 @@ export default function CreateFarmPage() {
                                 className="mt-2"
                                 onClick={() => setShowMapSelector(field.id)}
                               >
-                                Open Map
+                                📍 Define Field Boundaries
                               </Button>
                             </div>
                           </div>
@@ -440,9 +440,9 @@ export default function CreateFarmPage() {
             </div>
           )}
 
-          {/* Map Field Selector Modal */}
+          {/* Interactive Field Map Modal */}
           {showMapSelector && (
-            <MapFieldSelector
+            <InteractiveFieldMap
               fieldId={showMapSelector}
               onBoundariesDetected={(boundaries) => {
                 updateField(showMapSelector, { perimeter: boundaries })

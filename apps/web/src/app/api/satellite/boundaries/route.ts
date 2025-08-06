@@ -145,8 +145,8 @@ export const POST = apiMiddleware.protected(
               }
             });
 
-            const fieldsWithBoundaries = farms.flatMap(farm => 
-              farm.fields.map(field => ({
+            const fieldsWithBoundaries = farms.flatMap((farm: any) => 
+              farm.fields.map((field: any) => ({
                 ...field,
                 farmName: farm.name,
                 farmId: farm.id,
@@ -164,7 +164,7 @@ export const POST = apiMiddleware.protected(
               summary: {
                 action: 'list',
                 totalFields: fieldsWithBoundaries.length,
-                totalArea: fieldsWithBoundaries.reduce((sum, f) => sum + (f.area || 0), 0).toFixed(2) + ' hectares'
+                totalArea: fieldsWithBoundaries.reduce((sum: number, f: any) => sum + (f.area || 0), 0).toFixed(2) + ' hectares'
               },
               message: `Found ${fieldsWithBoundaries.length} fields with boundaries`
             });
@@ -231,8 +231,8 @@ export const GET = apiMiddleware.protected(
           }
         });
 
-        const fieldsWithBoundaries = farms.flatMap(farm => 
-          farm.fields.map(field => ({
+        const fieldsWithBoundaries = farms.flatMap((farm: any) => 
+          farm.fields.map((field: any) => ({
             fieldId: field.id,
             fieldName: field.name,
             farmName: farm.name,
@@ -245,7 +245,7 @@ export const GET = apiMiddleware.protected(
           data: fieldsWithBoundaries,
           summary: {
             totalFields: fieldsWithBoundaries.length,
-            totalArea: `${fieldsWithBoundaries.reduce((sum, f) => sum + (f.area || 0), 0).toFixed(2)} hectares`
+            totalArea: `${fieldsWithBoundaries.reduce((sum: number, f: any) => sum + (f.area || 0), 0).toFixed(2)} hectares`
           },
           message: `Found ${fieldsWithBoundaries.length} fields with defined boundaries`
         });

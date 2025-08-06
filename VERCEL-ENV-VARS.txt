@@ -2,7 +2,7 @@ VERCEL ENVIRONMENT VARIABLES - COPY THESE ONE BY ONE
 ====================================================
 
 DATABASE_URL
-postgresql://postgres:H4tchet!23@db.drtbsioeqfodcaelukpo.supabase.co:5432/postgres
+postgresql://postgres.drtbsioeqfodcaelukpo:H4tchet!23@aws-0-eu-central-1.pooler.supabase.com:6543/postgres
 
 DIRECT_URL
 postgresql://postgres:H4tchet!23@db.drtbsioeqfodcaelukpo.supabase.co:5432/postgres

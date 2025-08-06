@@ -239,7 +239,7 @@ export const GET = apiMiddleware.protected(
         });
 
         // Extract stress trends
-        const stressTrend = analyses.map(a => ({
+        const stressTrend = analyses.map((a: any) => ({
           date: a.captureDate.toISOString().split('T')[0],
           overallStress: a.stressLevel.toLowerCase(),
           ndvi: a.ndvi,
@@ -253,7 +253,7 @@ export const GET = apiMiddleware.protected(
           data: {
             fieldId,
             fieldName: field.name,
-            analyses: analyses.map(a => ({
+            analyses: analyses.map((a: any) => ({
               id: a.id,
               date: a.captureDate.toISOString().split('T')[0],
               overallStress: a.stressLevel.toLowerCase(),
@@ -265,10 +265,10 @@ export const GET = apiMiddleware.protected(
               totalAnalyses: analyses.length,
               latestStressLevel: stressTrend[0]?.overallStress || 'none',
               averageNdvi: analyses.length > 0 ?
-                (analyses.reduce((sum, a) => sum + a.ndvi, 0) / analyses.length).toFixed(3) :
+                (analyses.reduce((sum: number, a: any) => sum + a.ndvi, 0) / analyses.length).toFixed(3) :
                 '0.000',
               averageAffectedArea: stressTrend.length > 0 ?
-                (stressTrend.reduce((sum, t) => sum + t.affectedPercentage, 0) / stressTrend.length).toFixed(1) + '%' :
+                (stressTrend.reduce((sum: number, t: any) => sum + t.affectedPercentage, 0) / stressTrend.length).toFixed(1) + '%' :
                 '0%'
             }
           },

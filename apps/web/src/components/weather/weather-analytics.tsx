@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Alert, AlertDescription } from '../ui/alert'
-import { AggregatedWeatherData, HourlyWeatherData } from '../lib/weather/aggregator'
+import { AggregatedWeatherData, HourlyWeatherData } from '../../lib/weather/aggregator'
 
 interface WeatherAnalyticsProps {
   latitude: number

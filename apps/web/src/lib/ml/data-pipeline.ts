@@ -175,7 +175,7 @@ class AgricultureDataPipeline {
       for (let i = 0; i < fields.length; i += this.BATCH_SIZE) {
         const batch = fields.slice(i, i + this.BATCH_SIZE);
         
-        const batchPromises = batch.map(async (field) => {
+        const batchPromises = batch.map(async (field: any) => {
           try {
             const data: Partial<TrainingData> = {
               id: `training_${field.id}_${Date.now()}`,

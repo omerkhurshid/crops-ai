@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
-import { CurrentWeather, WeatherForecast, WeatherAlert, AgricultureWeatherData } from '../lib/weather/service'
+import { CurrentWeather, WeatherForecast, WeatherAlert, AgricultureWeatherData } from '../../lib/weather/service'
 
 interface WeatherDashboardProps {
   latitude: number
@@ -169,7 +169,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                       <div className="mt-3">
                         <p className="text-sm font-medium text-gray-700">Recommendations:</p>
                         <ul className="text-sm text-gray-600 list-disc list-inside">
-                          {alert.recommendations.map((rec, index) => (
+                          {alert.recommendations.map((rec: string, index: number) => (
                             <li key={index}>{rec}</li>
                           ))}
                         </ul>

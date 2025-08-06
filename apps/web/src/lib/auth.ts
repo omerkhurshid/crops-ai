@@ -1,12 +1,13 @@
 import { NextAuthOptions } from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { prisma } from './prisma'
+// import { PrismaAdapter } from '@auth/prisma-adapter'
+// import { prisma } from './prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
+  // Temporarily disable adapter to test NextAuth routing
+  // adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
   providers: [
     CredentialsProvider({
       name: 'credentials',

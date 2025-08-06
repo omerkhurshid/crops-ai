@@ -26,15 +26,15 @@ export async function POST(request) {
     const user = demoUsers.find(u => u.email === email && u.password === password)
 
     if (!user) {
-      return Response.json({ url: 'http://localhost:3000/api/auth/error?error=CredentialsSignin' }, { status: 401 })
+      return Response.json({ url: 'https://crops-ai-gray.vercel.app/api/auth/error?error=CredentialsSignin' }, { status: 401 })
     }
 
     // In a real implementation, set a session cookie here
     // For now, just return success
-    return Response.json({ url: 'http://localhost:3000' })
+    return Response.json({ url: 'https://crops-ai-gray.vercel.app/dashboard' })
   } catch (error) {
     return Response.json({ 
-      url: 'http://localhost:3000/api/auth/error?error=Configuration' 
+      url: 'https://crops-ai-gray.vercel.app/api/auth/error?error=Configuration' 
     }, { status: 500 })
   }
 }

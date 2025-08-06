@@ -27,32 +27,39 @@ export class AuthUtils {
     password: string
     role?: UserRole
   }) {
-    const existingUser = await prisma.user.findUnique({
-      where: { email: data.email }
-    })
+    try {
+      const existingUser = await prisma.user.findUnique({
+        where: { email: data.email }
+      })
 
-    if (existingUser) {
-      throw new Error('User already exists with this email')
-    }
-
-    const passwordHash = await this.hashPassword(data.password)
-
-    return prisma.user.create({
-      data: {
-        email: data.email,
-        name: data.name,
-        passwordHash,
-        role: data.role || UserRole.FARM_OWNER
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true
+      if (existingUser) {
+        throw new Error('User already exists with this email')
       }
-    })
+
+      const passwordHash = await this.hashPassword(data.password)
+
+      const user = await prisma.user.create({
+        data: {
+          email: data.email,
+          name: data.name,
+          passwordHash,
+          role: data.role || UserRole.FARM_OWNER
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true
+        }
+      })
+
+      return user
+    } finally {
+      // Don't disconnect in serverless - let connection pool handle it
+      // await prisma.$disconnect()
+    }
   }
 
   /**

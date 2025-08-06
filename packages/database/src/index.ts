@@ -4,17 +4,15 @@ declare global {
   var __prisma: PrismaClient | undefined
 }
 
-// Configure Prisma for serverless environments
-export const prisma = globalThis.__prisma || new PrismaClient({
-  // Reduce connection pool size for serverless
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL
-    }
-  }
+// Create a single Prisma client instance with serverless configuration
+const createPrismaClient = () => new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 })
 
-if (process.env.NODE_ENV === 'development') {
+// Use global instance in development, new instance in serverless
+export const prisma = globalThis.__prisma ?? createPrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
   globalThis.__prisma = prisma
 }
 

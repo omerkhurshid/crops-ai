@@ -22,9 +22,10 @@ export async function GET(request: NextRequest) {
         <input type="email" id="email" placeholder="Email" value="test@example.com">
         <input type="text" id="name" placeholder="Name" value="Test User">
         <input type="password" id="password" placeholder="Password" value="TestPass123!">
-        <button onclick="testRegistration()">Test Registration</button>
+        <button onclick="testRegistration()">Test Debug Registration</button>
         <button onclick="testRegularRegistration()">Test Regular Registration</button>
         <button onclick="testSimpleRegistration()">Test Simple Registration</button>
+        <button onclick="testFixedRegistration()">Test Fixed Registration</button>
     </div>
     
     <div id="result"></div>
@@ -91,6 +92,28 @@ export async function GET(request: NextRequest) {
                 
                 const data = await response.json();
                 result.innerHTML = '<h3>Simple Registration Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                result.innerHTML = '<h3>Error:</h3><pre>' + error.message + '</pre>';
+            }
+        }
+        
+        async function testFixedRegistration() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing fixed registration...';
+            
+            try {
+                const response = await fetch('/api/auth/register-fixed', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        name: document.getElementById('name').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = '<h3>Fixed Registration Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
             } catch (error) {
                 result.innerHTML = '<h3>Error:</h3><pre>' + error.message + '</pre>';
             }

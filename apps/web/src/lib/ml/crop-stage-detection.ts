@@ -705,7 +705,7 @@ class CropStageDetectionService {
     weatherForecast: any
   ): number {
     // Base probability based on time in stage
-    let baseProb = Math.min(0.9, daysInStage / expectedDuration)
+    const baseProb = Math.min(0.9, daysInStage / expectedDuration)
 
     // Adjust based on NDVI relative to stage expectations
     const ndviOptimal = currentStage.ndviRange.optimal

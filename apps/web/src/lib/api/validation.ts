@@ -24,12 +24,14 @@ export const updateUserSchema = z.object({
 // Farm validation schemas
 export const createFarmSchema = z.object({
   name: z.string().min(1, 'Farm name is required'),
+  farmType: z.string().optional(), // Will be ignored until schema migration
+  description: z.string().optional(), // Will be ignored until schema migration
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
   address: z.string().optional(),
   region: z.string().optional(),
   country: z.string().min(2, 'Country code is required'),
-  totalArea: z.number().positive('Total area must be positive')
+  totalArea: z.number().min(0, 'Total area must be non-negative')
 })
 
 export const updateFarmSchema = z.object({
@@ -48,20 +50,14 @@ export const createFieldSchema = z.object({
   name: z.string().min(1, 'Field name is required'),
   area: z.number().positive('Area must be positive'),
   soilType: z.string().optional(),
-  boundary: z.object({
-    type: z.literal('Polygon'),
-    coordinates: z.array(z.array(z.array(z.number())))
-  }).optional()
+  boundary: z.string().optional() // JSON string representation of geometry
 })
 
 export const updateFieldSchema = z.object({
   name: z.string().min(1, 'Field name is required').optional(),
   area: z.number().positive('Area must be positive').optional(),
   soilType: z.string().optional(),
-  boundary: z.object({
-    type: z.literal('Polygon'),
-    coordinates: z.array(z.array(z.array(z.number())))
-  }).optional()
+  boundary: z.string().optional() // JSON string representation of geometry
 })
 
 // Crop validation schemas

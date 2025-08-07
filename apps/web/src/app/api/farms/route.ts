@@ -51,7 +51,7 @@ export const GET = apiMiddleware.protected(
     ])
 
     return createSuccessResponse({
-      data: farms,
+      farms,
       pagination: {
         page,
         limit,
@@ -68,9 +68,12 @@ export const POST = apiMiddleware.protected(
     const body = await request.json()
     const farmData = validateRequestBody(createFarmSchema, body)
 
+    // Remove fields that don't exist in current schema
+    const { farmType, description, ...dbFarmData } = farmData
+    
     const farm = await prisma.farm.create({
       data: {
-        ...farmData,
+        ...dbFarmData,
         ownerId: request.user.id
       },
       include: {
@@ -84,6 +87,6 @@ export const POST = apiMiddleware.protected(
       }
     })
 
-    return createSuccessResponse(farm, 201)
+    return createSuccessResponse({ farm }, 201)
   })
 )

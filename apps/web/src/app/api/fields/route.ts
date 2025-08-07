@@ -101,24 +101,18 @@ export const GET = apiMiddleware.protected(
   })
 )
 
-// POST /api/fields - Create new field (for future use)
+// POST /api/fields - Create new field
 export const POST = apiMiddleware.protected(
-  withMethods(['POST'], async (request: NextRequest) => {
+  withMethods(['POST'], async (request: any) => {
     try {
-      const user = await getCurrentUser()
-      
-      if (!user) {
-        throw new ValidationError('User authentication required')
-      }
-
       const body = await request.json()
-      const { farmId, name, area, soilType, location, perimeter } = body
+      const { farmId, name, area, soilType, boundary } = body
 
       // Verify farm ownership
       const farm = await prisma.farm.findFirst({
         where: {
           id: farmId,
-          ownerId: user.id
+          ownerId: request.user.id
         }
       })
 
@@ -133,7 +127,8 @@ export const POST = apiMiddleware.protected(
           name,
           area: parseFloat(area) || 0,
           soilType: soilType || null
-          // Note: location and perimeter would need additional schema changes to store
+          // Note: boundary would need additional schema changes to store properly
+          // For now we ignore it to get basic functionality working
         },
         include: {
           farm: {

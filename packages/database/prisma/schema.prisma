@@ -58,6 +58,7 @@ model Farm {
   id        String   @id @default(cuid())
   name      String
   ownerId   String
+  location  String?  // Added to match database
   latitude  Float
   longitude Float
   address   String?

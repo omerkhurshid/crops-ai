@@ -261,7 +261,7 @@ async function updateRateLimits(settings: any, userId: string, request: NextRequ
  */
 async function blockIP(ip: string, reason: string, userId: string, request: NextRequest) {
   await auditLogger.logSecurityIncident(
-    'malicious_activity',
+    'malicious_request',
     'medium',
     {
       action: 'ip_blocked_by_admin',

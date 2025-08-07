@@ -1,25 +1,33 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { hyperlocalWeather } from '../../../../lib/weather/hyperlocal';
+import { hyperlocalWeather } from '../../../../lib/weather/hyperlocal-weather';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
+import { auditLogger } from '../../../../lib/logging/audit-logger';
 
 const hyperlocalSchema = z.object({
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
-  type: z.enum(['point', 'grid', 'field']),
-  // For grid generation
-  radius: z.number().min(100).max(10000).optional(),
-  // For field analysis
-  fieldBoundary: z.array(z.object({
-    latitude: z.number(),
-    longitude: z.number()
-  })).optional(),
-  // For point prediction
+  type: z.enum(['forecast', 'crop-specific', 'trends']).default('forecast'),
   elevation: z.number().optional(),
+  fieldId: z.string().optional(),
+  // For crop-specific forecasts
+  cropType: z.string().optional(),
+  growthStage: z.string().optional(),
+  // For trends analysis
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
 });
 
-// GET /api/weather/hyperlocal?latitude=40.7128&longitude=-74.0060&type=point
+const cropSpecificSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  cropType: z.string().min(1),
+  growthStage: z.string().min(1),
+  fieldId: z.string().optional(),
+});
+
+// GET /api/weather/hyperlocal?latitude=40.7128&longitude=-74.0060&type=forecast
 export const GET = apiMiddleware.basic(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
@@ -27,29 +35,25 @@ export const GET = apiMiddleware.basic(
       
       const latitude = parseFloat(searchParams.get('latitude') || '');
       const longitude = parseFloat(searchParams.get('longitude') || '');
-      const type = searchParams.get('type') || 'point';
-      const radius = parseInt(searchParams.get('radius') || '1000');
+      const type = searchParams.get('type') || 'forecast';
       const elevation = searchParams.get('elevation') ? parseFloat(searchParams.get('elevation')!) : undefined;
-      
-      // Parse field boundary if provided
-      const fieldBoundaryParam = searchParams.get('fieldBoundary');
-      let fieldBoundary;
-      if (fieldBoundaryParam) {
-        try {
-          fieldBoundary = JSON.parse(fieldBoundaryParam);
-        } catch {
-          throw new ValidationError('Invalid fieldBoundary format. Must be valid JSON array.');
-        }
-      }
+      const fieldId = searchParams.get('fieldId') || undefined;
+      const cropType = searchParams.get('cropType') || undefined;
+      const growthStage = searchParams.get('growthStage') || undefined;
+      const startDate = searchParams.get('startDate') || undefined;
+      const endDate = searchParams.get('endDate') || undefined;
 
       // Validate input
       const validation = hyperlocalSchema.safeParse({
         latitude,
         longitude,
         type,
-        radius,
-        fieldBoundary,
-        elevation
+        elevation,
+        fieldId,
+        cropType,
+        growthStage,
+        startDate,
+        endDate
       });
 
       if (!validation.success) {
@@ -60,27 +64,64 @@ export const GET = apiMiddleware.basic(
       let result;
 
       switch (type) {
-        case 'point':
-          result = await hyperlocalWeather.getPointPrediction(
+        case 'forecast':
+          result = await hyperlocalWeather.getFieldForecast(
             latitude,
             longitude,
-            elevation
+            elevation,
+            fieldId
           );
-          break;
-
-        case 'grid':
-          result = await hyperlocalWeather.generateHyperlocalGrid(
+          
+          await auditLogger.logAPI('hyperlocal_forecast_requested', 'GET', true, {
             latitude,
             longitude,
-            radius
-          );
+            fieldId,
+            sourcesUsed: result.metadata.sources.length,
+            confidence: result.metadata.confidence
+          });
           break;
 
-        case 'field':
-          if (!fieldBoundary || !Array.isArray(fieldBoundary) || fieldBoundary.length < 3) {
-            throw new ValidationError('Field boundary must be an array of at least 3 coordinate points');
+        case 'crop-specific':
+          if (!cropType || !growthStage) {
+            throw new ValidationError('cropType and growthStage are required for crop-specific forecasts');
           }
-          result = await hyperlocalWeather.analyzeFieldMicroclimate(fieldBoundary);
+          
+          result = await hyperlocalWeather.getCropSpecificForecast(
+            latitude,
+            longitude,
+            cropType,
+            growthStage,
+            fieldId
+          );
+          
+          await auditLogger.logAPI('crop_specific_forecast_requested', 'GET', true, {
+            latitude,
+            longitude,
+            cropType,
+            growthStage,
+            fieldId,
+            advisoryGenerated: !!result.cropAdvisory
+          });
+          break;
+
+        case 'trends':
+          if (!startDate || !endDate) {
+            throw new ValidationError('startDate and endDate are required for trends analysis');
+          }
+          
+          result = await hyperlocalWeather.getWeatherTrends(
+            latitude,
+            longitude,
+            new Date(startDate),
+            new Date(endDate)
+          );
+          
+          await auditLogger.logAPI('weather_trends_requested', 'GET', true, {
+            latitude,
+            longitude,
+            dateRange: `${startDate} to ${endDate}`,
+            daysAnalyzed: result.temperatureTrend.length
+          });
           break;
 
         default:
@@ -96,14 +137,66 @@ export const GET = apiMiddleware.basic(
         type,
         location: { latitude, longitude },
         parameters: {
-          radius: type === 'grid' ? radius : undefined,
-          elevation: type === 'point' ? elevation : undefined,
-          fieldPoints: type === 'field' ? fieldBoundary?.length : undefined
+          elevation,
+          fieldId,
+          cropType: type === 'crop-specific' ? cropType : undefined,
+          growthStage: type === 'crop-specific' ? growthStage : undefined,
+          dateRange: type === 'trends' ? `${startDate} to ${endDate}` : undefined
         },
-        message: `Hyperlocal weather ${type} prediction generated successfully`
+        message: `Hyperlocal weather ${type} generated successfully`
       });
 
     } catch (error) {
+      return handleApiError(error);
+    }
+  })
+);
+
+// POST /api/weather/hyperlocal - For crop-specific weather forecasts
+export const POST = apiMiddleware.basic(
+  withMethods(['POST'], async (request: NextRequest) => {
+    try {
+      const body = await request.json();
+      
+      const validation = cropSpecificSchema.safeParse(body);
+      
+      if (!validation.success) {
+        throw new ValidationError('Invalid request body: ' + validation.error.errors.map(e => e.message).join(', '));
+      }
+
+      const { latitude, longitude, cropType, growthStage, fieldId } = validation.data;
+
+      const result = await hyperlocalWeather.getCropSpecificForecast(
+        latitude,
+        longitude,
+        cropType,
+        growthStage,
+        fieldId
+      );
+
+      await auditLogger.logAPI('crop_specific_weather_requested', 'POST', true, {
+        latitude,
+        longitude,
+        cropType,
+        growthStage,
+        fieldId,
+        advisoryGenerated: !!result.cropAdvisory
+      });
+
+      return createSuccessResponse({
+        data: result,
+        cropType,
+        growthStage,
+        location: { latitude, longitude },
+        advisoryIncluded: !!result.cropAdvisory,
+        message: 'Crop-specific weather forecast generated successfully'
+      });
+
+    } catch (error) {
+      await auditLogger.logAPI('crop_specific_weather_error', 'POST', false, {
+        error: error instanceof Error ? error.message : 'Unknown error'
+      }, 'error');
+      
       return handleApiError(error);
     }
   })

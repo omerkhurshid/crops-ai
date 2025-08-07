@@ -72,7 +72,7 @@ export const GET = apiMiddleware.basic(
             fieldId
           );
           
-          await auditLogger.logAPI('hyperlocal_forecast_requested', 'GET', true, {
+          await auditLogger.logSystem('hyperlocal_forecast_requested', true, {
             latitude,
             longitude,
             fieldId,
@@ -94,7 +94,7 @@ export const GET = apiMiddleware.basic(
             fieldId
           );
           
-          await auditLogger.logAPI('crop_specific_forecast_requested', 'GET', true, {
+          await auditLogger.logSystem('crop_specific_forecast_requested', true, {
             latitude,
             longitude,
             cropType,
@@ -116,7 +116,7 @@ export const GET = apiMiddleware.basic(
             new Date(endDate)
           );
           
-          await auditLogger.logAPI('weather_trends_requested', 'GET', true, {
+          await auditLogger.logSystem('weather_trends_requested', true, {
             latitude,
             longitude,
             dateRange: `${startDate} to ${endDate}`,
@@ -174,7 +174,7 @@ export const POST = apiMiddleware.basic(
         fieldId
       );
 
-      await auditLogger.logAPI('crop_specific_weather_requested', 'POST', true, {
+      await auditLogger.logSystem('crop_specific_weather_requested', true, {
         latitude,
         longitude,
         cropType,
@@ -193,7 +193,7 @@ export const POST = apiMiddleware.basic(
       });
 
     } catch (error) {
-      await auditLogger.logAPI('crop_specific_weather_error', 'POST', false, {
+      await auditLogger.logSystem('crop_specific_weather_error', false, {
         error: error instanceof Error ? error.message : 'Unknown error'
       }, 'error');
       

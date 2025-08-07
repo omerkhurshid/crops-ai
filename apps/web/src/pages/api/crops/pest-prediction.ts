@@ -119,7 +119,7 @@ export default async function handler(
     }
 
     // Log API request
-    await auditLogger.logAPI('pest_prediction_request', req, undefined, {
+    await auditLogger.logML('pest_prediction_request', params.fieldId, undefined, undefined, {
       fieldId: params.fieldId,
       cropType: params.cropType,
       action: params.action || 'predict'
@@ -195,7 +195,7 @@ export default async function handler(
     }
 
     // Log successful response
-    await auditLogger.logAPI('pest_prediction_success', req, undefined, {
+    await auditLogger.logML('pest_prediction_success', params.fieldId, undefined, undefined, {
       fieldId: params.fieldId,
       action: params.action || 'predict',
       processingTime,
@@ -219,7 +219,7 @@ export default async function handler(
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
 
     // Log error
-    await auditLogger.logAPI('pest_prediction_error', req, undefined, {
+    await auditLogger.logML('pest_prediction_error', params.fieldId || 'unknown', undefined, undefined, {
       error: errorMessage,
       processingTime
     }, 'error')

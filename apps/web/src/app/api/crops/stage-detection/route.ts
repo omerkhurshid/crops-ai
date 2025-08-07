@@ -60,7 +60,7 @@ export const POST = apiMiddleware.basic(
         fieldBounds
       )
 
-      await auditLogger.logAPI('crop_stage_detection_requested', 'POST', true, {
+      await auditLogger.logML('crop_stage_detection_requested', fieldId, undefined, undefined, {
         fieldId,
         cropType,
         latitude,

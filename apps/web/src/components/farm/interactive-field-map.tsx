@@ -117,25 +117,23 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
             summary: result.summary
           })
           
-          if (result.success && result.data) {
+          // Handle both wrapped and direct API responses
+          const data = result.data || result; // result.data if wrapped, result if direct response
+          
+          if (data) {
             // Check for different response formats
-            if (result.data.imageUrl) {
-              console.log('Using imageUrl:', result.data.imageUrl.substring(0, 50) + '...')
-              setSatelliteImage(result.data.imageUrl)
-            } else if (result.data.imageData) {
-              console.log('Using base64 imageData, length:', result.data.imageData.length)
-              setSatelliteImage(result.data.imageData)
+            if (data.imageUrl) {
+              console.log('Using imageUrl:', data.imageUrl.substring(0, 50) + '...')
+              setSatelliteImage(data.imageUrl)
+            } else if (data.imageData) {
+              console.log('Using base64 imageData, length:', data.imageData.length)
+              setSatelliteImage(data.imageData)
             } else {
-              console.warn('No image data found. Available data fields:', Object.keys(result.data))
-              console.log('Full data object:', result.data)
+              console.warn('No image data found. Available data fields:', Object.keys(data))
+              console.log('Full data object:', data)
             }
           } else {
-            console.error('API returned success=false or no data:', {
-              success: result.success,
-              error: result.error,
-              message: result.message,
-              data: result.data
-            })
+            console.error('No data in API response:', result)
           }
         } else {
           const errorText = await response.text()

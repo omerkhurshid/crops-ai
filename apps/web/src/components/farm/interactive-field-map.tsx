@@ -138,8 +138,8 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   }
 
   const detectBoundariesFromSatellite = async () => {
-    if (!coordinates.centerLat || !coordinates.centerLng) {
-      alert('Please enter coordinates for your field location')
+    if (!mapCenter.lat || !mapCenter.lng || mapCenter.lat === 0 || mapCenter.lng === 0) {
+      alert('Please enter coordinates and click "Update Map" first')
       return
     }
 

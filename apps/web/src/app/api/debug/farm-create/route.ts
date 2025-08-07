@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/prisma'
 
+// GET for easy browser testing
+export async function GET(request: NextRequest) {
+  return testFarmCreation()
+}
+
 export async function POST(request: NextRequest) {
+  return testFarmCreation()
+}
+
+async function testFarmCreation() {
   try {
     console.log('=== FARM CREATION DEBUG ===')
     
@@ -19,9 +28,8 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
-    // Get request body
-    const body = await request.json()
-    console.log('Request body:', JSON.stringify(body, null, 2))
+    // Skip request body parsing for GET requests
+    console.log('Testing with hardcoded data...')
 
     // Test minimal farm creation
     const testFarmData = {

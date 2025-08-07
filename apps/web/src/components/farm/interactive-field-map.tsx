@@ -25,7 +25,7 @@ interface MapPoint {
 }
 
 export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: InteractiveFieldMapProps) {
-  const [mapCenter, setMapCenter] = useState({ lat: 40.7128, lng: -74.0060 })
+  const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 })
   const [coordinates, setCoordinates] = useState({
     centerLat: '',
     centerLng: '',
@@ -59,7 +59,11 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   // Fetch satellite image when center changes
   useEffect(() => {
     const fetchSatelliteImage = async () => {
-      if (!mapCenter.lat || !mapCenter.lng) return
+      // Only fetch if we have valid coordinates and map is loaded
+      if (!mapCenter.lat || !mapCenter.lng || !mapLoaded) return
+      
+      // Skip if coordinates haven't been explicitly set by user
+      if (coordinates.centerLat === '' && coordinates.centerLng === '') return
       
       setLoadingImage(true)
       try {
@@ -119,7 +123,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     }
 
     fetchSatelliteImage()
-  }, [mapCenter])
+  }, [mapCenter, mapLoaded, coordinates.centerLat, coordinates.centerLng])
 
   const updateMapCenter = () => {
     const lat = parseFloat(coordinates.centerLat)
@@ -493,10 +497,12 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                     <rect width="100%" height="100%" fill="url(#grid)" />
                   </svg>
 
-                  {/* Center marker */}
-                  <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500">
-                    <MapPin className="h-6 w-6" />
-                  </div>
+                  {/* Center marker - only show if coordinates are set */}
+                  {(coordinates.centerLat !== '' && coordinates.centerLng !== '') && (
+                    <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500">
+                      <MapPin className="h-6 w-6" />
+                    </div>
+                  )}
 
                   {/* Field boundary polygon */}
                   {points.length > 2 && (
@@ -564,7 +570,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   <div className="flex space-x-4">
                     <span>Points: {points.length}</span>
                     <span>Area: {calculateArea().toFixed(2)} ha</span>
-                    <span>Center: {mapCenter.lat.toFixed(4)}, {mapCenter.lng.toFixed(4)}</span>
+                    <span>Center: {mapCenter.lat !== 0 ? `${mapCenter.lat.toFixed(4)}, ${mapCenter.lng.toFixed(4)}` : 'Not set'}</span>
                   </div>
                   <div className="text-gray-500">
                     {mode === 'manual' ? 'Click to add • Drag to move' : 'Satellite detection mode'}

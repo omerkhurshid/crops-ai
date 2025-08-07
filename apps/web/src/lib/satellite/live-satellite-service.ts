@@ -4,7 +4,7 @@
  */
 
 import { SentinelHubService } from './sentinel-hub'
-import { NDVIAnalyzer } from './ndvi-analysis'
+import { NDVIAnalysisService } from './ndvi-analysis'
 import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
 import { prisma } from '../prisma'
@@ -35,12 +35,12 @@ export interface SatelliteDataPoint {
 
 class LiveSatelliteService {
   private sentinelHub: SentinelHubService
-  private ndviAnalyzer: NDVIAnalyzer
+  private ndviAnalyzer: NDVIAnalysisService
   private config: LiveSatelliteConfig
 
   constructor(config?: Partial<LiveSatelliteConfig>) {
     this.sentinelHub = new SentinelHubService()
-    this.ndviAnalyzer = new NDVIAnalyzer()
+    this.ndviAnalyzer = new NDVIAnalysisService()
     
     this.config = {
       preferLiveData: true,

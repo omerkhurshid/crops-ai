@@ -670,3 +670,4 @@ class SentinelHubService {
 }
 
 export const sentinelHub = new SentinelHubService();
+export { SentinelHubService };

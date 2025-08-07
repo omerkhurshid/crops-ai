@@ -212,7 +212,8 @@ async function getTableStatistics() {
     
     for (const table of tables) {
       try {
-        const result = await migrationManager['prisma'].$queryRawUnsafe(table.query) as Array<{ count: bigint }>
+        const { prisma } = await import('../../../../lib/prisma')
+        const result = await prisma.$queryRawUnsafe(table.query) as Array<{ count: bigint }>
         stats.push({
           name: table.name,
           recordCount: Number(result[0].count),

@@ -732,3 +732,4 @@ class NDVIAnalysisService {
 }
 
 export const ndviAnalysis = new NDVIAnalysisService();
+export { NDVIAnalysisService };

@@ -52,6 +52,74 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Features Section */}
+      <section className="py-24 px-8 lg:px-16 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+              Powerful Features for Modern Agriculture
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Everything you need to optimize your farm's productivity and sustainability with cutting-edge AI technology
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-6xl mb-6">🌤️</div>
+              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+                Weather Intelligence
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Real-time weather data and hyperlocal forecasting for precise farm management decisions. Get alerts for extreme weather conditions.
+              </p>
+            </div>
+            
+            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-6xl mb-6">🛰️</div>
+              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+                Satellite Monitoring
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Track crop health and growth stages with advanced satellite imagery analysis, NDVI monitoring, and stress detection.
+              </p>
+            </div>
+            
+            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-6xl mb-6">🤖</div>
+              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+                AI Recommendations
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
+                Get intelligent insights for planting, irrigation, and harvest optimization powered by machine learning algorithms.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center card-gradient max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gradient">
+              Transform Your Farm Management Today
+            </h2>
+            <p className="text-gray-600 mb-8 text-xl leading-relaxed">
+              Join thousands of farmers who are already using Crops.AI to increase yields, 
+              reduce costs, and make data-driven decisions for sustainable agriculture.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link href="/register">
+                <button className="btn-ghost text-xl px-12 py-4">
+                  Start Your Free Trial
+                </button>
+              </Link>
+              <Link href="/login">
+                <button className="border-2 border-primary/50 bg-transparent text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
+                  View Demo
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer Section */}
       <footer className="bg-gradient-crops py-16 px-8 lg:px-16">
         <div className="max-w-7xl mx-auto">

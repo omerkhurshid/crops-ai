@@ -36,14 +36,14 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats()
 
   return (
-    <div className="min-h-screen bg-gradient-crops-light">
+    <div className="min-h-screen bg-gradient-crops organic-bg">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gradient mb-2">Dashboard</h1>
-            <p className="text-lg text-gray-600">Welcome back, {user.name}!</p>
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
+        <div className="px-8 lg:px-16 py-12 sm:px-0">
+          <div className="mb-12">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">Dashboard</h1>
+            <p className="text-2xl text-white/80 font-light">Welcome back, {user.name}!</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <Card>
+            <div className="card-gradient">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Activity className="h-5 w-5 mr-2" />

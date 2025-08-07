@@ -35,19 +35,19 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms()
 
   return (
-    <div className="min-h-screen bg-gradient-crops-light">
+    <div className="min-h-screen bg-gradient-crops organic-bg">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
+        <div className="px-8 lg:px-16 py-12 sm:px-0">
           {/* Header */}
-          <div className="mb-8 flex justify-between items-center">
+          <div className="mb-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <h1 className="text-4xl font-bold text-gradient mb-2">My Farms</h1>
-              <p className="text-lg text-gray-600">Manage and monitor your agricultural operations</p>
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">My Farms</h1>
+              <p className="text-2xl text-white/80 font-light">Manage and monitor your agricultural operations</p>
             </div>
             <Link href="/farms/create">
-              <button className="btn-ghost text-lg px-8 py-3">
+              <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-4 font-light text-lg">
                 + Add New Farm
               </button>
             </Link>

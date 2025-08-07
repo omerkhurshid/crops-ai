@@ -425,12 +425,12 @@ class USDANassService {
 
     const stateAverages = states.map((state, index) => {
       const variation = (Math.random() - 0.5) * 0.4 // ±20% variation
-      const yield = baseYield * (1 + variation)
+      const yieldValue = baseYield * (1 + variation)
       
       return {
         state,
-        yield: Math.round(yield * 10) / 10,
-        percentOfNational: Math.round((yield / nationalAverage) * 100),
+        yield: Math.round(yieldValue * 10) / 10,
+        percentOfNational: Math.round((yieldValue / nationalAverage) * 100),
         rank: index + 1
       }
     }).sort((a, b) => b.yield - a.yield)

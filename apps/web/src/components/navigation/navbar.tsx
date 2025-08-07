@@ -12,11 +12,11 @@ export function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="nav-glass sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-crops-green-700">
+            <Link href="/" className="text-2xl font-bold text-gradient">
               Crops.AI
             </Link>
             
@@ -24,45 +24,27 @@ export function Navbar() {
               <div className="hidden md:ml-10 md:flex md:space-x-8">
                 <Link
                   href="/dashboard"
-                  className="text-gray-900 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-600 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/farms"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
                 >
                   Farms
                 </Link>
                 <Link
-                  href="/fields"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Fields
-                </Link>
-                <Link
                   href="/weather"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
                 >
                   Weather
                 </Link>
                 <Link
                   href="/recommendations"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
                 >
                   AI Insights
-                </Link>
-                <Link
-                  href="/crop-health"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Crop Health
-                </Link>
-                <Link
-                  href="/weather/alerts"
-                  className="text-gray-500 hover:text-crops-green-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Weather Alerts
                 </Link>
               </div>
             )}
@@ -83,14 +65,14 @@ export function Navbar() {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="rounded-full">
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm">
+                  <button className="btn-ghost text-sm">
                     Sign Up
-                  </Button>
+                  </button>
                 </Link>
               </div>
             )}

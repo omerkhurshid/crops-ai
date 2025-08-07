@@ -35,7 +35,7 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-crops-light">
       <Navbar />
       
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -43,12 +43,14 @@ export default async function FarmsPage() {
           {/* Header */}
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Farms</h1>
-              <p className="text-gray-600">Manage and monitor your agricultural operations</p>
+              <h1 className="text-4xl font-bold text-gradient mb-2">My Farms</h1>
+              <p className="text-lg text-gray-600">Manage and monitor your agricultural operations</p>
             </div>
-            <Button className="bg-green-600 hover:bg-green-700">
-              + Add New Farm
-            </Button>
+            <Link href="/farms/create">
+              <button className="btn-ghost text-lg px-8 py-3">
+                + Add New Farm
+              </button>
+            </Link>
           </div>
 
           {/* Stats Cards */}

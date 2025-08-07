@@ -10,20 +10,26 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 142 76% 36%;
+    --primary: 98 84% 47%;
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 98%;
     --secondary-foreground: 222.2 84% 4.9%;
     --muted: 210 40% 98%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 98%;
+    --accent: 84 100% 59%;
     --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
-    --radius: 0.5rem;
+    --ring: 98 84% 47%;
+    --radius: 1rem;
+    
+    /* New gradient colors */
+    --gradient-start: 98 84% 47%;
+    --gradient-end: 84 100% 59%;
+    --gradient-lime: 84 100% 59%;
+    --gradient-emerald: 160 84% 39%;
   }
 
   .dark {
@@ -55,5 +61,77 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  /* Gradient backgrounds */
+  .bg-gradient-crops {
+    background: linear-gradient(135deg, hsl(var(--gradient-lime)) 0%, hsl(var(--gradient-start)) 50%, hsl(var(--gradient-emerald)) 100%);
+  }
+  
+  .bg-gradient-crops-light {
+    background: linear-gradient(135deg, hsl(var(--gradient-lime) / 0.1) 0%, hsl(var(--gradient-start) / 0.1) 100%);
+  }
+  
+  /* Organic shapes */
+  .organic-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .organic-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, hsl(var(--gradient-lime) / 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, hsl(var(--gradient-emerald) / 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 20% 70%, hsl(var(--gradient-start) / 0.25) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-20px, -30px) rotate(1deg); }
+    66% { transform: translate(20px, 30px) rotate(-1deg); }
+  }
+  
+  /* Button styles */
+  .btn-ghost {
+    @apply border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground;
+    @apply transition-all duration-300 ease-in-out;
+    @apply rounded-full px-8 py-3 font-medium;
+  }
+  
+  .btn-ghost-white {
+    @apply border-2 border-white/50 bg-transparent text-white hover:bg-white hover:text-primary;
+    @apply transition-all duration-300 ease-in-out;
+    @apply rounded-full px-8 py-3 font-medium;
+  }
+  
+  /* Card styles */
+  .card-gradient {
+    @apply bg-white/80 backdrop-blur-sm;
+    @apply border border-white/20;
+    @apply rounded-3xl p-6;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Text styles */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-emerald)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Navigation styles */
+  .nav-glass {
+    @apply bg-white/80 backdrop-blur-lg border-b border-white/20;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   }
 }

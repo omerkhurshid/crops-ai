@@ -36,88 +36,88 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-crops-light">
       <Navbar />
       
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {user.name}!</p>
+            <h1 className="text-4xl font-bold text-gradient mb-2">Dashboard</h1>
+            <p className="text-lg text-gray-600">Welcome back, {user.name}!</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <Sprout className="h-5 w-5 mr-2 text-crops-green-600" />
-                  Total Farms
-                </CardTitle>
-                <CardDescription>Farms under your management</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-crops-green-700">
-                  {stats?.overview?.totalFarms || 0}
+            <div className="card-gradient">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-gradient-crops rounded-full mr-3">
+                  <Sprout className="h-6 w-6 text-white" />
                 </div>
-                <p className="text-sm text-gray-500">
-                  {stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'No farms yet'}
-                </p>
-              </CardContent>
-            </Card>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Total Farms</h3>
+                  <p className="text-sm text-gray-600">Farms under your management</p>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-gradient mb-2">
+                {stats?.overview?.totalFarms || 0}
+              </div>
+              <p className="text-sm text-gray-500">
+                {stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'No farms yet'}
+              </p>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <MapPin className="h-5 w-5 mr-2 text-blue-600" />
-                  Active Fields
-                </CardTitle>
-                <CardDescription>Fields currently in production</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-blue-700">
-                  {stats?.overview?.activeFields || 0}
+            <div className="card-gradient">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-blue-500 rounded-full mr-3">
+                  <MapPin className="h-6 w-6 text-white" />
                 </div>
-                <p className="text-sm text-gray-500">
-                  {stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields` : 'No fields yet'}
-                </p>
-              </CardContent>
-            </Card>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Active Fields</h3>
+                  <p className="text-sm text-gray-600">Fields currently in production</p>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-gradient mb-2">
+                {stats?.overview?.activeFields || 0}
+              </div>
+              <p className="text-sm text-gray-500">
+                {stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields` : 'No fields yet'}
+              </p>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-green-600" />
-                  Health Score
-                </CardTitle>
-                <CardDescription>Average crop health</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-green-700">
-                  {stats?.overview?.avgHealthScore || 0}
+            <div className="card-gradient">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-emerald-500 rounded-full mr-3">
+                  <TrendingUp className="h-6 w-6 text-white" />
                 </div>
-                <p className="text-sm text-gray-500">
-                  {stats?.overview?.avgHealthScore ? `${stats.overview.avgHealthScore}/100 average` : 'No data yet'}
-                </p>
-              </CardContent>
-            </Card>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Health Score</h3>
+                  <p className="text-sm text-gray-600">Average crop health</p>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-gradient mb-2">
+                {stats?.overview?.avgHealthScore || 0}
+              </div>
+              <p className="text-sm text-gray-500">
+                {stats?.overview?.avgHealthScore ? `${stats.overview.avgHealthScore}/100 average` : 'No data yet'}
+              </p>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center">
-                  <AlertTriangle className="h-5 w-5 mr-2 text-yellow-600" />
-                  Weather Alerts
-                </CardTitle>
-                <CardDescription>Current notifications</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-yellow-600">
-                  {stats?.overview?.weatherAlerts || 0}
+            <div className="card-gradient">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-yellow-500 rounded-full mr-3">
+                  <AlertTriangle className="h-6 w-6 text-white" />
                 </div>
-                <p className="text-sm text-gray-500">
-                  {stats?.overview?.weatherAlerts ? 'Active alerts' : 'No alerts'}
-                </p>
-              </CardContent>
-            </Card>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Weather Alerts</h3>
+                  <p className="text-sm text-gray-600">Current notifications</p>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-gradient mb-2">
+                {stats?.overview?.weatherAlerts || 0}
+              </div>
+              <p className="text-sm text-gray-500">
+                {stats?.overview?.weatherAlerts ? 'Active alerts' : 'No alerts'}
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

@@ -27,24 +27,42 @@ export function Navbar() {
           </div>
 
           {session && (
-            <div className="hidden md:flex md:space-x-12">
+            <div className="hidden md:flex md:space-x-8">
               <Link
                 href="/dashboard"
                 className="text-white/80 hover:text-white text-lg font-light transition-colors"
               >
-                Home
+                Dashboard
               </Link>
               <Link
                 href="/farms"
                 className="text-white/80 hover:text-white text-lg font-light transition-colors"
               >
-                Products
+                Farms
+              </Link>
+              <Link
+                href="/weather"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Weather
+              </Link>
+              <Link
+                href="/crop-health"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Crop Health
               </Link>
               <Link
                 href="/recommendations"
                 className="text-white/80 hover:text-white text-lg font-light transition-colors"
               >
-                Contact Us
+                AI Insights
+              </Link>
+              <Link
+                href="/reports"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Reports
               </Link>
             </div>
           )}

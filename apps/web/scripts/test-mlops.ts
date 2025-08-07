@@ -30,7 +30,7 @@ async function demonstrateMLOpsPipeline() {
   const yieldModels = modelRegistry.getModelsByCategory('yield_prediction')
   yieldModels.forEach(model => {
     console.log(`  ${model.name} (${model.id})`)
-    console.log(`    - Performance: RMSE=${model.performance.rmse}, R²=${model.performance.r2Score || 'N/A'}`)
+    console.log(`    - Performance: RMSE=${model.performance.rmse}, Accuracy=${model.performance.accuracy || 'N/A'}`)
     console.log(`    - Required: ${model.requirements.requiredFeatures.join(', ')}`)
   })
   

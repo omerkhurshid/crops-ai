@@ -177,7 +177,8 @@ async function getDatabaseStatus() {
  */
 async function testDatabaseConnection() {
   try {
-    const result = await migrationManager['prisma'].$queryRaw`SELECT 1 as test`
+    const { prisma } = await import('../../../../lib/prisma')
+    const result = await prisma.$queryRaw`SELECT 1 as test`
     return {
       status: 'connected',
       message: 'Database connection successful',

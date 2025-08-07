@@ -12,66 +12,68 @@ export function Navbar() {
   }
 
   return (
-    <nav className="nav-glass sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+    <nav className="absolute top-0 left-0 right-0 z-50">
+      <div className="max-w-7xl mx-auto px-8 lg:px-16">
+        <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Link href="/" className="text-2xl font-bold text-gradient">
-              Crops.AI
-            </Link>
-            
-            {session && (
-              <div className="hidden md:ml-10 md:flex md:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="text-gray-600 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/farms"
-                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
-                >
-                  Farms
-                </Link>
-                <Link
-                  href="/weather"
-                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
-                >
-                  Weather
-                </Link>
-                <Link
-                  href="/recommendations"
-                  className="text-gray-500 hover:text-primary px-3 py-2 rounded-full text-sm font-medium transition-colors"
-                >
-                  AI Insights
-                </Link>
+            <Link href="/" className="flex items-center">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                <div className="w-4 h-4 bg-white rounded-full"></div>
               </div>
-            )}
+              <span className="text-xl font-light text-white/90 tracking-wider">
+                CROPS.AI
+              </span>
+            </Link>
           </div>
+
+          {session && (
+            <div className="hidden md:flex md:space-x-12">
+              <Link
+                href="/dashboard"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/farms"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Products
+              </Link>
+              <Link
+                href="/recommendations"
+                className="text-white/80 hover:text-white text-lg font-light transition-colors"
+              >
+                Contact Us
+              </Link>
+            </div>
+          )}
 
           <div className="flex items-center space-x-4">
             {status === 'loading' ? (
               <div className="animate-pulse bg-gray-200 h-8 w-20 rounded"></div>
             ) : session ? (
               <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">
+                <span className="text-white/80">
                   Welcome, {session.user?.name}
                 </span>
-                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <button 
+                  onClick={handleSignOut}
+                  className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light"
+                >
                   Sign Out
-                </Button>
+                </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm" className="rounded-full">
-                    Sign In
-                  </Button>
-                </Link>
+              <div className="flex items-center space-x-3">
                 <Link href="/register">
-                  <button className="btn-ghost text-sm">
+                  <button className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light">
                     Sign Up
+                  </button>
+                </Link>
+                <Link href="/login">
+                  <button className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light">
+                    Login
                   </button>
                 </Link>
               </div>

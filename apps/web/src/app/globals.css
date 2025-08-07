@@ -83,14 +83,20 @@
   .organic-bg::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 20%, hsl(var(--gradient-lime) / 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, hsl(var(--gradient-emerald) / 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 20% 70%, hsl(var(--gradient-start) / 0.25) 0%, transparent 50%);
-    animation: float 20s ease-in-out infinite;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      /* Large prominent blob top right */
+      radial-gradient(ellipse 800px 600px at 85% 15%, hsl(var(--gradient-lime) / 0.4) 0%, transparent 70%),
+      /* Medium blob middle right */
+      radial-gradient(ellipse 600px 400px at 90% 50%, hsl(var(--gradient-emerald) / 0.3) 0%, transparent 60%),
+      /* Large blob bottom right */
+      radial-gradient(ellipse 1000px 700px at 80% 90%, hsl(84 100% 59% / 0.5) 0%, transparent 75%),
+      /* Flowing shape from center-right */
+      radial-gradient(ellipse 400px 800px at 60% 40%, hsl(var(--gradient-start) / 0.2) 0%, transparent 80%);
+    animation: float 25s ease-in-out infinite;
     pointer-events: none;
   }
   

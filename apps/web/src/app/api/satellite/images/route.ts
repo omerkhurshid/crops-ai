@@ -10,15 +10,15 @@ const satelliteSchema = z.object({
   east: z.number().min(-180).max(180),
   north: z.number().min(-90).max(90),
   type: z.enum(['search', 'true-color', 'ndvi', 'analysis', 'time-series', 'compare']).optional(),
-  date: z.string().optional(),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  date1: z.string().optional(),
-  date2: z.string().optional(),
+  date: z.string().nullable().optional(),
+  startDate: z.string().nullable().optional(),
+  endDate: z.string().nullable().optional(),
+  date1: z.string().nullable().optional(),
+  date2: z.string().nullable().optional(),
   width: z.number().min(64).max(2048).optional(),
   height: z.number().min(64).max(2048).optional(),
   maxCloudCoverage: z.number().min(0).max(100).optional(),
-  fieldId: z.string().optional(),
+  fieldId: z.string().nullable().optional(),
   interval: z.number().min(1).max(365).optional()
 });
 

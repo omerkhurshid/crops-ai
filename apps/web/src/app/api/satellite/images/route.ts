@@ -28,10 +28,25 @@ export const GET = apiMiddleware.basic(
     try {
       const { searchParams } = new URL(request.url);
       
-      const west = parseFloat(searchParams.get('west') || '');
-      const south = parseFloat(searchParams.get('south') || '');
-      const east = parseFloat(searchParams.get('east') || '');
-      const north = parseFloat(searchParams.get('north') || '');
+      // Parse coordinates with proper validation
+      const westStr = searchParams.get('west');
+      const southStr = searchParams.get('south');
+      const eastStr = searchParams.get('east');
+      const northStr = searchParams.get('north');
+      
+      if (!westStr || !southStr || !eastStr || !northStr) {
+        throw new ValidationError('Missing required bounding box parameters: west, south, east, north');
+      }
+      
+      const west = parseFloat(westStr);
+      const south = parseFloat(southStr);
+      const east = parseFloat(eastStr);
+      const north = parseFloat(northStr);
+      
+      if (isNaN(west) || isNaN(south) || isNaN(east) || isNaN(north)) {
+        throw new ValidationError('Invalid coordinate values: all bounding box parameters must be valid numbers');
+      }
+      
       const type = searchParams.get('type') || 'search';
       const date = searchParams.get('date');
       const startDate = searchParams.get('startDate');

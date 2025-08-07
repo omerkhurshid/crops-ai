@@ -109,6 +109,12 @@ class SentinelHubService {
     }
 
     if (!this.config.clientId || !this.config.clientSecret) {
+      console.error('Missing Sentinel Hub credentials:', {
+        hasClientId: !!this.config.clientId,
+        hasClientSecret: !!this.config.clientSecret,
+        clientIdLength: this.config.clientId?.length,
+        clientSecretLength: this.config.clientSecret?.length
+      });
       throw new Error('Sentinel Hub credentials not configured');
     }
 
@@ -126,7 +132,9 @@ class SentinelHubService {
       });
 
       if (!response.ok) {
-        throw new Error(`Authentication failed: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('Sentinel Hub auth error:', response.status, errorText);
+        throw new Error(`Authentication failed: ${response.statusText} - ${errorText}`);
       }
 
       const data = await response.json();

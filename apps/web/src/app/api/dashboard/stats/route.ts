@@ -109,15 +109,9 @@ export const GET = apiMiddleware.protected(
       activityItems.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       const recentActivities = activityItems.slice(0, 5)
 
-      // Calculate crop distribution
+      // Calculate crop distribution - simplified since crop data is in separate model
+      // For now, return empty distribution until we implement proper crop querying
       const cropDistribution: Record<string, number> = {}
-      farms.forEach(farm => {
-        farm.fields.forEach(field => {
-          if (field.crop) {
-            cropDistribution[field.crop] = (cropDistribution[field.crop] || 0) + 1
-          }
-        })
-      })
 
       // Calculate total farm area
       const totalArea = farms.reduce((sum, farm) => {
@@ -211,9 +205,8 @@ function generateRecommendations(farms: any[], alertsCount: number): string[] {
     
     recommendations.push('Review crop health analytics for optimization opportunities')
     
-    if (farms.some(farm => farm.fields.some((field: any) => !field.isActive))) {
-      recommendations.push('Activate inactive fields for the growing season')
-    }
+    // Note: isActive field doesn't exist in current schema
+    // Skip inactive fields recommendation for now
   }
   
   return recommendations.slice(0, 3) // Top 3 recommendations
@@ -232,29 +225,27 @@ function generateUpcomingTasks(farms: any[]): Array<{
   // Generate tasks based on farms and season
   farms.forEach(farm => {
     farm.fields.forEach((field: any) => {
-      if (field.crop) {
-        // Seasonal task generation
-        const month = now.getMonth()
-        
-        if (month >= 2 && month <= 4) { // Spring
-          tasks.push({
-            id: `planting-${field.id}`,
-            title: `Plan ${field.crop} planting`,
-            description: `Prepare field ${field.name} for planting season`,
-            dueDate: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-            priority: 'high' as const
-          })
-        }
-        
-        if (month >= 5 && month <= 8) { // Growing season
-          tasks.push({
-            id: `monitoring-${field.id}`,
-            title: `Monitor ${field.name}`,
-            description: `Check crop health and irrigation needs`,
-            dueDate: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-            priority: 'medium' as const
-          })
-        }
+      // Seasonal task generation (simplified without crop type)
+      const month = now.getMonth()
+      
+      if (month >= 2 && month <= 4) { // Spring
+        tasks.push({
+          id: `planting-${field.id}`,
+          title: `Plan field planting`,
+          description: `Prepare field ${field.name} for planting season`,
+          dueDate: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          priority: 'high' as const
+        })
+      }
+      
+      if (month >= 5 && month <= 8) { // Growing season
+        tasks.push({
+          id: `monitoring-${field.id}`,
+          title: `Monitor ${field.name}`,
+          description: `Check crop health and irrigation needs`,
+          dueDate: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+          priority: 'medium' as const
+        })
       }
     })
   })

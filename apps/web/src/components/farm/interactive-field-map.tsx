@@ -59,11 +59,24 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   // Fetch satellite image when center changes
   useEffect(() => {
     const fetchSatelliteImage = async () => {
+      console.log('Satellite fetch check:', {
+        mapCenter,
+        mapLoaded,
+        coordinates: { centerLat: coordinates.centerLat, centerLng: coordinates.centerLng },
+        shouldFetch: mapCenter.lat && mapCenter.lng && mapLoaded && !(coordinates.centerLat === '' && coordinates.centerLng === '')
+      })
+      
       // Only fetch if we have valid coordinates and map is loaded
-      if (!mapCenter.lat || !mapCenter.lng || !mapLoaded) return
+      if (!mapCenter.lat || !mapCenter.lng || !mapLoaded) {
+        console.log('Skipping satellite fetch: invalid coordinates or map not loaded')
+        return
+      }
       
       // Skip if coordinates haven't been explicitly set by user
-      if (coordinates.centerLat === '' && coordinates.centerLng === '') return
+      if (coordinates.centerLat === '' && coordinates.centerLng === '') {
+        console.log('Skipping satellite fetch: coordinates not set by user')
+        return
+      }
       
       setLoadingImage(true)
       try {
@@ -128,12 +141,18 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   const updateMapCenter = () => {
     const lat = parseFloat(coordinates.centerLat)
     const lng = parseFloat(coordinates.centerLng)
+    console.log('Updating map center:', { lat, lng, isValidLat: !isNaN(lat), isValidLng: !isNaN(lng) })
+    
     if (!isNaN(lat) && !isNaN(lng)) {
       setMapCenter({ lat, lng })
       // Clear existing points when changing location
       setPoints([])
       setDetectedFields([])
       setSelectedField(null)
+      console.log('Map center updated successfully')
+    } else {
+      console.error('Invalid coordinates:', { centerLat: coordinates.centerLat, centerLng: coordinates.centerLng })
+      alert('Please enter valid numeric coordinates')
     }
   }
 

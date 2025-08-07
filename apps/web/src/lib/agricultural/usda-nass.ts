@@ -391,14 +391,14 @@ class USDANassService {
       const year = currentYear - i
       const trend = 0.02 // 2% annual improvement
       const noise = (Math.random() - 0.5) * 0.1 // ±5% random variation
-      const yield = baseYield * (1 + trend * (yearRange - i)) * (1 + noise)
+      const yieldValue = baseYield * (1 + trend * (yearRange - i)) * (1 + noise)
       
       years.push({
         year,
-        yield: Math.round(yield * 10) / 10,
+        yield: Math.round(yieldValue * 10) / 10,
         plantedAcres: Math.floor(Math.random() * 50000) + 10000,
         harvestedAcres: Math.floor(Math.random() * 45000) + 9500,
-        production: Math.floor(yield * 30000)
+        production: Math.floor(yieldValue * 30000)
       })
     }
 

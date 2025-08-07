@@ -244,8 +244,10 @@ async function checkDatabaseIssues() {
   const issues = []
 
   try {
+    const { prisma } = await import('../../../../lib/prisma')
+    
     // Check for fields without boundaries
-    const fieldsWithoutBoundaries = await migrationManager['prisma'].$queryRaw`
+    const fieldsWithoutBoundaries = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM fields WHERE boundary IS NULL
     ` as Array<{ count: bigint }>
 
@@ -254,7 +256,7 @@ async function checkDatabaseIssues() {
     }
 
     // Check for farms without fields
-    const farmsWithoutFields = await migrationManager['prisma'].$queryRaw`
+    const farmsWithoutFields = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM farms 
       WHERE id NOT IN (SELECT DISTINCT farm_id FROM fields)
     ` as Array<{ count: bigint }>
@@ -264,7 +266,7 @@ async function checkDatabaseIssues() {
     }
 
     // Check for old data that needs cleanup
-    const oldWeatherData = await migrationManager['prisma'].$queryRaw`
+    const oldWeatherData = await prisma.$queryRaw`
       SELECT COUNT(*) as count FROM weather_data 
       WHERE timestamp < NOW() - INTERVAL '2 years'
     ` as Array<{ count: bigint }>
@@ -274,7 +276,7 @@ async function checkDatabaseIssues() {
     }
 
     // Check PostGIS extension
-    const postgisCheck = await migrationManager['prisma'].$queryRaw`
+    const postgisCheck = await prisma.$queryRaw`
       SELECT EXISTS(
         SELECT 1 FROM pg_extension WHERE extname = 'postgis'
       ) as enabled

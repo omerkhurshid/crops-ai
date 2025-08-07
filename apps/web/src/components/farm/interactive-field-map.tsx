@@ -6,7 +6,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
-import { MapPin, Move, Square, RotateCcw, Check, X, Shapes } from 'lucide-react'
+import { MapPin, Move, Square, RotateCcw, Check, X, Shapes, MapPinned, Info } from 'lucide-react'
 
 interface InteractiveFieldMapProps {
   fieldId: string
@@ -26,13 +26,13 @@ interface MapPoint {
 export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: InteractiveFieldMapProps) {
   const [mapCenter, setMapCenter] = useState({ lat: 40.7128, lng: -74.0060 })
   const [coordinates, setCoordinates] = useState({
-    centerLat: '40.7128',
-    centerLng: '-74.0060',
+    centerLat: '',
+    centerLng: '',
     zoom: '16'
   })
   const [points, setPoints] = useState<MapPoint[]>([])
   const [dragPoint, setDragPoint] = useState<string | null>(null)
-  const [mode, setMode] = useState<'satellite' | 'manual'>('satellite')
+  const [mode, setMode] = useState<'satellite' | 'manual'>('manual')
   const [mapLoaded, setMapLoaded] = useState(false)
   const [isDetecting, setIsDetecting] = useState(false)
   const [detectedFields, setDetectedFields] = useState<any[]>([])
@@ -40,14 +40,69 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   
   const mapRef = useRef<HTMLDivElement>(null)
   const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
-
-  // Mock satellite map tiles - in production, you'd use real map tiles
-  const mapTileUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${mapCenter.lng},${mapCenter.lat},${coordinates.zoom}/800x600@2x?access_token=your_mapbox_token`
+  const [satelliteImage, setSatelliteImage] = useState<string | null>(null)
+  const [loadingImage, setLoadingImage] = useState(false)
 
   useEffect(() => {
-    // Simulate map loading
-    const timer = setTimeout(() => setMapLoaded(true), 1000)
+    // Simulate map loading and create initial square
+    const timer = setTimeout(() => {
+      setMapLoaded(true)
+      if (mode === 'manual' && points.length === 0) {
+        createSquareField()
+      }
+    }, 500)
     return () => clearTimeout(timer)
+  }, [])
+
+  // Fetch satellite image when center changes
+  useEffect(() => {
+    const fetchSatelliteImage = async () => {
+      if (!mapCenter.lat || !mapCenter.lng) return
+      
+      setLoadingImage(true)
+      try {
+        const bbox = {
+          west: mapCenter.lng - 0.01,
+          south: mapCenter.lat - 0.01,
+          east: mapCenter.lng + 0.01,
+          north: mapCenter.lat + 0.01
+        }
+
+        const params = new URLSearchParams({
+          west: bbox.west.toString(),
+          south: bbox.south.toString(),
+          east: bbox.east.toString(),
+          north: bbox.north.toString(),
+          type: 'true-color',
+          width: '800',
+          height: '600',
+          date: new Date().toISOString().split('T')[0]
+        })
+
+        const response = await fetch(`/api/satellite/images?${params}`, {
+          method: 'GET'
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data) {
+            // Check for different response formats
+            if (result.data.imageUrl) {
+              setSatelliteImage(result.data.imageUrl)
+            } else if (result.data.imageData) {
+              // Base64 image data
+              setSatelliteImage(result.data.imageData)
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch satellite image:', error)
+      } finally {
+        setLoadingImage(false)
+      }
+    }
+
+    fetchSatelliteImage()
   }, [mapCenter])
 
   const updateMapCenter = () => {
@@ -272,14 +327,24 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
             <span>Define Field Boundaries</span>
           </CardTitle>
           <CardDescription>
-            Use satellite detection or manually define your field perimeter with drag-and-drop pins
+            Define your field boundaries by drawing on the map or using automatic satellite detection
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             {/* Location Input */}
             <div>
-              <h4 className="font-medium mb-4">1. Set Map Location</h4>
+              <h4 className="font-medium mb-4">1. Set Map Location (Optional)</h4>
+              
+              {/* Location helpers */}
+              <div className="mb-4 p-3 bg-blue-50 rounded-lg flex items-start space-x-2">
+                <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-700">
+                  <p className="font-medium mb-1">Skip coordinates and draw directly!</p>
+                  <p className="text-xs">Just select "Manual Drawing" below and start creating your field boundaries.</p>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="center-lat">Latitude</Label>
@@ -356,15 +421,18 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
               )}
 
               {mode === 'manual' && (
-                <div className="flex space-x-4">
-                  <Button onClick={createSquareField} variant="outline">
-                    <Square className="h-4 w-4 mr-2" />
-                    Start with Square
-                  </Button>
-                  <Button onClick={clearPoints} variant="outline">
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Clear All
-                  </Button>
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Click on the map to add points, or use a preset shape:</p>
+                  <div className="flex space-x-4">
+                    <Button onClick={createSquareField} variant="outline">
+                      <Square className="h-4 w-4 mr-2" />
+                      Start with Square
+                    </Button>
+                    <Button onClick={clearPoints} variant="outline">
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Clear All
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
@@ -376,14 +444,26 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 {/* Map Container */}
                 <div 
                   ref={mapRef}
-                  className="relative w-full h-96 bg-green-100 cursor-crosshair select-none"
+                  className="relative w-full h-96 bg-gray-100 cursor-crosshair select-none overflow-hidden"
                   onClick={mode === 'manual' ? addCustomPoint : undefined}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
                   onMouseLeave={handleMouseUp}
                 >
-                  {/* Simulated satellite imagery background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-200 via-green-300 to-green-400 opacity-70"></div>
+                  {/* Satellite imagery background or fallback */}
+                  {loadingImage ? (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                      <div className="text-gray-600">Loading satellite image...</div>
+                    </div>
+                  ) : satelliteImage ? (
+                    <img 
+                      src={satelliteImage} 
+                      alt="Satellite view"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-200 via-green-300 to-green-400 opacity-70"></div>
+                  )}
                   
                   {/* Grid overlay for reference */}
                   <svg className="absolute inset-0 w-full h-full pointer-events-none">

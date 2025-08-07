@@ -28,14 +28,16 @@ export async function POST() {
       })
     }
 
-    // Add missing columns
+    // Add missing columns and fix existing constraints
     const migrations = [
       `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "latitude" DOUBLE PRECISION`,
       `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "longitude" DOUBLE PRECISION`,
       `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "address" TEXT`,
       `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "region" TEXT`,
       `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "country" TEXT DEFAULT 'US'`,
-      `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "totalArea" DOUBLE PRECISION DEFAULT 0`
+      `ALTER TABLE "farms" ADD COLUMN IF NOT EXISTS "totalArea" DOUBLE PRECISION DEFAULT 0`,
+      // Make location column nullable if it exists
+      `ALTER TABLE "farms" ALTER COLUMN "location" DROP NOT NULL`
     ]
 
     const results = []

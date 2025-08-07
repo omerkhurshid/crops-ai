@@ -70,7 +70,7 @@ export async function GET() {
       totalFields: Number(stats[0].total_fields),
       fieldsWithBoundaries: Number(stats[0].fields_with_boundaries),
       fieldsWithoutBoundaries: Number(stats[0].fields_without_boundaries),
-      completionPercentage: stats[0].total_fields > 0n 
+      completionPercentage: Number(stats[0].total_fields) > 0
         ? Math.round((Number(stats[0].fields_with_boundaries) / Number(stats[0].total_fields)) * 100)
         : 0
     }

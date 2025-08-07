@@ -98,6 +98,10 @@ class SentinelHubService {
       clientSecret: process.env.SENTINEL_HUB_CLIENT_SECRET || '',
       baseUrl: 'https://services.sentinel-hub.com'
     };
+    
+    if (!this.config.clientId || !this.config.clientSecret) {
+      console.warn('Sentinel Hub credentials not configured. Using fallback mock data.');
+    }
   }
 
   /**

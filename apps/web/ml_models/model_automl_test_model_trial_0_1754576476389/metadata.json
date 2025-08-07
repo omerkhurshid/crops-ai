@@ -1,0 +1,15 @@
+{
+  "id": "model_automl_test_model_trial_0_1754576476389",
+  "name": "AutoML Test Model_trial_0",
+  "version": "1.0.0",
+  "type": "regression",
+  "framework": "scikit-learn",
+  "description": "Auto-trained model for AutoML Test Model_trial_0",
+  "tags": [],
+  "createdAt": "2025-08-07T14:21:16.389Z",
+  "updatedAt": "2025-08-07T14:21:16.389Z",
+  "author": "training-service",
+  "metrics": {},
+  "parameters": {},
+  "status": "training"
+}

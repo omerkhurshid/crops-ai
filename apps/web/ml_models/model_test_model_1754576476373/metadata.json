@@ -1,0 +1,15 @@
+{
+  "id": "model_test_model_1754576476373",
+  "name": "Test Model",
+  "version": "1.0.0",
+  "type": "regression",
+  "framework": "scikit-learn",
+  "description": "Auto-trained model for Test Model",
+  "tags": [],
+  "createdAt": "2025-08-07T14:21:16.373Z",
+  "updatedAt": "2025-08-07T14:21:16.373Z",
+  "author": "training-service",
+  "metrics": {},
+  "parameters": {},
+  "status": "training"
+}

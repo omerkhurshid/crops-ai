@@ -1,0 +1,15 @@
+{
+  "id": "model_test_lifecycle_model_1754576481390",
+  "name": "Test Lifecycle Model",
+  "version": "1.0.0",
+  "type": "regression",
+  "framework": "scikit-learn",
+  "description": "Test model for lifecycle validation",
+  "tags": [],
+  "createdAt": "2025-08-07T14:21:21.390Z",
+  "updatedAt": "2025-08-07T14:21:21.390Z",
+  "author": "test-user",
+  "metrics": {},
+  "parameters": {},
+  "status": "training"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "model_versioned_model_1754576481392",
+  "name": "Versioned Model",
+  "version": "1.0.0",
+  "type": "classification",
+  "framework": "tensorflow",
+  "description": "Model with version tracking",
+  "tags": [],
+  "createdAt": "2025-08-07T14:21:21.392Z",
+  "updatedAt": "2025-08-07T14:21:21.392Z",
+  "author": "test-user",
+  "metrics": {},
+  "parameters": {},
+  "status": "training"
+}

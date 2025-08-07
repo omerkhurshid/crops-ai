@@ -170,7 +170,7 @@ export const GET = apiMiddleware.basic(
     } catch (error) {
       await auditLogger.logML('crop_stage_api_error', 'unknown', undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
-      }, 'error')
+      })
       
       return handleApiError(error)
     }

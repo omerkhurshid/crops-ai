@@ -222,7 +222,7 @@ export default async function handler(
     await auditLogger.logML('pest_prediction_error', params.fieldId || 'unknown', undefined, undefined, {
       error: errorMessage,
       processingTime
-    }, 'error')
+    })
 
     console.error('Pest prediction API error:', error)
 

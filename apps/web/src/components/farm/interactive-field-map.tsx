@@ -7,7 +7,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
-import { MapPin, Move, Square, RotateCcw, Check, X, Shapes, MapPinned, Info } from 'lucide-react'
+import { MapPin, Move, Square, RotateCcw, Check, X, Shapes, MapPinned, Info, ZoomIn, ZoomOut } from 'lucide-react'
 
 interface InteractiveFieldMapProps {
   fieldId: string
@@ -31,6 +31,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     centerLng: '',
     zoom: '16'
   })
+  const [currentZoom, setCurrentZoom] = useState(16)
   const [points, setPoints] = useState<MapPoint[]>([])
   const [dragPoint, setDragPoint] = useState<string | null>(null)
   const [mode, setMode] = useState<'satellite' | 'manual'>('manual')
@@ -92,11 +93,22 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
         const startDate = new Date()
         startDate.setDate(startDate.getDate() - 30)
         
+        // Calculate bbox size based on zoom level (higher zoom = smaller area = better resolution)
+        const zoomFactor = Math.pow(2, 16 - currentZoom) // Base zoom 16
+        const bboxSize = 0.01 * zoomFactor
+        
+        const adjustedBbox = {
+          west: mapCenter.lng - bboxSize,
+          south: mapCenter.lat - bboxSize,
+          east: mapCenter.lng + bboxSize,
+          north: mapCenter.lat + bboxSize
+        }
+        
         const params = new URLSearchParams({
-          west: bbox.west.toString(),
-          south: bbox.south.toString(),
-          east: bbox.east.toString(),
-          north: bbox.north.toString(),
+          west: adjustedBbox.west.toString(),
+          south: adjustedBbox.south.toString(),
+          east: adjustedBbox.east.toString(),
+          north: adjustedBbox.north.toString(),
           type: 'true-color',
           width: '800',
           height: '600',
@@ -147,7 +159,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     }
 
     fetchSatelliteImage()
-  }, [mapCenter, mapLoaded, coordinates.centerLat, coordinates.centerLng])
+  }, [mapCenter, mapLoaded, coordinates.centerLat, coordinates.centerLng, currentZoom])
 
   const updateMapCenter = () => {
     const lat = parseFloat(coordinates.centerLat)
@@ -164,6 +176,20 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     } else {
       console.error('Invalid coordinates:', { centerLat: coordinates.centerLat, centerLng: coordinates.centerLng })
       alert('Please enter valid numeric coordinates')
+    }
+  }
+
+  const zoomIn = () => {
+    if (currentZoom < 20) {
+      setCurrentZoom(prev => prev + 1)
+      setCoordinates(prev => ({ ...prev, zoom: (currentZoom + 1).toString() }))
+    }
+  }
+
+  const zoomOut = () => {
+    if (currentZoom > 10) {
+      setCurrentZoom(prev => prev - 1)
+      setCoordinates(prev => ({ ...prev, zoom: (currentZoom - 1).toString() }))
     }
   }
 
@@ -527,6 +553,33 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                     <rect width="100%" height="100%" fill="url(#grid)" />
                   </svg>
 
+                  {/* Zoom Controls */}
+                  <div className="absolute top-4 right-4 flex flex-col space-y-2 z-10">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-white/90 hover:bg-white/100 p-2"
+                      onClick={zoomIn}
+                      disabled={currentZoom >= 20}
+                      title="Zoom In"
+                    >
+                      <ZoomIn className="h-4 w-4" />
+                    </Button>
+                    <div className="bg-white/90 px-2 py-1 rounded text-xs font-mono text-center">
+                      Z{currentZoom}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-white/90 hover:bg-white/100 p-2"
+                      onClick={zoomOut}
+                      disabled={currentZoom <= 10}
+                      title="Zoom Out"
+                    >
+                      <ZoomOut className="h-4 w-4" />
+                    </Button>
+                  </div>
+
                   {/* Center marker - only show if coordinates are set */}
                   {(coordinates.centerLat !== '' && coordinates.centerLng !== '') && (
                     <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500">
@@ -600,10 +653,11 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   <div className="flex space-x-4">
                     <span>Points: {points.length}</span>
                     <span>Area: {calculateArea().toFixed(2)} ha</span>
+                    <span>Zoom: {currentZoom}</span>
                     <span>Center: {mapCenter.lat !== 0 ? `${mapCenter.lat.toFixed(4)}, ${mapCenter.lng.toFixed(4)}` : 'Not set'}</span>
                   </div>
                   <div className="text-gray-500">
-                    {mode === 'manual' ? 'Click to add • Drag to move' : 'Satellite detection mode'}
+                    {mode === 'manual' ? 'Click to add • Drag to move • Zoom for detail' : 'Satellite detection mode'}
                   </div>
                 </div>
               </div>

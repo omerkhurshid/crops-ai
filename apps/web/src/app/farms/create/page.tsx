@@ -14,7 +14,9 @@ interface Field {
   id: string
   name: string
   size: number
+  area?: number
   crop: string
+  soilType?: string
   perimeter: Array<{ lat: number; lng: number }>
   notes?: string
 }
@@ -24,6 +26,13 @@ interface Farm {
   description: string
   farmType: string
   fields: Field[]
+  location?: {
+    lat: number
+    lng: number
+    address?: string
+    region?: string
+    country?: string
+  }
 }
 
 const cropOptions = [
@@ -94,16 +103,69 @@ export default function CreateFarmPage() {
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      // Here you would submit to your API
-      console.log('Creating farm:', farm)
+      console.log('Creating farm with data:', farm)
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Redirect to farms list or dashboard
-      router.push('/farms')
+      // Create the farm via API
+      const farmResponse = await fetch('/api/farms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: farm.name,
+          farmType: farm.farmType,
+          description: farm.description,
+          latitude: farm.location?.lat || 0,
+          longitude: farm.location?.lng || 0,
+          address: farm.location?.address || '',
+          region: farm.location?.region || '',
+          country: farm.location?.country || 'US',
+          totalArea: farm.fields.reduce((total, field) => total + (field.size || 0), 0)
+        }),
+      })
+
+      if (!farmResponse.ok) {
+        const errorText = await farmResponse.text()
+        throw new Error(`Failed to create farm: ${errorText}`)
+      }
+
+      const farmResult = await farmResponse.json()
+      console.log('Farm created successfully:', farmResult)
+
+      // Create fields for the farm
+      if (farm.fields.length > 0) {
+        for (const field of farm.fields) {
+          const fieldResponse = await fetch('/api/fields', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              farmId: farmResult.farm.id,
+              name: field.name,
+              area: field.size || 0,
+              soilType: field.soilType || null,
+              // Convert perimeter coordinates to boundary format if available
+              boundary: field.perimeter ? JSON.stringify({
+                type: 'Polygon',
+                coordinates: [field.perimeter.map(p => [p.lng, p.lat])]
+              }) : null
+            }),
+          })
+
+          if (!fieldResponse.ok) {
+            console.error(`Failed to create field ${field.name}:`, await fieldResponse.text())
+          } else {
+            console.log(`Field ${field.name} created successfully`)
+          }
+        }
+      }
+
+      // Redirect to dashboard to see the created farm
+      router.push('/dashboard')
     } catch (error) {
       console.error('Error creating farm:', error)
+      alert('Failed to create farm. Please try again.')
     } finally {
       setIsLoading(false)
     }

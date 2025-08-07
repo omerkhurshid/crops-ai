@@ -60,7 +60,7 @@ export default function Home() {
               Powerful Features for Modern Agriculture
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Everything you need to optimize your farm's productivity and sustainability with cutting-edge AI technology
+              Everything you need to optimize your farm&apos;s productivity and sustainability with cutting-edge AI technology
             </p>
           </div>
 

@@ -70,6 +70,11 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           north: mapCenter.lat + 0.01
         }
 
+        // Use a date range for the last 30 days to find available imagery
+        const endDate = new Date()
+        const startDate = new Date()
+        startDate.setDate(startDate.getDate() - 30)
+        
         const params = new URLSearchParams({
           west: bbox.west.toString(),
           south: bbox.south.toString(),
@@ -78,7 +83,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           type: 'true-color',
           width: '800',
           height: '600',
-          date: new Date().toISOString().split('T')[0]
+          date: endDate.toISOString().split('T')[0]
         })
 
         const response = await fetch(`/api/satellite/images?${params}`, {
@@ -87,6 +92,8 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
 
         if (response.ok) {
           const result = await response.json()
+          console.log('Satellite API response:', result)
+          
           if (result.success && result.data) {
             // Check for different response formats
             if (result.data.imageUrl) {
@@ -94,8 +101,15 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
             } else if (result.data.imageData) {
               // Base64 image data
               setSatelliteImage(result.data.imageData)
+            } else {
+              console.warn('No image data in response:', result.data)
             }
+          } else {
+            console.error('Failed to get satellite image:', result.error || result.message)
           }
+        } else {
+          const errorText = await response.text()
+          console.error('Satellite API error:', response.status, errorText)
         }
       } catch (error) {
         console.error('Failed to fetch satellite image:', error)

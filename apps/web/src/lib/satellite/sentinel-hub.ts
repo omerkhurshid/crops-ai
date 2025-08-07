@@ -294,19 +294,30 @@ class SentinelHubService {
       function setup() {
         return {
           input: ["B02", "B03", "B04"],
-          output: { bands: 3 }
+          output: { bands: 3, sampleType: "AUTO" }
         };
       }
 
       function evaluatePixel(sample) {
-        return [sample.B04, sample.B03, sample.B02];
+        // Enhance visualization for better contrast
+        let gain = 2.5;
+        return [
+          sample.B04 * gain,
+          sample.B03 * gain,
+          sample.B02 * gain
+        ];
       }
     `;
 
+    // Use a date range to find available imagery
+    const toDate = new Date(date);
+    const fromDate = new Date(date);
+    fromDate.setDate(fromDate.getDate() - 30); // Look back 30 days
+    
     const imageRequest: SatelliteImageRequest = {
       bbox,
-      fromTime: date,
-      toTime: date,
+      fromTime: fromDate.toISOString(),
+      toTime: toDate.toISOString(),
       width,
       height,
       format: 'image/jpeg',

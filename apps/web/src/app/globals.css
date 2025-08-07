@@ -68,8 +68,8 @@
   /* Agricultural background with overlay */
   .bg-agricultural {
     background-image: 
-      linear-gradient(135deg, rgba(76, 175, 80, 0.85) 0%, rgba(139, 195, 74, 0.75) 50%, rgba(205, 220, 57, 0.8) 100%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cpath d='M0,400 C300,200 600,600 900,300 C1050,150 1200,500 1200,400 L1200,800 L0,800 Z' fill='%23FFD700' opacity='0.3'/%3E%3Cpath d='M0,500 C200,300 400,700 600,400 C800,100 1000,600 1200,300 L1200,800 L0,800 Z' fill='%23ADFF2F' opacity='0.4'/%3E%3Cpath d='M0,600 C150,400 450,800 750,500 C900,350 1050,650 1200,450 L1200,800 L0,800 Z' fill='%2332CD32' opacity='0.3'/%3E%3C/svg%3E");
+      linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%),
+      url('/images/agricultural-landscape.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

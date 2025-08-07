@@ -75,7 +75,7 @@ export const POST = apiMiddleware.basic(
       })
 
     } catch (error) {
-      await auditLogger.logAPI('crop_stage_detection_error', 'POST', false, {
+      await auditLogger.logML('crop_stage_detection_error', 'unknown', undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
       }, 'error')
       
@@ -113,7 +113,7 @@ export const GET = apiMiddleware.basic(
           plantingDateObj
         )
 
-        await auditLogger.logAPI('crop_stage_history_requested', 'GET', true, {
+        await auditLogger.logML('crop_stage_history_requested', fieldId, undefined, undefined, {
           fieldId,
           cropType,
           plantingDate,
@@ -150,7 +150,7 @@ export const GET = apiMiddleware.basic(
           currentStage
         )
 
-        await auditLogger.logAPI('stage_transition_prediction_requested', 'GET', true, {
+        await auditLogger.logML('stage_transition_prediction_requested', fieldId, undefined, undefined, {
           fieldId,
           cropType,
           currentStage,
@@ -168,7 +168,7 @@ export const GET = apiMiddleware.basic(
       }
 
     } catch (error) {
-      await auditLogger.logAPI('crop_stage_api_error', 'GET', false, {
+      await auditLogger.logML('crop_stage_api_error', 'unknown', undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
       }, 'error')
       

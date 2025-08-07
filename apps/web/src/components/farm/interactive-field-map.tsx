@@ -109,20 +109,33 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
 
         if (response.ok) {
           const result = await response.json()
-          console.log('Satellite API response:', result)
+          console.log('Satellite API response structure:', {
+            success: result.success,
+            hasData: !!result.data,
+            dataKeys: result.data ? Object.keys(result.data) : [],
+            message: result.message,
+            summary: result.summary
+          })
           
           if (result.success && result.data) {
             // Check for different response formats
             if (result.data.imageUrl) {
+              console.log('Using imageUrl:', result.data.imageUrl.substring(0, 50) + '...')
               setSatelliteImage(result.data.imageUrl)
             } else if (result.data.imageData) {
-              // Base64 image data
+              console.log('Using base64 imageData, length:', result.data.imageData.length)
               setSatelliteImage(result.data.imageData)
             } else {
-              console.warn('No image data in response:', result.data)
+              console.warn('No image data found. Available data fields:', Object.keys(result.data))
+              console.log('Full data object:', result.data)
             }
           } else {
-            console.error('Failed to get satellite image:', result.error || result.message)
+            console.error('API returned success=false or no data:', {
+              success: result.success,
+              error: result.error,
+              message: result.message,
+              data: result.data
+            })
           }
         } else {
           const errorText = await response.text()

@@ -198,6 +198,7 @@ async function authenticateRequest(request: NextRequest): Promise<{
   role: UserRole
 } | null> {
   try {
+    // Try NextAuth JWT token first
     const { getToken } = await import('next-auth/jwt')
     
     const token = await getToken({
@@ -205,15 +206,39 @@ async function authenticateRequest(request: NextRequest): Promise<{
       secret: process.env.NEXTAUTH_SECRET
     })
     
-    if (!token || !token.email) {
+    if (token && token.email) {
+      return {
+        id: token.id as string,
+        email: token.email,
+        name: token.name || 'Unknown User',
+        role: token.role as UserRole
+      }
+    }
+
+    // Fallback to session cookie (same logic as getCurrentUser)
+    const sessionCookie = request.cookies.get('session')
+    
+    if (!sessionCookie) {
       return null
     }
-    
-    return {
-      id: token.id as string,
-      email: token.email,
-      name: token.name || 'Unknown User',
-      role: token.role as UserRole
+
+    try {
+      const sessionData = JSON.parse(Buffer.from(sessionCookie.value, 'base64').toString())
+      
+      // Check if session is expired
+      if (Date.now() > sessionData.exp) {
+        return null
+      }
+
+      return {
+        id: sessionData.id,
+        email: sessionData.email,
+        name: sessionData.name,
+        role: sessionData.role as UserRole
+      }
+    } catch (cookieError) {
+      Logger.error('Error parsing session cookie', cookieError)
+      return null
     }
   } catch (error) {
     Logger.error('Authentication error', error)

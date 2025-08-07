@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -47,12 +48,13 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     // Simulate map loading and create initial square
     const timer = setTimeout(() => {
       setMapLoaded(true)
-      if (mode === 'manual' && points.length === 0) {
+      // Only create initial square on first load
+      if (points.length === 0) {
         createSquareField()
       }
     }, 500)
     return () => clearTimeout(timer)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fetch satellite image when center changes
   useEffect(() => {
@@ -341,7 +343,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-blue-700">
                   <p className="font-medium mb-1">Skip coordinates and draw directly!</p>
-                  <p className="text-xs">Just select "Manual Drawing" below and start creating your field boundaries.</p>
+                  <p className="text-xs">Just select &quot;Manual Drawing&quot; below and start creating your field boundaries.</p>
                 </div>
               </div>
               
@@ -456,10 +458,12 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       <div className="text-gray-600">Loading satellite image...</div>
                     </div>
                   ) : satelliteImage ? (
-                    <img 
+                    <Image 
                       src={satelliteImage} 
                       alt="Satellite view"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      unoptimized // Since it's a dynamic satellite image
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-green-200 via-green-300 to-green-400 opacity-70"></div>

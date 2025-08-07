@@ -31,11 +31,10 @@ async function testFarmCreation() {
     // Skip request body parsing for GET requests
     console.log('Testing with hardcoded data...')
 
-    // Test minimal farm creation with location field
+    // Test minimal farm creation
     const testFarmData = {
       name: 'Debug Test Farm',
       ownerId: 'demo-1',
-      location: 'Test Location',  // Add location field
       latitude: 40.7128,
       longitude: -74.0060,
       country: 'US',

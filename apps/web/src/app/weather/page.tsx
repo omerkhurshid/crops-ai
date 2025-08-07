@@ -19,14 +19,15 @@ export default async function WeatherPage() {
   const defaultLongitude = -74.0060
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-agricultural">
+      <div className="absolute inset-0 agricultural-overlay"></div>
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Weather Intelligence</h1>
-            <p className="text-gray-600">
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
+        <div className="px-8 lg:px-16 py-12 sm:px-0">
+          <div className="mb-12">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">Weather Intelligence</h1>
+            <p className="text-2xl text-white/80 font-light">
               Real-time weather data and agricultural insights for your farm locations
             </p>
           </div>

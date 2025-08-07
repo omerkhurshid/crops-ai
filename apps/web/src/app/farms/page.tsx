@@ -35,7 +35,8 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms()
 
   return (
-    <div className="min-h-screen bg-gradient-crops organic-bg">
+    <div className="min-h-screen bg-agricultural">
+      <div className="absolute inset-0 agricultural-overlay"></div>
       <Navbar />
       
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">

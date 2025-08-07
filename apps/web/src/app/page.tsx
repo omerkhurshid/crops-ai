@@ -8,7 +8,8 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative min-h-screen bg-gradient-crops organic-bg flex items-center justify-start">
+      <section className="relative min-h-screen bg-agricultural flex items-center justify-start">
+        <div className="absolute inset-0 agricultural-overlay-dark"></div>
         <div className="relative z-10 max-w-7xl w-full px-8 lg:px-16">
           <div className="max-w-3xl">
             <div className="mb-4">

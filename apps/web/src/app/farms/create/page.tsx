@@ -172,15 +172,16 @@ export default function CreateFarmPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-agricultural">
+      <div className="absolute inset-0 agricultural-overlay"></div>
       <Navbar />
       
-      <main className="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
         <div className="px-4 py-6 sm:px-0">
           {/* Progress Steps */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-gray-900">Create New Farm</h1>
+              <h1 className="text-4xl font-bold text-white">Create New Farm</h1>
               <div className="flex items-center space-x-4">
                 <div className={`flex items-center ${currentStep >= 1 ? 'text-crops-green-600' : 'text-gray-400'}`}>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-crops-green-600 text-white' : 'bg-gray-200'}`}>

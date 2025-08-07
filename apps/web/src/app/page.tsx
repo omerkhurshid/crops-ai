@@ -29,23 +29,15 @@ export default function Home() {
               real-time monitoring, and predictive analytics. Transform your agricultural operations with cutting-edge technology.
             </p>
             
-            {/* Dots indicator */}
-            <div className="flex gap-2 mb-8">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-              <div className="w-3 h-3 bg-white/50 rounded-full"></div>
-              <div className="w-3 h-3 bg-white/50 rounded-full"></div>
-              <div className="w-3 h-3 bg-white/50 rounded-full"></div>
-            </div>
-            
             <div className="flex gap-6">
               <Link href="/register">
                 <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-3 font-medium text-lg">
-                  FREE
+                  Get Started
                 </button>
               </Link>
               <Link href="/login">
                 <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-3 font-medium text-lg">
-                  PREMIUM
+                  Sign In
                 </button>
               </Link>
             </div>
@@ -54,65 +46,65 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 px-8 lg:px-16 bg-white">
+      <section className="py-24 px-8 lg:px-16 bg-agricultural">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Powerful Features for Modern Agriculture
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
               Everything you need to optimize your farm&apos;s productivity and sustainability with cutting-edge AI technology
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+            <div className="card-sleek text-center group">
               <div className="text-6xl mb-6">🌤️</div>
-              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+              <h3 className="text-2xl font-bold mb-4 text-white">
                 Weather Intelligence
               </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <p className="text-white/80 leading-relaxed text-lg">
                 Real-time weather data and hyperlocal forecasting for precise farm management decisions. Get alerts for extreme weather conditions.
               </p>
             </div>
             
-            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+            <div className="card-sleek text-center group">
               <div className="text-6xl mb-6">🛰️</div>
-              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+              <h3 className="text-2xl font-bold mb-4 text-white">
                 Satellite Monitoring
               </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <p className="text-white/80 leading-relaxed text-lg">
                 Track crop health and growth stages with advanced satellite imagery analysis, NDVI monitoring, and stress detection.
               </p>
             </div>
             
-            <div className="card-gradient text-center group hover:scale-105 transition-transform duration-300">
+            <div className="card-sleek text-center group">
               <div className="text-6xl mb-6">🤖</div>
-              <h3 className="text-2xl font-semibold mb-4 text-gradient">
+              <h3 className="text-2xl font-bold mb-4 text-white">
                 AI Recommendations
               </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <p className="text-white/80 leading-relaxed text-lg">
                 Get intelligent insights for planting, irrigation, and harvest optimization powered by machine learning algorithms.
               </p>
             </div>
           </div>
 
-          <div className="text-center card-gradient max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gradient">
+          <div className="text-center card-sleek max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
               Transform Your Farm Management Today
             </h2>
-            <p className="text-gray-600 mb-8 text-xl leading-relaxed">
+            <p className="text-white/80 mb-8 text-xl leading-relaxed">
               Join thousands of farmers who are already using Crops.AI to increase yields, 
               reduce costs, and make data-driven decisions for sustainable agriculture.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/register">
-                <button className="btn-ghost text-xl px-12 py-4">
+                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
                   Start Your Free Trial
                 </button>
               </Link>
               <Link href="/login">
-                <button className="border-2 border-primary/50 bg-transparent text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
+                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
                   View Demo
                 </button>
               </Link>

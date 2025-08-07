@@ -25,11 +25,11 @@
     --ring: 98 84% 47%;
     --radius: 1rem;
     
-    /* New gradient colors */
-    --gradient-start: 98 84% 47%;
-    --gradient-end: 84 100% 59%;
-    --gradient-lime: 84 100% 59%;
-    --gradient-emerald: 160 84% 39%;
+    /* New gradient colors - Darker Green Theme */
+    --gradient-start: 120 30% 25%;
+    --gradient-end: 140 35% 20%;
+    --gradient-lime: 120 40% 30%;
+    --gradient-emerald: 140 50% 15%;
   }
 
   .dark {
@@ -68,7 +68,7 @@
   /* Agricultural background with overlay */
   .bg-agricultural {
     background-image: 
-      linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%),
+      linear-gradient(135deg, rgba(20, 40, 25, 0.85) 0%, rgba(15, 30, 20, 0.75) 100%),
       url('/images/agricultural-landscape.png');
     background-size: cover;
     background-position: center;
@@ -146,13 +146,26 @@
     background-clip: text;
   }
   
-  /* Enhanced overlays for agricultural background */
+  /* Enhanced overlays for agricultural background - Darker Green Theme */
   .agricultural-overlay {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(20, 40, 25, 0.6) 0%, rgba(15, 30, 20, 0.4) 100%);
   }
   
   .agricultural-overlay-dark {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%);
+    background: linear-gradient(135deg, rgba(20, 40, 25, 0.8) 0%, rgba(15, 30, 20, 0.6) 100%);
+  }
+  
+  /* Sleeker card design */
+  .card-sleek {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-sleek:hover {
+    @apply bg-white/15 border-white/30;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
   }
   
   /* Navigation styles */

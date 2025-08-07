@@ -5,8 +5,9 @@ export async function POST() {
   try {
     console.log('=== DATABASE MIGRATION ===')
     
-    // Check if columns already exist
+    // Check if columns already exist and location nullability
     let columnsExist = false
+    let locationNullable = false
     try {
       const result: any[] = await prisma.$queryRaw`
         SELECT column_name 
@@ -15,15 +16,25 @@ export async function POST() {
         AND column_name IN ('latitude', 'longitude')
       `
       columnsExist = result.length >= 2
-      console.log('Columns exist check:', { result, columnsExist })
+      
+      // Check if location column is nullable
+      const locationCheck: any[] = await prisma.$queryRaw`
+        SELECT is_nullable 
+        FROM information_schema.columns 
+        WHERE table_name = 'farms' 
+        AND column_name = 'location'
+      `
+      locationNullable = locationCheck.length > 0 && locationCheck[0].is_nullable === 'YES'
+      
+      console.log('Columns exist check:', { result, columnsExist, locationNullable })
     } catch (error) {
       console.error('Error checking columns:', error)
     }
 
-    if (columnsExist) {
+    if (columnsExist && locationNullable) {
       return NextResponse.json({
         success: true,
-        message: 'Columns already exist, no migration needed',
+        message: 'All migrations already applied',
         columnsAdded: false
       })
     }

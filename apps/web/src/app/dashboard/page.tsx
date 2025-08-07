@@ -122,130 +122,128 @@ export default async function DashboardPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div className="card-gradient">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Activity className="h-5 w-5 mr-2" />
-                  Recent Activity
-                </CardTitle>
-                <CardDescription>Your latest farm management activities</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                    stats.recentActivity.map((activity: any) => (
-                      <div key={activity.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                        <div className={`p-2 rounded-full ${
-                          activity.type === 'farm_created' ? 'bg-green-100 text-green-600' :
-                          activity.type === 'satellite_analysis' ? 'bg-blue-100 text-blue-600' :
-                          'bg-gray-100 text-gray-600'
-                        }`}>
-                          {activity.type === 'farm_created' ? <Sprout className="h-4 w-4" /> :
-                           activity.type === 'satellite_analysis' ? <TrendingUp className="h-4 w-4" /> :
-                           <Activity className="h-4 w-4" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-gray-900">{activity.title}</div>
-                          <div className="text-sm text-gray-600">{activity.description}</div>
-                          <div className="text-xs text-gray-500 mt-1">{activity.timeAgo}</div>
-                        </div>
+              <div className="flex items-center mb-6">
+                <div className="p-2 bg-blue-500 rounded-full mr-3">
+                  <Activity className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Recent Activity</h3>
+                  <p className="text-gray-600">Your latest farm management activities</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {stats?.recentActivity && stats.recentActivity.length > 0 ? (
+                  stats.recentActivity.map((activity: any) => (
+                    <div key={activity.id} className="flex items-start space-x-3 p-3 bg-white/50 rounded-lg">
+                      <div className={`p-2 rounded-full ${
+                        activity.type === 'farm_created' ? 'bg-green-100 text-green-600' :
+                        activity.type === 'satellite_analysis' ? 'bg-blue-100 text-blue-600' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {activity.type === 'farm_created' ? <Sprout className="h-4 w-4" /> :
+                         activity.type === 'satellite_analysis' ? <TrendingUp className="h-4 w-4" /> :
+                         <Activity className="h-4 w-4" />}
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-center text-gray-500 py-8">
-                      <Activity className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>No recent activity</p>
-                      <p className="text-sm">Start by creating your first farm</p>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900">{activity.title}</div>
+                        <div className="text-sm text-gray-600">{activity.description}</div>
+                        <div className="text-xs text-gray-500 mt-1">{activity.timeAgo}</div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    <Activity className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>No recent activity</p>
+                    <p className="text-sm">Start by creating your first farm</p>
+                  </div>
+                )}
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Common tasks and recommended actions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
-                    <div className="font-medium text-gray-900">Create New Farm</div>
-                    <div className="text-sm text-gray-500">Add a new farm to your portfolio</div>
-                  </Link>
-                  <Link href="/weather" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
-                    <div className="font-medium text-gray-900">View Weather Data</div>
-                    <div className="text-sm text-gray-500">Check current weather conditions</div>
-                  </Link>
-                  <Link href="/crop-health" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
-                    <div className="font-medium text-gray-900">Crop Health Analytics</div>
-                    <div className="text-sm text-gray-500">Monitor vegetation health via satellite</div>
-                  </Link>
-                  <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
-                    <div className="font-medium text-gray-900">AI Insights</div>
-                    <div className="text-sm text-gray-500">Get intelligent recommendations</div>
-                  </Link>
-                  <Link href="/weather/alerts" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-crops-green-300 hover:bg-crops-green-50 transition-colors">
-                    <div className="font-medium text-gray-900">Weather Alerts</div>
-                    <div className="text-sm text-gray-500">Monitor extreme weather conditions</div>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="card-gradient">
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">Quick Actions</h3>
+                <p className="text-gray-600">Common tasks and recommended actions</p>
+              </div>
+              <div className="space-y-3">
+                <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                  <div className="font-medium text-gray-900">Create New Farm</div>
+                  <div className="text-sm text-gray-500">Add a new farm to your portfolio</div>
+                </Link>
+                <Link href="/weather" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                  <div className="font-medium text-gray-900">View Weather Data</div>
+                  <div className="text-sm text-gray-500">Check current weather conditions</div>
+                </Link>
+                <Link href="/crop-health" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                  <div className="font-medium text-gray-900">Crop Health Analytics</div>
+                  <div className="text-sm text-gray-500">Monitor vegetation health via satellite</div>
+                </Link>
+                <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                  <div className="font-medium text-gray-900">AI Insights</div>
+                  <div className="text-sm text-gray-500">Get intelligent recommendations</div>
+                </Link>
+                <Link href="/weather/alerts" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                  <div className="font-medium text-gray-900">Weather Alerts</div>
+                  <div className="text-sm text-gray-500">Monitor extreme weather conditions</div>
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Additional Insights */}
           {stats?.insights && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <TrendingUp className="h-5 w-5 mr-2 text-blue-600" />
-                    Recommendations
-                  </CardTitle>
-                  <CardDescription>AI-powered suggestions for your farm</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {stats.insights.recommendedActions?.map((action: string, index: number) => (
-                      <div key={index} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                        <span className="text-gray-700">{action}</span>
-                      </div>
-                    ))}
+              <div className="card-gradient">
+                <div className="flex items-center mb-6">
+                  <div className="p-2 bg-blue-500 rounded-full mr-3">
+                    <TrendingUp className="h-6 w-6 text-white" />
                   </div>
-                </CardContent>
-              </Card>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">Recommendations</h3>
+                    <p className="text-gray-600">AI-powered suggestions for your farm</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {stats.insights.recommendedActions?.map((action: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-gray-700">{action}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Clock className="h-5 w-5 mr-2 text-orange-600" />
-                    Upcoming Tasks
-                  </CardTitle>
-                  <CardDescription>Scheduled activities and reminders</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {stats.insights.upcomingTasks?.slice(0, 3).map((task: any) => (
-                      <div key={task.id} className="flex items-start justify-between p-2 bg-gray-50 rounded">
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-900">{task.title}</div>
-                          <div className="text-sm text-gray-600">{task.description}</div>
-                        </div>
-                        <Badge variant={task.priority === 'high' ? 'destructive' : task.priority === 'medium' ? 'default' : 'secondary'}>
-                          {task.priority}
-                        </Badge>
-                      </div>
-                    ))}
-                    {(!stats.insights.upcomingTasks || stats.insights.upcomingTasks.length === 0) && (
-                      <div className="text-center text-gray-500 py-4">
-                        <Clock className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                        <p className="text-sm">No upcoming tasks</p>
-                      </div>
-                    )}
+              <div className="card-gradient">
+                <div className="flex items-center mb-6">
+                  <div className="p-2 bg-orange-500 rounded-full mr-3">
+                    <Clock className="h-6 w-6 text-white" />
                   </div>
-                </CardContent>
-              </Card>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">Upcoming Tasks</h3>
+                    <p className="text-gray-600">Scheduled activities and reminders</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {stats.insights.upcomingTasks?.slice(0, 3).map((task: any) => (
+                    <div key={task.id} className="flex items-start justify-between p-2 bg-white/50 rounded">
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{task.title}</div>
+                        <div className="text-sm text-gray-600">{task.description}</div>
+                      </div>
+                      <Badge variant={task.priority === 'high' ? 'destructive' : task.priority === 'medium' ? 'default' : 'secondary'}>
+                        {task.priority}
+                      </Badge>
+                    </div>
+                  ))}
+                  {(!stats.insights.upcomingTasks || stats.insights.upcomingTasks.length === 0) && (
+                    <div className="text-center text-gray-500 py-4">
+                      <Clock className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                      <p className="text-sm">No upcoming tasks</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>

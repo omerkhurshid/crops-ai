@@ -65,28 +65,52 @@ export const GET = apiMiddleware.protected(
 // POST /api/farms - Create new farm
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: AuthenticatedRequest) => {
-    const body = await request.json()
-    const farmData = validateRequestBody(createFarmSchema, body)
+    try {
+      console.log('=== FARM CREATION START ===')
+      console.log('User:', {
+        id: request.user.id,
+        email: request.user.email,
+        role: request.user.role
+      })
 
-    // Remove fields that don't exist in current schema
-    const { farmType, description, ...dbFarmData } = farmData
-    
-    const farm = await prisma.farm.create({
-      data: {
+      const body = await request.json()
+      console.log('Request body:', JSON.stringify(body, null, 2))
+      
+      const farmData = validateRequestBody(createFarmSchema, body)
+      console.log('Validated farm data:', JSON.stringify(farmData, null, 2))
+
+      // Remove fields that don't exist in current schema
+      const { farmType, description, ...dbFarmData } = farmData
+      
+      const finalData = {
         ...dbFarmData,
         ownerId: request.user.id
-      },
-      include: {
-        owner: {
-          select: {
-            id: true,
-            name: true,
-            email: true
+      }
+      console.log('Final data for database:', JSON.stringify(finalData, null, 2))
+      
+      const farm = await prisma.farm.create({
+        data: finalData,
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
           }
         }
-      }
-    })
+      })
 
-    return createSuccessResponse({ farm }, 201)
+      console.log('Farm created successfully:', JSON.stringify(farm, null, 2))
+      return createSuccessResponse({ farm }, 201)
+    } catch (error) {
+      console.error('=== FARM CREATION ERROR ===')
+      console.error('Error:', error)
+      if (error instanceof Error) {
+        console.error('Error message:', error.message)
+        console.error('Error stack:', error.stack)
+      }
+      throw error // Re-throw to let middleware handle it
+    }
   })
 )

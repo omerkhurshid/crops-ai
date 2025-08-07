@@ -6,7 +6,7 @@
  */
 
 import { auditLogger } from '../logging/audit-logger'
-import { prisma } from '../database/prisma'
+import { prisma } from '../prisma'
 import path from 'path'
 import fs from 'fs/promises'
 

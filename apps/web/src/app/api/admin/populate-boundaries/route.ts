@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSampleFieldBoundaries, getFieldsInRegion } from '../../../../lib/database/field-boundary-utils'
-import { prisma } from '../../../../lib/database/prisma'
+import { prisma } from '../../../../lib/prisma'
 
 /**
  * Admin endpoint to populate field boundaries for existing fields

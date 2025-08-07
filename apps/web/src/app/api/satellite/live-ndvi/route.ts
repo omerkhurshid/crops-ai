@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { liveSatelliteService } from '../../../../lib/satellite/live-satellite-service'
 import { getCurrentUser } from '../../../../lib/auth/session'
-import { prisma } from '../../../../lib/database/prisma'
+import { prisma } from '../../../../lib/prisma'
 
 /**
  * Get live NDVI data for a field

@@ -5,7 +5,7 @@
  * operations for the Crops.AI platform.
  */
 
-import { prisma } from './prisma'
+import { prisma } from '../prisma'
 import { auditLogger } from '../logging/audit-logger'
 import { createSampleFieldBoundaries, updateFieldBoundary } from './field-boundary-utils'
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '../../../../lib/auth/session'
 import { auditLogger } from '../../../../lib/logging/audit-logger'
-import { prisma } from '../../../../lib/database/prisma'
+import { prisma } from '../../../../lib/prisma'
 
 /**
  * Get security status and metrics

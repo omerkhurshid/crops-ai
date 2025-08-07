@@ -7,7 +7,7 @@ import { SentinelHubService } from './sentinel-hub'
 import { NDVIAnalyzer } from './ndvi-analysis'
 import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
-import { prisma } from '../database/prisma'
+import { prisma } from '../prisma'
 
 export interface LiveSatelliteConfig {
   preferLiveData: boolean

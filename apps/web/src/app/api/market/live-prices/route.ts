@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cmePricingService } from '../../../../lib/market/cme-pricing'
 import { getCurrentUser } from '../../../../lib/auth/session'
-import { prisma } from '../../../../lib/database/prisma'
+import { prisma } from '../../../../lib/prisma'
 
 /**
  * Get live commodity prices

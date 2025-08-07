@@ -8,7 +8,7 @@
 import { mlOpsPipeline, TrainingConfig, ModelMetrics } from './mlops-pipeline'
 import { modelRegistry } from './model-registry'
 import { auditLogger } from '../logging/audit-logger'
-import { prisma } from '../database/prisma'
+import { prisma } from '../prisma'
 
 export interface TrainingDataset {
   id: string

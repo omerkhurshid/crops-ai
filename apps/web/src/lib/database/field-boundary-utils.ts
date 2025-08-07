@@ -3,7 +3,7 @@
  * PostGIS geographic data management for field boundaries
  */
 
-import { prisma } from './prisma'
+import { prisma } from '../prisma'
 
 export interface FieldBoundary {
   fieldId: string

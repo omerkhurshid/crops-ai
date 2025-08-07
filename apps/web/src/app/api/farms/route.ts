@@ -84,7 +84,8 @@ export const POST = apiMiddleware.protected(
       
       const finalData = {
         ...dbFarmData,
-        ownerId: request.user.id
+        ownerId: request.user.id,
+        location: `${dbFarmData.name} (${dbFarmData.latitude}, ${dbFarmData.longitude})` // Add location field
       }
       console.log('Final data for database:', JSON.stringify(finalData, null, 2))
       

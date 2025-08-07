@@ -84,7 +84,8 @@ export const POST = apiMiddleware.protected(
       
       const finalData = {
         ...dbFarmData,
-        ownerId: request.user.id
+        ownerId: request.user.id,
+        location: dbFarmData.address || `${dbFarmData.name} Farm` // Add location field with fallback
       }
       console.log('Final data for database:', JSON.stringify(finalData, null, 2))
       

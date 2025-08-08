@@ -205,7 +205,7 @@ class CropStageDetectionService {
     } catch (error) {
       await auditLogger.logML('crop_stage_detection_error', fieldId, undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
-      }, 'error')
+      })
       throw error
     }
   }

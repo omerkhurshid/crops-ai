@@ -143,7 +143,7 @@ class CropStageDetectionService {
       )
 
       // Calculate current NDVI and growth metrics
-      const currentNdvi = satelliteData?.ndvi || this.estimateNDVIFromStage(cropType, daysSincePlanting)
+      const currentNdvi = satelliteData?.meanNDVI || this.estimateNDVIFromStage(cropType, daysSincePlanting)
       const avgTemperature = weatherTrends.summary.avgTemperature
       const totalPrecipitation = weatherTrends.summary.totalPrecipitation
       const growingDegreeDays = weatherTrends.growingDegreeDays.reduce((sum, gdd) => sum + gdd, 0)

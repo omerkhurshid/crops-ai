@@ -1,10 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { prisma } from '../../../../lib/prisma'
-import bcrypt from 'bcryptjs'
 
 const authOptions = {
-  // Don't use PrismaAdapter with credentials provider + JWT sessions
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -13,14 +10,19 @@ const authOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        console.log('NextAuth authorize called with:', { email: credentials?.email, hasPassword: !!credentials?.password })
+        console.log('NextAuth authorize called with:', { 
+          email: credentials?.email, 
+          hasPassword: !!credentials?.password,
+          secret: !!process.env.NEXTAUTH_SECRET,
+          url: process.env.NEXTAUTH_URL
+        })
         
         if (!credentials?.email || !credentials?.password) {
           console.log('Missing credentials')
           return null
         }
 
-        // Demo users
+        // Demo users only for now
         const demoUsers = [
           {
             id: 'demo-1',
@@ -50,36 +52,17 @@ const authOptions = {
           }
         }
 
-        // Try database
-        try {
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email }
-          })
-
-          if (!user || !user.passwordHash) {
-            return null
-          }
-
-          const isValidPassword = await bcrypt.compare(credentials.password, user.passwordHash)
-          if (!isValidPassword) {
-            return null
-          }
-
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role
-          }
-        } catch (error) {
-          console.error('Database authentication error:', error)
-          return null
-        }
+        console.log('Authentication failed for:', credentials.email)
+        return null
       }
     })
   ],
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024'
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -99,10 +82,10 @@ const authOptions = {
   },
   pages: {
     signIn: '/login',
-    error: '/login?error=true'
+    error: '/login'
   },
   secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024',
-  debug: process.env.NODE_ENV === 'development'
+  debug: true
 }
 
 const handler = NextAuth(authOptions)

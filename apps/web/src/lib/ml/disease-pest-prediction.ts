@@ -241,7 +241,7 @@ class DiseasePestPredictionService {
 
       // Sort by risk level and probability
       predictions.sort((a, b) => {
-        const riskOrder = { critical: 4, high: 3, moderate: 2, low: 1 }
+        const riskOrder = { extreme: 4, high: 3, moderate: 2, low: 1 }
         return riskOrder[b.riskLevel] - riskOrder[a.riskLevel] || 
                b.outbreakProbability - a.outbreakProbability
       })
@@ -867,7 +867,7 @@ class DiseasePestPredictionService {
     return Math.min(0.95, Math.max(0.05, baseProbability))
   }
 
-  private calculateRiskLevel(probability: number, threat: PestThreat): 'low' | 'moderate' | 'high' | 'critical' {
+  private calculateRiskLevel(probability: number, threat: PestThreat): 'low' | 'moderate' | 'high' | 'extreme' {
     // Adjust risk level based on potential damage
     let adjustedThreshold = 1.0
     if (threat.potentialDamage.economicImpact === 'severe') {
@@ -878,7 +878,7 @@ class DiseasePestPredictionService {
 
     const adjustedProb = probability * adjustedThreshold
 
-    if (adjustedProb >= 0.75) return 'critical'
+    if (adjustedProb >= 0.75) return 'extreme'
     if (adjustedProb >= 0.5) return 'high'
     if (adjustedProb >= 0.25) return 'moderate'
     return 'low'
@@ -918,7 +918,7 @@ class DiseasePestPredictionService {
 
     const maxProbability = Math.max(...predictions.map(p => p.outbreakProbability))
 
-    if (highRiskCount >= 3 || maxProbability >= 0.8) return 'critical'
+    if (highRiskCount >= 3 || maxProbability >= 0.8) return 'extreme'
     if (highRiskCount >= 2 || maxProbability >= 0.6) return 'high'
     if (highRiskCount >= 1 || maxProbability >= 0.4) return 'moderate'
     return 'low'

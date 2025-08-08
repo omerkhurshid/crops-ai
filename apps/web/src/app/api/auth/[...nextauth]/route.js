@@ -1,11 +1,10 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../../../lib/prisma'
 import bcrypt from 'bcryptjs'
 
 const authOptions = {
-  adapter: PrismaAdapter(prisma),
+  // Don't use PrismaAdapter with credentials provider + JWT sessions
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -14,7 +13,10 @@ const authOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('NextAuth authorize called with:', { email: credentials?.email, hasPassword: !!credentials?.password })
+        
         if (!credentials?.email || !credentials?.password) {
+          console.log('Missing credentials')
           return null
         }
 
@@ -39,6 +41,7 @@ const authOptions = {
         // Check demo users
         const demoUser = demoUsers.find(user => user.email === credentials.email)
         if (demoUser && demoUser.password === credentials.password) {
+          console.log('Demo user authenticated successfully:', demoUser.email)
           return {
             id: demoUser.id,
             email: demoUser.email,
@@ -98,7 +101,8 @@ const authOptions = {
     signIn: '/login',
     error: '/login?error=true'
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024',
+  debug: process.env.NODE_ENV === 'development'
 }
 
 const handler = NextAuth(authOptions)

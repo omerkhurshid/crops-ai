@@ -26,18 +26,28 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
     try {
       const { signIn } = await import('next-auth/react')
       
+      console.log('Attempting sign in with:', { email, hasPassword: !!password })
+      
       const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
       })
 
+      console.log('Sign in result:', result)
+
       if (result?.error) {
+        console.error('Sign in error:', result.error)
         setError('Invalid email or password')
       } else if (result?.ok) {
+        console.log('Sign in successful, redirecting to:', callbackUrl)
         router.push(callbackUrl)
+      } else {
+        console.log('Unexpected result:', result)
+        setError('Sign in failed. Please try again.')
       }
     } catch (err) {
+      console.error('Sign in exception:', err)
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)

@@ -219,7 +219,7 @@ class DiseasePestPredictionService {
       const potentialThreats = this.pestDatabase.get(cropType.toLowerCase()) || []
 
       // Calculate outbreak probabilities for each threat
-      const predictions: PestThreat[] = []
+      const predictions: Array<any> = []
       for (const threat of potentialThreats) {
         const probability = this.calculateOutbreakProbability(
           threat,

@@ -1,0 +1,75 @@
+import { NextRequest } from 'next/server'
+import { authOptions } from '@/lib/auth'
+import bcrypt from 'bcryptjs'
+import { sign } from 'jsonwebtoken'
+import { UserRole } from '@crops-ai/shared'
+
+export async function POST(request: NextRequest) {
+  try {
+    const { email, password } = await request.json()
+    
+    if (!email || !password) {
+      return Response.json({ error: 'Email and password required' }, { status: 400 })
+    }
+
+    console.log('Manual signin attempt:', { email, hasPassword: !!password })
+
+    // Demo users from authOptions
+    const demoUsers = [
+      {
+        id: 'demo-1',
+        email: 'demo@crops.ai',
+        password: 'Demo123!',
+        name: 'Demo User',
+        role: UserRole.FARM_OWNER
+      },
+      {
+        id: 'admin-1', 
+        email: 'admin@crops.ai',
+        password: 'Admin123!',
+        name: 'Admin User',
+        role: UserRole.ADMIN
+      }
+    ]
+
+    // Check demo users first
+    const demoUser = demoUsers.find(user => user.email === email)
+    if (demoUser && demoUser.password === password) {
+      console.log('Demo user authenticated:', demoUser.email)
+      
+      // Create JWT token
+      const token = sign(
+        { 
+          userId: demoUser.id,
+          email: demoUser.email,
+          role: demoUser.role,
+          name: demoUser.name
+        },
+        process.env.NEXTAUTH_SECRET!,
+        { expiresIn: '24h' }
+      )
+      
+      const response = Response.json({ 
+        success: true,
+        user: {
+          id: demoUser.id,
+          email: demoUser.email,
+          name: demoUser.name,
+          role: demoUser.role
+        }
+      })
+      
+      // Set HTTP-only cookie
+      response.headers.set('Set-Cookie', `next-auth.session-token=${token}; HttpOnly; Secure; SameSite=Lax; Max-Age=86400; Path=/`)
+      
+      return response
+    }
+
+    console.log('Invalid credentials for:', email)
+    return Response.json({ error: 'Invalid credentials' }, { status: 401 })
+
+  } catch (error) {
+    console.error('Signin endpoint error:', error)
+    return Response.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

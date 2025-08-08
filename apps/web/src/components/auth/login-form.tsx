@@ -24,30 +24,18 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      // Get CSRF token first
-      const csrfRes = await fetch('/api/auth/csrf')
-      const { csrfToken } = await csrfRes.json()
-
-      // Attempt login using our manual auth endpoint
-      const result = await fetch('/api/auth/callback/credentials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          csrfToken,
-          email,
-          password,
-          json: 'true'
-        })
+      const { signIn } = await import('next-auth/react')
+      
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
 
-      if (result.ok) {
-        const data = await result.json()
-        // Redirect to dashboard or callback URL
-        router.push(callbackUrl)
-      } else {
+      if (result?.error) {
         setError('Invalid email or password')
+      } else if (result?.ok) {
+        router.push(callbackUrl)
       }
     } catch (err) {
       setError('An error occurred. Please try again.')

@@ -93,9 +93,15 @@ async function checkApiAuth(request: NextRequest): Promise<boolean> {
   console.log(`🔒 Auth check for: ${request.nextUrl.pathname}`)
   console.log(`🔍 Public endpoints:`, publicEndpoints)
   
-  const isPublic = publicEndpoints.some(endpoint => 
-    request.nextUrl.pathname.startsWith(endpoint) || request.nextUrl.pathname === endpoint.slice(0, -1)
-  )
+  const isPublic = publicEndpoints.some(endpoint => {
+    // Handle exact matches and trailing slash variants
+    const withoutSlash = endpoint.endsWith('/') ? endpoint.slice(0, -1) : endpoint
+    const withSlash = endpoint.endsWith('/') ? endpoint : endpoint + '/'
+    
+    return request.nextUrl.pathname === withoutSlash || 
+           request.nextUrl.pathname === withSlash ||
+           request.nextUrl.pathname.startsWith(withSlash)
+  })
   
   console.log(`🔍 Is public check result: ${isPublic}`)
   

@@ -83,18 +83,29 @@ async function checkApiAuth(request: NextRequest): Promise<boolean> {
   // Skip auth for public endpoints
   const publicEndpoints = [
     '/api/health',
-    '/api/auth', // All NextAuth endpoints
-    '/api/debug', // Debug endpoints
-    '/api/check-connection' // Connection check
+    '/api/auth/', // All NextAuth endpoints - note the trailing slash
+    '/api/debug/', // Debug endpoints  
+    '/api/check-connection', // Connection check
+    '/api/test-nextauth-route' // Test route
   ]
   
-  if (publicEndpoints.some(endpoint => request.nextUrl.pathname.startsWith(endpoint))) {
+  console.log(`🔒 Auth check for: ${request.nextUrl.pathname}`)
+  
+  const isPublic = publicEndpoints.some(endpoint => 
+    request.nextUrl.pathname.startsWith(endpoint) || request.nextUrl.pathname === endpoint.slice(0, -1)
+  )
+  
+  if (isPublic) {
+    console.log(`✅ Public endpoint allowed: ${request.nextUrl.pathname}`)
     return true
   }
 
   // Check for valid JWT token
+  console.log(`🔑 Checking JWT token for: ${request.nextUrl.pathname}`)
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
-  return !!token
+  const hasToken = !!token
+  console.log(`${hasToken ? '✅' : '❌'} JWT token check result: ${hasToken}`)
+  return hasToken
 }
 
 /**

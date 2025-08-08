@@ -83,7 +83,7 @@ async function checkApiAuth(request: NextRequest): Promise<boolean> {
   // Skip auth for public endpoints
   const publicEndpoints = [
     '/api/health',
-    '/api/auth/', // All NextAuth endpoints - note the trailing slash
+    '/api/authentication/', // All authentication endpoints - note the trailing slash
     '/api/debug/', // Debug endpoints  
     '/api/check-connection', // Connection check
     '/api/test-nextauth-route', // Test route

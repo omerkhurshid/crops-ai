@@ -113,7 +113,7 @@ class CopernicusService {
           'Authorization': `Bearer ${this.accessToken}`,
           'Content-Type': 'application/json'
         },
-        timeout: 30000
+        signal: AbortSignal.timeout(30000)
       })
 
       if (!response.ok) {
@@ -393,7 +393,12 @@ class CopernicusService {
     ndvi: number
     severity: 'low' | 'moderate' | 'high'
   }> {
-    const stressAreas = []
+    const stressAreas: Array<{
+      lat: number
+      lng: number
+      ndvi: number
+      severity: 'low' | 'moderate' | 'high'
+    }> = []
     const fieldCenterLat = (bounds.north + bounds.south) / 2
     const fieldCenterLng = (bounds.east + bounds.west) / 2
     
@@ -466,7 +471,7 @@ class CopernicusService {
             [bounds.west, bounds.north],
             [bounds.west, bounds.south]
           ]]]
-        },
+        } as any,
         bands: {
           B02: 'mock://sentinel2/B02.jp2',
           B03: 'mock://sentinel2/B03.jp2',

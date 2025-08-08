@@ -148,7 +148,24 @@ class HyperlocalWeatherService {
       )
 
       // Detect weather alerts
-      const alerts = this.detectWeatherAlerts(forecast, latitude, longitude)
+      const tempForecast: HyperlocalForecast = {
+        ...forecast,
+        location: {
+          latitude,
+          longitude,
+          elevation: actualElevation,
+          fieldId
+        },
+        alerts: [],
+        metadata: {
+          sources: weatherSources.map(s => s.name),
+          confidence: forecast.confidence,
+          lastUpdated: new Date(),
+          model: 'ensemble',
+          adjustments: adjustments
+        }
+      }
+      const alerts = this.detectWeatherAlerts(tempForecast, latitude, longitude)
 
       const hyperlocalForecast: HyperlocalForecast = {
         location: {

@@ -12,7 +12,7 @@ export interface PlanetLabsConfig {
 }
 
 export interface PlanetImageRequest {
-  geometry: GeoJSON.Polygon
+  geometry: any
   itemTypes: string[]
   startDate: string
   endDate: string
@@ -27,7 +27,7 @@ export interface PlanetImageItem {
   cloudCover: number
   sunAzimuth: number
   sunElevation: number
-  geometry: GeoJSON.Polygon
+  geometry: any
   properties: {
     satellite_id: string
     strip_id: string
@@ -162,7 +162,7 @@ class PlanetLabsService {
   /**
    * Get the latest high-resolution image for a field
    */
-  async getLatestImage(fieldGeometry: GeoJSON.Polygon): Promise<PlanetImageItem | null> {
+  async getLatestImage(fieldGeometry: any): Promise<PlanetImageItem | null> {
     try {
       // Search for images from the last 30 days
       const endDate = new Date()
@@ -297,7 +297,7 @@ class PlanetLabsService {
   /**
    * Create field geometry from boundary coordinates
    */
-  createFieldGeometry(coordinates: Array<{ lat: number; lng: number }>): GeoJSON.Polygon {
+  createFieldGeometry(coordinates: Array<{ lat: number; lng: number }>): any {
     // Ensure the polygon is closed
     const coords = [...coordinates]
     if (coords[0].lat !== coords[coords.length - 1].lat || 
@@ -316,7 +316,7 @@ class PlanetLabsService {
    */
   async getFieldStatistics(
     fieldId: string, 
-    fieldGeometry: GeoJSON.Polygon
+    fieldGeometry: any
   ): Promise<PlanetAnalytics | null> {
     try {
       const latestImage = await this.getLatestImage(fieldGeometry)

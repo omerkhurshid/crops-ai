@@ -272,17 +272,17 @@ class DiseasePestPredictionService {
         cropType,
         analysisDate: new Date(),
         threats: predictions.slice(0, 10).map(p => ({
-          name: p.commonName,
-          type: p.threatType === 'disease' ? 'fungal' : p.threatType as any,
-          riskScore: p.outbreakProbability,
-          riskLevel: p.riskLevel === 'critical' ? 'extreme' : p.riskLevel as any,
-          confidence: confidenceScore,
-          environmentalFactors: [...environmentalFactors.map(f => f.factor), 'historical_patterns'],
-          cropStageVulnerability: p.affectedCropStages.includes(stageDetection.currentStage.stage) ? 0.8 : 0.3,
+          name: p.name,
+          type: p.type,
+          riskScore: p.riskScore,
+          riskLevel: p.riskLevel,
+          confidence: p.confidence,
+          environmentalFactors: p.environmentalFactors,
+          cropStageVulnerability: p.cropStageVulnerability,
           treatments: [
             {
-              method: `IPM approach for ${p.commonName}`,
-              timing: `${p.peakRiskDays} days from now`,
+              method: `IPM approach for ${p.name}`,
+              timing: '7-14 days from now',
               effectiveness: 0.7 + Math.random() * 0.2,
               cost: Math.random() > 0.5 ? 'moderate' : 'low' as any,
               environmentalImpact: 'low' as any
@@ -290,13 +290,13 @@ class DiseasePestPredictionService {
           ],
           preventiveMeasures: preventiveMeasures.map(pm => pm.action),
           monitoringSchedule: [{
-            activity: `Monitor for ${p.commonName} symptoms`,
+            activity: `Monitor for ${p.name} symptoms`,
             frequency: 'weekly',
             criticalPeriod: stageDetection.currentStage.stage,
-            indicators: p.symptoms
+            indicators: ['visual_symptoms', 'environmental_conditions']
           }]
         })),
-        overallRiskLevel: overallRiskLevel === 'critical' ? 'extreme' : overallRiskLevel as any,
+        overallRiskLevel,
         weatherRiskFactors: {
           temperature: Math.max(0, Math.min(1, (weatherForecast.current.temperature - 10) / 30)),
           humidity: Math.max(0, Math.min(1, weatherForecast.current.humidity / 100)),
@@ -417,7 +417,7 @@ class DiseasePestPredictionService {
     severity: 'low' | 'moderate' | 'high' | 'critical'
   ): Promise<TreatmentRecommendation> {
     const pestThreats = this.pestDatabase.get(cropType.toLowerCase()) || []
-    const threat = pestThreats.find(p => p.commonName === pestId)
+    const threat = pestThreats.find(p => p.name === pestId)
     
     if (!threat) {
       throw new Error(`Pest threat ${pestId} not found for crop ${cropType}`)
@@ -425,7 +425,7 @@ class DiseasePestPredictionService {
 
     // Generate treatment recommendations based on threat type and severity
     const treatmentOptions = this.generateTreatmentOptions(threat, severity)
-    const urgency = this.determineUrgency(severity, threat.potentialDamage)
+    const urgency = this.determineUrgency(severity, threat.riskScore)
     
     return {
       pestId,
@@ -462,264 +462,219 @@ class DiseasePestPredictionService {
     // Corn pests and diseases
     this.pestDatabase.set('corn', [
       {
-        pestId: 'corn_borer',
-        commonName: 'European Corn Borer',
-        scientificName: 'Ostrinia nubilalis',
-        threatType: 'insect',
+        name: 'European Corn Borer',
+        type: 'insect',
+        riskScore: 0.3,
         riskLevel: 'moderate',
-        outbreakProbability: 0.3,
-        peakRiskDays: 14,
-        affectedCropStages: ['vegetative_late', 'tasseling', 'grain_filling'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 20,
-          economicImpact: 'moderate',
-          spreadRate: 'moderate'
-        },
-        symptoms: [
-          'Small holes in leaves',
-          'Sawdust-like frass around holes',
-          'Tunnels in stalks',
-          'Broken stalks',
-          'Premature ear drop'
+        confidence: 0.75,
+        environmentalFactors: ['temperature', 'humidity', 'wind'],
+        cropStageVulnerability: 0.6,
+        treatments: [
+          {
+            method: 'Bt corn varieties',
+            timing: 'Planting',
+            effectiveness: 0.85,
+            cost: 'moderate',
+            environmentalImpact: 'low'
+          }
         ],
-        identification: {
-          visualSigns: ['Larvae in stalks', 'Entry holes', 'Frass accumulation'],
-          locations: ['Leaf whorl', 'Stalk internodes', 'Ear shanks'],
-          timing: 'Mid to late growing season'
-        }
+        preventiveMeasures: [
+          'Plant Bt corn varieties',
+          'Monitor for egg masses',
+          'Remove crop residue'
+        ]
       },
       {
-        pestId: 'gray_leaf_spot',
-        commonName: 'Gray Leaf Spot',
-        scientificName: 'Cercospora zeae-maydis',
-        threatType: 'fungal',
+        name: 'Gray Leaf Spot',
+        type: 'fungal',
+        riskScore: 0.4,
         riskLevel: 'high',
-        outbreakProbability: 0.4,
-        peakRiskDays: 21,
-        affectedCropStages: ['vegetative_late', 'tasseling', 'grain_filling'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 40,
-          economicImpact: 'high',
-          spreadRate: 'fast'
-        },
-        symptoms: [
-          'Rectangular tan to gray lesions',
-          'Lesions between leaf veins',
-          'Premature leaf death',
-          'Reduced photosynthesis',
-          'Stalk weakness'
+        confidence: 0.8,
+        environmentalFactors: ['humidity', 'temperature', 'rainfall'],
+        cropStageVulnerability: 0.7,
+        treatments: [
+          {
+            method: 'Fungicide application',
+            timing: 'Pre-emptive',
+            effectiveness: 0.75,
+            cost: 'high',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['Rectangular leaf spots', 'Yellow halos around spots'],
-          locations: ['Lower leaves first', 'Progresses upward'],
-          timing: 'Warm, humid conditions'
-        }
+        preventiveMeasures: [
+          'Resistant varieties',
+          'Proper spacing',
+          'Crop rotation'
+        ]
       },
       {
-        pestId: 'corn_rootworm',
-        commonName: 'Western Corn Rootworm',
-        scientificName: 'Diabrotica virgifera',
-        threatType: 'insect',
+        name: 'Western Corn Rootworm',
+        type: 'insect',
+        riskScore: 0.35,
         riskLevel: 'high',
-        outbreakProbability: 0.35,
-        peakRiskDays: 30,
-        affectedCropStages: ['emergence', 'vegetative_early'],
-        damageType: 'plant_death',
-        potentialDamage: {
-          yieldLoss: 30,
-          economicImpact: 'high',
-          spreadRate: 'moderate'
-        },
-        symptoms: [
-          'Stunted plants',
-          'Lodged plants',
-          'Pruned root system',
-          'Gooseneck appearance',
-          'Poor nutrient uptake'
+        confidence: 0.8,
+        environmentalFactors: ['temperature', 'soil_moisture'],
+        cropStageVulnerability: 0.9,
+        treatments: [
+          {
+            method: 'Crop rotation',
+            timing: 'Annual planning',
+            effectiveness: 0.9,
+            cost: 'low',
+            environmentalImpact: 'low'
+          }
         ],
-        identification: {
-          visualSigns: ['Root feeding damage', 'Adult beetles on silk'],
-          locations: ['Root system', 'Silk and kernels'],
-          timing: 'Early season (larvae), mid-summer (adults)'
-        }
+        preventiveMeasures: [
+          'Rotate with non-host crops',
+          'Bt corn varieties',
+          'Soil insecticides'
+        ]
       },
       {
-        pestId: 'northern_leaf_blight',
-        commonName: 'Northern Corn Leaf Blight',
-        scientificName: 'Exserohilum turcicum',
-        threatType: 'fungal',
+        name: 'Northern Corn Leaf Blight',
+        type: 'fungal',
+        riskScore: 0.25,
         riskLevel: 'moderate',
-        outbreakProbability: 0.25,
-        peakRiskDays: 18,
-        affectedCropStages: ['vegetative_late', 'tasseling'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 25,
-          economicImpact: 'moderate',
-          spreadRate: 'moderate'
-        },
-        symptoms: [
-          'Cigar-shaped lesions',
-          'Gray-green to tan color',
-          'Dark borders on lesions',
-          'Leaf blight progression',
-          'Reduced ear size'
+        confidence: 0.7,
+        environmentalFactors: ['humidity', 'temperature'],
+        cropStageVulnerability: 0.6,
+        treatments: [
+          {
+            method: 'Fungicide application',
+            timing: 'Early detection',
+            effectiveness: 0.75,
+            cost: 'moderate',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['Elongated elliptical spots', 'Concentric rings'],
-          locations: ['Lower leaves', 'Whorl area'],
-          timing: 'Cool, humid weather'
-        }
+        preventiveMeasures: [
+          'Resistant varieties',
+          'Crop rotation',
+          'Field sanitation'
+        ]
       }
     ])
 
     // Soybean pests and diseases
     this.pestDatabase.set('soybean', [
       {
-        pestId: 'soybean_aphid',
-        commonName: 'Soybean Aphid',
-        scientificName: 'Aphis glycines',
-        threatType: 'insect',
+        name: 'Soybean Aphid',
+        type: 'insect',
+        riskScore: 0.45,
         riskLevel: 'high',
-        outbreakProbability: 0.45,
-        peakRiskDays: 12,
-        affectedCropStages: ['vegetative', 'flowering', 'pod_development'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 35,
-          economicImpact: 'high',
-          spreadRate: 'explosive'
-        },
-        symptoms: [
-          'Clusters of small insects',
-          'Honeydew on leaves',
-          'Yellowing leaves',
-          'Stunted growth',
-          'Sooty mold development'
+        confidence: 0.8,
+        environmentalFactors: ['temperature', 'humidity'],
+        cropStageVulnerability: 0.75,
+        treatments: [
+          {
+            method: 'Insecticide spray',
+            timing: 'Economic threshold',
+            effectiveness: 0.85,
+            cost: 'moderate',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['Light green aphids', 'White shed skins', 'Honeydew'],
-          locations: ['Undersides of leaves', 'Growing tips', 'Stems'],
-          timing: 'Mid to late summer'
-        }
+        preventiveMeasures: [
+          'Monitor populations',
+          'Beneficial insects',
+          'Early detection'
+        ]
       },
       {
-        pestId: 'white_mold',
-        commonName: 'White Mold',
-        scientificName: 'Sclerotinia sclerotiorum',
-        threatType: 'fungal',
+        name: 'White Mold',
+        type: 'fungal',
+        riskScore: 0.3,
         riskLevel: 'high',
-        outbreakProbability: 0.3,
-        peakRiskDays: 25,
-        affectedCropStages: ['flowering', 'pod_development'],
-        damageType: 'plant_death',
-        potentialDamage: {
-          yieldLoss: 50,
-          economicImpact: 'severe',
-          spreadRate: 'moderate'
-        },
-        symptoms: [
-          'White cotton-like growth',
-          'Water-soaked lesions',
-          'Wilting plants',
-          'Black sclerotia',
-          'Bleached stems'
+        confidence: 0.75,
+        environmentalFactors: ['humidity', 'temperature', 'rainfall'],
+        cropStageVulnerability: 0.8,
+        treatments: [
+          {
+            method: 'Fungicide application',
+            timing: 'Pre-bloom',
+            effectiveness: 0.7,
+            cost: 'high',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['White mycelium', 'Black sclerotia', 'Stem cankers'],
-          locations: ['Stem base', 'Main stem', 'Branch nodes'],
-          timing: 'Cool, moist conditions during flowering'
-        }
+        preventiveMeasures: [
+          'Crop rotation',
+          'Canopy management',
+          'Sclerotia management'
+        ]
       },
       {
-        pestId: 'soybean_rust',
-        commonName: 'Soybean Rust',
-        scientificName: 'Phakopsora pachyrhizi',
-        threatType: 'fungal',
-        riskLevel: 'critical',
-        outbreakProbability: 0.2,
-        peakRiskDays: 10,
-        affectedCropStages: ['vegetative', 'flowering', 'pod_development'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 60,
-          economicImpact: 'severe',
-          spreadRate: 'explosive'
-        },
-        symptoms: [
-          'Small tan lesions',
-          'Raised pustules',
-          'Yellow halos',
-          'Premature defoliation',
-          'Reduced pod fill'
+        name: 'Soybean Rust',
+        type: 'fungal',
+        riskScore: 0.2,
+        riskLevel: 'extreme',
+        confidence: 0.9,
+        environmentalFactors: ['humidity', 'temperature'],
+        cropStageVulnerability: 0.85,
+        treatments: [
+          {
+            method: 'Fungicide spray',
+            timing: 'Early detection',
+            effectiveness: 0.8,
+            cost: 'high',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['Tan-colored pustules', 'Raised lesions', 'Spores'],
-          locations: ['Lower leaf surfaces', 'Progresses upward'],
-          timing: 'Warm, humid conditions'
-        }
+        preventiveMeasures: [
+          'Early detection systems',
+          'Resistant varieties',
+          'Timely fungicide application'
+        ]
       }
     ])
 
     // Wheat pests and diseases
     this.pestDatabase.set('wheat', [
       {
-        pestId: 'stripe_rust',
-        commonName: 'Stripe Rust',
-        scientificName: 'Puccinia striiformis',
-        threatType: 'fungal',
+        name: 'Stripe Rust',
+        type: 'fungal',
+        riskScore: 0.4,
         riskLevel: 'high',
-        outbreakProbability: 0.4,
-        peakRiskDays: 15,
-        affectedCropStages: ['tillering', 'stem_elongation', 'heading'],
-        damageType: 'yield_loss',
-        potentialDamage: {
-          yieldLoss: 45,
-          economicImpact: 'high',
-          spreadRate: 'fast'
-        },
-        symptoms: [
-          'Yellow stripes on leaves',
-          'Parallel to leaf veins',
-          'Orange pustules',
-          'Premature leaf death',
-          'Reduced grain fill'
+        confidence: 0.8,
+        environmentalFactors: ['temperature', 'humidity', 'rainfall'],
+        cropStageVulnerability: 0.7,
+        treatments: [
+          {
+            method: 'Fungicide spray',
+            timing: 'Preventive',
+            effectiveness: 0.8,
+            cost: 'high',
+            environmentalImpact: 'moderate'
+          }
         ],
-        identification: {
-          visualSigns: ['Yellow striped patterns', 'Orange spores', 'Linear pustules'],
-          locations: ['Leaves', 'Leaf sheaths', 'Glumes'],
-          timing: 'Cool, moist spring conditions'
-        }
+        preventiveMeasures: [
+          'Resistant varieties',
+          'Timely planting',
+          'Field sanitation'
+        ]
       },
       {
-        pestId: 'hessian_fly',
-        commonName: 'Hessian Fly',
-        scientificName: 'Mayetiola destructor',
-        threatType: 'insect',
+        name: 'Hessian Fly',
+        type: 'insect',
+        riskScore: 0.25,
         riskLevel: 'moderate',
-        outbreakProbability: 0.25,
-        peakRiskDays: 20,
-        affectedCropStages: ['germination', 'tillering'],
-        damageType: 'stunting',
-        potentialDamage: {
-          yieldLoss: 30,
-          economicImpact: 'moderate',
-          spreadRate: 'moderate'
-        },
-        symptoms: [
-          'Stunted plants',
-          'Dark green color',
-          'Excessive tillering',
-          'Lodging susceptibility',
-          'Brown puparia'
+        confidence: 0.7,
+        environmentalFactors: ['temperature', 'humidity'],
+        cropStageVulnerability: 0.8,
+        treatments: [
+          {
+            method: 'Insecticide seed treatment',
+            timing: 'Pre-planting',
+            effectiveness: 0.85,
+            cost: 'moderate',
+            environmentalImpact: 'low'
+          }
         ],
-        identification: {
-          visualSigns: ['Flax seeds (puparia)', 'Maggots at base', 'Stunted tillers'],
-          locations: ['Base of plants', 'Between leaf sheaths'],
-          timing: 'Fall and spring emergence'
-        }
+        preventiveMeasures: [
+          'Resistant varieties',
+          'Delayed planting',
+          'Destroy volunteer plants'
+        ]
       }
     ])
   }
@@ -835,16 +790,14 @@ class DiseasePestPredictionService {
     let baseProbability = 0.3 // Base outbreak probability
 
     // Stage vulnerability adjustment
-    if (threat.affectedCropStages.includes(currentStage)) {
-      baseProbability *= 1.5 // 50% increase if in vulnerable stage
-    }
+    baseProbability *= (1 + threat.cropStageVulnerability)
 
     // Environmental factor adjustments
     for (const factor of environmentalFactors) {
-      if (threat.threatType === 'fungal' && (factor.factor === 'humidity' || factor.factor === 'precipitation')) {
+      if (threat.type === 'fungal' && (factor.factor === 'humidity' || factor.factor === 'precipitation')) {
         baseProbability *= (1 + factor.riskContribution * 0.4)
       }
-      if (threat.threatType === 'insect' && factor.factor === 'temperature') {
+      if (threat.type === 'insect' && factor.factor === 'temperature') {
         baseProbability *= (1 + factor.riskContribution * 0.3)
       }
     }
@@ -854,13 +807,13 @@ class DiseasePestPredictionService {
       (sum: number, day: any) => sum + day.precipitation.total, 0
     )
 
-    if (threat.threatType === 'fungal' && recentRain > 15) {
+    if (threat.type === 'fungal' && recentRain > 15) {
       baseProbability *= 1.3
     }
 
     // Seasonal adjustments
     const month = new Date().getMonth()
-    if (threat.pestId.includes('rust') && (month >= 5 && month <= 8)) {
+    if (threat.name.toLowerCase().includes('rust') && (month >= 5 && month <= 8)) {
       baseProbability *= 1.2 // Peak rust season
     }
 
@@ -868,11 +821,11 @@ class DiseasePestPredictionService {
   }
 
   private calculateRiskLevel(probability: number, threat: PestThreat): 'low' | 'moderate' | 'high' | 'extreme' {
-    // Adjust risk level based on potential damage
+    // Adjust risk level based on threat's inherent risk level
     let adjustedThreshold = 1.0
-    if (threat.potentialDamage.economicImpact === 'severe') {
+    if (threat.riskLevel === 'extreme') {
       adjustedThreshold = 0.8
-    } else if (threat.potentialDamage.economicImpact === 'high') {
+    } else if (threat.riskLevel === 'high') {
       adjustedThreshold = 0.9
     }
 
@@ -888,10 +841,10 @@ class DiseasePestPredictionService {
     threat: PestThreat,
     environmentalFactors: EnvironmentalRiskFactor[]
   ): number {
-    let baseDays = threat.peakRiskDays || 14
+    let baseDays = 14 // Default peak risk days
 
     // Adjust based on temperature for insect development
-    if (threat.threatType === 'insect') {
+    if (threat.type === 'insect') {
       const tempFactor = environmentalFactors.find(f => f.factor === 'temperature')
       if (tempFactor && tempFactor.currentValue > 25) {
         baseDays = Math.max(7, baseDays * 0.8) // Faster development in heat
@@ -899,7 +852,7 @@ class DiseasePestPredictionService {
     }
 
     // Adjust for disease spread
-    if (threat.threatType === 'fungal' || threat.threatType === 'bacterial') {
+    if (threat.type === 'fungal' || threat.type === 'bacterial') {
       const humidityFactor = environmentalFactors.find(f => f.factor === 'humidity')
       if (humidityFactor && humidityFactor.riskContribution > 0.8) {
         baseDays = Math.max(5, baseDays * 0.7) // Faster spread in optimal conditions
@@ -909,14 +862,14 @@ class DiseasePestPredictionService {
     return Math.round(baseDays)
   }
 
-  private calculateOverallRisk(predictions: PestThreat[]): 'low' | 'moderate' | 'high' | 'critical' {
+  private calculateOverallRisk(predictions: PestThreat[]): 'low' | 'moderate' | 'high' | 'extreme' {
     if (predictions.length === 0) return 'low'
 
     const highRiskCount = predictions.filter(p => 
-      p.riskLevel === 'high' || p.riskLevel === 'critical'
+      p.riskLevel === 'high' || p.riskLevel === 'extreme'
     ).length
 
-    const maxProbability = Math.max(...predictions.map(p => p.outbreakProbability))
+    const maxProbability = Math.max(...predictions.map(p => p.riskScore))
 
     if (highRiskCount >= 3 || maxProbability >= 0.8) return 'extreme'
     if (highRiskCount >= 2 || maxProbability >= 0.6) return 'high'
@@ -981,7 +934,7 @@ class DiseasePestPredictionService {
     })
 
     // Specific measures based on threats
-    const fungalThreats = predictions.filter(p => p.threatType === 'fungal')
+    const fungalThreats = predictions.filter(p => p.type === 'fungal')
     if (fungalThreats.length > 0) {
       measures.push({
         action: 'Improve air circulation and reduce humidity',
@@ -995,7 +948,7 @@ class DiseasePestPredictionService {
       })
     }
 
-    const insectThreats = predictions.filter(p => p.threatType === 'insect')
+    const insectThreats = predictions.filter(p => p.type === 'insect')
     if (insectThreats.length > 0) {
       measures.push({
         action: 'Deploy beneficial insects or pheromone traps',
@@ -1021,12 +974,12 @@ class DiseasePestPredictionService {
     recommendations.push('Scout fields weekly focusing on lower leaves and plant base')
     recommendations.push('Monitor weather conditions for temperature and humidity changes')
     
-    if (predictions.some(p => p.threatType === 'fungal')) {
+    if (predictions.some(p => p.type === 'fungal')) {
       recommendations.push('Check for early disease symptoms during morning inspections')
       recommendations.push('Monitor leaf wetness duration after rain events')
     }
 
-    if (predictions.some(p => p.threatType === 'insect')) {
+    if (predictions.some(p => p.type === 'insect')) {
       recommendations.push('Use sticky traps or pheromone traps for pest monitoring')
       recommendations.push('Check for egg masses and early larval stages')
     }
@@ -1043,7 +996,7 @@ class DiseasePestPredictionService {
   ): Array<any> {
     const options = []
 
-    if (threat.threatType === 'fungal') {
+    if (threat.type === 'fungal') {
       options.push({
         method: 'organic',
         product: 'Copper-based fungicide',
@@ -1070,7 +1023,7 @@ class DiseasePestPredictionService {
       }
     }
 
-    if (threat.threatType === 'insect') {
+    if (threat.type === 'insect') {
       options.push({
         method: 'biological',
         product: 'Beneficial insects',
@@ -1117,12 +1070,12 @@ class DiseasePestPredictionService {
       'Monitor pest populations regularly to time interventions'
     ]
 
-    if (threat.threatType === 'fungal') {
+    if (threat.type === 'fungal') {
       approaches.push('Improve air circulation and reduce leaf wetness')
       approaches.push('Use resistant varieties when available')
     }
 
-    if (threat.threatType === 'insect') {
+    if (threat.type === 'insect') {
       approaches.push('Preserve beneficial insects through selective pesticide use')
       approaches.push('Use trap crops or companion planting')
     }
@@ -1158,17 +1111,17 @@ class DiseasePestPredictionService {
         
         outbreaks.push({
           date: new Date(new Date().getFullYear() - year, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)),
-          pestId: pest.pestId,
+          pestId: pest.name,
           severity,
           weatherConditions: {
             avgTemperature: 20 + Math.random() * 15,
             humidity: 60 + Math.random() * 30,
             precipitation: Math.random() * 100
           },
-          cropStage: pest.affectedCropStages[0],
+          cropStage: 'vegetative',
           treatmentApplied: ['scouting', 'targeted_spray'],
           controlEffectiveness: 0.6 + Math.random() * 0.3,
-          yieldImpact: Math.random() * pest.potentialDamage.yieldLoss
+          yieldImpact: Math.random() * 30
         })
       }
     }

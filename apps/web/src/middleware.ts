@@ -105,7 +105,7 @@ function checkIPBlocking(request: NextRequest): boolean {
   const ip = request.ip || request.headers.get('x-forwarded-for') || ''
   
   // Block known malicious IPs (would be maintained in database/config in production)
-  const blockedIPs = [
+  const blockedIPs: string[] = [
     // Add blocked IPs here
   ]
   

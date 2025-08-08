@@ -42,10 +42,11 @@ export default async function handler(
   res: NextApiResponse<PestPredictionResponse>
 ) {
   const startTime = Date.now()
+  let params: any = {}
   
   try {
     // Apply rate limiting
-    const rateLimitResult = await rateLimit(req)
+    const rateLimitResult = await rateLimit(req as any)
     if (!rateLimitResult.success) {
       return res.status(429).json({
         success: false,
@@ -61,7 +62,6 @@ export default async function handler(
     }
 
     // Extract parameters from request
-    let params: PestPredictionRequest
     if (req.method === 'POST') {
       params = req.body
     } else {
@@ -72,7 +72,7 @@ export default async function handler(
         latitude: parseFloat(req.query.latitude as string),
         longitude: parseFloat(req.query.longitude as string),
         plantingDate: req.query.plantingDate as string,
-        action: (req.query.action as string) || 'predict'
+        action: (req.query.action as 'predict' | 'history' | 'recommendations') || 'predict'
       }
 
       if (req.query.fieldBounds) {

@@ -15,10 +15,7 @@ const authOptions = {
           console.log('Credentials received:', { 
             email: credentials?.email, 
             hasPassword: !!credentials?.password,
-            passwordLength: credentials?.password?.length,
-            secret: !!process.env.NEXTAUTH_SECRET,
-            url: process.env.NEXTAUTH_URL,
-            nodeEnv: process.env.NODE_ENV
+            passwordLength: credentials?.password?.length
           })
           
           if (!credentials?.email || !credentials?.password) {
@@ -81,95 +78,27 @@ const authOptions = {
     strategy: 'jwt',
     maxAge: 24 * 60 * 60, // 24 hours
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024'
-  },
   callbacks: {
-    async jwt({ token, user, account, profile }) {
-      try {
-        console.log('=== JWT Callback Debug ===')
-        console.log('JWT callback called with:', { 
-          hasUser: !!user, 
-          hasToken: !!token,
-          hasAccount: !!account,
-          userEmail: user?.email,
-          tokenEmail: token?.email
-        })
-        
-        if (user) {
-          console.log('✅ Adding user data to token:', { id: user.id, email: user.email, role: user.role })
-          token.role = user.role
-          token.id = user.id
-        }
-        
-        console.log('JWT token result:', { 
-          id: token.id, 
-          email: token.email, 
-          role: token.role 
-        })
-        return token
-      } catch (error) {
-        console.error('🚨 Error in JWT callback:', error)
-        return token
+    async jwt({ token, user }) {
+      if (user) {
+        console.log('✅ Adding user data to token:', { id: user.id, email: user.email, role: user.role })
+        token.role = user.role
+        token.id = user.id
       }
+      return token
     },
     async session({ session, token }) {
-      try {
-        console.log('=== Session Callback Debug ===')
-        console.log('Session callback called with:', { 
-          hasSession: !!session,
-          hasToken: !!token,
-          tokenId: token?.id,
-          tokenRole: token?.role,
-          sessionUserEmail: session?.user?.email
-        })
-        
-        if (token) {
-          session.user.id = token.id
-          session.user.role = token.role
-          console.log('✅ Session updated with token data')
-        }
-        
-        console.log('Final session result:', {
-          id: session.user.id,
-          email: session.user.email,
-          role: session.user.role
-        })
-        return session
-      } catch (error) {
-        console.error('🚨 Error in session callback:', error)
-        return session
+      if (token) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
+        console.log('✅ Session updated with token data')
       }
+      return session
     }
   },
   pages: {
     signIn: '/login',
     error: '/login'
-  },
-  events: {
-    async signIn({ user, account, profile, isNewUser }) {
-      console.log('🎉 NextAuth signIn event:', { user, account, profile, isNewUser })
-    },
-    async signOut({ token, session }) {
-      console.log('👋 NextAuth signOut event:', { token, session })
-    },
-    async session({ session, token }) {
-      console.log('📋 NextAuth session event:', { session, token })
-    },
-    async createUser({ user }) {
-      console.log('👤 NextAuth createUser event:', { user })
-    }
-  },
-  logger: {
-    error(code, metadata) {
-      console.error('🚨 NextAuth Error:', code, metadata)
-    },
-    warn(code) {
-      console.warn('⚠️  NextAuth Warning:', code)
-    },
-    debug(code, metadata) {
-      console.log('🐛 NextAuth Debug:', code, metadata)
-    }
   },
   secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024',
   debug: true

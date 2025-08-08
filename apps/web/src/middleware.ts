@@ -86,14 +86,18 @@ async function checkApiAuth(request: NextRequest): Promise<boolean> {
     '/api/auth/', // All NextAuth endpoints - note the trailing slash
     '/api/debug/', // Debug endpoints  
     '/api/check-connection', // Connection check
-    '/api/test-nextauth-route' // Test route
+    '/api/test-nextauth-route', // Test route
+    '/api/test' // Test endpoint for debugging
   ]
   
   console.log(`🔒 Auth check for: ${request.nextUrl.pathname}`)
+  console.log(`🔍 Public endpoints:`, publicEndpoints)
   
   const isPublic = publicEndpoints.some(endpoint => 
     request.nextUrl.pathname.startsWith(endpoint) || request.nextUrl.pathname === endpoint.slice(0, -1)
   )
+  
+  console.log(`🔍 Is public check result: ${isPublic}`)
   
   if (isPublic) {
     console.log(`✅ Public endpoint allowed: ${request.nextUrl.pathname}`)

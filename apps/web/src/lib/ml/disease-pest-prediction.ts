@@ -241,7 +241,7 @@ class DiseasePestPredictionService {
 
       // Sort by risk level and probability
       predictions.sort((a, b) => {
-        const riskOrder = { extreme: 4, high: 3, moderate: 2, low: 1 }
+        const riskOrder: Record<string, number> = { extreme: 4, high: 3, moderate: 2, low: 1 }
         return riskOrder[b.riskLevel] - riskOrder[a.riskLevel] || 
                b.outbreakProbability - a.outbreakProbability
       })

@@ -417,7 +417,7 @@ class DiseasePestPredictionService {
     severity: 'low' | 'moderate' | 'high' | 'critical'
   ): Promise<TreatmentRecommendation> {
     const pestThreats = this.pestDatabase.get(cropType.toLowerCase()) || []
-    const threat = pestThreats.find(p => p.pestId === pestId)
+    const threat = pestThreats.find(p => p.commonName === pestId)
     
     if (!threat) {
       throw new Error(`Pest threat ${pestId} not found for crop ${cropType}`)

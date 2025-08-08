@@ -507,7 +507,7 @@ class USDANassService {
     return units[commodity.toUpperCase()] || 'units/acre'
   }
 
-  private estimateInputCost(commodity: string, yield: number): number {
+  private estimateInputCost(commodity: string, yieldValue: number): number {
     // Rough input cost estimates per acre
     const baseCosts: Record<string, number> = {
       'CORN': 450,
@@ -518,12 +518,12 @@ class USDANassService {
     }
     const baseCost = baseCosts[commodity.toUpperCase()] || 400
     // Higher yields typically require higher inputs
-    return Math.round(baseCost * (1 + (yield / this.getBaseYield(commodity) - 1) * 0.3))
+    return Math.round(baseCost * (1 + (yieldValue / this.getBaseYield(commodity) - 1) * 0.3))
   }
 
-  private estimateProfitability(commodity: string, yield: number): number {
-    const inputCost = this.estimateInputCost(commodity, yield)
-    const revenue = yield * this.getCommodityPrice(commodity)
+  private estimateProfitability(commodity: string, yieldValue: number): number {
+    const inputCost = this.estimateInputCost(commodity, yieldValue)
+    const revenue = yieldValue * this.getCommodityPrice(commodity)
     return Math.round(revenue - inputCost)
   }
 

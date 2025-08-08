@@ -3,7 +3,7 @@ import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -43,8 +43,7 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login'
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET || 'crops-ai-dev-secret-key-2024'
 }
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+export default NextAuth(authOptions)

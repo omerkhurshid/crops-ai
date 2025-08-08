@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { UserRole } from '@prisma/client'
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -17,8 +18,8 @@ const authOptions: NextAuthOptions = {
 
         // Demo users
         const demoUsers = [
-          { id: '1', email: 'demo@crops.ai', password: 'Demo123!', name: 'Demo User', role: 'FARM_OWNER' },
-          { id: '2', email: 'admin@crops.ai', password: 'Admin123!', name: 'Admin User', role: 'ADMIN' }
+          { id: '1', email: 'demo@crops.ai', password: 'Demo123!', name: 'Demo User', role: UserRole.FARM_OWNER },
+          { id: '2', email: 'admin@crops.ai', password: 'Admin123!', name: 'Admin User', role: UserRole.ADMIN }
         ]
 
         const user = demoUsers.find(u => u.email === credentials.email && u.password === credentials.password)
@@ -27,7 +28,8 @@ const authOptions: NextAuthOptions = {
           return { 
             id: user.id, 
             email: user.email, 
-            name: user.name
+            name: user.name,
+            role: user.role as UserRole
           }
         }
         

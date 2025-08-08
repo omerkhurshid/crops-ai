@@ -326,7 +326,7 @@ class DiseasePestPredictionService {
       await auditLogger.logML('pest_prediction_error', fieldId, undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error',
         cropType
-      }, 'error')
+      })
       throw error
     }
   }

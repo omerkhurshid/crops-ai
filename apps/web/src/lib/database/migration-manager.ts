@@ -139,10 +139,6 @@ class DatabaseMigrationManager {
    * Seed database with sample data for development/testing
    */
   async seedDatabase(environment: 'development' | 'staging' | 'demo'): Promise<DataSeeding> {
-    if (environment === 'production') {
-      throw new Error('Database seeding not allowed in production environment')
-    }
-
     await auditLogger.logSystem(
       'database_seeding_started',
       true,

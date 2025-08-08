@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@crops-ai/shared'
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -29,7 +29,7 @@ const authOptions: NextAuthOptions = {
             id: user.id, 
             email: user.email, 
             name: user.name,
-            role: user.role as UserRole
+            role: user.role
           }
         }
         

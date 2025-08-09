@@ -164,7 +164,6 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
             </Tabs>
           </ModernCard>
         </div>
-        </div>
       </main>
     </div>
   )

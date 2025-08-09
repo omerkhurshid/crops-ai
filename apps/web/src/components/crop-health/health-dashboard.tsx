@@ -80,7 +80,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
   const fetchHealthData = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/satellite/live-ndvi?farmId=${farmId}`)
+      const response = await fetch(`/api/satellite/farm-health?farmId=${farmId}`)
       
       if (response.ok) {
         const data = await response.json()

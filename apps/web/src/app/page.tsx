@@ -109,7 +109,7 @@ export default function Home() {
               Powerful Tools for Modern Farming
             </h2>
             <p className="text-xl text-sage-600 max-w-3xl mx-auto leading-relaxed">
-              Everything you need to optimize your farm's productivity and sustainability
+              Everything you need to optimize your farm&apos;s productivity and sustainability
             </p>
           </div>
 

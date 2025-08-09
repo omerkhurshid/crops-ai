@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
+import { encode } from 'next-auth/jwt'
 import { UserRole } from '@crops-ai/shared'
 
 export async function POST(request: NextRequest) {
@@ -37,17 +37,16 @@ export async function POST(request: NextRequest) {
     if (demoUser && demoUser.password === password) {
       console.log('Demo user authenticated:', demoUser.email)
       
-      // Create JWT token
-      const token = sign(
-        { 
-          userId: demoUser.id,
+      // Create NextAuth-compatible JWT token
+      const token = await encode({
+        token: {
+          id: demoUser.id,
           email: demoUser.email,
-          role: demoUser.role,
-          name: demoUser.name
+          name: demoUser.name,
+          role: demoUser.role
         },
-        process.env.NEXTAUTH_SECRET!,
-        { expiresIn: '24h' }
-      )
+        secret: process.env.NEXTAUTH_SECRET!
+      })
       
       const response = Response.json({ 
         success: true,

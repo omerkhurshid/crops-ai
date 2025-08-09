@@ -79,14 +79,28 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude }: Fie
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Failed to create field')
+        // Handle both string errors and error objects
+        const errorMessage = typeof data.error === 'string' 
+          ? data.error 
+          : data.error?.message || 'Failed to create field'
+        throw new Error(errorMessage)
       }
 
       const field = await response.json()
       router.push(`/farms/${farmId}`)
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      console.error('Field creation error:', err)
+      // Ensure we always display a string error message
+      let errorMessage = 'An error occurred'
+      if (err instanceof Error) {
+        errorMessage = err.message
+      } else if (typeof err === 'string') {
+        errorMessage = err
+      } else if (err && typeof err === 'object' && 'message' in err) {
+        errorMessage = String(err.message)
+      }
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

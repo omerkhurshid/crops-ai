@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { encode } from 'next-auth/jwt'
 import { UserRole } from '@crops-ai/shared'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,6 +37,28 @@ export async function POST(request: NextRequest) {
     const demoUser = demoUsers.find(user => user.email === email)
     if (demoUser && demoUser.password === password) {
       console.log('Demo user authenticated:', demoUser.email)
+      
+      // Ensure demo user exists in database
+      try {
+        await prisma.user.upsert({
+          where: { email: demoUser.email },
+          update: {
+            name: demoUser.name,
+            role: demoUser.role
+          },
+          create: {
+            id: demoUser.id,
+            email: demoUser.email,
+            name: demoUser.name,
+            role: demoUser.role,
+            emailVerified: new Date()
+          },
+        })
+        console.log('✅ Demo user ensured in database:', demoUser.email)
+      } catch (dbError) {
+        console.error('⚠️ Failed to upsert demo user:', dbError)
+        // Continue anyway - we'll still create the JWT token
+      }
       
       // Create NextAuth-compatible JWT token
       const token = await encode({

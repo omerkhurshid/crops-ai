@@ -18,7 +18,7 @@ export function FarmSelector({ farms, currentFarmId }: FarmSelectorProps) {
   const searchParams = useSearchParams()
 
   const handleFarmChange = (farmId: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams || '')
     params.set('farmId', farmId)
     const currentPath = window.location.pathname
     router.push(`${currentPath}?${params.toString()}`)

@@ -19,8 +19,10 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   try {
     // Try NextAuth first (for when it's working)
     const session = await getServerSession(authOptions)
+    console.log('🔍 Server session in getCurrentUser:', session)
     
     if (session?.user) {
+      console.log('✅ Found user in server session:', session.user)
       return {
         id: session.user.id,
         email: session.user.email,

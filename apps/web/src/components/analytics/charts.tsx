@@ -257,7 +257,7 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
                   key={option.value}
                   variant={selectedRange === option.value ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedRange(option.value)}
+                  onClick={() => setSelectedRange(option.value as '7d' | '30d' | '90d' | '1y')}
                 >
                   {option.label}
                 </Button>

@@ -37,10 +37,6 @@ async function getFarmDetails(farmId: string, userId: string) {
               take: 1
             }
           }
-        },
-        weatherData: {
-          orderBy: { recordedAt: 'desc' },
-          take: 1
         }
       }
     })
@@ -56,9 +52,6 @@ async function getFarmDetails(farmId: string, userId: string) {
       return sum + (latestData?.ndvi || 0)
     }, 0) / (farm.fields.length || 1)
 
-    // Get latest weather data
-    const latestWeather = farm.weatherData[0]
-
     return {
       ...farm,
       stats: {
@@ -66,8 +59,7 @@ async function getFarmDetails(farmId: string, userId: string) {
         averageNDVI,
         fieldsCount: farm.fields.length,
         healthScore: Math.round(averageNDVI * 100)
-      },
-      weather: latestWeather
+      }
     }
   } catch (error) {
     console.error('Error fetching farm details:', error)
@@ -284,10 +276,10 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                       <Sun className="h-8 w-8 text-yellow-500 mr-3" />
                       <div>
                         <div className="text-2xl font-bold">
-                          {farm.weather?.temperature || 22}°C
+                          22°C
                         </div>
                         <div className="text-sm text-gray-600">
-                          {farm.weather?.conditions || 'Partly Cloudy'}
+                          Partly Cloudy
                         </div>
                       </div>
                     </div>
@@ -298,7 +290,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                       <Droplets className="h-4 w-4 text-blue-500 mr-2" />
                       <div>
                         <div className="text-sm font-medium">
-                          {farm.weather?.humidity || 65}%
+                          65%
                         </div>
                         <div className="text-xs text-gray-500">Humidity</div>
                       </div>
@@ -307,7 +299,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                       <Wind className="h-4 w-4 text-gray-500 mr-2" />
                       <div>
                         <div className="text-sm font-medium">
-                          {farm.weather?.windSpeed || 12} km/h
+                          12 km/h
                         </div>
                         <div className="text-xs text-gray-500">Wind</div>
                       </div>

@@ -4,21 +4,46 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
 import { Navbar } from '../../components/navigation/navbar'
+import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
-async function getUserFarms() {
+async function getUserFarms(userId: string) {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/farms`, {
-      cache: 'no-store'
+    const farms = await prisma.farm.findMany({
+      where: { ownerId: userId },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        _count: {
+          select: {
+            fields: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
     })
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch user farms')
-    }
-    
-    const data = await response.json()
-    return data.farms || []
+    return farms.map(farm => ({
+      id: farm.id,
+      name: farm.name,
+      totalArea: farm.totalArea,
+      latitude: farm.latitude,
+      longitude: farm.longitude,
+      address: farm.address,
+      region: farm.region,
+      country: farm.country,
+      location: farm.location,
+      fieldsCount: farm._count.fields,
+      createdAt: farm.createdAt,
+      updatedAt: farm.updatedAt,
+      owner: farm.owner
+    }))
   } catch (error) {
     console.error('Error fetching user farms:', error)
     return []
@@ -32,7 +57,7 @@ export default async function FarmsPage() {
     redirect('/login')
   }
 
-  const userFarms = await getUserFarms()
+  const userFarms = await getUserFarms(user.id)
 
   return (
     <div className="min-h-screen bg-agricultural">

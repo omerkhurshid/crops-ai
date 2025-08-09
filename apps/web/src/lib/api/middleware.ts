@@ -198,52 +198,43 @@ async function authenticateRequest(request: NextRequest): Promise<{
   role: UserRole
 } | null> {
   try {
-    // Try NextAuth JWT token first
-    const { getToken } = await import('next-auth/jwt')
+    console.log('🔍 Authenticating request in middleware')
     
-    const token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET
+    // Get the session token from cookies (same logic as our session endpoint)
+    const cookieName = process.env.NODE_ENV === 'production' 
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token'
+    
+    const token = request.cookies.get(cookieName)?.value
+    console.log('🎫 Token found in middleware:', !!token)
+    
+    if (!token) {
+      console.log('❌ No token found in middleware')
+      return null
+    }
+    
+    // Decode NextAuth JWT token using the same method as our session endpoint
+    const { decode } = await import('next-auth/jwt')
+    const decoded = await decode({
+      token,
+      secret: process.env.NEXTAUTH_SECRET!
     })
     
-    console.log('🔍 NextAuth token in middleware:', token)
-    
-    if (token && token.email) {
-      return {
-        id: (token.id || token.sub) as string, // NextAuth sometimes uses 'sub' field
-        email: token.email,
-        name: token.name || 'Unknown User',
-        role: token.role as UserRole
-      }
-    }
-
-    // Fallback to session cookie (same logic as getCurrentUser)
-    const sessionCookie = request.cookies.get('session')
-    
-    if (!sessionCookie) {
+    if (!decoded) {
+      console.log('❌ Token decode failed in middleware')
       return null
     }
-
-    try {
-      const sessionData = JSON.parse(Buffer.from(sessionCookie.value, 'base64').toString())
-      
-      // Check if session is expired
-      if (Date.now() > sessionData.exp) {
-        return null
-      }
-
-      return {
-        id: sessionData.id,
-        email: sessionData.email,
-        name: sessionData.name,
-        role: sessionData.role as UserRole
-      }
-    } catch (cookieError) {
-      Logger.error('Error parsing session cookie', cookieError)
-      return null
+    
+    console.log('✅ User authenticated in middleware:', { id: decoded.id, email: decoded.email })
+    
+    return {
+      id: decoded.id as string,
+      email: decoded.email as string,
+      name: decoded.name as string,
+      role: decoded.role as UserRole
     }
   } catch (error) {
-    Logger.error('Authentication error', error)
+    console.error('❌ Authentication error in middleware:', error)
     return null
   }
 }

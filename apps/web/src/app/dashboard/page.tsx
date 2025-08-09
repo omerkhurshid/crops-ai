@@ -300,7 +300,7 @@ export default async function DashboardPage() {
               title="Health Score"
               value={stats?.overview?.avgHealthScore || 0}
               unit="%"
-              trend={stats?.overview?.avgHealthScore >= 80 ? 'up' : stats?.overview?.avgHealthScore >= 60 ? 'stable' : 'down'}
+              trend={(stats?.overview?.avgHealthScore || 0) >= 80 ? 'up' : (stats?.overview?.avgHealthScore || 0) >= 60 ? 'stable' : 'down'}
               description={stats?.overview?.avgHealthScore ? 'AI-analyzed crop health across all fields' : 'Health data will appear here'}
               icon={<Activity className="h-5 w-5 text-sage-600" />}
               tooltip={TOOLTIP_CONTENT.healthScore}

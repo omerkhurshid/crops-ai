@@ -209,11 +209,6 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                             <Badge variant="outline" className="text-xs">
                               Health: {(field.satelliteData[0].ndvi * 100).toFixed(0)}%
                             </Badge>
-                            {field.satelliteData[0].cloudCoverage && (
-                              <Badge variant="outline" className="text-xs">
-                                Cloud: {field.satelliteData[0].cloudCoverage.toFixed(0)}%
-                              </Badge>
-                            )}
                           </div>
                         )}
                       </div>

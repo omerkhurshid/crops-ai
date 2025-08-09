@@ -105,7 +105,12 @@ export const GET = apiMiddleware.protected(
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: any) => {
     try {
+      console.log('🔍 Field creation API called')
+      console.log('🧑 User from request:', request.user)
+      
       const body = await request.json()
+      console.log('📝 Request body:', body)
+      
       const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary } = body
 
       // Basic validation
@@ -120,6 +125,7 @@ export const POST = apiMiddleware.protected(
       }
 
       // Verify farm ownership
+      console.log('🔍 Looking for farm:', farmId, 'owned by:', request.user.id)
       const farm = await prisma.farm.findFirst({
         where: {
           id: farmId,
@@ -128,15 +134,19 @@ export const POST = apiMiddleware.protected(
       })
 
       if (!farm) {
+        console.log('❌ Farm not found or access denied')
         throw new ValidationError('Farm not found or access denied')
       }
 
+      console.log('✅ Farm found:', farm.name)
+
       // Create new field
+      console.log('🌱 Creating field with data:', { farmId, name, area: parseFloat(area), soilType })
       const field = await prisma.field.create({
         data: {
           farmId,
-          name,
-          area: parseFloat(area) || 0,
+          name: name.trim(),
+          area: parseFloat(area),
           soilType: soilType || null,
           // Note: boundary would need additional schema changes to store properly
           // cropType, description, and coordinates are not in Field schema
@@ -151,6 +161,8 @@ export const POST = apiMiddleware.protected(
           }
         }
       })
+
+      console.log('✅ Field created successfully:', field.id)
 
       // Create crop if cropType was provided
       let crop = null

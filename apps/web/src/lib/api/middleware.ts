@@ -206,9 +206,11 @@ async function authenticateRequest(request: NextRequest): Promise<{
       secret: process.env.NEXTAUTH_SECRET
     })
     
+    console.log('🔍 NextAuth token in middleware:', token)
+    
     if (token && token.email) {
       return {
-        id: token.id as string,
+        id: (token.id || token.sub) as string, // NextAuth sometimes uses 'sub' field
         email: token.email,
         name: token.name || 'Unknown User',
         role: token.role as UserRole

@@ -41,25 +41,29 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       // Process current weather
       if (currentResponse.status === 'fulfilled' && currentResponse.value.ok) {
         const currentData = await currentResponse.value.json()
-        setCurrentWeather(currentData.data.weather)
+        console.log('Current weather response:', currentData)
+        setCurrentWeather(currentData.data?.weather || currentData.weather)
       }
 
       // Process forecast
       if (forecastResponse.status === 'fulfilled' && forecastResponse.value.ok) {
         const forecastData = await forecastResponse.value.json()
-        setForecast(forecastData.data.forecast)
+        console.log('Forecast response:', forecastData)
+        setForecast(forecastData.data?.forecast || forecastData.forecast || [])
       }
 
       // Process alerts
       if (alertsResponse.status === 'fulfilled' && alertsResponse.value.ok) {
         const alertsData = await alertsResponse.value.json()
-        setAlerts(alertsData.data.alerts)
+        console.log('Alerts response:', alertsData)
+        setAlerts(alertsData.data?.alerts || alertsData.alerts || [])
       }
 
       // Process agriculture data
       if (agriResponse.status === 'fulfilled' && agriResponse.value.ok) {
         const agriData = await agriResponse.value.json()
-        setAgricultureData(agriData.data.data)
+        console.log('Agriculture response:', agriData)
+        setAgricultureData(agriData.data?.data || agriData.data)
       }
 
     } catch (err) {

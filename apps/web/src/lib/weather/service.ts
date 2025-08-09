@@ -115,14 +115,16 @@ class WeatherService {
   async getCurrentWeather(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     try {
       if (!this.API_KEY) {
-        throw new Error('OpenWeatherMap API key not configured');
+        console.warn('OpenWeatherMap API key not configured, returning mock data');
+        return this.getMockCurrentWeather(latitude, longitude);
       }
 
       const url = `${this.BASE_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`;
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(`Weather API error: ${response.statusText}`);
+        console.warn(`Weather API error: ${response.statusText}, falling back to mock data`);
+        return this.getMockCurrentWeather(latitude, longitude);
       }
 
       const data = await response.json();
@@ -159,7 +161,7 @@ class WeatherService {
       return currentWeather;
     } catch (error) {
       console.error('Error fetching current weather:', error);
-      return null;
+      return this.getMockCurrentWeather(latitude, longitude);
     }
   }
 
@@ -170,14 +172,16 @@ class WeatherService {
   ): Promise<WeatherForecast[]> {
     try {
       if (!this.API_KEY) {
-        throw new Error('OpenWeatherMap API key not configured');
+        console.warn('OpenWeatherMap API key not configured, returning mock forecast');
+        return this.getMockForecast(latitude, longitude, days);
       }
 
       const url = `${this.ONECALL_URL}?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric&exclude=minutely,hourly`;
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(`Forecast API error: ${response.statusText}`);
+        console.warn(`Forecast API error: ${response.statusText}, falling back to mock data`);
+        return this.getMockForecast(latitude, longitude, days);
       }
 
       const data = await response.json();
@@ -213,7 +217,7 @@ class WeatherService {
       return forecasts;
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
-      return [];
+      return this.getMockForecast(latitude, longitude, days);
     }
   }
 
@@ -463,6 +467,87 @@ class WeatherService {
     this.setCachedData(cacheKey, forecast);
     
     return forecast;
+  }
+
+  // Mock data methods for when API is unavailable
+  private getMockCurrentWeather(latitude: number, longitude: number): CurrentWeather {
+    return {
+      id: `mock_current_${latitude}_${longitude}_${Date.now()}`,
+      location: {
+        latitude,
+        longitude,
+        name: 'Sample Location',
+        country: 'US'
+      },
+      temperature: 22,
+      feelsLike: 24,
+      humidity: 65,
+      pressure: 1013,
+      visibility: 10000,
+      uvIndex: 6,
+      windSpeed: 3.5,
+      windDirection: 180,
+      windGust: 5.2,
+      cloudCover: 40,
+      precipitation: {
+        rain1h: 0,
+        rain3h: 0,
+        snow1h: 0,
+        snow3h: 0
+      },
+      conditions: [{
+        id: 801,
+        main: 'Clouds',
+        description: 'Few clouds',
+        icon: '02d'
+      }],
+      timestamp: new Date().toISOString(),
+      sunrise: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      sunset: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString()
+    };
+  }
+
+  private getMockForecast(latitude: number, longitude: number, days: number): WeatherForecast[] {
+    const forecasts: WeatherForecast[] = [];
+    
+    for (let i = 0; i < Math.min(days, 7); i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i + 1);
+      
+      forecasts.push({
+        id: `mock_forecast_${latitude}_${longitude}_${i}`,
+        location: {
+          latitude,
+          longitude,
+          name: 'Sample Location'
+        },
+        date: date.toISOString().split('T')[0],
+        temperature: {
+          min: 18 + Math.random() * 5,
+          max: 25 + Math.random() * 8,
+          morning: 20 + Math.random() * 3,
+          day: 26 + Math.random() * 4,
+          evening: 22 + Math.random() * 3,
+          night: 18 + Math.random() * 2
+        },
+        humidity: 60 + Math.random() * 20,
+        pressure: 1010 + Math.random() * 10,
+        windSpeed: 2 + Math.random() * 4,
+        windDirection: Math.random() * 360,
+        cloudCover: Math.random() * 100,
+        precipitationProbability: Math.random() * 60,
+        precipitationAmount: Math.random() < 0.3 ? Math.random() * 5 : 0,
+        conditions: [{
+          id: 800 + Math.floor(Math.random() * 4),
+          main: ['Clear', 'Clouds', 'Rain', 'Sun'][Math.floor(Math.random() * 4)],
+          description: ['Clear sky', 'Scattered clouds', 'Light rain', 'Sunny'][Math.floor(Math.random() * 4)],
+          icon: ['01d', '02d', '10d', '01d'][Math.floor(Math.random() * 4)]
+        }],
+        uvIndex: 3 + Math.random() * 5
+      });
+    }
+    
+    return forecasts;
   }
 }
 

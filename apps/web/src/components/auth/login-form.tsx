@@ -24,27 +24,30 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      const { signIn } = await import('next-auth/react')
-      
       console.log('Attempting sign in with:', { email, hasPassword: !!password })
       
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      // Use our custom authentication endpoint
+      const response = await fetch('/api/authentication/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
 
+      const result = await response.json()
       console.log('Sign in result:', result)
 
-      if (result?.error) {
-        console.error('Sign in error:', result.error)
-        setError('Invalid email or password')
-      } else if (result?.ok) {
+      if (response.ok && result.success) {
         console.log('Sign in successful, redirecting to:', callbackUrl)
-        router.push(callbackUrl)
+        // Force a page refresh to ensure session is loaded properly
+        window.location.href = callbackUrl
       } else {
-        console.log('Unexpected result:', result)
-        setError('Sign in failed. Please try again.')
+        console.error('Sign in error:', result.error)
+        setError(result.error || 'Invalid email or password')
       }
     } catch (err) {
       console.error('Sign in exception:', err)

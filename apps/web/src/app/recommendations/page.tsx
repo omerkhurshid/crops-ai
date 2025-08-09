@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { Navbar } from '../../components/navigation/navbar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
@@ -33,6 +35,8 @@ interface RecommendationFilters {
 }
 
 export default function RecommendationsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState<RecommendationFilters>({
@@ -41,6 +45,33 @@ export default function RecommendationsPage() {
     priority: 'yield_maximization',
     timeHorizon: 90
   })
+
+  // Authentication guard
+  useEffect(() => {
+    if (status === 'loading') return // Still loading
+    if (!session) {
+      router.push('/login')
+      return
+    }
+  }, [session, status, router])
+
+  useEffect(() => {
+    fetchRecommendations()
+  }, [])
+
+  // Show loading screen while checking authentication
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-agricultural flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    )
+  }
+
+  // Redirect if not authenticated (this prevents flash of content)
+  if (!session) {
+    return null
+  }
 
   const fetchRecommendations = async () => {
     setLoading(true)
@@ -156,10 +187,6 @@ export default function RecommendationsPage() {
       deadline: '2024-03-01'
     }
   ]
-
-  useEffect(() => {
-    fetchRecommendations()
-  }, [])
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
@@ -63,6 +65,8 @@ interface StressData {
 }
 
 export default function CropHealthPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [healthData, setHealthData] = useState<FieldHealthData | null>(null)
   const [stressData, setStressData] = useState<StressData | null>(null)
   const [fields, setFields] = useState<any[]>([])
@@ -71,6 +75,15 @@ export default function CropHealthPage() {
   const [error, setError] = useState<string | null>(null)
   const [selectedField, setSelectedField] = useState('')
   const [activeTab, setActiveTab] = useState<'overview' | 'indices' | 'stress' | 'recommendations'>('overview')
+
+  // Authentication guard
+  useEffect(() => {
+    if (status === 'loading') return // Still loading
+    if (!session) {
+      router.push('/login')
+      return
+    }
+  }, [session, status, router])
 
   useEffect(() => {
     fetchFields()
@@ -81,6 +94,20 @@ export default function CropHealthPage() {
       fetchHealthData()
     }
   }, [selectedField])
+
+  // Show loading screen while checking authentication
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-agricultural flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    )
+  }
+
+  // Redirect if not authenticated (this prevents flash of content)
+  if (!session) {
+    return null
+  }
 
   const fetchFields = async () => {
     try {

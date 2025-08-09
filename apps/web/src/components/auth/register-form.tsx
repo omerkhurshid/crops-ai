@@ -68,7 +68,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     }
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/authentication/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

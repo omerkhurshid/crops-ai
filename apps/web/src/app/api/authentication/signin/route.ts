@@ -50,8 +50,7 @@ export async function POST(request: NextRequest) {
             id: demoUser.id,
             email: demoUser.email,
             name: demoUser.name,
-            role: demoUser.role,
-            emailVerified: new Date()
+            role: demoUser.role
           },
         })
         console.log('✅ Demo user ensured in database:', demoUser.email)

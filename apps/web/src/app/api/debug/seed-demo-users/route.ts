@@ -10,15 +10,13 @@ export async function POST() {
         id: 'demo-1',
         email: 'demo@crops.ai',
         name: 'Demo User',
-        role: UserRole.FARM_OWNER,
-        emailVerified: new Date()
+        role: UserRole.FARM_OWNER
       },
       {
         id: 'admin-1', 
         email: 'admin@crops.ai',
         name: 'Admin User',
-        role: UserRole.ADMIN,
-        emailVerified: new Date()
+        role: UserRole.ADMIN
       }
     ]
 

@@ -226,7 +226,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
         <div className="bg-blue-50 rounded-lg p-4">
           <h4 className="font-medium text-blue-900 mb-2">Analysis Summary</h4>
           <p className="text-sm text-blue-700">
-            Field "{fieldName}" shows {ndviData.ndviClass} vegetation density with 
+            Field &quot;{fieldName}&quot; shows {ndviData.ndviClass} vegetation density with 
             {ndviData.healthStatus.toLowerCase() === 'excellent' ? ' optimal' : 
              ndviData.healthStatus.toLowerCase() === 'good' ? ' healthy' :
              ndviData.healthStatus.toLowerCase() === 'moderate' ? ' acceptable' :

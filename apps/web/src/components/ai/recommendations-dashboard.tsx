@@ -6,7 +6,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Progress } from '../ui/progress'
 import { 
-  Brain, TrendingUp, Droplets, Sprout, Bug, Harvest, 
+  Brain, TrendingUp, Droplets, Sprout, Bug, Calendar2, 
   DollarSign, Calendar, AlertTriangle, CheckCircle2, Clock,
   RefreshCw, ChevronRight, Target, Lightbulb
 } from 'lucide-react'

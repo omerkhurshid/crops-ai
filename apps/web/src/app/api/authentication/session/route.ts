@@ -26,12 +26,15 @@ export async function GET(request: NextRequest) {
     
     try {
       // Verify the JWT token
+      console.log('🔑 Attempting to verify token with secret:', process.env.NEXTAUTH_SECRET ? 'present' : 'missing')
       const decoded = verify(token, process.env.NEXTAUTH_SECRET!) as {
         userId: string
         email: string
         name: string
         role: UserRole
       }
+      
+      console.log('✅ Token verified successfully:', { userId: decoded.userId, email: decoded.email })
       
       // Return session in NextAuth format
       const session = {
@@ -44,9 +47,12 @@ export async function GET(request: NextRequest) {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
       }
       
+      console.log('🎉 Returning session:', { userId: session.user.id, email: session.user.email })
       return Response.json(session)
     } catch (err) {
-      console.error('Token verification failed:', err)
+      console.error('❌ Token verification failed:', err)
+      console.error('Token starts with:', token.substring(0, 50))
+      console.error('Secret present:', !!process.env.NEXTAUTH_SECRET)
       // Invalid token - return null session
       return Response.json(null)
     }

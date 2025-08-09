@@ -1,10 +1,15 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Badge } from '../../components/ui/badge'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
+import { InfoTooltip, TOOLTIP_CONTENT } from '../../components/ui/info-tooltip'
+import { FloatingActionButton, InlineFloatingButton } from '../../components/ui/floating-button'
 import { Navbar } from '../../components/navigation/navbar'
-import { Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock } from 'lucide-react'
+import { 
+  Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
+  Plus, Brain, CloudRain, BarChart, Settings, Zap, Target
+} from 'lucide-react'
 import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -247,214 +252,312 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats(user.id)
 
   return (
-    <div className="min-h-screen bg-agricultural">
-      <div className="absolute inset-0 agricultural-overlay"></div>
+    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-sage-50/30 to-cream-100">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
-        <div className="px-8 lg:px-16 py-12 sm:px-0">
-          <div className="mb-12">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">Dashboard</h1>
-            <p className="text-2xl text-white/80 font-light">Welcome back, {user.name}!</p>
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        icon={<Plus className="h-5 w-5" />}
+        label="Quick Action"
+        variant="primary"
+        onClick={() => {}} // Add functionality later
+      />
+      
+      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="mb-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+              Dashboard
+            </h1>
+            <p className="text-xl text-sage-600 font-light leading-relaxed">
+              Welcome back, <span className="font-medium text-sage-800">{user.name}</span>! 
+              Monitor your agricultural operations from one intelligent platform.
+            </p>
+          </div>
+        </div>
+
+          {/* Modern Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <MetricCard
+              title="Total Farms"
+              value={stats?.overview?.totalFarms || 0}
+              description={stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'Create your first farm to get started'}
+              icon={<Sprout className="h-5 w-5 text-sage-600" />}
+              tooltip={TOOLTIP_CONTENT.farm}
+              variant="floating"
+            />
+            
+            <MetricCard
+              title="Active Fields"
+              value={stats?.overview?.activeFields || 0}
+              description={stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields in production` : 'Add fields to start monitoring'}
+              icon={<MapPin className="h-5 w-5 text-sage-600" />}
+              tooltip={TOOLTIP_CONTENT.field}
+              variant="floating"
+            />
+            
+            <MetricCard
+              title="Health Score"
+              value={stats?.overview?.avgHealthScore || 0}
+              unit="%"
+              trend={stats?.overview?.avgHealthScore >= 80 ? 'up' : stats?.overview?.avgHealthScore >= 60 ? 'stable' : 'down'}
+              description={stats?.overview?.avgHealthScore ? 'AI-analyzed crop health across all fields' : 'Health data will appear here'}
+              icon={<Activity className="h-5 w-5 text-sage-600" />}
+              tooltip={TOOLTIP_CONTENT.healthScore}
+              variant="floating"
+            />
+            
+            <MetricCard
+              title="Weather Alerts"
+              value={stats?.overview?.weatherAlerts || 0}
+              description={stats?.overview?.weatherAlerts ? 'Active weather notifications requiring attention' : 'No weather alerts at this time'}
+              icon={<AlertTriangle className="h-5 w-5 text-earth-600" />}
+              tooltip={TOOLTIP_CONTENT.precipitation}
+              variant="soft"
+            />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="card-gradient">
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-gradient-crops rounded-full mr-3">
-                  <Sprout className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Total Farms</h3>
-                  <p className="text-sm text-gray-600">Farms under your management</p>
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gradient mb-2">
-                {stats?.overview?.totalFarms || 0}
-              </div>
-              <p className="text-sm text-gray-500">
-                {stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'No farms yet'}
-              </p>
-            </div>
-
-            <div className="card-gradient">
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-blue-500 rounded-full mr-3">
-                  <MapPin className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Active Fields</h3>
-                  <p className="text-sm text-gray-600">Fields currently in production</p>
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gradient mb-2">
-                {stats?.overview?.activeFields || 0}
-              </div>
-              <p className="text-sm text-gray-500">
-                {stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields` : 'No fields yet'}
-              </p>
-            </div>
-
-            <div className="card-gradient">
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-emerald-500 rounded-full mr-3">
-                  <TrendingUp className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Health Score</h3>
-                  <p className="text-sm text-gray-600">Average crop health</p>
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gradient mb-2">
-                {stats?.overview?.avgHealthScore || 0}
-              </div>
-              <p className="text-sm text-gray-500">
-                {stats?.overview?.avgHealthScore ? `${stats.overview.avgHealthScore}/100 average` : 'No data yet'}
-              </p>
-            </div>
-
-            <div className="card-gradient">
-              <div className="flex items-center mb-4">
-                <div className="p-2 bg-yellow-500 rounded-full mr-3">
-                  <AlertTriangle className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Weather Alerts</h3>
-                  <p className="text-sm text-gray-600">Current notifications</p>
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-gradient mb-2">
-                {stats?.overview?.weatherAlerts || 0}
-              </div>
-              <p className="text-sm text-gray-500">
-                {stats?.overview?.weatherAlerts ? 'Active alerts' : 'No alerts'}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div className="card-gradient">
-              <div className="flex items-center mb-6">
-                <div className="p-2 bg-blue-500 rounded-full mr-3">
-                  <Activity className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Recent Activity</h3>
-                  <p className="text-gray-600">Your latest farm management activities</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                  stats.recentActivity.map((activity: any) => (
-                    <div key={activity.id} className="flex items-start space-x-3 p-3 bg-white/50 rounded-lg">
-                      <div className={`p-2 rounded-full ${
-                        activity.type === 'farm_created' ? 'bg-green-100 text-green-600' :
-                        activity.type === 'satellite_analysis' ? 'bg-blue-100 text-blue-600' :
-                        'bg-gray-100 text-gray-600'
-                      }`}>
-                        {activity.type === 'farm_created' ? <Sprout className="h-4 w-4" /> :
-                         activity.type === 'satellite_analysis' ? <TrendingUp className="h-4 w-4" /> :
-                         <Activity className="h-4 w-4" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-900">{activity.title}</div>
-                        <div className="text-sm text-gray-600">{activity.description}</div>
-                        <div className="text-xs text-gray-500 mt-1">{activity.timeAgo}</div>
-                      </div>
+          {/* Asymmetric Magazine Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+            {/* Main Content Area - Takes 8 columns */}
+            <div className="lg:col-span-8">
+              <ModernCard variant="floating" className="overflow-hidden">
+                <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <ModernCardTitle className="text-sage-800">Recent Activity</ModernCardTitle>
+                      <InfoTooltip title="Activity Feed" description="Real-time updates from your farm management operations and satellite monitoring system." />
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    <Activity className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>No recent activity</p>
-                    <p className="text-sm">Start by creating your first farm</p>
+                    <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                      Live Updates
+                    </Badge>
                   </div>
-                )}
-              </div>
+                  <ModernCardDescription>
+                    Your latest farm management activities and automated system updates
+                  </ModernCardDescription>
+                </ModernCardHeader>
+                <ModernCardContent>
+                  <div className="space-y-4">
+                    {stats?.recentActivity && stats.recentActivity.length > 0 ? (
+                      stats.recentActivity.map((activity: any) => (
+                        <ModernCard key={activity.id} variant="soft" className="hover:variant-floating transition-all duration-300">
+                          <ModernCardContent className="p-4">
+                            <div className="flex items-start space-x-4">
+                              <div className={`p-3 rounded-xl ${
+                                activity.type === 'farm_created' ? 'bg-sage-100 text-sage-700' :
+                                activity.type === 'satellite_analysis' ? 'bg-sage-100 text-sage-700' :
+                                'bg-cream-100 text-earth-700'
+                              }`}>
+                                {activity.type === 'farm_created' ? <Sprout className="h-5 w-5" /> :
+                                 activity.type === 'satellite_analysis' ? <Activity className="h-5 w-5" /> :
+                                 <TrendingUp className="h-5 w-5" />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between">
+                                  <h4 className="font-semibold text-sage-800">{activity.title}</h4>
+                                  <span className="text-xs text-sage-500 font-medium">{activity.timeAgo}</span>
+                                </div>
+                                <p className="text-sm text-sage-600 mt-1 leading-relaxed">{activity.description}</p>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <Badge className="bg-sage-50 text-sage-600 border-sage-200 text-xs">
+                                    {activity.farmName}
+                                  </Badge>
+                                  {activity.fieldName && (
+                                    <Badge className="bg-cream-50 text-earth-600 border-earth-200 text-xs">
+                                      {activity.fieldName}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </ModernCardContent>
+                        </ModernCard>
+                      ))
+                    ) : (
+                      <div className="text-center py-12">
+                        <div className="relative">
+                          <Activity className="h-16 w-16 text-sage-300 mx-auto mb-4 animate-pulse-soft" />
+                          <div className="absolute inset-0 rounded-full bg-sage-100 opacity-20 animate-float"></div>
+                        </div>
+                        <h3 className="font-medium text-sage-700 mb-2">No activity yet</h3>
+                        <p className="text-sage-500 text-sm mb-6">Your farm activities will appear here as you manage your operations</p>
+                        <Link href="/farms/create">
+                          <InlineFloatingButton
+                            icon={<Plus className="h-4 w-4" />}
+                            label="Create Your First Farm"
+                            showLabel={true}
+                            variant="primary"
+                          />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </ModernCardContent>
+              </ModernCard>
             </div>
 
-            <div className="card-gradient">
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">Quick Actions</h3>
-                <p className="text-gray-600">Common tasks and recommended actions</p>
-              </div>
-              <div className="space-y-3">
-                <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
-                  <div className="font-medium text-gray-900">Create New Farm</div>
-                  <div className="text-sm text-gray-500">Add a new farm to your portfolio</div>
-                </Link>
-                <Link href="/weather" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
-                  <div className="font-medium text-gray-900">View Weather Data</div>
-                  <div className="text-sm text-gray-500">Check current weather conditions</div>
-                </Link>
-                <Link href="/crop-health" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
-                  <div className="font-medium text-gray-900">Crop Health Analytics</div>
-                  <div className="text-sm text-gray-500">Monitor vegetation health via satellite</div>
-                </Link>
-                <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
-                  <div className="font-medium text-gray-900">AI Insights</div>
-                  <div className="text-sm text-gray-500">Get intelligent recommendations</div>
-                </Link>
-                <Link href="/weather/alerts" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
-                  <div className="font-medium text-gray-900">Weather Alerts</div>
-                  <div className="text-sm text-gray-500">Monitor extreme weather conditions</div>
-                </Link>
-              </div>
+            {/* Right Sidebar - Takes 4 columns */}
+            <div className="lg:col-span-4 space-y-6">
+              <ModernCard variant="glass" className="overflow-hidden">
+                <ModernCardHeader className="bg-gradient-to-br from-cream-50/90 to-sage-50/90">
+                  <div className="flex items-center gap-3">
+                    <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
+                    <InfoTooltip title="Quick Access" description="Common tasks and recommended actions for efficient farm management." />
+                  </div>
+                  <ModernCardDescription>
+                    Essential tools and shortcuts for daily operations
+                  </ModernCardDescription>
+                </ModernCardHeader>
+                <ModernCardContent className="p-4">
+                  <div className="space-y-3">
+                    <Link href="/farms/create">
+                      <InlineFloatingButton
+                        icon={<Sprout className="h-4 w-4" />}
+                        label="Create New Farm"
+                        showLabel={true}
+                        variant="primary"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                    <Link href="/weather">
+                      <InlineFloatingButton
+                        icon={<CloudRain className="h-4 w-4" />}
+                        label="Weather Monitoring"
+                        showLabel={true}
+                        variant="secondary"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                    <Link href="/crop-health">
+                      <InlineFloatingButton
+                        icon={<Activity className="h-4 w-4" />}
+                        label="Crop Health Analytics"
+                        showLabel={true}
+                        variant="ghost"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                    <Link href="/recommendations">
+                      <InlineFloatingButton
+                        icon={<Brain className="h-4 w-4" />}
+                        label="AI Recommendations"
+                        showLabel={true}
+                        variant="ghost"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                    <Link href="/weather/alerts">
+                      <InlineFloatingButton
+                        icon={<AlertTriangle className="h-4 w-4" />}
+                        label="Weather Alerts"
+                        showLabel={true}
+                        variant="ghost"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                  </div>
+                </ModernCardContent>
+              </ModernCard>
             </div>
           </div>
 
-          {/* Additional Insights */}
+          {/* AI Insights & Task Management */}
           {stats?.insights && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="card-gradient">
-                <div className="flex items-center mb-6">
-                  <div className="p-2 bg-blue-500 rounded-full mr-3">
-                    <TrendingUp className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">Recommendations</h3>
-                    <p className="text-gray-600">AI-powered suggestions for your farm</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {stats.insights.recommendedActions?.map((action: string, index: number) => (
-                    <div key={index} className="flex items-start space-x-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
-                      <span className="text-gray-700">{action}</span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* AI Recommendations - Main Column */}
+              <div className="lg:col-span-7">
+                <ModernCard variant="glow" className="overflow-hidden">
+                  <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
+                    <div className="flex items-center gap-3">
+                      <ModernCardTitle className="text-sage-800">AI Recommendations</ModernCardTitle>
+                      <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
                     </div>
-                  ))}
-                </div>
+                    <ModernCardDescription>
+                      Intelligent insights powered by satellite data, weather patterns, and agricultural best practices
+                    </ModernCardDescription>
+                  </ModernCardHeader>
+                  <ModernCardContent>
+                    <div className="space-y-4">
+                      {stats.insights.recommendedActions?.map((action: string, index: number) => (
+                        <div key={index} className="flex items-start space-x-4 p-4 bg-sage-50/50 rounded-xl border border-sage-100/50">
+                          <div className="p-2 bg-sage-200 rounded-lg mt-1">
+                            <Target className="h-4 w-4 text-sage-700" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sage-800 font-medium leading-relaxed">{action}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge className="bg-sage-100 text-sage-700 border-sage-200 text-xs">
+                                AI Generated
+                              </Badge>
+                              <span className="text-xs text-sage-500">Confidence: 85%</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {(!stats.insights.recommendedActions || stats.insights.recommendedActions.length === 0) && (
+                        <div className="text-center py-8">
+                          <Brain className="h-12 w-12 text-sage-300 mx-auto mb-4" />
+                          <p className="text-sage-600">No recommendations available</p>
+                          <p className="text-sm text-sage-500">Add farms and fields to receive AI-powered insights</p>
+                        </div>
+                      )}
+                    </div>
+                  </ModernCardContent>
+                </ModernCard>
               </div>
 
-              <div className="card-gradient">
-                <div className="flex items-center mb-6">
-                  <div className="p-2 bg-orange-500 rounded-full mr-3">
-                    <Clock className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">Upcoming Tasks</h3>
-                    <p className="text-gray-600">Scheduled activities and reminders</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {stats.insights.upcomingTasks?.slice(0, 3).map((task: any) => (
-                    <div key={task.id} className="flex items-start justify-between p-2 bg-white/50 rounded">
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900">{task.title}</div>
-                        <div className="text-sm text-gray-600">{task.description}</div>
-                      </div>
-                      <Badge variant={task.priority === 'high' ? 'destructive' : task.priority === 'medium' ? 'default' : 'secondary'}>
-                        {task.priority}
-                      </Badge>
+              {/* Upcoming Tasks - Side Column */}
+              <div className="lg:col-span-5">
+                <ModernCard variant="floating" className="overflow-hidden">
+                  <ModernCardHeader className="bg-gradient-to-br from-cream-50 to-earth-50/80">
+                    <div className="flex items-center gap-3">
+                      <ModernCardTitle className="text-sage-800">Upcoming Tasks</ModernCardTitle>
+                      <InfoTooltip title="Task Management" description="Scheduled activities, reminders, and seasonal recommendations for optimal farm management." />
                     </div>
-                  ))}
-                  {(!stats.insights.upcomingTasks || stats.insights.upcomingTasks.length === 0) && (
-                    <div className="text-center text-gray-500 py-4">
-                      <Clock className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                      <p className="text-sm">No upcoming tasks</p>
+                    <ModernCardDescription>
+                      Scheduled activities and seasonal recommendations
+                    </ModernCardDescription>
+                  </ModernCardHeader>
+                  <ModernCardContent>
+                    <div className="space-y-3">
+                      {stats.insights.upcomingTasks?.slice(0, 4).map((task: any) => (
+                        <div key={task.id} className="p-3 bg-white/80 rounded-xl border border-sage-100/30 hover:bg-white transition-colors">
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-semibold text-sage-800 text-sm">{task.title}</h4>
+                            <Badge className={`text-xs ${
+                              task.priority === 'high' 
+                                ? 'bg-earth-100 text-earth-700 border-earth-200' 
+                                : task.priority === 'medium' 
+                                ? 'bg-sage-100 text-sage-700 border-sage-200' 
+                                : 'bg-cream-100 text-earth-600 border-cream-200'
+                            }`}>
+                              {task.priority}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-sage-600 leading-relaxed mb-2">{task.description}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-sage-500">
+                              Due: {new Date(task.dueDate).toLocaleDateString()}
+                            </span>
+                            <Clock className="h-3 w-3 text-sage-400" />
+                          </div>
+                        </div>
+                      ))}
+                      {(!stats.insights.upcomingTasks || stats.insights.upcomingTasks.length === 0) && (
+                        <div className="text-center py-6">
+                          <Clock className="h-10 w-10 text-sage-300 mx-auto mb-3" />
+                          <p className="text-sm text-sage-600">No upcoming tasks</p>
+                          <p className="text-xs text-sage-500">Tasks will appear based on your farm activities</p>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </ModernCardContent>
+                </ModernCard>
               </div>
             </div>
           )}

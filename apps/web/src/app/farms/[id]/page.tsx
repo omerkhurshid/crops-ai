@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser } from '../../../lib/auth/session'
 import { Badge } from '../../../components/ui/badge'
-import { Button } from '../../../components/ui/button'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../../components/ui/modern-card'
 import { InfoTooltip, TOOLTIP_CONTENT } from '../../../components/ui/info-tooltip'
 import { FloatingActionButton, InlineFloatingButton } from '../../../components/ui/floating-button'
@@ -333,168 +332,229 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
           </div>
 
           {/* Right Column - Weather & Insights */}
-          <div className="space-y-6">
+          <div className="lg:col-span-4 space-y-6">
             {/* Weather Widget */}
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <CloudRain className="h-5 w-5 mr-2" />
-                  Current Weather
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+            <ModernCard variant="glass" className="overflow-hidden">
+              <ModernCardHeader className="bg-gradient-to-br from-sage-50/80 to-cream-50/80">
+                <div className="flex items-center gap-3">
+                  <ModernCardTitle className="text-sage-800">Current Weather</ModernCardTitle>
+                  <InfoTooltip {...TOOLTIP_CONTENT.temperature} />
+                </div>
+                <ModernCardDescription>
+                  Live conditions for optimal farming decisions
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <Sun className="h-8 w-8 text-yellow-500 mr-3" />
+                      <div className="p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl mr-4">
+                        <Sun className="h-8 w-8 text-yellow-600" />
+                      </div>
                       <div>
-                        <div className="text-2xl font-bold">
+                        <div className="text-3xl font-light text-sage-800">
                           22°C
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-sage-600 font-medium">
                           Partly Cloudy
                         </div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center">
-                      <Droplets className="h-4 w-4 text-blue-500 mr-2" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center p-3 bg-sage-50 rounded-xl">
+                      <Droplets className="h-4 w-4 text-blue-500 mr-3" />
                       <div>
-                        <div className="text-sm font-medium">
+                        <div className="text-lg font-semibold text-sage-800">
                           65%
                         </div>
-                        <div className="text-xs text-gray-500">Humidity</div>
+                        <div className="text-xs text-sage-600 flex items-center gap-1">
+                          Humidity
+                          <InfoTooltip {...TOOLTIP_CONTENT.humidity} size="sm" />
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      <Wind className="h-4 w-4 text-gray-500 mr-2" />
+                    <div className="flex items-center p-3 bg-sage-50 rounded-xl">
+                      <Wind className="h-4 w-4 text-sage-500 mr-3" />
                       <div>
-                        <div className="text-sm font-medium">
+                        <div className="text-lg font-semibold text-sage-800">
                           12 km/h
                         </div>
-                        <div className="text-xs text-gray-500">Wind</div>
+                        <div className="text-xs text-sage-600 flex items-center gap-1">
+                          Wind Speed
+                          <InfoTooltip {...TOOLTIP_CONTENT.windSpeed} size="sm" />
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <Link href={`/weather?farmId=${farm.id}`}>
-                    <Button className="w-full" size="sm" variant="outline">
-                      View Detailed Forecast
-                    </Button>
+                    <InlineFloatingButton
+                      icon={<CloudRain className="h-4 w-4" />}
+                      label="View Detailed Forecast"
+                      showLabel={true}
+                      variant="secondary"
+                      size="md"
+                      className="w-full justify-center"
+                    />
                   </Link>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
 
             {/* AI Insights */}
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Brain className="h-5 w-5 mr-2" />
-                  AI Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="p-3 bg-green-50 rounded-lg">
+            <ModernCard variant="floating" className="overflow-hidden">
+              <ModernCardHeader className="bg-gradient-to-br from-sage-50/90 to-cream-50/90">
+                <div className="flex items-center gap-3">
+                  <ModernCardTitle className="text-sage-800">AI Insights</ModernCardTitle>
+                  <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
+                </div>
+                <ModernCardDescription>
+                  Smart recommendations powered by satellite data and weather patterns
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-gradient-to-r from-sage-50 to-sage-100/50 rounded-xl border border-sage-200/30">
                     <div className="flex items-start">
-                      <TrendingUp className="h-4 w-4 text-green-600 mr-2 mt-1" />
-                      <div>
-                        <p className="text-sm font-medium text-green-900">
+                      <div className="p-2 bg-sage-200 rounded-lg mr-3">
+                        <TrendingUp className="h-4 w-4 text-sage-700" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-sage-800 mb-1">
                           Optimal harvest window approaching
                         </p>
-                        <p className="text-xs text-green-700 mt-1">
-                          Field A expected to reach optimal maturity in 12-15 days
+                        <p className="text-xs text-sage-600 leading-relaxed">
+                          Field A expected to reach optimal maturity in 12-15 days based on current growth patterns
                         </p>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="p-3 bg-orange-50 rounded-lg">
+                  <div className="p-4 bg-gradient-to-r from-earth-50 to-earth-100/50 rounded-xl border border-earth-200/30">
                     <div className="flex items-start">
-                      <AlertTriangle className="h-4 w-4 text-orange-600 mr-2 mt-1" />
-                      <div>
-                        <p className="text-sm font-medium text-orange-900">
+                      <div className="p-2 bg-earth-200 rounded-lg mr-3">
+                        <AlertTriangle className="h-4 w-4 text-earth-700" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-earth-800 mb-1">
                           Irrigation recommended
                         </p>
-                        <p className="text-xs text-orange-700 mt-1">
-                          Soil moisture below optimal levels in Field B
+                        <p className="text-xs text-earth-600 leading-relaxed">
+                          Soil moisture below optimal levels in Field B - consider watering within 48 hours
                         </p>
                       </div>
                     </div>
                   </div>
 
                   <Link href={`/recommendations?farmId=${farm.id}`}>
-                    <Button className="w-full" size="sm" variant="outline">
-                      View All Recommendations
-                    </Button>
+                    <InlineFloatingButton
+                      icon={<Brain className="h-4 w-4" />}
+                      label="View All Recommendations"
+                      showLabel={true}
+                      variant="secondary"
+                      size="md"
+                      className="w-full justify-center"
+                    />
                   </Link>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
 
             {/* Market Prices */}
-            <Card className="border-2">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <DollarSign className="h-5 w-5 mr-2" />
-                  Market Prices
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
+            <ModernCard variant="soft" className="overflow-hidden">
+              <ModernCardHeader className="bg-gradient-to-br from-cream-100/80 to-earth-50/80">
+                <div className="flex items-center gap-3">
+                  <ModernCardTitle className="text-sage-800">Market Prices</ModernCardTitle>
+                  <InfoTooltip {...TOOLTIP_CONTENT.commodityPrice} />
+                </div>
+                <ModernCardDescription>
+                  Live commodity pricing for strategic selling decisions
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-white/70 rounded-lg border border-sage-100">
                     <div>
-                      <div className="font-medium">Wheat</div>
-                      <div className="text-xs text-gray-500">Chicago Board</div>
+                      <div className="font-semibold text-sage-800">Wheat</div>
+                      <div className="text-xs text-sage-500">Chicago Board</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold">$7.85/bu</div>
-                      <div className="text-xs text-green-600">+2.3%</div>
+                      <div className="font-bold text-lg text-sage-800">$7.85/bu</div>
+                      <div className="text-xs text-sage-600 flex items-center gap-1">
+                        +2.3%
+                        <InfoTooltip {...TOOLTIP_CONTENT.priceChange} size="sm" />
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center p-3 bg-white/70 rounded-lg border border-sage-100">
                     <div>
-                      <div className="font-medium">Corn</div>
-                      <div className="text-xs text-gray-500">Chicago Board</div>
+                      <div className="font-semibold text-sage-800">Corn</div>
+                      <div className="text-xs text-sage-500">Chicago Board</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold">$6.42/bu</div>
-                      <div className="text-xs text-red-600">-0.8%</div>
+                      <div className="font-bold text-lg text-sage-800">$6.42/bu</div>
+                      <div className="text-xs text-earth-600 flex items-center gap-1">
+                        -0.8%
+                        <InfoTooltip {...TOOLTIP_CONTENT.priceChange} size="sm" />
+                      </div>
                     </div>
                   </div>
 
-                  <Button className="w-full" size="sm" variant="outline">
-                    View Market Analysis
-                  </Button>
+                  <InlineFloatingButton
+                    icon={<BarChart className="h-4 w-4" />}
+                    label="View Market Analysis"
+                    showLabel={true}
+                    variant="ghost"
+                    size="md"
+                    className="w-full justify-center"
+                  />
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="mt-8 flex gap-4 justify-center">
-          <Link href={`/farms/${farm.id}/fields/create`}>
-            <Button>
-              <MapPin className="h-4 w-4 mr-2" />
-              Add Field
-            </Button>
-          </Link>
-          <Link href={`/farms/${farm.id}/edit`}>
-            <Button variant="outline">
-              Edit Farm Details
-            </Button>
-          </Link>
-          <Link href={`/reports?farmId=${farm.id}`}>
-            <Button variant="outline">
-              <BarChart className="h-4 w-4 mr-2" />
-              Generate Report
-            </Button>
-          </Link>
+        {/* Modern Action Buttons */}
+        <div className="mt-12">
+          <ModernCard variant="glass" className="max-w-2xl mx-auto">
+            <ModernCardContent className="p-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href={`/farms/${farm.id}/fields/create`}>
+                  <InlineFloatingButton
+                    icon={<MapPin className="h-4 w-4" />}
+                    label="Add New Field"
+                    showLabel={true}
+                    variant="primary"
+                    size="lg"
+                    className="min-w-[160px]"
+                  />
+                </Link>
+                <Link href={`/farms/${farm.id}/edit`}>
+                  <InlineFloatingButton
+                    icon={<Settings className="h-4 w-4" />}
+                    label="Edit Farm Details"
+                    showLabel={true}
+                    variant="secondary"
+                    size="lg"
+                    className="min-w-[160px]"
+                  />
+                </Link>
+                <Link href={`/reports?farmId=${farm.id}`}>
+                  <InlineFloatingButton
+                    icon={<BarChart className="h-4 w-4" />}
+                    label="Generate Report"
+                    showLabel={true}
+                    variant="ghost"
+                    size="lg"
+                    className="min-w-[160px]"
+                  />
+                </Link>
+              </div>
+            </ModernCardContent>
+          </ModernCard>
         </div>
       </main>
     </div>

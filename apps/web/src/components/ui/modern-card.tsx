@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '../../lib/utils'
+import { InfoTooltip } from './info-tooltip'
 
 interface ModernCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'glass' | 'floating' | 'soft' | 'glow'
@@ -171,8 +172,12 @@ export function MetricCard({
             <div className="flex items-center gap-2 mb-3">
               <p className="text-sm font-medium text-sage-700">{title}</p>
               {tooltip && (
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                  {/* InfoTooltip will be imported and used here */}
+                <div className="opacity-70 group-hover:opacity-100 transition-opacity">
+                  <InfoTooltip 
+                    title={tooltip.title}
+                    description={tooltip.description}
+                    size="sm"
+                  />
                 </div>
               )}
             </div>

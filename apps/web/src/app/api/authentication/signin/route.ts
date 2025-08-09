@@ -59,8 +59,13 @@ export async function POST(request: NextRequest) {
         }
       })
       
-      // Set HTTP-only cookie
-      response.headers.set('Set-Cookie', `next-auth.session-token=${token}; HttpOnly; Secure; SameSite=Lax; Max-Age=86400; Path=/`)
+      // Set HTTP-only cookie with proper NextAuth format
+      const cookieName = process.env.NODE_ENV === 'production' 
+        ? '__Secure-next-auth.session-token'
+        : 'next-auth.session-token'
+      
+      const cookieValue = `${cookieName}=${token}; HttpOnly; ${process.env.NODE_ENV === 'production' ? 'Secure; ' : ''}SameSite=Lax; Max-Age=86400; Path=/`
+      response.headers.set('Set-Cookie', cookieValue)
       
       return response
     }

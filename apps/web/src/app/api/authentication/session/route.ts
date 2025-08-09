@@ -4,8 +4,12 @@ import { UserRole } from '@crops-ai/shared'
 
 export async function GET(request: NextRequest) {
   try {
-    // Get the session token from cookies
-    const token = request.cookies.get('next-auth.session-token')?.value
+    // Get the session token from cookies (check both production and development names)
+    const cookieName = process.env.NODE_ENV === 'production' 
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token'
+    
+    const token = request.cookies.get(cookieName)?.value
     
     if (!token) {
       // Return null session (not authenticated)

@@ -19,9 +19,9 @@ export async function GET(request: NextRequest) {
     console.log('🎫 Token found:', !!token, token ? `${token.substring(0, 20)}...` : 'none')
     
     if (!token) {
-      // Return null session (not authenticated)
-      console.log('❌ No token found, returning null session')
-      return Response.json(null)
+      // Return empty session object (not authenticated) - NextAuth expects this format
+      console.log('❌ No token found, returning empty session')
+      return Response.json({})
     }
     
     try {
@@ -34,17 +34,18 @@ export async function GET(request: NextRequest) {
       
       if (!decoded) {
         console.log('❌ Token decode returned null')
-        return Response.json(null)
+        return Response.json({})
       }
       
       console.log('✅ Token decoded successfully:', { id: decoded.id, email: decoded.email })
       
-      // Return session in NextAuth format
+      // Return session in exact NextAuth format
       const session = {
         user: {
           id: decoded.id as string,
           email: decoded.email as string,
           name: decoded.name as string,
+          image: null, // NextAuth expects this field
           role: decoded.role as UserRole
         },
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
@@ -56,8 +57,8 @@ export async function GET(request: NextRequest) {
       console.error('❌ Token decode failed:', err)
       console.error('Token starts with:', token.substring(0, 50))
       console.error('Secret present:', !!process.env.NEXTAUTH_SECRET)
-      // Invalid token - return null session
-      return Response.json(null)
+      // Invalid token - return empty session
+      return Response.json({})
     }
   } catch (error) {
     console.error('Session endpoint error:', error)

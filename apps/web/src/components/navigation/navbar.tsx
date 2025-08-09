@@ -12,7 +12,7 @@ export function Navbar() {
   }
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50">
+    <nav className="absolute top-0 left-0 right-0 z-50 border-b-4 border-white/30">
       <div className="max-w-7xl mx-auto px-8 lg:px-16">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
@@ -77,7 +77,7 @@ export function Navbar() {
                 </span>
                 <button 
                   onClick={handleSignOut}
-                  className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light"
+                  className="border-3 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-6 py-2 font-medium"
                 >
                   Sign Out
                 </button>
@@ -85,12 +85,12 @@ export function Navbar() {
             ) : (
               <div className="flex items-center space-x-3">
                 <Link href="/register">
-                  <button className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light">
+                  <button className="border-3 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-6 py-2 font-medium">
                     Sign Up
                   </button>
                 </Link>
                 <Link href="/login">
-                  <button className="border-2 border-white/30 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-6 py-2 font-light">
+                  <button className="border-3 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-6 py-2 font-medium">
                     Login
                   </button>
                 </Link>

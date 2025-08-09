@@ -133,7 +133,7 @@
   /* Card styles */
   .card-gradient {
     @apply bg-white/80 backdrop-blur-sm;
-    @apply border border-white/20;
+    @apply border-4 border-white/40;
     @apply rounded-3xl p-6;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
@@ -157,13 +157,13 @@
   
   /* Sleeker card design */
   .card-sleek {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8;
+    @apply bg-white/10 backdrop-blur-lg border-4 border-white/30 rounded-2xl p-8;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .card-sleek:hover {
-    @apply bg-white/15 border-white/30;
+    @apply bg-white/15 border-white/50;
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
     transform: translateY(-4px);
   }

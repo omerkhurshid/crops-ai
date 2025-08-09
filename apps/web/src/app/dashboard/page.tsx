@@ -379,23 +379,23 @@ export default async function DashboardPage() {
                 <p className="text-gray-600">Common tasks and recommended actions</p>
               </div>
               <div className="space-y-3">
-                <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                <Link href="/farms/create" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
                   <div className="font-medium text-gray-900">Create New Farm</div>
                   <div className="text-sm text-gray-500">Add a new farm to your portfolio</div>
                 </Link>
-                <Link href="/weather" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                <Link href="/weather" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
                   <div className="font-medium text-gray-900">View Weather Data</div>
                   <div className="text-sm text-gray-500">Check current weather conditions</div>
                 </Link>
-                <Link href="/crop-health" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                <Link href="/crop-health" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
                   <div className="font-medium text-gray-900">Crop Health Analytics</div>
                   <div className="text-sm text-gray-500">Monitor vegetation health via satellite</div>
                 </Link>
-                <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                <Link href="/recommendations" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
                   <div className="font-medium text-gray-900">AI Insights</div>
                   <div className="text-sm text-gray-500">Get intelligent recommendations</div>
                 </Link>
-                <Link href="/weather/alerts" className="block w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
+                <Link href="/weather/alerts" className="block w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:border-primary hover:bg-primary/10 transition-colors">
                   <div className="font-medium text-gray-900">Weather Alerts</div>
                   <div className="text-sm text-gray-500">Monitor extreme weather conditions</div>
                 </Link>

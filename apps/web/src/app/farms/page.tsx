@@ -73,7 +73,7 @@ export default async function FarmsPage() {
               <p className="text-2xl text-white/80 font-light">Manage and monitor your agricultural operations</p>
             </div>
             <Link href="/farms/create">
-              <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-4 font-light text-lg">
+              <button className="border-3 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-8 py-4 font-medium text-lg">
                 + Add New Farm
               </button>
             </Link>

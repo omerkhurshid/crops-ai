@@ -9,16 +9,9 @@ export default function Home() {
       
       {/* Hero Section */}
       <section className="relative min-h-screen bg-agricultural flex items-center justify-start">
-        <div className="absolute inset-0 agricultural-overlay-dark"></div>
+        <div className="absolute inset-0 agricultural-overlay"></div>
         <div className="relative z-10 max-w-7xl w-full px-8 lg:px-16">
           <div className="max-w-3xl">
-            <div className="mb-4">
-              <h2 className="text-2xl md:text-3xl font-light text-white/90 mb-2">
-                Landing Page
-              </h2>
-              <p className="text-lg text-white/70">Creative Design</p>
-            </div>
-            
             <h1 className="text-6xl md:text-8xl font-bold mb-8 text-white leading-tight">
               Crops.AI
             </h1>
@@ -29,15 +22,10 @@ export default function Home() {
               real-time monitoring, and predictive analytics. Transform your agricultural operations with cutting-edge technology.
             </p>
             
-            <div className="flex gap-6">
+            <div>
               <Link href="/register">
-                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-3 font-medium text-lg">
+                <button className="border-4 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
                   Get Started
-                </button>
-              </Link>
-              <Link href="/login">
-                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-8 py-3 font-medium text-lg">
-                  Sign In
                 </button>
               </Link>
             </div>
@@ -97,15 +85,10 @@ export default function Home() {
               Join thousands of farmers who are already using Crops.AI to increase yields, 
               reduce costs, and make data-driven decisions for sustainable agriculture.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex justify-center">
               <Link href="/register">
-                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
+                <button className="border-4 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-16 py-5 font-medium text-xl">
                   Start Your Free Trial
-                </button>
-              </Link>
-              <Link href="/login">
-                <button className="border-2 border-white/50 bg-transparent text-white hover:bg-white/10 transition-all duration-300 rounded-full px-12 py-4 font-medium text-xl">
-                  View Demo
                 </button>
               </Link>
             </div>

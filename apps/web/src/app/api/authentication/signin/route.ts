@@ -65,6 +65,10 @@ export async function POST(request: NextRequest) {
         : 'next-auth.session-token'
       
       const cookieValue = `${cookieName}=${token}; HttpOnly; ${process.env.NODE_ENV === 'production' ? 'Secure; ' : ''}SameSite=Lax; Max-Age=86400; Path=/`
+      
+      console.log('🍪 Setting cookie:', cookieName, 'Environment:', process.env.NODE_ENV)
+      console.log('🍪 Cookie value:', cookieValue.substring(0, 100) + '...')
+      
       response.headers.set('Set-Cookie', cookieValue)
       
       return response

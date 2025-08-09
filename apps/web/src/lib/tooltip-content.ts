@@ -49,6 +49,14 @@ export const TOOLTIP_CONTENT = {
     title: "LAI (Leaf Area Index)",
     description: "Measures the total leaf area per ground area unit, indicating crop canopy development and photosynthetic capacity."
   },
+  ndmi: {
+    title: "NDMI (Moisture Index)",
+    description: "Normalized Difference Moisture Index measures vegetation water content and drought stress levels."
+  },
+  fvc: {
+    title: "FVC (Fractional Vegetation Cover)",
+    description: "Percentage of ground area covered by green vegetation, indicating crop density and development stage."
+  },
   healthScore: {
     title: "Crop Health Score",
     description: "AI-calculated overall health rating (0-100%) based on vegetation indices, weather conditions, and growth stage analysis."
@@ -106,5 +114,49 @@ export const TOOLTIP_CONTENT = {
   riskAssessment: {
     title: "Risk Assessment",
     description: "Probability of adverse conditions affecting crop development, including weather, disease, and pest threats."
+  },
+  
+  // Health Analysis
+  zones: {
+    title: "Health Zones",
+    description: "Field areas categorized by vegetation health: excellent (>85%), good (70-85%), moderate (50-70%), stressed (<50%)."
+  },
+  vegetationIndices: {
+    title: "Vegetation Indices",
+    description: "Collection of satellite-derived metrics measuring different aspects of crop health, water stress, and development."
+  },
+  stressAnalysis: {
+    title: "Stress Analysis",
+    description: "AI-powered assessment of crop stress factors including drought, disease, nutrient deficiency, and pest pressure."
+  },
+  drought: {
+    title: "Drought Stress",
+    description: "Water deficit stress level affecting crop growth, measured through satellite moisture indices and weather data."
+  },
+  disease: {
+    title: "Disease Pressure",
+    description: "Likelihood and severity of plant diseases based on environmental conditions and crop health indicators."
+  },
+  nutrient: {
+    title: "Nutrient Status",
+    description: "Plant nutrient availability and deficiency assessment using vegetation indices and soil data analysis."
+  },
+  pest: {
+    title: "Pest Pressure",
+    description: "Insect and pest activity levels determined by weather patterns, crop stage, and regional pest monitoring data."
+  },
+  
+  // Yield Predictions
+  currentYield: {
+    title: "Current Projection",
+    description: "Expected yield based on current field conditions, crop development stage, and remaining growing season."
+  },
+  potentialYield: {
+    title: "Potential Yield", 
+    description: "Maximum achievable yield under optimal management and favorable weather conditions for the remainder of the season."
+  },
+  recommendations: {
+    title: "Management Recommendations",
+    description: "AI-generated actionable suggestions for improving crop health, yield potential, and farm management efficiency."
   }
 } as const

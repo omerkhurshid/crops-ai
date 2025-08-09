@@ -10,6 +10,8 @@ import {
   Droplets, Bug, Zap, Target, RefreshCw, Eye, BarChart3,
   CheckCircle2, XCircle, MinusCircle, MapPin
 } from 'lucide-react'
+import { InfoTooltip } from '../ui/info-tooltip'
+import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 
 interface HealthDashboardProps {
   farmId: string
@@ -217,7 +219,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Overall Health</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Overall Health</CardTitle>
+              <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
@@ -231,7 +236,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Stressed Areas</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Stressed Areas</CardTitle>
+              <InfoTooltip {...TOOLTIP_CONTENT.stressLevel} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-600">
@@ -245,7 +253,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
+              <InfoTooltip {...TOOLTIP_CONTENT.ndvi} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
@@ -259,7 +270,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
+              <InfoTooltip {...TOOLTIP_CONTENT.area} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
@@ -318,7 +332,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             {/* Health Zones */}
             <Card className="border-2">
               <CardHeader>
-                <CardTitle>Health Zone Distribution</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>Health Zone Distribution</CardTitle>
+                  <InfoTooltip {...TOOLTIP_CONTENT.zones} />
+                </div>
                 <CardDescription>{selectedFieldData.fieldName} - {selectedFieldData.area.toFixed(1)} ha</CardDescription>
               </CardHeader>
               <CardContent>
@@ -349,17 +366,28 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             {/* Vegetation Indices */}
             <Card className="border-2">
               <CardHeader>
-                <CardTitle>Vegetation Indices</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>Vegetation Indices</CardTitle>
+                  <InfoTooltip {...TOOLTIP_CONTENT.vegetationIndices} />
+                </div>
                 <CardDescription>Comprehensive vegetation health metrics</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(selectedFieldData.indices).map(([index, value]) => (
-                    <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
-                      <div className="text-lg font-bold">{value.toFixed(3)}</div>
-                      <div className="text-xs text-gray-600">{index.toUpperCase()}</div>
-                    </div>
-                  ))}
+                  {Object.entries(selectedFieldData.indices).map(([index, value]) => {
+                    const tooltipKey = index as keyof typeof TOOLTIP_CONTENT
+                    const tooltipData = TOOLTIP_CONTENT[tooltipKey]
+                    
+                    return (
+                      <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                        <div className="text-lg font-bold">{value.toFixed(3)}</div>
+                        <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                          <span>{index.toUpperCase()}</span>
+                          {tooltipData && <InfoTooltip {...tooltipData} size="sm" />}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -368,18 +396,25 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           {/* Stress Analysis */}
           <Card className="border-2">
             <CardHeader>
-              <CardTitle>Stress Analysis</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle>Stress Analysis</CardTitle>
+                <InfoTooltip {...TOOLTIP_CONTENT.stressAnalysis} />
+              </div>
               <CardDescription>AI-powered stress detection and severity assessment</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {Object.entries(selectedFieldData.stressIndicators).map(([type, data]) => {
                   const Icon = stressIcons[type as keyof typeof stressIcons]
+                  const tooltipKey = type as keyof typeof TOOLTIP_CONTENT
+                  const tooltipData = TOOLTIP_CONTENT[tooltipKey]
+                  
                   return (
                     <div key={type} className="p-4 border-2 rounded-lg">
                       <div className="flex items-center gap-2 mb-3">
                         <Icon className="h-5 w-5 text-blue-600" />
                         <span className="font-medium capitalize">{type}</span>
+                        {tooltipData && <InfoTooltip {...tooltipData} size="sm" />}
                         {getStressIcon(data.severity)}
                       </div>
                       
@@ -422,7 +457,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           {/* Yield Prediction */}
           <Card className="border-2">
             <CardHeader>
-              <CardTitle>Yield Prediction</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle>Yield Prediction</CardTitle>
+                <InfoTooltip {...TOOLTIP_CONTENT.yieldPrediction} />
+              </div>
               <CardDescription>AI-powered yield forecasting based on current health metrics</CardDescription>
             </CardHeader>
             <CardContent>
@@ -431,8 +469,9 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   <div className="text-2xl font-bold text-blue-800">
                     {selectedFieldData.yieldPrediction.current}
                   </div>
-                  <div className="text-sm text-blue-600">
-                    Current Projection
+                  <div className="flex items-center justify-center gap-1 text-sm text-blue-600">
+                    <span>Current Projection</span>
+                    <InfoTooltip {...TOOLTIP_CONTENT.currentYield} size="sm" />
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
                     {selectedFieldData.cropType === 'Corn' ? 'bushels/acre' : 
@@ -444,8 +483,9 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   <div className="text-2xl font-bold text-green-800">
                     {selectedFieldData.yieldPrediction.potential}
                   </div>
-                  <div className="text-sm text-green-600">
-                    Potential Yield
+                  <div className="flex items-center justify-center gap-1 text-sm text-green-600">
+                    <span>Potential Yield</span>
+                    <InfoTooltip {...TOOLTIP_CONTENT.potentialYield} size="sm" />
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
                     With optimization
@@ -456,8 +496,9 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   <div className="text-2xl font-bold text-orange-800">
                     {selectedFieldData.yieldPrediction.confidence}%
                   </div>
-                  <div className="text-sm text-orange-600">
-                    Confidence Level
+                  <div className="flex items-center justify-center gap-1 text-sm text-orange-600">
+                    <span>Confidence Level</span>
+                    <InfoTooltip {...TOOLTIP_CONTENT.confidence} size="sm" />
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
                     Prediction accuracy
@@ -481,7 +522,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           {/* Recommendations */}
           <Card className="border-2">
             <CardHeader>
-              <CardTitle>Management Recommendations</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle>Management Recommendations</CardTitle>
+                <InfoTooltip {...TOOLTIP_CONTENT.recommendations} />
+              </div>
               <CardDescription>AI-generated action items for {selectedFieldData.fieldName}</CardDescription>
             </CardHeader>
             <CardContent>

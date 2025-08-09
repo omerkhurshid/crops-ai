@@ -1,9 +1,12 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Navbar } from '../../components/navigation/navbar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { Button } from '../../components/ui/button'
-import Link from 'next/link'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
+import { ComingSoon } from '../../components/ui/coming-soon'
+import { InfoTooltip } from '../../components/ui/info-tooltip'
+import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
+import { ClientFloatingButton } from '../../components/ui/client-floating-button'
+import { BarChart, FileText, TrendingUp, DollarSign, Leaf, Plus } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,188 +18,174 @@ export default async function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-agricultural">
+    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-sage-50/30 to-cream-100">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Reports & Analytics</h1>
-            <p className="text-gray-600">Generate comprehensive reports for your farm operations</p>
+      {/* Floating Action Button */}
+      <ClientFloatingButton
+        icon={<Plus className="h-5 w-5" />}
+        label="New Report"
+        variant="primary"
+      />
+      
+      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="mb-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+              Reports & Analytics
+            </h1>
+            <p className="text-xl text-sage-600 font-light leading-relaxed">
+              Generate comprehensive insights and detailed reports for your agricultural operations.
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <span>Farm Performance</span>
-                </CardTitle>
-                <CardDescription>
-                  Comprehensive analysis of farm productivity and efficiency
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • Yield analysis by field
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Cost-benefit analysis
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Resource utilization
-                  </div>
-                  <Button className="w-full mt-4" variant="outline">
-                    Generate Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Weather Impact</CardTitle>
-                <CardDescription>
-                  How weather conditions affected your crops
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • Rainfall vs irrigation needs
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Temperature stress analysis
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Weather-yield correlation
-                  </div>
-                  <Button className="w-full mt-4" variant="outline">
-                    Generate Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Crop Health</CardTitle>
-                <CardDescription>
-                  Satellite and sensor data analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • NDVI trends over time
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Stress detection areas
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Growth pattern analysis
-                  </div>
-                  <Button className="w-full mt-4" variant="outline">
-                    Generate Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Financial Summary</CardTitle>
-                <CardDescription>
-                  Revenue, costs, and profitability analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • Revenue by crop type
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Operating cost breakdown
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Profit margin analysis
-                  </div>
-                  <Button className="w-full mt-4" variant="outline">
-                    Generate Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Sustainability</CardTitle>
-                <CardDescription>
-                  Environmental impact and sustainability metrics
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • Water usage efficiency
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Carbon footprint
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Soil health indicators
-                  </div>
-                  <Button className="w-full mt-4" variant="outline">
-                    Generate Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Custom Report</CardTitle>
-                <CardDescription>
-                  Create a tailored report with specific metrics
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    • Choose date range
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Select farms/fields
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    • Pick metrics to include
-                  </div>
-                  <Button className="w-full mt-4">
-                    Create Custom Report
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Reports</CardTitle>
-              <CardDescription>Your previously generated reports</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-gray-500 mb-4">
-                  <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <p className="text-gray-500 mb-2">No reports generated yet</p>
-                <p className="text-sm text-gray-400">Generate your first report using one of the options above</p>
-              </div>
-            </CardContent>
-          </Card>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+          <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
+                  <BarChart className="h-6 w-6 text-sage-700" />
+                </div>
+                <InfoTooltip {...TOOLTIP_CONTENT.yieldPrediction} />
+              </div>
+              <ModernCardTitle>Farm Performance</ModernCardTitle>
+              <ModernCardDescription>
+                Comprehensive analysis of farm productivity and efficiency
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Performance Analytics" 
+                description="Yield analysis, cost-benefit breakdowns, and resource utilization metrics"
+              />
+            </ModernCardContent>
+          </ModernCard>
+
+          <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl">
+                  <TrendingUp className="h-6 w-6 text-earth-700" />
+                </div>
+                <InfoTooltip {...TOOLTIP_CONTENT.precipitation} />
+              </div>
+              <ModernCardTitle>Weather Impact</ModernCardTitle>
+              <ModernCardDescription>
+                How weather conditions affected your crops
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Weather Analytics" 
+                description="Rainfall vs irrigation, temperature stress analysis, and weather-yield correlation"
+              />
+            </ModernCardContent>
+          </ModernCard>
+
+          <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl">
+                  <Leaf className="h-6 w-6 text-sage-700" />
+                </div>
+                <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
+              </div>
+              <ModernCardTitle>Crop Health</ModernCardTitle>
+              <ModernCardDescription>
+                Satellite and sensor data analysis
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Health Reports" 
+                description="NDVI trends, stress detection areas, and growth pattern analysis"
+              />
+            </ModernCardContent>
+          </ModernCard>
+
+          <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
+                  <DollarSign className="h-6 w-6 text-sage-700" />
+                </div>
+                <InfoTooltip {...TOOLTIP_CONTENT.commodityPrice} />
+              </div>
+              <ModernCardTitle>Financial Summary</ModernCardTitle>
+              <ModernCardDescription>
+                Revenue, costs, and profitability analysis
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Financial Reports" 
+                description="Revenue by crop type, operating costs, and profit margin analysis"
+              />
+            </ModernCardContent>
+          </ModernCard>
+
+          <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl">
+                  <Leaf className="h-6 w-6 text-earth-700" />
+                </div>
+                <InfoTooltip title="Sustainability Metrics" description="Environmental impact tracking and sustainable farming practice analysis." />
+              </div>
+              <ModernCardTitle>Sustainability</ModernCardTitle>
+              <ModernCardDescription>
+                Environmental impact and sustainability metrics
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Sustainability Reports" 
+                description="Water usage efficiency, carbon footprint, and soil health indicators"
+              />
+            </ModernCardContent>
+          </ModernCard>
+
+          <ModernCard variant="glow" className="group hover:scale-105 transition-all duration-300">
+            <ModernCardHeader>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl">
+                  <FileText className="h-6 w-6 text-sage-700" />
+                </div>
+                <InfoTooltip title="Custom Reports" description="Create tailored reports with specific metrics and date ranges for your unique needs." />
+              </div>
+              <ModernCardTitle>Custom Report</ModernCardTitle>
+              <ModernCardDescription>
+                Create a tailored report with specific metrics
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <ComingSoon 
+                variant="compact" 
+                title="Report Builder" 
+                description="Choose date ranges, select farms/fields, and pick custom metrics to include"
+              />
+            </ModernCardContent>
+          </ModernCard>
+        </div>
+
+        <ModernCard variant="soft">
+          <ModernCardHeader>
+            <ModernCardTitle>Recent Reports</ModernCardTitle>
+            <ModernCardDescription>Your previously generated reports</ModernCardDescription>
+          </ModernCardHeader>
+          <ModernCardContent>
+            <ComingSoon 
+              title="Report History"
+              description="Your generated reports will appear here once the reporting system is implemented. You'll be able to view, download, and share your agricultural analytics reports."
+            />
+          </ModernCardContent>
+        </ModernCard>
       </main>
     </div>
   )

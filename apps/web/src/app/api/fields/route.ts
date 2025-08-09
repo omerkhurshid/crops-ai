@@ -108,6 +108,17 @@ export const POST = apiMiddleware.protected(
       const body = await request.json()
       const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary } = body
 
+      // Basic validation
+      if (!farmId) {
+        throw new ValidationError('Farm ID is required')
+      }
+      if (!name || name.trim() === '') {
+        throw new ValidationError('Field name is required')
+      }
+      if (!area || isNaN(parseFloat(area)) || parseFloat(area) <= 0) {
+        throw new ValidationError('Valid area is required')
+      }
+
       // Verify farm ownership
       const farm = await prisma.farm.findFirst({
         where: {
@@ -126,7 +137,7 @@ export const POST = apiMiddleware.protected(
           farmId,
           name,
           area: parseFloat(area) || 0,
-          soilType: soilType || null
+          soilType: soilType || null,
           // Note: boundary would need additional schema changes to store properly
           // cropType, description, and coordinates are not in Field schema
           // cropType should be handled via Crop model separately
@@ -160,6 +171,7 @@ export const POST = apiMiddleware.protected(
           })
         } catch (cropError) {
           console.warn('Failed to create crop, but field was created:', cropError)
+          // Field creation succeeded, so we don't throw here
         }
       }
 

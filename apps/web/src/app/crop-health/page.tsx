@@ -4,7 +4,8 @@ import { Navbar } from '../../components/navigation/navbar'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InfoTooltip, TOOLTIP_CONTENT } from '../../components/ui/info-tooltip'
-import { FloatingActionButton, InlineFloatingButton } from '../../components/ui/floating-button'
+import { InlineFloatingButton } from '../../components/ui/floating-button'
+import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { prisma } from '../../lib/prisma'
 import { Leaf, Satellite, Brain, Activity, Settings, Zap } from 'lucide-react'
@@ -66,11 +67,10 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
       <Navbar />
       
       {/* Floating Action Button */}
-      <FloatingActionButton
+      <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
         label="Health Settings"
         variant="primary"
-        onClick={() => {}} // Add functionality later
       />
       
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">

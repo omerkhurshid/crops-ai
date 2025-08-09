@@ -4,7 +4,8 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InfoTooltip, TOOLTIP_CONTENT } from '../../components/ui/info-tooltip'
-import { FloatingActionButton, InlineFloatingButton } from '../../components/ui/floating-button'
+import { InlineFloatingButton } from '../../components/ui/floating-button'
+import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Navbar } from '../../components/navigation/navbar'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
@@ -256,11 +257,10 @@ export default async function DashboardPage() {
       <Navbar />
       
       {/* Floating Action Button */}
-      <FloatingActionButton
+      <ClientFloatingButton
         icon={<Plus className="h-5 w-5" />}
         label="Quick Action"
         variant="primary"
-        onClick={() => {}} // Add functionality later
       />
       
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">

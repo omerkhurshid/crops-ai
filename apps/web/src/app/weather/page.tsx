@@ -6,7 +6,8 @@ import { WeatherAnalytics } from '../../components/weather/weather-analytics'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { InfoTooltip, TOOLTIP_CONTENT } from '../../components/ui/info-tooltip'
-import { FloatingActionButton, InlineFloatingButton } from '../../components/ui/floating-button'
+import { InlineFloatingButton } from '../../components/ui/floating-button'
+import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { CloudRain, MapPin, Thermometer, Settings, BarChart } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
@@ -68,11 +69,10 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
       <Navbar />
       
       {/* Floating Action Button */}
-      <FloatingActionButton
+      <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
         label="Weather Settings"
         variant="primary"
-        onClick={() => {}} // Add functionality later
       />
       
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">

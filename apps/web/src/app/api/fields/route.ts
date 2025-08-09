@@ -106,7 +106,7 @@ export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: any) => {
     try {
       const body = await request.json()
-      const { farmId, name, area, soilType, boundary } = body
+      const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary } = body
 
       // Verify farm ownership
       const farm = await prisma.farm.findFirst({
@@ -128,7 +128,8 @@ export const POST = apiMiddleware.protected(
           area: parseFloat(area) || 0,
           soilType: soilType || null
           // Note: boundary would need additional schema changes to store properly
-          // For now we ignore it to get basic functionality working
+          // cropType, description, and coordinates are not in Field schema
+          // cropType should be handled via Crop model separately
         },
         include: {
           farm: {
@@ -140,6 +141,28 @@ export const POST = apiMiddleware.protected(
         }
       })
 
+      // Create crop if cropType was provided
+      let crop = null
+      if (cropType) {
+        try {
+          const currentYear = new Date().getFullYear()
+          const defaultPlantingDate = new Date(currentYear, 3, 1) // April 1st
+          const defaultHarvestDate = new Date(currentYear, 8, 15) // September 15th
+
+          crop = await prisma.crop.create({
+            data: {
+              fieldId: field.id,
+              cropType,
+              plantingDate: defaultPlantingDate,
+              expectedHarvestDate: defaultHarvestDate,
+              status: 'PLANNED'
+            }
+          })
+        } catch (cropError) {
+          console.warn('Failed to create crop, but field was created:', cropError)
+        }
+      }
+
       return createSuccessResponse({
         field: {
           id: field.id,
@@ -148,9 +171,10 @@ export const POST = apiMiddleware.protected(
           farmName: field.farm?.name,
           area: field.area,
           soilType: field.soilType,
+          cropType: crop?.cropType || null,
           createdAt: field.createdAt
         },
-        message: 'Field created successfully'
+        message: 'Field created successfully' + (crop ? ' with crop plan' : '')
       })
 
     } catch (error) {

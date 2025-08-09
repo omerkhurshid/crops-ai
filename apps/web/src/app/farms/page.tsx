@@ -127,22 +127,23 @@ export default async function FarmsPage() {
           {/* Farms Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userFarms.length > 0 ? userFarms.map((farm: any) => (
-              <Card key={farm.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-lg">{farm.name}</CardTitle>
-                      <CardDescription>
-                        {farm.address || `${farm.region || 'Unknown'}, ${farm.country || 'Unknown'}`}
-                      </CardDescription>
+              <Link key={farm.id} href={`/farms/${farm.id}`}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle className="text-lg">{farm.name}</CardTitle>
+                        <CardDescription>
+                          {farm.address || `${farm.region || 'Unknown'}, ${farm.country || 'Unknown'}`}
+                        </CardDescription>
+                      </div>
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Active
+                      </span>
                     </div>
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      Active
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Area:</span>
                       <span className="text-sm font-medium">{farm.totalArea?.toFixed(1) || 0} ha</span>
@@ -172,7 +173,8 @@ export default async function FarmsPage() {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </Link>
             )) : (
               <div className="col-span-full text-center py-12">
                 <div className="text-gray-500">

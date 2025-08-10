@@ -94,7 +94,7 @@ export default function FinancialPage() {
               </h1>
               
               <p className="text-gray-600 mb-8">
-                Track your farm's income and expenses, generate profit insights, and forecast future profitability 
+                Track your farm&apos;s income and expenses, generate profit insights, and forecast future profitability 
                 with AI-powered analytics.
               </p>
               
@@ -133,7 +133,7 @@ export default function FinancialPage() {
             <Card className="p-6 mb-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Select a Farm</h2>
               <p className="text-gray-600 mb-6">
-                Choose which farm you'd like to manage financially.
+                Choose which farm you&apos;d like to manage financially.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

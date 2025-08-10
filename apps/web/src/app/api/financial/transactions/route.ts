@@ -118,9 +118,9 @@ export async function GET(request: NextRequest) {
         offset: query.offset,
       },
       summary: {
-        totalIncome: incomeSum._sum.amount || 0,
-        totalExpenses: expenseSum._sum.amount || 0,
-        netProfit: (incomeSum._sum.amount || 0) - (expenseSum._sum.amount || 0),
+        totalIncome: Number(incomeSum._sum.amount || 0),
+        totalExpenses: Number(expenseSum._sum.amount || 0),
+        netProfit: Number(incomeSum._sum.amount || 0) - Number(expenseSum._sum.amount || 0),
         count: summary._count,
       },
     });

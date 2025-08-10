@@ -91,22 +91,8 @@ export function CropCategorySelector({ selectedCrop, onSelect }: CropCategorySel
                       <div className="flex items-start justify-between mb-2">
                         <h4 className="font-medium text-gray-900">{crop.name}</h4>
                         <InfoTooltip
-                          content={
-                            <div className="space-y-2">
-                              {crop.scientificName && (
-                                <p><strong>Scientific:</strong> {crop.scientificName}</p>
-                              )}
-                              {crop.growingSeasonDays && (
-                                <p><strong>Growing Season:</strong> {crop.growingSeasonDays} days</p>
-                              )}
-                              {crop.primaryHarvestSeason && (
-                                <p><strong>Harvest:</strong> {crop.primaryHarvestSeason.join(', ')}</p>
-                              )}
-                              {crop.commonVarieties && (
-                                <p><strong>Varieties:</strong> {crop.commonVarieties.slice(0, 3).join(', ')}</p>
-                              )}
-                            </div>
-                          }
+                          title={crop.name}
+                          description={`${crop.scientificName ? `Scientific: ${crop.scientificName}. ` : ''}${crop.growingSeasonDays ? `Growing season: ${crop.growingSeasonDays} days. ` : ''}${crop.primaryHarvestSeason ? `Harvest: ${crop.primaryHarvestSeason.join(', ')}. ` : ''}${crop.commonVarieties ? `Varieties: ${crop.commonVarieties.slice(0, 3).join(', ')}` : ''}`}
                         />
                       </div>
                       

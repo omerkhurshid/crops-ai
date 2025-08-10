@@ -90,20 +90,8 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                       <div className="flex items-start justify-between mb-2">
                         <h4 className="font-medium text-gray-900">{livestock.name}</h4>
                         <InfoTooltip
-                          content={
-                            <div className="space-y-2">
-                              {livestock.scientificName && (
-                                <p><strong>Scientific:</strong> {livestock.scientificName}</p>
-                              )}
-                              {livestock.typicalHerdSize && (
-                                <p><strong>Typical Size:</strong> {livestock.typicalHerdSize}</p>
-                              )}
-                              {livestock.housingRequirements && (
-                                <p><strong>Housing:</strong> {livestock.housingRequirements}</p>
-                              )}
-                              <p><strong>Purpose:</strong> {livestock.primaryPurpose.join(', ')}</p>
-                            </div>
-                          }
+                          title={livestock.name}
+                          description={`${livestock.scientificName ? `Scientific: ${livestock.scientificName}. ` : ''}${livestock.typicalHerdSize ? `Typical size: ${livestock.typicalHerdSize}. ` : ''}${livestock.housingRequirements ? `Housing: ${livestock.housingRequirements}. ` : ''}Purpose: ${livestock.primaryPurpose.join(', ')}`}
                         />
                       </div>
                       

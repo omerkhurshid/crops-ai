@@ -245,14 +245,14 @@ export default function CreateFarmPage() {
                 <div className="text-6xl mb-4">🌱</div>
                 <CardTitle className="text-2xl">Welcome to Crops.AI Farm Setup</CardTitle>
                 <CardDescription className="text-lg">
-                  Let's set up your farm with satellite imagery, live data feeds, and AI-powered insights.
+                  Let&apos;s set up your farm with satellite imagery, live data feeds, and AI-powered insights.
                   This process takes about 5 minutes and will customize your experience.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div className="bg-sage-50 rounded-lg p-6">
-                    <h3 className="font-semibold text-sage-800 mb-3">What we'll help you set up:</h3>
+                    <h3 className="font-semibold text-sage-800 mb-3">What we&apos;ll help you set up:</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="h-5 w-5 text-sage-600" />

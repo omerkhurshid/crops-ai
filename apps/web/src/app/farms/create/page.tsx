@@ -7,24 +7,38 @@ import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Textarea } from '../../../components/ui/textarea'
+import { Badge } from '../../../components/ui/badge'
 import { Navbar } from '../../../components/navigation/navbar'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
+import { FarmTypeSelector } from '../../../components/farm/farm-type-selector'
+import { CropCategorySelector } from '../../../components/farm/crop-category-selector'
+import { LivestockCategorySelector } from '../../../components/farm/livestock-category-selector'
+import { FarmType, CropItem, CropCategory, LivestockItem, LivestockCategory } from '../../../lib/farm-categories'
+import { ArrowLeft, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
 
 interface Field {
   id: string
   name: string
   size: number
   area?: number
-  crop: string
+  crop?: string
+  livestock?: string
+  cropData?: CropItem
+  livestockData?: LivestockItem
   soilType?: string
   perimeter: Array<{ lat: number; lng: number }>
   notes?: string
+  monitoringSettings?: {
+    frequency: 'daily' | 'weekly' | 'monthly'
+    alerts: string[]
+    parameters: string[]
+  }
 }
 
 interface Farm {
   name: string
   description: string
-  farmType: string
+  farmType: FarmType
   fields: Field[]
   location?: {
     lat: number
@@ -35,53 +49,75 @@ interface Farm {
   }
 }
 
-const cropOptions = [
-  { value: 'corn', label: 'Corn' },
-  { value: 'wheat', label: 'Wheat' },
-  { value: 'soybeans', label: 'Soybeans' },
-  { value: 'rice', label: 'Rice' },
-  { value: 'cotton', label: 'Cotton' },
-  { value: 'tomatoes', label: 'Tomatoes' },
-  { value: 'potatoes', label: 'Potatoes' },
-  { value: 'carrots', label: 'Carrots' },
-  { value: 'lettuce', label: 'Lettuce' },
-  { value: 'onions', label: 'Onions' },
-  { value: 'peppers', label: 'Peppers' },
-  { value: 'cucumbers', label: 'Cucumbers' },
-  { value: 'beans', label: 'Beans' },
-  { value: 'peas', label: 'Peas' },
-  { value: 'barley', label: 'Barley' },
-  { value: 'oats', label: 'Oats' },
-  { value: 'sunflower', label: 'Sunflower' },
-  { value: 'canola', label: 'Canola' },
-  { value: 'other', label: 'Other' }
-]
-
 export default function CreateFarmPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [farm, setFarm] = useState<Farm>({
     name: '',
     description: '',
-    farmType: '',
+    farmType: 'crops',
     fields: []
   })
   const [isLoading, setIsLoading] = useState(false)
   const [showMapSelector, setShowMapSelector] = useState<string | null>(null)
+  const [currentFieldSelection, setCurrentFieldSelection] = useState<string | null>(null)
   const router = useRouter()
 
+  const stepTitles = [
+    'Welcome',
+    'Farm Type',
+    'Farm Details', 
+    'Location',
+    'Fields/Areas',
+    'Data Setup',
+    'Review'
+  ]
+
   const addField = () => {
+    const fieldType = farm.farmType === 'crops' ? 'Field' : farm.farmType === 'livestock' ? 'Paddock' : 'Area'
     const newField: Field = {
       id: `field-${Date.now()}`,
       name: '',
       size: 0,
-      crop: '',
+      crop: farm.farmType === 'crops' || farm.farmType === 'mixed' ? '' : undefined,
+      livestock: farm.farmType === 'livestock' || farm.farmType === 'mixed' ? '' : undefined,
       perimeter: [],
-      notes: ''
+      notes: '',
+      monitoringSettings: {
+        frequency: 'weekly',
+        alerts: [],
+        parameters: []
+      }
     }
     setFarm(prev => ({
       ...prev,
       fields: [...prev.fields, newField]
     }))
+  }
+
+  const handleCropSelection = (crop: CropItem, category: CropCategory, fieldId: string) => {
+    updateField(fieldId, { 
+      crop: crop.id,
+      cropData: crop,
+      monitoringSettings: {
+        frequency: 'weekly',
+        alerts: ['Weather Changes', 'Growth Stage Updates'],
+        parameters: crop.monitoringParameters
+      }
+    })
+    setCurrentFieldSelection(null)
+  }
+
+  const handleLivestockSelection = (livestock: LivestockItem, category: LivestockCategory, fieldId: string) => {
+    updateField(fieldId, { 
+      livestock: livestock.id,
+      livestockData: livestock,
+      monitoringSettings: {
+        frequency: 'daily',
+        alerts: ['Animal Health', 'Pasture Changes'],
+        parameters: livestock.monitoringParameters
+      }
+    })
+    setCurrentFieldSelection(null)
   }
 
   const updateField = (fieldId: string, updates: Partial<Field>) => {
@@ -182,38 +218,121 @@ export default function CreateFarmPage() {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <h1 className="text-4xl font-bold text-white">Create New Farm</h1>
-              <div className="flex items-center space-x-4">
-                <div className={`flex items-center ${currentStep >= 1 ? 'text-crops-green-600' : 'text-gray-400'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-crops-green-600 text-white' : 'bg-gray-200'}`}>
-                    1
+              <div className="flex items-center space-x-2">
+                {stepTitles.map((title, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className={`flex items-center ${currentStep >= index + 1 ? 'text-sage-400' : 'text-gray-500'}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                        currentStep >= index + 1 ? 'bg-sage-600 text-white' : 'bg-gray-300 text-gray-600'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <span className="ml-2 text-sm font-medium hidden lg:block">{title}</span>
+                    </div>
+                    {index < stepTitles.length - 1 && (
+                      <div className="w-4 h-0.5 bg-gray-300 ml-2"></div>
+                    )}
                   </div>
-                  <span className="ml-2">Farm Details</span>
-                </div>
-                <div className="w-8 h-0.5 bg-gray-300"></div>
-                <div className={`flex items-center ${currentStep >= 2 ? 'text-crops-green-600' : 'text-gray-400'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-crops-green-600 text-white' : 'bg-gray-200'}`}>
-                    2
-                  </div>
-                  <span className="ml-2">Add Fields</span>
-                </div>
-                <div className="w-8 h-0.5 bg-gray-300"></div>
-                <div className={`flex items-center ${currentStep >= 3 ? 'text-crops-green-600' : 'text-gray-400'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 3 ? 'bg-crops-green-600 text-white' : 'bg-gray-200'}`}>
-                    3
-                  </div>
-                  <span className="ml-2">Review</span>
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Step 1: Farm Details */}
+          {/* Step 1: Welcome & Context */}
           {currentStep === 1 && (
             <Card>
+              <CardHeader className="text-center">
+                <div className="text-6xl mb-4">🌱</div>
+                <CardTitle className="text-2xl">Welcome to Crops.AI Farm Setup</CardTitle>
+                <CardDescription className="text-lg">
+                  Let's set up your farm with satellite imagery, live data feeds, and AI-powered insights.
+                  This process takes about 5 minutes and will customize your experience.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="bg-sage-50 rounded-lg p-6">
+                    <h3 className="font-semibold text-sage-800 mb-3">What we'll help you set up:</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-3">
+                        <CheckCircle className="h-5 w-5 text-sage-600" />
+                        <span className="text-sm">Farm type selection & optimization</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <CheckCircle className="h-5 w-5 text-sage-600" />
+                        <span className="text-sm">Field boundary mapping</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <CheckCircle className="h-5 w-5 text-sage-600" />
+                        <span className="text-sm">Satellite data integration</span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <CheckCircle className="h-5 w-5 text-sage-600" />
+                        <span className="text-sm">Automated monitoring setup</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <Button variant="outline" onClick={() => router.push('/dashboard')}>
+                      Skip Setup (Go to Dashboard)
+                    </Button>
+                    <Button 
+                      onClick={() => setCurrentStep(2)}
+                      className="bg-sage-600 hover:bg-sage-700"
+                    >
+                      Get Started →
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 2: Farm Type Selection */}
+          {currentStep === 2 && (
+            <Card>
               <CardHeader>
-                <CardTitle>Farm Information</CardTitle>
+                <CardTitle>What type of farming do you do?</CardTitle>
                 <CardDescription>
-                  Enter the basic details about your farm
+                  This helps us customize monitoring, alerts, and insights for your specific needs.
+                  You can always change this later or add multiple types.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <FarmTypeSelector
+                    selectedType={farm.farmType}
+                    onSelect={(type) => setFarm(prev => ({ ...prev, farmType: type }))}
+                  />
+
+                  <div className="flex justify-between">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setCurrentStep(1)}
+                    >
+                      ← Back
+                    </Button>
+                    <Button 
+                      onClick={() => setCurrentStep(3)}
+                      disabled={!farm.farmType}
+                      className="bg-sage-600 hover:bg-sage-700"
+                    >
+                      Next: Farm Details →
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Step 3: Farm Details */}
+          {currentStep === 3 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Tell us about your {farm.farmType === 'mixed' ? 'mixed' : farm.farmType} operation</CardTitle>
+                <CardDescription>
+                  Basic information to get your farm profile started.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -231,45 +350,50 @@ export default function CreateFarmPage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="farm-type">Farm Type *</Label>
-                      <select
-                        id="farm-type"
-                        value={farm.farmType}
-                        onChange={(e) => setFarm(prev => ({ ...prev, farmType: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-crops-green-500 focus:border-transparent"
-                        required
-                      >
-                        <option value="">Select farm type</option>
-                        <option value="crop">Crop Production</option>
-                        <option value="livestock">Livestock</option>
-                        <option value="mixed">Mixed Farming</option>
-                        <option value="organic">Organic Farm</option>
-                        <option value="greenhouse">Greenhouse</option>
-                        <option value="orchard">Orchard</option>
-                        <option value="dairy">Dairy Farm</option>
-                        <option value="poultry">Poultry Farm</option>
-                      </select>
+                      <Label>Farm Type</Label>
+                      <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-md">
+                        <span className="text-2xl">
+                          {farm.farmType === 'crops' ? '🌾' : farm.farmType === 'livestock' ? '🐄' : '🚜'}
+                        </span>
+                        <span className="font-medium">
+                          {farm.farmType === 'crops' ? 'Crop Production' : 
+                           farm.farmType === 'livestock' ? 'Livestock Production' : 'Mixed Farming'}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setCurrentStep(2)}
+                        >
+                          Change
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="farm-description">Description</Label>
+                    <Label htmlFor="farm-description">Description (Optional)</Label>
                     <Textarea
                       id="farm-description"
-                      placeholder="Describe your farm, including any special characteristics, soil types, or farming practices"
+                      placeholder="Describe your farming operation, goals, or any special characteristics"
                       rows={4}
                       value={farm.description}
                       onChange={(e) => setFarm(prev => ({ ...prev, description: e.target.value }))}
                     />
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-between">
                     <Button 
+                      variant="outline" 
                       onClick={() => setCurrentStep(2)}
-                      disabled={!farm.name || !farm.farmType}
-                      className="bg-crops-green-600 hover:bg-crops-green-700"
                     >
-                      Next: Add Fields
+                      ← Back
+                    </Button>
+                    <Button 
+                      onClick={() => setCurrentStep(4)}
+                      disabled={!farm.name}
+                      className="bg-sage-600 hover:bg-sage-700"
+                    >
+                      Next: Location →
                     </Button>
                   </div>
                 </div>

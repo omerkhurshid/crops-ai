@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/logo.svg',
+        url: '/crops-ai-logo.png',
         width: 400,
         height: 400,
         alt: 'Crops.AI - Satellite and agricultural field logo'
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     site: '@cropsai',
     title: 'Crops.AI - AI-Powered Farm Management',
     description: 'Transform your agricultural operations with intelligent decision-support, real-time monitoring, and predictive analytics.',
-    images: ['/logo.svg']
+    images: ['/crops-ai-logo.png']
   },
   robots: {
     index: true,

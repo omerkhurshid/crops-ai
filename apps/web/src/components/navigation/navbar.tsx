@@ -34,11 +34,11 @@ export function Navbar() {
             <Link href="/" className="flex items-center group">
               <div className="w-10 h-10 mr-3 group-hover:scale-105 transition-transform">
                 <Image 
-                  src="/logo.svg" 
+                  src="/crops-ai-logo.png" 
                   alt="Crops.AI Logo" 
                   width={40} 
                   height={40}
-                  className="w-full h-full"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <span className="text-2xl font-medium text-sage-800 tracking-tight">

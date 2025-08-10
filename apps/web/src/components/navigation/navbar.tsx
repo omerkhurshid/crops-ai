@@ -3,107 +3,128 @@
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
+import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
 
 export function Navbar() {
   const { data: session, status } = useSession()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' })
   }
 
+  const navLinks = [
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/farms', label: 'Farms' },
+    { href: '/weather', label: 'Weather' },
+    { href: '/crop-health', label: 'Crop Health' },
+    { href: '/recommendations', label: 'AI Insights' },
+    { href: '/financial', label: 'Financials' },
+    { href: '/reports', label: 'Reports' },
+  ]
+
   return (
-    <nav className="bg-white/95 backdrop-blur-md shadow-soft sticky top-0 left-0 right-0 z-50 border-b border-sage-200/50">
-      <div className="max-w-7xl mx-auto px-8 lg:px-16">
-        <div className="flex justify-between items-center h-20">
+    <nav className="bg-white/90 backdrop-blur-lg shadow-sm sticky top-0 left-0 right-0 z-50 border-b border-sage-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-sage-500 to-earth-600 rounded-full flex items-center justify-center mr-3">
-                <div className="w-4 h-4 bg-white rounded-full"></div>
+            <Link href="/" className="flex items-center group">
+              <div className="w-10 h-10 bg-gradient-to-br from-sage-500 to-earth-600 rounded-xl flex items-center justify-center mr-3 group-hover:scale-105 transition-transform">
+                <div className="w-5 h-5 bg-white rounded-full"></div>
               </div>
-              <span className="text-xl font-light text-sage-800 tracking-wider">
-                CROPS.AI
+              <span className="text-2xl font-medium text-sage-800 tracking-tight">
+                Crops<span className="text-sage-600">.AI</span>
               </span>
             </Link>
           </div>
 
+          {/* Desktop Navigation */}
           {session && (
-            <div className="hidden md:flex md:space-x-8">
-              <Link
-                href="/dashboard"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/farms"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Farms
-              </Link>
-              <Link
-                href="/weather"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Weather
-              </Link>
-              <Link
-                href="/crop-health"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Crop Health
-              </Link>
-              <Link
-                href="/recommendations"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                AI Insights
-              </Link>
-              <Link
-                href="/financial"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Financials
-              </Link>
-              <Link
-                href="/reports"
-                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
-              >
-                Reports
-              </Link>
+            <div className="hidden lg:flex lg:items-center lg:space-x-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sage-700 hover:text-sage-900 hover:bg-sage-50 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           )}
 
-          <div className="flex items-center space-x-4">
+          {/* User Menu */}
+          <div className="flex items-center space-x-3">
             {status === 'loading' ? (
-              <div className="animate-pulse bg-sage-200 h-8 w-20 rounded"></div>
+              <div className="animate-pulse bg-sage-100 h-9 w-24 rounded-lg"></div>
             ) : session ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sage-600">
-                  Welcome, {session.user?.name}
-                </span>
-                <button 
-                  onClick={handleSignOut}
-                  className="border-2 border-sage-500 bg-transparent text-sage-600 hover:bg-sage-500 hover:text-white transition-all duration-300 rounded-full px-6 py-2 font-medium"
+              <>
+                <div className="hidden sm:flex items-center space-x-3">
+                  <span className="text-sm text-sage-700 font-medium">
+                    {session.user?.name || 'User'}
+                  </span>
+                  <button 
+                    onClick={handleSignOut}
+                    className="bg-white border border-sage-200 text-sage-700 hover:bg-sage-50 hover:border-sage-300 transition-all duration-200 rounded-lg px-4 py-2 text-sm font-medium"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+                {/* Mobile menu button */}
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="lg:hidden p-2 rounded-lg text-sage-600 hover:bg-sage-50"
                 >
-                  Sign Out
+                  {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
-              </div>
+              </>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Link href="/register">
-                  <button className="border-2 border-sage-500 bg-transparent text-sage-600 hover:bg-sage-500 hover:text-white transition-all duration-300 rounded-full px-6 py-2 font-medium">
-                    Sign Up
+              <div className="flex items-center space-x-2">
+                <Link href="/login">
+                  <button className="text-sage-700 hover:text-sage-900 px-4 py-2 text-sm font-medium">
+                    Sign In
                   </button>
                 </Link>
-                <Link href="/login">
-                  <button className="bg-sage-500 text-white hover:bg-sage-600 transition-all duration-300 rounded-full px-6 py-2 font-medium">
-                    Login
+                <Link href="/register">
+                  <button className="bg-sage-600 text-white hover:bg-sage-700 transition-all duration-200 rounded-lg px-4 py-2 text-sm font-medium">
+                    Get Started
                   </button>
                 </Link>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {session && isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-sage-100 py-3">
+            <div className="space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="block text-sage-700 hover:text-sage-900 hover:bg-sage-50 px-3 py-2 rounded-lg text-sm font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="pt-3 mt-3 border-t border-sage-100 sm:hidden">
+                <div className="px-3 py-2 text-sm text-sage-600">
+                  {session.user?.name || 'User'}
+                </div>
+                <button 
+                  onClick={handleSignOut}
+                  className="w-full text-left text-sage-700 hover:text-sage-900 hover:bg-sage-50 px-3 py-2 rounded-lg text-sm font-medium"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   )

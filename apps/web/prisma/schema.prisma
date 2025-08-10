@@ -38,6 +38,32 @@ enum StressLevel {
   SEVERE
 }
 
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum FinancialCategory {
+  // Income categories
+  CROP_SALES
+  LIVESTOCK_SALES
+  SUBSIDIES
+  LEASE_INCOME
+  OTHER_INCOME
+  // Expense categories
+  SEEDS
+  FERTILIZER
+  PESTICIDES
+  LABOR
+  MACHINERY
+  FUEL
+  IRRIGATION
+  STORAGE
+  INSURANCE
+  OVERHEAD
+  OTHER_EXPENSE
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -48,9 +74,11 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  ownedFarms    Farm[]
-  managedFarms  FarmManager[]
-  weatherAlerts WeatherAlert[]
+  ownedFarms            Farm[]
+  managedFarms          FarmManager[]
+  weatherAlerts         WeatherAlert[]
+  financialTransactions FinancialTransaction[]
+  createdTransactions   FinancialTransaction[] @relation("TransactionCreator")
 
   @@map("users")
 }
@@ -70,9 +98,12 @@ model Farm {
   updatedAt DateTime @updatedAt
 
   // Relations
-  owner    User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  fields   Field[]
-  managers FarmManager[]
+  owner                 User                   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  fields                Field[]
+  managers              FarmManager[]
+  financialTransactions FinancialTransaction[]
+  financialBudgets      FinancialBudget[]
+  financialForecasts    FinancialForecast[]
 
   @@map("farms")
 }
@@ -101,11 +132,13 @@ model Field {
   updatedAt   DateTime                   @updatedAt
 
   // Relations
-  farm            Farm              @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  crops           Crop[]
-  satelliteData   SatelliteData[]
-  weatherData     WeatherData[]
-  recommendations Recommendation[]
+  farm                  Farm                   @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  crops                 Crop[]
+  satelliteData         SatelliteData[]
+  weatherData           WeatherData[]
+  recommendations       Recommendation[]
+  financialTransactions FinancialTransaction[]
+  financialForecasts    FinancialForecast[]
 
   @@map("fields")
 }
@@ -124,7 +157,9 @@ model Crop {
   updatedAt           DateTime   @updatedAt
 
   // Relations
-  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  field                 Field                  @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  financialTransactions FinancialTransaction[]
+  financialForecasts    FinancialForecast[]
 
   @@map("crops")
 }
@@ -213,20 +248,101 @@ model Recommendation {
   @@map("recommendations")
 }
 
-model FinancialRecord {
-  id          String   @id @default(cuid())
-  farmId      String?
-  fieldId     String?
-  category    String // input_cost, labor_cost, equipment_cost, revenue
-  subcategory String? // fertilizer, pesticide, fuel, etc.
-  amount      Float
-  currency    String   @default("USD")
-  description String?
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model FinancialTransaction {
+  id              String            @id @default(cuid())
+  userId          String
+  farmId          String
+  fieldId         String?
+  cropId          String?
+  
+  type            TransactionType
+  category        FinancialCategory
+  subcategory     String?
+  
+  amount          Decimal           @db.Decimal(12, 2)
+  currency        String            @default("USD")
+  quantity        Decimal?          @db.Decimal(10, 2)
+  unitPrice       Decimal?          @db.Decimal(10, 2)
+  
+  transactionDate DateTime          @db.Date
+  paymentDate     DateTime?         @db.Date
+  
+  operationId     String?
+  marketPriceId   String?
+  
+  notes           String?           @db.Text
+  attachments     Json?
+  tags            String[]
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  createdById     String
+  
+  // Relations
+  user            User              @relation(fields: [userId], references: [id])
+  farm            Farm              @relation(fields: [farmId], references: [id])
+  field           Field?            @relation(fields: [fieldId], references: [id])
+  crop            Crop?             @relation(fields: [cropId], references: [id])
+  marketPrice     MarketPrice?      @relation(fields: [marketPriceId], references: [id])
+  createdBy       User              @relation("TransactionCreator", fields: [createdById], references: [id])
+  
+  @@index([farmId, transactionDate])
+  @@index([type, category])
+  @@index([fieldId])
+  @@map("financial_transactions")
+}
 
-  @@map("financial_records")
+model FinancialBudget {
+  id            String   @id @default(cuid())
+  farmId        String
+  seasonId      String?
+  year          Int
+  month         Int?
+  
+  category      FinancialCategory
+  plannedAmount Decimal  @db.Decimal(12, 2)
+  actualAmount  Decimal  @default(0) @db.Decimal(12, 2)
+  currency      String   @default("USD")
+  
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  farm          Farm     @relation(fields: [farmId], references: [id])
+  
+  @@unique([farmId, year, month, category])
+  @@index([farmId, year])
+  @@map("financial_budgets")
+}
+
+model FinancialForecast {
+  id               String   @id @default(cuid())
+  farmId           String
+  fieldId          String?
+  cropId           String?
+  
+  forecastDate     DateTime @db.Date
+  forecastType     String   // yield, price, revenue, cost
+  predictedYield   Decimal? @db.Decimal(10, 2)
+  predictedPrice   Decimal? @db.Decimal(10, 2)
+  predictedRevenue Decimal? @db.Decimal(12, 2)
+  predictedCost    Decimal? @db.Decimal(12, 2)
+  confidenceScore  Decimal  @db.Decimal(5, 2)
+  
+  modelId          String?
+  modelVersion     String?
+  assumptions      Json?
+  
+  createdAt        DateTime @default(now())
+  
+  // Relations
+  farm             Farm     @relation(fields: [farmId], references: [id])
+  field            Field?   @relation(fields: [fieldId], references: [id])
+  crop             Crop?    @relation(fields: [cropId], references: [id])
+  
+  @@index([farmId, forecastDate])
+  @@map("financial_forecasts")
 }
 
 model MarketPrice {
@@ -239,5 +355,9 @@ model MarketPrice {
   date      DateTime
   createdAt DateTime @default(now())
 
+  // Relations
+  financialTransactions FinancialTransaction[]
+
+  @@index([commodity, date])
   @@map("market_prices")
 }

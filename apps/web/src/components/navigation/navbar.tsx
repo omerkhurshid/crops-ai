@@ -59,6 +59,12 @@ export function Navbar() {
                 AI Insights
               </Link>
               <Link
+                href="/financial"
+                className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
+              >
+                Financials
+              </Link>
+              <Link
                 href="/reports"
                 className="text-sage-600 hover:text-sage-800 text-lg font-medium transition-colors"
               >

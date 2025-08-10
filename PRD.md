@@ -669,7 +669,65 @@ Crops.AI is an AI-powered land and crop management platform designed to optimize
 - Intelligent fallback systems for data reliability
 - Comprehensive audit logging for all predictions
 
-### 🚀 NEXT: Phase 3A - Intelligent Alert System (Weeks 1-2)
+### 🚀 NEXT: Phase 2E - Farm Financial Management System (Weeks 1-6)
+
+#### **Comprehensive P&L Management Platform**
+**📋 High Priority Implementation - Active Development:**
+
+**Overview:**
+The Farm P&L Management module enables farmers, landowners, and large estate managers to track income and expenses, generate real-time profit insights, and forecast future profitability using AI, satellite imagery, and weather data. Simple enough for smallholder farmers yet powerful enough for commercial farms.
+
+**Core Financial Features:**
+- **Income Tracking**: Crop sales, livestock, subsidies, lease income with automated data capture
+- **Expense Management**: Seeds, fertilizer, labor, machinery, fuel, insurance with operation linking
+- **Real-time P&L Dashboard**: Season snapshot with net profit, gross profit, profit per acre
+- **Multi-level Analysis**: Per farm, per field, per crop profitability metrics
+- **Historical Comparisons**: Year-on-year and seasonal trend analysis
+- **Automated Data Import**: Market prices, operational costs, sales data integration
+
+**Financial Dashboard Components:**
+- Season Snapshot with key metrics and quick-add actions
+- Interactive trend charts (monthly/seasonal views)
+- Expandable P&L summary table with drill-down capabilities
+- Field-level profitability heatmap visualization
+- Export functionality (PDF, Excel) for reporting
+
+**Advanced Financial Intelligence:**
+- **AI-Powered Forecasting**: Yield projections using satellite and weather data
+- **Revenue Estimation**: Auto-calculated based on market prices and predicted yields
+- **Cost Prediction**: Estimated expenses from planned activities and historical patterns
+- **Break-even Analysis**: Dynamic calculations with scenario planning
+- **What-if Simulator**: Model impacts of price changes, weather events, input costs
+- **Risk Assessment**: Financial exposure analysis with mitigation recommendations
+
+**Data Automation & Integration:**
+- Link financial entries to operational logs (planting, fertilizing, harvesting)
+- Auto-import from connected marketplaces and commodity exchanges
+- Weather-adjusted yield and revenue forecasts
+- Smart cost allocation based on field operations
+- Automatic categorization using ML classification
+
+**User Experience Features:**
+- Role-based permissions (Owner, Accountant, Worker)
+- Mobile-responsive design for field data entry
+- Bulk import/export capabilities
+- Multi-currency support for international operations
+- Customizable financial categories and reports
+
+**Technical Implementation:**
+- Extended database schema with financial_transactions table
+- GraphQL API endpoints for CRUD operations
+- Real-time synchronization with operational data
+- Integration with existing weather and satellite services
+- Secure data encryption for financial information
+
+**Success Metrics:**
+- 80%+ farmers actively logging financial data
+- 50%+ reduction in manual data entry time
+- 85%+ forecast accuracy vs actual results
+- 90%+ user retention in financial module
+
+### 🚀 Phase 3A - Intelligent Alert System (Weeks 1-2)
 
 #### **Personalized Threshold Alerts System**
 **📋 High Priority Implementation:**
@@ -866,7 +924,8 @@ Crops.AI is an AI-powered land and crop management platform designed to optimize
 - ✅ **100% Phase 2B** hyperlocal weather models complete
 - ✅ **100% Phase 2C** crop stage detection complete
 - ✅ **100% Phase 2D** pest/disease prediction complete
-- 🚀 **Phase 3A** personalized alerts system (next implementation)
+- 🚀 **Phase 2E** farm financial management system (next implementation)
+- 📅 **Phase 3A** personalized alerts system (upcoming)
 
 **Data Integration:**
 - ✅ Live satellite data from Copernicus/Sentinel-2 with Planet Labs fallback

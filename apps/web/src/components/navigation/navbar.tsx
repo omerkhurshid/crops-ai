@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export function Navbar() {
   const { data: session, status } = useSession()
@@ -31,8 +32,14 @@ export function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center group">
-              <div className="w-10 h-10 bg-gradient-to-br from-sage-500 to-earth-600 rounded-xl flex items-center justify-center mr-3 group-hover:scale-105 transition-transform">
-                <div className="w-5 h-5 bg-white rounded-full"></div>
+              <div className="w-10 h-10 mr-3 group-hover:scale-105 transition-transform">
+                <Image 
+                  src="/logo.svg" 
+                  alt="Crops.AI Logo" 
+                  width={40} 
+                  height={40}
+                  className="w-full h-full"
+                />
               </div>
               <span className="text-2xl font-medium text-sage-800 tracking-tight">
                 Crops<span className="text-sage-600">.AI</span>

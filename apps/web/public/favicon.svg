@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Simplified satellite -->
+  <g transform="scale(0.08) translate(50, 50)">
+    <rect x="120" y="80" width="60" height="40" rx="8" fill="#4a7c59"/>
+    <rect x="80" y="90" width="40" height="20" rx="4" fill="#4a7c59"/>
+    <rect x="180" y="60" width="50" height="30" rx="4" fill="#4a7c59"/>
+    <circle cx="150" cy="100" r="8" fill="white"/>
+    <path d="M 120 160 Q 140 140 160 160" stroke="#4a7c59" stroke-width="6" fill="none"/>
+  </g>
+  
+  <!-- Simplified field -->
+  <g transform="scale(0.08) translate(0, 150)">
+    <path d="M 50 150 Q 150 120 300 150 L 300 200 Q 150 220 50 200 Z" fill="#7cb342"/>
+    <path d="M 250 150 Q 320 140 360 150 L 360 200 Q 320 210 250 200 Z" fill="#f4a261"/>
+    
+    <!-- Simple plant -->
+    <g transform="translate(150, 140)">
+      <rect x="-1" y="10" width="2" height="20" fill="#7cb342"/>
+      <ellipse cx="-8" cy="8" rx="6" ry="10" fill="#8bc34a" transform="rotate(-20)"/>
+      <ellipse cx="8" cy="8" rx="6" ry="10" fill="#8bc34a" transform="rotate(20)"/>
+    </g>
+  </g>
+</svg>

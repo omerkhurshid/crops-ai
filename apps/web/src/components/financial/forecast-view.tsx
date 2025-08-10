@@ -21,4 +21,391 @@ import {
   BarChart3,
   RefreshCw,
   AlertTriangle
-} from 'lucide-react';\n\ninterface Forecast {\n  id: string;\n  forecastDate: string;\n  forecastType: string;\n  predictedYield?: number;\n  predictedPrice?: number;\n  predictedRevenue?: number;\n  predictedCost?: number;\n  confidenceScore: number;\n  assumptions?: any;\n}\n\ninterface ForecastViewProps {\n  farmId: string;\n  onRefresh: () => void;\n}\n\nexport function ForecastView({ farmId, onRefresh }: ForecastViewProps) {\n  const [forecasts, setForecasts] = useState<Record<string, Forecast[]>>({});\n  const [loading, setLoading] = useState(true);\n  const [generating, setGenerating] = useState(false);\n  const [scenario, setScenario] = useState<'optimistic' | 'realistic' | 'pessimistic'>('realistic');\n  const [summary, setSummary] = useState<any>(null);\n\n  useEffect(() => {\n    fetchForecasts();\n  }, [farmId]);\n\n  const fetchForecasts = async () => {\n    try {\n      setLoading(true);\n      const response = await fetch(`/api/financial/forecast?farmId=${farmId}&forecastHorizon=3`);\n      \n      if (response.ok) {\n        const data = await response.json();\n        setForecasts(data.forecasts || {});\n        setSummary(data.summary);\n      }\n    } catch (error) {\n      console.error('Error fetching forecasts:', error);\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  const generateForecast = async () => {\n    try {\n      setGenerating(true);\n      const response = await fetch('/api/financial/forecast', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({\n          farmId,\n          options: {\n            includeWeatherImpact: true,\n            includeMarketTrends: true,\n            scenarioType: scenario,\n          },\n        }),\n      });\n\n      if (response.ok) {\n        const data = await response.json();\n        await fetchForecasts(); // Refresh forecasts\n        onRefresh(); // Refresh parent dashboard\n      } else {\n        alert('Failed to generate forecast');\n      }\n    } catch (error) {\n      console.error('Error generating forecast:', error);\n      alert('Failed to generate forecast');\n    } finally {\n      setGenerating(false);\n    }\n  };\n\n  const formatCurrency = (amount: number) => {\n    return new Intl.NumberFormat('en-US', {\n      style: 'currency',\n      currency: 'USD',\n      minimumFractionDigits: 0,\n      maximumFractionDigits: 0,\n    }).format(amount);\n  };\n\n  const formatDate = (dateString: string) => {\n    return new Date(dateString).toLocaleDateString('en-US', {\n      month: 'short',\n      year: 'numeric',\n    });\n  };\n\n  const getScenarioColor = (scenario: string) => {\n    switch (scenario) {\n      case 'optimistic':\n        return 'bg-green-100 text-green-800 border-green-200';\n      case 'pessimistic':\n        return 'bg-red-100 text-red-800 border-red-200';\n      default:\n        return 'bg-blue-100 text-blue-800 border-blue-200';\n    }\n  };\n\n  const getConfidenceColor = (confidence: number) => {\n    if (confidence >= 80) return 'text-green-600';\n    if (confidence >= 60) return 'text-yellow-600';\n    return 'text-red-600';\n  };\n\n  const revenueForecasts = forecasts.revenue || [];\n  const costForecasts = forecasts.cost || [];\n\n  const totalPredictedRevenue = revenueForecasts.reduce(\n    (sum, f) => sum + (f.predictedRevenue || 0), 0\n  );\n  const totalPredictedCost = costForecasts.reduce(\n    (sum, f) => sum + (f.predictedCost || 0), 0\n  );\n  const predictedProfit = totalPredictedRevenue - totalPredictedCost;\n\n  if (loading) {\n    return (\n      <div className=\"space-y-4\">\n        {[...Array(3)].map((_, i) => (\n          <Card key={i} className=\"p-6\">\n            <div className=\"animate-pulse space-y-4\">\n              <div className=\"h-4 bg-gray-200 rounded w-1/3\"></div>\n              <div className=\"h-20 bg-gray-200 rounded\"></div>\n            </div>\n          </Card>\n        ))}\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"space-y-6\">\n      {/* Header & Controls */}\n      <Card className=\"p-6\">\n        <div className=\"flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4\">\n          <div>\n            <h3 className=\"text-lg font-semibold text-gray-900 mb-2\">Financial Forecast</h3>\n            <p className=\"text-gray-600\">\n              AI-powered predictions based on satellite data, weather patterns, and market trends\n            </p>\n          </div>\n          \n          <div className=\"flex items-center space-x-3\">\n            <Select value={scenario} onValueChange={(value: any) => setScenario(value)}>\n              <SelectTrigger className=\"w-40\">\n                <SelectValue />\n              </SelectTrigger>\n              <SelectContent>\n                <SelectItem value=\"optimistic\">\n                  <div className=\"flex items-center space-x-2\">\n                    <TrendingUp className=\"h-4 w-4\" />\n                    <span>Optimistic</span>\n                  </div>\n                </SelectItem>\n                <SelectItem value=\"realistic\">\n                  <div className=\"flex items-center space-x-2\">\n                    <Target className=\"h-4 w-4\" />\n                    <span>Realistic</span>\n                  </div>\n                </SelectItem>\n                <SelectItem value=\"pessimistic\">\n                  <div className=\"flex items-center space-x-2\">\n                    <TrendingDown className=\"h-4 w-4\" />\n                    <span>Pessimistic</span>\n                  </div>\n                </SelectItem>\n              </SelectContent>\n            </Select>\n            \n            <Button\n              onClick={generateForecast}\n              disabled={generating}\n              className=\"bg-blue-600 hover:bg-blue-700\"\n            >\n              {generating ? (\n                <>\n                  <RefreshCw className=\"h-4 w-4 mr-2 animate-spin\" />\n                  Generating...\n                </>\n              ) : (\n                <>\n                  <Brain className=\"h-4 w-4 mr-2\" />\n                  Generate Forecast\n                </>\n              )}\n            </Button>\n          </div>\n        </div>\n      </Card>\n\n      {/* Forecast Summary */}\n      {(revenueForecasts.length > 0 || costForecasts.length > 0) && (\n        <div className=\"grid grid-cols-1 md:grid-cols-3 gap-4\">\n          <Card className=\"p-6\">\n            <div className=\"flex items-center justify-between\">\n              <div>\n                <p className=\"text-sm text-gray-600\">Predicted Revenue</p>\n                <p className=\"text-2xl font-bold text-green-600\">\n                  {formatCurrency(totalPredictedRevenue)}\n                </p>\n              </div>\n              <TrendingUp className=\"h-8 w-8 text-green-500\" />\n            </div>\n            <p className=\"text-xs text-gray-500 mt-2\">Next 3 months</p>\n          </Card>\n          \n          <Card className=\"p-6\">\n            <div className=\"flex items-center justify-between\">\n              <div>\n                <p className=\"text-sm text-gray-600\">Predicted Costs</p>\n                <p className=\"text-2xl font-bold text-red-600\">\n                  {formatCurrency(totalPredictedCost)}\n                </p>\n              </div>\n              <TrendingDown className=\"h-8 w-8 text-red-500\" />\n            </div>\n            <p className=\"text-xs text-gray-500 mt-2\">Next 3 months</p>\n          </Card>\n          \n          <Card className=\"p-6\">\n            <div className=\"flex items-center justify-between\">\n              <div>\n                <p className=\"text-sm text-gray-600\">Net Profit</p>\n                <p className={`text-2xl font-bold ${\n                  predictedProfit >= 0 ? 'text-green-600' : 'text-red-600'\n                }`}>\n                  {formatCurrency(predictedProfit)}\n                </p>\n              </div>\n              <BarChart3 className={`h-8 w-8 ${\n                predictedProfit >= 0 ? 'text-green-500' : 'text-red-500'\n              }`} />\n            </div>\n            <p className=\"text-xs text-gray-500 mt-2\">Projected profit</p>\n          </Card>\n        </div>\n      )}\n\n      {/* Detailed Forecasts */}\n      {revenueForecasts.length > 0 && (\n        <Card className=\"p-6\">\n          <h4 className=\"text-lg font-semibold text-gray-900 mb-4 flex items-center\">\n            <DollarSign className=\"h-5 w-5 mr-2 text-green-600\" />\n            Revenue Forecasts\n          </h4>\n          \n          <div className=\"space-y-3\">\n            {revenueForecasts.map((forecast) => (\n              <div key={forecast.id} className=\"flex items-center justify-between p-4 bg-gray-50 rounded-lg\">\n                <div>\n                  <div className=\"flex items-center space-x-2 mb-1\">\n                    <span className=\"font-medium\">{formatDate(forecast.forecastDate)}</span>\n                    <Badge className={getScenarioColor(forecast.assumptions?.scenario || 'realistic')}>\n                      {forecast.assumptions?.scenario || 'Realistic'}\n                    </Badge>\n                  </div>\n                  \n                  <div className=\"flex items-center space-x-4 text-sm text-gray-600\">\n                    <span className={getConfidenceColor(forecast.confidenceScore)}>\n                      {forecast.confidenceScore.toFixed(0)}% confidence\n                    </span>\n                    \n                    {forecast.assumptions?.avgNDVI && (\n                      <span className=\"flex items-center space-x-1\">\n                        <span>🛰️</span>\n                        <span>NDVI: {(forecast.assumptions.avgNDVI * 100).toFixed(0)}%</span>\n                      </span>\n                    )}\n                    \n                    {forecast.assumptions?.weatherImpact && (\n                      <span className=\"flex items-center space-x-1\">\n                        <Cloud className=\"h-3 w-3\" />\n                        <span>Weather factor</span>\n                      </span>\n                    )}\n                  </div>\n                </div>\n                \n                <div className=\"text-right\">\n                  <p className=\"text-lg font-semibold text-green-600\">\n                    {formatCurrency(forecast.predictedRevenue || 0)}\n                  </p>\n                  \n                  {forecast.predictedYield && (\n                    <p className=\"text-xs text-gray-500\">\n                      Est. yield: {forecast.predictedYield.toFixed(1)} t/ha\n                    </p>\n                  )}\n                </div>\n              </div>\n            ))}\n          </div>\n        </Card>\n      )}\n\n      {/* Cost Forecasts */}\n      {costForecasts.length > 0 && (\n        <Card className=\"p-6\">\n          <h4 className=\"text-lg font-semibold text-gray-900 mb-4 flex items-center\">\n            <TrendingDown className=\"h-5 w-5 mr-2 text-red-600\" />\n            Cost Forecasts\n          </h4>\n          \n          <div className=\"space-y-3\">\n            {costForecasts.map((forecast) => (\n              <div key={forecast.id} className=\"flex items-center justify-between p-4 bg-gray-50 rounded-lg\">\n                <div>\n                  <div className=\"flex items-center space-x-2 mb-1\">\n                    <span className=\"font-medium\">{formatDate(forecast.forecastDate)}</span>\n                    <Badge className={getScenarioColor(forecast.assumptions?.scenario || 'realistic')}>\n                      {forecast.assumptions?.scenario || 'Realistic'}\n                    </Badge>\n                  </div>\n                  \n                  <div className=\"flex items-center space-x-4 text-sm text-gray-600\">\n                    <span className={getConfidenceColor(forecast.confidenceScore)}>\n                      {forecast.confidenceScore.toFixed(0)}% confidence\n                    </span>\n                    \n                    <span>\n                      Based on {forecast.assumptions?.historicalMonths || 12} months of data\n                    </span>\n                  </div>\n                </div>\n                \n                <div className=\"text-right\">\n                  <p className=\"text-lg font-semibold text-red-600\">\n                    {formatCurrency(forecast.predictedCost || 0)}\n                  </p>\n                </div>\n              </div>\n            ))}\n          </div>\n        </Card>\n      )}\n\n      {/* No Forecasts State */}\n      {revenueForecasts.length === 0 && costForecasts.length === 0 && (\n        <Card className=\"p-12 text-center\">\n          <Brain className=\"h-12 w-12 text-gray-400 mx-auto mb-4\" />\n          <h3 className=\"text-lg font-medium text-gray-900 mb-2\">No Forecasts Available</h3>\n          <p className=\"text-gray-600 mb-6\">\n            Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.\n          </p>\n          \n          <Button\n            onClick={generateForecast}\n            disabled={generating}\n            className=\"bg-blue-600 hover:bg-blue-700\"\n          >\n            {generating ? (\n              <>\n                <RefreshCw className=\"h-4 w-4 mr-2 animate-spin\" />\n                Generating Forecast...\n              </>\n            ) : (\n              <>\n                <Brain className=\"h-4 w-4 mr-2\" />\n                Generate Your First Forecast\n              </>\n            )}\n          </Button>\n        </Card>\n      )}\n\n      {/* Disclaimer */}\n      <Card className=\"p-4 bg-amber-50 border-amber-200\">\n        <div className=\"flex items-start space-x-3\">\n          <AlertTriangle className=\"h-5 w-5 text-amber-600 mt-0.5\" />\n          <div className=\"text-sm\">\n            <p className=\"font-medium text-amber-800 mb-1\">Forecast Disclaimer</p>\n            <p className=\"text-amber-700\">\n              These forecasts are AI-generated predictions based on historical data, satellite imagery, and market trends. \n              Actual results may vary due to weather, market conditions, and other factors beyond our control.\n            </p>\n          </div>\n        </div>\n      </Card>\n    </div>\n  );\n}
+} from 'lucide-react';
+
+interface Forecast {
+  id: string;
+  forecastDate: string;
+  forecastType: string;
+  predictedYield?: number;
+  predictedPrice?: number;
+  predictedRevenue?: number;
+  predictedCost?: number;
+  confidenceScore: number;
+  assumptions?: any;
+}
+
+interface ForecastViewProps {
+  farmId: string;
+  onRefresh: () => void;
+}
+
+export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
+  const [forecasts, setForecasts] = useState<Record<string, Forecast[]>>({});
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [scenario, setScenario] = useState<'optimistic' | 'realistic' | 'pessimistic'>('realistic');
+  const [summary, setSummary] = useState<any>(null);
+
+  useEffect(() => {
+    fetchForecasts();
+  }, [farmId]);
+
+  const fetchForecasts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/financial/forecast?farmId=${farmId}&forecastHorizon=3`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setForecasts(data.forecasts || {});
+        setSummary(data.summary);
+      }
+    } catch (error) {
+      console.error('Error fetching forecasts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateForecast = async () => {
+    try {
+      setGenerating(true);
+      const response = await fetch('/api/financial/forecast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          farmId,
+          options: {
+            includeWeatherImpact: true,
+            includeMarketTrends: true,
+            scenarioType: scenario,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await fetchForecasts(); // Refresh forecasts
+        onRefresh(); // Refresh parent dashboard
+      } else {
+        alert('Failed to generate forecast');
+      }
+    } catch (error) {
+      console.error('Error generating forecast:', error);
+      alert('Failed to generate forecast');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  const getScenarioColor = (scenario: string) => {
+    switch (scenario) {
+      case 'optimistic':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'pessimistic':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+    }
+  };
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 80) return 'text-green-600';
+    if (confidence >= 60) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const revenueForecasts = forecasts.revenue || [];
+  const costForecasts = forecasts.cost || [];
+
+  const totalPredictedRevenue = revenueForecasts.reduce(
+    (sum, f) => sum + (f.predictedRevenue || 0), 0
+  );
+  const totalPredictedCost = costForecasts.reduce(
+    (sum, f) => sum + (f.predictedCost || 0), 0
+  );
+  const predictedProfit = totalPredictedRevenue - totalPredictedCost;
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[...Array(3)].map((_, i) => (
+          <Card key={i} className="p-6">
+            <div className="animate-pulse space-y-4">
+              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-20 bg-gray-200 rounded"></div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header & Controls */}
+      <Card className="p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Financial Forecast</h3>
+            <p className="text-gray-600">
+              AI-powered predictions based on satellite data, weather patterns, and market trends
+            </p>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <Select value={scenario} onValueChange={(value: any) => setScenario(value)}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="optimistic">
+                  <div className="flex items-center space-x-2">
+                    <TrendingUp className="h-4 w-4" />
+                    <span>Optimistic</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="realistic">
+                  <div className="flex items-center space-x-2">
+                    <Target className="h-4 w-4" />
+                    <span>Realistic</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="pessimistic">
+                  <div className="flex items-center space-x-2">
+                    <TrendingDown className="h-4 w-4" />
+                    <span>Pessimistic</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Button
+              onClick={generateForecast}
+              disabled={generating}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              {generating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Brain className="h-4 w-4 mr-2" />
+                  Generate Forecast
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Forecast Summary */}
+      {(revenueForecasts.length > 0 || costForecasts.length > 0) && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Predicted Revenue</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {formatCurrency(totalPredictedRevenue)}
+                </p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-green-500" />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
+          </Card>
+          
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Predicted Costs</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {formatCurrency(totalPredictedCost)}
+                </p>
+              </div>
+              <TrendingDown className="h-8 w-8 text-red-500" />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
+          </Card>
+          
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Net Profit</p>
+                <p className={`text-2xl font-bold ${
+                  predictedProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {formatCurrency(predictedProfit)}
+                </p>
+              </div>
+              <BarChart3 className={`h-8 w-8 ${
+                predictedProfit >= 0 ? 'text-green-500' : 'text-red-500'
+              }`} />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Projected profit</p>
+          </Card>
+        </div>
+      )}
+
+      {/* Detailed Forecasts */}
+      {revenueForecasts.length > 0 && (
+        <Card className="p-6">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <DollarSign className="h-5 w-5 mr-2 text-green-600" />
+            Revenue Forecasts
+          </h4>
+          
+          <div className="space-y-3">
+            {revenueForecasts.map((forecast) => (
+              <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="font-medium">{formatDate(forecast.forecastDate)}</span>
+                    <Badge className={getScenarioColor(forecast.assumptions?.scenario || 'realistic')}>
+                      {forecast.assumptions?.scenario || 'Realistic'}
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <span className={getConfidenceColor(forecast.confidenceScore)}>
+                      {forecast.confidenceScore.toFixed(0)}% confidence
+                    </span>
+                    
+                    {forecast.assumptions?.avgNDVI && (
+                      <span className="flex items-center space-x-1">
+                        <span>🛰️</span>
+                        <span>NDVI: {(forecast.assumptions.avgNDVI * 100).toFixed(0)}%</span>
+                      </span>
+                    )}
+                    
+                    {forecast.assumptions?.weatherImpact && (
+                      <span className="flex items-center space-x-1">
+                        <Cloud className="h-3 w-3" />
+                        <span>Weather factor</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-green-600">
+                    {formatCurrency(forecast.predictedRevenue || 0)}
+                  </p>
+                  
+                  {forecast.predictedYield && (
+                    <p className="text-xs text-gray-500">
+                      Est. yield: {forecast.predictedYield.toFixed(1)} t/ha
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Cost Forecasts */}
+      {costForecasts.length > 0 && (
+        <Card className="p-6">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <TrendingDown className="h-5 w-5 mr-2 text-red-600" />
+            Cost Forecasts
+          </h4>
+          
+          <div className="space-y-3">
+            {costForecasts.map((forecast) => (
+              <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="font-medium">{formatDate(forecast.forecastDate)}</span>
+                    <Badge className={getScenarioColor(forecast.assumptions?.scenario || 'realistic')}>
+                      {forecast.assumptions?.scenario || 'Realistic'}
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <span className={getConfidenceColor(forecast.confidenceScore)}>
+                      {forecast.confidenceScore.toFixed(0)}% confidence
+                    </span>
+                    
+                    <span>
+                      Based on {forecast.assumptions?.historicalMonths || 12} months of data
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-red-600">
+                    {formatCurrency(forecast.predictedCost || 0)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* No Forecasts State */}
+      {revenueForecasts.length === 0 && costForecasts.length === 0 && (
+        <Card className="p-12 text-center">
+          <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No Forecasts Available</h3>
+          <p className="text-gray-600 mb-6">
+            Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.
+          </p>
+          
+          <Button
+            onClick={generateForecast}
+            disabled={generating}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {generating ? (
+              <>
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                Generating Forecast...
+              </>
+            ) : (
+              <>
+                <Brain className="h-4 w-4 mr-2" />
+                Generate Your First Forecast
+              </>
+            )}
+          </Button>
+        </Card>
+      )}
+
+      {/* Disclaimer */}
+      <Card className="p-4 bg-amber-50 border-amber-200">
+        <div className="flex items-start space-x-3">
+          <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-medium text-amber-800 mb-1">Forecast Disclaimer</p>
+            <p className="text-amber-700">
+              These forecasts are AI-generated predictions based on historical data, satellite imagery, and market trends. 
+              Actual results may vary due to weather, market conditions, and other factors beyond our control.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}

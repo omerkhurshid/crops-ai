@@ -13,4 +13,319 @@ import {
   Trash2,
   Link2,
   Download
-} from 'lucide-react';\n\ninterface CategoryBreakdown {\n  category: string;\n  amount: number;\n  count: number;\n}\n\ninterface FinancialSummary {\n  totalIncome: number;\n  totalExpenses: number;\n  netProfit: number;\n  grossProfit: number;\n  profitMargin: number;\n  profitPerAcre: number;\n  profitChange: number;\n  transactionCount: number;\n}\n\ninterface PLSummaryTableProps {\n  summary: FinancialSummary;\n  farmId: string;\n  dateRange: { start: Date; end: Date };\n}\n\ninterface DetailedBreakdown {\n  incomeByCategory: CategoryBreakdown[];\n  expensesByCategory: CategoryBreakdown[];\n}\n\nconst CATEGORY_ICONS: Record<string, string> = {\n  // Income\n  CROP_SALES: '🌾',\n  LIVESTOCK_SALES: '🐄',\n  SUBSIDIES: '💰',\n  LEASE_INCOME: '🏡',\n  OTHER_INCOME: '📈',\n  // Expenses\n  SEEDS: '🌱',\n  FERTILIZER: '🧪',\n  PESTICIDES: '🚿',\n  LABOR: '👨‍🌾',\n  MACHINERY: '🚜',\n  FUEL: '⛽',\n  IRRIGATION: '💧',\n  STORAGE: '🏪',\n  INSURANCE: '🛡️',\n  OVERHEAD: '🏢',\n  OTHER_EXPENSE: '📄',\n};\n\nconst CATEGORY_LABELS: Record<string, string> = {\n  // Income\n  CROP_SALES: 'Crop Sales',\n  LIVESTOCK_SALES: 'Livestock Sales',\n  SUBSIDIES: 'Subsidies',\n  LEASE_INCOME: 'Lease Income',\n  OTHER_INCOME: 'Other Income',\n  // Expenses\n  SEEDS: 'Seeds',\n  FERTILIZER: 'Fertilizer',\n  PESTICIDES: 'Pesticides',\n  LABOR: 'Labor',\n  MACHINERY: 'Machinery',\n  FUEL: 'Fuel',\n  IRRIGATION: 'Irrigation',\n  STORAGE: 'Storage',\n  INSURANCE: 'Insurance',\n  OVERHEAD: 'Overhead',\n  OTHER_EXPENSE: 'Other Expenses',\n};\n\nexport function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTableProps) {\n  const [breakdown, setBreakdown] = useState<DetailedBreakdown | null>(null);\n  const [loading, setLoading] = useState(false);\n  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['income', 'expenses']));\n\n  const formatCurrency = (amount: number) => {\n    return new Intl.NumberFormat('en-US', {\n      style: 'currency',\n      currency: 'USD',\n      minimumFractionDigits: 0,\n      maximumFractionDigits: 0,\n    }).format(amount);\n  };\n\n  const formatPercentage = (percentage: number) => {\n    return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`;\n  };\n\n  const fetchBreakdown = async () => {\n    if (breakdown) return; // Already loaded\n    \n    try {\n      setLoading(true);\n      const response = await fetch(\n        `/api/financial/summary?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`\n      );\n      \n      if (response.ok) {\n        const data = await response.json();\n        setBreakdown(data.breakdown);\n      }\n    } catch (error) {\n      console.error('Error fetching breakdown:', error);\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  useEffect(() => {\n    fetchBreakdown();\n  }, [farmId, dateRange]);\n\n  const toggleSection = (section: string) => {\n    const newExpanded = new Set(expandedSections);\n    if (newExpanded.has(section)) {\n      newExpanded.delete(section);\n    } else {\n      newExpanded.add(section);\n    }\n    setExpandedSections(newExpanded);\n  };\n\n  const getCategoryPercentage = (amount: number, total: number) => {\n    return total > 0 ? (amount / total) * 100 : 0;\n  };\n\n  const handleExport = async () => {\n    try {\n      const response = await fetch(\n        `/api/financial/export?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}&format=pdf`,\n        { method: 'POST' }\n      );\n      \n      if (response.ok) {\n        const blob = await response.blob();\n        const url = window.URL.createObjectURL(blob);\n        const a = document.createElement('a');\n        a.style.display = 'none';\n        a.href = url;\n        a.download = `financial-summary-${farmId}-${new Date().toISOString().split('T')[0]}.pdf`;\n        document.body.appendChild(a);\n        a.click();\n        window.URL.revokeObjectURL(url);\n      }\n    } catch (error) {\n      console.error('Error exporting report:', error);\n    }\n  };\n\n  return (\n    <Card className=\"p-6\">\n      <div className=\"flex items-center justify-between mb-6\">\n        <h3 className=\"text-lg font-semibold text-gray-900\">P&L Summary</h3>\n        <Button variant=\"outline\" size=\"sm\" onClick={handleExport}>\n          <Download className=\"h-4 w-4 mr-2\" />\n          Export\n        </Button>\n      </div>\n\n      <div className=\"space-y-4\">\n        {/* Income Section */}\n        <div className=\"border rounded-lg\">\n          <button\n            onClick={() => toggleSection('income')}\n            className=\"w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors\"\n          >\n            <div className=\"flex items-center space-x-3\">\n              {expandedSections.has('income') ? (\n                <ChevronDown className=\"h-4 w-4 text-gray-500\" />\n              ) : (\n                <ChevronRight className=\"h-4 w-4 text-gray-500\" />\n              )}\n              <div className=\"flex items-center space-x-2\">\n                <div className=\"w-3 h-3 bg-green-500 rounded-full\"></div>\n                <span className=\"font-medium text-gray-900\">Income</span>\n              </div>\n            </div>\n            <div className=\"flex items-center space-x-2\">\n              <span className=\"font-semibold text-green-600\">\n                {formatCurrency(summary.totalIncome)}\n              </span>\n              <TrendingUp className=\"h-4 w-4 text-green-500\" />\n            </div>\n          </button>\n          \n          {expandedSections.has('income') && breakdown && (\n            <div className=\"px-4 pb-4 space-y-2\">\n              {breakdown.incomeByCategory.map((item) => (\n                <div key={item.category} className=\"flex items-center justify-between py-2 pl-8 pr-2\">\n                  <div className=\"flex items-center space-x-2\">\n                    <span className=\"text-lg\">{CATEGORY_ICONS[item.category] || '📊'}</span>\n                    <span className=\"text-gray-700\">{CATEGORY_LABELS[item.category] || item.category}</span>\n                    <Badge variant=\"outline\" className=\"text-xs\">\n                      {item.count} {item.count === 1 ? 'transaction' : 'transactions'}\n                    </Badge>\n                  </div>\n                  <div className=\"flex items-center space-x-2\">\n                    <span className=\"text-sm text-gray-500\">\n                      {getCategoryPercentage(item.amount, summary.totalIncome).toFixed(1)}%\n                    </span>\n                    <span className=\"font-medium text-gray-900\">\n                      {formatCurrency(item.amount)}\n                    </span>\n                  </div>\n                </div>\n              ))}\n              \n              {breakdown.incomeByCategory.length === 0 && (\n                <div className=\"text-center py-4 text-gray-500\">\n                  No income recorded for this period\n                </div>\n              )}\n            </div>\n          )}\n        </div>\n\n        {/* Expenses Section */}\n        <div className=\"border rounded-lg\">\n          <button\n            onClick={() => toggleSection('expenses')}\n            className=\"w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors\"\n          >\n            <div className=\"flex items-center space-x-3\">\n              {expandedSections.has('expenses') ? (\n                <ChevronDown className=\"h-4 w-4 text-gray-500\" />\n              ) : (\n                <ChevronRight className=\"h-4 w-4 text-gray-500\" />\n              )}\n              <div className=\"flex items-center space-x-2\">\n                <div className=\"w-3 h-3 bg-red-500 rounded-full\"></div>\n                <span className=\"font-medium text-gray-900\">Expenses</span>\n              </div>\n            </div>\n            <div className=\"flex items-center space-x-2\">\n              <span className=\"font-semibold text-red-600\">\n                {formatCurrency(summary.totalExpenses)}\n              </span>\n              <TrendingDown className=\"h-4 w-4 text-red-500\" />\n            </div>\n          </button>\n          \n          {expandedSections.has('expenses') && breakdown && (\n            <div className=\"px-4 pb-4 space-y-2\">\n              {breakdown.expensesByCategory.map((item) => (\n                <div key={item.category} className=\"flex items-center justify-between py-2 pl-8 pr-2\">\n                  <div className=\"flex items-center space-x-2\">\n                    <span className=\"text-lg\">{CATEGORY_ICONS[item.category] || '📊'}</span>\n                    <span className=\"text-gray-700\">{CATEGORY_LABELS[item.category] || item.category}</span>\n                    <Badge variant=\"outline\" className=\"text-xs\">\n                      {item.count} {item.count === 1 ? 'transaction' : 'transactions'}\n                    </Badge>\n                  </div>\n                  <div className=\"flex items-center space-x-2\">\n                    <span className=\"text-sm text-gray-500\">\n                      {getCategoryPercentage(item.amount, summary.totalExpenses).toFixed(1)}%\n                    </span>\n                    <span className=\"font-medium text-gray-900\">\n                      {formatCurrency(item.amount)}\n                    </span>\n                  </div>\n                </div>\n              ))}\n              \n              {breakdown.expensesByCategory.length === 0 && (\n                <div className=\"text-center py-4 text-gray-500\">\n                  No expenses recorded for this period\n                </div>\n              )}\n            </div>\n          )}\n        </div>\n\n        {/* Net Profit Section */}\n        <div className=\"border-2 border-gray-300 rounded-lg bg-gray-50\">\n          <div className=\"p-4\">\n            <div className=\"flex items-center justify-between\">\n              <div className=\"flex items-center space-x-2\">\n                <div className={`w-3 h-3 rounded-full ${\n                  summary.netProfit >= 0 ? 'bg-green-500' : 'bg-red-500'\n                }`}></div>\n                <span className=\"font-semibold text-gray-900\">Net Profit</span>\n              </div>\n              <div className=\"flex items-center space-x-2\">\n                <span className={`font-bold text-lg ${\n                  summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'\n                }`}>\n                  {formatCurrency(summary.netProfit)}\n                </span>\n                {summary.netProfit >= 0 ? (\n                  <TrendingUp className=\"h-5 w-5 text-green-500\" />\n                ) : (\n                  <TrendingDown className=\"h-5 w-5 text-red-500\" />\n                )}\n              </div>\n            </div>\n            \n            <div className=\"mt-2 text-sm text-gray-600\">\n              Profit margin: {formatPercentage(summary.profitMargin)} • \n              Expense ratio: {formatPercentage(summary.totalIncome > 0 ? (summary.totalExpenses / summary.totalIncome) * 100 : 0)}\n            </div>\n          </div>\n        </div>\n\n        {/* Loading State */}\n        {loading && breakdown === null && (\n          <div className=\"text-center py-8\">\n            <div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto\"></div>\n            <p className=\"text-gray-600 mt-2\">Loading detailed breakdown...</p>\n          </div>\n        )}\n      </div>\n    </Card>\n  );\n}
+} from 'lucide-react';
+
+interface CategoryBreakdown {
+  category: string;
+  amount: number;
+  count: number;
+}
+
+interface FinancialSummary {
+  totalIncome: number;
+  totalExpenses: number;
+  netProfit: number;
+  grossProfit: number;
+  profitMargin: number;
+  profitPerAcre: number;
+  profitChange: number;
+  transactionCount: number;
+}
+
+interface PLSummaryTableProps {
+  summary: FinancialSummary;
+  farmId: string;
+  dateRange: { start: Date; end: Date };
+}
+
+interface DetailedBreakdown {
+  incomeByCategory: CategoryBreakdown[];
+  expensesByCategory: CategoryBreakdown[];
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
+  // Income
+  CROP_SALES: '🌾',
+  LIVESTOCK_SALES: '🐄',
+  SUBSIDIES: '💰',
+  LEASE_INCOME: '🏡',
+  OTHER_INCOME: '📈',
+  // Expenses
+  SEEDS: '🌱',
+  FERTILIZER: '🧪',
+  PESTICIDES: '🚿',
+  LABOR: '👨‍🌾',
+  MACHINERY: '🚜',
+  FUEL: '⛽',
+  IRRIGATION: '💧',
+  STORAGE: '🏪',
+  INSURANCE: '🛡️',
+  OVERHEAD: '🏢',
+  OTHER_EXPENSE: '📄',
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  // Income
+  CROP_SALES: 'Crop Sales',
+  LIVESTOCK_SALES: 'Livestock Sales',
+  SUBSIDIES: 'Subsidies',
+  LEASE_INCOME: 'Lease Income',
+  OTHER_INCOME: 'Other Income',
+  // Expenses
+  SEEDS: 'Seeds',
+  FERTILIZER: 'Fertilizer',
+  PESTICIDES: 'Pesticides',
+  LABOR: 'Labor',
+  MACHINERY: 'Machinery',
+  FUEL: 'Fuel',
+  IRRIGATION: 'Irrigation',
+  STORAGE: 'Storage',
+  INSURANCE: 'Insurance',
+  OVERHEAD: 'Overhead',
+  OTHER_EXPENSE: 'Other Expenses',
+};
+
+export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTableProps) {
+  const [breakdown, setBreakdown] = useState<DetailedBreakdown | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['income', 'expenses']));
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatPercentage = (percentage: number) => {
+    return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`;
+  };
+
+  const fetchBreakdown = async () => {
+    if (breakdown) return; // Already loaded
+    
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/financial/summary?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setBreakdown(data.breakdown);
+      }
+    } catch (error) {
+      console.error('Error fetching breakdown:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBreakdown();
+  }, [farmId, dateRange]);
+
+  const toggleSection = (section: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(section)) {
+      newExpanded.delete(section);
+    } else {
+      newExpanded.add(section);
+    }
+    setExpandedSections(newExpanded);
+  };
+
+  const getCategoryPercentage = (amount: number, total: number) => {
+    return total > 0 ? (amount / total) * 100 : 0;
+  };
+
+  const handleExport = async () => {
+    try {
+      const response = await fetch(
+        `/api/financial/export?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}&format=pdf`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `financial-summary-${farmId}-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('Error exporting report:', error);
+    }
+  };
+
+  return (
+    <Card className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">P&L Summary</h3>
+        <Button variant="outline" size="sm" onClick={handleExport}>
+          <Download className="h-4 w-4 mr-2" />
+          Export
+        </Button>
+      </div>
+
+      <div className="space-y-4">
+        {/* Income Section */}
+        <div className="border rounded-lg">
+          <button
+            onClick={() => toggleSection('income')}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center space-x-3">
+              {expandedSections.has('income') ? (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronRight className="h-4 w-4 text-gray-500" />
+              )}
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="font-medium text-gray-900">Income</span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-semibold text-green-600">
+                {formatCurrency(summary.totalIncome)}
+              </span>
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </div>
+          </button>
+          
+          {expandedSections.has('income') && breakdown && (
+            <div className="px-4 pb-4 space-y-2">
+              {breakdown.incomeByCategory.map((item) => (
+                <div key={item.category} className="flex items-center justify-between py-2 pl-8 pr-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{CATEGORY_ICONS[item.category] || '📊'}</span>
+                    <span className="text-gray-700">{CATEGORY_LABELS[item.category] || item.category}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {item.count} {item.count === 1 ? 'transaction' : 'transactions'}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">
+                      {getCategoryPercentage(item.amount, summary.totalIncome).toFixed(1)}%
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {formatCurrency(item.amount)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              
+              {breakdown.incomeByCategory.length === 0 && (
+                <div className="text-center py-4 text-gray-500">
+                  No income recorded for this period
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Expenses Section */}
+        <div className="border rounded-lg">
+          <button
+            onClick={() => toggleSection('expenses')}
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center space-x-3">
+              {expandedSections.has('expenses') ? (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronRight className="h-4 w-4 text-gray-500" />
+              )}
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span className="font-medium text-gray-900">Expenses</span>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="font-semibold text-red-600">
+                {formatCurrency(summary.totalExpenses)}
+              </span>
+              <TrendingDown className="h-4 w-4 text-red-500" />
+            </div>
+          </button>
+          
+          {expandedSections.has('expenses') && breakdown && (
+            <div className="px-4 pb-4 space-y-2">
+              {breakdown.expensesByCategory.map((item) => (
+                <div key={item.category} className="flex items-center justify-between py-2 pl-8 pr-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{CATEGORY_ICONS[item.category] || '📊'}</span>
+                    <span className="text-gray-700">{CATEGORY_LABELS[item.category] || item.category}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {item.count} {item.count === 1 ? 'transaction' : 'transactions'}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-500">
+                      {getCategoryPercentage(item.amount, summary.totalExpenses).toFixed(1)}%
+                    </span>
+                    <span className="font-medium text-gray-900">
+                      {formatCurrency(item.amount)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              
+              {breakdown.expensesByCategory.length === 0 && (
+                <div className="text-center py-4 text-gray-500">
+                  No expenses recorded for this period
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Net Profit Section */}
+        <div className="border-2 border-gray-300 rounded-lg bg-gray-50">
+          <div className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className={`w-3 h-3 rounded-full ${
+                  summary.netProfit >= 0 ? 'bg-green-500' : 'bg-red-500'
+                }`}></div>
+                <span className="font-semibold text-gray-900">Net Profit</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`font-bold text-lg ${
+                  summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {formatCurrency(summary.netProfit)}
+                </span>
+                {summary.netProfit >= 0 ? (
+                  <TrendingUp className="h-5 w-5 text-green-500" />
+                ) : (
+                  <TrendingDown className="h-5 w-5 text-red-500" />
+                )}
+              </div>
+            </div>
+            
+            <div className="mt-2 text-sm text-gray-600">
+              Profit margin: {formatPercentage(summary.profitMargin)} • 
+              Expense ratio: {formatPercentage(summary.totalIncome > 0 ? (summary.totalExpenses / summary.totalIncome) * 100 : 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading && breakdown === null && (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="text-gray-600 mt-2">Loading detailed breakdown...</p>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}

@@ -180,4 +180,176 @@ export function TransactionList({ farmId, onRefresh }: TransactionListProps) {
         ))}
       </div>
     );
-  }\n\n  return (\n    <div className=\"space-y-6\">\n      {/* Filters */}\n      <Card className=\"p-4\">\n        <div className=\"flex flex-col sm:flex-row gap-4\">\n          <div className=\"flex-1\">\n            <div className=\"relative\">\n              <Search className=\"absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4\" />\n              <Input\n                placeholder=\"Search transactions...\"\n                value={searchTerm}\n                onChange={(e) => setSearchTerm(e.target.value)}\n                className=\"pl-10\"\n              />\n            </div>\n          </div>\n          \n          <Select value={typeFilter} onValueChange={setTypeFilter}>\n            <SelectTrigger className=\"w-full sm:w-48\">\n              <SelectValue placeholder=\"Filter by type\" />\n            </SelectTrigger>\n            <SelectContent>\n              <SelectItem value=\"all\">All Types</SelectItem>\n              <SelectItem value=\"INCOME\">Income</SelectItem>\n              <SelectItem value=\"EXPENSE\">Expenses</SelectItem>\n            </SelectContent>\n          </Select>\n          \n          <Select value={categoryFilter} onValueChange={setCategoryFilter}>\n            <SelectTrigger className=\"w-full sm:w-48\">\n              <SelectValue placeholder=\"Filter by category\" />\n            </SelectTrigger>\n            <SelectContent>\n              <SelectItem value=\"all\">All Categories</SelectItem>\n              {Object.entries(CATEGORY_LABELS).map(([value, label]) => (\n                <SelectItem key={value} value={value}>{label}</SelectItem>\n              ))}\n            </SelectContent>\n          </Select>\n        </div>\n      </Card>\n\n      {/* Transaction List */}\n      <div className=\"space-y-3\">\n        {filteredTransactions.length === 0 ? (\n          <Card className=\"p-8 text-center\">\n            <DollarSign className=\"h-12 w-12 text-gray-400 mx-auto mb-4\" />\n            <h3 className=\"text-lg font-medium text-gray-900 mb-2\">No transactions found</h3>\n            <p className=\"text-gray-600\">Start by adding your first income or expense transaction.</p>\n          </Card>\n        ) : (\n          filteredTransactions.map((transaction) => (\n            <Card key={transaction.id} className=\"p-4 hover:shadow-md transition-shadow\">\n              <div className=\"flex items-start justify-between\">\n                <div className=\"flex-1\">\n                  <div className=\"flex items-center space-x-3 mb-2\">\n                    <Badge \n                      variant={transaction.type === 'INCOME' ? 'default' : 'secondary'}\n                      className={transaction.type === 'INCOME' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'}\n                    >\n                      {transaction.type === 'INCOME' ? '↗' : '↙'} {CATEGORY_LABELS[transaction.category] || transaction.category}\n                    </Badge>\n                    \n                    {transaction.subcategory && (\n                      <Badge variant=\"outline\" className=\"text-xs\">\n                        {transaction.subcategory}\n                      </Badge>\n                    )}\n                  </div>\n                  \n                  <div className=\"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-gray-600\">\n                    <div className=\"flex items-center space-x-1\">\n                      <Calendar className=\"h-3 w-3\" />\n                      <span>{formatDate(transaction.transactionDate)}</span>\n                    </div>\n                    \n                    {transaction.field && (\n                      <div className=\"flex items-center space-x-1\">\n                        <MapPin className=\"h-3 w-3\" />\n                        <span>{transaction.field.name}</span>\n                      </div>\n                    )}\n                    \n                    {transaction.crop && (\n                      <div className=\"flex items-center space-x-1\">\n                        <span>🌾</span>\n                        <span>{transaction.crop.cropType}</span>\n                      </div>\n                    )}\n                    \n                    {transaction.tags && transaction.tags.length > 0 && (\n                      <div className=\"flex items-center space-x-1\">\n                        <Tag className=\"h-3 w-3\" />\n                        <span>{transaction.tags.join(', ')}</span>\n                      </div>\n                    )}\n                  </div>\n                  \n                  {transaction.notes && (\n                    <p className=\"mt-2 text-sm text-gray-700\">{transaction.notes}</p>\n                  )}\n                  \n                  {transaction.quantity && transaction.unitPrice && (\n                    <p className=\"mt-1 text-xs text-gray-500\">\n                      {transaction.quantity} × {formatCurrency(transaction.unitPrice)}\n                    </p>\n                  )}\n                </div>\n                \n                <div className=\"flex items-center space-x-3 ml-4\">\n                  <span className={`text-lg font-semibold ${\n                    transaction.type === 'INCOME' ? 'text-green-600' : 'text-red-600'\n                  }`}>\n                    {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}\n                  </span>\n                  \n                  <div className=\"flex items-center space-x-1\">\n                    <Button size=\"sm\" variant=\"outline\" className=\"h-8 w-8 p-0\">\n                      <Edit className=\"h-3 w-3\" />\n                    </Button>\n                    <Button \n                      size=\"sm\" \n                      variant=\"outline\" \n                      className=\"h-8 w-8 p-0 text-red-600 hover:text-red-700\"\n                      onClick={() => handleDelete(transaction.id)}\n                    >\n                      <Trash2 className=\"h-3 w-3\" />\n                    </Button>\n                  </div>\n                </div>\n              </div>\n            </Card>\n          ))\n        )}\n      </div>\n\n      {/* Pagination */}\n      {totalPages > 1 && (\n        <Card className=\"p-4\">\n          <div className=\"flex items-center justify-between\">\n            <div className=\"text-sm text-gray-600\">\n              Page {currentPage} of {totalPages}\n            </div>\n            \n            <div className=\"flex items-center space-x-2\">\n              <Button\n                size=\"sm\"\n                variant=\"outline\"\n                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}\n                disabled={currentPage === 1}\n              >\n                <ChevronLeft className=\"h-4 w-4\" />\n                Previous\n              </Button>\n              \n              <Button\n                size=\"sm\"\n                variant=\"outline\"\n                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}\n                disabled={currentPage === totalPages}\n              >\n                Next\n                <ChevronRight className=\"h-4 w-4\" />\n              </Button>\n            </div>\n          </div>\n        </Card>\n      )}\n    </div>\n  );\n}
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Filters */}
+      <Card className="p-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search transactions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+          
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="INCOME">Income</SelectItem>
+              <SelectItem value="EXPENSE">Expenses</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Filter by category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+                <SelectItem key={value} value={value}>{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </Card>
+
+      {/* Transaction List */}
+      <div className="space-y-3">
+        {filteredTransactions.length === 0 ? (
+          <Card className="p-8 text-center">
+            <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
+            <p className="text-gray-600">Start by adding your first income or expense transaction.</p>
+          </Card>
+        ) : (
+          filteredTransactions.map((transaction) => (
+            <Card key={transaction.id} className="p-4 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <Badge 
+                      variant={transaction.type === 'INCOME' ? 'default' : 'secondary'}
+                      className={transaction.type === 'INCOME' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'}
+                    >
+                      {transaction.type === 'INCOME' ? '↗' : '↙'} {CATEGORY_LABELS[transaction.category] || transaction.category}
+                    </Badge>
+                    
+                    {transaction.subcategory && (
+                      <Badge variant="outline" className="text-xs">
+                        {transaction.subcategory}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>{formatDate(transaction.transactionDate)}</span>
+                    </div>
+                    
+                    {transaction.field && (
+                      <div className="flex items-center space-x-1">
+                        <MapPin className="h-3 w-3" />
+                        <span>{transaction.field.name}</span>
+                      </div>
+                    )}
+                    
+                    {transaction.crop && (
+                      <div className="flex items-center space-x-1">
+                        <span>🌾</span>
+                        <span>{transaction.crop.cropType}</span>
+                      </div>
+                    )}
+                    
+                    {transaction.tags && transaction.tags.length > 0 && (
+                      <div className="flex items-center space-x-1">
+                        <Tag className="h-3 w-3" />
+                        <span>{transaction.tags.join(', ')}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {transaction.notes && (
+                    <p className="mt-2 text-sm text-gray-700">{transaction.notes}</p>
+                  )}
+                  
+                  {transaction.quantity && transaction.unitPrice && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      {transaction.quantity} × {formatCurrency(transaction.unitPrice)}
+                    </p>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-3 ml-4">
+                  <span className={`text-lg font-semibold ${
+                    transaction.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                  </span>
+                  
+                  <div className="flex items-center space-x-1">
+                    <Button size="sm" variant="outline" className="h-8 w-8 p-0">
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                      onClick={() => handleDelete(transaction.id)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <Card className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              Page {currentPage} of {totalPages}
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}

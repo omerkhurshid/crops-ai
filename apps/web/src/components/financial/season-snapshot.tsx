@@ -79,4 +79,131 @@ function MetricCard({ title, value, subtitle, change, icon, color = 'gray' }: Me
           </div>
         )}
       </div>
-    </Card>\n  );\n}\n\nexport function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: SeasonSnapshotProps) {\n  const formatCurrency = (amount: number) => {\n    return new Intl.NumberFormat('en-US', {\n      style: 'currency',\n      currency: 'USD',\n      minimumFractionDigits: 0,\n      maximumFractionDigits: 0,\n    }).format(amount);\n  };\n\n  const formatPercentage = (percentage: number) => {\n    return `${percentage.toFixed(1)}%`;\n  };\n\n  const acreage = farm.totalArea * 2.47105; // Convert hectares to acres\n\n  return (\n    <Card className=\"p-6\">\n      <div className=\"mb-6\">\n        <div className=\"flex items-center justify-between mb-4\">\n          <h2 className=\"text-xl font-semibold text-gray-900\">Season Snapshot</h2>\n          <div className=\"flex items-center space-x-2\">\n            <Badge variant=\"outline\">\n              {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}\n            </Badge>\n            <Badge variant=\"secondary\">\n              {summary.transactionCount} transactions\n            </Badge>\n          </div>\n        </div>\n\n        {/* Main Profit Display */}\n        <div className=\"text-center py-6 border-b border-gray-200\">\n          <p className=\"text-sm text-gray-600 mb-2\">Net Profit</p>\n          <p className={`text-4xl font-bold ${\n            summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'\n          }`}>\n            {formatCurrency(summary.netProfit)}\n          </p>\n          {summary.profitChange !== 0 && (\n            <div className={`flex items-center justify-center mt-2 ${\n              summary.profitChange > 0 ? 'text-green-600' : 'text-red-600'\n            }`}>\n              {summary.profitChange > 0 ? (\n                <TrendingUp className=\"h-4 w-4 mr-1\" />\n              ) : (\n                <TrendingDown className=\"h-4 w-4 mr-1\" />\n              )}\n              <span className=\"text-sm font-medium\">\n                {summary.profitChange > 0 ? '+' : ''}{summary.profitChange.toFixed(1)}% vs last period\n              </span>\n            </div>\n          )}\n        </div>\n      </div>\n\n      {/* Key Metrics Grid */}\n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4\">\n        <MetricCard\n          title=\"Total Income\"\n          value={formatCurrency(summary.totalIncome)}\n          icon={<TrendingUp className=\"h-5 w-5\" />}\n          color=\"green\"\n        />\n        \n        <MetricCard\n          title=\"Total Expenses\"\n          value={formatCurrency(summary.totalExpenses)}\n          icon={<TrendingDown className=\"h-5 w-5\" />}\n          color=\"red\"\n        />\n        \n        <MetricCard\n          title=\"Profit Margin\"\n          value={formatPercentage(summary.profitMargin)}\n          subtitle=\"of total income\"\n          icon={<BarChart3 className=\"h-5 w-5\" />}\n          color=\"blue\"\n        />\n        \n        <MetricCard\n          title=\"Profit per Acre\"\n          value={formatCurrency(summary.profitPerAcre)}\n          subtitle={`${acreage.toFixed(0)} total acres`}\n          icon={<DollarSign className=\"h-5 w-5\" />}\n          color=\"gray\"\n        />\n      </div>\n\n      {/* Quick Stats */}\n      <div className=\"mt-6 pt-6 border-t border-gray-200\">\n        <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4 text-center\">\n          <div>\n            <p className=\"text-2xl font-bold text-gray-900\">\n              {formatCurrency(summary.grossProfit)}\n            </p>\n            <p className=\"text-sm text-gray-600\">Gross Profit</p>\n          </div>\n          \n          <div>\n            <p className=\"text-2xl font-bold text-gray-900\">\n              {summary.totalIncome > 0 ? ((summary.totalExpenses / summary.totalIncome) * 100).toFixed(1) : 0}%\n            </p>\n            <p className=\"text-sm text-gray-600\">Expense Ratio</p>\n          </div>\n          \n          <div>\n            <p className=\"text-2xl font-bold text-gray-900\">\n              {formatCurrency(summary.totalIncome / acreage)}\n            </p>\n            <p className=\"text-sm text-gray-600\">Revenue per Acre</p>\n          </div>\n          \n          <div>\n            <p className=\"text-2xl font-bold text-gray-900\">\n              {formatCurrency(summary.totalExpenses / acreage)}\n            </p>\n            <p className=\"text-sm text-gray-600\">Cost per Acre</p>\n          </div>\n        </div>\n      </div>\n    </Card>\n  );\n}
+    </Card>
+  );
+}
+
+export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: SeasonSnapshotProps) {
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatPercentage = (percentage: number) => {
+    return `${percentage.toFixed(1)}%`;
+  };
+
+  const acreage = farm.totalArea * 2.47105; // Convert hectares to acres
+
+  return (
+    <Card className="p-6">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-900">Season Snapshot</h2>
+          <div className="flex items-center space-x-2">
+            <Badge variant="outline">
+              {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}
+            </Badge>
+            <Badge variant="secondary">
+              {summary.transactionCount} transactions
+            </Badge>
+          </div>
+        </div>
+
+        {/* Main Profit Display */}
+        <div className="text-center py-6 border-b border-gray-200">
+          <p className="text-sm text-gray-600 mb-2">Net Profit</p>
+          <p className={`text-4xl font-bold ${
+            summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {formatCurrency(summary.netProfit)}
+          </p>
+          {summary.profitChange !== 0 && (
+            <div className={`flex items-center justify-center mt-2 ${
+              summary.profitChange > 0 ? 'text-green-600' : 'text-red-600'
+            }`}>
+              {summary.profitChange > 0 ? (
+                <TrendingUp className="h-4 w-4 mr-1" />
+              ) : (
+                <TrendingDown className="h-4 w-4 mr-1" />
+              )}
+              <span className="text-sm font-medium">
+                {summary.profitChange > 0 ? '+' : ''}{summary.profitChange.toFixed(1)}% vs last period
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard
+          title="Total Income"
+          value={formatCurrency(summary.totalIncome)}
+          icon={<TrendingUp className="h-5 w-5" />}
+          color="green"
+        />
+        
+        <MetricCard
+          title="Total Expenses"
+          value={formatCurrency(summary.totalExpenses)}
+          icon={<TrendingDown className="h-5 w-5" />}
+          color="red"
+        />
+        
+        <MetricCard
+          title="Profit Margin"
+          value={formatPercentage(summary.profitMargin)}
+          subtitle="of total income"
+          icon={<BarChart3 className="h-5 w-5" />}
+          color="blue"
+        />
+        
+        <MetricCard
+          title="Profit per Acre"
+          value={formatCurrency(summary.profitPerAcre)}
+          subtitle={`${acreage.toFixed(0)} total acres`}
+          icon={<DollarSign className="h-5 w-5" />}
+          color="gray"
+        />
+      </div>
+
+      {/* Quick Stats */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrency(summary.grossProfit)}
+            </p>
+            <p className="text-sm text-gray-600">Gross Profit</p>
+          </div>
+          
+          <div>
+            <p className="text-2xl font-bold text-gray-900">
+              {summary.totalIncome > 0 ? ((summary.totalExpenses / summary.totalIncome) * 100).toFixed(1) : 0}%
+            </p>
+            <p className="text-sm text-gray-600">Expense Ratio</p>
+          </div>
+          
+          <div>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrency(summary.totalIncome / acreage)}
+            </p>
+            <p className="text-sm text-gray-600">Revenue per Acre</p>
+          </div>
+          
+          <div>
+            <p className="text-2xl font-bold text-gray-900">
+              {formatCurrency(summary.totalExpenses / acreage)}
+            </p>
+            <p className="text-sm text-gray-600">Cost per Acre</p>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}

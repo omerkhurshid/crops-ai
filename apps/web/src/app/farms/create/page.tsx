@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Navbar } from '../../../components/navigation/navbar'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
 import { SatelliteMapViewer } from '../../../components/farm/satellite-map-viewer'
-import { getCropRecommendations, getLivestockRecommendations, CROP_DATABASE } from '../../../lib/farm/regional-crops'
+import { getCropRecommendations, getLivestockRecommendations } from '../../../lib/farm/regional-crops'
+import { COMPREHENSIVE_CROP_DATABASE, getCropsByCategory as getComprehensiveCropsByCategory, CROP_CATEGORIES } from '../../../lib/farm/comprehensive-crops'
 import { 
   MapPin, Locate, Search, ChevronRight, CheckCircle, 
   Wheat, Users, Loader2, Navigation, Globe,
@@ -67,34 +68,8 @@ export default function CreateFarmPage() {
     return iconMap[iconName] || <Wheat className={size} />;
   };
 
-  // Get crops organized by category
-  const getCropsByCategory = () => {
-    const categories: Record<string, any[]> = {};
-    
-    Object.values(CROP_DATABASE).forEach(crop => {
-      if (!categories[crop.category]) {
-        categories[crop.category] = [];
-      }
-      categories[crop.category].push({
-        id: crop.id,
-        name: crop.name,
-        scientificName: crop.scientificName,
-        icon: getIconComponent(crop.icon, "h-4 w-4"),
-        yield: crop.yield,
-        plantingWindow: crop.plantingWindow,
-        harvestWindow: crop.harvestWindow
-      });
-    });
-    
-    // Sort crops within each category by name
-    Object.keys(categories).forEach(category => {
-      categories[category].sort((a, b) => a.name.localeCompare(b.name));
-    });
-    
-    return categories;
-  };
-
-  const cropsByCategory = getCropsByCategory();
+  // Get crops organized by category from comprehensive database
+  const cropsByCategory = getComprehensiveCropsByCategory();
 
   // Auto-fetch regional recommendations when location changes
   useEffect(() => {
@@ -664,32 +639,34 @@ export default function CreateFarmPage() {
                       </div>
                     )}
                     
-                    {/* Structured Crop Selection */}
+                    {/* Comprehensive Crop Selection */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {Object.entries(cropsByCategory).map(([category, crops]) => (
                         <div key={category} className="space-y-2">
                           <Label className="text-sm font-medium text-gray-700 capitalize flex items-center">
-                            {getIconComponent('wheat', 'h-4 w-4')}
-                            <span className="ml-2">{category.replace('_', ' ')} Crops</span>
+                            {getIconComponent(CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.icon || 'wheat', 'h-4 w-4')}
+                            <span className="ml-2">{CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.name || category}</span>
                           </Label>
                           <Select
                             value={farm.primaryProduct && crops.find(c => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
                             onValueChange={(value) => handleProductSelection(value, true)}
                           >
                             <SelectTrigger className="w-full">
-                              <SelectValue placeholder={`Select ${category} crop`} />
+                              <SelectValue placeholder={`Select ${CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.name || category}`} />
                             </SelectTrigger>
                             <SelectContent>
                               {crops.map((crop: any) => (
                                 <SelectItem key={crop.id} value={crop.id}>
-                                  <div className="flex items-center space-x-2">
-                                    <div className="flex-shrink-0">{crop.icon}</div>
+                                  <div className="flex items-center space-x-2 w-full">
+                                    <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
                                     <div className="flex-1 min-w-0">
                                       <div className="text-sm font-medium truncate">{crop.name}</div>
-                                      <div className="text-xs text-gray-500 truncate">{crop.scientificName}</div>
+                                      <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
+                                      <div className="text-xs text-blue-600">{crop.botanicalFamily}</div>
                                     </div>
-                                    <div className="text-xs text-gray-400">
-                                      {crop.yield?.typical} {crop.yield?.unit}/acre
+                                    <div className="text-xs text-gray-400 text-right">
+                                      <div>{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                                      <div className="text-green-600">${crop.marketValue?.avgPrice}</div>
                                     </div>
                                   </div>
                                 </SelectItem>
@@ -701,29 +678,61 @@ export default function CreateFarmPage() {
                     </div>
 
                     {/* Selected Crop Details */}
-                    {farm.primaryProduct && CROP_DATABASE[farm.primaryProduct] && (
-                      <div className="p-4 bg-sage-50 border border-sage-200 rounded-xl">
-                        <div className="flex items-start space-x-3">
+                    {farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct] && (
+                      <div className="p-5 bg-sage-50 border border-sage-200 rounded-xl">
+                        <div className="flex items-start space-x-4">
                           <div className="flex-shrink-0 mt-1">
-                            {getIconComponent(CROP_DATABASE[farm.primaryProduct].icon)}
+                            {getIconComponent(COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].icon, 'h-8 w-8')}
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-sage-900">
-                              {CROP_DATABASE[farm.primaryProduct].name}
-                            </h4>
-                            <p className="text-sm text-sage-700 italic mb-2">
-                              {CROP_DATABASE[farm.primaryProduct].scientificName}
-                            </p>
-                            <div className="grid grid-cols-2 gap-4 text-xs">
+                            <div className="mb-3">
+                              <h4 className="text-lg font-semibold text-sage-900">
+                                {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].name}
+                              </h4>
+                              <p className="text-sm text-sage-700 italic">
+                                {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].scientificName}
+                              </p>
+                              <p className="text-xs text-blue-600 font-medium">
+                                Family: {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].botanicalFamily}
+                              </p>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                               <div>
-                                <span className="font-medium">Planting:</span>
-                                <p>{CROP_DATABASE[farm.primaryProduct].plantingWindow.optimal}</p>
+                                <span className="font-medium text-gray-700">Planting Season:</span>
+                                <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].plantingWindow.optimal}</p>
                               </div>
                               <div>
-                                <span className="font-medium">Expected Yield:</span>
-                                <p>{CROP_DATABASE[farm.primaryProduct].yield.typical} {CROP_DATABASE[farm.primaryProduct].yield.unit}/acre</p>
+                                <span className="font-medium text-gray-700">Expected Yield:</span>
+                                <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.typical} {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.unit}/acre</p>
+                              </div>
+                              <div>
+                                <span className="font-medium text-gray-700">Market Value:</span>
+                                <p className="text-green-700 font-medium">${COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].marketValue.avgPrice}/{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.unit}</p>
+                              </div>
+                              <div>
+                                <span className="font-medium text-gray-700">Growing Season:</span>
+                                <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].harvestWindow.duration} days</p>
+                              </div>
+                              <div>
+                                <span className="font-medium text-gray-700">Water Needs:</span>
+                                <p className="text-sage-800 capitalize">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].waterRequirements}</p>
+                              </div>
+                              <div>
+                                <span className="font-medium text-gray-700">Soil pH:</span>
+                                <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].soilRequirements.ph.min} - {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].soilRequirements.ph.max}</p>
                               </div>
                             </div>
+
+                            {/* Key Benefits */}
+                            {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].benefits.length > 0 && (
+                              <div className="mt-3 p-2 bg-white/60 rounded-lg">
+                                <span className="text-xs font-medium text-gray-700">Key Benefits:</span>
+                                <p className="text-xs text-sage-700 mt-1">
+                                  {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].benefits.slice(0, 3).join(' • ')}
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -837,10 +846,11 @@ export default function CreateFarmPage() {
                               {crops.filter(crop => crop.id !== farm.primaryProduct).map((crop: any) => (
                                 <SelectItem key={crop.id} value={crop.id}>
                                   <div className="flex items-center space-x-2">
-                                    <div className="flex-shrink-0">{crop.icon}</div>
+                                    <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
                                     <div className="flex-1 min-w-0">
                                       <div className="text-sm font-medium truncate">{crop.name}</div>
-                                      <div className="text-xs text-gray-500 truncate">Good for rotation</div>
+                                      <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
+                                      <div className="text-xs text-blue-600">Good for rotation • {crop.botanicalFamily}</div>
                                     </div>
                                   </div>
                                 </SelectItem>
@@ -857,12 +867,15 @@ export default function CreateFarmPage() {
                         <Label className="text-sm text-gray-600">Selected Secondary Crops:</Label>
                         <div className="flex flex-wrap gap-2">
                           {farm.secondaryProducts.map(productId => {
-                            const crop = CROP_DATABASE[productId];
+                            const crop = COMPREHENSIVE_CROP_DATABASE[productId];
                             if (!crop) return null;
                             return (
-                              <div key={productId} className="flex items-center space-x-2 bg-sage-100 px-3 py-1 rounded-full">
-                                {getIconComponent(crop.icon, "h-3 w-3")}
-                                <span className="text-sm">{crop.name}</span>
+                              <div key={productId} className="flex items-center space-x-2 bg-sage-100 px-3 py-2 rounded-full border border-sage-200">
+                                {getIconComponent(crop.icon, "h-4 w-4")}
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-medium">{crop.name}</span>
+                                  <span className="text-xs text-gray-500 italic">{crop.botanicalFamily}</span>
+                                </div>
                                 <button
                                   onClick={() => {
                                     setFarm(prev => ({
@@ -870,7 +883,8 @@ export default function CreateFarmPage() {
                                       secondaryProducts: prev.secondaryProducts?.filter(p => p !== productId)
                                     }));
                                   }}
-                                  className="text-gray-500 hover:text-red-500 ml-1"
+                                  className="text-gray-500 hover:text-red-500 ml-1 text-lg"
+                                  title="Remove crop"
                                 >
                                   ×
                                 </button>

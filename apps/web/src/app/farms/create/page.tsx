@@ -237,7 +237,7 @@ export default function CreateFarmPage() {
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      // Create the farm
+      // Create the farm - force redeploy
       const response = await fetch('/api/farms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

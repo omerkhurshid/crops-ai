@@ -537,7 +537,7 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     waterRequirements: 'high',
     spacing: { rows: 120, plants: 60 }, // 10ft x 5ft spacing
     yield: { typical: 20, unit: 'tons' },
-    marketValue: { avgPrice: 180.00, demand: 'moderate', stability: 'seasonal' },
+    marketValue: { avgPrice: 180.00, demand: 'moderate', stability: 'volatile' },
     challenges: ['Squash bugs', 'Powdery mildew', 'Bacterial wilt', 'Weather dependency'],
     benefits: ['High value specialty crop', 'Seasonal demand', 'Direct marketing', 'Agritourism'],
     companions: ['corn', 'beans'],

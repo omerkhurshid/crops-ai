@@ -31,12 +31,12 @@ interface SatelliteLayer {
   icon: React.ReactNode;
 }
 
-// Sentinel Hub evalscripts for different visualizations
+// Simplified satellite layers - only True Color for now
 const SATELLITE_LAYERS: SatelliteLayer[] = [
   {
     id: 'true-color',
-    name: 'True Color',
-    description: 'Natural color satellite imagery',
+    name: 'Satellite View',
+    description: 'High-resolution satellite imagery',
     icon: <Satellite className="h-4 w-4" />,
     evalScript: `
       //VERSION=3
@@ -49,48 +49,6 @@ const SATELLITE_LAYERS: SatelliteLayer[] = [
       
       function evaluatePixel(sample) {
         return [sample.B04, sample.B03, sample.B02].map(a => a * 2.5);
-      }
-    `
-  },
-  {
-    id: 'ndvi',
-    name: 'NDVI',
-    description: 'Vegetation health analysis',
-    icon: <div className="h-4 w-4 bg-green-500 rounded" />,
-    evalScript: `
-      //VERSION=3
-      function setup() {
-        return {
-          input: ["B04", "B08"],
-          output: { bands: 3 }
-        };
-      }
-      
-      function evaluatePixel(sample) {
-        let ndvi = (sample.B08 - sample.B04) / (sample.B08 + sample.B04);
-        if (ndvi < 0) return [0.5, 0.5, 0.5];
-        else if (ndvi < 0.3) return [1, 0, 0];
-        else if (ndvi < 0.6) return [1, 1, 0];
-        else return [0, 1, 0];
-      }
-    `
-  },
-  {
-    id: 'false-color',
-    name: 'False Color',
-    description: 'Enhanced vegetation contrast',
-    icon: <div className="h-4 w-4 bg-red-500 rounded" />,
-    evalScript: `
-      //VERSION=3
-      function setup() {
-        return {
-          input: ["B03", "B04", "B08"],
-          output: { bands: 3 }
-        };
-      }
-      
-      function evaluatePixel(sample) {
-        return [sample.B08, sample.B04, sample.B03].map(a => a * 2.5);
       }
     `
   }
@@ -132,53 +90,25 @@ export function SatelliteMapViewer({
     };
   }, []);
 
-  // Fetch satellite imagery from Sentinel Hub
+  // Fetch satellite imagery - using ESRI World Imagery directly for reliability
   const fetchSatelliteImage = useCallback(async () => {
     setLoading(true);
     try {
       const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
-      const currentLayer = SATELLITE_LAYERS.find(l => l.id === activeLayer);
       
-      if (!currentLayer) return;
-
-      // Get the most recent imagery (last 30 days)
-      const toDate = new Date().toISOString().split('T')[0];
-      const fromDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-      // In a real implementation, this would call the Sentinel Hub API
-      // For now, we'll simulate the API call and use placeholder data
-      const response = await fetch('/api/satellite/imagery', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bbox,
-          fromTime: fromDate,
-          toTime: toDate,
-          width: 512,
-          height: 512,
-          evalScript: currentLayer.evalScript,
-          format: 'image/jpeg'
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setImageUrl(data.imageUrl);
-        setImageDate(data.acquisitionDate);
-        setCloudCoverage(data.cloudCoverage);
-      } else {
-        // Use more reliable satellite imagery fallback
-        const esriUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}&bboxSR=4326&imageSR=4326&size=512,512&f=image&format=jpg`;
-        setImageUrl(esriUrl);
-        setImageDate(toDate);
-        setCloudCoverage(5);
-      }
+      // Use ESRI World Imagery directly for better reliability
+      const esriUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}&bboxSR=4326&imageSR=4326&size=512,512&f=image&format=jpg`;
+      
+      setImageUrl(esriUrl);
+      setImageDate(new Date().toISOString().split('T')[0]);
+      setCloudCoverage(5); // Assume low cloud coverage for ESRI imagery
+      
     } catch (error) {
       console.error('Error fetching satellite imagery:', error);
-      // More reliable fallback to ESRI World Imagery
+      // Fallback to a different ESRI endpoint if needed
       const fallbackBbox = calculateBoundingBox(location.lat, location.lng, zoom);
-      const esriUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${fallbackBbox.west},${fallbackBbox.south},${fallbackBbox.east},${fallbackBbox.north}&bboxSR=4326&imageSR=4326&size=512,512&f=image&format=jpg`;
-      setImageUrl(esriUrl);
+      const fallbackUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${fallbackBbox.west},${fallbackBbox.south},${fallbackBbox.east},${fallbackBbox.north}&bboxSR=4326&imageSR=4326&size=256,256&f=image&format=png`;
+      setImageUrl(fallbackUrl);
       setImageDate(new Date().toISOString().split('T')[0]);
       setCloudCoverage(null);
     } finally {
@@ -329,21 +259,23 @@ export function SatelliteMapViewer({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {/* Layer Selection */}
-          <div className="flex space-x-2">
-            {SATELLITE_LAYERS.map(layer => (
-              <Button
-                key={layer.id}
-                variant={activeLayer === layer.id ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setActiveLayer(layer.id)}
-                className="flex items-center space-x-2"
-              >
-                {layer.icon}
-                <span>{layer.name}</span>
-              </Button>
-            ))}
-          </div>
+          {/* Layer Selection - Hidden since we only have one layer */}
+          {SATELLITE_LAYERS.length > 1 && (
+            <div className="flex space-x-2">
+              {SATELLITE_LAYERS.map(layer => (
+                <Button
+                  key={layer.id}
+                  variant={activeLayer === layer.id ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setActiveLayer(layer.id)}
+                  className="flex items-center space-x-2"
+                >
+                  {layer.icon}
+                  <span>{layer.name}</span>
+                </Button>
+              ))}
+            </div>
+          )}
 
           {/* Map Container */}
           <div 

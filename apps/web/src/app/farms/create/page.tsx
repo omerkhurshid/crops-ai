@@ -46,7 +46,6 @@ export default function CreateFarmPage() {
   const [detectingLocation, setDetectingLocation] = useState(false)
   const [locationInput, setLocationInput] = useState('')
   const [showMap, setShowMap] = useState(false)
-  const [showSatelliteViewer, setShowSatelliteViewer] = useState(false)
   const [regionalRecommendations, setRegionalRecommendations] = useState<any>(null)
   const router = useRouter()
 
@@ -191,34 +190,28 @@ export default function CreateFarmPage() {
     }))
   }
 
-  const handleLocationConfirm = () => {
-    setShowSatelliteViewer(true)
-    // Get regional crop/livestock recommendations
-    if (farm.type === 'crops') {
-      const recommendations = getCropRecommendations(farm.location.lat, farm.location.lng, 'crops')
-      setRegionalRecommendations(recommendations)
-    } else {
-      const recommendations = getLivestockRecommendations(farm.location.lat, farm.location.lng)
-      setRegionalRecommendations(recommendations)
+  // Calculate polygon area in hectares from lat/lng coordinates
+  const calculatePolygonArea = (coordinates: Array<{ lat: number; lng: number }>): number => {
+    if (coordinates.length < 3) return 0;
+    
+    // Using the Shoelace formula for calculating polygon area
+    // Convert to meters for accurate area calculation
+    const R = 6371000; // Earth's radius in meters
+    let area = 0;
+    
+    for (let i = 0; i < coordinates.length; i++) {
+      const j = (i + 1) % coordinates.length;
+      const lat1 = coordinates[i].lat * Math.PI / 180;
+      const lat2 = coordinates[j].lat * Math.PI / 180;
+      const lng1 = coordinates[i].lng * Math.PI / 180;
+      const lng2 = coordinates[j].lng * Math.PI / 180;
+      
+      area += (lng2 - lng1) * (2 + Math.sin(lat1) + Math.sin(lat2));
     }
-  }
-
-  const handleSatelliteViewerComplete = (adjustedLocation: { lat: number; lng: number; zoom: number }, detectedFields?: Array<any>) => {
-    setFarm(prev => ({
-      ...prev,
-      location: {
-        ...prev.location,
-        lat: adjustedLocation.lat,
-        lng: adjustedLocation.lng
-      },
-      detectedFields: detectedFields || prev.detectedFields,
-      totalArea: detectedFields ? detectedFields.reduce((sum, field) => sum + field.area, 0) : prev.totalArea
-    }))
-    if (!detectedFields) {
-      detectFields() // Fallback detection if satellite viewer didn't provide fields
-    }
-    setShowSatelliteViewer(false)
-    setCurrentStep(2)
+    
+    area = Math.abs(area * R * R / 2);
+    // Convert from square meters to hectares
+    return area / 10000;
   }
 
   const handleProductSelection = (productId: string, isPrimary: boolean = true) => {
@@ -468,6 +461,50 @@ export default function CreateFarmPage() {
                 )}
               </div>
 
+              {/* Integrated Satellite Map - No Modal */}
+              {showMap && (
+                <div className="mt-6 space-y-4">
+                  <div className="border rounded-lg overflow-hidden">
+                    <SatelliteMapViewer
+                      initialLocation={farm.location}
+                      onLocationChange={(location) => setFarm(prev => ({ ...prev, location }))}
+                      onFieldsDetected={(fields) => setFarm(prev => ({ 
+                        ...prev, 
+                        detectedFields: fields,
+                        totalArea: fields.reduce((sum, field) => sum + field.area, 0)
+                      }))}
+                      onBoundariesSet={(boundaries) => {
+                        // Calculate actual area from boundaries
+                        if (boundaries.length >= 3) {
+                          const area = calculatePolygonArea(boundaries);
+                          const field = {
+                            id: 'user-marked-field',
+                            area: area,
+                            boundaries
+                          };
+                          setFarm(prev => ({
+                            ...prev,
+                            detectedFields: [field],
+                            totalArea: area
+                          }));
+                        }
+                      }}
+                      showFieldDetection={true}
+                      showBoundaryMarking={true}
+                      height="500px"
+                    />
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Tip:</strong> Use the map to adjust your farm location precisely. You can:
+                      • Zoom in/out for better detail
+                      • Click the pin icon to mark field boundaries
+                      • Auto-detect fields using satellite imagery
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Continue Button */}
               <div className="flex justify-between pt-4">
                 <Button
@@ -477,7 +514,17 @@ export default function CreateFarmPage() {
                   Cancel
                 </Button>
                 <Button
-                  onClick={handleLocationConfirm}
+                  onClick={() => {
+                    // Get recommendations and move to next step
+                    if (farm.type === 'crops') {
+                      const recommendations = getCropRecommendations(farm.location.lat, farm.location.lng, 'crops')
+                      setRegionalRecommendations(recommendations)
+                    } else {
+                      const recommendations = getLivestockRecommendations(farm.location.lat, farm.location.lng)
+                      setRegionalRecommendations(recommendations)
+                    }
+                    setCurrentStep(2)
+                  }}
                   disabled={!farm.name || !showMap}
                   className="bg-sage-600 hover:bg-sage-700"
                 >
@@ -772,75 +819,6 @@ export default function CreateFarmPage() {
         )}
       </main>
 
-      {/* Satellite Map Viewer Modal */}
-      {showSatelliteViewer && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
-          <div className="min-h-screen px-4 py-8">
-            <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-2xl font-light text-sage-800">Adjust Your Farm Location</h2>
-                    <p className="text-sm text-gray-600 mt-1">
-                      View satellite imagery, adjust location, and detect field boundaries
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowSatelliteViewer(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-                
-                <SatelliteMapViewer
-                  initialLocation={farm.location}
-                  onLocationChange={(location) => setFarm(prev => ({ ...prev, location }))}
-                  onFieldsDetected={(fields) => setFarm(prev => ({ 
-                    ...prev, 
-                    detectedFields: fields,
-                    totalArea: fields.reduce((sum, field) => sum + field.area, 0)
-                  }))}
-                  onBoundariesSet={(boundaries) => {
-                    // Convert boundaries to a detected field for area calculation
-                    if (boundaries.length >= 3) {
-                      const mockField = {
-                        id: 'user-marked-field',
-                        area: 25.0, // Rough estimate - in production would calculate actual area
-                        boundaries
-                      };
-                      setFarm(prev => ({
-                        ...prev,
-                        detectedFields: [mockField],
-                        totalArea: mockField.area
-                      }));
-                    }
-                  }}
-                  showFieldDetection={true}
-                  showBoundaryMarking={true}
-                  height="600px"
-                />
-                
-                <div className="mt-6 flex justify-between">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowSatelliteViewer(false)}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={() => handleSatelliteViewerComplete({ ...farm.location, zoom: 15 }, farm.detectedFields)}
-                    className="bg-sage-600 hover:bg-sage-700"
-                  >
-                    Continue with This Location
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

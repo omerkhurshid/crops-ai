@@ -64,7 +64,7 @@ export function SatelliteMapViewer({
   height = "500px"
 }: SatelliteMapViewerProps) {
   const [location, setLocation] = useState(initialLocation);
-  const [zoom, setZoom] = useState(15);
+  const [zoom, setZoom] = useState(18); // Changed default zoom to 18 for field detail
   const [activeLayer, setActiveLayer] = useState<string>('true-color');
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);

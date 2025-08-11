@@ -373,7 +373,7 @@ export default function CreateFarmPage() {
             <CardContent className="space-y-8">
               {/* Farm Name */}
               <div>
-                <Label htmlFor="farm-name" className="text-base font-medium">
+                <Label htmlFor="farm-name" className="text-base font-medium text-sage-700">
                   What&apos;s your farm called?
                 </Label>
                 <Input
@@ -382,14 +382,14 @@ export default function CreateFarmPage() {
                   placeholder="e.g., Smith Family Farm"
                   value={farm.name}
                   onChange={(e) => setFarm(prev => ({ ...prev, name: e.target.value }))}
-                  className="mt-3 text-lg h-12"
+                  className="mt-3 text-lg h-12 border-sage-200 focus:border-sage-500 focus:ring-sage-500"
                   autoFocus
                 />
               </div>
 
               {/* Farm Type Selection */}
               <div>
-                <Label className="text-base font-medium mb-3 block">
+                <Label className="text-base font-medium mb-3 block text-sage-700">
                   What type of farming do you do?
                 </Label>
                 <div className="grid grid-cols-2 gap-6">
@@ -397,12 +397,12 @@ export default function CreateFarmPage() {
                     onClick={() => setFarm(prev => ({ ...prev, type: 'crops' }))}
                     className={`p-8 rounded-xl border-2 transition-all hover:shadow-md ${
                       farm.type === 'crops'
-                        ? 'border-sage-600 bg-sage-50 shadow-soft'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-green-700 bg-green-50 shadow-soft'
+                        : 'border-gray-200 hover:border-green-300'
                     }`}
                   >
                     <Wheat className={`h-14 w-14 mx-auto mb-4 ${
-                      farm.type === 'crops' ? 'text-sage-600' : 'text-gray-400'
+                      farm.type === 'crops' ? 'text-green-700' : 'text-gray-400'
                     }`} />
                     <div className="text-xl font-semibold mb-2">Crop Farming</div>
                     <div className="text-sm text-gray-600">
@@ -414,12 +414,12 @@ export default function CreateFarmPage() {
                     onClick={() => setFarm(prev => ({ ...prev, type: 'livestock' }))}
                     className={`p-8 rounded-xl border-2 transition-all hover:shadow-md ${
                       farm.type === 'livestock'
-                        ? 'border-sage-600 bg-sage-50 shadow-soft'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-green-700 bg-green-50 shadow-soft'
+                        : 'border-gray-200 hover:border-green-300'
                     }`}
                   >
                     <Users className={`h-14 w-14 mx-auto mb-4 ${
-                      farm.type === 'livestock' ? 'text-sage-600' : 'text-gray-400'
+                      farm.type === 'livestock' ? 'text-green-700' : 'text-gray-400'
                     }`} />
                     <div className="text-xl font-semibold mb-2">Livestock Farming</div>
                     <div className="text-sm text-gray-600">
@@ -431,7 +431,7 @@ export default function CreateFarmPage() {
 
               {/* Location Input */}
               <div>
-                <Label className="text-base font-medium mb-3 block">
+                <Label className="text-base font-medium mb-3 block text-sage-700">
                   Where&apos;s your farm located?
                 </Label>
                 <div className="space-y-3">
@@ -442,7 +442,7 @@ export default function CreateFarmPage() {
                         placeholder="Enter address or GPS coordinates (lat, lng)"
                         value={locationInput}
                         onChange={(e) => setLocationInput(e.target.value)}
-                        className="w-full"
+                        className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500"
                       />
                     </div>
                     <Button
@@ -476,29 +476,23 @@ export default function CreateFarmPage() {
 
                 {/* Map Preview */}
                 {showMap && (
-                  <div className="mt-4 space-y-3">
-                    <div className="bg-sage-50 p-4 rounded-lg">
+                  <div className="mt-4">
+                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
                       <div className="flex items-start space-x-3">
-                        <MapPin className="h-5 w-5 text-sage-600 mt-0.5" />
+                        <MapPin className="h-5 w-5 text-green-600 mt-0.5" />
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-sage-800">
+                          <p className="text-sm font-medium text-green-800">
                             Location: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
                           </p>
                           {farm.location.address && (
-                            <p className="text-sm text-sage-600">{farm.location.address}</p>
+                            <p className="text-sm text-green-700 mb-2">{farm.location.address}</p>
                           )}
-                          <p className="text-xs text-sage-600 mt-1">
-                            You can adjust this on the map in the next step
+                          <p className="text-sm text-green-700">
+                            <strong>Next:</strong> We&apos;ll show you a satellite view where you can adjust the location, 
+                            zoom in/out, and automatically detect your field boundaries.
                           </p>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <strong>Next:</strong> We&apos;ll show you a satellite view where you can adjust the location, 
-                        zoom in/out, and we&apos;ll automatically detect your field boundaries.
-                      </p>
                     </div>
                   </div>
                 )}

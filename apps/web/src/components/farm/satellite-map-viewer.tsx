@@ -76,6 +76,8 @@ export function SatelliteMapViewer({
   const [isMarkingBoundary, setIsMarkingBoundary] = useState(false);
   const [hasDetectedFields, setHasDetectedFields] = useState(false);
   const [lastDetectionLocation, setLastDetectionLocation] = useState<string>('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
 
   // Calculate bounding box based on location and zoom
   const calculateBoundingBox = useCallback((lat: number, lng: number, zoom: number) => {
@@ -240,6 +242,45 @@ export function SatelliteMapViewer({
     detectFields();
   };
 
+  // Mouse handling for map dragging
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isMarkingBoundary) return;
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !dragStart || isMarkingBoundary) return;
+    
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
+    
+    // Convert pixel movement to lat/lng movement based on zoom
+    const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
+    const latRange = bbox.north - bbox.south;
+    const lngRange = bbox.east - bbox.west;
+    
+    // Calculate movement in degrees (inverted Y axis for lat)
+    const latDelta = -(deltaY / 500) * latRange * 0.1; // Adjust sensitivity
+    const lngDelta = -(deltaX / 500) * lngRange * 0.1;
+    
+    // Update location
+    const newLat = Math.max(-85, Math.min(85, location.lat + latDelta));
+    const newLng = Math.max(-180, Math.min(180, location.lng + lngDelta));
+    
+    setLocation({ lat: newLat, lng: newLng });
+    onLocationChange?.({ lat: newLat, lng: newLng, zoom });
+    
+    // Update drag start for continuous dragging
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setDragStart(null);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -279,9 +320,13 @@ export function SatelliteMapViewer({
 
           {/* Map Container */}
           <div 
-            className={`relative bg-gray-100 rounded-lg overflow-hidden border ${isMarkingBoundary ? 'cursor-crosshair' : 'cursor-grab'}`}
+            className={`relative bg-gray-100 rounded-lg overflow-hidden border ${isMarkingBoundary ? 'cursor-crosshair' : 'cursor-move'}`}
             style={{ height }}
             onClick={handleMapClick}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
@@ -300,24 +345,7 @@ export function SatelliteMapViewer({
                   onError={() => setImageUrl(null)}
                 />
 
-                {/* Field Overlays */}
-                {detectedFields.map(field => (
-                  <div
-                    key={field.id}
-                    className="absolute border-2 border-yellow-400 bg-yellow-400 bg-opacity-20"
-                    style={{
-                      left: '20%',
-                      top: '20%',
-                      width: '25%',
-                      height: '20%',
-                      pointerEvents: 'none'
-                    }}
-                  >
-                    <div className="absolute -top-6 left-0 bg-yellow-500 text-white px-2 py-1 rounded text-xs">
-                      {field.area.toFixed(1)} acres
-                    </div>
-                  </div>
-                ))}
+                {/* Field Overlays - Removed random yellow boundaries */}
 
                 {/* Boundary Pins */}
                 {boundaryPins.map((pin, index) => {
@@ -331,7 +359,7 @@ export function SatelliteMapViewer({
                       className="absolute w-6 h-6 -ml-3 -mt-3 cursor-pointer"
                       style={{ left: `${x}%`, top: `${y}%` }}
                     >
-                      <div className="w-6 h-6 bg-blue-600 border-2 border-white rounded-full flex items-center justify-center shadow-lg">
+                      <div className="w-6 h-6 bg-green-700 border-2 border-white rounded-full flex items-center justify-center shadow-lg">
                         <span className="text-white text-xs font-bold">{index + 1}</span>
                       </div>
                     </div>
@@ -359,7 +387,7 @@ export function SatelliteMapViewer({
                           y1={`${y1}%`}
                           x2={`${x2}%`}
                           y2={`${y2}%`}
-                          stroke="#2563eb"
+                          stroke="#15803d"
                           strokeWidth="2"
                           strokeDasharray="4,4"
                         />
@@ -372,7 +400,7 @@ export function SatelliteMapViewer({
                         y1={`${((calculateBoundingBox(location.lat, location.lng, zoom).north - boundaryPins[boundaryPins.length - 1].lat) / (calculateBoundingBox(location.lat, location.lng, zoom).north - calculateBoundingBox(location.lat, location.lng, zoom).south)) * 100}%`}
                         x2={`${((boundaryPins[0].lng - calculateBoundingBox(location.lat, location.lng, zoom).west) / (calculateBoundingBox(location.lat, location.lng, zoom).east - calculateBoundingBox(location.lat, location.lng, zoom).west)) * 100}%`}
                         y2={`${((calculateBoundingBox(location.lat, location.lng, zoom).north - boundaryPins[0].lat) / (calculateBoundingBox(location.lat, location.lng, zoom).north - calculateBoundingBox(location.lat, location.lng, zoom).south)) * 100}%`}
-                        stroke="#2563eb"
+                        stroke="#15803d"
                         strokeWidth="2"
                         strokeDasharray="4,4"
                       />
@@ -380,10 +408,14 @@ export function SatelliteMapViewer({
                   </svg>
                 )}
 
-                {/* Center Crosshair */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="w-8 h-8 border-2 border-red-500 bg-red-500 bg-opacity-20 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                {/* Center Crosshair - Professional and Subtle */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="relative">
+                    {/* Subtle crosshair lines */}
+                    <div className="absolute w-6 h-0.5 bg-gray-800 bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
+                    <div className="absolute w-0.5 h-6 bg-gray-800 bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
+                    {/* Center dot */}
+                    <div className="w-2 h-2 bg-gray-800 bg-opacity-80 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
                   </div>
                 </div>
               </>
@@ -480,12 +512,12 @@ export function SatelliteMapViewer({
                   </div>
                 )}
                 {boundaryPins.length > 0 && (
-                  <div className="text-xs text-blue-600">
+                  <div className="text-xs text-green-700">
                     {boundaryPins.length} boundary pins • {isMarkingBoundary ? 'Click to add more' : 'Boundary marked'}
                   </div>
                 )}
                 {isMarkingBoundary && (
-                  <div className="text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded">
+                  <div className="text-xs text-green-800 bg-green-50 px-2 py-1 rounded border border-green-200">
                     Click on the map to drop boundary pins
                   </div>
                 )}

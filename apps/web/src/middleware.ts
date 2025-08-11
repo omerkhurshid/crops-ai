@@ -65,7 +65,7 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.vercel.app *.nextjs.org; " +
     "style-src 'self' 'unsafe-inline' fonts.googleapis.com; " +
     "font-src 'self' fonts.gstatic.com; " +
-    "img-src 'self' data: blob: *.openweathermap.org *.planet.com *.sentinel-hub.com *.arcgisonline.com *.esri.com mt*.google.com mt*.googleapis.com; " +
+    "img-src 'self' data: blob: *.openweathermap.org *.planet.com *.sentinel-hub.com *.arcgisonline.com *.esri.com mt0.google.com mt1.google.com mt2.google.com mt3.google.com *.googleapis.com; " +
     "connect-src 'self' *.supabase.co api.openweathermap.org services.sentinel-hub.com api.planet.com *.cmegroup.com quickstats.nass.usda.gov; " +
     "frame-ancestors 'none';"
   )

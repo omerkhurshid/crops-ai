@@ -24,8 +24,10 @@ export const updateUserSchema = z.object({
 // Farm validation schemas
 export const createFarmSchema = z.object({
   name: z.string().min(1, 'Farm name is required'),
-  farmType: z.string().optional(), // Will be ignored until schema migration
-  description: z.string().optional(), // Will be ignored until schema migration
+  farmType: z.enum(['crops', 'livestock', 'mixed']).default('crops'),
+  primaryProduct: z.string().optional(),
+  metadata: z.any().optional(), // For storing secondary products and other flexible data
+  description: z.string().optional(),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
   address: z.string().optional(),

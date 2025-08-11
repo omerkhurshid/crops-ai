@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Navbar } from '../../components/navigation/navbar'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
+import { AdvancedVisualizations } from '../../components/crop-health/advanced-visualizations'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
@@ -9,7 +10,7 @@ import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { prisma } from '../../lib/prisma'
-import { Leaf, Satellite, Brain, Activity, Settings, Zap } from 'lucide-react'
+import { Leaf, Satellite, Brain, Activity, Settings, Zap, BarChart3 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -165,6 +166,24 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
         {/* Health Dashboard with Modern Wrapper */}
         <div className="space-y-8">
           <HealthDashboard farmId={farmId} />
+        </div>
+
+        {/* Advanced Visualizations Section */}
+        <div className="space-y-8">
+          <ModernCard variant="floating">
+            <ModernCardHeader>
+              <ModernCardTitle className="text-sage-800 flex items-center gap-3">
+                <BarChart3 className="h-6 w-6" />
+                Advanced Health Analytics
+              </ModernCardTitle>
+              <ModernCardDescription>
+                In-depth visualization and trend analysis of your crop health data
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <AdvancedVisualizations farmId={farmId} />
+            </ModernCardContent>
+          </ModernCard>
         </div>
       </main>
     </div>

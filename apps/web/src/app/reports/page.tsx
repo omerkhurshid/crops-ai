@@ -2,7 +2,13 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Navbar } from '../../components/navigation/navbar'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
-import { ComingSoon } from '../../components/ui/coming-soon'
+import { FarmPerformanceReport } from '../../components/reports/farm-performance-report'
+import { WeatherImpactReport } from '../../components/reports/weather-impact-report' 
+import { CropHealthReport } from '../../components/reports/crop-health-report'
+import { FinancialReport } from '../../components/reports/financial-report'
+import { SustainabilityReport } from '../../components/reports/sustainability-report'
+import { CustomReportBuilder } from '../../components/reports/custom-report-builder'
+import { RecentReports } from '../../components/reports/recent-reports'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
@@ -55,11 +61,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Performance Analytics" 
-                description="Yield analysis, cost-benefit breakdowns, and resource utilization metrics"
-              />
+              <FarmPerformanceReport farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -77,11 +79,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Weather Analytics" 
-                description="Rainfall vs irrigation, temperature stress analysis, and weather-yield correlation"
-              />
+              <WeatherImpactReport farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -99,11 +97,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Health Reports" 
-                description="NDVI trends, stress detection areas, and growth pattern analysis"
-              />
+              <CropHealthReport farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -121,11 +115,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Financial Reports" 
-                description="Revenue by crop type, operating costs, and profit margin analysis"
-              />
+              <FinancialReport farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -143,11 +133,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Sustainability Reports" 
-                description="Water usage efficiency, carbon footprint, and soil health indicators"
-              />
+              <SustainabilityReport farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -165,11 +151,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <ComingSoon 
-                variant="compact" 
-                title="Report Builder" 
-                description="Choose date ranges, select farms/fields, and pick custom metrics to include"
-              />
+              <CustomReportBuilder farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
         </div>
@@ -180,10 +162,7 @@ export default async function ReportsPage() {
             <ModernCardDescription>Your previously generated reports</ModernCardDescription>
           </ModernCardHeader>
           <ModernCardContent>
-            <ComingSoon 
-              title="Report History"
-              description="Your generated reports will appear here once the reporting system is implemented. You'll be able to view, download, and share your agricultural analytics reports."
-            />
+            <RecentReports farmId={user.id} />
           </ModernCardContent>
         </ModernCard>
       </main>

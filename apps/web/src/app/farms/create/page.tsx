@@ -247,6 +247,7 @@ export default function CreateFarmPage() {
           latitude: farm.location.lat,
           longitude: farm.location.lng,
           address: farm.location.address || '',
+          country: 'US', // Default to US, in production would determine from coordinates
           totalArea: farm.totalArea,
           primaryProduct: farm.primaryProduct,
           metadata: {

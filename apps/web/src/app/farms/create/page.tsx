@@ -9,7 +9,8 @@ import { Label } from '../../../components/ui/label'
 import { Badge } from '../../../components/ui/badge'
 import { Navbar } from '../../../components/navigation/navbar'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
-import { LocationMapAdjuster } from '../../../components/farm/location-map-adjuster'
+import { SatelliteMapViewer } from '../../../components/farm/satellite-map-viewer'
+import { getCropRecommendations, getLivestockRecommendations } from '../../../lib/farm/regional-crops'
 import { 
   MapPin, Locate, Search, ChevronRight, CheckCircle, 
   Wheat, Users, Loader2, Navigation, Globe
@@ -45,39 +46,81 @@ export default function CreateFarmPage() {
   const [detectingLocation, setDetectingLocation] = useState(false)
   const [locationInput, setLocationInput] = useState('')
   const [showMap, setShowMap] = useState(false)
-  const [showMapAdjuster, setShowMapAdjuster] = useState(false)
+  const [showSatelliteViewer, setShowSatelliteViewer] = useState(false)
+  const [regionalRecommendations, setRegionalRecommendations] = useState<any>(null)
   const router = useRouter()
 
-  // Popular crops and livestock for quick selection
-  const cropOptions = {
-    primary: [
-      { id: 'corn', name: 'Corn', icon: '🌽', season: 'Mar-Oct' },
-      { id: 'soybeans', name: 'Soybeans', icon: '🌱', season: 'Apr-Sep' },
-      { id: 'wheat', name: 'Wheat', icon: '🌾', season: 'Sep-Jul' },
-      { id: 'cotton', name: 'Cotton', icon: '🏵️', season: 'Apr-Nov' }
-    ],
-    secondary: [
-      { id: 'alfalfa', name: 'Alfalfa', icon: '🌿' },
-      { id: 'barley', name: 'Barley', icon: '🌾' },
-      { id: 'rice', name: 'Rice', icon: '🌾' },
-      { id: 'vegetables', name: 'Vegetables', icon: '🥬' }
-    ]
+  // Get crop options from regional recommendations or fallback to defaults
+  const getCropOptions = () => {
+    if (regionalRecommendations && farm.type === 'crops') {
+      return {
+        primary: regionalRecommendations.primary.slice(0, 4).map((crop: any) => ({
+          id: crop.id,
+          name: crop.name,
+          icon: crop.icon,
+          season: `${crop.plantingWindow.start.replace('-', '/')} - ${crop.harvestWindow.end.replace('-', '/')}`
+        })),
+        secondary: regionalRecommendations.secondary.slice(0, 4).map((crop: any) => ({
+          id: crop.id,
+          name: crop.name,
+          icon: crop.icon
+        }))
+      }
+    }
+    // Fallback options
+    return {
+      primary: [
+        { id: 'corn-field', name: 'Corn', icon: '🌽', season: 'Mar-Oct' },
+        { id: 'soybeans', name: 'Soybeans', icon: '🌱', season: 'Apr-Sep' },
+        { id: 'winter-wheat', name: 'Wheat', icon: '🌾', season: 'Sep-Jul' },
+        { id: 'sunflowers', name: 'Sunflowers', icon: '🌻', season: 'Apr-Nov' }
+      ],
+      secondary: [
+        { id: 'sweet-corn', name: 'Sweet Corn', icon: '🌽' },
+        { id: 'tomatoes', name: 'Tomatoes', icon: '🍅' },
+        { id: 'hemp-industrial', name: 'Hemp', icon: '🌿' },
+        { id: 'vegetables', name: 'Vegetables', icon: '🥬' }
+      ]
+    }
   }
 
-  const livestockOptions = {
-    primary: [
-      { id: 'cattle-beef', name: 'Beef Cattle', icon: '🐄', typical: '50-500 head' },
-      { id: 'cattle-dairy', name: 'Dairy Cattle', icon: '🐄', typical: '100-1000 head' },
-      { id: 'poultry', name: 'Poultry', icon: '🐔', typical: '1000+ birds' },
-      { id: 'swine', name: 'Swine', icon: '🐖', typical: '100-5000 head' }
-    ],
-    secondary: [
-      { id: 'sheep', name: 'Sheep', icon: '🐑' },
-      { id: 'goats', name: 'Goats', icon: '🐐' },
-      { id: 'horses', name: 'Horses', icon: '🐴' },
-      { id: 'mixed', name: 'Mixed Livestock', icon: '🚜' }
-    ]
+  const cropOptions = getCropOptions()
+
+  // Get livestock options from regional recommendations or fallback to defaults
+  const getLivestockOptions = () => {
+    if (regionalRecommendations && farm.type === 'livestock') {
+      return {
+        primary: regionalRecommendations.primary.map((livestock: any) => ({
+          id: livestock.id,
+          name: livestock.name,
+          icon: livestock.icon,
+          typical: livestock.suitability === 'high' ? 'Highly Recommended' : 'Suitable'
+        })),
+        secondary: regionalRecommendations.secondary.map((livestock: any) => ({
+          id: livestock.id,
+          name: livestock.name,
+          icon: livestock.icon
+        }))
+      }
+    }
+    // Fallback options
+    return {
+      primary: [
+        { id: 'cattle-beef', name: 'Beef Cattle', icon: '🐄', typical: '50-500 head' },
+        { id: 'cattle-dairy', name: 'Dairy Cattle', icon: '🐄', typical: '100-1000 head' },
+        { id: 'poultry', name: 'Poultry', icon: '🐔', typical: '1000+ birds' },
+        { id: 'swine', name: 'Swine', icon: '🐖', typical: '100-5000 head' }
+      ],
+      secondary: [
+        { id: 'sheep', name: 'Sheep', icon: '🐑' },
+        { id: 'goats', name: 'Goats', icon: '🐐' },
+        { id: 'horses', name: 'Horses', icon: '🐴' },
+        { id: 'mixed', name: 'Mixed Livestock', icon: '🚜' }
+      ]
+    }
   }
+
+  const livestockOptions = getLivestockOptions()
 
   // Get user's current location
   const getCurrentLocation = () => {
@@ -149,20 +192,32 @@ export default function CreateFarmPage() {
   }
 
   const handleLocationConfirm = () => {
-    setShowMapAdjuster(true)
+    setShowSatelliteViewer(true)
+    // Get regional crop/livestock recommendations
+    if (farm.type === 'crops') {
+      const recommendations = getCropRecommendations(farm.location.lat, farm.location.lng, 'crops')
+      setRegionalRecommendations(recommendations)
+    } else {
+      const recommendations = getLivestockRecommendations(farm.location.lat, farm.location.lng)
+      setRegionalRecommendations(recommendations)
+    }
   }
 
-  const handleMapAdjustmentComplete = (adjustedLocation: { lat: number; lng: number; zoom: number }) => {
+  const handleSatelliteViewerComplete = (adjustedLocation: { lat: number; lng: number; zoom: number }, detectedFields?: Array<any>) => {
     setFarm(prev => ({
       ...prev,
       location: {
         ...prev.location,
         lat: adjustedLocation.lat,
         lng: adjustedLocation.lng
-      }
+      },
+      detectedFields: detectedFields || prev.detectedFields,
+      totalArea: detectedFields ? detectedFields.reduce((sum, field) => sum + field.area, 0) : prev.totalArea
     }))
-    detectFields()
-    setShowMapAdjuster(false)
+    if (!detectedFields) {
+      detectFields() // Fallback detection if satellite viewer didn't provide fields
+    }
+    setShowSatelliteViewer(false)
     setCurrentStep(2)
   }
 
@@ -467,7 +522,7 @@ export default function CreateFarmPage() {
                   Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {(farm.type === 'crops' ? cropOptions.primary : livestockOptions.primary).map((option) => (
+                  {(farm.type === 'crops' ? cropOptions.primary : livestockOptions.primary).map((option: any) => (
                     <button
                       key={option.id}
                       onClick={() => handleProductSelection(option.id, true)}
@@ -496,7 +551,7 @@ export default function CreateFarmPage() {
                   Secondary {farm.type === 'crops' ? 'Crops' : 'Livestock'} (Optional)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {(farm.type === 'crops' ? cropOptions.secondary : livestockOptions.secondary).map((option) => (
+                  {(farm.type === 'crops' ? cropOptions.secondary : livestockOptions.secondary).map((option: any) => (
                     <button
                       key={option.id}
                       onClick={() => handleProductSelection(option.id, false)}
@@ -518,11 +573,16 @@ export default function CreateFarmPage() {
               {/* Smart Recommendations */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-800">
-                  <strong>Regional Insight:</strong> Based on your location, 
-                  {farm.type === 'crops' 
+                  <strong>Regional Insight:</strong> {regionalRecommendations ? regionalRecommendations.reasoning : `Based on your location, 
+                  ${farm.type === 'crops' 
                     ? ' corn and soybeans are the most profitable crops in your area this season.'
-                    : ' beef cattle operations have shown the highest returns in your region.'}
+                    : ' beef cattle operations have shown the highest returns in your region.'}`}
                 </p>
+                {regionalRecommendations?.region && (
+                  <p className="text-xs text-blue-600 mt-2">
+                    Agricultural Region: {regionalRecommendations.region}
+                  </p>
+                )}
               </div>
 
               {/* Navigation */}
@@ -584,7 +644,7 @@ export default function CreateFarmPage() {
                     <span className="text-gray-600">Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}:</span>
                     <p className="font-medium">
                       {farm.primaryProduct && (farm.type === 'crops' ? cropOptions : livestockOptions).primary.find(
-                        p => p.id === farm.primaryProduct
+                        (p: any) => p.id === farm.primaryProduct
                       )?.name}
                     </p>
                   </div>
@@ -678,15 +738,56 @@ export default function CreateFarmPage() {
         )}
       </main>
 
-      {/* Location Map Adjuster Modal */}
-      {showMapAdjuster && (
+      {/* Satellite Map Viewer Modal */}
+      {showSatelliteViewer && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
           <div className="min-h-screen px-4 py-8">
-            <LocationMapAdjuster
-              initialLocation={farm.location}
-              onLocationConfirm={handleMapAdjustmentComplete}
-              onBack={() => setShowMapAdjuster(false)}
-            />
+            <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-light text-sage-800">Adjust Your Farm Location</h2>
+                    <p className="text-sm text-gray-600 mt-1">
+                      View satellite imagery, adjust location, and detect field boundaries
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowSatelliteViewer(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+                
+                <SatelliteMapViewer
+                  initialLocation={farm.location}
+                  onLocationChange={(location) => setFarm(prev => ({ ...prev, location }))}
+                  onFieldsDetected={(fields) => setFarm(prev => ({ 
+                    ...prev, 
+                    detectedFields: fields,
+                    totalArea: fields.reduce((sum, field) => sum + field.area, 0)
+                  }))}
+                  showFieldDetection={true}
+                  height="600px"
+                />
+                
+                <div className="mt-6 flex justify-between">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowSatelliteViewer(false)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    onClick={() => handleSatelliteViewerComplete({ ...farm.location, zoom: 15 }, farm.detectedFields)}
+                    className="bg-sage-600 hover:bg-sage-700"
+                  >
+                    Continue with This Location
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

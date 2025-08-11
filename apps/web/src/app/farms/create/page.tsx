@@ -51,6 +51,7 @@ export default function CreateFarmPage() {
   const [locationInput, setLocationInput] = useState('')
   const [showMap, setShowMap] = useState(false)
   const [regionalRecommendations, setRegionalRecommendations] = useState<any>(null)
+  const [loadingRecommendations, setLoadingRecommendations] = useState(false)
   const [livestockCounts, setLivestockCounts] = useState<Record<string, number>>({})
   const router = useRouter()
 
@@ -94,6 +95,27 @@ export default function CreateFarmPage() {
   };
 
   const cropsByCategory = getCropsByCategory();
+
+  // Auto-fetch regional recommendations when location changes
+  useEffect(() => {
+    if (farm.location.lat !== 0 && farm.location.lng !== 0) {
+      setLoadingRecommendations(true)
+      // Small delay to show loading state
+      setTimeout(() => {
+        if (farm.type === 'crops') {
+          const recommendations = getCropRecommendations(farm.location.lat, farm.location.lng, 'crops')
+          setRegionalRecommendations(recommendations)
+        } else {
+          const recommendations = getLivestockRecommendations(farm.location.lat, farm.location.lng)
+          setRegionalRecommendations(recommendations)
+        }
+        setLoadingRecommendations(false)
+      }, 500)
+    } else {
+      setRegionalRecommendations(null)
+      setLoadingRecommendations(false)
+    }
+  }, [farm.location.lat, farm.location.lng, farm.type])
 
   // Get crop options from regional recommendations or fallback to defaults
   const getCropOptions = () => {
@@ -560,17 +582,7 @@ export default function CreateFarmPage() {
                   Cancel
                 </Button>
                 <Button
-                  onClick={() => {
-                    // Get recommendations and move to next step
-                    if (farm.type === 'crops') {
-                      const recommendations = getCropRecommendations(farm.location.lat, farm.location.lng, 'crops')
-                      setRegionalRecommendations(recommendations)
-                    } else {
-                      const recommendations = getLivestockRecommendations(farm.location.lat, farm.location.lng)
-                      setRegionalRecommendations(recommendations)
-                    }
-                    setCurrentStep(2)
-                  }}
+                  onClick={() => setCurrentStep(2)}
                   disabled={!farm.name || !showMap}
                   className="bg-sage-600 hover:bg-sage-700"
                 >
@@ -619,22 +631,36 @@ export default function CreateFarmPage() {
                 {farm.type === 'crops' ? (
                   <div className="space-y-4">
                     {/* Regional Recommendations Banner */}
-                    {regionalRecommendations?.region && (
+                    {(loadingRecommendations || regionalRecommendations?.region) && (
                       <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <MapPin className="h-4 w-4 text-blue-600" />
-                          <p className="text-sm text-blue-800 font-medium">
-                            {regionalRecommendations.region} - Recommended for your area
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                          {regionalRecommendations.primary.slice(0, 4).map((crop: any) => (
-                            <div key={crop.id} className="text-xs bg-white/60 px-2 py-1 rounded">
-                              <span className="font-medium">{crop.name}</span>
-                              <div className="text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                        {loadingRecommendations ? (
+                          <div className="flex items-center space-x-2">
+                            <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
+                            <p className="text-sm text-blue-800">
+                              Analyzing your location for regional crop recommendations...
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center space-x-2 mb-2">
+                              <MapPin className="h-4 w-4 text-blue-600" />
+                              <p className="text-sm text-blue-800 font-medium">
+                                {regionalRecommendations.region} - Recommended for your location
+                              </p>
+                              <Badge variant="outline" className="text-xs ml-auto">
+                                {farm.location.lat.toFixed(2)}°, {farm.location.lng.toFixed(2)}°
+                              </Badge>
                             </div>
-                          ))}
-                        </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                              {regionalRecommendations.primary.slice(0, 4).map((crop: any) => (
+                                <div key={crop.id} className="text-xs bg-white/60 px-2 py-1 rounded">
+                                  <span className="font-medium">{crop.name}</span>
+                                  <div className="text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
                       </div>
                     )}
                     
@@ -887,12 +913,18 @@ export default function CreateFarmPage() {
                   <div className="flex-1">
                     <h4 className="text-base font-semibold text-blue-900 mb-2">
                       🤖 AI Regional Analysis
+                      {farm.location.lat !== 0 && farm.location.lng !== 0 && (
+                        <span className="text-xs font-normal text-blue-600 ml-2">
+                          ({farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)})
+                        </span>
+                      )}
                     </h4>
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      {regionalRecommendations ? regionalRecommendations.reasoning : `Based on your location, 
-                      ${farm.type === 'crops' 
-                        ? ' corn and soybeans are the most profitable crops in your area this season.'
-                        : ' beef cattle operations have shown the highest returns in your region.'}`}
+                      {regionalRecommendations ? regionalRecommendations.reasoning : 
+                        farm.location.lat !== 0 && farm.location.lng !== 0 ? 
+                          `Analyzing agricultural conditions for your location at ${farm.location.lat.toFixed(2)}, ${farm.location.lng.toFixed(2)}...` :
+                          `Please set your farm location to receive personalized regional insights and crop recommendations.`
+                      }
                       {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
                         ` With ${livestockCounts[farm.primaryProduct!]} head, you'll need approximately ${Math.ceil(farm.totalArea * 0.5)} acres of pasture for rotational grazing.`
                       )}

@@ -79,20 +79,13 @@ export const POST = apiMiddleware.protected(
       const farmData = validateRequestBody(createFarmSchema, body)
       console.log('Validated farm data:', JSON.stringify(farmData, null, 2))
 
-      // Map frontend farmType to enum values
-      const farmTypeMap: Record<string, string> = {
-        'crops': 'CROPS',
-        'livestock': 'LIVESTOCK',
-        'mixed': 'MIXED'
-      }
-      
       // Extract and prepare data
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
       
       const finalData = {
         ...dbFarmData,
         ownerId: request.user.id,
-        farmType: (farmData.farmType ? farmTypeMap[farmData.farmType] : null) || 'CROPS',
+        // Remove farmType - not in database schema
         primaryProduct: primaryProduct || null,
         metadata: metadata || null,
         location: dbFarmData.address || `${dbFarmData.name} Farm` // Add location field with fallback

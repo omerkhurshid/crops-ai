@@ -243,7 +243,6 @@ export default function CreateFarmPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: farm.name,
-          farmType: farm.type,
           latitude: farm.location.lat,
           longitude: farm.location.lng,
           address: farm.location.address || '',
@@ -251,6 +250,7 @@ export default function CreateFarmPage() {
           totalArea: farm.totalArea,
           primaryProduct: farm.primaryProduct,
           metadata: {
+            farmType: farm.type, // Store farm type in metadata since it's not in schema
             detectedFields: farm.detectedFields?.length || 0,
             secondaryProducts: farm.secondaryProducts
           }

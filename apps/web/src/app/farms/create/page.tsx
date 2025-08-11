@@ -521,6 +521,13 @@ export default function CreateFarmPage() {
                 <Label className="text-base font-medium mb-3 block">
                   Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
                 </Label>
+                {regionalRecommendations?.region && (
+                  <div className="mb-3 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-800 font-medium">
+                      📍 {regionalRecommendations.region} - Top Recommendations
+                    </p>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(farm.type === 'crops' ? cropOptions.primary : livestockOptions.primary).map((option: any) => (
                     <button
@@ -540,6 +547,11 @@ export default function CreateFarmPage() {
                       {'typical' in option && option.typical && (
                         <div className="text-xs text-gray-600 mt-1">{option.typical}</div>
                       )}
+                      {regionalRecommendations && farm.type === 'crops' && (
+                        <div className="text-xs text-green-600 mt-1 font-medium">
+                          Recommended
+                        </div>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -550,6 +562,22 @@ export default function CreateFarmPage() {
                 <Label className="text-base font-medium mb-3 block">
                   Secondary {farm.type === 'crops' ? 'Crops' : 'Livestock'} (Optional)
                 </Label>
+                {farm.type === 'crops' && regionalRecommendations?.seasonal && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Seasonal Options</h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {Object.entries(regionalRecommendations.seasonal).map(([season, crops]: [string, any]) => (
+                        <div key={season} className="bg-gray-50 p-2 rounded">
+                          <span className="font-medium capitalize">{season}:</span>
+                          <div className="mt-1">
+                            {crops.slice(0, 2).map((crop: any) => crop.name).join(', ')}
+                            {crops.length > 2 && ` +${crops.length - 2} more`}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(farm.type === 'crops' ? cropOptions.secondary : livestockOptions.secondary).map((option: any) => (
                     <button
@@ -563,7 +591,12 @@ export default function CreateFarmPage() {
                     >
                       <div className="flex items-center space-x-2">
                         <span className="text-xl">{option.icon}</span>
-                        <span className="text-sm">{option.name}</span>
+                        <div className="text-left">
+                          <div className="text-sm font-medium">{option.name}</div>
+                          {regionalRecommendations && farm.type === 'crops' && regionalRecommendations.secondary.find((c: any) => c.id === option.id) && (
+                            <div className="text-xs text-blue-600">Regional match</div>
+                          )}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -767,7 +800,23 @@ export default function CreateFarmPage() {
                     detectedFields: fields,
                     totalArea: fields.reduce((sum, field) => sum + field.area, 0)
                   }))}
+                  onBoundariesSet={(boundaries) => {
+                    // Convert boundaries to a detected field for area calculation
+                    if (boundaries.length >= 3) {
+                      const mockField = {
+                        id: 'user-marked-field',
+                        area: 25.0, // Rough estimate - in production would calculate actual area
+                        boundaries
+                      };
+                      setFarm(prev => ({
+                        ...prev,
+                        detectedFields: [mockField],
+                        totalArea: mockField.area
+                      }));
+                    }
+                  }}
                   showFieldDetection={true}
+                  showBoundaryMarking={true}
                   height="600px"
                 />
                 

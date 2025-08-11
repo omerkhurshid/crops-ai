@@ -6,7 +6,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { 
   ZoomIn, ZoomOut, Satellite, Map as MapIcon, Loader2, 
-  Calendar, RefreshCw, Download, Info, Settings
+  Calendar, RefreshCw, Download, Info, Settings, MapPin
 } from 'lucide-react';
 
 interface SatelliteMapViewerProps {
@@ -17,7 +17,9 @@ interface SatelliteMapViewerProps {
   };
   onLocationChange?: (location: { lat: number; lng: number; zoom: number }) => void;
   onFieldsDetected?: (fields: Array<{ id: string; area: number; boundaries: Array<{ lat: number; lng: number }> }>) => void;
+  onBoundariesSet?: (boundaries: Array<{ lat: number; lng: number }>) => void;
   showFieldDetection?: boolean;
+  showBoundaryMarking?: boolean;
   height?: string;
 }
 
@@ -98,7 +100,9 @@ export function SatelliteMapViewer({
   initialLocation,
   onLocationChange,
   onFieldsDetected,
+  onBoundariesSet,
   showFieldDetection = false,
+  showBoundaryMarking = false,
   height = "500px"
 }: SatelliteMapViewerProps) {
   const [location, setLocation] = useState(initialLocation);
@@ -110,6 +114,8 @@ export function SatelliteMapViewer({
   const [cloudCoverage, setCloudCoverage] = useState<number | null>(null);
   const [detectedFields, setDetectedFields] = useState<Array<any>>([]);
   const [detecting, setDetecting] = useState(false);
+  const [boundaryPins, setBoundaryPins] = useState<Array<{ lat: number; lng: number; id: string }>>([]);
+  const [isMarkingBoundary, setIsMarkingBoundary] = useState(false);
 
   // Calculate bounding box based on location and zoom
   const calculateBoundingBox = useCallback((lat: number, lng: number, zoom: number) => {
@@ -159,15 +165,18 @@ export function SatelliteMapViewer({
         setImageDate(data.acquisitionDate);
         setCloudCoverage(data.cloudCoverage);
       } else {
-        // Fallback to a placeholder satellite-style image
-        setImageUrl(`https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${location.lng},${location.lat},${zoom}/512x512?access_token=pk.placeholder`);
+        // Use more reliable satellite imagery fallback
+        const esriUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${bbox.west},${bbox.south},${bbox.east},${bbox.north}&bboxSR=4326&imageSR=4326&size=512,512&f=image&format=jpg`;
+        setImageUrl(esriUrl);
         setImageDate(toDate);
         setCloudCoverage(5);
       }
     } catch (error) {
       console.error('Error fetching satellite imagery:', error);
-      // Fallback to OpenStreetMap satellite
-      setImageUrl(`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${Math.floor((1 - (location.lat + 90) / 180) * (1 << zoom))}/${Math.floor((location.lng + 180) / 360 * (1 << zoom))}`);
+      // More reliable fallback to ESRI World Imagery
+      const fallbackBbox = calculateBoundingBox(location.lat, location.lng, zoom);
+      const esriUrl = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=${fallbackBbox.west},${fallbackBbox.south},${fallbackBbox.east},${fallbackBbox.north}&bboxSR=4326&imageSR=4326&size=512,512&f=image&format=jpg`;
+      setImageUrl(esriUrl);
       setImageDate(new Date().toISOString().split('T')[0]);
       setCloudCoverage(null);
     } finally {
@@ -253,6 +262,46 @@ export function SatelliteMapViewer({
     onLocationChange?.({ ...newLocation, zoom });
   };
 
+  // Handle map click for pin dropping
+  const handleMapClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!isMarkingBoundary) return;
+    
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    // Convert pixel coordinates to lat/lng (rough approximation)
+    const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
+    const lat = bbox.north - (y / rect.height) * (bbox.north - bbox.south);
+    const lng = bbox.west + (x / rect.width) * (bbox.east - bbox.west);
+    
+    const newPin = {
+      lat,
+      lng,
+      id: `pin-${Date.now()}`
+    };
+    
+    setBoundaryPins(prev => [...prev, newPin]);
+    
+    // If we have 3+ pins, we can form a boundary
+    if (boundaryPins.length >= 2) {
+      const boundaries = [...boundaryPins, newPin].map(pin => ({ lat: pin.lat, lng: pin.lng }));
+      onBoundariesSet?.(boundaries);
+    }
+  };
+
+  const clearBoundaryPins = () => {
+    setBoundaryPins([]);
+    onBoundariesSet?.([]);
+  };
+
+  const toggleBoundaryMarking = () => {
+    setIsMarkingBoundary(prev => !prev);
+    if (isMarkingBoundary) {
+      clearBoundaryPins();
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -290,8 +339,9 @@ export function SatelliteMapViewer({
 
           {/* Map Container */}
           <div 
-            className="relative bg-gray-100 rounded-lg overflow-hidden border"
+            className={`relative bg-gray-100 rounded-lg overflow-hidden border ${isMarkingBoundary ? 'cursor-crosshair' : 'cursor-grab'}`}
             style={{ height }}
+            onClick={handleMapClick}
           >
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
@@ -328,6 +378,67 @@ export function SatelliteMapViewer({
                     </div>
                   </div>
                 ))}
+
+                {/* Boundary Pins */}
+                {boundaryPins.map((pin, index) => {
+                  const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
+                  const x = ((pin.lng - bbox.west) / (bbox.east - bbox.west)) * 100;
+                  const y = ((bbox.north - pin.lat) / (bbox.north - bbox.south)) * 100;
+                  
+                  return (
+                    <div
+                      key={pin.id}
+                      className="absolute w-6 h-6 -ml-3 -mt-3 cursor-pointer"
+                      style={{ left: `${x}%`, top: `${y}%` }}
+                    >
+                      <div className="w-6 h-6 bg-blue-600 border-2 border-white rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-white text-xs font-bold">{index + 1}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Boundary Lines */}
+                {boundaryPins.length > 1 && (
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                    {boundaryPins.map((pin, index) => {
+                      if (index === 0) return null;
+                      
+                      const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
+                      const prevPin = boundaryPins[index - 1];
+                      
+                      const x1 = ((prevPin.lng - bbox.west) / (bbox.east - bbox.west)) * 100;
+                      const y1 = ((bbox.north - prevPin.lat) / (bbox.north - bbox.south)) * 100;
+                      const x2 = ((pin.lng - bbox.west) / (bbox.east - bbox.west)) * 100;
+                      const y2 = ((bbox.north - pin.lat) / (bbox.north - bbox.south)) * 100;
+                      
+                      return (
+                        <line
+                          key={`line-${index}`}
+                          x1={`${x1}%`}
+                          y1={`${y1}%`}
+                          x2={`${x2}%`}
+                          y2={`${y2}%`}
+                          stroke="#2563eb"
+                          strokeWidth="2"
+                          strokeDasharray="4,4"
+                        />
+                      );
+                    })}
+                    {/* Close the boundary if we have 3+ pins */}
+                    {boundaryPins.length >= 3 && (
+                      <line
+                        x1={`${((boundaryPins[boundaryPins.length - 1].lng - calculateBoundingBox(location.lat, location.lng, zoom).west) / (calculateBoundingBox(location.lat, location.lng, zoom).east - calculateBoundingBox(location.lat, location.lng, zoom).west)) * 100}%`}
+                        y1={`${((calculateBoundingBox(location.lat, location.lng, zoom).north - boundaryPins[boundaryPins.length - 1].lat) / (calculateBoundingBox(location.lat, location.lng, zoom).north - calculateBoundingBox(location.lat, location.lng, zoom).south)) * 100}%`}
+                        x2={`${((boundaryPins[0].lng - calculateBoundingBox(location.lat, location.lng, zoom).west) / (calculateBoundingBox(location.lat, location.lng, zoom).east - calculateBoundingBox(location.lat, location.lng, zoom).west)) * 100}%`}
+                        y2={`${((calculateBoundingBox(location.lat, location.lng, zoom).north - boundaryPins[0].lat) / (calculateBoundingBox(location.lat, location.lng, zoom).north - calculateBoundingBox(location.lat, location.lng, zoom).south)) * 100}%`}
+                        stroke="#2563eb"
+                        strokeWidth="2"
+                        strokeDasharray="4,4"
+                      />
+                    )}
+                  </svg>
+                )}
 
                 {/* Center Crosshair */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -383,6 +494,31 @@ export function SatelliteMapViewer({
                   )}
                 </Button>
               )}
+              
+              {showBoundaryMarking && (
+                <div className="space-y-2">
+                  <Button
+                    size="sm"
+                    variant={isMarkingBoundary ? "default" : "secondary"}
+                    onClick={toggleBoundaryMarking}
+                    className="bg-white shadow-md"
+                    title={isMarkingBoundary ? "Stop marking boundary" : "Start marking boundary"}
+                  >
+                    <MapPin className="h-4 w-4" />
+                  </Button>
+                  {boundaryPins.length > 0 && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={clearBoundaryPins}
+                      className="bg-white shadow-md"
+                      title="Clear all pins"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Info Overlay */}
@@ -400,6 +536,16 @@ export function SatelliteMapViewer({
                 {detectedFields.length > 0 && (
                   <div className="text-xs text-green-600">
                     {detectedFields.length} fields detected • {detectedFields.reduce((sum, f) => sum + f.area, 0).toFixed(1)} acres
+                  </div>
+                )}
+                {boundaryPins.length > 0 && (
+                  <div className="text-xs text-blue-600">
+                    {boundaryPins.length} boundary pins • {isMarkingBoundary ? 'Click to add more' : 'Boundary marked'}
+                  </div>
+                )}
+                {isMarkingBoundary && (
+                  <div className="text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded">
+                    Click on the map to drop boundary pins
                   </div>
                 )}
               </div>

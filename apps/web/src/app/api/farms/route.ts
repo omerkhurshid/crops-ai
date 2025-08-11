@@ -79,15 +79,20 @@ export const POST = apiMiddleware.protected(
       const farmData = validateRequestBody(createFarmSchema, body)
       console.log('Validated farm data:', JSON.stringify(farmData, null, 2))
 
-      // Extract and prepare data
+      // Extract and prepare data - remove fields not in database schema
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
+      
+      // Combine all non-schema fields into metadata
+      const combinedMetadata = {
+        ...(metadata || {}),
+        primaryProduct: primaryProduct || null
+      }
       
       const finalData = {
         ...dbFarmData,
         ownerId: request.user.id,
-        // Remove farmType - not in database schema
-        primaryProduct: primaryProduct || null,
-        metadata: metadata || null,
+        // Remove primaryProduct - not in database schema, store in metadata
+        metadata: combinedMetadata,
         location: dbFarmData.address || `${dbFarmData.name} Farm` // Add location field with fallback
       }
       console.log('Final data for database:', JSON.stringify(finalData, null, 2))

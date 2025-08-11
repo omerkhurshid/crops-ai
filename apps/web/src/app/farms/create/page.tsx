@@ -7,10 +7,11 @@ import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Badge } from '../../../components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { Navbar } from '../../../components/navigation/navbar'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
 import { SatelliteMapViewer } from '../../../components/farm/satellite-map-viewer'
-import { getCropRecommendations, getLivestockRecommendations } from '../../../lib/farm/regional-crops'
+import { getCropRecommendations, getLivestockRecommendations, CROP_DATABASE } from '../../../lib/farm/regional-crops'
 import { 
   MapPin, Locate, Search, ChevronRight, CheckCircle, 
   Wheat, Users, Loader2, Navigation, Globe,
@@ -64,6 +65,35 @@ export default function CreateFarmPage() {
     };
     return iconMap[iconName] || <Wheat className={size} />;
   };
+
+  // Get crops organized by category
+  const getCropsByCategory = () => {
+    const categories: Record<string, any[]> = {};
+    
+    Object.values(CROP_DATABASE).forEach(crop => {
+      if (!categories[crop.category]) {
+        categories[crop.category] = [];
+      }
+      categories[crop.category].push({
+        id: crop.id,
+        name: crop.name,
+        scientificName: crop.scientificName,
+        icon: getIconComponent(crop.icon, "h-4 w-4"),
+        yield: crop.yield,
+        plantingWindow: crop.plantingWindow,
+        harvestWindow: crop.harvestWindow
+      });
+    });
+    
+    // Sort crops within each category by name
+    Object.keys(categories).forEach(category => {
+      categories[category].sort((a, b) => a.name.localeCompare(b.name));
+    });
+    
+    return categories;
+  };
+
+  const cropsByCategory = getCropsByCategory();
 
   // Get crop options from regional recommendations or fallback to defaults
   const getCropOptions = () => {
@@ -585,50 +615,114 @@ export default function CreateFarmPage() {
                 <Label className="text-base font-medium mb-3 block">
                   Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
                 </Label>
-                {regionalRecommendations?.region && (
-                  <div className="mb-3 p-3 bg-blue-50 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4 text-blue-600" />
-                      <p className="text-sm text-blue-800 font-medium">
-                        {regionalRecommendations.region} - Top Recommendations
-                      </p>
+                
+                {farm.type === 'crops' ? (
+                  <div className="space-y-4">
+                    {/* Regional Recommendations Banner */}
+                    {regionalRecommendations?.region && (
+                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <MapPin className="h-4 w-4 text-blue-600" />
+                          <p className="text-sm text-blue-800 font-medium">
+                            {regionalRecommendations.region} - Recommended for your area
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                          {regionalRecommendations.primary.slice(0, 4).map((crop: any) => (
+                            <div key={crop.id} className="text-xs bg-white/60 px-2 py-1 rounded">
+                              <span className="font-medium">{crop.name}</span>
+                              <div className="text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Structured Crop Selection */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(cropsByCategory).map(([category, crops]) => (
+                        <div key={category} className="space-y-2">
+                          <Label className="text-sm font-medium text-gray-700 capitalize flex items-center">
+                            {getIconComponent('wheat', 'h-4 w-4')}
+                            <span className="ml-2">{category.replace('_', ' ')} Crops</span>
+                          </Label>
+                          <Select
+                            value={farm.primaryProduct && crops.find(c => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
+                            onValueChange={(value) => handleProductSelection(value, true)}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={`Select ${category} crop`} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {crops.map((crop: any) => (
+                                <SelectItem key={crop.id} value={crop.id}>
+                                  <div className="flex items-center space-x-2">
+                                    <div className="flex-shrink-0">{crop.icon}</div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="text-sm font-medium truncate">{crop.name}</div>
+                                      <div className="text-xs text-gray-500 truncate">{crop.scientificName}</div>
+                                    </div>
+                                    <div className="text-xs text-gray-400">
+                                      {crop.yield?.typical} {crop.yield?.unit}/acre
+                                    </div>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ))}
                     </div>
+
+                    {/* Selected Crop Details */}
+                    {farm.primaryProduct && CROP_DATABASE[farm.primaryProduct] && (
+                      <div className="p-4 bg-sage-50 border border-sage-200 rounded-xl">
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-shrink-0 mt-1">
+                            {getIconComponent(CROP_DATABASE[farm.primaryProduct].icon)}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-sage-900">
+                              {CROP_DATABASE[farm.primaryProduct].name}
+                            </h4>
+                            <p className="text-sm text-sage-700 italic mb-2">
+                              {CROP_DATABASE[farm.primaryProduct].scientificName}
+                            </p>
+                            <div className="grid grid-cols-2 gap-4 text-xs">
+                              <div>
+                                <span className="font-medium">Planting:</span>
+                                <p>{CROP_DATABASE[farm.primaryProduct].plantingWindow.optimal}</p>
+                              </div>
+                              <div>
+                                <span className="font-medium">Expected Yield:</span>
+                                <p>{CROP_DATABASE[farm.primaryProduct].yield.typical} {CROP_DATABASE[farm.primaryProduct].yield.unit}/acre</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // Livestock selection (keep existing format)
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {livestockOptions.primary.map((option: any) => (
+                      <button
+                        key={option.id}
+                        onClick={() => handleProductSelection(option.id, true)}
+                        className={`p-5 rounded-xl border-2 transition-all hover:shadow-md ${
+                          farm.primaryProduct === option.id
+                            ? 'border-sage-600 bg-sage-50 shadow-soft'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex justify-center mb-2 text-gray-600">{option.icon}</div>
+                        <div className="text-sm font-medium">{option.name}</div>
+                        <div className="text-xs text-gray-600 mt-1">{option.typical}</div>
+                      </button>
+                    ))}
                   </div>
                 )}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {(farm.type === 'crops' ? cropOptions.primary : livestockOptions.primary).map((option: any) => (
-                    <button
-                      key={option.id}
-                      onClick={() => handleProductSelection(option.id, true)}
-                      className={`p-5 rounded-xl border-2 transition-all hover:shadow-md ${
-                        farm.primaryProduct === option.id
-                          ? 'border-sage-600 bg-sage-50 shadow-soft'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex justify-center mb-2 text-gray-600">{option.icon}</div>
-                      <div className="text-sm font-medium">{option.name}</div>
-                      {'season' in option && option.season && (
-                        <div className="text-xs text-gray-600 mt-1">{option.season}</div>
-                      )}
-                      {'typical' in option && option.typical && (
-                        <div className="text-xs text-gray-600 mt-1">{option.typical}</div>
-                      )}
-                      {regionalRecommendations && farm.type === 'crops' && (
-                        <div className="mt-2 space-y-1">
-                          <div className="text-xs text-green-600 font-medium">
-                            ✓ Recommended
-                          </div>
-                          {regionalRecommendations.primary.find((crop: any) => crop.id === option.id) && (
-                            <div className="text-xs text-gray-500">
-                              {regionalRecommendations.primary.find((crop: any) => crop.id === option.id)?.yield?.typical} {regionalRecommendations.primary.find((crop: any) => crop.id === option.id)?.yield?.unit}/acre
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
               </div>
 
               {/* Livestock Count Selection (only for livestock farms) */}
@@ -675,45 +769,115 @@ export default function CreateFarmPage() {
                 <Label className="text-base font-medium mb-3 block">
                   Secondary {farm.type === 'crops' ? 'Crops' : 'Livestock'} (Optional)
                 </Label>
-                {farm.type === 'crops' && regionalRecommendations?.seasonal && (
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Seasonal Options</h4>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {Object.entries(regionalRecommendations.seasonal).map(([season, crops]: [string, any]) => (
-                        <div key={season} className="bg-gray-50 p-2 rounded">
-                          <span className="font-medium capitalize">{season}:</span>
-                          <div className="mt-1">
-                            {crops.slice(0, 2).map((crop: any) => crop.name).join(', ')}
-                            {crops.length > 2 && ` +${crops.length - 2} more`}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {(farm.type === 'crops' ? cropOptions.secondary : livestockOptions.secondary).map((option: any) => (
-                    <button
-                      key={option.id}
-                      onClick={() => handleProductSelection(option.id, false)}
-                      className={`p-4 rounded-xl border-2 transition-all hover:shadow-sm ${
-                        farm.secondaryProducts?.includes(option.id)
-                          ? 'border-sage-600 bg-sage-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="text-gray-600">{option.icon}</div>
-                        <div className="text-left">
-                          <div className="text-sm font-medium">{option.name}</div>
-                          {regionalRecommendations && farm.type === 'crops' && regionalRecommendations.secondary.find((c: any) => c.id === option.id) && (
-                            <div className="text-xs text-blue-600">Regional match</div>
-                          )}
+                
+                {farm.type === 'crops' ? (
+                  <div className="space-y-4">
+                    {/* Seasonal Recommendations */}
+                    {regionalRecommendations?.seasonal && (
+                      <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <h4 className="text-sm font-medium text-gray-700 mb-2">Seasonal Rotation Options</h4>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          {Object.entries(regionalRecommendations.seasonal).map(([season, crops]: [string, any]) => (
+                            <div key={season} className="bg-white p-2 rounded">
+                              <span className="font-medium capitalize">{season}:</span>
+                              <div className="mt-1">
+                                {crops.slice(0, 2).map((crop: any) => crop.name).join(', ')}
+                                {crops.length > 2 && ` +${crops.length - 2} more`}
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    </button>
-                  ))}
-                </div>
+                    )}
+                    
+                    {/* Secondary Crop Selection */}
+                    <div>
+                      <Label className="text-sm text-gray-600 mb-2 block">
+                        Select additional crops for rotation or diversification
+                      </Label>
+                      <Select
+                        value=""
+                        onValueChange={(value) => handleProductSelection(value, false)}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Add secondary crop..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(cropsByCategory).map(([category, crops]) => (
+                            <div key={category}>
+                              <div className="px-2 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                {category} Crops
+                              </div>
+                              {crops.filter(crop => crop.id !== farm.primaryProduct).map((crop: any) => (
+                                <SelectItem key={crop.id} value={crop.id}>
+                                  <div className="flex items-center space-x-2">
+                                    <div className="flex-shrink-0">{crop.icon}</div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="text-sm font-medium truncate">{crop.name}</div>
+                                      <div className="text-xs text-gray-500 truncate">Good for rotation</div>
+                                    </div>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </div>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Selected Secondary Crops */}
+                    {farm.secondaryProducts && farm.secondaryProducts.length > 0 && (
+                      <div className="space-y-2">
+                        <Label className="text-sm text-gray-600">Selected Secondary Crops:</Label>
+                        <div className="flex flex-wrap gap-2">
+                          {farm.secondaryProducts.map(productId => {
+                            const crop = CROP_DATABASE[productId];
+                            if (!crop) return null;
+                            return (
+                              <div key={productId} className="flex items-center space-x-2 bg-sage-100 px-3 py-1 rounded-full">
+                                {getIconComponent(crop.icon, "h-3 w-3")}
+                                <span className="text-sm">{crop.name}</span>
+                                <button
+                                  onClick={() => {
+                                    setFarm(prev => ({
+                                      ...prev,
+                                      secondaryProducts: prev.secondaryProducts?.filter(p => p !== productId)
+                                    }));
+                                  }}
+                                  className="text-gray-500 hover:text-red-500 ml-1"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // Livestock secondary selection (keep existing)
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {livestockOptions.secondary.map((option: any) => (
+                      <button
+                        key={option.id}
+                        onClick={() => handleProductSelection(option.id, false)}
+                        className={`p-4 rounded-xl border-2 transition-all hover:shadow-sm ${
+                          farm.secondaryProducts?.includes(option.id)
+                            ? 'border-sage-600 bg-sage-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="text-gray-600">{option.icon}</div>
+                          <div className="text-left">
+                            <div className="text-sm font-medium">{option.name}</div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* AI-Powered Recommendations */}

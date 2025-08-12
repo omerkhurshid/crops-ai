@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -16,7 +16,22 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Check for registration success
+    const registered = searchParams.get('registered')
+    const emailParam = searchParams.get('email')
+    
+    if (registered === 'true') {
+      setSuccessMessage('Account created successfully! Please sign in with your credentials.')
+      if (emailParam) {
+        setEmail(decodeURIComponent(emailParam))
+      }
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -91,8 +106,15 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
               disabled={isLoading}
             />
           </div>
+          {successMessage && (
+            <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md border border-green-200">
+              {successMessage}
+            </div>
+          )}
           {error && (
-            <div className="text-red-600 text-sm">{error}</div>
+            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+              {error}
+            </div>
           )}
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign in'}

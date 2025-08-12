@@ -96,19 +96,20 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       setSuccess(true)
       
       // Auto-login after successful registration
-      const signInResult = await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      })
+      setTimeout(async () => {
+        const signInResult = await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          redirect: false,
+        })
 
-      if (signInResult?.ok) {
-        router.push(callbackUrl)
-      } else {
-        // Registration succeeded but auto-login failed
-        setError('Account created successfully, but auto-login failed. Please try logging in manually.')
-        setSuccess(false)
-      }
+        if (signInResult?.ok) {
+          router.push(callbackUrl)
+        } else {
+          // Registration succeeded but auto-login failed
+          router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
+        }
+      }, 500)
       
     } catch (err) {
       console.error('Registration error:', err)

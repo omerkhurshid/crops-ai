@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role
+          role: user.role as UserRole
         },
         secret: process.env.NEXTAUTH_SECRET!
       })
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role
+          role: user.role as UserRole
         }
       })
       

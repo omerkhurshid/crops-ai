@@ -155,7 +155,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
 
         {/* Sophisticated Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="polished-card card-green rounded-2xl p-6 text-white">
+          <div className="polished-card card-sage rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Sprout className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.area} variant="light" />
@@ -167,7 +167,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             </div>
           </div>
           
-          <div className="polished-card card-blue rounded-2xl p-6 text-white">
+          <div className="polished-card card-forest rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <MapPin className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
@@ -179,7 +179,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             </div>
           </div>
           
-          <div className="polished-card card-purple rounded-2xl p-6 text-white">
+          <div className="polished-card card-earth rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Activity className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
@@ -191,7 +191,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             </div>
           </div>
           
-          <div className="polished-card card-orange rounded-2xl p-6 text-white">
+          <div className="polished-card card-golden rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Calendar className="h-8 w-8 text-white" />
             </div>

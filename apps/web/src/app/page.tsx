@@ -114,7 +114,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            <div className="polished-card card-teal rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+            <div className="polished-card card-moss rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
               <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                 <CloudRain className="h-12 w-12 text-white" />
               </div>
@@ -125,7 +125,7 @@ export default function Home() {
               <InfoTooltip {...TOOLTIP_CONTENT.temperature} variant="light" />
             </div>
             
-            <div className="polished-card card-indigo rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+            <div className="polished-card card-clay rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
               <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                 <Satellite className="h-12 w-12 text-white" />
               </div>
@@ -136,7 +136,7 @@ export default function Home() {
               <InfoTooltip {...TOOLTIP_CONTENT.ndvi} variant="light" />
             </div>
             
-            <div className="polished-card card-pink rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+            <div className="polished-card card-wheat rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
               <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                 <Brain className="h-12 w-12 text-white" />
               </div>
@@ -183,19 +183,19 @@ export default function Home() {
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="polished-card card-blue rounded-2xl p-6 text-white text-center">
+            <div className="polished-card card-sage rounded-2xl p-6 text-white text-center">
               <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
               <div className="text-lg font-medium opacity-90">Active Farmers</div>
             </div>
-            <div className="polished-card card-green rounded-2xl p-6 text-white text-center">
+            <div className="polished-card card-forest rounded-2xl p-6 text-white text-center">
               <div className="text-4xl md:text-5xl font-bold mb-2">2M+</div>
               <div className="text-lg font-medium opacity-90">Hectares Monitored</div>
             </div>
-            <div className="polished-card card-purple rounded-2xl p-6 text-white text-center">
+            <div className="polished-card card-earth rounded-2xl p-6 text-white text-center">
               <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
               <div className="text-lg font-medium opacity-90">Accuracy Rate</div>
             </div>
-            <div className="polished-card card-red rounded-2xl p-6 text-white text-center">
+            <div className="polished-card card-bark rounded-2xl p-6 text-white text-center">
               <div className="text-4xl md:text-5xl font-bold mb-2">24/7</div>
               <div className="text-lg font-medium opacity-90">Monitoring</div>
             </div>

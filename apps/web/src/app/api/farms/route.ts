@@ -7,58 +7,71 @@ import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/a
 // GET /api/farms - List farms with pagination
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
-    const { searchParams } = new URL(request.url)
-    const pagination = validateQueryParams(
-      paginationSchema,
-      Object.fromEntries(searchParams)
-    )
-    const { page = 1, limit = 10, sortBy, sortOrder = 'desc' } = pagination
+    try {
+      console.log('=== GET FARMS START ===')
+      console.log('User:', request.user)
+      
+      const { searchParams } = new URL(request.url)
+      const pagination = validateQueryParams(
+        paginationSchema,
+        Object.fromEntries(searchParams)
+      )
+      const { page = 1, limit = 10, sortBy, sortOrder = 'desc' } = pagination
 
-    const skip = (page - 1) * limit
-    const orderBy = sortBy ? { [sortBy]: sortOrder as 'asc' | 'desc' } : { createdAt: 'desc' as const }
+      const skip = (page - 1) * limit
+      const orderBy = sortBy ? { [sortBy]: sortOrder as 'asc' | 'desc' } : { createdAt: 'desc' as const }
 
-    // Filter farms based on user role
-    const where = request.user.role === 'ADMIN' ? {} : {
-      OR: [
-        { ownerId: request.user.id },
-        { managers: { some: { userId: request.user.id } } }
-      ]
-    }
+      // Filter farms based on user role
+      const where = request.user.role === 'ADMIN' ? {} : {
+        OR: [
+          { ownerId: request.user.id },
+          { managers: { some: { userId: request.user.id } } }
+        ]
+      }
+      
+      console.log('Query where clause:', JSON.stringify(where, null, 2))
 
-    const [farms, total] = await Promise.all([
-      prisma.farm.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              email: true
-            }
-          },
-          _count: {
-            select: {
-              fields: true,
-              managers: true
+      const [farms, total] = await Promise.all([
+        prisma.farm.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy,
+          include: {
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            },
+            _count: {
+              select: {
+                fields: true,
+                managers: true
+              }
             }
           }
-        }
-      }),
-      prisma.farm.count({ where })
-    ])
+        }),
+        prisma.farm.count({ where })
+      ])
+      
+      console.log(`Found ${farms.length} farms, total: ${total}`)
 
-    return createSuccessResponse({
-      farms,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    })
+      return createSuccessResponse({
+        farms,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit)
+        }
+      })
+    } catch (error) {
+      console.error('=== GET FARMS ERROR ===')
+      console.error('Error:', error)
+      throw error
+    }
   })
 )
 

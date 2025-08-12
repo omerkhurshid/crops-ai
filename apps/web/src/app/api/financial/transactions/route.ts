@@ -175,17 +175,31 @@ export async function POST(request: NextRequest) {
     let transaction: any;
 
     try {
+      // Prepare the data with proper field handling
+      const transactionData = {
+        userId: session.user.id,
+        farmId: validatedData.farmId,
+        fieldId: validatedData.fieldId || null,
+        cropId: validatedData.cropId || null,
+        type: validatedData.type,
+        category: validatedData.category,
+        subcategory: validatedData.subcategory || null,
+        amount: new Prisma.Decimal(validatedData.amount),
+        currency: validatedData.currency || 'USD',
+        quantity: validatedData.quantity ? new Prisma.Decimal(validatedData.quantity) : null,
+        unitPrice: validatedData.unitPrice ? new Prisma.Decimal(validatedData.unitPrice) : null,
+        transactionDate: new Date(validatedData.transactionDate),
+        paymentDate: validatedData.paymentDate ? new Date(validatedData.paymentDate) : null,
+        notes: validatedData.notes || null,
+        tags: validatedData.tags || [],
+        attachments: validatedData.attachments || null,
+        createdById: session.user.id,
+      };
+
+      console.log('Creating transaction with data:', JSON.stringify(transactionData, null, 2));
+
       transaction = await prisma.financialTransaction.create({
-        data: {
-          ...validatedData,
-          userId: session.user.id,
-          createdById: session.user.id,
-          amount: new Prisma.Decimal(validatedData.amount),
-          quantity: validatedData.quantity ? new Prisma.Decimal(validatedData.quantity) : null,
-          unitPrice: validatedData.unitPrice ? new Prisma.Decimal(validatedData.unitPrice) : null,
-          transactionDate: new Date(validatedData.transactionDate),
-          paymentDate: validatedData.paymentDate ? new Date(validatedData.paymentDate) : null,
-        },
+        data: transactionData,
         include: {
           field: true,
           crop: true,
@@ -193,6 +207,10 @@ export async function POST(request: NextRequest) {
         },
       });
     } catch (error: any) {
+      console.error('Transaction creation error:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      
       // If financial_transactions table doesn't exist, return error message
       if (error.code === 'P2021' || error.code === 'P2010') {
         return NextResponse.json({ 
@@ -200,7 +218,12 @@ export async function POST(request: NextRequest) {
           code: 'FEATURE_NOT_AVAILABLE'
         }, { status: 503 });
       } else {
-        throw error;
+        // Return the actual error for debugging
+        return NextResponse.json({ 
+          error: 'Failed to create transaction',
+          details: error.message,
+          code: error.code
+        }, { status: 400 });
       }
     }
 

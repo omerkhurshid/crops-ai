@@ -267,7 +267,7 @@ export function FieldFormWithMap({
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-2">How to select fields:</h4>
               <ul className="text-sm text-gray-700 space-y-1">
-                <li>• Click "Auto-detect Fields" to find field boundaries automatically</li>
+                <li>• Click &quot;Auto-detect Fields&quot; to find field boundaries automatically</li>
                 <li>• Or click the pin icon and draw boundaries manually</li>
                 <li>• Click on detected fields below to select them</li>
                 <li>• You can select multiple fields to create at once</li>

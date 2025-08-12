@@ -31,6 +31,16 @@ const soilTypes = [
 ]
 
 export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmTotalArea, existingFields }: FieldFormProps) {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    area: '',
+    cropType: '',
+    soilType: ''
+  })
+
   // Use the enhanced form with map if we have coordinates
   if (farmLatitude && farmLongitude) {
     return (
@@ -44,15 +54,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
       />
     )
   }
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [formData, setFormData] = useState({
-    name: '',
-    area: '',
-    cropType: '',
-    soilType: ''
-  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target

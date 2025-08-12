@@ -45,8 +45,7 @@ export const GET = apiMiddleware.protected(
             },
             _count: {
               select: {
-                fields: true,
-                managers: true
+                fields: true
               }
             }
           }

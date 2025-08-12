@@ -22,11 +22,9 @@ export const GET = apiMiddleware.protected(
       const orderBy = sortBy ? { [sortBy]: sortOrder as 'asc' | 'desc' } : { createdAt: 'desc' as const }
 
       // Filter farms based on user role
+      // Note: Temporarily simplified to only check ownership until farm_managers table is created
       const where = request.user.role === 'ADMIN' ? {} : {
-        OR: [
-          { ownerId: request.user.id },
-          { managers: { some: { userId: request.user.id } } }
-        ]
+        ownerId: request.user.id
       }
       
       console.log('Query where clause:', JSON.stringify(where, null, 2))

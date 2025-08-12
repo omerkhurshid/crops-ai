@@ -69,7 +69,7 @@
   .bg-agricultural {
     background-image: 
       linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
-      url('/images/field-background.jpg');
+      url('/hero-page.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -98,7 +98,7 @@
     min-height: 100vh;
     background-image: 
       linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
-      url('/images/field-background.jpg');
+      url('/hero-page.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

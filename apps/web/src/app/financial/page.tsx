@@ -29,10 +29,10 @@ export default function FinancialPage() {
       return;
     }
 
-    if (status === 'authenticated') {
+    if (status === 'authenticated' && session?.user) {
       fetchFarms();
     }
-  }, [status, router]);
+  }, [status, router, session]);
 
   const fetchFarms = async () => {
     try {

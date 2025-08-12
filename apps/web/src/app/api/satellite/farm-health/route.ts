@@ -61,6 +61,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform fields data to match FieldHealth interface
+    let hasRealSatelliteData = false
     const fieldsHealth = await Promise.all(farm.fields.map(async (field) => {
       const latestSatelliteData = field.satelliteData[0]
       const currentCrop = field.crops[0]
@@ -109,6 +110,9 @@ export async function GET(request: NextRequest) {
           }
         }
       }
+
+      // Mark that we have real satellite data
+      hasRealSatelliteData = true
 
       // Calculate health score from NDVI
       const healthScore = Math.round(latestSatelliteData.ndvi * 100)
@@ -228,6 +232,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       fields: fieldsHealth,
+      hasRealData: hasRealSatelliteData,
       farm: {
         id: farm.id,
         name: farm.name,
@@ -241,6 +246,7 @@ export async function GET(request: NextRequest) {
     // Return mock data on error for demo purposes
     return NextResponse.json({
       success: false,
+      hasRealData: false,
       fields: [
         {
           fieldId: 'demo-field-1',

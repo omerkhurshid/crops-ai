@@ -74,6 +74,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
   const [fields, setFields] = useState<FieldHealth[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedField, setSelectedField] = useState<string | null>(null)
+  const [dataStatus, setDataStatus] = useState<'real' | 'mock' | 'error'>('mock')
 
   useEffect(() => {
     fetchHealthData()
@@ -88,13 +89,16 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         const data = await response.json()
         // Transform API data to match our interface
         setFields(data.fields || [])
+        setDataStatus(data.hasRealData ? 'real' : 'mock')
       } else {
         // Use mock data for demo
         setFields(getMockHealthData())
+        setDataStatus('mock')
       }
     } catch (error) {
       console.error('Failed to fetch health data:', error)
       setFields(getMockHealthData())
+      setDataStatus('error')
     } finally {
       setLoading(false)
     }
@@ -215,6 +219,39 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
   return (
     <div className="space-y-6">
+      {/* Data Status Indicator */}
+      {dataStatus !== 'real' && (
+        <Card className={`border-l-4 ${dataStatus === 'mock' ? 'border-l-blue-500 bg-blue-50' : 'border-l-yellow-500 bg-yellow-50'}`}>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 rounded-full ${dataStatus === 'mock' ? 'bg-blue-100' : 'bg-yellow-100'}`}>
+                <Activity className={`h-4 w-4 ${dataStatus === 'mock' ? 'text-blue-600' : 'text-yellow-600'}`} />
+              </div>
+              <div>
+                <h4 className={`font-semibold ${dataStatus === 'mock' ? 'text-blue-900' : 'text-yellow-900'}`}>
+                  {dataStatus === 'mock' ? 'Demo Data Display' : 'Limited Data Available'}
+                </h4>
+                <p className={`text-sm ${dataStatus === 'mock' ? 'text-blue-700' : 'text-yellow-700'}`}>
+                  {dataStatus === 'mock' 
+                    ? 'This page is showing sample data for demonstration. Real satellite data will appear once your fields have been processed.'
+                    : 'Some satellite data is missing. Contact support to enable full health monitoring.'
+                  }
+                </p>
+              </div>
+              <Button
+                onClick={fetchHealthData}
+                variant="outline"
+                size="sm"
+                className="ml-auto"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-2">

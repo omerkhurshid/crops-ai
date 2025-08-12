@@ -114,44 +114,38 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-            <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
-              <ModernCardContent className="p-8 text-center">
-                <div className="p-6 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl mx-auto w-fit mb-6 group-hover:shadow-soft transition-all">
-                  <CloudRain className="h-12 w-12 text-sage-700" />
-                </div>
-                <ModernCardTitle className="text-2xl mb-4">Weather Intelligence</ModernCardTitle>
-                <p className="text-sage-600 leading-relaxed mb-4">
-                  Real-time weather data and hyperlocal forecasting for precise farm management decisions
-                </p>
-                <InfoTooltip {...TOOLTIP_CONTENT.temperature} />
-              </ModernCardContent>
-            </ModernCard>
+            <div className="polished-card card-teal rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                <CloudRain className="h-12 w-12 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4">Weather Intelligence</h3>
+              <p className="text-white/90 leading-relaxed mb-4">
+                Real-time weather data and hyperlocal forecasting for precise farm management decisions
+              </p>
+              <InfoTooltip {...TOOLTIP_CONTENT.temperature} variant="light" />
+            </div>
             
-            <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
-              <ModernCardContent className="p-8 text-center">
-                <div className="p-6 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl mx-auto w-fit mb-6 group-hover:shadow-soft transition-all">
-                  <Satellite className="h-12 w-12 text-earth-700" />
-                </div>
-                <ModernCardTitle className="text-2xl mb-4">Satellite Monitoring</ModernCardTitle>
-                <p className="text-sage-600 leading-relaxed mb-4">
-                  Track crop health with advanced satellite imagery, NDVI analysis, and stress detection
-                </p>
-                <InfoTooltip {...TOOLTIP_CONTENT.ndvi} />
-              </ModernCardContent>
-            </ModernCard>
+            <div className="polished-card card-indigo rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                <Satellite className="h-12 w-12 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4">Satellite Monitoring</h3>
+              <p className="text-white/90 leading-relaxed mb-4">
+                Track crop health with advanced satellite imagery, NDVI analysis, and stress detection
+              </p>
+              <InfoTooltip {...TOOLTIP_CONTENT.ndvi} variant="light" />
+            </div>
             
-            <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
-              <ModernCardContent className="p-8 text-center">
-                <div className="p-6 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl mx-auto w-fit mb-6 group-hover:shadow-soft transition-all">
-                  <Brain className="h-12 w-12 text-sage-700" />
-                </div>
-                <ModernCardTitle className="text-2xl mb-4">AI Recommendations</ModernCardTitle>
-                <p className="text-sage-600 leading-relaxed mb-4">
-                  Get intelligent insights for planting, irrigation, and harvest optimization
-                </p>
-                <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
-              </ModernCardContent>
-            </ModernCard>
+            <div className="polished-card card-pink rounded-2xl p-8 text-white text-center group hover:scale-105 transition-all duration-300">
+              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                <Brain className="h-12 w-12 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4">AI Recommendations</h3>
+              <p className="text-white/90 leading-relaxed mb-4">
+                Get intelligent insights for planting, irrigation, and harvest optimization
+              </p>
+              <InfoTooltip {...TOOLTIP_CONTENT.confidence} variant="light" />
+            </div>
           </div>
 
           {/* CTA Section */}
@@ -186,24 +180,24 @@ export default function Home() {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-sage-50 to-cream-50">
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-light text-sage-800 mb-2">10K+</div>
-              <div className="text-sage-600">Active Farmers</div>
+            <div className="polished-card card-blue rounded-2xl p-6 text-white text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
+              <div className="text-lg font-medium opacity-90">Active Farmers</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-light text-sage-800 mb-2">2M+</div>
-              <div className="text-sage-600">Hectares Monitored</div>
+            <div className="polished-card card-green rounded-2xl p-6 text-white text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">2M+</div>
+              <div className="text-lg font-medium opacity-90">Hectares Monitored</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-light text-sage-800 mb-2">95%</div>
-              <div className="text-sage-600">Accuracy Rate</div>
+            <div className="polished-card card-purple rounded-2xl p-6 text-white text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
+              <div className="text-lg font-medium opacity-90">Accuracy Rate</div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-light text-sage-800 mb-2">24/7</div>
-              <div className="text-sage-600">Monitoring</div>
+            <div className="polished-card card-red rounded-2xl p-6 text-white text-center">
+              <div className="text-4xl md:text-5xl font-bold mb-2">24/7</div>
+              <div className="text-lg font-medium opacity-90">Monitoring</div>
             </div>
           </div>
         </div>

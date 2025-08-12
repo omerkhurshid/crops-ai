@@ -155,43 +155,52 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
 
         {/* Sophisticated Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <MetricCard
-            title="Total Area"
-            value={farm.stats.totalArea.toFixed(1)}
-            unit=" ha"
-            description={`${(farm.stats.totalArea * 2.47).toFixed(1)} acres equivalent`}
-            icon={<Sprout className="h-5 w-5 text-sage-600" />}
-            tooltip={TOOLTIP_CONTENT.area}
-            variant="floating"
-          />
+          <div className="polished-card card-green rounded-2xl p-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <Sprout className="h-8 w-8 text-white" />
+              <InfoTooltip {...TOOLTIP_CONTENT.area} variant="light" />
+            </div>
+            <div className="text-3xl font-bold mb-2">{farm.stats.totalArea.toFixed(1)} ha</div>
+            <div className="text-xl font-medium mb-2">Total Area</div>
+            <div className="text-sm opacity-90">
+              {(farm.stats.totalArea * 2.47).toFixed(1)} acres equivalent
+            </div>
+          </div>
           
-          <MetricCard
-            title="Active Fields"
-            value={farm.stats.fieldsCount}
-            description="All monitored and tracked"
-            icon={<MapPin className="h-5 w-5 text-sage-600" />}
-            tooltip={TOOLTIP_CONTENT.field}
-            variant="floating"
-          />
+          <div className="polished-card card-blue rounded-2xl p-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <MapPin className="h-8 w-8 text-white" />
+              <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
+            </div>
+            <div className="text-3xl font-bold mb-2">{farm.stats.fieldsCount}</div>
+            <div className="text-xl font-medium mb-2">Active Fields</div>
+            <div className="text-sm opacity-90">
+              All monitored and tracked
+            </div>
+          </div>
           
-          <MetricCard
-            title="Health Score"
-            value={farm.stats.healthScore}
-            unit="%"
-            trend={farm.stats.healthScore >= 80 ? 'up' : farm.stats.healthScore >= 60 ? 'stable' : 'down'}
-            description="Based on NDVI analysis"
-            icon={<Activity className="h-5 w-5 text-sage-600" />}
-            tooltip={TOOLTIP_CONTENT.healthScore}
-            variant="floating"
-          />
+          <div className="polished-card card-purple rounded-2xl p-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <Activity className="h-8 w-8 text-white" />
+              <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
+            </div>
+            <div className="text-3xl font-bold mb-2">{farm.stats.healthScore}%</div>
+            <div className="text-xl font-medium mb-2">Health Score</div>
+            <div className="text-sm opacity-90">
+              Based on NDVI analysis
+            </div>
+          </div>
           
-          <MetricCard
-            title="Next Action"
-            value="Field Inspection"
-            description="Scheduled in 3 days"
-            icon={<Calendar className="h-5 w-5 text-earth-600" />}
-            variant="soft"
-          />
+          <div className="polished-card card-orange rounded-2xl p-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <Calendar className="h-8 w-8 text-white" />
+            </div>
+            <div className="text-3xl font-bold mb-2">Field Inspection</div>
+            <div className="text-xl font-medium mb-2">Next Action</div>
+            <div className="text-sm opacity-90">
+              Scheduled in 3 days
+            </div>
+          </div>
         </div>
 
         {/* Asymmetric Magazine-Style Layout */}

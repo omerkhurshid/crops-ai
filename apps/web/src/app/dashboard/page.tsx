@@ -279,43 +279,53 @@ export default async function DashboardPage() {
 
           {/* Modern Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <MetricCard
-              title="Total Farms"
-              value={stats?.overview?.totalFarms || 0}
-              description={stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'Create your first farm to get started'}
-              icon={<Sprout className="h-5 w-5 text-sage-600" />}
-              tooltip={TOOLTIP_CONTENT.farm}
-              variant="floating"
-            />
+            <div className="polished-card card-green rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <Sprout className="h-8 w-8 text-white" />
+                <InfoTooltip {...TOOLTIP_CONTENT.farm} variant="light" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{stats?.overview?.totalFarms || 0}</div>
+              <div className="text-xl font-medium mb-2">Total Farms</div>
+              <div className="text-sm opacity-90">
+                {stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'Create your first farm to get started'}
+              </div>
+            </div>
             
-            <MetricCard
-              title="Active Fields"
-              value={stats?.overview?.activeFields || 0}
-              description={stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields in production` : 'Add fields to start monitoring'}
-              icon={<MapPin className="h-5 w-5 text-sage-600" />}
-              tooltip={TOOLTIP_CONTENT.field}
-              variant="floating"
-            />
+            <div className="polished-card card-blue rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <MapPin className="h-8 w-8 text-white" />
+                <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{stats?.overview?.activeFields || 0}</div>
+              <div className="text-xl font-medium mb-2">Active Fields</div>
+              <div className="text-sm opacity-90">
+                {stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields in production` : 'Add fields to start monitoring'}
+              </div>
+            </div>
             
-            <MetricCard
-              title="Health Score"
-              value={stats?.overview?.avgHealthScore || 0}
-              unit="%"
-              trend={(stats?.overview?.avgHealthScore || 0) >= 80 ? 'up' : (stats?.overview?.avgHealthScore || 0) >= 60 ? 'stable' : 'down'}
-              description={stats?.overview?.avgHealthScore ? 'AI-analyzed crop health across all fields' : 'Health data will appear here'}
-              icon={<Activity className="h-5 w-5 text-sage-600" />}
-              tooltip={TOOLTIP_CONTENT.healthScore}
-              variant="floating"
-            />
+            <div className="polished-card card-purple rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <Activity className="h-8 w-8 text-white" />
+                <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{stats?.overview?.avgHealthScore || 0}%</div>
+              <div className="text-xl font-medium mb-2">Health Score</div>
+              <div className="text-sm opacity-90">
+                {stats?.overview?.avgHealthScore ? 'AI-analyzed crop health across all fields' : 'Health data will appear here'}
+              </div>
+            </div>
             
-            <MetricCard
-              title="Weather Alerts"
-              value={stats?.overview?.weatherAlerts || 0}
-              description={stats?.overview?.weatherAlerts ? 'Active weather notifications requiring attention' : 'No weather alerts at this time'}
-              icon={<AlertTriangle className="h-5 w-5 text-earth-600" />}
-              tooltip={TOOLTIP_CONTENT.precipitation}
-              variant="soft"
-            />
+            <div className="polished-card card-orange rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <AlertTriangle className="h-8 w-8 text-white" />
+                <InfoTooltip {...TOOLTIP_CONTENT.precipitation} variant="light" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{stats?.overview?.weatherAlerts || 0}</div>
+              <div className="text-xl font-medium mb-2">Weather Alerts</div>
+              <div className="text-sm opacity-90">
+                {stats?.overview?.weatherAlerts ? 'Active weather notifications requiring attention' : 'No weather alerts at this time'}
+              </div>
+            </div>
           </div>
 
           {/* Asymmetric Magazine Layout */}

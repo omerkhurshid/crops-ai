@@ -68,7 +68,7 @@
   /* Minimalistic agricultural background with overlay */
   .bg-agricultural {
     background-image: 
-      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
+      linear-gradient(135deg, rgba(34, 69, 34, 0.15) 0%, rgba(22, 44, 22, 0.25) 100%),
       url('/hero-page.jpg');
     background-size: cover;
     background-position: center;
@@ -93,11 +93,58 @@
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
   
+  /* Polished colored cards */
+  .polished-card {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .polished-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Card color variants */
+  .card-blue {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(37, 99, 235, 0.95) 100%);
+  }
+  
+  .card-green {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.9) 0%, rgba(21, 128, 61, 0.95) 100%);
+  }
+  
+  .card-purple {
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.9) 0%, rgba(126, 34, 206, 0.95) 100%);
+  }
+  
+  .card-orange {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.9) 0%, rgba(234, 88, 12, 0.95) 100%);
+  }
+  
+  .card-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.9) 0%, rgba(13, 148, 136, 0.95) 100%);
+  }
+  
+  .card-red {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.95) 100%);
+  }
+  
+  .card-indigo {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(79, 70, 229, 0.95) 100%);
+  }
+  
+  .card-pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.9) 0%, rgba(219, 39, 119, 0.95) 100%);
+  }
+  
   /* Minimalistic page wrapper */
   .minimal-page {
     min-height: 100vh;
     background-image: 
-      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
+      linear-gradient(135deg, rgba(34, 69, 34, 0.15) 0%, rgba(22, 44, 22, 0.25) 100%),
       url('/hero-page.jpg');
     background-size: cover;
     background-position: center;

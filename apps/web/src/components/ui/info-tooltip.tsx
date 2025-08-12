@@ -9,6 +9,7 @@ interface InfoTooltipProps {
   position?: 'top' | 'bottom' | 'left' | 'right'
   size?: 'sm' | 'md' | 'lg'
   className?: string
+  variant?: 'default' | 'light'
 }
 
 export function InfoTooltip({ 
@@ -16,7 +17,8 @@ export function InfoTooltip({
   description, 
   position = 'top', 
   size = 'sm',
-  className = '' 
+  className = '',
+  variant = 'default'
 }: InfoTooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -47,7 +49,11 @@ export function InfoTooltip({
         onMouseLeave={() => setIsVisible(false)}
         onFocus={() => setIsVisible(true)}
         onBlur={() => setIsVisible(false)}
-        className="text-sage-500 hover:text-sage-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sage-300 rounded-full p-1"
+        className={`transition-colors duration-200 focus:outline-none focus:ring-2 rounded-full p-1 ${
+          variant === 'light' 
+            ? 'text-white/70 hover:text-white focus:ring-white/50' 
+            : 'text-sage-500 hover:text-sage-700 focus:ring-sage-300'
+        }`}
         type="button"
         aria-label={`Information about ${title}`}
       >

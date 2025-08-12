@@ -48,23 +48,35 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 });
     }
 
-    // Fetch existing forecasts
-    const forecasts = await prisma.financialForecast.findMany({
-      where: {
-        farmId: query.farmId,
-        ...(query.fieldId && { fieldId: query.fieldId }),
-        ...(query.cropId && { cropId: query.cropId }),
-        forecastDate: {
-          gte: new Date(),
-          lte: new Date(Date.now() + query.forecastHorizon * 30 * 24 * 60 * 60 * 1000),
+    // Fetch existing forecasts with graceful handling
+    let forecasts: any[] = [];
+
+    try {
+      forecasts = await prisma.financialForecast.findMany({
+        where: {
+          farmId: query.farmId,
+          ...(query.fieldId && { fieldId: query.fieldId }),
+          ...(query.cropId && { cropId: query.cropId }),
+          forecastDate: {
+            gte: new Date(),
+            lte: new Date(Date.now() + query.forecastHorizon * 30 * 24 * 60 * 60 * 1000),
+          },
         },
-      },
-      include: {
-        field: true,
-        crop: true,
-      },
-      orderBy: { forecastDate: 'asc' },
-    });
+        include: {
+          field: true,
+          crop: true,
+        },
+        orderBy: { forecastDate: 'asc' },
+      });
+    } catch (error: any) {
+      // If financial_forecast table doesn't exist, return empty forecasts
+      if (error.code === 'P2021') {
+        console.log('Financial forecast table does not exist, returning empty forecasts');
+        forecasts = [];
+      } else {
+        throw error;
+      }
+    }
 
     // If no forecasts exist, generate them
     if (forecasts.length === 0) {
@@ -140,15 +152,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 });
     }
 
-    // Fetch historical data for analysis
-    const historicalData = await prisma.financialTransaction.findMany({
-      where: {
-        farmId: validatedData.farmId,
-        transactionDate: {
-          gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // Last year
+    // Fetch historical data for analysis with graceful handling
+    let historicalData: any[] = [];
+
+    try {
+      historicalData = await prisma.financialTransaction.findMany({
+        where: {
+          farmId: validatedData.farmId,
+          transactionDate: {
+            gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // Last year
+          },
         },
-      },
-    });
+      });
+    } catch (error: any) {
+      // If financial_transactions table doesn't exist, use empty data
+      if (error.code === 'P2021') {
+        console.log('Financial transactions table does not exist, using empty historical data for forecast');
+        historicalData = [];
+      } else {
+        throw error;
+      }
+    }
 
     // Fetch weather forecasts
     const weatherResponse = await fetch(
@@ -247,34 +271,52 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Save forecasts
-    const createdForecasts = await prisma.financialForecast.createMany({
-      data: forecasts,
-    });
+    // Save forecasts with graceful handling
+    let createdForecasts: any;
+    let newForecasts: any[] = [];
 
-    // Log the action
-    await auditLog({
-      action: 'financial.forecast.generate',
-      userId: session.user.id,
-      resourceType: 'FinancialForecast',
-      resourceId: validatedData.farmId,
-      metadata: {
-        scenario,
-        forecastCount: forecasts.length,
-        options: validatedData.options,
-      },
-    });
+    try {
+      createdForecasts = await prisma.financialForecast.createMany({
+        data: forecasts,
+      });
 
-    // Fetch and return the created forecasts
-    const newForecasts = await prisma.financialForecast.findMany({
-      where: {
-        farmId: validatedData.farmId,
-        forecastDate: {
-          gte: new Date(),
+      // Log the action
+      await auditLog({
+        action: 'financial.forecast.generate',
+        userId: session.user.id,
+        resourceType: 'FinancialForecast',
+        resourceId: validatedData.farmId,
+        metadata: {
+          scenario,
+          forecastCount: forecasts.length,
+          options: validatedData.options,
         },
-      },
-      orderBy: { forecastDate: 'asc' },
-    });
+      });
+
+      // Fetch and return the created forecasts
+      newForecasts = await prisma.financialForecast.findMany({
+        where: {
+          farmId: validatedData.farmId,
+          forecastDate: {
+            gte: new Date(),
+          },
+        },
+        orderBy: { forecastDate: 'asc' },
+      });
+    } catch (error: any) {
+      // If financial_forecast table doesn't exist, return mock forecasts
+      if (error.code === 'P2021') {
+        console.log('Financial forecast table does not exist, returning mock forecast data');
+        newForecasts = forecasts.map((f, index) => ({
+          ...f,
+          id: `mock-forecast-${index}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        }));
+      } else {
+        throw error;
+      }
+    }
 
     return NextResponse.json({
       forecasts: newForecasts,

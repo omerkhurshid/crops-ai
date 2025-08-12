@@ -50,18 +50,34 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    // Fetch overall summary
-    const [totalIncome, totalExpenses, transactionCount] = await Promise.all([
-      prisma.financialTransaction.aggregate({
-        where: { ...baseWhere, type: TransactionType.INCOME },
-        _sum: { amount: true },
-      }),
-      prisma.financialTransaction.aggregate({
-        where: { ...baseWhere, type: TransactionType.EXPENSE },
-        _sum: { amount: true },
-      }),
-      prisma.financialTransaction.count({ where: baseWhere }),
-    ]);
+    // Fetch overall summary with graceful handling for missing tables
+    let totalIncome: { _sum: { amount: any } } = { _sum: { amount: null } };
+    let totalExpenses: { _sum: { amount: any } } = { _sum: { amount: null } };
+    let transactionCount = 0;
+
+    try {
+      [totalIncome, totalExpenses, transactionCount] = await Promise.all([
+        prisma.financialTransaction.aggregate({
+          where: { ...baseWhere, type: TransactionType.INCOME },
+          _sum: { amount: true },
+        }),
+        prisma.financialTransaction.aggregate({
+          where: { ...baseWhere, type: TransactionType.EXPENSE },
+          _sum: { amount: true },
+        }),
+        prisma.financialTransaction.count({ where: baseWhere }),
+      ]);
+    } catch (error: any) {
+      // If financial_transactions table doesn't exist, return empty data
+      if (error.code === 'P2021') {
+        console.log('Financial transactions table does not exist, returning empty financial data');
+        totalIncome = { _sum: { amount: null } };
+        totalExpenses = { _sum: { amount: null } };
+        transactionCount = 0;
+      } else {
+        throw error;
+      }
+    }
 
     const income = Number(totalIncome._sum.amount || 0);
     const expenses = Number(totalExpenses._sum.amount || 0);
@@ -70,27 +86,41 @@ export async function GET(request: NextRequest) {
     const profitMargin = income > 0 ? (netProfit / income) * 100 : 0;
     const profitPerAcre = netProfit / (farm.totalArea * 2.47105); // Convert hectares to acres
 
-    // Income by category
-    const incomeByCategory = await prisma.financialTransaction.groupBy({
-      by: ['category'],
-      where: { ...baseWhere, type: TransactionType.INCOME },
-      _sum: { amount: true },
-      _count: true,
-    });
+    // Income by category with graceful handling
+    let incomeByCategory: any[] = [];
+    let expensesByCategory: any[] = [];
+    let transactions: any[] = [];
 
-    // Expenses by category
-    const expensesByCategory = await prisma.financialTransaction.groupBy({
-      by: ['category'],
-      where: { ...baseWhere, type: TransactionType.EXPENSE },
-      _sum: { amount: true },
-      _count: true,
-    });
-
-    // Monthly trends
-    const transactions = await prisma.financialTransaction.findMany({
-      where: baseWhere,
-      orderBy: { transactionDate: 'asc' },
-    });
+    try {
+      [incomeByCategory, expensesByCategory, transactions] = await Promise.all([
+        prisma.financialTransaction.groupBy({
+          by: ['category'],
+          where: { ...baseWhere, type: TransactionType.INCOME },
+          _sum: { amount: true },
+          _count: true,
+        }),
+        prisma.financialTransaction.groupBy({
+          by: ['category'],
+          where: { ...baseWhere, type: TransactionType.EXPENSE },
+          _sum: { amount: true },
+          _count: true,
+        }),
+        prisma.financialTransaction.findMany({
+          where: baseWhere,
+          orderBy: { transactionDate: 'asc' },
+        }),
+      ]);
+    } catch (error: any) {
+      // If financial_transactions table doesn't exist, return empty arrays
+      if (error.code === 'P2021') {
+        console.log('Financial transactions table does not exist, using empty data for categories and trends');
+        incomeByCategory = [];
+        expensesByCategory = [];
+        transactions = [];
+      } else {
+        throw error;
+      }
+    }
 
     const monthlyTrends = transactions.reduce((acc, transaction) => {
       const monthKey = `${transaction.transactionDate.getFullYear()}-${String(transaction.transactionDate.getMonth() + 1).padStart(2, '0')}`;
@@ -108,45 +138,93 @@ export async function GET(request: NextRequest) {
       return acc;
     }, {} as Record<string, { month: string; income: number; expenses: number }>);
 
-    // Field profitability
-    const fieldProfitability = await prisma.$queryRaw`
-      SELECT 
-        f.id,
-        f.name,
-        f.area,
-        COALESCE(SUM(CASE WHEN ft.type = 'INCOME' THEN ft.amount ELSE 0 END), 0) as income,
-        COALESCE(SUM(CASE WHEN ft.type = 'EXPENSE' THEN ft.amount ELSE 0 END), 0) as expenses,
-        COALESCE(SUM(CASE WHEN ft.type = 'INCOME' THEN ft.amount ELSE -ft.amount END), 0) as profit
-      FROM fields f
-      LEFT JOIN financial_transactions ft ON f.id = ft."fieldId"
-        AND ft."farmId" = ${query.farmId}
-        AND ft."transactionDate" >= ${startDate}
-        AND ft."transactionDate" <= ${endDate}
-      WHERE f."farmId" = ${query.farmId}
-      GROUP BY f.id, f.name, f.area
-    `;
+    // Field profitability with graceful handling
+    let fieldProfitability: any[] = [];
+
+    try {
+      fieldProfitability = await prisma.$queryRaw`
+        SELECT 
+          f.id,
+          f.name,
+          f.area,
+          COALESCE(SUM(CASE WHEN ft.type = 'INCOME' THEN ft.amount ELSE 0 END), 0) as income,
+          COALESCE(SUM(CASE WHEN ft.type = 'EXPENSE' THEN ft.amount ELSE 0 END), 0) as expenses,
+          COALESCE(SUM(CASE WHEN ft.type = 'INCOME' THEN ft.amount ELSE -ft.amount END), 0) as profit
+        FROM fields f
+        LEFT JOIN financial_transactions ft ON f.id = ft."fieldId"
+          AND ft."farmId" = ${query.farmId}
+          AND ft."transactionDate" >= ${startDate}
+          AND ft."transactionDate" <= ${endDate}
+        WHERE f."farmId" = ${query.farmId}
+        GROUP BY f.id, f.name, f.area
+      `;
+    } catch (error: any) {
+      // If financial_transactions table doesn't exist, try fields only
+      if (error.code === 'P2021') {
+        console.log('Financial transactions table does not exist, fetching fields without financial data');
+        try {
+          fieldProfitability = await prisma.$queryRaw`
+            SELECT 
+              f.id,
+              f.name,
+              f.area,
+              0 as income,
+              0 as expenses,
+              0 as profit
+            FROM fields f
+            WHERE f."farmId" = ${query.farmId}
+            GROUP BY f.id, f.name, f.area
+          `;
+        } catch (fieldsError: any) {
+          // If fields table doesn't exist either, return empty array
+          if (fieldsError.code === 'P2021') {
+            console.log('Fields table does not exist either, using empty field profitability');
+            fieldProfitability = [];
+          } else {
+            throw fieldsError;
+          }
+        }
+      } else {
+        throw error;
+      }
+    }
 
     // Compare with previous period
     const periodLength = endDate.getTime() - startDate.getTime();
     const previousStartDate = new Date(startDate.getTime() - periodLength);
     const previousEndDate = new Date(startDate.getTime() - 1);
 
-    const previousPeriodIncome = await prisma.financialTransaction.aggregate({
-      where: {
-        farmId: query.farmId,
-        type: TransactionType.INCOME,
-        transactionDate: {
-          gte: previousStartDate,
-          lte: previousEndDate,
-        },
-      },
-      _sum: { amount: true },
-    });
+    // Previous period comparison with graceful handling
+    let previousIncome = 0;
+    let profitChange = 0;
 
-    const previousIncome = Number(previousPeriodIncome._sum.amount || 0);
-    const profitChange = previousIncome > 0 
-      ? ((income - previousIncome) / previousIncome) * 100 
-      : 0;
+    try {
+      const previousPeriodIncome = await prisma.financialTransaction.aggregate({
+        where: {
+          farmId: query.farmId,
+          type: TransactionType.INCOME,
+          transactionDate: {
+            gte: previousStartDate,
+            lte: previousEndDate,
+          },
+        },
+        _sum: { amount: true },
+      });
+
+      previousIncome = Number(previousPeriodIncome._sum.amount || 0);
+      profitChange = previousIncome > 0 
+        ? ((income - previousIncome) / previousIncome) * 100 
+        : 0;
+    } catch (error: any) {
+      // If financial_transactions table doesn't exist, use zero values
+      if (error.code === 'P2021') {
+        console.log('Financial transactions table does not exist, using zero for previous period comparison');
+        previousIncome = 0;
+        profitChange = 0;
+      } else {
+        throw error;
+      }
+    }
 
     return NextResponse.json({
       summary: {

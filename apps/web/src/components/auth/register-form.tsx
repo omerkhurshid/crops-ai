@@ -95,18 +95,31 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
 
       setSuccess(true)
       
-      // Auto-login after successful registration
+      // Auto-login after successful registration using custom signin endpoint
       setTimeout(async () => {
-        const signInResult = await signIn('credentials', {
-          email: formData.email,
-          password: formData.password,
-          redirect: false,
-        })
+        try {
+          const signinResponse = await fetch('/api/authentication/signin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              password: formData.password,
+            }),
+          })
 
-        if (signInResult?.ok) {
-          router.push(callbackUrl)
-        } else {
-          // Registration succeeded but auto-login failed
+          const signinResult = await signinResponse.json()
+
+          if (signinResponse.ok && signinResult.success) {
+            // Force page refresh to ensure session is loaded
+            window.location.href = callbackUrl
+          } else {
+            // Auto-login failed, redirect to login page
+            router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
+          }
+        } catch (error) {
+          console.error('Auto-login error:', error)
           router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
         }
       }, 500)

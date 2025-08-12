@@ -65,11 +65,40 @@
 }
 
 @layer components {
-  /* Agricultural background with overlay */
+  /* Minimalistic agricultural background with overlay */
   .bg-agricultural {
     background-image: 
-      linear-gradient(135deg, rgba(20, 40, 25, 0.85) 0%, rgba(15, 30, 20, 0.75) 100%),
-      url('/images/agricultural-landscape.png');
+      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
+      url('/images/field-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  /* Glass morphism navbar */
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+  
+  /* Glass card effects */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+  
+  /* Minimalistic page wrapper */
+  .minimal-page {
+    min-height: 100vh;
+    background-image: 
+      linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
+      url('/images/field-background.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

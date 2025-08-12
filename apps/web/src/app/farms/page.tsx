@@ -60,8 +60,7 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms(user.id)
 
   return (
-    <div className="min-h-screen bg-agricultural">
-      <div className="absolute inset-0 agricultural-overlay"></div>
+    <div className="minimal-page">
       <Navbar />
       
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">

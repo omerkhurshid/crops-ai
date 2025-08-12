@@ -68,7 +68,7 @@ export default async function FieldsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-agricultural">
+    <div className="minimal-page">
       <Navbar />
       
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">

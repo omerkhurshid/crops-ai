@@ -65,7 +65,7 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
   const farmName = selectedFarm?.name || farms[0].name
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-sage-50/30 to-cream-100">
+    <div className="minimal-page">
       <Navbar />
       
       {/* Floating Action Button */}

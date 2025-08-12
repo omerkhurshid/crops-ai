@@ -334,7 +334,7 @@ export default function CreateFarmPage() {
   const stepTitles = ['Farm Basics', farm.type === 'crops' ? 'Crop Selection' : 'Livestock Selection', 'Review & Create']
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-sage-50/30 to-cream-100">
+    <div className="minimal-page">
       <Navbar />
       
       <main className="max-w-4xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">

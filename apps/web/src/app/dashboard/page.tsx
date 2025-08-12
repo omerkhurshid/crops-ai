@@ -254,7 +254,7 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats(user.id)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-sage-50/30 to-cream-100">
+    <div className="minimal-page">
       <Navbar />
       
       {/* Floating Action Button */}

@@ -94,6 +94,13 @@ export default function CreateFarmPage() {
     }
   }, [farm.location.lat, farm.location.lng, farm.type])
 
+  // Auto-select category when primary product exists
+  useEffect(() => {
+    if (farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]) {
+      setSelectedCropCategory(COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].category)
+    }
+  }, [farm.primaryProduct])
+
   // Get crop options from regional recommendations or fallback to defaults
   const getCropOptions = () => {
     if (regionalRecommendations && farm.type === 'crops') {
@@ -597,35 +604,42 @@ export default function CreateFarmPage() {
                         <Label className="text-sm font-medium text-sage-700 mb-2 block">
                           Step 1: Select Crop Type
                         </Label>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                          {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => {
-                            const hasSelectedCrop = farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category === categoryKey;
-                            return (
-                              <button
-                                key={categoryKey}
-                                onClick={() => {
-                                  setSelectedCropCategory(categoryKey);
-                                  if (farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category !== categoryKey) {
-                                    setFarm(prev => ({ ...prev, primaryProduct: '' }));
-                                  }
-                                }}
-                                className={`p-4 rounded-xl border-2 transition-all hover:shadow-md text-left ${
-                                  selectedCropCategory === categoryKey || hasSelectedCrop
-                                    ? 'border-green-700 bg-green-50 shadow-soft'
-                                    : 'border-gray-200 hover:border-gray-300'
-                                }`}
-                              >
+                        <Select
+                          value={selectedCropCategory || (farm.primaryProduct ? COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category : '')}
+                          onValueChange={(value) => {
+                            setSelectedCropCategory(value);
+                            if (farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category !== value) {
+                              setFarm(prev => ({ ...prev, primaryProduct: '' }));
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                            <SelectValue placeholder="Select a crop category...">
+                              {selectedCropCategory && CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES] && (
                                 <div className="flex items-center space-x-3">
-                                  <div className="text-green-600">{getIconComponent(category.icon, 'h-6 w-6')}</div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">{category.name}</div>
-                                    <div className="text-xs text-gray-600 mt-1">{category.description}</div>
+                                  <div className="text-sage-600">{getIconComponent(CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES].icon, 'h-5 w-5')}</div>
+                                  <div className="text-left">
+                                    <div className="text-sm font-medium">{CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES].name}</div>
+                                    <div className="text-xs text-gray-500">{CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES].description}</div>
                                   </div>
                                 </div>
-                              </button>
-                            );
-                          })}
-                        </div>
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => (
+                              <SelectItem key={categoryKey} value={categoryKey} className="py-3">
+                                <div className="flex items-center space-x-3">
+                                  <div className="text-sage-600 flex-shrink-0">{getIconComponent(category.icon, 'h-5 w-5')}</div>
+                                  <div>
+                                    <div className="text-sm font-medium">{category.name}</div>
+                                    <div className="text-xs text-gray-500">{category.description}</div>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       {/* Step 2: Select Specific Crop */}
@@ -638,22 +652,41 @@ export default function CreateFarmPage() {
                             value={farm.primaryProduct && cropsByCategory[selectedCropCategory].find((c: any) => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
                             onValueChange={(value) => handleProductSelection(value, true)}
                           >
-                            <SelectTrigger className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500">
-                              <SelectValue placeholder={`Choose your ${CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'}...`} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {cropsByCategory[selectedCropCategory].map((crop: any) => (
-                                <SelectItem key={crop.id} value={crop.id}>
-                                  <div className="flex items-center space-x-2 w-full">
-                                    <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="text-sm font-medium truncate">{crop.name}</div>
-                                      <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
-                                      <div className="text-xs text-blue-600">{crop.botanicalFamily}</div>
+                            <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                              <SelectValue placeholder={`Choose your ${CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'}...`}>
+                                {farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct] && (
+                                  <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center space-x-3">
+                                      <div className="text-sage-600">{getIconComponent(COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].icon, 'h-5 w-5')}</div>
+                                      <div className="text-left">
+                                        <div className="text-sm font-medium">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].name}</div>
+                                        <div className="text-xs text-gray-500 italic">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].scientificName}</div>
+                                        <div className="text-xs text-blue-600">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].botanicalFamily}</div>
+                                      </div>
                                     </div>
-                                    <div className="text-xs text-gray-400 text-right">
-                                      <div>{crop.yield?.typical} {crop.yield?.unit}/acre</div>
-                                      <div className="text-green-600">${crop.marketValue?.avgPrice}</div>
+                                    <div className="text-right ml-4">
+                                      <div className="text-xs text-gray-600">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield?.typical} {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield?.unit}/acre</div>
+                                      <div className="text-sm font-medium text-green-600">${COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].marketValue?.avgPrice}</div>
+                                    </div>
+                                  </div>
+                                )}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[400px]">
+                              {cropsByCategory[selectedCropCategory].map((crop: any) => (
+                                <SelectItem key={crop.id} value={crop.id} className="py-3">
+                                  <div className="flex items-center justify-between w-full pr-2">
+                                    <div className="flex items-center space-x-3 flex-1">
+                                      <div className="flex-shrink-0 text-sage-600">{getIconComponent(crop.icon, 'h-5 w-5')}</div>
+                                      <div className="min-w-0">
+                                        <div className="text-sm font-medium">{crop.name}</div>
+                                        <div className="text-xs text-gray-500 italic">{crop.scientificName}</div>
+                                        <div className="text-xs text-blue-600">{crop.botanicalFamily}</div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right flex-shrink-0 ml-4">
+                                      <div className="text-xs text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                                      <div className="text-sm font-medium text-green-600">${crop.marketValue?.avgPrice}</div>
                                     </div>
                                   </div>
                                 </SelectItem>
@@ -819,29 +852,37 @@ export default function CreateFarmPage() {
                         <Label className="text-sm font-medium text-sage-700 mb-2 block">
                           Step 1: Select Secondary Crop Type
                         </Label>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                          {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => {
-                            const hasSelectedSecondaryCrop = farm.secondaryProducts?.some(id => 
-                              COMPREHENSIVE_CROP_DATABASE[id]?.category === categoryKey
-                            );
-                            return (
-                              <button
-                                key={categoryKey}
-                                onClick={() => setSelectedSecondaryCropCategory(categoryKey)}
-                                className={`p-3 rounded-lg border-2 transition-all hover:shadow-sm text-left ${
-                                  selectedSecondaryCropCategory === categoryKey || hasSelectedSecondaryCrop
-                                    ? 'border-green-700 bg-green-50'
-                                    : 'border-gray-200 hover:border-gray-300'
-                                }`}
-                              >
-                                <div className="flex items-center space-x-2">
-                                  <div className="text-green-600">{getIconComponent(category.icon, 'h-5 w-5')}</div>
-                                  <div className="text-xs font-medium">{category.name}</div>
+                        <Select
+                          value={selectedSecondaryCropCategory}
+                          onValueChange={(value) => setSelectedSecondaryCropCategory(value)}
+                        >
+                          <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                            <SelectValue placeholder="Select a crop category for rotation...">
+                              {selectedSecondaryCropCategory && CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES] && (
+                                <div className="flex items-center space-x-3">
+                                  <div className="text-sage-600">{getIconComponent(CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES].icon, 'h-5 w-5')}</div>
+                                  <div className="text-left">
+                                    <div className="text-sm font-medium">{CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES].name}</div>
+                                    <div className="text-xs text-gray-500">{CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES].description}</div>
+                                  </div>
                                 </div>
-                              </button>
-                            );
-                          })}
-                        </div>
+                              )}
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => (
+                              <SelectItem key={categoryKey} value={categoryKey} className="py-3">
+                                <div className="flex items-center space-x-3">
+                                  <div className="text-sage-600 flex-shrink-0">{getIconComponent(category.icon, 'h-5 w-5')}</div>
+                                  <div>
+                                    <div className="text-sm font-medium">{category.name}</div>
+                                    <div className="text-xs text-gray-500">{category.description}</div>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       {/* Step 2: Select Specific Secondary Crop */}
@@ -857,20 +898,26 @@ export default function CreateFarmPage() {
                               setSelectedSecondaryCropCategory('');
                             }}
                           >
-                            <SelectTrigger className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                            <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
                               <SelectValue placeholder={`Choose secondary ${CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'}...`} />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="max-h-[400px]">
                               {cropsByCategory[selectedSecondaryCropCategory]
                                 .filter((crop: any) => crop.id !== farm.primaryProduct && !farm.secondaryProducts?.includes(crop.id))
                                 .map((crop: any) => (
-                                  <SelectItem key={crop.id} value={crop.id}>
-                                    <div className="flex items-center space-x-2 w-full">
-                                      <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
-                                      <div className="flex-1 min-w-0">
-                                        <div className="text-sm font-medium truncate">{crop.name}</div>
-                                        <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
-                                        <div className="text-xs text-blue-600">Good for rotation • {crop.botanicalFamily}</div>
+                                  <SelectItem key={crop.id} value={crop.id} className="py-3">
+                                    <div className="flex items-center justify-between w-full pr-2">
+                                      <div className="flex items-center space-x-3 flex-1">
+                                        <div className="flex-shrink-0 text-sage-600">{getIconComponent(crop.icon, 'h-5 w-5')}</div>
+                                        <div className="min-w-0">
+                                          <div className="text-sm font-medium">{crop.name}</div>
+                                          <div className="text-xs text-gray-500 italic">{crop.scientificName}</div>
+                                          <div className="text-xs text-blue-600">Good for rotation • {crop.botanicalFamily}</div>
+                                        </div>
+                                      </div>
+                                      <div className="text-right flex-shrink-0 ml-4">
+                                        <div className="text-xs text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                                        <div className="text-sm font-medium text-green-600">${crop.marketValue?.avgPrice}</div>
                                       </div>
                                     </div>
                                   </SelectItem>

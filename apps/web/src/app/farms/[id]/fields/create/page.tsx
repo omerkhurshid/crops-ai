@@ -18,7 +18,15 @@ async function getFarm(farmId: string, userId: string) {
       id: true,
       name: true,
       latitude: true,
-      longitude: true
+      longitude: true,
+      totalArea: true,
+      fields: {
+        select: {
+          id: true,
+          name: true,
+          area: true
+        }
+      }
     }
   })
   
@@ -60,6 +68,8 @@ export default async function CreateFieldPage({ params }: { params: { id: string
           farmName={farm.name}
           farmLatitude={farm.latitude}
           farmLongitude={farm.longitude}
+          farmTotalArea={farm.totalArea}
+          existingFields={farm.fields}
         />
       </main>
     </div>

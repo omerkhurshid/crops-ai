@@ -9,12 +9,15 @@ import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { Badge } from '../ui/badge'
 import { MapPin, Plus, Save, AlertCircle } from 'lucide-react'
+import { FieldFormWithMap } from './field-form-with-map'
 
 interface FieldFormProps {
   farmId: string
   farmName: string
   farmLatitude: number | null
   farmLongitude: number | null
+  farmTotalArea?: number
+  existingFields?: Array<{ id: string; name: string; area: number }>
 }
 
 const cropTypes = [
@@ -27,7 +30,20 @@ const soilTypes = [
   'Silty Clay Loam', 'Sandy Clay', 'Sandy Clay Loam', 'Unknown'
 ]
 
-export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude }: FieldFormProps) {
+export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmTotalArea, existingFields }: FieldFormProps) {
+  // Use the enhanced form with map if we have coordinates
+  if (farmLatitude && farmLongitude) {
+    return (
+      <FieldFormWithMap
+        farmId={farmId}
+        farmName={farmName}
+        farmLatitude={farmLatitude}
+        farmLongitude={farmLongitude}
+        farmTotalArea={farmTotalArea}
+        existingFields={existingFields}
+      />
+    )
+  }
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

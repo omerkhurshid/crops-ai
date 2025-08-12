@@ -142,16 +142,17 @@ export const POST = apiMiddleware.protected(
 
       // Create new field
       console.log('🌱 Creating field with data:', { farmId, name, area: parseFloat(area), soilType })
+      
+      // Create field using Prisma, omitting the boundary field
+      const fieldData: any = {
+        farmId,
+        name: name.trim(),
+        area: parseFloat(area),
+        soilType: soilType || null,
+      };
+      
       const field = await prisma.field.create({
-        data: {
-          farmId,
-          name: name.trim(),
-          area: parseFloat(area),
-          soilType: soilType || null,
-          // Note: boundary would need additional schema changes to store properly
-          // cropType, description, and coordinates are not in Field schema
-          // cropType should be handled via Crop model separately
-        },
+        data: fieldData,
         include: {
           farm: {
             select: {
@@ -161,8 +162,31 @@ export const POST = apiMiddleware.protected(
           }
         }
       })
+      
+      // If boundary coordinates are provided, update with PostGIS geography using raw SQL
+      if (boundary && Array.isArray(boundary) && boundary.length >= 3) {
+        try {
+          // Convert boundary array to WKT polygon format
+          const wktCoordinates = boundary.map((point: any) => `${point.lng} ${point.lat}`).join(', ');
+          const wktPolygon = `POLYGON((${wktCoordinates}, ${boundary[0].lng} ${boundary[0].lat}))`; // Close the polygon
+          
+          await prisma.$executeRaw`
+            UPDATE fields 
+            SET boundary = ST_GeogFromText(${wktPolygon})
+            WHERE id = ${field.id}
+          `;
+          console.log('✅ Field boundary updated successfully');
+        } catch (boundaryError) {
+          console.warn('Failed to update field boundary:', boundaryError);
+          // Continue without boundary - field was created successfully
+        }
+      }
 
-      console.log('✅ Field created successfully:', field.id)
+      console.log('✅ Field created successfully:', field?.id)
+      
+      if (!field) {
+        throw new Error('Failed to create field');
+      }
 
       // Create crop if cropType was provided
       let crop = null

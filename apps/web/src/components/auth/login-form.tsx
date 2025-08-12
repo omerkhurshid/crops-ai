@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -11,7 +11,7 @@ interface LoginFormProps {
   callbackUrl?: string
 }
 
-export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
+function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -130,5 +130,31 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+export function LoginForm({ callbackUrl }: LoginFormProps) {
+  return (
+    <Suspense fallback={
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Sign in to your account</CardTitle>
+          <CardDescription>
+            Loading...
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+          </div>
+        </CardContent>
+      </Card>
+    }>
+      <LoginFormContent callbackUrl={callbackUrl} />
+    </Suspense>
   )
 }

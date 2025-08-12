@@ -40,10 +40,7 @@ export async function GET(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: query.farmId,
-        OR: [
-          { ownerId: session.user.id },
-          { managers: { some: { userId: session.user.id } } },
-        ],
+        ownerId: session.user.id,
       },
     });
 
@@ -122,10 +119,7 @@ export async function POST(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: validatedData.farmId,
-        OR: [
-          { ownerId: session.user.id },
-          { managers: { some: { userId: session.user.id } } },
-        ],
+        ownerId: session.user.id,
       },
       include: {
         fields: {

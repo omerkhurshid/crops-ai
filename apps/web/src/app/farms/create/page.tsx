@@ -54,6 +54,8 @@ export default function CreateFarmPage() {
   const [regionalRecommendations, setRegionalRecommendations] = useState<any>(null)
   const [loadingRecommendations, setLoadingRecommendations] = useState(false)
   const [livestockCounts, setLivestockCounts] = useState<Record<string, number>>({})
+  const [selectedCropCategory, setSelectedCropCategory] = useState<string>('')
+  const [selectedSecondaryCropCategory, setSelectedSecondaryCropCategory] = useState<string>('')
   const router = useRouter()
 
   // Helper function to convert icon string to React component
@@ -575,81 +577,72 @@ export default function CreateFarmPage() {
                 You can add more later from your dashboard.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-8">
-              {/* Auto-detected Fields Info */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-green-800">
-                      We detected {farm.detectedFields?.length || 4} fields on your property
-                    </p>
-                    <p className="text-sm text-green-700">
-                      Total area: {farm.totalArea.toFixed(1)} acres
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Content - Left Side */}
+                <div className="lg:col-span-2 space-y-8">
 
-              {/* Primary Selection */}
-              <div>
-                <Label className="text-base font-medium mb-3 block">
-                  Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
-                </Label>
+                  {/* Primary Selection */}
+                  <div>
+                    <Label className="text-base font-medium text-sage-700 mb-3 block">
+                      Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
+                    </Label>
                 
                 {farm.type === 'crops' ? (
                   <div className="space-y-4">
-                    {/* Regional Recommendations Banner */}
-                    {(loadingRecommendations || regionalRecommendations?.region) && (
-                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                        {loadingRecommendations ? (
-                          <div className="flex items-center space-x-2">
-                            <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
-                            <p className="text-sm text-blue-800">
-                              Analyzing your location for regional crop recommendations...
-                            </p>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="flex items-center space-x-2 mb-2">
-                              <MapPin className="h-4 w-4 text-blue-600" />
-                              <p className="text-sm text-blue-800 font-medium">
-                                {regionalRecommendations.region} - Recommended for your location
-                              </p>
-                              <Badge variant="outline" className="text-xs ml-auto">
-                                {farm.location.lat.toFixed(2)}°, {farm.location.lng.toFixed(2)}°
-                              </Badge>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                              {regionalRecommendations.primary.slice(0, 4).map((crop: any) => (
-                                <div key={crop.id} className="text-xs bg-white/60 px-2 py-1 rounded">
-                                  <span className="font-medium">{crop.name}</span>
-                                  <div className="text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</div>
+                    {/* Step-by-Step Crop Selection */}
+                    <div className="space-y-4">
+                      {/* Step 1: Select Crop Type/Category */}
+                      <div>
+                        <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                          Step 1: Select Crop Type
+                        </Label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => {
+                            const hasSelectedCrop = farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category === categoryKey;
+                            return (
+                              <button
+                                key={categoryKey}
+                                onClick={() => {
+                                  setSelectedCropCategory(categoryKey);
+                                  if (farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category !== categoryKey) {
+                                    setFarm(prev => ({ ...prev, primaryProduct: '' }));
+                                  }
+                                }}
+                                className={`p-4 rounded-xl border-2 transition-all hover:shadow-md text-left ${
+                                  selectedCropCategory === categoryKey || hasSelectedCrop
+                                    ? 'border-green-700 bg-green-50 shadow-soft'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                }`}
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div className="text-green-600">{getIconComponent(category.icon, 'h-6 w-6')}</div>
+                                  <div>
+                                    <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                                    <div className="text-xs text-gray-600 mt-1">{category.description}</div>
+                                  </div>
                                 </div>
-                              ))}
-                            </div>
-                          </>
-                        )}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                    )}
-                    
-                    {/* Comprehensive Crop Selection */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Object.entries(cropsByCategory).map(([category, crops]) => (
-                        <div key={category} className="space-y-2">
-                          <Label className="text-sm font-medium text-gray-700 capitalize flex items-center">
-                            {getIconComponent(CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.icon || 'wheat', 'h-4 w-4')}
-                            <span className="ml-2">{CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.name || category}</span>
+
+                      {/* Step 2: Select Specific Crop */}
+                      {selectedCropCategory && cropsByCategory[selectedCropCategory] && (
+                        <div>
+                          <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                            Step 2: Select Specific {CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'Crop'}
                           </Label>
                           <Select
-                            value={farm.primaryProduct && crops.find(c => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
+                            value={farm.primaryProduct && cropsByCategory[selectedCropCategory].find((c: any) => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
                             onValueChange={(value) => handleProductSelection(value, true)}
                           >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder={`Select ${CROP_CATEGORIES[category as keyof typeof CROP_CATEGORIES]?.name || category}`} />
+                            <SelectTrigger className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                              <SelectValue placeholder={`Choose your ${CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'}...`} />
                             </SelectTrigger>
                             <SelectContent>
-                              {crops.map((crop: any) => (
+                              {cropsByCategory[selectedCropCategory].map((crop: any) => (
                                 <SelectItem key={crop.id} value={crop.id}>
                                   <div className="flex items-center space-x-2 w-full">
                                     <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
@@ -668,7 +661,7 @@ export default function CreateFarmPage() {
                             </SelectContent>
                           </Select>
                         </div>
-                      ))}
+                      )}
                     </div>
 
                     {/* Selected Crop Details */}
@@ -793,11 +786,11 @@ export default function CreateFarmPage() {
                 </div>
               )}
 
-              {/* Secondary Selection (Optional) */}
-              <div>
-                <Label className="text-base font-medium mb-3 block">
-                  Secondary {farm.type === 'crops' ? 'Crops' : 'Livestock'} (Optional)
-                </Label>
+                  {/* Secondary Selection (Optional) */}
+                  <div>
+                    <Label className="text-base font-medium text-sage-700 mb-3 block">
+                      Secondary {farm.type === 'crops' ? 'Crops' : 'Livestock'} (Optional)
+                    </Label>
                 
                 {farm.type === 'crops' ? (
                   <div className="space-y-4">
@@ -819,40 +812,73 @@ export default function CreateFarmPage() {
                       </div>
                     )}
                     
-                    {/* Secondary Crop Selection */}
-                    <div>
-                      <Label className="text-sm text-gray-600 mb-2 block">
-                        Select additional crops for rotation or diversification
-                      </Label>
-                      <Select
-                        value=""
-                        onValueChange={(value) => handleProductSelection(value, false)}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Add secondary crop..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(cropsByCategory).map(([category, crops]) => (
-                            <div key={category}>
-                              <div className="px-2 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                {category} Crops
-                              </div>
-                              {crops.filter(crop => crop.id !== farm.primaryProduct).map((crop: any) => (
-                                <SelectItem key={crop.id} value={crop.id}>
-                                  <div className="flex items-center space-x-2">
-                                    <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="text-sm font-medium truncate">{crop.name}</div>
-                                      <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
-                                      <div className="text-xs text-blue-600">Good for rotation • {crop.botanicalFamily}</div>
+                    {/* Step-by-Step Secondary Crop Selection */}
+                    <div className="space-y-4">
+                      {/* Step 1: Select Secondary Crop Type */}
+                      <div>
+                        <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                          Step 1: Select Secondary Crop Type
+                        </Label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {Object.entries(CROP_CATEGORIES).map(([categoryKey, category]) => {
+                            const hasSelectedSecondaryCrop = farm.secondaryProducts?.some(id => 
+                              COMPREHENSIVE_CROP_DATABASE[id]?.category === categoryKey
+                            );
+                            return (
+                              <button
+                                key={categoryKey}
+                                onClick={() => setSelectedSecondaryCropCategory(categoryKey)}
+                                className={`p-3 rounded-lg border-2 transition-all hover:shadow-sm text-left ${
+                                  selectedSecondaryCropCategory === categoryKey || hasSelectedSecondaryCrop
+                                    ? 'border-green-700 bg-green-50'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                }`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div className="text-green-600">{getIconComponent(category.icon, 'h-5 w-5')}</div>
+                                  <div className="text-xs font-medium">{category.name}</div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Step 2: Select Specific Secondary Crop */}
+                      {selectedSecondaryCropCategory && cropsByCategory[selectedSecondaryCropCategory] && (
+                        <div>
+                          <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                            Step 2: Select Specific {CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'Crop'} for Rotation
+                          </Label>
+                          <Select
+                            value=""
+                            onValueChange={(value) => {
+                              handleProductSelection(value, false);
+                              setSelectedSecondaryCropCategory('');
+                            }}
+                          >
+                            <SelectTrigger className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                              <SelectValue placeholder={`Choose secondary ${CROP_CATEGORIES[selectedSecondaryCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'}...`} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {cropsByCategory[selectedSecondaryCropCategory]
+                                .filter((crop: any) => crop.id !== farm.primaryProduct && !farm.secondaryProducts?.includes(crop.id))
+                                .map((crop: any) => (
+                                  <SelectItem key={crop.id} value={crop.id}>
+                                    <div className="flex items-center space-x-2 w-full">
+                                      <div className="flex-shrink-0">{getIconComponent(crop.icon, 'h-4 w-4')}</div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="text-sm font-medium truncate">{crop.name}</div>
+                                        <div className="text-xs text-gray-500 truncate italic">{crop.scientificName}</div>
+                                        <div className="text-xs text-blue-600">Good for rotation • {crop.botanicalFamily}</div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </div>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Selected Secondary Crops */}
@@ -914,95 +940,138 @@ export default function CreateFarmPage() {
                 )}
               </div>
 
-              {/* AI-Powered Recommendations */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
-                <div className="flex items-start space-x-3">
-                  <TrendingUp className="h-6 w-6 text-blue-600 mt-1" />
-                  <div className="flex-1">
-                    <h4 className="text-base font-semibold text-blue-900 mb-2">
-                      🤖 AI Regional Analysis
-                      {farm.location.lat !== 0 && farm.location.lng !== 0 && (
-                        <span className="text-xs font-normal text-blue-600 ml-2">
-                          ({farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)})
-                        </span>
-                      )}
-                    </h4>
-                    <p className="text-sm text-blue-800 leading-relaxed">
-                      {regionalRecommendations ? regionalRecommendations.reasoning : 
-                        farm.location.lat !== 0 && farm.location.lng !== 0 ? 
-                          `Analyzing agricultural conditions for your location at ${farm.location.lat.toFixed(2)}, ${farm.location.lng.toFixed(2)}...` :
-                          `Please set your farm location to receive personalized regional insights and crop recommendations.`
-                      }
-                      {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
-                        ` With ${livestockCounts[farm.primaryProduct!]} head, you'll need approximately ${Math.ceil(farm.totalArea * 0.5)} acres of pasture for rotational grazing.`
-                      )}
-                    </p>
-                    {regionalRecommendations?.region && (
-                      <div className="mt-3 p-3 bg-white/60 rounded-lg">
-                        <div className="grid grid-cols-2 gap-3 text-xs">
-                          <div>
-                            <span className="font-medium text-gray-700">Region:</span>
-                            <p className="text-blue-800">{regionalRecommendations.region}</p>
-                          </div>
-                          {regionalRecommendations.primary && regionalRecommendations.primary.length > 0 && (
-                            <div>
-                              <span className="font-medium text-gray-700">Best ROI:</span>
-                              <p className="text-green-700">{regionalRecommendations.primary[0].name}</p>
-                            </div>
-                          )}
-                          {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
-                            <div>
-                              <span className="font-medium text-gray-700">Stock Count:</span>
-                              <p className="text-purple-700">{livestockCounts[farm.primaryProduct!]} head</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    <div className="mt-3 flex items-center text-xs text-blue-600">
-                      <Info className="h-3 w-3 mr-1" />
-                      Analysis based on climate, soil, market data, and regional success patterns
-                    </div>
-                  </div>
                 </div>
-              </div>
-
-              {/* Field Creation Options */}
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
-                <h4 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
-                  <Building2 className="h-5 w-5 mr-2 text-gray-600" />
-                  Field Management Setup
-                </h4>
-                <p className="text-sm text-gray-700 mb-4">
-                  How would you like to organize your {farm.totalArea.toFixed(1)}-acre farm?
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-sage-300 transition-all cursor-pointer">
+                
+                {/* Right Sidebar - AI Suggestions & Pre-populated Info */}
+                <div className="lg:col-span-1 space-y-6">
+                  {/* Auto-detected Fields Info */}
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-start space-x-3">
                       <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                       <div>
-                        <div className="font-medium text-sm">Single Field Operation</div>
-                        <div className="text-xs text-gray-600 mt-1">
-                          Treat entire farm as one field - simpler management
-                        </div>
+                        <p className="text-sm font-medium text-green-800">
+                          We detected {farm.detectedFields?.length || 4} fields on your property
+                        </p>
+                        <p className="text-sm text-green-700">
+                          Total area: {farm.totalArea.toFixed(1)} acres
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <div className="p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-sage-300 transition-all cursor-pointer">
+
+                  {/* Regional Recommendations Banner */}
+                  {(loadingRecommendations || regionalRecommendations?.region) && (
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                      {loadingRecommendations ? (
+                        <div className="flex items-center space-x-2">
+                          <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
+                          <p className="text-sm text-blue-800">
+                            Analyzing your location for regional crop recommendations...
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-center space-x-2 mb-2">
+                            <MapPin className="h-4 w-4 text-blue-600" />
+                            <p className="text-sm text-blue-800 font-medium">
+                              {regionalRecommendations.region} - Recommended for your location
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            {regionalRecommendations.primary.slice(0, 3).map((crop: any) => (
+                              <div key={crop.id} className="text-xs bg-white/60 px-2 py-1 rounded flex justify-between">
+                                <span className="font-medium">{crop.name}</span>
+                                <span className="text-gray-600">{crop.yield?.typical} {crop.yield?.unit}/acre</span>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {/* AI-Powered Recommendations */}
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
                     <div className="flex items-start space-x-3">
-                      <TrendingUp className="h-5 w-5 text-blue-600 mt-0.5" />
-                      <div>
-                        <div className="font-medium text-sm">Multiple Fields Setup</div>
-                        <div className="text-xs text-gray-600 mt-1">
-                          Create separate fields for rotation and specialized management
+                      <TrendingUp className="h-5 w-5 text-blue-600 mt-1" />
+                      <div className="flex-1">
+                        <h4 className="text-sm font-semibold text-blue-900 mb-2">
+                          🤖 AI Regional Analysis
+                        </h4>
+                        <p className="text-xs text-blue-800 leading-relaxed">
+                          {regionalRecommendations ? regionalRecommendations.reasoning : 
+                            farm.location.lat !== 0 && farm.location.lng !== 0 ? 
+                              `Analyzing agricultural conditions for your location...` :
+                              `Please set your farm location to receive personalized insights.`
+                          }
+                          {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
+                            ` With ${livestockCounts[farm.primaryProduct!]} head, you'll need approximately ${Math.ceil(farm.totalArea * 0.5)} acres of pasture.`
+                          )}
+                        </p>
+                        {regionalRecommendations?.region && (
+                          <div className="mt-3 p-2 bg-white/60 rounded-lg">
+                            <div className="space-y-1 text-xs">
+                              <div>
+                                <span className="font-medium text-gray-700">Region:</span>
+                                <p className="text-blue-800">{regionalRecommendations.region}</p>
+                              </div>
+                              {regionalRecommendations.primary && regionalRecommendations.primary.length > 0 && (
+                                <div>
+                                  <span className="font-medium text-gray-700">Best ROI:</span>
+                                  <p className="text-green-700">{regionalRecommendations.primary[0].name}</p>
+                                </div>
+                              )}
+                              {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
+                                <div>
+                                  <span className="font-medium text-gray-700">Stock Count:</span>
+                                  <p className="text-purple-700">{livestockCounts[farm.primaryProduct!]} head</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        <div className="mt-3 flex items-center text-xs text-blue-600">
+                          <Info className="h-3 w-3 mr-1" />
+                          Based on climate, soil & market data
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="mt-4 text-xs text-gray-600 flex items-center">
-                  <Info className="h-3 w-3 mr-1" />
-                  You can always add, modify, or split fields later from your dashboard
+
+                  {/* Field Creation Options */}
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2 flex items-center">
+                      <Building2 className="h-4 w-4 mr-2 text-gray-600" />
+                      Field Management
+                    </h4>
+                    <p className="text-xs text-gray-700 mb-3">
+                      Organize your {farm.totalArea.toFixed(1)}-acre farm
+                    </p>
+                    <div className="space-y-2">
+                      <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-sage-300 transition-all cursor-pointer">
+                        <div className="flex items-start space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                          <div>
+                            <div className="font-medium text-xs">Single Field</div>
+                            <div className="text-xs text-gray-600">Simpler management</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-sage-300 transition-all cursor-pointer">
+                        <div className="flex items-start space-x-2">
+                          <TrendingUp className="h-4 w-4 text-blue-600 mt-0.5" />
+                          <div>
+                            <div className="font-medium text-xs">Multiple Fields</div>
+                            <div className="text-xs text-gray-600">Advanced rotation</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3 text-xs text-gray-600 flex items-center">
+                      <Info className="h-3 w-3 mr-1" />
+                      Modify later from dashboard
+                    </div>
+                  </div>
                 </div>
               </div>
 

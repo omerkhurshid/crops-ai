@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
       ]);
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty data
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, returning empty transaction data');
         transactions = [];
         total = 0;
@@ -194,7 +194,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return error message
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         return NextResponse.json({ 
           error: 'Financial transactions feature is not yet available. Please contact support to enable this feature.',
           code: 'FEATURE_NOT_AVAILABLE'
@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (budgetError: any) {
       // If financial_budget table doesn't exist, just log and continue
-      if (budgetError.code === 'P2021') {
+      if (budgetError.code === 'P2021' || budgetError.code === 'P2010') {
         console.log('Financial budget table does not exist, skipping budget update');
       } else {
         console.error('Error updating budget:', budgetError);

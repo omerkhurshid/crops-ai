@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       });
     } catch (error: any) {
       // If financial_forecast table doesn't exist, return empty forecasts
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial forecast table does not exist, returning empty forecasts');
         forecasts = [];
       } else {
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       // If financial_transactions table doesn't exist, use empty data
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, using empty historical data for forecast');
         historicalData = [];
       } else {
@@ -305,7 +305,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (error: any) {
       // If financial_forecast table doesn't exist, return mock forecasts
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial forecast table does not exist, returning mock forecast data');
         newForecasts = forecasts.map((f, index) => ({
           ...f,

@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       ]);
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty data
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, returning empty financial data');
         totalIncome = { _sum: { amount: null } };
         totalExpenses = { _sum: { amount: null } };
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
       ]);
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty arrays
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, using empty data for categories and trends');
         incomeByCategory = [];
         expensesByCategory = [];
@@ -159,8 +159,8 @@ export async function GET(request: NextRequest) {
         GROUP BY f.id, f.name, f.area
       `;
     } catch (error: any) {
-      // If financial_transactions table doesn't exist, try fields only
-      if (error.code === 'P2021') {
+      // If financial_transactions table doesn't exist (P2021 or P2010), try fields only
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, fetching fields without financial data');
         try {
           fieldProfitability = await prisma.$queryRaw`
@@ -177,7 +177,7 @@ export async function GET(request: NextRequest) {
           `;
         } catch (fieldsError: any) {
           // If fields table doesn't exist either, return empty array
-          if (fieldsError.code === 'P2021') {
+          if (fieldsError.code === 'P2021' || fieldsError.code === 'P2010') {
             console.log('Fields table does not exist either, using empty field profitability');
             fieldProfitability = [];
           } else {
@@ -217,7 +217,7 @@ export async function GET(request: NextRequest) {
         : 0;
     } catch (error: any) {
       // If financial_transactions table doesn't exist, use zero values
-      if (error.code === 'P2021') {
+      if (error.code === 'P2021' || error.code === 'P2010') {
         console.log('Financial transactions table does not exist, using zero for previous period comparison');
         previousIncome = 0;
         profitChange = 0;

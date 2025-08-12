@@ -7,6 +7,7 @@ import { FinancialDashboard } from '../../components/financial/financial-dashboa
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { AlertCircle, Plus, DollarSign } from 'lucide-react';
+import { Navbar } from '../../components/navigation/navbar';
 
 interface Farm {
   id: string;
@@ -36,8 +37,15 @@ export default function FinancialPage() {
   const fetchFarms = async () => {
     try {
       const response = await fetch('/api/farms');
-      if (response.ok) {
+      console.log('Farms API response status:', response.status);
+      
+      if (!response.ok) {
+        console.error('Failed to fetch farms:', response.status, response.statusText);
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+      } else {
         const data = await response.json();
+        console.log('Farms data received:', data);
         setFarms(data.farms || []);
         
         // Auto-select first farm if only one exists
@@ -59,6 +67,7 @@ export default function FinancialPage() {
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+        <Navbar />
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse space-y-6">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
@@ -82,6 +91,7 @@ export default function FinancialPage() {
   if (farms.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+        <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-2xl mx-auto text-center">
             <Card className="p-12">
@@ -126,6 +136,7 @@ export default function FinancialPage() {
   if (farms.length > 1 && !selectedFarm) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+        <Navbar />
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Financial Management</h1>
@@ -161,9 +172,11 @@ export default function FinancialPage() {
   }
 
   // Show financial dashboard for selected farm
-  if (selectedFarm) {
+  if (selectedFarm || farms.length === 1) {
+    const farmToUse = selectedFarm || farms[0];
     return (
       <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+        <Navbar />
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-7xl mx-auto">
             {/* Farm Selector (if multiple farms) */}
@@ -174,10 +187,10 @@ export default function FinancialPage() {
                     <div className="flex items-center space-x-4">
                       <h2 className="text-lg font-semibold text-gray-900">Current Farm:</h2>
                       <div className="flex items-center space-x-2">
-                        <span className="font-medium text-green-600">{selectedFarm.name}</span>
+                        <span className="font-medium text-green-600">{farmToUse.name}</span>
                         <span className="text-gray-500">•</span>
                         <span className="text-sm text-gray-600">
-                          {selectedFarm.totalArea.toFixed(1)} hectares
+                          {farmToUse.totalArea.toFixed(1)} hectares
                         </span>
                       </div>
                     </div>
@@ -194,7 +207,7 @@ export default function FinancialPage() {
             )}
             
             {/* Financial Dashboard */}
-            <FinancialDashboard farm={selectedFarm} />
+            <FinancialDashboard farm={farmToUse} />
           </div>
         </div>
       </div>

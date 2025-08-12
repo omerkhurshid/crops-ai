@@ -22,8 +22,8 @@ export function LoginForm({ callbackUrl = '/dashboard' }: LoginFormProps) {
 
   useEffect(() => {
     // Check for registration success
-    const registered = searchParams.get('registered')
-    const emailParam = searchParams.get('email')
+    const registered = searchParams?.get('registered')
+    const emailParam = searchParams?.get('email')
     
     if (registered === 'true') {
       setSuccessMessage('Account created successfully! Please sign in with your credentials.')

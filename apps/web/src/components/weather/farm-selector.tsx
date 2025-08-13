@@ -29,7 +29,7 @@ export function FarmSelector({ farms, currentFarmId }: FarmSelectorProps) {
   }
 
   return (
-    <div className="flex items-center gap-2 bg-sage-100/80 backdrop-blur-sm rounded-lg px-4 py-2 border border-sage-200/50">
+    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 border border-sage-200/50 shadow-sm">
       <MapPin className="h-4 w-4 text-sage-700" />
       <select
         value={currentFarmId}

@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { Button } from '../../components/ui/button'
+import { Badge } from '../../components/ui/badge'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
+import { InlineFloatingButton } from '../../components/ui/floating-button'
+import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
 import { Navbar } from '../../components/navigation/navbar'
 import { prisma } from '../../lib/prisma'
 
@@ -72,149 +74,170 @@ export default async function FarmsPage() {
               <p className="text-2xl text-white/80 font-light">Manage and monitor your agricultural operations</p>
             </div>
             <Link href="/farms/create">
-              <button className="border-3 border-white bg-transparent text-white hover:bg-white hover:text-green-800 transition-all duration-300 rounded-full px-8 py-4 font-medium text-lg">
-                + Add New Farm
-              </button>
+              <InlineFloatingButton
+                icon={<Plus className="h-5 w-5" />}
+                label="Add New Farm"
+                showLabel={true}
+                variant="primary"
+                size="lg"
+                className="min-w-[200px]"
+              />
             </Link>
           </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Total Farms</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">{userFarms.length}</div>
-              </CardContent>
-            </Card>
+            <div className="polished-card card-sage rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <Sprout className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-3xl font-bold mb-2">{userFarms.length}</div>
+              <div className="text-xl font-medium mb-2">Total Farms</div>
+              <div className="text-sm opacity-90">Active agricultural operations</div>
+            </div>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha
-                </div>
-              </CardContent>
-            </Card>
+            <div className="polished-card card-forest rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <MapPin className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-3xl font-bold mb-2">
+                {userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha
+              </div>
+              <div className="text-xl font-medium mb-2">Total Area</div>
+              <div className="text-sm opacity-90">Hectares under management</div>
+            </div>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Active Fields</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0)}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="polished-card card-earth rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <BarChart className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-3xl font-bold mb-2">
+                {userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0)}
+              </div>
+              <div className="text-xl font-medium mb-2">Active Fields</div>
+              <div className="text-sm opacity-90">Fields in production</div>
+            </div>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Regions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {new Set(userFarms.map((farm: any) => farm.region || 'Unknown').filter((r: string) => r !== 'Unknown')).size}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="polished-card card-golden rounded-2xl p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <MapPin className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-3xl font-bold mb-2">
+                {new Set(userFarms.map((farm: any) => farm.region || 'Unknown').filter((r: string) => r !== 'Unknown')).size}
+              </div>
+              <div className="text-xl font-medium mb-2">Regions</div>
+              <div className="text-sm opacity-90">Geographic coverage</div>
+            </div>
           </div>
 
           {/* Farms Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userFarms.length > 0 ? userFarms.map((farm: any) => (
               <Link key={farm.id} href={`/farms/${farm.id}`}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardHeader>
+                <ModernCard variant="floating" className="hover:scale-105 transition-all duration-300 cursor-pointer group">
+                  <ModernCardHeader>
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">{farm.name}</CardTitle>
-                        <CardDescription>
+                        <ModernCardTitle className="text-lg text-sage-800">{farm.name}</ModernCardTitle>
+                        <ModernCardDescription>
                           {farm.address || `${farm.region || 'Unknown'}, ${farm.country || 'Unknown'}`}
-                        </CardDescription>
+                        </ModernCardDescription>
                       </div>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <Badge className="bg-sage-100 text-sage-700 border-sage-200">
                         Active
-                      </span>
+                      </Badge>
                     </div>
-                  </CardHeader>
-                  <CardContent>
+                  </ModernCardHeader>
+                  <ModernCardContent>
                     <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Area:</span>
-                      <span className="text-sm font-medium">{farm.totalArea?.toFixed(1) || 0} ha</span>
+                      <span className="text-sm text-sage-600">Area:</span>
+                      <span className="text-sm font-medium text-sage-800">{farm.totalArea?.toFixed(1) || 0} ha</span>
                     </div>
                     
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Fields:</span>
-                      <span className="text-sm font-medium">{farm.fieldsCount || 0} fields</span>
+                      <span className="text-sm text-sage-600">Fields:</span>
+                      <span className="text-sm font-medium text-sage-800">{farm.fieldsCount || 0} fields</span>
                     </div>
 
                     {farm.fieldsTotalArea && (
                       <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Field Area:</span>
-                        <span className="text-sm font-medium">{farm.fieldsTotalArea} ha</span>
+                        <span className="text-sm text-sage-600">Field Area:</span>
+                        <span className="text-sm font-medium text-sage-800">{farm.fieldsTotalArea} ha</span>
                       </div>
                     )}
 
-                    <div className="pt-2 border-t">
+                    <div className="pt-3 border-t border-sage-200/50">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-sage-500">
                           Created {new Date(farm.createdAt).toLocaleDateString()}
                         </span>
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
+                        <InlineFloatingButton
+                          icon={<Eye className="h-4 w-4" />}
+                          label="View Details"
+                          variant="ghost"
+                          size="sm"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
                       </div>
                     </div>
                   </div>
-                </CardContent>
-                </Card>
+                </ModernCardContent>
+                </ModernCard>
               </Link>
             )) : (
               <div className="col-span-full text-center py-12">
-                <div className="text-gray-500">
-                  <p className="text-lg font-medium mb-2">No farms yet</p>
-                  <p className="text-sm mb-4">Create your first farm to get started with agricultural monitoring</p>
-                  <Button asChild>
+                <ModernCard variant="soft" className="max-w-md mx-auto">
+                  <ModernCardContent className="p-8">
+                    <Sprout className="h-16 w-16 text-sage-300 mx-auto mb-4" />
+                    <p className="text-lg font-medium mb-2 text-sage-700">No farms yet</p>
+                    <p className="text-sm mb-6 text-sage-600">Create your first farm to get started with agricultural monitoring</p>
                     <Link href="/farms/create">
-                      Create Your First Farm
+                      <InlineFloatingButton
+                        icon={<Plus className="h-4 w-4" />}
+                        label="Create Your First Farm"
+                        showLabel={true}
+                        variant="primary"
+                      />
                     </Link>
-                  </Button>
-                </div>
+                  </ModernCardContent>
+                </ModernCard>
               </div>
             )}
           </div>
 
           {/* Quick Actions */}
           <div className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Common farm management tasks</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <ModernCard variant="floating" className="overflow-hidden">
+              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+                <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
+                <ModernCardDescription>Common farm management tasks</ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
-                    <div className="font-medium">Weather Monitoring</div>
-                    <div className="text-sm text-gray-500 mt-1">Check weather conditions for all farms</div>
-                  </Button>
+                  <Link href="/weather">
+                    <div className="polished-card card-moss rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                      <div className="font-medium mb-2">Weather Monitoring</div>
+                      <div className="text-sm opacity-90">Check weather conditions for all farms</div>
+                    </div>
+                  </Link>
                   
-                  <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
-                    <div className="font-medium">Satellite Analysis</div>
-                    <div className="text-sm text-gray-500 mt-1">View NDVI and crop health data</div>
-                  </Button>
+                  <Link href="/crop-health">
+                    <div className="polished-card card-clay rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                      <div className="font-medium mb-2">Satellite Analysis</div>
+                      <div className="text-sm opacity-90">View NDVI and crop health data</div>
+                    </div>
+                  </Link>
                   
-                  <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
-                    <div className="font-medium">Yield Predictions</div>
-                    <div className="text-sm text-gray-500 mt-1">Generate ML-powered yield forecasts</div>
-                  </Button>
+                  <Link href="/reports">
+                    <div className="polished-card card-wheat rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                      <div className="font-medium mb-2">Yield Predictions</div>
+                      <div className="text-sm opacity-90">Generate ML-powered yield forecasts</div>
+                    </div>
+                  </Link>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           </div>
         </div>
       </main>

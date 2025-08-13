@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { Button } from '../ui/button'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
+import { InlineFloatingButton } from '../ui/floating-button'
+import { InfoTooltip } from '../ui/info-tooltip'
+import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
+import { Thermometer, Droplets, Wind, Eye, CloudRain, RotateCcw } from 'lucide-react'
 import { CurrentWeather, WeatherForecast, WeatherAlert, AgricultureWeatherData } from '../../lib/weather/service'
 
 interface WeatherDashboardProps {

@@ -57,12 +57,21 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
   });
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [transactionType, setTransactionType] = useState<'INCOME' | 'EXPENSE'>('INCOME');
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
+
+  const currencies = [
+    { code: 'USD', name: 'US Dollar', symbol: '$' },
+    { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
+    { code: 'EUR', name: 'Euro', symbol: '€' },
+    { code: 'GBP', name: 'British Pound', symbol: '£' },
+    { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
+  ];
 
   // Format currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: selectedCurrency,
     }).format(amount);
   };
 
@@ -129,6 +138,18 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
         </div>
         
         <div className="flex items-center gap-2">
+          <select
+            value={selectedCurrency}
+            onChange={(e) => setSelectedCurrency(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-sage-500"
+          >
+            {currencies.map((currency) => (
+              <option key={currency.code} value={currency.code}>
+                {currency.symbol} {currency.code}
+              </option>
+            ))}
+          </select>
+          
           <Button
             onClick={() => handleAddTransaction('INCOME')}
             className="bg-green-600 hover:bg-green-700"

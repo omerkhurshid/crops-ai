@@ -5,6 +5,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { InlineFloatingButton } from '../ui/floating-button';
 import {
   TrendingUp,
   TrendingDown,
@@ -129,47 +130,56 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
   }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Financial Management</h1>
-          <p className="text-gray-600">{farm.name} • {farm.totalArea.toFixed(1)} hectares</p>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <select
-            value={selectedCurrency}
-            onChange={(e) => setSelectedCurrency(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-sage-500"
-          >
-            {currencies.map((currency) => (
-              <option key={currency.code} value={currency.code}>
-                {currency.symbol} {currency.code}
-              </option>
-            ))}
-          </select>
+    <div className="space-y-6">
+      {/* Enhanced Header with Currency Selector */}
+      <div className="polished-card card-golden rounded-2xl p-6 text-white">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Financial Dashboard</h1>
+            <p className="text-white/90">{farm.name} • {farm.totalArea.toFixed(1)} hectares</p>
+          </div>
           
-          <Button
-            onClick={() => handleAddTransaction('INCOME')}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Income
-          </Button>
-          
-          <Button
-            onClick={() => handleAddTransaction('EXPENSE')}
-            variant="outline"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Expense
-          </Button>
-          
-          <Button variant="outline">
-            <Upload className="h-4 w-4 mr-2" />
-            Import Data
-          </Button>
+          <div className="flex items-center gap-3">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              <select
+                value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}
+                className="bg-transparent border-0 text-white font-medium focus:outline-none cursor-pointer"
+              >
+                {currencies.map((currency) => (
+                  <option key={currency.code} value={currency.code} className="text-gray-900 bg-white">
+                    {currency.symbol} {currency.code}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <InlineFloatingButton
+              onClick={() => handleAddTransaction('INCOME')}
+              icon={<Plus className="h-4 w-4" />}
+              label="Income"
+              showLabel={true}
+              variant="secondary"
+              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+            />
+            
+            <InlineFloatingButton
+              onClick={() => handleAddTransaction('EXPENSE')}
+              icon={<Plus className="h-4 w-4" />}
+              label="Expense"
+              showLabel={true}
+              variant="ghost"
+              className="text-white border-white/30 hover:bg-white/10"
+            />
+            
+            <InlineFloatingButton
+              icon={<Upload className="h-4 w-4" />}
+              label="Import"
+              variant="ghost"
+              className="text-white border-white/30 hover:bg-white/10"
+            />
+          </div>
         </div>
       </div>
 

@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { ModernCard, ModernCardContent } from '@/components/ui/modern-card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown, DollarSign, BarChart3 } from 'lucide-react';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { TOOLTIP_CONTENT } from '@/lib/tooltip-content';
+import { TrendingUp, TrendingDown, DollarSign, BarChart3, Wallet, TrendingDown as Loss, PiggyBank, Calculator } from 'lucide-react';
 
 interface FinancialSummary {
   totalIncome: number;
@@ -44,34 +46,23 @@ interface MetricCardProps {
 }
 
 function MetricCard({ title, value, subtitle, change, icon, color = 'gray' }: MetricCardProps) {
-  const colorClasses = {
-    green: 'bg-green-50 border-green-200 text-green-700',
-    red: 'bg-red-50 border-red-200 text-red-700',
-    blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    gray: 'bg-gray-50 border-gray-200 text-gray-700',
+  const colorMap = {
+    green: 'card-sage',
+    red: 'card-clay',
+    blue: 'card-forest',
+    gray: 'card-earth'
   };
 
-  const trendColor = change && change > 0 ? 'text-green-600' : change && change < 0 ? 'text-red-600' : 'text-gray-600';
   const TrendIcon = change && change > 0 ? TrendingUp : change && change < 0 ? TrendingDown : null;
 
   return (
-    <Card className={`p-6 ${colorClasses[color]} border`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-lg bg-white bg-opacity-50">
-            {icon}
-          </div>
-          <div>
-            <p className="text-sm font-medium opacity-75">{title}</p>
-            <p className="text-2xl font-bold">{value}</p>
-            {subtitle && (
-              <p className="text-sm opacity-75">{subtitle}</p>
-            )}
-          </div>
+    <div className={`polished-card ${colorMap[color]} rounded-2xl p-6 text-white`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+          {icon}
         </div>
-        
         {change !== undefined && (
-          <div className={`flex items-center space-x-1 ${trendColor}`}>
+          <div className="flex items-center space-x-1">
             {TrendIcon && <TrendIcon className="h-4 w-4" />}
             <span className="text-sm font-medium">
               {change > 0 ? '+' : ''}{change.toFixed(1)}%
@@ -79,7 +70,12 @@ function MetricCard({ title, value, subtitle, change, icon, color = 'gray' }: Me
           </div>
         )}
       </div>
-    </Card>
+      <div className="text-3xl font-bold mb-2">{value}</div>
+      <div className="text-xl font-medium mb-2">{title}</div>
+      {subtitle && (
+        <div className="text-sm opacity-90">{subtitle}</div>
+      )}
+    </div>
   );
 }
 
@@ -100,19 +96,21 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
   const acreage = farm.totalArea * 2.47105; // Convert hectares to acres
 
   return (
-    <Card className="p-6">
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Season Snapshot</h2>
-          <div className="flex items-center space-x-2">
-            <Badge variant="outline">
-              {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}
-            </Badge>
-            <Badge variant="secondary">
-              {summary.transactionCount} transactions
-            </Badge>
+    <div className="space-y-6">
+      {/* Main Profit Overview */}
+      <ModernCard variant="floating" className="overflow-hidden">
+        <ModernCardContent className="p-8 bg-gradient-to-r from-sage-50 to-cream-50">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-light text-sage-800">Financial Overview</h2>
+            <div className="flex items-center space-x-2">
+              <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}
+              </Badge>
+              <Badge className="bg-earth-100 text-earth-700 border-earth-200">
+                {summary.transactionCount} transactions
+              </Badge>
+            </div>
           </div>
-        </div>
 
         {/* Main Profit Display */}
         <div className="text-center py-6 border-b border-gray-200">
@@ -172,38 +170,7 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
         />
       </div>
 
-      {/* Quick Stats */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {formatCurrency(summary.grossProfit)}
-            </p>
-            <p className="text-sm text-gray-600">Gross Profit</p>
-          </div>
-          
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {summary.totalIncome > 0 ? ((summary.totalExpenses / summary.totalIncome) * 100).toFixed(1) : 0}%
-            </p>
-            <p className="text-sm text-gray-600">Expense Ratio</p>
-          </div>
-          
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {formatCurrency(summary.totalIncome / acreage)}
-            </p>
-            <p className="text-sm text-gray-600">Revenue per Acre</p>
-          </div>
-          
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {formatCurrency(summary.totalExpenses / acreage)}
-            </p>
-            <p className="text-sm text-gray-600">Cost per Acre</p>
-          </div>
-        </div>
       </div>
-    </Card>
+    </div>
   );
 }

@@ -102,13 +102,13 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             Back to Farms
           </Link>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Farm Info - Takes 2 columns */}
             <div className="lg:col-span-2">
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-4xl font-light text-sage-800 tracking-tight">{farm.name}</h1>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-sage-800 tracking-tight">{farm.name}</h1>
                     <InfoTooltip {...TOOLTIP_CONTENT.farm} size="md" />
                   </div>
                   <div className="flex items-center text-sage-600 mb-4">
@@ -153,60 +153,60 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
           </div>
         </div>
 
-        {/* Sophisticated Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="polished-card card-sage rounded-2xl p-6 text-white">
+        {/* Sophisticated Stats Grid - Mobile Optimized */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 lg:mb-12">
+          <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Sprout className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.area} variant="light" />
             </div>
-            <div className="text-3xl font-bold mb-2">{farm.stats.totalArea.toFixed(1)} ha</div>
-            <div className="text-xl font-medium mb-2">Total Area</div>
-            <div className="text-sm opacity-90">
-              {(farm.stats.totalArea * 2.47).toFixed(1)} acres equivalent
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.totalArea.toFixed(1)} ha</div>
+            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Total Area</div>
+            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
+              {(farm.stats.totalArea * 2.47).toFixed(1)} acres
             </div>
           </div>
           
-          <div className="polished-card card-forest rounded-2xl p-6 text-white">
+          <div className="polished-card card-forest rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <MapPin className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
             </div>
-            <div className="text-3xl font-bold mb-2">{farm.stats.fieldsCount}</div>
-            <div className="text-xl font-medium mb-2">Active Fields</div>
-            <div className="text-sm opacity-90">
-              All monitored and tracked
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.fieldsCount}</div>
+            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Fields</div>
+            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
+              Monitored
             </div>
           </div>
           
-          <div className="polished-card card-earth rounded-2xl p-6 text-white">
+          <div className="polished-card card-earth rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Activity className="h-8 w-8 text-white" />
               <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
             </div>
-            <div className="text-3xl font-bold mb-2">{farm.stats.healthScore}%</div>
-            <div className="text-xl font-medium mb-2">Health Score</div>
-            <div className="text-sm opacity-90">
-              Based on NDVI analysis
+            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.healthScore}%</div>
+            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Health</div>
+            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
+              NDVI-based
             </div>
           </div>
           
-          <div className="polished-card card-golden rounded-2xl p-6 text-white">
+          <div className="polished-card card-golden rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <Calendar className="h-8 w-8 text-white" />
             </div>
-            <div className="text-3xl font-bold mb-2">Field Inspection</div>
-            <div className="text-xl font-medium mb-2">Next Action</div>
-            <div className="text-sm opacity-90">
-              Scheduled in 3 days
+            <div className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 lg:mb-2">Inspection</div>
+            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Next Task</div>
+            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
+              3 days
             </div>
           </div>
         </div>
 
-        {/* Asymmetric Magazine-Style Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main Content Area - Takes 8 columns */}
-          <div className="lg:col-span-8 space-y-8">
+        {/* Asymmetric Magazine-Style Layout - Mobile Optimized */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Main Content Area - Takes 8 columns, full width on mobile */}
+          <div className="lg:col-span-8 space-y-6 lg:space-y-8 order-2 lg:order-1">
             {/* Fields Overview with Modern Design */}
             <ModernCard variant="floating" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
@@ -341,8 +341,8 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             </div>
           </div>
 
-          {/* Right Column - Weather & Insights */}
-          <div className="lg:col-span-4 space-y-6">
+          {/* Right Column - Weather & Insights, appears first on mobile */}
+          <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
             {/* Weather Widget */}
             <ModernCard variant="glass" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-br from-sage-50/80 to-cream-50/80">
@@ -372,7 +372,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <div className="flex items-center p-3 bg-sage-50 rounded-xl">
                       <Droplets className="h-4 w-4 text-blue-500 mr-3" />
                       <div>
@@ -531,7 +531,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
         <div className="mt-12">
           <ModernCard variant="glass" className="max-w-2xl mx-auto">
             <ModernCardContent className="p-6">
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center">
                 <Link href={`/farms/${farm.id}/fields/create`}>
                   <InlineFloatingButton
                     icon={<MapPin className="h-4 w-4" />}

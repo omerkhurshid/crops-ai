@@ -252,8 +252,8 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         </Card>
       )}
 
-      {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Overview Stats - Mobile Optimized */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
@@ -330,7 +330,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           <CardDescription>Choose a field for detailed health analysis</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {fields.map((field) => (
               <button
                 key={field.fieldId}
@@ -364,8 +364,8 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
       {selectedFieldData && (
         <>
-          {/* Detailed Field Analysis */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Detailed Field Analysis - Mobile Optimized */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
             {/* Health Zones */}
             <Card className="border-2">
               <CardHeader>
@@ -410,7 +410,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                 <CardDescription>Comprehensive vegetation health metrics</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {Object.entries(selectedFieldData.indices).map(([index, value]) => {
                     const tooltipKey = index as keyof typeof TOOLTIP_CONTENT
                     const tooltipData = TOOLTIP_CONTENT[tooltipKey]
@@ -440,7 +440,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
               <CardDescription>AI-powered stress detection and severity assessment</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {Object.entries(selectedFieldData.stressIndicators).map(([type, data]) => {
                   const Icon = stressIcons[type as keyof typeof stressIcons]
                   const tooltipKey = type as keyof typeof TOOLTIP_CONTENT
@@ -501,7 +501,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
               <CardDescription>AI-powered yield forecasting based on current health metrics</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 <div className="text-center p-4 bg-blue-50 rounded-lg">
                   <div className="text-2xl font-bold text-blue-800">
                     {selectedFieldData.yieldPrediction.current}

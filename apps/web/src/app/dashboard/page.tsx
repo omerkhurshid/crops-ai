@@ -276,18 +276,97 @@ export default async function DashboardPage() {
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-sage-800 mb-4 sm:mb-6 tracking-tight">
               Dashboard
             </h1>
-            <p className="text-xl text-sage-600 font-light leading-relaxed">
+            <p className="text-lg sm:text-xl text-sage-600 font-light leading-relaxed">
               Welcome back, <span className="font-medium text-sage-800">{user.name}</span>! 
               Monitor your agricultural operations from one intelligent platform.
             </p>
           </div>
         </div>
 
-          {/* Modern Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        {/* New User Onboarding Guide */}
+        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
+          <div className="mb-16">
+            <ModernCard variant="glow" className="overflow-hidden max-w-4xl mx-auto">
+              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl">
+                    <Sprout className="h-8 w-8 text-sage-700" />
+                  </div>
+                </div>
+                <ModernCardTitle className="text-2xl text-sage-800 mb-4">
+                  Welcome to Crops.AI! Let&apos;s get you started.
+                </ModernCardTitle>
+                <ModernCardDescription className="text-lg max-w-2xl mx-auto">
+                  Follow these simple steps to unlock the full power of AI-driven farm management
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="text-center group">
+                    <div className="p-6 bg-sage-50 rounded-2xl mb-4 group-hover:bg-sage-100 transition-colors">
+                      <div className="flex items-center justify-center w-12 h-12 bg-sage-200 rounded-xl mx-auto mb-4">
+                        <span className="text-lg font-bold text-sage-800">1</span>
+                      </div>
+                      <h3 className="font-semibold text-sage-800 mb-2">Create Your Farm</h3>
+                      <p className="text-sm text-sage-600 mb-4">Add your farm location and basic information</p>
+                      <Link href="/farms/create">
+                        <InlineFloatingButton
+                          icon={<Sprout className="h-4 w-4" />}
+                          label="Create Farm"
+                          variant="primary"
+                          size="sm"
+                          className="w-full"
+                        />
+                      </Link>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center group opacity-60">
+                    <div className="p-6 bg-sage-50 rounded-2xl mb-4">
+                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl mx-auto mb-4">
+                        <span className="text-lg font-bold text-gray-500">2</span>
+                      </div>
+                      <h3 className="font-semibold text-gray-600 mb-2">Add Fields</h3>
+                      <p className="text-sm text-gray-500 mb-4">Define field boundaries for satellite monitoring</p>
+                      <InlineFloatingButton
+                        icon={<MapPin className="h-4 w-4" />}
+                        label="Coming Next"
+                        variant="ghost"
+                        size="sm"
+                        className="w-full"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="text-center group opacity-60">
+                    <div className="p-6 bg-sage-50 rounded-2xl mb-4">
+                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl mx-auto mb-4">
+                        <span className="text-lg font-bold text-gray-500">3</span>
+                      </div>
+                      <h3 className="font-semibold text-gray-600 mb-2">Monitor & Analyze</h3>
+                      <p className="text-sm text-gray-500 mb-4">Get AI insights and satellite data</p>
+                      <InlineFloatingButton
+                        icon={<Brain className="h-4 w-4" />}
+                        label="Almost There"
+                        variant="ghost"
+                        size="sm"
+                        className="w-full"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+              </ModernCardContent>
+            </ModernCard>
+          </div>
+        )}
+
+          {/* Modern Stats Grid - Improved Mobile */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
             <div className="polished-card card-sage rounded-2xl p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <Sprout className="h-8 w-8 text-white" />
@@ -337,10 +416,10 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* Asymmetric Magazine Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-            {/* Main Content Area - Takes 8 columns */}
-            <div className="lg:col-span-8">
+          {/* Asymmetric Magazine Layout - Mobile Optimized */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mb-12 lg:mb-16">
+            {/* Main Content Area - Takes 8 columns, full width on mobile */}
+            <div className="lg:col-span-8 order-2 lg:order-1">
               <ModernCard variant="floating" className="overflow-hidden">
                 <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
                   <div className="flex justify-between items-center">
@@ -416,8 +495,8 @@ export default async function DashboardPage() {
               </ModernCard>
             </div>
 
-            {/* Right Sidebar - Takes 4 columns */}
-            <div className="lg:col-span-4 space-y-6">
+            {/* Right Sidebar - Takes 4 columns, appears first on mobile */}
+            <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
               <ModernCard variant="glass" className="overflow-hidden">
                 <ModernCardHeader className="bg-gradient-to-br from-cream-50/90 to-sage-50/90">
                   <div className="flex items-center gap-3">
@@ -486,11 +565,11 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* AI Insights & Task Management */}
+          {/* AI Insights & Task Management - Mobile Optimized */}
           {stats?.insights && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* AI Recommendations - Main Column */}
-              <div className="lg:col-span-7">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+              {/* AI Recommendations - Main Column, stacks on mobile */}
+              <div className="lg:col-span-7 order-2 lg:order-1">
                 <ModernCard variant="glow" className="overflow-hidden">
                   <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
                     <div className="flex items-center gap-3">
@@ -531,8 +610,8 @@ export default async function DashboardPage() {
                 </ModernCard>
               </div>
 
-              {/* Upcoming Tasks - Side Column */}
-              <div className="lg:col-span-5">
+              {/* Upcoming Tasks - Side Column, appears first on mobile */}
+              <div className="lg:col-span-5 order-1 lg:order-2">
                 <ModernCard variant="floating" className="overflow-hidden">
                   <ModernCardHeader className="bg-gradient-to-br from-cream-50 to-earth-50/80">
                     <div className="flex items-center gap-3">

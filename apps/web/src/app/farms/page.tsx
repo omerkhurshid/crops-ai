@@ -85,10 +85,10 @@ export default async function FarmsPage() {
               </div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-sage-800 mb-4 sm:mb-6 tracking-tight">
               My Farms
             </h1>
-            <p className="text-xl text-sage-600 font-light leading-relaxed mb-6">
+            <p className="text-lg sm:text-xl text-sage-600 font-light leading-relaxed mb-4 sm:mb-6">
               Manage and monitor your agricultural operations with AI-powered insights
             </p>
             
@@ -106,53 +106,53 @@ export default async function FarmsPage() {
             </div>
           </div>
         
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
-            <div className="polished-card card-sage rounded-2xl p-6 text-white">
+          {/* Stats Cards - Mobile Optimized */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
+            <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <Sprout className="h-8 w-8 text-white" />
               </div>
-              <div className="text-3xl font-bold mb-2">{userFarms.length}</div>
-              <div className="text-xl font-medium mb-2">Total Farms</div>
-              <div className="text-sm opacity-90">Active agricultural operations</div>
+              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">{userFarms.length}</div>
+              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Farms</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Active operations</div>
             </div>
 
-            <div className="polished-card card-forest rounded-2xl p-6 text-white">
+            <div className="polished-card card-forest rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <MapPin className="h-8 w-8 text-white" />
               </div>
-              <div className="text-3xl font-bold mb-2">
+              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha
               </div>
-              <div className="text-xl font-medium mb-2">Total Area</div>
-              <div className="text-sm opacity-90">Hectares under management</div>
+              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Area</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Under management</div>
             </div>
 
-            <div className="polished-card card-earth rounded-2xl p-6 text-white">
+            <div className="polished-card card-earth rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <BarChart className="h-8 w-8 text-white" />
               </div>
-              <div className="text-3xl font-bold mb-2">
+              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0)}
               </div>
-              <div className="text-xl font-medium mb-2">Active Fields</div>
-              <div className="text-sm opacity-90">Fields in production</div>
+              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Active Fields</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">In production</div>
             </div>
 
-            <div className="polished-card card-golden rounded-2xl p-6 text-white">
+            <div className="polished-card card-golden rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <MapPin className="h-8 w-8 text-white" />
               </div>
-              <div className="text-3xl font-bold mb-2">
+              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {new Set(userFarms.map((farm: any) => farm.region || 'Unknown').filter((r: string) => r !== 'Unknown')).size}
               </div>
-              <div className="text-xl font-medium mb-2">Regions</div>
-              <div className="text-sm opacity-90">Geographic coverage</div>
+              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Regions</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Geographic coverage</div>
             </div>
           </div>
 
-          {/* Farms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {/* Farms Grid - Mobile Optimized */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
             {userFarms.length > 0 ? userFarms.map((farm: any) => (
               <Link key={farm.id} href={`/farms/${farm.id}`}>
                 <ModernCard variant="floating" className="hover:scale-105 transition-all duration-300 cursor-pointer group">
@@ -234,7 +234,7 @@ export default async function FarmsPage() {
               <ModernCardDescription>Common farm management tasks</ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <Link href="/weather">
                   <div className="polished-card card-moss rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
                     <div className="font-medium mb-2">Weather Monitoring</div>

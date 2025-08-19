@@ -3,7 +3,6 @@
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
-import { GlobalSearch } from '../search/global-search'
 import { KeyboardShortcuts } from './keyboard-shortcuts'
 import { ThemeToggle } from '../theme/theme-toggle'
 import { Menu, X, HelpCircle } from 'lucide-react'
@@ -53,40 +52,18 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           {session && (
-            <>
-              <div className="hidden lg:flex lg:items-center lg:space-x-1">
-                {navLinks.slice(0, -1).map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Global Search - Desktop */}
-              <div className="hidden md:block flex-1 max-w-md mx-6">
-                <div data-global-search>
-                  <GlobalSearch 
-                    placeholder="Search farms, fields, weather..."
-                    className="w-full"
-                  />
-                </div>
-              </div>
-
-              {/* Help Link */}
-              <div className="hidden lg:flex">
+            <div className="hidden lg:flex lg:items-center lg:space-x-1">
+              {navLinks.map((link) => (
                 <Link
-                  href="/help"
+                  key={link.href}
+                  href={link.href}
                   className="text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
                 >
-                  <HelpCircle className="h-4 w-4" />
-                  Help
+                  {link.icon}
+                  {link.label}
                 </Link>
-              </div>
-            </>
+              ))}
+            </div>
           )}
 
           {/* User Menu */}

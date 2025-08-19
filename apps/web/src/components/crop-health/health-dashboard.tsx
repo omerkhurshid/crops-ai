@@ -12,6 +12,8 @@ import {
 } from 'lucide-react'
 import { InfoTooltip } from '../ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
+import { LoadingState, LoadingCard, LoadingButton } from '../ui/loading'
+import { ErrorBoundary, ErrorState } from '../ui/error-boundary'
 
 interface HealthDashboardProps {
   farmId: string
@@ -206,19 +208,17 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">Loading crop health data...</p>
-          </div>
-        </div>
-      </div>
+      <LoadingCard 
+        title="Analyzing Crop Health" 
+        message="Processing satellite imagery and vegetation indices for comprehensive field analysis..." 
+        type="health" 
+      />
     )
   }
 
   return (
-    <div className="space-y-6">
+    <ErrorBoundary>
+      <div className="space-y-6">
       {/* Data Status Indicator */}
       {dataStatus !== 'real' && (
         <Card className={`border-l-4 ${dataStatus === 'mock' ? 'border-l-blue-500 bg-blue-50' : 'border-l-yellow-500 bg-yellow-50'}`}>
@@ -578,6 +578,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </Card>
         </>
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

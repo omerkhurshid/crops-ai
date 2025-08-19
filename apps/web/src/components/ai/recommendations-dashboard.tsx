@@ -10,6 +10,8 @@ import {
   DollarSign, AlertTriangle, CheckCircle2, Clock,
   RefreshCw, ChevronRight, Target, Lightbulb
 } from 'lucide-react'
+import { LoadingState, LoadingCard, LoadingButton, AsyncWrapper } from '../ui/loading'
+import { ErrorBoundary } from '../ui/error-boundary'
 
 interface RecommendationsProps {
   farmId: string
@@ -138,7 +140,14 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
   }
 
   return (
-    <div className="space-y-6">
+    <ErrorBoundary>
+      <AsyncWrapper 
+        loading={loading} 
+        error={error}
+        onRetry={fetchRecommendations}
+        loadingComponent={<LoadingCard title="Generating AI Recommendations" message="Our AI is analyzing your farm data to provide personalized recommendations..." type="ai" />}
+      >
+        <div className="space-y-6">
       {/* Settings */}
       <Card className="border-2">
         <CardHeader>
@@ -326,6 +335,8 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
           })
         )}
       </div>
-    </div>
+        </div>
+      </AsyncWrapper>
+    </ErrorBoundary>
   )
 }

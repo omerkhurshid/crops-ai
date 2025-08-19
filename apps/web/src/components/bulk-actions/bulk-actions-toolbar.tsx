@@ -11,11 +11,11 @@ import {
   CheckCircle2, X, Loader2, ChevronDown
 } from 'lucide-react'
 
-interface BulkAction {
+export interface BulkAction {
   id: string
   label: string
   icon: React.ReactNode
-  variant: 'default' | 'primary' | 'secondary' | 'destructive' | 'ghost'
+  variant: 'primary' | 'secondary' | 'ghost' | 'success' | 'warning'
   requiresConfirmation?: boolean
   confirmationMessage?: string
   disabled?: boolean
@@ -162,7 +162,7 @@ export function BulkActionsToolbar({
                             className={`w-full text-left px-4 py-2 text-sm hover:bg-sage-50 transition-colors flex items-center gap-3 ${
                               action.disabled ? 'opacity-50 cursor-not-allowed' : ''
                             } ${
-                              action.variant === 'destructive' ? 'text-red-600 hover:bg-red-50' : 'text-sage-700'
+                              action.variant === 'warning' ? 'text-red-600 hover:bg-red-50' : 'text-sage-700'
                             }`}
                           >
                             {isExecuting === action.id ? (
@@ -209,13 +209,15 @@ export function BulkActionsToolbar({
                   </div>
                   <div className="flex gap-2">
                     <InlineFloatingButton
+                      icon={<CheckCircle2 className="h-4 w-4" />}
                       label="Confirm"
-                      variant="destructive"
+                      variant="warning"
                       size="sm"
                       onClick={() => executeAction(showConfirmation)}
                       disabled={isExecuting !== null}
                     />
                     <InlineFloatingButton
+                      icon={<X className="h-4 w-4" />}
                       label="Cancel"
                       variant="ghost"
                       size="sm"
@@ -305,7 +307,7 @@ export const farmBulkActions: BulkAction[] = [
     id: 'delete',
     label: 'Delete Farms',
     icon: <Trash2 className="h-4 w-4" />,
-    variant: 'destructive',
+    variant: 'warning',
     requiresConfirmation: true,
     confirmationMessage: 'This will permanently delete the selected farms and all associated data. This action cannot be undone.',
     description: 'Permanently remove farms'
@@ -345,7 +347,7 @@ export const fieldBulkActions: BulkAction[] = [
     id: 'delete',
     label: 'Delete Fields',
     icon: <Trash2 className="h-4 w-4" />,
-    variant: 'destructive',
+    variant: 'warning',
     requiresConfirmation: true,
     confirmationMessage: 'This will permanently delete the selected fields and all associated data.',
     description: 'Permanently remove fields'
@@ -385,7 +387,7 @@ export const financialBulkActions: BulkAction[] = [
     id: 'delete',
     label: 'Delete Transactions',
     icon: <Trash2 className="h-4 w-4" />,
-    variant: 'destructive',
+    variant: 'warning',
     requiresConfirmation: true,
     confirmationMessage: 'This will permanently delete the selected transactions. This action cannot be undone.',
     description: 'Permanently remove transactions'

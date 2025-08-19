@@ -338,6 +338,7 @@ export function OnboardingTooltips({
                   />
                 )}
                 <InlineFloatingButton
+                  icon={<X className="h-3 w-3" />}
                   label="Skip Tour"
                   variant="ghost"
                   size="sm"

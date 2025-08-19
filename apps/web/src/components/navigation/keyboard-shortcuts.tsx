@@ -7,7 +7,7 @@ import { InlineFloatingButton } from '../ui/floating-button'
 import { 
   Command, X, Keyboard, Search, Plus, Home, Activity,
   CloudRain, DollarSign, BarChart3, Settings, HelpCircle,
-  RefreshCw, ArrowUp, ArrowDown, Enter, Escape
+  RefreshCw, ArrowUp, ArrowDown
 } from 'lucide-react'
 
 interface ShortcutAction {

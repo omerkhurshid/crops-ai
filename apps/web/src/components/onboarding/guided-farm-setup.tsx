@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '../ui/alert'
 import { 
   Sprout, MapPin, Calendar, DollarSign, Settings, 
   CheckCircle2, ArrowRight, ArrowLeft, Info, Lightbulb,
-  Target, Activity, CloudRain, BarChart3, Users
+  Target, Activity, CloudRain, BarChart3, Users, X
 } from 'lucide-react'
 
 interface SetupStep {
@@ -48,7 +48,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               Transform Your Farming with AI
             </h3>
             <p className="text-sage-600 max-w-2xl mx-auto leading-relaxed">
-              You're about to unlock the power of precision agriculture with satellite monitoring, 
+              You&apos;re about to unlock the power of precision agriculture with satellite monitoring, 
               AI-powered insights, and data-driven decision making.
             </p>
           </div>
@@ -102,7 +102,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 <Sprout className="h-5 w-5 text-sage-700" />
               </div>
               <div>
-                <h4 className="font-semibold text-sage-800">What you'll provide:</h4>
+                <h4 className="font-semibold text-sage-800">What you&apos;ll provide:</h4>
                 <p className="text-sm text-sage-600">Essential farm information for setup</p>
               </div>
             </div>
@@ -372,6 +372,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             />
           )}
           <InlineFloatingButton
+            icon={<X className="h-4 w-4" />}
             label="Skip Setup"
             variant="ghost"
             onClick={handleSkip}

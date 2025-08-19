@@ -76,7 +76,16 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
         variant="primary"
       />
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      {/* Animated Background with Floating Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
+      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
+        <CloudRain className="h-8 w-8 text-sage-600" />
+      </div>
+      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
+        <Thermometer className="h-8 w-8 text-sage-600" />
+      </div>
+      
+      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           {/* Modern Header with Asymmetric Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">

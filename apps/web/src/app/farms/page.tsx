@@ -65,28 +65,49 @@ export default async function FarmsPage() {
     <div className="minimal-page">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 relative z-10">
-        <div className="px-8 lg:px-16 py-12 sm:px-0">
-          {/* Header */}
-          <div className="mb-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">My Farms</h1>
-              <p className="text-2xl text-white/80 font-light">Manage and monitor your agricultural operations</p>
+      {/* Animated Background with Floating Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
+      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
+        <Sprout className="h-8 w-8 text-sage-600" />
+      </div>
+      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
+        <MapPin className="h-8 w-8 text-sage-600" />
+      </div>
+      
+      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-16">
+          {/* Enhanced Header */}
+          <div className="text-center max-w-4xl mx-auto mb-12">
+            <div className="flex justify-center mb-6">
+              <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
+                <Sprout className="h-10 w-10 text-sage-700 relative z-10" />
+                <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
+              </div>
             </div>
-            <Link href="/farms/create">
-              <InlineFloatingButton
-                icon={<Plus className="h-5 w-5" />}
-                label="Add New Farm"
-                showLabel={true}
-                variant="primary"
-                size="lg"
-                className="min-w-[200px]"
-              />
-            </Link>
+            
+            <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+              My Farms
+            </h1>
+            <p className="text-xl text-sage-600 font-light leading-relaxed mb-6">
+              Manage and monitor your agricultural operations with AI-powered insights
+            </p>
+            
+            <div className="flex justify-center">
+              <Link href="/farms/create">
+                <InlineFloatingButton
+                  icon={<Plus className="h-5 w-5" />}
+                  label="Add New Farm"
+                  showLabel={true}
+                  variant="primary"
+                  size="lg"
+                  className="min-w-[200px]"
+                />
+              </Link>
+            </div>
           </div>
-
+        
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
             <div className="polished-card card-sage rounded-2xl p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <Sprout className="h-8 w-8 text-white" />
@@ -131,7 +152,7 @@ export default async function FarmsPage() {
           </div>
 
           {/* Farms Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {userFarms.length > 0 ? userFarms.map((farm: any) => (
               <Link key={farm.id} href={`/farms/${farm.id}`}>
                 <ModernCard variant="floating" className="hover:scale-105 transition-all duration-300 cursor-pointer group">
@@ -207,40 +228,38 @@ export default async function FarmsPage() {
           </div>
 
           {/* Quick Actions */}
-          <div className="mt-8">
-            <ModernCard variant="floating" className="overflow-hidden">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-                <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
-                <ModernCardDescription>Common farm management tasks</ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Link href="/weather">
-                    <div className="polished-card card-moss rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <div className="font-medium mb-2">Weather Monitoring</div>
-                      <div className="text-sm opacity-90">Check weather conditions for all farms</div>
-                    </div>
-                  </Link>
-                  
-                  <Link href="/crop-health">
-                    <div className="polished-card card-clay rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <div className="font-medium mb-2">Satellite Analysis</div>
-                      <div className="text-sm opacity-90">View NDVI and crop health data</div>
-                    </div>
-                  </Link>
-                  
-                  <Link href="/reports">
-                    <div className="polished-card card-wheat rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                      <div className="font-medium mb-2">Yield Predictions</div>
-                      <div className="text-sm opacity-90">Generate ML-powered yield forecasts</div>
-                    </div>
-                  </Link>
-                </div>
-              </ModernCardContent>
-            </ModernCard>
-          </div>
-        </div>
-      </main>
+          <ModernCard variant="floating" className="overflow-hidden">
+            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+              <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
+              <ModernCardDescription>Common farm management tasks</ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link href="/weather">
+                  <div className="polished-card card-moss rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <div className="font-medium mb-2">Weather Monitoring</div>
+                    <div className="text-sm opacity-90">Check weather conditions for all farms</div>
+                  </div>
+                </Link>
+                
+                <Link href="/crop-health">
+                  <div className="polished-card card-clay rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <div className="font-medium mb-2">Satellite Analysis</div>
+                    <div className="text-sm opacity-90">View NDVI and crop health data</div>
+                  </div>
+                </Link>
+                
+                <Link href="/reports">
+                  <div className="polished-card card-wheat rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <div className="font-medium mb-2">Yield Predictions</div>
+                    <div className="text-sm opacity-90">Generate ML-powered yield forecasts</div>
+                  </div>
+                </Link>
+              </div>
+            </ModernCardContent>
+          </ModernCard>
+        </main>
+      </div>
     </div>
   )
 }

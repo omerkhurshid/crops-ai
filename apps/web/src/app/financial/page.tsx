@@ -147,51 +147,73 @@ export default function FinancialPage() {
     return (
       <div className="minimal-page">
         <Navbar />
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <h1 className="text-5xl md:text-6xl font-light text-sage-800 mb-4 tracking-tight text-center">
-              Financial Management
-            </h1>
-            <p className="text-xl text-sage-600 font-light text-center">
-              Select a farm to view its financial performance
-            </p>
+        
+        {/* Animated Background with Floating Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
+        <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
+          <DollarSign className="h-8 w-8 text-sage-600" />
+        </div>
+        <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
+          <TrendingUp className="h-8 w-8 text-sage-600" />
+        </div>
+        
+        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="mb-16">
+            {/* Enhanced Header with Icon */}
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="flex justify-center mb-6">
+                <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
+                  <DollarSign className="h-10 w-10 text-sage-700 relative z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
+                </div>
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+                Financial Management
+              </h1>
+              <p className="text-xl text-sage-600 font-light leading-relaxed mb-4">
+                Select a farm to view its financial performance and profitability insights
+              </p>
+              <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                <BarChart className="h-4 w-4 mr-2" />
+                AI-Powered Financial Analytics
+              </Badge>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {farms.map((farm) => (
-              <ModernCard 
-                key={farm.id} 
-                variant="floating"
-                className="hover:scale-105 transition-all duration-300 cursor-pointer group"
-                onClick={() => setSelectedFarm(farm)}
-              >
-                <ModernCardContent className="p-6">
+              <div key={farm.id} className="group">
+                <div 
+                  className="polished-card card-sage rounded-2xl p-6 text-white cursor-pointer hover:scale-105 transition-all duration-300 hover:shadow-soft"
+                  onClick={() => setSelectedFarm(farm)}
+                >
                   <div className="flex items-center justify-between mb-4">
-                    <MapPin className="h-8 w-8 text-sage-600" />
-                    <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                      <MapPin className="h-6 w-6 text-white" />
+                    </div>
+                    <Badge className="bg-white/20 text-white border-white/30">
                       Active
                     </Badge>
                   </div>
-                  <h3 className="font-semibold text-sage-800 text-xl mb-2">{farm.name}</h3>
-                  <div className="space-y-2">
-                    <p className="text-sage-600">
+                  <h3 className="text-2xl font-bold mb-2">{farm.name}</h3>
+                  <div className="space-y-2 mb-4">
+                    <p className="text-white/90">
                       <span className="font-medium">{farm.totalArea.toFixed(1)}</span> hectares
                     </p>
                     {farm.location && (
-                      <p className="text-sm text-sage-500">{farm.location}</p>
+                      <p className="text-sm text-white/80">{farm.location}</p>
                     )}
                   </div>
-                  <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <InlineFloatingButton
-                      icon={<BarChart className="h-4 w-4" />}
-                      label="View Financials"
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-center"
-                    />
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-2 text-white/90">
+                      <BarChart className="h-4 w-4" />
+                      <span className="text-sm font-medium">View Financial Dashboard</span>
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
                   </div>
-                </ModernCardContent>
-              </ModernCard>
+                </div>
+              </div>
             ))}
           </div>
         </main>
@@ -205,17 +227,39 @@ export default function FinancialPage() {
     return (
       <div className="minimal-page">
         <Navbar />
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-          {/* Enhanced Header with Farm Info */}
-          <div className="mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        {/* Subtle Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/30 to-earth-50/30 -z-10"></div>
+        
+        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="mb-16">
+            {/* Enhanced Header with Icon and Asymmetric Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8">
-                <h1 className="text-4xl md:text-5xl font-light text-sage-800 mb-2 tracking-tight">
-                  Financial Management
-                </h1>
-                <p className="text-xl text-sage-600 font-light">
-                  Track income, expenses, and profitability for {farmToUse.name}
-                </p>
+                <div className="flex items-start gap-6">
+                  <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
+                    <DollarSign className="h-10 w-10 text-sage-700 relative z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4 mb-3">
+                      <h1 className="text-4xl md:text-6xl font-light text-sage-800 tracking-tight">
+                        Financial Management
+                      </h1>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <p className="text-xl text-sage-600 font-light">
+                        Track income, expenses, and profitability for <span className="font-semibold text-sage-800">{farmToUse.name}</span>
+                      </p>
+                      <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                        Live Data
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-sage-500 leading-relaxed">
+                      Advanced financial analytics powered by real-time market data and AI-driven insights for precision agriculture profitability
+                    </p>
+                  </div>
+                </div>
               </div>
               
               {/* Farm Selector Card */}
@@ -225,11 +269,13 @@ export default function FinancialPage() {
                     <ModernCardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <MapPin className="h-5 w-5 text-sage-600" />
+                          <div className="p-2 bg-sage-100 rounded-lg">
+                            <MapPin className="h-5 w-5 text-sage-600" />
+                          </div>
                           <div>
                             <p className="text-sm text-sage-500">Current Farm</p>
                             <p className="font-semibold text-sage-800">{farmToUse.name}</p>
-                            <p className="text-sm text-sage-600">{farmToUse.totalArea.toFixed(1)} ha</p>
+                            <p className="text-sm text-sage-600">{farmToUse.totalArea.toFixed(1)} hectares</p>
                           </div>
                         </div>
                         <InlineFloatingButton

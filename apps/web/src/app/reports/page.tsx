@@ -34,7 +34,16 @@ export default async function ReportsPage() {
         variant="primary"
       />
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      {/* Animated Background with Floating Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
+      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
+        <BarChart className="h-8 w-8 text-sage-600" />
+      </div>
+      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
+        <FileText className="h-8 w-8 text-sage-600" />
+      </div>
+      
+      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">

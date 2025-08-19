@@ -33,6 +33,24 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     }))
   }
 
+  const getPasswordStrength = (password: string) => {
+    let strength = 0
+    const checks = [
+      password.length >= 8,
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /[0-9]/.test(password),
+      /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ]
+    
+    strength = checks.filter(Boolean).length
+    
+    if (strength < 2) return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
+    if (strength < 4) return { level: 'medium', color: 'bg-yellow-500', text: 'Medium' }
+    if (strength >= 4) return { level: 'strong', color: 'bg-green-500', text: 'Strong' }
+    return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
+  }
+
   const validateForm = () => {
     if (!formData.name.trim()) {
       return 'Name is required'
@@ -215,6 +233,29 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               required
               disabled={isLoading}
             />
+            {formData.password && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        getPasswordStrength(formData.password).color
+                      }`}
+                      style={{ 
+                        width: `${(getPasswordStrength(formData.password).level === 'weak' ? 25 : 
+                                   getPasswordStrength(formData.password).level === 'medium' ? 60 : 100)}%` 
+                      }}
+                    ></div>
+                  </div>
+                  <span className={`text-xs font-medium ${
+                    getPasswordStrength(formData.password).level === 'weak' ? 'text-red-600' :
+                    getPasswordStrength(formData.password).level === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                  }`}>
+                    {getPasswordStrength(formData.password).text}
+                  </span>
+                </div>
+              </div>
+            )}
             <div className="text-xs text-gray-600">
               Password must have 8+ characters, one uppercase letter, and one special character
             </div>

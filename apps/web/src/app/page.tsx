@@ -16,12 +16,6 @@ export default function Home() {
     <div className="minimal-page">
       <Navbar />
       
-      {/* Floating Action Button */}
-      <ClientFloatingButton
-        icon={<Sparkles className="h-5 w-5" />}
-        label="Get Started"
-        variant="primary"
-      />
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -212,34 +206,34 @@ export default function Home() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/features" className="hover:text-sage-900 transition-colors">Features</Link></li>
                 <li><Link href="/pricing" className="hover:text-sage-900 transition-colors">Pricing</Link></li>
-                <li><Link href="/demo" className="hover:text-sage-900 transition-colors">Demo</Link></li>
+                <li><Link href="/dashboard" className="hover:text-sage-900 transition-colors">Dashboard Demo</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4 text-sage-800">Company</h4>
+              <h4 className="font-semibold mb-4 text-sage-800">Platform</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-sage-900 transition-colors">About Us</Link></li>
-                <li><Link href="/careers" className="hover:text-sage-900 transition-colors">Careers</Link></li>
-                <li><Link href="/contact" className="hover:text-sage-900 transition-colors">Contact</Link></li>
+                <li><Link href="/crop-health" className="hover:text-sage-900 transition-colors">Crop Health</Link></li>
+                <li><Link href="/weather" className="hover:text-sage-900 transition-colors">Weather Intelligence</Link></li>
+                <li><Link href="/recommendations" className="hover:text-sage-900 transition-colors">AI Recommendations</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4 text-sage-800">Resources</h4>
+              <h4 className="font-semibold mb-4 text-sage-800">Management</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/docs" className="hover:text-sage-900 transition-colors">Documentation</Link></li>
-                <li><Link href="/blog" className="hover:text-sage-900 transition-colors">Blog</Link></li>
-                <li><Link href="/support" className="hover:text-sage-900 transition-colors">Support</Link></li>
+                <li><Link href="/farms" className="hover:text-sage-900 transition-colors">Farm Management</Link></li>
+                <li><Link href="/financial" className="hover:text-sage-900 transition-colors">Financial Tracking</Link></li>
+                <li><Link href="/fields" className="hover:text-sage-900 transition-colors">Field Operations</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4 text-sage-800">Legal</h4>
+              <h4 className="font-semibold mb-4 text-sage-800">Account</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/privacy" className="hover:text-sage-900 transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-sage-900 transition-colors">Terms of Service</Link></li>
-                <li><Link href="/cookies" className="hover:text-sage-900 transition-colors">Cookie Policy</Link></li>
+                <li><Link href="/register" className="hover:text-sage-900 transition-colors">Sign Up</Link></li>
+                <li><Link href="/login" className="hover:text-sage-900 transition-colors">Sign In</Link></li>
+                <li><Link href="/dashboard" className="hover:text-sage-900 transition-colors">Dashboard</Link></li>
               </ul>
             </div>
           </div>

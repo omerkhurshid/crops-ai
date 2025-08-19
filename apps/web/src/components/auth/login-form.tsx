@@ -95,7 +95,20 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex justify-between items-center">
+              <Label htmlFor="password">Password</Label>
+              <a 
+                href="#" 
+                className="text-sm text-sage-600 hover:text-sage-800 underline" 
+                onClick={(e) => {
+                  e.preventDefault()
+                  // TODO: Implement forgot password flow
+                  alert('Forgot password feature coming soon! Please contact support.')
+                }}
+              >
+                Forgot password?
+              </a>
+            </div>
             <Input
               id="password"
               type="password"

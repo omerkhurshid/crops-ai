@@ -9,6 +9,7 @@ import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Navbar } from '../../components/navigation/navbar'
 import { OnboardingFlow } from '../../components/onboarding/onboarding-flow'
+import { OnboardingTooltips, dashboardTooltips } from '../../components/onboarding/onboarding-tooltips'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
   Plus, Brain, CloudRain, BarChart, Settings, Zap, Target
@@ -303,7 +304,7 @@ export default async function DashboardPage() {
         )}
 
           {/* Modern Stats Grid - Improved Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16" data-tour="dashboard-stats">
             <div className="polished-card card-sage rounded-2xl p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <Sprout className="h-8 w-8 text-white" />
@@ -417,7 +418,7 @@ export default async function DashboardPage() {
                         </div>
                         <h3 className="font-medium text-sage-700 mb-2">No activity yet</h3>
                         <p className="text-sage-500 text-sm mb-6">Your farm activities will appear here as you manage your operations</p>
-                        <Link href="/farms/create">
+                        <Link href="/farms/create" data-tour="add-farm-button">
                           <InlineFloatingButton
                             icon={<Plus className="h-4 w-4" />}
                             label="Create Your First Farm"
@@ -456,7 +457,7 @@ export default async function DashboardPage() {
                         className="w-full justify-start"
                       />
                     </Link>
-                    <Link href="/weather">
+                    <Link href="/weather" data-tour="weather-section">
                       <InlineFloatingButton
                         icon={<CloudRain className="h-4 w-4" />}
                         label="Weather Monitoring"
@@ -466,7 +467,7 @@ export default async function DashboardPage() {
                         className="w-full justify-start"
                       />
                     </Link>
-                    <Link href="/crop-health">
+                    <Link href="/crop-health" data-tour="health-section">
                       <InlineFloatingButton
                         icon={<Activity className="h-4 w-4" />}
                         label="Crop Health Analytics"
@@ -598,6 +599,17 @@ export default async function DashboardPage() {
             </div>
           )}
       </main>
+
+      {/* Progressive Onboarding Tooltips - Show only for new users */}
+      {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
+        <OnboardingTooltips
+          steps={dashboardTooltips}
+          onComplete={() => console.log('Dashboard tour completed')}
+          onSkip={() => console.log('Dashboard tour skipped')}
+          startDelay={2000}
+          theme="sage"
+        />
+      )}
     </div>
   )
 }

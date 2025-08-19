@@ -3,7 +3,9 @@
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
-import { Menu, X } from 'lucide-react'
+import { GlobalSearch } from '../search/global-search'
+import { KeyboardShortcuts } from './keyboard-shortcuts'
+import { Menu, X, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
 
@@ -23,6 +25,7 @@ export function Navbar() {
     { href: '/recommendations', label: 'AI Insights' },
     { href: '/financial', label: 'Financials' },
     { href: '/reports', label: 'Reports' },
+    { href: '/help', label: 'Help', icon: <HelpCircle className="h-4 w-4" /> },
   ]
 
   return (
@@ -49,17 +52,40 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           {session && (
-            <div className="hidden lg:flex lg:items-center lg:space-x-1">
-              {navLinks.map((link) => (
+            <>
+              <div className="hidden lg:flex lg:items-center lg:space-x-1">
+                {navLinks.slice(0, -1).map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Global Search - Desktop */}
+              <div className="hidden md:block flex-1 max-w-md mx-6">
+                <div data-global-search>
+                  <GlobalSearch 
+                    placeholder="Search farms, fields, weather..."
+                    className="w-full"
+                  />
+                </div>
+              </div>
+
+              {/* Help Link */}
+              <div className="hidden lg:flex">
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                  href="/help"
+                  className="text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
                 >
-                  {link.label}
+                  <HelpCircle className="h-4 w-4" />
+                  Help
                 </Link>
-              ))}
-            </div>
+              </div>
+            </>
           )}
 
           {/* User Menu */}
@@ -133,6 +159,9 @@ export function Navbar() {
           </div>
         )}
       </div>
+
+      {/* Keyboard Shortcuts System */}
+      {session && <KeyboardShortcuts />}
     </nav>
   )
 }

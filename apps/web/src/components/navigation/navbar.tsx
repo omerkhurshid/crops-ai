@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { GlobalSearch } from '../search/global-search'
 import { KeyboardShortcuts } from './keyboard-shortcuts'
+import { ThemeToggle } from '../theme/theme-toggle'
 import { Menu, X, HelpCircle } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
@@ -90,6 +91,7 @@ export function Navbar() {
 
           {/* User Menu */}
           <div className="flex items-center space-x-3">
+            {session && <ThemeToggle variant="compact" />}
             {status === 'loading' ? (
               <div className="animate-pulse bg-sage-100 h-9 w-24 rounded-lg"></div>
             ) : session ? (

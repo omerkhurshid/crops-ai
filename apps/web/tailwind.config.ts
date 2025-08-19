@@ -6,6 +6,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -78,6 +79,7 @@ const config: Config = {
           700: '#374d3b',
           800: '#2e3f32',
           900: '#1f2a22',
+          950: '#0f1510',
         },
         'cream': {
           50: '#fefffe',
@@ -90,6 +92,7 @@ const config: Config = {
           700: '#9a9086',
           800: '#7a7169',
           900: '#5d5751',
+          950: '#403e3a',
         },
         'earth': {
           50: '#faf8f3',
@@ -102,6 +105,7 @@ const config: Config = {
           700: '#8b6d44',
           800: '#71583d',
           900: '#5c4835',
+          950: '#3d2f23',
         },
       },
       borderRadius: {

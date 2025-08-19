@@ -7,6 +7,7 @@ import { InfoTooltip } from '../../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
+import { NoFieldsEmptyState, EmptyStateCard } from '../../../components/ui/empty-states'
 import { Navbar } from '../../../components/navigation/navbar'
 import { SatelliteViewer } from '../../../components/satellite/satellite-viewer'
 import { MarketDashboard } from '../../../components/market/market-dashboard'
@@ -295,22 +296,9 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="relative">
-                      <Sprout className="h-16 w-16 text-sage-300 mx-auto mb-4 animate-pulse-soft" />
-                      <div className="absolute inset-0 rounded-full bg-sage-100 opacity-20 animate-float"></div>
-                    </div>
-                    <h3 className="font-medium text-sage-700 mb-2">No fields added yet</h3>
-                    <p className="text-sage-500 text-sm mb-4">Start by adding your first field to begin monitoring</p>
-                    <Link href={`/farms/${farm.id}/fields/create`}>
-                      <InlineFloatingButton
-                        icon={<Plus className="h-4 w-4" />}
-                        label="Add Your First Field"
-                        showLabel={true}
-                        variant="primary"
-                      />
-                    </Link>
-                  </div>
+                  <EmptyStateCard>
+                    <NoFieldsEmptyState farmId={farm.id} />
+                  </EmptyStateCard>
                 )}
               </ModernCardContent>
             </ModernCard>

@@ -8,6 +8,7 @@ import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
+import { NoHealthDataEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { prisma } from '../../lib/prisma'
 import { Leaf, Satellite, Brain, Activity, Settings, Zap, BarChart3 } from 'lucide-react'
@@ -55,10 +56,8 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
   const farms = await getUserFarms(user.id)
   const selectedFarm = await getSelectedFarm(searchParams.farmId || null, user.id)
 
-  // If no farms exist, redirect to create farm
-  if (farms.length === 0) {
-    redirect('/farms/create')
-  }
+  // If no farms exist, show empty state instead of redirect
+  const showEmptyState = farms.length === 0
 
   // If no farm selected or invalid farm, use first farm
   const farmId = selectedFarm?.id || farms[0].id
@@ -173,27 +172,35 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
         </div>
 
         {/* Health Dashboard with Modern Wrapper */}
-        <div className="space-y-8">
-          <HealthDashboard farmId={farmId} />
-        </div>
+        {showEmptyState ? (
+          <EmptyStateCard className="max-w-3xl mx-auto">
+            <NoHealthDataEmptyState />
+          </EmptyStateCard>
+        ) : (
+          <div className="space-y-8">
+            <HealthDashboard farmId={farmId} />
+          </div>
+        )}
 
         {/* Advanced Visualizations Section */}
-        <div className="space-y-8">
-          <ModernCard variant="floating">
-            <ModernCardHeader>
-              <ModernCardTitle className="text-sage-800 flex items-center gap-3">
-                <BarChart3 className="h-6 w-6" />
-                Advanced Health Analytics
-              </ModernCardTitle>
-              <ModernCardDescription>
-                In-depth visualization and trend analysis of your crop health data
-              </ModernCardDescription>
-            </ModernCardHeader>
-            <ModernCardContent>
-              <AdvancedVisualizations farmId={farmId} />
-            </ModernCardContent>
-          </ModernCard>
-        </div>
+        {!showEmptyState && (
+          <div className="space-y-8">
+            <ModernCard variant="floating">
+              <ModernCardHeader>
+                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
+                  <BarChart3 className="h-6 w-6" />
+                  Advanced Health Analytics
+                </ModernCardTitle>
+                <ModernCardDescription>
+                  In-depth visualization and trend analysis of your crop health data
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <AdvancedVisualizations farmId={farmId} />
+              </ModernCardContent>
+            </ModernCard>
+          </div>
+        )}
       </main>
     </div>
   )

@@ -4,6 +4,7 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
+import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
 import { Navbar } from '../../components/navigation/navbar'
 import { prisma } from '../../lib/prisma'
@@ -207,22 +208,10 @@ export default async function FarmsPage() {
                 </ModernCard>
               </Link>
             )) : (
-              <div className="col-span-full text-center py-12">
-                <ModernCard variant="soft" className="max-w-md mx-auto">
-                  <ModernCardContent className="p-8">
-                    <Sprout className="h-16 w-16 text-sage-300 mx-auto mb-4" />
-                    <p className="text-lg font-medium mb-2 text-sage-700">No farms yet</p>
-                    <p className="text-sm mb-6 text-sage-600">Create your first farm to get started with agricultural monitoring</p>
-                    <Link href="/farms/create">
-                      <InlineFloatingButton
-                        icon={<Plus className="h-4 w-4" />}
-                        label="Create Your First Farm"
-                        showLabel={true}
-                        variant="primary"
-                      />
-                    </Link>
-                  </ModernCardContent>
-                </ModernCard>
+              <div className="col-span-full">
+                <EmptyStateCard className="max-w-3xl mx-auto">
+                  <NoFarmsEmptyState />
+                </EmptyStateCard>
               </div>
             )}
           </div>

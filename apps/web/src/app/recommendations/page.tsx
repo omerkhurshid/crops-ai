@@ -7,6 +7,7 @@ import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
+import { NoRecommendationsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Badge } from '../../components/ui/badge'
 import { prisma } from '../../lib/prisma'
 import { FarmSelector } from '../../components/weather/farm-selector'
@@ -55,10 +56,8 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
   const farms = await getUserFarms(user.id)
   const selectedFarm = await getSelectedFarm(searchParams.farmId || null, user.id)
 
-  // If no farms exist, redirect to create farm
-  if (farms.length === 0) {
-    redirect('/farms/create')
-  }
+  // If no farms exist, show empty state instead of redirect
+  const showEmptyState = farms.length === 0
 
   // If no farm selected or invalid farm, use first farm
   const farmId = selectedFarm?.id || farms[0].id
@@ -190,9 +189,15 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
         </div>
 
         {/* Recommendations Dashboard with Modern Wrapper */}
-        <div className="space-y-8">
-          <RecommendationsDashboard farmId={farmId} />
-        </div>
+        {showEmptyState ? (
+          <EmptyStateCard className="max-w-3xl mx-auto">
+            <NoRecommendationsEmptyState />
+          </EmptyStateCard>
+        ) : (
+          <div className="space-y-8">
+            <RecommendationsDashboard farmId={farmId} />
+          </div>
+        )}
       </main>
     </div>
   )

@@ -8,6 +8,7 @@ import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Navbar } from '../../components/navigation/navbar'
+import { OnboardingFlow } from '../../components/onboarding/onboarding-flow'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
   Plus, Brain, CloudRain, BarChart, Settings, Zap, Target
@@ -286,82 +287,18 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* New User Onboarding Guide */}
-        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
+        {/* Enhanced Onboarding Flow */}
+        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0 || 
+          (stats.overview.totalFarms > 0 && stats.overview.totalFields === 0)) && (
           <div className="mb-16">
-            <ModernCard variant="glow" className="overflow-hidden max-w-4xl mx-auto">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl">
-                    <Sprout className="h-8 w-8 text-sage-700" />
-                  </div>
-                </div>
-                <ModernCardTitle className="text-2xl text-sage-800 mb-4">
-                  Welcome to Crops.AI! Let&apos;s get you started.
-                </ModernCardTitle>
-                <ModernCardDescription className="text-lg max-w-2xl mx-auto">
-                  Follow these simple steps to unlock the full power of AI-driven farm management
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent className="p-8">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                  <div className="text-center group">
-                    <div className="p-6 bg-sage-50 rounded-2xl mb-4 group-hover:bg-sage-100 transition-colors">
-                      <div className="flex items-center justify-center w-12 h-12 bg-sage-200 rounded-xl mx-auto mb-4">
-                        <span className="text-lg font-bold text-sage-800">1</span>
-                      </div>
-                      <h3 className="font-semibold text-sage-800 mb-2">Create Your Farm</h3>
-                      <p className="text-sm text-sage-600 mb-4">Add your farm location and basic information</p>
-                      <Link href="/farms/create">
-                        <InlineFloatingButton
-                          icon={<Sprout className="h-4 w-4" />}
-                          label="Create Farm"
-                          variant="primary"
-                          size="sm"
-                          className="w-full"
-                        />
-                      </Link>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center group opacity-60">
-                    <div className="p-6 bg-sage-50 rounded-2xl mb-4">
-                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl mx-auto mb-4">
-                        <span className="text-lg font-bold text-gray-500">2</span>
-                      </div>
-                      <h3 className="font-semibold text-gray-600 mb-2">Add Fields</h3>
-                      <p className="text-sm text-gray-500 mb-4">Define field boundaries for satellite monitoring</p>
-                      <InlineFloatingButton
-                        icon={<MapPin className="h-4 w-4" />}
-                        label="Coming Next"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="text-center group opacity-60">
-                    <div className="p-6 bg-sage-50 rounded-2xl mb-4">
-                      <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl mx-auto mb-4">
-                        <span className="text-lg font-bold text-gray-500">3</span>
-                      </div>
-                      <h3 className="font-semibold text-gray-600 mb-2">Monitor & Analyze</h3>
-                      <p className="text-sm text-gray-500 mb-4">Get AI insights and satellite data</p>
-                      <InlineFloatingButton
-                        icon={<Brain className="h-4 w-4" />}
-                        label="Almost There"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full"
-                        disabled
-                      />
-                    </div>
-                  </div>
-                </div>
-              </ModernCardContent>
-            </ModernCard>
+            <OnboardingFlow 
+              userStats={{
+                totalFarms: stats?.overview?.totalFarms || 0,
+                totalFields: stats?.overview?.totalFields || 0,
+                hasWeatherData: (stats?.overview?.weatherAlerts || 0) > 0,
+                hasRecommendations: false // TODO: Add recommendation tracking
+              }}
+            />
           </div>
         )}
 

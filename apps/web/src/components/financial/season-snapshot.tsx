@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { ModernCard, ModernCardContent } from '@/components/ui/modern-card';
-import { Badge } from '@/components/ui/badge';
-import { InfoTooltip } from '@/components/ui/info-tooltip';
-import { TOOLTIP_CONTENT } from '@/lib/tooltip-content';
-import { TrendingUp, TrendingDown, DollarSign, BarChart3, Wallet, TrendingDown as Loss, PiggyBank, Calculator } from 'lucide-react';
+import React from 'react'
+import { ModernCard, ModernCardContent } from '@/components/ui/modern-card'
+import { Badge } from '@/components/ui/badge'
+import { InfoTooltip } from '@/components/ui/info-tooltip'
+import { TOOLTIP_CONTENT } from '@/lib/tooltip-content'
+import { TrendingUp, TrendingDown, DollarSign, BarChart3, Wallet, PiggyBank, Calculator } from 'lucide-react'
 
 interface FinancialSummary {
   totalIncome: number;
@@ -135,7 +135,8 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
             </div>
           )}
         </div>
-      </div>
+        </ModernCardContent>
+      </ModernCard>
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -168,8 +169,6 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           icon={<DollarSign className="h-5 w-5" />}
           color="gray"
         />
-      </div>
-
       </div>
     </div>
   );

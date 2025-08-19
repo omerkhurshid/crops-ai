@@ -258,8 +258,8 @@ export default async function FarmsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

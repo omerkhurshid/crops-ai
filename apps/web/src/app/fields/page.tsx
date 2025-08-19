@@ -1,3 +1,4 @@
+import React from 'react'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../../components/ui/modern-card'

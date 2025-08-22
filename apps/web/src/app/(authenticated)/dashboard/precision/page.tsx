@@ -15,7 +15,7 @@ export default async function PrecisionDashboardPage() {
   let farm = null
   try {
     farm = await prisma.farm.findFirst({
-      where: { userId: user.id },
+      where: { ownerId: user.id },
       select: { id: true, name: true, latitude: true, longitude: true }
     })
   } catch (error) {

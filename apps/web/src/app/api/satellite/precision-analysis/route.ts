@@ -235,7 +235,7 @@ function generateExecutiveSummary(analysisResults: any[], alerts: any[], precisi
       .map(alert => ({
         field: alert.fieldName,
         action: alert.title,
-        timeframe: alert.actionItems.find(item => item.priority === 'immediate')?.task || 'Immediate assessment required'
+        timeframe: alert.actionItems.find((item: any) => item.priority === 'immediate')?.task || 'Immediate assessment required'
       })),
     investmentRecommendation: {
       priority: totalInvestment > 0 ? (expectedReturn / totalInvestment > 2 ? 'High Priority' : 'Consider') : 'No immediate investment needed',

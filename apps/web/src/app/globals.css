@@ -65,11 +65,11 @@
 }
 
 @layer components {
-  /* Agricultural background with new field image */
+  /* Agricultural background with aerial fields image */
   .bg-agricultural {
     background-image: 
-      linear-gradient(135deg, rgba(34, 69, 34, 0.3) 0%, rgba(22, 44, 22, 0.4) 100%),
-      url('/agricultural-field-bg.jpg');
+      linear-gradient(135deg, rgba(34, 69, 34, 0.2) 0%, rgba(22, 44, 22, 0.3) 100%),
+      url('/images/aerial-fields.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

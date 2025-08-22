@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../components/ui/modern-card'
 import { LoadingSpinner } from '../../components/ui/loading'
@@ -8,7 +8,7 @@ import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { CheckCircle2, XCircle, Loader2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying')
@@ -114,5 +114,20 @@ export default function VerifyEmailPage() {
         </ModernCard>
       </div>
     </div>
+  )
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-agricultural">
+        <div className="absolute inset-0 agricultural-overlay"></div>
+        <div className="relative z-10">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        </div>
+      </div>
+    }>
+      <VerifyEmailContent />
+    </Suspense>
   )
 }

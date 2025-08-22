@@ -16,74 +16,64 @@ export default function Home() {
     <div className="min-h-screen bg-agricultural">
       <Navbar />
       
-      {/* Hero Section with Glassmorphic Design */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Floating Glass Elements */}
-        <div className="absolute top-20 left-20 p-6 glass-feature rounded-3xl animate-float hidden md:block">
-          <Sprout className="h-8 w-8 text-white" />
-        </div>
-        <div className="absolute bottom-20 right-20 p-6 glass-feature rounded-3xl animate-float hidden md:block" style={{ animationDelay: '2s' }}>
-          <Brain className="h-8 w-8 text-white" />
-        </div>
-        <div className="absolute top-1/3 right-1/4 p-6 glass-feature rounded-3xl animate-float hidden lg:block" style={{ animationDelay: '4s' }}>
-          <Satellite className="h-8 w-8 text-white" />
-        </div>
+      {/* Full Page Glassmorphic Layout */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-8 px-4 sm:px-6 lg:px-8">
         
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-5xl mx-auto glass-hero p-12 md:p-16">
-            {/* Logo Badge */}
-            <Badge className="glass-feature text-white border-white/30 mb-8 px-6 py-3 text-sm font-medium">
-              <Sparkles className="h-4 w-4 mr-2" />
-              AI-Powered Precision Agriculture
-            </Badge>
+        <div className="relative z-10 max-w-7xl mx-auto w-full">
+          {/* Large Extended Glass Container */}
+          <div className="glass-hero-extended p-8 md:p-12 lg:p-16 text-center min-h-[80vh] flex flex-col justify-center">
             
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-light mb-8 text-white tracking-tight drop-shadow-lg">
-              Crops<span className="text-green-200">.AI</span>
+            {/* Top Badge */}
+            <div className="mb-12">
+              <Badge className="glass-badge text-white border-white/30 px-8 py-4 text-base font-medium rounded-full">
+                <Sparkles className="h-5 w-5 mr-3" />
+                AI-Powered Precision Agriculture
+              </Badge>
+            </div>
+            
+            {/* Main Title */}
+            <h1 className="text-7xl md:text-9xl lg:text-[12rem] font-extralight mb-12 text-white tracking-tight drop-shadow-2xl leading-none">
+              Crops<span className="text-white/70">.AI</span>
             </h1>
             
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+            {/* Description */}
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-16 max-w-5xl mx-auto leading-relaxed font-light">
               Transform your agricultural operations with intelligent decision-support, 
               real-time monitoring, and predictive analytics powered by cutting-edge AI technology.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            {/* Elegant Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
               <Link href="/register">
-                <InlineFloatingButton
-                  icon={<ArrowRight className="h-5 w-5" />}
-                  label="Start Free Trial"
-                  showLabel={true}
-                  variant="primary"
-                  size="lg"
-                  className="min-w-[200px] bg-white/20 hover:bg-white/30 border-white/40"
-                />
+                <button className="glass-button-primary px-10 py-4 text-white font-medium text-lg rounded-full min-w-[220px] transition-all duration-300">
+                  <ArrowRight className="h-5 w-5 mr-3 inline" />
+                  Start Free Trial
+                </button>
               </Link>
               <Link href="/login">
-                <InlineFloatingButton
-                  icon={<Users className="h-5 w-5" />}
-                  label="Sign In"
-                  showLabel={true}
-                  variant="ghost"
-                  size="lg"
-                  className="min-w-[200px] text-white border-white/40 hover:bg-white/10"
-                />
+                <button className="glass-button-secondary px-10 py-4 text-white font-medium text-lg rounded-full min-w-[220px] transition-all duration-300">
+                  <Users className="h-5 w-5 mr-3 inline" />
+                  Sign In
+                </button>
               </Link>
             </div>
             
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8 text-white/80">
-              <div className="flex items-center gap-2 glass-feature px-4 py-2 rounded-full">
-                <Shield className="h-4 w-4" />
-                <span className="text-sm">Bank-grade Security</span>
+            {/* Elegant Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-white/70">
+              <div className="flex items-center gap-3 glass-indicator px-6 py-3 rounded-full">
+                <Shield className="h-5 w-5" />
+                <span className="text-base font-light">Bank-grade Security</span>
               </div>
-              <div className="flex items-center gap-2 glass-feature px-4 py-2 rounded-full">
-                <BarChart className="h-4 w-4" />
-                <span className="text-sm">99.9% Uptime</span>
+              <div className="flex items-center gap-3 glass-indicator px-6 py-3 rounded-full">
+                <BarChart className="h-5 w-5" />
+                <span className="text-base font-light">99.9% Uptime</span>
               </div>
-              <div className="flex items-center gap-2 glass-feature px-4 py-2 rounded-full">
-                <Users className="h-4 w-4" />
-                <span className="text-sm">10,000+ Farmers</span>
+              <div className="flex items-center gap-3 glass-indicator px-6 py-3 rounded-full">
+                <Users className="h-5 w-5" />
+                <span className="text-base font-light">10,000+ Farmers</span>
               </div>
             </div>
+            
           </div>
         </div>
       </section>

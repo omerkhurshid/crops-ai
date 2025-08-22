@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -24,11 +25,38 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     // Check for registration success
     const registered = searchParams?.get('registered')
     const emailParam = searchParams?.get('email')
+    const verified = searchParams?.get('verified')
+    const errorParam = searchParams?.get('error')
+    const passwordReset = searchParams?.get('password-reset')
     
     if (registered === 'true') {
       setSuccessMessage('Account created successfully! Please sign in with your credentials.')
       if (emailParam) {
         setEmail(decodeURIComponent(emailParam))
+      }
+    }
+    
+    if (verified === 'true') {
+      setSuccessMessage('Email verified successfully! You can now sign in.')
+    }
+    
+    if (passwordReset === 'true') {
+      setSuccessMessage('Password reset successfully! You can now sign in with your new password.')
+    }
+    
+    if (errorParam) {
+      switch (errorParam) {
+        case 'missing-token':
+          setError('Verification token is missing.')
+          break
+        case 'invalid-token':
+          setError('Invalid or expired verification token.')
+          break
+        case 'verification-failed':
+          setError('Email verification failed. Please try again.')
+          break
+        default:
+          setError('An error occurred.')
       }
     }
   }, [searchParams])
@@ -97,17 +125,12 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="password">Password</Label>
-              <a 
-                href="#" 
-                className="text-sm text-sage-600 hover:text-sage-800 underline" 
-                onClick={(e) => {
-                  e.preventDefault()
-                  // TODO: Implement forgot password flow
-                  alert('Forgot password feature coming soon! Please contact support.')
-                }}
+              <Link 
+                href="/forgot-password" 
+                className="text-sm text-sage-600 hover:text-sage-800 underline"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
             <Input
               id="password"

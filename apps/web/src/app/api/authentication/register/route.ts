@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { hash } from 'bcryptjs'
 import { prisma } from '@crops-ai/database'
 import { UserRole } from '@crops-ai/shared'
+import { sendVerificationEmail } from '../../../../lib/auth/email-verification'
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,13 +39,14 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hash(password, 12)
 
-    // Create user
+    // Create user (unverified)
     const user = await prisma.user.create({
       data: {
         name,
         email,
         passwordHash: hashedPassword,
-        role: role as UserRole || UserRole.FARM_OWNER
+        role: role as UserRole || UserRole.FARM_OWNER,
+        emailVerified: null // Not verified yet
       },
       select: {
         id: true,
@@ -57,14 +59,24 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ User created successfully:', { id: user.id, email: user.email })
 
+    // Send verification email
+    try {
+      await sendVerificationEmail(user.id, user.email, user.name)
+      console.log('📧 Verification email sent to:', user.email)
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError)
+      // Don't fail registration if email fails
+    }
+
     return Response.json({
-      message: 'User created successfully',
+      message: 'User created successfully! Please check your email to verify your account.',
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role
-      }
+      },
+      requiresVerification: true
     }, { status: 201 })
 
   } catch (error) {

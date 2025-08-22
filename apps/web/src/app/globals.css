@@ -65,7 +65,7 @@
 }
 
 @layer components {
-  /* Agricultural background with aerial fields image */
+  /* Agricultural background with beautiful aerial fields image */
   .bg-agricultural {
     background-image: 
       linear-gradient(135deg, rgba(34, 69, 34, 0.2) 0%, rgba(22, 44, 22, 0.3) 100%),

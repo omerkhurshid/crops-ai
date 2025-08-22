@@ -24,9 +24,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Email verified successfully!',
       user: {
-        id: result.user.id,
-        email: result.user.email,
-        name: result.user.name
+        id: result.user!.id,
+        email: result.user!.email,
+        name: result.user!.name
       }
     })
     

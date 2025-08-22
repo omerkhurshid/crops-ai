@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
                 <h3 className="text-xl font-semibold text-sage-800">Check Your Email</h3>
                 <p className="text-sage-600">
                   If an account exists with <span className="font-medium">{email}</span>, 
-                  we've sent a password reset link.
+                  we&apos;ve sent a password reset link.
                 </p>
                 <p className="text-sm text-sage-500">
                   The link will expire in 1 hour.
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
           <ModernCardHeader>
             <ModernCardTitle>Forgot Password?</ModernCardTitle>
             <ModernCardDescription>
-              Enter your email address and we'll send you a link to reset your password.
+              Enter your email address and we&apos;ll send you a link to reset your password.
             </ModernCardDescription>
           </ModernCardHeader>
           <ModernCardContent>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { hash } from 'bcryptjs'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
@@ -59,7 +58,7 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (password !== confirmPassword) {
+    if (password.localeCompare(confirmPassword) !== 0) {
       setError('Passwords do not match')
       return
     }

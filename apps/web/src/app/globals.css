@@ -247,7 +247,7 @@
     min-height: 100vh;
     background-image: 
       linear-gradient(135deg, rgba(34, 69, 34, 0.15) 0%, rgba(22, 44, 22, 0.25) 100%),
-      url('/hero-page.jpg');
+      url('/aerial-fields.jpg?v=20250822');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

@@ -25,10 +25,10 @@ export default function Home() {
             
             {/* Top Badge */}
             <div className="mb-8">
-              <Badge className="glass-badge text-white border-white/30 px-6 py-3 text-sm font-medium rounded-full">
+              <div className="glass-badge text-white border-white/30 px-6 py-3 text-sm font-medium rounded-full inline-flex items-center">
                 <Sparkles className="h-4 w-4 mr-2" />
                 Trusted by 10,000+ Farmers Worldwide
-              </Badge>
+              </div>
             </div>
             
             {/* Main Title - Smaller */}

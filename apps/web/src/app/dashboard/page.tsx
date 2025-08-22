@@ -12,7 +12,7 @@ import { OnboardingFlow } from '../../components/onboarding/onboarding-flow'
 import { OnboardingTooltips, dashboardTooltips } from '../../components/onboarding/onboarding-tooltips'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
-  Plus, Brain, CloudRain, BarChart, Settings, Zap, Target
+  Plus, Brain, CloudRain, BarChart, Settings, Zap, Target, Satellite
 } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
 
@@ -493,6 +493,16 @@ export default async function DashboardPage() {
                         label="Weather Alerts"
                         showLabel={true}
                         variant="ghost"
+                        size="md"
+                        className="w-full justify-start"
+                      />
+                    </Link>
+                    <Link href="/dashboard/satellite-health" data-tour="satellite-section">
+                      <InlineFloatingButton
+                        icon={<Satellite className="h-4 w-4" />}
+                        label="Satellite Health Monitor"
+                        showLabel={true}
+                        variant="secondary"
                         size="md"
                         className="w-full justify-start"
                       />

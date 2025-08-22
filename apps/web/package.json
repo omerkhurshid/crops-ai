@@ -47,6 +47,7 @@
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-tabs": "^1.1.12",
+    "@react-google-maps/api": "^2.20.7",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^18",

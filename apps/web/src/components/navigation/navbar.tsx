@@ -20,6 +20,7 @@ export function Navbar() {
   const navLinks = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/farms', label: 'Farms' },
+    { href: '/dashboard/precision', label: 'Precision Ag' },
     { href: '/weather', label: 'Weather' },
     { href: '/crop-health', label: 'Crop Health' },
     { href: '/recommendations', label: 'AI Insights' },

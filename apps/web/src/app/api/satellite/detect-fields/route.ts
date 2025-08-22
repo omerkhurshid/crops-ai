@@ -59,9 +59,14 @@ export async function POST(request: NextRequest) {
       ]
 
       detectedFields.push({
-        id: `field-${i + 1}`,
+        id: `field-${Date.now()}-${i + 1}`,
+        name: `Field ${i + 1}`,
         area: Math.round(fieldSize * 10) / 10, // Round to 1 decimal
         boundaries,
+        center: {
+          lat: fieldCenterLat,
+          lng: fieldCenterLng
+        },
         confidence: 0.85 + Math.random() * 0.10, // 85-95% confidence
         fieldType: Math.random() > 0.7 ? 'irregular' : 'rectangular',
         estimatedCropType: fieldSize > 50 ? 'field-crop' : 'specialty',
@@ -76,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      detectedFields,
+      fields: detectedFields,
       statistics: {
         totalFields: detectedFields.length,
         totalArea: Math.round(totalArea * 10) / 10,

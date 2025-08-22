@@ -10,7 +10,7 @@ import { Badge } from '../../../components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { Navbar } from '../../../components/navigation/navbar'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
-import { SatelliteMapViewer } from '../../../components/farm/satellite-map-viewer'
+import { GoogleMapsFieldEditor } from '../../../components/farm/google-maps-field-editor'
 import { getCropRecommendations, getLivestockRecommendations } from '../../../lib/farm/regional-crops'
 import { COMPREHENSIVE_CROP_DATABASE, getCropsByCategory as getComprehensiveCropsByCategory, CROP_CATEGORIES } from '../../../lib/farm/comprehensive-crops'
 import { 
@@ -32,8 +32,11 @@ interface Farm {
   totalArea: number
   detectedFields?: Array<{
     id: string
+    name: string
     area: number
     boundaries: Array<{ lat: number; lng: number }>
+    centerLat: number
+    centerLng: number
   }>
   primaryProduct?: string
   secondaryProducts?: string[]
@@ -225,21 +228,11 @@ export default function CreateFarmPage() {
     }
   }
 
-  // Simulate field detection
+  // Simulate field detection - now handled by GoogleMapsFieldEditor
   const detectFields = () => {
-    // In production, this would use satellite imagery analysis
-    const mockFields = [
-      { id: 'field-1', area: 45.5, boundaries: [] },
-      { id: 'field-2', area: 38.2, boundaries: [] },
-      { id: 'field-3', area: 52.8, boundaries: [] },
-      { id: 'field-4', area: 41.5, boundaries: [] }
-    ]
-    
-    setFarm(prev => ({
-      ...prev,
-      detectedFields: mockFields,
-      totalArea: mockFields.reduce((sum, field) => sum + field.area, 0)
-    }))
+    // This is now handled by the GoogleMapsFieldEditor component
+    // The component will call onFieldsDetected with properly formatted fields
+    console.log('Field detection handled by GoogleMapsFieldEditor component')
   }
 
   // Calculate polygon area in hectares from lat/lng coordinates
@@ -315,8 +308,11 @@ export default function CreateFarmPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               farmId: result.farm.id,
-              name: `Field ${index + 1}`,
-              area: field.area
+              name: field.name || `Field ${index + 1}`,
+              area: field.area,
+              latitude: field.centerLat,
+              longitude: field.centerLng,
+              boundaries: field.boundaries
             })
           })
         }
@@ -507,45 +503,26 @@ export default function CreateFarmPage() {
                 )}
               </div>
 
-              {/* Integrated Satellite Map - No Modal */}
+              {/* Google Maps Field Editor - Integrated */}
               {showMap && (
                 <div className="mt-6 space-y-4">
                   <div className="border rounded-lg overflow-hidden">
-                    <SatelliteMapViewer
-                      initialLocation={farm.location}
-                      onLocationChange={(location) => setFarm(prev => ({ ...prev, location }))}
+                    <GoogleMapsFieldEditor
+                      farmLocation={farm.location}
                       onFieldsDetected={(fields) => setFarm(prev => ({ 
                         ...prev, 
                         detectedFields: fields,
                         totalArea: fields.reduce((sum, field) => sum + field.area, 0)
                       }))}
-                      onBoundariesSet={(boundaries) => {
-                        // Calculate actual area from boundaries
-                        if (boundaries.length >= 3) {
-                          const area = calculatePolygonArea(boundaries);
-                          const field = {
-                            id: 'user-marked-field',
-                            area: area,
-                            boundaries
-                          };
-                          setFarm(prev => ({
-                            ...prev,
-                            detectedFields: [field],
-                            totalArea: area
-                          }));
-                        }
-                      }}
-                      showFieldDetection={true}
-                      showBoundaryMarking={true}
-                      height="500px"
                     />
                   </div>
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <p className="text-sm text-blue-800">
-                      <strong>Tip:</strong> Use the map to adjust your farm location precisely. You can:
-                      • Zoom in/out for better detail
-                      • Click the pin icon to mark field boundaries
-                      • Auto-detect fields using satellite imagery
+                      <strong>Tip:</strong> Use the Google Maps interface to precisely define your fields:
+                      • Draw field boundaries using the drawing tools
+                      • Auto-detect fields using satellite imagery analysis
+                      • Edit and manage multiple fields within your farm
+                      • All field data will be saved with your farm
                     </p>
                   </div>
                 </div>

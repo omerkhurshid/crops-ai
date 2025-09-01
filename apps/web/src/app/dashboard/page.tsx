@@ -471,7 +471,7 @@ export default async function DashboardPage() {
               </ModernCardHeader>
               <ModernCardContent className="p-4">
                 <div className="space-y-3">
-                  {stats?.overview?.weatherAlerts > 0 && (
+                  {(stats?.overview?.weatherAlerts || 0) > 0 && (
                     <div className="flex items-start gap-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
                       <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
                       <div>

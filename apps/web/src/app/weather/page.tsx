@@ -77,7 +77,6 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
       />
       
       {/* Animated Background with Floating Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <CloudRain className="h-8 w-8 text-sage-600" />
       </div>

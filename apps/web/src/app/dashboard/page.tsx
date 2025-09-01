@@ -258,8 +258,6 @@ export default async function DashboardPage() {
     <div className="minimal-page">
       <Navbar />
       
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
       
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Stats */}

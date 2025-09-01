@@ -6,9 +6,8 @@ import { Home, ArrowLeft, Search, Map, Sprout } from 'lucide-react'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       {/* Animated Background with Floating Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <Search className="h-8 w-8 text-sage-600" />
       </div>

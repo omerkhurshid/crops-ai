@@ -67,7 +67,7 @@ export default function FinancialPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+      <div className="min-h-screen">
         <Navbar />
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse space-y-6">
@@ -149,7 +149,6 @@ export default function FinancialPage() {
         <Navbar />
         
         {/* Animated Background with Floating Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
         <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
           <DollarSign className="h-8 w-8 text-sage-600" />
         </div>
@@ -229,7 +228,6 @@ export default function FinancialPage() {
         <Navbar />
         
         {/* Subtle Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/30 to-earth-50/30 -z-10"></div>
         
         <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="mb-16">

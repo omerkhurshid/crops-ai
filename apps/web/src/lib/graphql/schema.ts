@@ -439,13 +439,13 @@ export const typeDefs = gql`
     fieldAnalytics(fieldId: ID!, from: DateTime!, to: DateTime!): JSON!
     cropAnalytics(cropId: ID!): JSON!
 
-    # Produce Database queries
-    produceType(id: ID!): ProduceType
-    produceTypes(category: ProduceCategory, search: String): [ProduceType!]!
-    produceVarieties(produceTypeId: ID!): [ProduceVariety!]!
-    nutritionalData(produceTypeId: ID!): NutritionalData
-    plantingCalendar(produceTypeId: ID!, region: String): PlantingCalendar
-    recommendedCrops(latitude: Float!, longitude: Float!, season: String): [ProduceType!]!
+    # Produce Database queries (temporarily disabled)
+    # produceType(id: ID!): ProduceType
+    # produceTypes(category: ProduceCategory, search: String): [ProduceType!]!
+    # produceVarieties(produceTypeId: ID!): [ProduceVariety!]!
+    # nutritionalData(produceTypeId: ID!): NutritionalData
+    # plantingCalendar(produceTypeId: ID!, region: String): PlantingCalendar
+    # recommendedCrops(latitude: Float!, longitude: Float!, season: String): [ProduceType!]!
   }
 
   # Mutations

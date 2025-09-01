@@ -280,13 +280,12 @@ export const satelliteResolvers = {
         const fieldData = await prisma.field.findUnique({
           where: { id: fieldId },
           select: { 
-            boundary: true,
             area: true
           }
         })
 
-        if (!fieldData || !fieldData.boundary) {
-          throw new Error('Field boundary not available for satellite analysis')
+        if (!fieldData) {
+          throw new Error('Field not found for satellite analysis')
         }
 
         // For now, estimate bounds from field center (would parse actual boundary in production)

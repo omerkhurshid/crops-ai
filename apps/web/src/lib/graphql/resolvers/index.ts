@@ -4,7 +4,7 @@ import { fieldResolvers } from './field'
 import { cropResolvers } from './crop'
 import { weatherResolvers } from './weather'
 import { satelliteResolvers } from './satellite'
-import { produceResolvers } from './produce'
+// import { produceResolvers } from './produce'
 import { scalarResolvers } from './scalars'
 
 export const resolvers = {
@@ -16,7 +16,7 @@ export const resolvers = {
     ...cropResolvers.Query,
     ...weatherResolvers.Query,
     ...satelliteResolvers.Query,
-    ...produceResolvers.Query,
+    // ...produceResolvers.Query,
   },
   Mutation: {
     ...userResolvers.Mutation,
@@ -25,7 +25,7 @@ export const resolvers = {
     ...cropResolvers.Mutation,
     ...weatherResolvers.Mutation,
     ...satelliteResolvers.Mutation,
-    ...produceResolvers.Mutation,
+    // ...produceResolvers.Mutation,
   },
   Subscription: {
     ...weatherResolvers.Subscription,
@@ -40,7 +40,7 @@ export const resolvers = {
   Crop: cropResolvers.Crop,
   WeatherData: weatherResolvers.WeatherData,
   SatelliteData: satelliteResolvers.SatelliteData,
-  ProduceType: produceResolvers.ProduceType,
-  ProduceVariety: produceResolvers.ProduceVariety,
-  NutritionalData: produceResolvers.NutritionalData,
+  // ProduceType: produceResolvers.ProduceType,
+  // ProduceVariety: produceResolvers.ProduceVariety,
+  // NutritionalData: produceResolvers.NutritionalData,
 }

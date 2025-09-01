@@ -376,3 +376,204 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+// ==================== CROP/PRODUCE DATABASE ====================
+
+enum ProduceCategory {
+  CROPS       // Grains, cereals (corn, wheat, rice)
+  VEGETABLES  // Edible plants (tomato, carrot, lettuce)
+  FRUITS      // Tree and vine fruits (apple, grape, strawberry)
+  TREES       // Non-fruit trees (oak, pine, maple)
+  HERBS       // Culinary and medicinal herbs
+  NUTS        // Tree nuts and ground nuts
+}
+
+enum ClimateZone {
+  TROPICAL
+  SUBTROPICAL
+  TEMPERATE
+  CONTINENTAL
+  POLAR
+  ARID
+  MEDITERRANEAN
+}
+
+enum SoilType {
+  CLAY
+  SANDY
+  LOAM
+  SILT
+  PEAT
+  CHALK
+  SANDY_LOAM
+  CLAY_LOAM
+  SILT_LOAM
+}
+
+enum WaterRequirement {
+  VERY_LOW   // Drought tolerant
+  LOW        // Minimal water
+  MODERATE   // Regular watering
+  HIGH       // Frequent watering
+  VERY_HIGH  // Constant moisture
+}
+
+enum SunRequirement {
+  FULL_SHADE
+  PARTIAL_SHADE
+  PARTIAL_SUN
+  FULL_SUN
+}
+
+enum GrowthHabit {
+  ANNUAL      // Complete lifecycle in one year
+  BIENNIAL    // Two-year lifecycle
+  PERENNIAL   // Lives for multiple years
+  DECIDUOUS   // Loses leaves seasonally
+  EVERGREEN   // Retains leaves year-round
+}
+
+model ProduceType {
+  id                String           @id @default(cuid())
+  name              String           @unique
+  scientificName    String
+  category          ProduceCategory
+  description       String?
+  
+  // Growing Requirements
+  climateZones      ClimateZone[]
+  hardinessZoneMin  Int?            // USDA Hardiness Zone minimum
+  hardinessZoneMax  Int?            // USDA Hardiness Zone maximum
+  soilTypes         SoilType[]
+  soilPhMin         Float?          // Minimum soil pH
+  soilPhMax         Float?          // Maximum soil pH
+  waterRequirement  WaterRequirement
+  sunRequirement    SunRequirement
+  growthHabit       GrowthHabit
+  
+  // Planting Information
+  plantingDepth     Float?          // in inches
+  plantSpacing      Float?          // in inches
+  rowSpacing        Float?          // in inches
+  germinationDays   Int?            // Days to germination
+  daysToMaturity    Int?            // Days from planting to harvest
+  
+  // Physical Characteristics
+  matureHeight      Float?          // in feet
+  matureSpread      Float?          // in feet
+  
+  // Additional Information
+  companionPlants   String[]        // Good companion plants
+  incompatibleWith  String[]        // Plants to avoid nearby
+  commonPests       String[]        // Common pest threats
+  commonDiseases    String[]        // Common disease threats
+  
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  // Relations
+  varieties         ProduceVariety[]
+  nutritionalData   NutritionalData?
+  
+  @@map("produce_types")
+}
+
+model ProduceVariety {
+  id                String      @id @default(cuid())
+  produceTypeId     String
+  name              String
+  description       String?
+  
+  // Variety-specific characteristics
+  daysToMaturity    Int?        // May differ from parent type
+  yieldPerPlant     Float?      // Average yield in appropriate units
+  yieldUnit         String?     // kg, lbs, bushels, etc.
+  
+  // Market Information
+  marketDemand      String?     // High, Medium, Low
+  premiumVariety    Boolean     @default(false)
+  
+  // Growing Characteristics
+  diseaseResistance String[]    // List of diseases this variety resists
+  droughtTolerant   Boolean     @default(false)
+  coldTolerant      Boolean     @default(false)
+  heatTolerant      Boolean     @default(false)
+  
+  // Appearance
+  color             String?
+  size              String?     // Small, Medium, Large, etc.
+  shape             String?
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  // Relations
+  produceType       ProduceType @relation(fields: [produceTypeId], references: [id], onDelete: Cascade)
+  
+  @@map("produce_varieties")
+}
+
+model NutritionalData {
+  id              String      @id @default(cuid())
+  produceTypeId   String      @unique
+  
+  // Per 100g serving
+  calories        Float?
+  protein         Float?      // grams
+  carbohydrates   Float?      // grams
+  fiber           Float?      // grams
+  sugar           Float?      // grams
+  fat             Float?      // grams
+  saturatedFat    Float?      // grams
+  
+  // Vitamins (% Daily Value)
+  vitaminA        Float?
+  vitaminC        Float?
+  vitaminD        Float?
+  vitaminE        Float?
+  vitaminK        Float?
+  vitaminB6       Float?
+  vitaminB12      Float?
+  
+  // Minerals (mg unless specified)
+  calcium         Float?
+  iron            Float?
+  magnesium       Float?
+  phosphorus      Float?
+  potassium       Float?
+  sodium          Float?
+  zinc            Float?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  // Relations
+  produceType     ProduceType @relation(fields: [produceTypeId], references: [id], onDelete: Cascade)
+  
+  @@map("nutritional_data")
+}
+
+model PlantingCalendar {
+  id              String      @id @default(cuid())
+  produceTypeId   String
+  region          String      // Geographic region
+  
+  // Planting windows (month numbers 1-12)
+  springPlantStart Int?
+  springPlantEnd   Int?
+  fallPlantStart   Int?
+  fallPlantEnd     Int?
+  
+  // Harvest windows
+  harvestStart     Int?
+  harvestEnd       Int?
+  
+  // Indoor starting
+  indoorStartWeeks Int?       // Weeks before last frost to start indoors
+  
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@map("planting_calendars")
+}

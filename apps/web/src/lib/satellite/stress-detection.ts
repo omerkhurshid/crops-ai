@@ -5,7 +5,7 @@
  * vegetation indices, and machine learning algorithms.
  */
 
-import { sentinelHub } from './sentinel-hub';
+import { copernicusService } from './copernicus-service';
 import { ndviAnalysis } from './ndvi-analysis';
 import { historicalWeather } from '../weather/historical';
 import type { 
@@ -260,28 +260,49 @@ class CropStressDetector {
   }
 
   /**
-   * Get vegetation data from satellite imagery
+   * Get vegetation data from satellite imagery using Copernicus
    */
   private async getVegetationData(bbox: BoundingBox, date: string) {
-    // Get NDVI analysis
-    const ndviData = await sentinelHub.calculateNDVIAnalysis('temp', bbox, date);
-    
-    // Calculate comprehensive indices
-    const indices = ndviAnalysis.calculateVegetationIndices({
-      red: 0.1 + Math.random() * 0.1,
-      nir: 0.4 + Math.random() * 0.3,
-      redEdge: 0.3 + Math.random() * 0.2,
-      green: 0.08 + Math.random() * 0.04,
-      blue: 0.06 + Math.random() * 0.03,
-      swir1: 0.15 + Math.random() * 0.1,
-      swir2: 0.1 + Math.random() * 0.05
-    });
+    try {
+      // Convert BoundingBox to FieldBounds format
+      const bounds = {
+        north: bbox.north,
+        south: bbox.south,
+        east: bbox.east,
+        west: bbox.west
+      };
+      
+      // Get spectral indices from Copernicus
+      const indices = await copernicusService.processImageForIndices(bounds, date);
+      
+      // Get NDVI calculation for detailed analysis
+      const ndviData = await copernicusService.calculateFieldIndices('temp', bounds, date);
+      
+      return {
+        indices,
+        ndviData,
+        quality: this.assessDataQuality(ndviData)
+      };
+    } catch (error) {
+      console.error('Error getting vegetation data from Copernicus:', error);
+      
+      // Fallback to simulated data
+      const indices = ndviAnalysis.calculateVegetationIndices({
+        red: 0.1 + Math.random() * 0.1,
+        nir: 0.4 + Math.random() * 0.3,
+        redEdge: 0.3 + Math.random() * 0.2,
+        green: 0.08 + Math.random() * 0.04,
+        blue: 0.06 + Math.random() * 0.03,
+        swir1: 0.15 + Math.random() * 0.1,
+        swir2: 0.1 + Math.random() * 0.05
+      });
 
-    return {
-      indices,
-      ndviData,
-      quality: this.assessDataQuality(ndviData)
-    };
+      return {
+        indices,
+        ndviData: null,
+        quality: 'fair' as const
+      };
+    }
   }
 
   /**

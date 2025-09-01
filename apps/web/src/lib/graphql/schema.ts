@@ -31,6 +31,60 @@ export const typeDefs = gql`
     SEVERE
   }
 
+  enum ProduceCategory {
+    CROPS
+    VEGETABLES
+    FRUITS
+    TREES
+    HERBS
+    NUTS
+  }
+
+  enum ClimateZone {
+    TROPICAL
+    SUBTROPICAL
+    TEMPERATE
+    CONTINENTAL
+    POLAR
+    ARID
+    MEDITERRANEAN
+  }
+
+  enum SoilType {
+    CLAY
+    SANDY
+    LOAM
+    SILT
+    PEAT
+    CHALK
+    SANDY_LOAM
+    CLAY_LOAM
+    SILT_LOAM
+  }
+
+  enum WaterRequirement {
+    VERY_LOW
+    LOW
+    MODERATE
+    HIGH
+    VERY_HIGH
+  }
+
+  enum SunRequirement {
+    FULL_SHADE
+    PARTIAL_SHADE
+    PARTIAL_SUN
+    FULL_SUN
+  }
+
+  enum GrowthHabit {
+    ANNUAL
+    BIENNIAL
+    PERENNIAL
+    DECIDUOUS
+    EVERGREEN
+  }
+
   # Types
   type User {
     id: ID!
@@ -118,6 +172,102 @@ export const typeDefs = gql`
     stressLevel: StressLevel
     imageUrl: String
     field: Field!
+  }
+
+  type ProduceType {
+    id: ID!
+    name: String!
+    scientificName: String!
+    category: ProduceCategory!
+    description: String
+    climateZones: [ClimateZone!]!
+    hardinessZoneMin: Int
+    hardinessZoneMax: Int
+    soilTypes: [SoilType!]!
+    soilPhMin: Float
+    soilPhMax: Float
+    waterRequirement: WaterRequirement!
+    sunRequirement: SunRequirement!
+    growthHabit: GrowthHabit!
+    plantingDepth: Float
+    plantSpacing: Float
+    rowSpacing: Float
+    germinationDays: Int
+    daysToMaturity: Int
+    matureHeight: Float
+    matureSpread: Float
+    companionPlants: [String!]!
+    incompatibleWith: [String!]!
+    commonPests: [String!]!
+    commonDiseases: [String!]!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    varieties: [ProduceVariety!]!
+    nutritionalData: NutritionalData
+  }
+
+  type ProduceVariety {
+    id: ID!
+    name: String!
+    description: String
+    daysToMaturity: Int
+    yieldPerPlant: Float
+    yieldUnit: String
+    marketDemand: String
+    premiumVariety: Boolean!
+    diseaseResistance: [String!]!
+    droughtTolerant: Boolean!
+    coldTolerant: Boolean!
+    heatTolerant: Boolean!
+    color: String
+    size: String
+    shape: String
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    produceType: ProduceType!
+  }
+
+  type NutritionalData {
+    id: ID!
+    calories: Float
+    protein: Float
+    carbohydrates: Float
+    fiber: Float
+    sugar: Float
+    fat: Float
+    saturatedFat: Float
+    vitaminA: Float
+    vitaminC: Float
+    vitaminD: Float
+    vitaminE: Float
+    vitaminK: Float
+    vitaminB6: Float
+    vitaminB12: Float
+    calcium: Float
+    iron: Float
+    magnesium: Float
+    phosphorus: Float
+    potassium: Float
+    sodium: Float
+    zinc: Float
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    produceType: ProduceType!
+  }
+
+  type PlantingCalendar {
+    id: ID!
+    region: String!
+    springPlantStart: Int
+    springPlantEnd: Int
+    fallPlantStart: Int
+    fallPlantEnd: Int
+    harvestStart: Int
+    harvestEnd: Int
+    indoorStartWeeks: Int
+    notes: String
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 
   # Input Types
@@ -288,6 +438,14 @@ export const typeDefs = gql`
     farmAnalytics(farmId: ID!, from: DateTime!, to: DateTime!): JSON!
     fieldAnalytics(fieldId: ID!, from: DateTime!, to: DateTime!): JSON!
     cropAnalytics(cropId: ID!): JSON!
+
+    # Produce Database queries
+    produceType(id: ID!): ProduceType
+    produceTypes(category: ProduceCategory, search: String): [ProduceType!]!
+    produceVarieties(produceTypeId: ID!): [ProduceVariety!]!
+    nutritionalData(produceTypeId: ID!): NutritionalData
+    plantingCalendar(produceTypeId: ID!, region: String): PlantingCalendar
+    recommendedCrops(latitude: Float!, longitude: Float!, season: String): [ProduceType!]!
   }
 
   # Mutations

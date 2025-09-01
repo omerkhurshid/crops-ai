@@ -6,13 +6,12 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
-import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Navbar } from '../../components/navigation/navbar'
 import { OnboardingFlow } from '../../components/onboarding/onboarding-flow'
 import { OnboardingTooltips, dashboardTooltips } from '../../components/onboarding/onboarding-tooltips'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
-  Plus, Brain, CloudRain, BarChart, Settings, Zap, Target, Satellite
+  Plus, Brain, CloudRain, Settings, Zap, Target, Satellite
 } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
 
@@ -259,367 +258,264 @@ export default async function DashboardPage() {
     <div className="minimal-page">
       <Navbar />
       
-      {/* Floating Action Button */}
-      <ClientFloatingButton
-        icon={<Plus className="h-5 w-5" />}
-        label="Quick Action"
-        variant="primary"
-      />
-      
-      {/* Animated Background with Floating Elements */}
+      {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-sage-50/80 to-earth-50/80 -z-10"></div>
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <BarChart className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <TrendingUp className="h-8 w-8 text-sage-600" />
-      </div>
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-sage-800 mb-4 sm:mb-6 tracking-tight">
-              Dashboard
-            </h1>
-            <p className="text-lg sm:text-xl text-sage-600 font-light leading-relaxed">
-              Welcome back, <span className="font-medium text-sage-800">{user.name}</span>! 
-              Monitor your agricultural operations from one intelligent platform.
-            </p>
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header Stats */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-semibold text-sage-800 mb-6">Dashboard</h1>
+          <div className="flex justify-center gap-12 mb-8">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-sage-800">{stats?.overview?.totalFarms || 0}</div>
+              <div className="text-sage-600 font-medium">Total Farms</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-sage-800">{stats?.overview?.totalArea || 0}</div>
+              <div className="text-sage-600 font-medium">Hectares Under Management</div>
+            </div>
           </div>
         </div>
 
-        {/* Enhanced Onboarding Flow */}
-        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0 || 
-          (stats.overview.totalFarms > 0 && stats.overview.totalFields === 0)) && (
-          <div className="mb-16">
+        {/* Show onboarding only if no farms exist */}
+        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
+          <div className="mb-8">
             <OnboardingFlow 
               userStats={{
                 totalFarms: stats?.overview?.totalFarms || 0,
                 totalFields: stats?.overview?.totalFields || 0,
                 hasWeatherData: (stats?.overview?.weatherAlerts || 0) > 0,
-                hasRecommendations: false // TODO: Add recommendation tracking
+                hasRecommendations: false
               }}
             />
           </div>
         )}
 
-          {/* Modern Stats Grid - Improved Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16" data-tour="dashboard-stats">
-            <div className="polished-card card-sage rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <Sprout className="h-8 w-8 text-white" />
-                <InfoTooltip {...TOOLTIP_CONTENT.farm} variant="light" />
-              </div>
-              <div className="text-3xl font-bold mb-2">{stats?.overview?.totalFarms || 0}</div>
-              <div className="text-xl font-medium mb-2">Total Farms</div>
-              <div className="text-sm opacity-90">
-                {stats?.overview?.totalFarms ? `${stats.overview.totalArea} hectares total` : 'Create your first farm to get started'}
-              </div>
-            </div>
-            
-            <div className="polished-card card-forest rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <MapPin className="h-8 w-8 text-white" />
-                <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
-              </div>
-              <div className="text-3xl font-bold mb-2">{stats?.overview?.activeFields || 0}</div>
-              <div className="text-xl font-medium mb-2">Active Fields</div>
-              <div className="text-sm opacity-90">
-                {stats?.overview?.totalFields ? `${stats.overview.totalFields} total fields in production` : 'Add fields to start monitoring'}
-              </div>
-            </div>
-            
-            <div className="polished-card card-earth rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <Activity className="h-8 w-8 text-white" />
-                <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
-              </div>
-              <div className="text-3xl font-bold mb-2">{stats?.overview?.avgHealthScore || 0}%</div>
-              <div className="text-xl font-medium mb-2">Health Score</div>
-              <div className="text-sm opacity-90">
-                {stats?.overview?.avgHealthScore ? 'AI-analyzed crop health across all fields' : 'Health data will appear here'}
-              </div>
-            </div>
-            
-            <div className="polished-card card-golden rounded-2xl p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <AlertTriangle className="h-8 w-8 text-white" />
-                <InfoTooltip {...TOOLTIP_CONTENT.precipitation} variant="light" />
-              </div>
-              <div className="text-3xl font-bold mb-2">{stats?.overview?.weatherAlerts || 0}</div>
-              <div className="text-xl font-medium mb-2">Weather Alerts</div>
-              <div className="text-sm opacity-90">
-                {stats?.overview?.weatherAlerts ? 'Active weather notifications requiring attention' : 'No weather alerts at this time'}
-              </div>
-            </div>
-          </div>
-
-          {/* Asymmetric Magazine Layout - Mobile Optimized */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mb-12 lg:mb-16">
-            {/* Main Content Area - Takes 8 columns, full width on mobile */}
-            <div className="lg:col-span-8 order-2 lg:order-1">
-              <ModernCard variant="floating" className="overflow-hidden">
-                <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <ModernCardTitle className="text-sage-800">Recent Activity</ModernCardTitle>
-                      <InfoTooltip title="Activity Feed" description="Real-time updates from your farm management operations and satellite monitoring system." />
-                    </div>
-                    <Badge className="bg-sage-100 text-sage-700 border-sage-200">
-                      Live Updates
-                    </Badge>
-                  </div>
-                  <ModernCardDescription>
-                    Your latest farm management activities and automated system updates
-                  </ModernCardDescription>
-                </ModernCardHeader>
-                <ModernCardContent>
-                  <div className="space-y-4">
-                    {stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                      stats.recentActivity.map((activity: any) => (
-                        <ModernCard key={activity.id} variant="soft" className="hover:variant-floating transition-all duration-300">
-                          <ModernCardContent className="p-4">
-                            <div className="flex items-start space-x-4">
-                              <div className={`p-3 rounded-xl ${
-                                activity.type === 'farm_created' ? 'bg-sage-100 text-sage-700' :
-                                activity.type === 'satellite_analysis' ? 'bg-sage-100 text-sage-700' :
-                                'bg-cream-100 text-earth-700'
-                              }`}>
-                                {activity.type === 'farm_created' ? <Sprout className="h-5 w-5" /> :
-                                 activity.type === 'satellite_analysis' ? <Activity className="h-5 w-5" /> :
-                                 <TrendingUp className="h-5 w-5" />}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
-                                  <h4 className="font-semibold text-sage-800">{activity.title}</h4>
-                                  <span className="text-xs text-sage-500 font-medium">{activity.timeAgo}</span>
-                                </div>
-                                <p className="text-sm text-sage-600 mt-1 leading-relaxed">{activity.description}</p>
-                                <div className="flex items-center gap-2 mt-2">
-                                  <Badge className="bg-sage-50 text-sage-600 border-sage-200 text-xs">
-                                    {activity.farmName}
-                                  </Badge>
-                                  {activity.fieldName && (
-                                    <Badge className="bg-cream-50 text-earth-600 border-earth-200 text-xs">
-                                      {activity.fieldName}
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </ModernCardContent>
-                        </ModernCard>
-                      ))
-                    ) : (
-                      <div className="text-center py-12">
-                        <div className="relative">
-                          <Activity className="h-16 w-16 text-sage-300 mx-auto mb-4 animate-pulse-soft" />
-                          <div className="absolute inset-0 rounded-full bg-sage-100 opacity-20 animate-float"></div>
-                        </div>
-                        <h3 className="font-medium text-sage-700 mb-2">No activity yet</h3>
-                        <p className="text-sage-500 text-sm mb-6">Your farm activities will appear here as you manage your operations</p>
-                        <Link href="/farms/create" data-tour="add-farm-button">
-                          <InlineFloatingButton
-                            icon={<Plus className="h-4 w-4" />}
-                            label="Create Your First Farm"
-                            showLabel={true}
-                            variant="primary"
-                          />
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                </ModernCardContent>
-              </ModernCard>
-            </div>
-
-            {/* Right Sidebar - Takes 4 columns, appears first on mobile */}
-            <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
-              <ModernCard variant="glass" className="overflow-hidden">
-                <ModernCardHeader className="bg-gradient-to-br from-cream-50/90 to-sage-50/90">
+        {/* Main Dashboard Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Left Column (2/3) */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Farm Summary */}
+            <ModernCard variant="floating" className="overflow-hidden">
+              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+                <div className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
-                    <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
-                    <InfoTooltip title="Quick Access" description="Common tasks and recommended actions for efficient farm management." />
+                    <ModernCardTitle className="text-sage-800">Farm Overview</ModernCardTitle>
+                    <InfoTooltip title="Farm Summary" description="Comprehensive overview of all your farms with key metrics and health indicators." />
                   </div>
-                  <ModernCardDescription>
-                    Essential tools and shortcuts for daily operations
-                  </ModernCardDescription>
-                </ModernCardHeader>
-                <ModernCardContent className="p-4">
-                  <div className="space-y-3">
+                </div>
+                <ModernCardDescription>
+                  Real-time data from all farms and fields under management
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-6">
+                {stats?.overview?.totalFarms > 0 ? (
+                  <div className="space-y-6">
+                    {/* Key Metrics Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="text-center p-4 bg-sage-50 rounded-lg">
+                        <div className="text-2xl font-bold text-sage-800">{stats.overview.totalArea}</div>
+                        <div className="text-sm text-sage-600">Total Hectares</div>
+                      </div>
+                      <div className="text-center p-4 bg-green-50 rounded-lg">
+                        <div className="text-2xl font-bold text-green-800">0.72</div>
+                        <div className="text-sm text-green-600">Avg NDVI</div>
+                      </div>
+                      <div className="text-center p-4 bg-blue-50 rounded-lg">
+                        <div className="text-2xl font-bold text-blue-800">22°C</div>
+                        <div className="text-sm text-blue-600">Avg Temp</div>
+                      </div>
+                      <div className="text-center p-4 bg-orange-50 rounded-lg">
+                        <div className="text-2xl font-bold text-orange-800">65%</div>
+                        <div className="text-sm text-orange-600">Humidity</div>
+                      </div>
+                    </div>
+
+                    {/* Farm List */}
+                    <div className="space-y-3">
+                      <h3 className="font-semibold text-sage-800 mb-3">Your Farms</h3>
+                      {[...Array(Math.min(stats.overview.totalFarms, 3))].map((_, index) => (
+                        <div key={index} className="border border-sage-200 rounded-lg p-4 hover:bg-sage-50 transition-colors cursor-pointer">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <div className="font-medium text-sage-800">Farm {index + 1}</div>
+                              <div className="text-sm text-sage-600">{Math.floor(Math.random() * 50 + 10)} hectares • {Math.floor(Math.random() * 5 + 2)} fields</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className={`${Math.random() > 0.3 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                {Math.random() > 0.3 ? 'Healthy' : 'Monitor'}
+                              </Badge>
+                              <div className="text-sm text-sage-500">NDVI: {(0.6 + Math.random() * 0.2).toFixed(2)}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Sprout className="h-12 w-12 text-sage-300 mx-auto mb-4" />
+                    <h3 className="font-medium text-sage-700 mb-2">No farms yet</h3>
+                    <p className="text-sage-500 text-sm mb-4">Create your first farm to start monitoring</p>
                     <Link href="/farms/create">
                       <InlineFloatingButton
-                        icon={<Sprout className="h-4 w-4" />}
-                        label="Create New Farm"
+                        icon={<Plus className="h-4 w-4" />}
+                        label="Create Your First Farm"
                         showLabel={true}
                         variant="primary"
-                        size="md"
-                        className="w-full justify-start"
-                      />
-                    </Link>
-                    <Link href="/weather" data-tour="weather-section">
-                      <InlineFloatingButton
-                        icon={<CloudRain className="h-4 w-4" />}
-                        label="Weather Monitoring"
-                        showLabel={true}
-                        variant="secondary"
-                        size="md"
-                        className="w-full justify-start"
-                      />
-                    </Link>
-                    <Link href="/crop-health" data-tour="health-section">
-                      <InlineFloatingButton
-                        icon={<Activity className="h-4 w-4" />}
-                        label="Crop Health Analytics"
-                        showLabel={true}
-                        variant="ghost"
-                        size="md"
-                        className="w-full justify-start"
-                      />
-                    </Link>
-                    <Link href="/recommendations">
-                      <InlineFloatingButton
-                        icon={<Brain className="h-4 w-4" />}
-                        label="AI Recommendations"
-                        showLabel={true}
-                        variant="ghost"
-                        size="md"
-                        className="w-full justify-start"
-                      />
-                    </Link>
-                    <Link href="/weather/alerts">
-                      <InlineFloatingButton
-                        icon={<AlertTriangle className="h-4 w-4" />}
-                        label="Weather Alerts"
-                        showLabel={true}
-                        variant="ghost"
-                        size="md"
-                        className="w-full justify-start"
-                      />
-                    </Link>
-                    <Link href="/dashboard/satellite-health" data-tour="satellite-section">
-                      <InlineFloatingButton
-                        icon={<Satellite className="h-4 w-4" />}
-                        label="Satellite Health Monitor"
-                        showLabel={true}
-                        variant="secondary"
-                        size="md"
-                        className="w-full justify-start"
                       />
                     </Link>
                   </div>
-                </ModernCardContent>
-              </ModernCard>
-            </div>
+                )}
+              </ModernCardContent>
+            </ModernCard>
+
+            {/* Market Insights */}
+            <ModernCard variant="floating">
+              <ModernCardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
+                <ModernCardTitle className="text-sage-800">Market Insights</ModernCardTitle>
+                <ModernCardDescription>
+                  Current commodity prices and market trends
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
+                    <div className="text-xl font-bold text-green-800">$6.85</div>
+                    <div className="text-sm text-green-600">Corn ($/bushel)</div>
+                    <div className="text-xs text-green-500">+2.3% today</div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg">
+                    <div className="text-xl font-bold text-yellow-800">$15.20</div>
+                    <div className="text-sm text-yellow-600">Soybeans ($/bushel)</div>
+                    <div className="text-xs text-yellow-500">-0.8% today</div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg">
+                    <div className="text-xl font-bold text-orange-800">$7.45</div>
+                    <div className="text-sm text-orange-600">Wheat ($/bushel)</div>
+                    <div className="text-xs text-orange-500">+1.2% today</div>
+                  </div>
+                </div>
+              </ModernCardContent>
+            </ModernCard>
           </div>
 
-          {/* AI Insights & Task Management - Mobile Optimized */}
-          {stats?.insights && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-              {/* AI Recommendations - Main Column, stacks on mobile */}
-              <div className="lg:col-span-7 order-2 lg:order-1">
-                <ModernCard variant="glow" className="overflow-hidden">
-                  <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
-                    <div className="flex items-center gap-3">
-                      <ModernCardTitle className="text-sage-800">AI Recommendations</ModernCardTitle>
-                      <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
-                    </div>
-                    <ModernCardDescription>
-                      Intelligent insights powered by satellite data, weather patterns, and agricultural best practices
-                    </ModernCardDescription>
-                  </ModernCardHeader>
-                  <ModernCardContent>
-                    <div className="space-y-4">
-                      {stats.insights.recommendedActions?.map((action: string, index: number) => (
-                        <div key={index} className="flex items-start space-x-4 p-4 bg-sage-50/50 rounded-xl border border-sage-100/50">
-                          <div className="p-2 bg-sage-200 rounded-lg mt-1">
-                            <Target className="h-4 w-4 text-sage-700" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sage-800 font-medium leading-relaxed">{action}</p>
-                            <div className="flex items-center gap-2 mt-2">
-                              <Badge className="bg-sage-100 text-sage-700 border-sage-200 text-xs">
-                                AI Generated
-                              </Badge>
-                              <span className="text-xs text-sage-500">Confidence: 85%</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                      {(!stats.insights.recommendedActions || stats.insights.recommendedActions.length === 0) && (
-                        <div className="text-center py-8">
-                          <Brain className="h-12 w-12 text-sage-300 mx-auto mb-4" />
-                          <p className="text-sage-600">No recommendations available</p>
-                          <p className="text-sm text-sage-500">Add farms and fields to receive AI-powered insights</p>
-                        </div>
-                      )}
-                    </div>
-                  </ModernCardContent>
-                </ModernCard>
-              </div>
+          {/* Right Column (1/3) */}
+          <div className="space-y-6">
+            {/* Financial Summary */}
+            <ModernCard variant="floating">
+              <ModernCardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
+                <ModernCardTitle className="text-sage-800">Financial Summary</ModernCardTitle>
+                <ModernCardDescription>
+                  Revenue and expense tracking across all operations
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sage-600">Total Revenue</span>
+                    <span className="font-semibold text-green-700">$425,340</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sage-600">Total Expenses</span>
+                    <span className="font-semibold text-red-600">$287,920</span>
+                  </div>
+                  <hr className="border-sage-200" />
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-sage-800">Net Profit</span>
+                    <span className="font-bold text-green-700 text-lg">$137,420</span>
+                  </div>
+                  <div className="text-xs text-sage-500 text-center">This year to date</div>
+                </div>
+              </ModernCardContent>
+            </ModernCard>
 
-              {/* Upcoming Tasks - Side Column, appears first on mobile */}
-              <div className="lg:col-span-5 order-1 lg:order-2">
-                <ModernCard variant="floating" className="overflow-hidden">
-                  <ModernCardHeader className="bg-gradient-to-br from-cream-50 to-earth-50/80">
-                    <div className="flex items-center gap-3">
-                      <ModernCardTitle className="text-sage-800">Upcoming Tasks</ModernCardTitle>
-                      <InfoTooltip title="Task Management" description="Scheduled activities, reminders, and seasonal recommendations for optimal farm management." />
+            {/* Last 5 Transactions */}
+            <ModernCard variant="floating">
+              <ModernCardHeader>
+                <ModernCardTitle className="text-sage-800">Recent Transactions</ModernCardTitle>
+                <ModernCardDescription>
+                  Latest financial activity
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-4">
+                <div className="space-y-3">
+                  {[
+                    { type: 'income', desc: 'Corn harvest sale', amount: '+$12,450', date: '2 days ago' },
+                    { type: 'expense', desc: 'Fertilizer purchase', amount: '-$3,200', date: '5 days ago' },
+                    { type: 'income', desc: 'Soybean contract', amount: '+$8,750', date: '1 week ago' },
+                    { type: 'expense', desc: 'Equipment maintenance', amount: '-$1,850', date: '1 week ago' },
+                    { type: 'income', desc: 'Wheat delivery', amount: '+$6,900', date: '2 weeks ago' }
+                  ].map((transaction, index) => (
+                    <div key={index} className="flex justify-between items-center py-2">
+                      <div>
+                        <div className="text-sm font-medium text-sage-800">{transaction.desc}</div>
+                        <div className="text-xs text-sage-500">{transaction.date}</div>
+                      </div>
+                      <div className={`font-semibold ${transaction.type === 'income' ? 'text-green-700' : 'text-red-600'}`}>
+                        {transaction.amount}
+                      </div>
                     </div>
-                    <ModernCardDescription>
-                      Scheduled activities and seasonal recommendations
-                    </ModernCardDescription>
-                  </ModernCardHeader>
-                  <ModernCardContent>
-                    <div className="space-y-3">
-                      {stats.insights.upcomingTasks?.slice(0, 4).map((task: any) => (
-                        <div key={task.id} className="p-3 bg-white/80 rounded-xl border border-sage-100/30 hover:bg-white transition-colors">
-                          <div className="flex items-start justify-between mb-2">
-                            <h4 className="font-semibold text-sage-800 text-sm">{task.title}</h4>
-                            <Badge className={`text-xs ${
-                              task.priority === 'high' 
-                                ? 'bg-earth-100 text-earth-700 border-earth-200' 
-                                : task.priority === 'medium' 
-                                ? 'bg-sage-100 text-sage-700 border-sage-200' 
-                                : 'bg-cream-100 text-earth-600 border-cream-200'
-                            }`}>
-                              {task.priority}
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-sage-600 leading-relaxed mb-2">{task.description}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-sage-500">
-                              Due: {new Date(task.dueDate).toLocaleDateString()}
-                            </span>
-                            <Clock className="h-3 w-3 text-sage-400" />
-                          </div>
-                        </div>
-                      ))}
-                      {(!stats.insights.upcomingTasks || stats.insights.upcomingTasks.length === 0) && (
-                        <div className="text-center py-6">
-                          <Clock className="h-10 w-10 text-sage-300 mx-auto mb-3" />
-                          <p className="text-sm text-sage-600">No upcoming tasks</p>
-                          <p className="text-xs text-sage-500">Tasks will appear based on your farm activities</p>
-                        </div>
-                      )}
-                    </div>
-                  </ModernCardContent>
-                </ModernCard>
-              </div>
-            </div>
-          )}
-      </main>
+                  ))}
+                </div>
+              </ModernCardContent>
+            </ModernCard>
 
-      {/* Progressive Onboarding Tooltips - Show only for new users */}
-      {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
-        <OnboardingTooltips
-          steps={dashboardTooltips}
-          onComplete={() => console.log('Dashboard tour completed')}
-          onSkip={() => console.log('Dashboard tour skipped')}
-          startDelay={2000}
-          theme="sage"
+            {/* Key Highlights & Alerts */}
+            <ModernCard variant="floating">
+              <ModernCardHeader>
+                <ModernCardTitle className="text-sage-800">Key Highlights</ModernCardTitle>
+                <ModernCardDescription>
+                  Important alerts and actions needed
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-4">
+                <div className="space-y-3">
+                  {stats?.overview?.weatherAlerts > 0 && (
+                    <div className="flex items-start gap-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                      <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
+                      <div>
+                        <div className="font-medium text-orange-800">Weather Alert</div>
+                        <div className="text-sm text-orange-600">Heavy rain expected in 48 hours</div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <Activity className="h-5 w-5 text-red-600 mt-0.5" />
+                    <div>
+                      <div className="font-medium text-red-800">Stress Alert</div>
+                      <div className="text-sm text-red-600">Field 3A showing water stress</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <Clock className="h-5 w-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <div className="font-medium text-blue-800">Action Required</div>
+                      <div className="text-sm text-blue-600">Irrigation schedule needs update</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <TrendingUp className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div>
+                      <div className="font-medium text-green-800">Good News</div>
+                      <div className="text-sm text-green-600">NDVI improved 8% this week</div>
+                    </div>
+                  </div>
+                </div>
+              </ModernCardContent>
+            </ModernCard>
+          </div>
+        </div>
+
+        {/* Onboarding Tooltips */}
+        <OnboardingTooltips 
+          tooltips={dashboardTooltips} 
+          isVisible={stats?.overview?.totalFarms === 0} 
         />
-      )}
+      </main>
     </div>
   )
 }

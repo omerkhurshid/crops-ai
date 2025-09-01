@@ -75,9 +75,9 @@
     background-attachment: fixed;
   }
   
-  /* Glass morphism navbar */
+  /* Glass morphism navbar with slight green tint */
   .glass-nav {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(34, 139, 34, 0.15);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);

@@ -278,7 +278,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Show onboarding only if no farms exist */}
-        {(!stats?.overview?.totalFarms || stats.overview.totalFarms === 0) && (
+        {(!stats?.overview?.totalFarms || stats?.overview?.totalFarms === 0) && (
           <div className="mb-8">
             <OnboardingFlow 
               userStats={{
@@ -309,12 +309,12 @@ export default async function DashboardPage() {
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent className="p-6">
-                {stats?.overview?.totalFarms > 0 ? (
+                {(stats?.overview?.totalFarms || 0) > 0 ? (
                   <div className="space-y-6">
                     {/* Key Metrics Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="text-center p-4 bg-sage-50 rounded-lg">
-                        <div className="text-2xl font-bold text-sage-800">{stats.overview.totalArea}</div>
+                        <div className="text-2xl font-bold text-sage-800">{stats?.overview?.totalArea || 0}</div>
                         <div className="text-sm text-sage-600">Total Hectares</div>
                       </div>
                       <div className="text-center p-4 bg-green-50 rounded-lg">
@@ -334,7 +334,7 @@ export default async function DashboardPage() {
                     {/* Farm List */}
                     <div className="space-y-3">
                       <h3 className="font-semibold text-sage-800 mb-3">Your Farms</h3>
-                      {[...Array(Math.min(stats.overview.totalFarms, 3))].map((_, index) => (
+                      {[...Array(Math.min(stats?.overview?.totalFarms || 0, 3))].map((_, index) => (
                         <div key={index} className="border border-sage-200 rounded-lg p-4 hover:bg-sage-50 transition-colors cursor-pointer">
                           <div className="flex justify-between items-center">
                             <div>

@@ -79,41 +79,6 @@ export function GoogleMapsFieldEditor({
   const [drawingManager, setDrawingManager] = useState<google.maps.drawing.DrawingManager | null>(null)
   const polygonsRef = useRef<Map<string, google.maps.Polygon>>(new Map())
 
-  // Check if Google Maps API key is available
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-  
-  if (!apiKey) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <MapPin className="h-5 w-5 mr-2" />
-            Google Maps Field Editor
-          </CardTitle>
-          <CardDescription>
-            Interactive field boundary mapping with satellite imagery
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Google Maps API key is not configured. Please configure the NEXT_PUBLIC_GOOGLE_MAPS_API_KEY environment variable to use this feature.
-              <br />
-              <br />
-              <Button 
-                onClick={() => onFieldsDetected([])}
-                className="mt-2"
-              >
-                Continue without field mapping
-              </Button>
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
-    )
-  }
-
   // Load map
   const onLoad = useCallback((map: google.maps.Map) => {
     const bounds = new google.maps.LatLngBounds()
@@ -252,6 +217,41 @@ export function GoogleMapsFieldEditor({
 
   // Calculate total area
   const totalArea = fields.reduce((sum, field) => sum + field.area, 0)
+
+  // Check if Google Maps API key is available
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  
+  if (!apiKey) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <MapPin className="h-5 w-5 mr-2" />
+            Google Maps Field Editor
+          </CardTitle>
+          <CardDescription>
+            Interactive field boundary mapping with satellite imagery
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Google Maps API key is not configured. Please configure the NEXT_PUBLIC_GOOGLE_MAPS_API_KEY environment variable to use this feature.
+              <br />
+              <br />
+              <Button 
+                onClick={() => onFieldsDetected([])}
+                className="mt-2"
+              >
+                Continue without field mapping
+              </Button>
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <LoadScript

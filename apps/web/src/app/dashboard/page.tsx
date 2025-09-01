@@ -510,11 +510,16 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Onboarding Tooltips */}
-        <OnboardingTooltips 
-          tooltips={dashboardTooltips} 
-          isVisible={stats?.overview?.totalFarms === 0} 
-        />
+        {/* Onboarding Tooltips - Show only for new users */}
+        {(!stats?.overview?.totalFarms || stats?.overview?.totalFarms === 0) && (
+          <OnboardingTooltips 
+            steps={dashboardTooltips} 
+            onComplete={() => console.log('Dashboard tour completed')}
+            onSkip={() => console.log('Dashboard tour skipped')}
+            startDelay={2000}
+            theme="sage"
+          />
+        )}
       </main>
     </div>
   )

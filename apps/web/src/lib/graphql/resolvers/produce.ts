@@ -1,4 +1,4 @@
-import { PrismaClient, ProduceCategory } from '@crops-ai/database'
+import { PrismaClient } from '@crops-ai/database'
 
 const prisma = new PrismaClient()
 
@@ -18,7 +18,7 @@ export const produceResolvers = {
     // Get all produce types with optional filtering
     produceTypes: async (
       _: any,
-      { category, search }: { category?: ProduceCategory; search?: string }
+      { category, search }: { category?: string; search?: string }
     ) => {
       const where: any = {}
 

@@ -470,19 +470,19 @@ export default async function DashboardPage() {
                       </div>
                       <div className="text-center p-4 bg-green-50 rounded-lg">
                         <div className="text-2xl font-bold text-green-800">
-                          {stats?.overview?.avgNdvi > 0 ? stats.overview.avgNdvi : '--'}
+                          {(stats?.overview?.avgNdvi ?? 0) > 0 ? stats?.overview?.avgNdvi?.toFixed(3) : '--'}
                         </div>
                         <div className="text-sm text-green-600">Avg NDVI</div>
                       </div>
                       <div className="text-center p-4 bg-blue-50 rounded-lg">
                         <div className="text-2xl font-bold text-blue-800">
-                          {stats?.overview?.avgTemp > 0 ? `${stats.overview.avgTemp}°C` : '--'}
+                          {(stats?.overview?.avgTemp ?? 0) > 0 ? `${stats?.overview?.avgTemp?.toFixed(1)}°C` : '--'}
                         </div>
                         <div className="text-sm text-blue-600">Avg Temp</div>
                       </div>
                       <div className="text-center p-4 bg-orange-50 rounded-lg">
                         <div className="text-2xl font-bold text-orange-800">
-                          {stats?.overview?.avgHumidity > 0 ? `${stats.overview.avgHumidity}%` : '--'}
+                          {(stats?.overview?.avgHumidity ?? 0) > 0 ? `${stats?.overview?.avgHumidity?.toFixed(0)}%` : '--'}
                         </div>
                         <div className="text-sm text-orange-600">Humidity</div>
                       </div>
@@ -606,8 +606,8 @@ export default async function DashboardPage() {
                   <hr className="border-sage-200" />
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-sage-800">Net Profit</span>
-                    <span className={`font-bold ${stats?.overview?.netProfit >= 0 ? 'text-green-700' : 'text-red-600'} text-lg`}>
-                      ${stats?.overview?.netProfit?.toLocaleString() || 0}
+                    <span className={`font-bold ${(stats?.overview?.netProfit ?? 0) >= 0 ? 'text-green-700' : 'text-red-600'} text-lg`}>
+                      ${stats?.overview?.netProfit?.toLocaleString() || '0'}
                     </span>
                   </div>
                   <div className="text-xs text-sage-500 text-center">This year to date</div>
@@ -725,13 +725,13 @@ export default async function DashboardPage() {
                   )}
 
                   {/* Show positive NDVI trend if available */}
-                  {stats?.overview?.avgNdvi > 0.7 && (
+                  {(stats?.overview?.avgNdvi ?? 0) > 0.7 && (
                     <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <TrendingUp className="h-5 w-5 text-green-600 mt-0.5" />
                       <div>
                         <div className="font-medium text-green-800">Good News</div>
                         <div className="text-sm text-green-600">
-                          Average NDVI is {(stats.overview.avgNdvi * 100).toFixed(0)}% - crops are healthy
+                          Average NDVI is {((stats?.overview?.avgNdvi ?? 0) * 100).toFixed(0)}% - crops are healthy
                         </div>
                       </div>
                     </div>

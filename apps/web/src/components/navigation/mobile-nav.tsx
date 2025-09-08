@@ -130,7 +130,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
         {/* Menu Items */}
         <nav className="flex-1 px-4 py-4 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname.startsWith(item.href)
+            const isActive = pathname?.startsWith(item.href) ?? false
             const Icon = item.icon
             
             return (

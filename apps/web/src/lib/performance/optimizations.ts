@@ -289,7 +289,7 @@ export class QueryOptimizer {
     const { ttl = CacheTTL.FARM_DATA, tags = [], staleWhileRevalidate = false } = options
 
     // Check cache first
-    let cached = await cache.get<T>(cacheKey)
+    const cached = await cache.get<T>(cacheKey)
     
     if (cached !== null) {
       if (staleWhileRevalidate) {

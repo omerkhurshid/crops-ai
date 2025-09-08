@@ -284,9 +284,9 @@ export interface ResponsiveProps {
 export function Responsive({ mobile, tablet, desktop, children }: ResponsiveProps) {
   const { isMobile, isTablet } = useScreenSize()
   
-  if (isMobile && mobile) return <>{mobile}</>
-  if (isTablet && tablet) return <>{tablet}</>
-  if (desktop) return <>{desktop}</>
+  if (isMobile && mobile) return <React.Fragment>{mobile}</React.Fragment>
+  if (isTablet && tablet) return <React.Fragment>{tablet}</React.Fragment>
+  if (desktop) return <React.Fragment>{desktop}</React.Fragment>
   
-  return <>{children}</>
+  return <React.Fragment>{children}</React.Fragment>
 }

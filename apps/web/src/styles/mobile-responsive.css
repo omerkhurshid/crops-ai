@@ -1,0 +1,257 @@
+/**
+ * Mobile Responsive Utilities
+ * Comprehensive mobile-first design system
+ */
+
+/* Mobile-first breakpoints */
+@media (max-width: 640px) {
+  /* Typography scaling */
+  .text-4xl { font-size: 2rem !important; }
+  .text-3xl { font-size: 1.5rem !important; }
+  .text-2xl { font-size: 1.25rem !important; }
+  .text-xl { font-size: 1.125rem !important; }
+
+  /* Container adjustments */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Card spacing */
+  .modern-card {
+    margin-bottom: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  /* Button adjustments */
+  .btn {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  /* Form controls */
+  .form-input {
+    padding: 0.75rem !important;
+    font-size: 1rem !important; /* Prevent zoom on iOS */
+  }
+
+  /* Navigation */
+  .navbar {
+    padding: 0.5rem 1rem !important;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 9999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .navbar-menu.open {
+    transform: translateX(0);
+  }
+
+  /* Grid adjustments */
+  .grid-cols-3 { 
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important; 
+  }
+  
+  .grid-cols-2 { 
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important; 
+  }
+
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+
+  /* Dashboard specific */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* NBA Recommendations */
+  .nba-recommendations {
+    padding: 0.75rem !important;
+  }
+
+  .recommendation-card {
+    padding: 1rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .recommendation-actions {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .recommendation-actions button {
+    width: 100% !important;
+  }
+
+  /* Modal adjustments */
+  .modal {
+    margin: 1rem !important;
+    max-height: calc(100vh - 2rem) !important;
+    width: calc(100vw - 2rem) !important;
+    max-width: none !important;
+  }
+
+  .modal-content {
+    padding: 1rem !important;
+  }
+
+  /* Table responsiveness */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive table {
+    min-width: 600px;
+  }
+
+  /* Hide desktop-only content */
+  .hidden-mobile {
+    display: none !important;
+  }
+
+  /* Show mobile-only content */
+  .show-mobile {
+    display: block !important;
+  }
+
+  /* Touch-friendly sizing */
+  .touch-target {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  /* Sidebar navigation */
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: white;
+    z-index: 9998;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9997;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-cols-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .tablet-cols-1 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce padding on tablets */
+  .modern-card {
+    padding: 1.25rem !important;
+  }
+}
+
+/* Landscape phone adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+  .landscape-adjust {
+    padding: 0.5rem !important;
+  }
+
+  .landscape-text {
+    font-size: 0.875rem !important;
+  }
+
+  .landscape-hide {
+    display: none !important;
+  }
+}
+
+/* High-DPI display adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi-icon {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode considerations */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .auto-dark .card {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  * {
+    color: black !important;
+    background: white !important;
+  }
+
+  .container {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}

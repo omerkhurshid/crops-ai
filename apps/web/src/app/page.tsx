@@ -38,12 +38,12 @@ export default function Home() {
             
             {/* Updated Tagline - Farmer-focused messaging */}
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-white/95 mb-4 max-w-4xl mx-auto leading-tight font-light">
-              Grow More. Work Less. Save Money.
+              Your Farm Command Center. Make Smarter Decisions Daily.
             </h2>
             
             <p className="text-lg md:text-xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of farmers who increased yields by up to 30%, reduced operational costs by 15%, 
-              and saved 5+ hours per week with AI-powered farm management
+              Get instant answers to "Should I spray today?", "When should I harvest?", and "Which fields need attention?"
+              — all from one unified dashboard that saves you 2 hours every day.
             </p>
             
             {/* Single CTA Button */}
@@ -65,10 +65,10 @@ export default function Home() {
                 <div className="p-4 glass-indicator rounded-full w-fit mx-auto mb-4">
                   <Satellite className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">See Problems Before They Spread</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">"Should I Spray Today?"</h3>
                 <p className="text-white/80 leading-relaxed text-sm">
-                  Spot crop stress, pest infestations, and irrigation issues days before they're visible. 
-                  Save entire harvests with early detection.
+                  Get instant yes/no answers with weather windows, crop readiness, and application timing. 
+                  Never miss the perfect spray window again.
                 </p>
               </div>
               
@@ -77,10 +77,10 @@ export default function Home() {
                 <div className="p-4 glass-indicator rounded-full w-fit mx-auto mb-4">
                   <CloudRain className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Never Miss the Perfect Window</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">"When Should I Harvest?"</h3>
                 <p className="text-white/80 leading-relaxed text-sm">
-                  Get field-specific weather alerts for planting, spraying, and harvesting. 
-                  Make decisions with confidence, not guesswork.
+                  Combine crop maturity, weather forecasts, and market prices into clear harvest timing recommendations. 
+                  Maximize quality and profits.
                 </p>
               </div>
               
@@ -89,10 +89,10 @@ export default function Home() {
                 <div className="p-4 glass-indicator rounded-full w-fit mx-auto mb-4">
                   <TrendingUp className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Know Your True Profit Per Acre</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">"Which Fields Are Making Money?"</h3>
                 <p className="text-white/80 leading-relaxed text-sm">
-                  Track costs, compare field performance, and get market insights. 
-                  Make data-driven decisions that boost your bottom line.
+                  See profit per acre by field, track every expense with voice logging, and get market signals. 
+                  Focus your efforts where they matter most.
                 </p>
               </div>
               
@@ -127,8 +127,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-white/90 leading-relaxed mb-4">
-                "Crops.AI helped us identify nitrogen deficiency in our corn fields 2 weeks early. 
-                We saved $18,000 in potential losses and increased our yield by 23% this season."
+                "I used to spend 3 hours every morning checking weather, walking fields, and planning my day. 
+                Now Crops.AI tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="text-white/70">
@@ -152,8 +152,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-white/90 leading-relaxed mb-4">
-                "The weather alerts alone paid for the subscription 10x over. We harvested just before 
-                a hailstorm that would've destroyed 40% of our wheat crop."
+                "The 'Should I harvest today?' feature saved our wheat crop. It warned us about incoming hail 
+                48 hours early, so we harvested just in time. That one alert paid for 10 years of subscription."
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="text-white/70">
@@ -177,8 +177,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-white/90 leading-relaxed mb-4">
-                "Managing multiple fields was a nightmare. Now I check everything from my phone. 
-                We cut water usage by 30% and labor costs by $45,000 annually."
+                "Instead of driving to each field every morning, I get a priority list on my phone: 
+                'Irrigate Field 7', 'Spray Field 12 between 6-10am'. Cut labor costs by $45,000 this year."
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="text-white/70">

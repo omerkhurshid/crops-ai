@@ -50,6 +50,7 @@ enum FinancialCategory {
   SUBSIDIES
   LEASE_INCOME
   OTHER_INCOME
+  HARVEST
   // Expense categories
   SEEDS
   FERTILIZER
@@ -62,6 +63,7 @@ enum FinancialCategory {
   INSURANCE
   OVERHEAD
   OTHER_EXPENSE
+  LIVESTOCK
 }
 
 model User {
@@ -81,6 +83,10 @@ model User {
   financialTransactions FinancialTransaction[]
   createdTransactions   FinancialTransaction[] @relation("TransactionCreator")
   verificationTokens    VerificationToken[]
+  harvestRecords        HarvestRecord[]
+  livestockEvents       LivestockEvent[]
+  decisionRecommendations DecisionRecommendation[]
+  decisionExecutions    DecisionExecution[]
 
   @@map("users")
 }
@@ -106,6 +112,11 @@ model Farm {
   financialTransactions FinancialTransaction[]
   financialBudgets      FinancialBudget[]
   financialForecasts    FinancialForecast[]
+  harvestRecords        HarvestRecord[]
+  livestockEvents       LivestockEvent[]
+  decisionRecommendations DecisionRecommendation[]
+  decisionExecutions    DecisionExecution[]
+  weatherAlerts         WeatherAlert[] @relation("FarmWeatherAlerts")
 
   @@map("farms")
 }
@@ -200,21 +211,6 @@ model WeatherForecast {
   @@map("weather_forecasts")
 }
 
-model WeatherAlert {
-  id          String   @id @default(cuid())
-  userId      String
-  alertType   String // frost, storm, drought, etc.
-  severity    String // low, medium, high, severe
-  message     String
-  isActive    Boolean  @default(true)
-  triggeredAt DateTime @default(now())
-  expiresAt   DateTime?
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("weather_alerts")
-}
 
 model SatelliteData {
   id          String      @id @default(cuid())
@@ -576,4 +572,168 @@ model PlantingCalendar {
   updatedAt       DateTime    @updatedAt
   
   @@map("planting_calendars")
+}
+
+model HarvestRecord {
+  id           String   @id @default(cuid())
+  farmId       String
+  fieldName    String
+  cropType     String
+  quantity     Float
+  unit         String   @default("tons")
+  qualityNotes String?
+  harvestDate  DateTime @default(now())
+  userId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  farm         Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("harvest_records")
+}
+
+model LivestockEvent {
+  id            String   @id @default(cuid())
+  farmId        String
+  livestockType String   // cattle, sheep, goats, etc.
+  eventType     String   // vaccination, breeding, calving, etc.
+  animalCount   Int
+  notes         String?
+  eventDate     DateTime @default(now())
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  farm          Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("livestock_events")
+}
+
+model DecisionRecommendation {
+  id          String   @id @default(cuid())
+  userId      String
+  farmId      String
+  type        String   // SPRAY, HARVEST, IRRIGATE, etc.
+  priority    String   // URGENT, HIGH, MEDIUM, LOW
+  title       String
+  description String
+  
+  // Decision scoring
+  urgencyScore     Int
+  roiScore        Int
+  feasibilityScore Int
+  totalScore      Int
+  confidence      Int
+  
+  // Timing
+  idealStart      DateTime?
+  idealEnd        DateTime?
+  mustCompleteBy  DateTime?
+  
+  // Financial impact
+  estimatedRevenue    Float?
+  estimatedCostSaving Float?
+  estimatedYieldGain  Float? // percentage
+  
+  // Requirements
+  weatherRequirements Json? // weather constraints
+  resourceRequirements String[] // required resources
+  
+  // Decision details
+  explanation     String
+  actionSteps     String[]
+  alternatives    String[]
+  
+  // Status tracking
+  status          String   @default("PENDING") // PENDING, ACCEPTED, REJECTED, COMPLETED
+  userResponse    String? // User feedback
+  actualOutcome   Json? // Track actual results
+  
+  // Relations
+  targetField     String?
+  relatedDecisions String[] // IDs of related decisions
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  completedAt     DateTime?
+  
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  farm            Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  
+  @@map("decision_recommendations")
+}
+
+model DecisionTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  category        String
+  description     String
+  requiredInputs  Json     // Schema for required inputs
+  decisionLogic   String   // Logic description
+  bestPractices   String[]
+  commonMistakes  String[]
+  regulations     String[]
+  isActive        Boolean  @default(true)
+  version         String   @default("1.0")
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Usage tracking
+  executions      DecisionExecution[]
+  
+  @@map("decision_templates")
+}
+
+model DecisionExecution {
+  id                String   @id @default(cuid())
+  templateId        String
+  userId            String
+  farmId            String
+  inputs            Json     // User inputs
+  recommendation    Json     // Generated recommendation
+  userAction        String?  // What user decided to do
+  actualOutcome     Json?    // Actual results
+  satisfaction      Int?     // User satisfaction rating 1-5
+  feedback          String?  // User feedback text
+  
+  executedAt        DateTime @default(now())
+  completedAt       DateTime?
+  
+  // Relations
+  template          DecisionTemplate @relation(fields: [templateId], references: [id])
+  user              User             @relation(fields: [userId], references: [id])
+  farm              Farm             @relation(fields: [farmId], references: [id])
+  
+  @@map("decision_executions")
+}
+
+model WeatherAlert {
+  id            String   @id @default(cuid())
+  userId        String
+  farmId        String?
+  alertType     String   // FROST, HAIL, WIND, DROUGHT, etc.
+  severity      String   // LOW, MEDIUM, HIGH, SEVERE
+  message       String
+  isActive      Boolean  @default(true)
+  triggeredAt   DateTime @default(now())
+  expiresAt     DateTime?
+  
+  // Location
+  latitude      Float?
+  longitude     Float?
+  
+  // Alert data
+  weatherData   Json?    // Specific weather conditions
+  
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  farm          Farm?    @relation("FarmWeatherAlerts", fields: [farmId], references: [id], onDelete: Cascade)
+  
+  @@map("weather_alerts")
 }

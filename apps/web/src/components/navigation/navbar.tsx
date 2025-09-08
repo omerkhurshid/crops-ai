@@ -4,8 +4,7 @@ import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { KeyboardShortcuts } from './keyboard-shortcuts'
-import { ThemeToggle } from '../theme/theme-toggle'
-import { Menu, X, HelpCircle } from 'lucide-react'
+import { Menu, X, HelpCircle, Home, BarChart3, CloudRain, Activity, Brain, DollarSign, FileText } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
 
@@ -18,14 +17,13 @@ export function Navbar() {
   }
 
   const navLinks = [
-    { href: '/dashboard', label: 'Dashboard' },
-    { href: '/farms', label: 'Farms' },
-    { href: '/dashboard/precision', label: 'Precision Ag' },
-    { href: '/weather', label: 'Weather' },
-    { href: '/crop-health', label: 'Crop Health' },
-    { href: '/recommendations', label: 'AI Insights' },
-    { href: '/financial', label: 'Financials' },
-    { href: '/reports', label: 'Reports' },
+    { href: '/dashboard', label: 'Command Center', icon: <Home className="h-4 w-4" /> },
+    { href: '/farms', label: 'Farms', icon: <BarChart3 className="h-4 w-4" /> },
+    { href: '/weather', label: 'Weather', icon: <CloudRain className="h-4 w-4" /> },
+    { href: '/crop-health', label: 'Crop Health', icon: <Activity className="h-4 w-4" /> },
+    { href: '/recommendations', label: 'AI Insights', icon: <Brain className="h-4 w-4" /> },
+    { href: '/financial', label: 'Financials', icon: <DollarSign className="h-4 w-4" /> },
+    { href: '/reports', label: 'Reports', icon: <FileText className="h-4 w-4" /> },
     { href: '/help', label: 'Help', icon: <HelpCircle className="h-4 w-4" /> },
   ]
 
@@ -69,14 +67,13 @@ export function Navbar() {
 
           {/* User Menu */}
           <div className="flex items-center space-x-3">
-            {session && <ThemeToggle variant="compact" />}
             {status === 'loading' ? (
               <div className="animate-pulse bg-sage-100 h-9 w-24 rounded-lg"></div>
             ) : session ? (
               <>
                 <div className="hidden sm:flex items-center space-x-3">
                   <span className="text-sm text-white/90 font-medium">
-                    {session.user?.name || 'User'}
+                    {session.user?.name || 'Farmer'}
                   </span>
                   <button 
                     onClick={handleSignOut}
@@ -102,7 +99,7 @@ export function Navbar() {
                 </Link>
                 <Link href="/register">
                   <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30 hover:border-white/40 transition-all duration-200 rounded-lg px-4 py-2 text-sm font-medium">
-                    Get Started
+                    Start Farming Smarter
                   </button>
                 </Link>
               </div>
@@ -118,9 +115,10 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium"
+                  className="flex items-center gap-2 text-white/90 hover:text-white hover:bg-white/20 px-3 py-2 rounded-lg text-sm font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  {link.icon}
                   {link.label}
                 </Link>
               ))}

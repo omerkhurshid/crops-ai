@@ -252,23 +252,25 @@ function getCurrentBreakpoint(width: number): Breakpoint | null {
 }
 
 /**
- * Utility function for responsive class names
+ * Hook for responsive class names
  */
-export function responsiveClassName(classes: {
-  base?: string
-  mobile?: string
-  tablet?: string
-  desktop?: string
-}): string {
+export function useResponsiveClassName() {
   const { isMobile, isTablet } = useScreenSize()
   
-  const classNames = [classes.base || '']
-  
-  if (isMobile && classes.mobile) classNames.push(classes.mobile)
-  else if (isTablet && classes.tablet) classNames.push(classes.tablet)
-  else if (classes.desktop) classNames.push(classes.desktop)
-  
-  return classNames.filter(Boolean).join(' ')
+  return useCallback((classes: {
+    base?: string
+    mobile?: string
+    tablet?: string
+    desktop?: string
+  }): string => {
+    const classNames = [classes.base || '']
+    
+    if (isMobile && classes.mobile) classNames.push(classes.mobile)
+    else if (isTablet && classes.tablet) classNames.push(classes.tablet)
+    else if (classes.desktop) classNames.push(classes.desktop)
+    
+    return classNames.filter(Boolean).join(' ')
+  }, [isMobile, isTablet])
 }
 
 /**

@@ -207,12 +207,12 @@ class RedisCache {
 
   private invalidateMemoryCacheByTags(tags: string[]): boolean {
     let invalidated = false
-    for (const [key, item] of this.memoryCache.entries()) {
+    this.memoryCache.forEach((item, key) => {
       if (item.tags && item.tags.some(tag => tags.includes(tag))) {
         this.memoryCache.delete(key)
         invalidated = true
       }
-    }
+    })
     return invalidated
   }
 }

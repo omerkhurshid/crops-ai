@@ -54,28 +54,28 @@ const helpSections = [
     icon: <Activity className="h-6 w-6" />,
     articles: [
       {
-        title: 'Understanding NDVI & Vegetation Indices',
-        description: 'Learn what NDVI, EVI, and other vegetation indices tell you about your crops',
-        readTime: '12 min read',
-        tags: ['NDVI', 'Satellite', 'Science']
-      },
-      {
-        title: 'Health Score Interpretation',
-        description: 'How to read and interpret your crop health scores and alerts',
+        title: 'Understanding Plant Health Scores',
+        description: 'Learn how we measure crop health using satellite data (no complex science required!)',
         readTime: '8 min read',
-        tags: ['Health Score', 'Analysis']
+        tags: ['Plant Health', 'Easy Guide', 'Satellite']
       },
       {
-        title: 'Setting Up Health Alerts',
-        description: 'Configure automated alerts for crop stress, disease, and other health issues',
+        title: 'Reading Your Traffic Light Health System',
+        description: 'Understanding the red, yellow, and green indicators for your crops',
+        readTime: '5 min read',
+        tags: ['Health Status', 'Simple Guide']
+      },
+      {
+        title: 'Getting Alerts When Crops Need Help',
+        description: 'Set up notifications so you know immediately when your crops need attention',
         readTime: '6 min read',
-        tags: ['Alerts', 'Monitoring']
+        tags: ['Notifications', 'Problem Detection']
       },
       {
-        title: 'Historical Health Trends',
-        description: 'Analyze historical crop health data to identify patterns and optimize practices',
-        readTime: '10 min read',
-        tags: ['Trends', 'History']
+        title: 'Learning from Past Seasons',
+        description: 'See how your crops performed in previous years to make better decisions',
+        readTime: '8 min read',
+        tags: ['Historical Data', 'Planning']
       }
     ]
   },
@@ -118,22 +118,22 @@ const helpSections = [
     icon: <Target className="h-6 w-6" />,
     articles: [
       {
-        title: 'Understanding AI Recommendations',
-        description: 'How our AI analyzes your data to provide personalized farming advice',
-        readTime: '10 min read',
-        tags: ['AI', 'Recommendations']
+        title: 'Your Personal Farm Assistant',
+        description: 'How Crops.AI analyzes your data to give you simple, actionable farming advice',
+        readTime: '7 min read',
+        tags: ['Smart Advice', 'Farm Assistant']
       },
       {
-        title: 'Implementing Suggested Actions',
-        description: 'Best practices for implementing AI recommendations on your farm',
-        readTime: '12 min read',
-        tags: ['Implementation', 'Best Practices']
-      },
-      {
-        title: 'Confidence Scores & Reliability',
-        description: 'Understanding confidence levels and when to trust AI recommendations',
+        title: 'Acting on Your Priority Tasks',
+        description: 'How to tackle the 1-2 most important actions recommended for your farm each day',
         readTime: '8 min read',
-        tags: ['Confidence', 'Trust']
+        tags: ['Daily Actions', 'Priority Tasks']
+      },
+      {
+        title: 'How Sure Are We? Understanding Confidence',
+        description: 'Learn when to trust recommendations and when to use your farming experience',
+        readTime: '6 min read',
+        tags: ['Trust Level', 'Decision Making']
       },
       {
         title: 'Customizing Recommendation Settings',
@@ -270,7 +270,7 @@ export default async function HelpPage() {
             </h1>
           </div>
           <p className="text-xl text-sage-600 font-light max-w-2xl mx-auto leading-relaxed mb-8">
-            Everything you need to master precision agriculture with Crops.AI
+            Simple guides to help you get the most out of your farm with Crops.AI
           </p>
           
           {/* Search Bar */}

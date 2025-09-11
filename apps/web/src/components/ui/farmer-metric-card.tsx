@@ -142,11 +142,13 @@ export function FarmerMetricCard({
 // Preset cards for common farming metrics
 export function CropHealthCard({
   healthScore,
+  healthTrend = 0,
   showMore,
   onShowMore,
   className
 }: {
   healthScore: number
+  healthTrend?: number
   showMore?: boolean
   onShowMore?: () => void
   className?: string
@@ -159,6 +161,13 @@ export function CropHealthCard({
       value={`${healthScore}%`}
       subtitle="Overall condition of your crops"
       status={status}
+      trend={
+        healthTrend !== 0 ? {
+          direction: healthTrend > 0 ? 'up' : 'down',
+          percentage: Math.abs(healthTrend),
+          label: 'from last week'
+        } : undefined
+      }
       showMore={showMore}
       onShowMore={onShowMore}
       icon={<div className="w-5 h-5 bg-green-500 rounded-full" />}
@@ -169,11 +178,13 @@ export function CropHealthCard({
 
 export function StressLevelCard({
   stressPercentage,
+  stressTrend = 0,
   showMore,
   onShowMore,
   className
 }: {
   stressPercentage: number
+  stressTrend?: number
   showMore?: boolean
   onShowMore?: () => void
   className?: string
@@ -186,6 +197,13 @@ export function StressLevelCard({
       value={`${stressPercentage.toFixed(1)}%`}
       subtitle="Areas needing attention"
       status={status}
+      trend={
+        stressTrend !== 0 ? {
+          direction: stressTrend > 0 ? 'up' : stressTrend < 0 ? 'down' : 'stable',
+          percentage: Math.abs(stressTrend),
+          label: 'from last week'
+        } : undefined
+      }
       showMore={showMore}
       onShowMore={onShowMore}
       icon={<div className="w-5 h-5 bg-orange-500 rounded-full" />}

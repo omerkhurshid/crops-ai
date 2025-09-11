@@ -6,6 +6,8 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { Button } from '../../components/ui/button'
 import { Navbar } from '../../components/navigation/navbar'
 import { FarmerDashboard } from '../../components/dashboard/farmer-dashboard'
+import { GlobalFAB, MobileFAB } from '../../components/ui/global-fab'
+import { useScreenSize } from '../../hooks/useScreenSize'
 import NBARecommendations from '../../components/dashboard/nba-recommendations'
 import { 
   Sprout, MapPin, AlertTriangle, TrendingUp, Clock, Plus, Brain, CloudRain, DollarSign,
@@ -224,6 +226,9 @@ export default async function DashboardPage() {
           {/* Use the new farmer-friendly dashboard */}
           <FarmerDashboard farmId={farms[0]?.id || 'default'} />
         </main>
+
+        {/* Global Floating Action Button */}
+        <GlobalFAB role="farmer" />
       </div>
     )
   } catch (error) {

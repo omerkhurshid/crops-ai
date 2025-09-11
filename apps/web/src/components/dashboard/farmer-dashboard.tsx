@@ -6,7 +6,11 @@ import { FarmerMetricCard, CropHealthCard, StressLevelCard, YieldPotentialCard }
 import { PriorityActionsList, createSampleActions } from '../ui/priority-action'
 import { TrafficLightStatus, getHealthStatus, getStressStatus } from '../ui/traffic-light-status'
 import { convertHealthScore, convertRecommendation, getFarmerTerm } from '../../lib/farmer-language'
+import { MorningBriefing } from './morning-briefing'
+import { UrgentTasks, UrgentTasksMobile } from './urgent-tasks'
+import { MarketTicker, MobileMarketTicker } from './market-ticker'
 import { Button } from '../ui/button'
+import { useScreenSize } from '../../hooks/useScreenSize'
 import { 
   Leaf, 
   Droplets, 
@@ -23,7 +27,9 @@ interface FarmSummary {
   farmName: string
   totalAcres: number
   overallHealth: number
+  healthTrend: number
   stressedAreas: number
+  stressTrend: number
   currentWeather: {
     temperature: number
     condition: string
@@ -37,6 +43,15 @@ interface FarmSummary {
     cropType: string
   }
   todayHighlights: string[]
+  urgentTasks: Array<{
+    id: string
+    title: string
+    field?: string
+    urgency: 'critical' | 'high'
+    timeframe: string
+    impact?: string
+    category: 'water' | 'pest' | 'weather' | 'financial' | 'health'
+  }>
 }
 
 interface FarmerDashboardProps {
@@ -47,6 +62,7 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDetailedView, setShowDetailedView] = useState(false)
+  const { isMobile } = useScreenSize()
 
   // Mock data for demonstration
   useEffect(() => {
@@ -54,7 +70,9 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
       farmName: "Johnson Family Farm",
       totalAcres: 78,
       overallHealth: 82,
+      healthTrend: 3,
       stressedAreas: 8.5,
+      stressTrend: -2,
       currentWeather: {
         temperature: 75,
         condition: "Partly Cloudy",
@@ -71,6 +89,26 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
         "North field showing excellent growth",
         "Light rain expected tomorrow afternoon",
         "Corn is 5 days ahead of schedule"
+      ],
+      urgentTasks: [
+        {
+          id: 'urgent-1',
+          title: 'Check irrigation in North Field',
+          field: 'North Field (Section A)',
+          urgency: 'critical',
+          timeframe: '4 hours',
+          impact: '$1,200 potential crop loss',
+          category: 'water'
+        },
+        {
+          id: 'urgent-2',
+          title: 'Apply fungicide to wheat',
+          field: 'South Field',
+          urgency: 'high',
+          timeframe: '24 hours',
+          impact: '$800 prevention cost',
+          category: 'pest'
+        }
       ]
     }
 
@@ -103,72 +141,71 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
   const stressStatus = getStressStatus(farmData.stressedAreas)
 
   return (
-    <div className="space-y-8">
-      {/* Welcome Header */}
-      <ModernCard variant="glow" className="overflow-hidden">
-        <ModernCardContent className="p-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-sage-100 rounded-2xl">
-                  <Leaf className="h-6 w-6 text-sage-700" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-sage-800">
-                    Good morning! 👋
-                  </h1>
-                  <p className="text-sage-600">
-                    {farmData.farmName} • {farmData.totalAcres} acres
-                  </p>
-                </div>
-              </div>
-              
-              <div className="space-y-2 text-sm text-sage-700">
-                {farmData.todayHighlights.map((highlight, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-sage-400 rounded-full"></div>
-                    <span>{highlight}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+    <div className="space-y-6">
+      {/* Market Ticker */}
+      {isMobile ? (
+        <MobileMarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
+      ) : (
+        <MarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
+      )}
 
-            {/* Quick Weather */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="text-center p-4 bg-white/50 rounded-2xl">
-                <Sun className="h-6 w-6 text-orange-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-sage-800">
-                  {farmData.currentWeather.temperature}°F
-                </div>
-                <div className="text-xs text-sage-600">
-                  {farmData.currentWeather.condition}
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-white/50 rounded-2xl">
-                <CloudRain className="h-6 w-6 text-blue-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-sage-800">
-                  {farmData.currentWeather.precipitation}"
-                </div>
-                <div className="text-xs text-sage-600">
-                  Rain today
-                </div>
-              </div>
-            </div>
-          </div>
-        </ModernCardContent>
-      </ModernCard>
+      {/* Morning Briefing - Unified Dashboard */}
+      <MorningBriefing 
+        farmName={farmData.farmName}
+        totalAcres={farmData.totalAcres}
+        overallHealth={farmData.overallHealth}
+        healthTrend={farmData.healthTrend}
+        stressedAreas={farmData.stressedAreas}
+        stressTrend={farmData.stressTrend}
+        weather={{
+          current: {
+            temp: farmData.currentWeather.temperature,
+            condition: farmData.currentWeather.condition,
+            icon: 'sun'
+          },
+          today: {
+            high: 82,
+            low: 65,
+            precipitation: farmData.currentWeather.precipitation,
+            windSpeed: 12
+          },
+          alerts: []
+        }}
+        financials={{
+          netYTD: 45230,
+          trend: 12,
+          lastUpdate: 'yesterday'
+        }}
+        urgentTasksCount={farmData.urgentTasks.length}
+      />
+
+      {/* Urgent Tasks - Most Prominent */}
+      {farmData.urgentTasks.length > 0 && (
+        isMobile ? (
+          <UrgentTasksMobile 
+            tasks={farmData.urgentTasks}
+            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
+          />
+        ) : (
+          <UrgentTasks 
+            tasks={farmData.urgentTasks}
+            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
+          />
+        )
+      )}
 
       {/* Key Metrics - Simplified to 3 Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <CropHealthCard
           healthScore={farmData.overallHealth}
+          healthTrend={farmData.healthTrend}
           showMore={true}
           onShowMore={() => setShowDetailedView(true)}
         />
         
         <StressLevelCard
           stressPercentage={farmData.stressedAreas}
+          stressTrend={farmData.stressTrend}
           showMore={true}
           onShowMore={() => setShowDetailedView(true)}
         />

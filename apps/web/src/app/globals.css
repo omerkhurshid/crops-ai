@@ -74,6 +74,44 @@
     background-position: center;
     background-attachment: fixed;
   }
+
+  /* Market ticker animations */
+  .animate-scroll-left {
+    animation: scroll-left 60s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Mobile-optimized touch targets */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Compressed mobile cards */
+  .mobile-card-compact {
+    @apply p-3 space-y-2;
+  }
+
+  .mobile-card-compact h3 {
+    @apply text-sm font-medium;
+  }
+
+  .mobile-card-compact p {
+    @apply text-xs;
+  }
+
+  /* Enhanced hover states for better mobile interaction */
+  .mobile-hover {
+    @apply active:scale-95 transition-transform duration-150;
+  }
   
   /* Glass morphism navbar with slight green tint */
   .glass-nav {

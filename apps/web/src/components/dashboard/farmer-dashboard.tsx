@@ -10,7 +10,7 @@ import { MorningBriefing } from './morning-briefing'
 import { UrgentTasks, UrgentTasksMobile } from './urgent-tasks'
 import { MarketTicker, MobileMarketTicker } from './market-ticker'
 import { Button } from '../ui/button'
-import { useScreenSize } from '../../hooks/useScreenSize'
+import { useScreenSize } from '../../hooks/useResponsive'
 import { 
   Leaf, 
   Droplets, 

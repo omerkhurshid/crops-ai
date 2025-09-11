@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status'
+import { Badge } from '../ui/badge'
 import { 
   MapPin, 
   Maximize2, 

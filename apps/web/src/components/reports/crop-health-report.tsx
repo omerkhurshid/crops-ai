@@ -1,15 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card';
 import { Button } from '../ui/button';
-import { Progress } from '../ui/progress';
+import { TrafficLightStatus, getHealthStatus, getStressStatus } from '../ui/traffic-light-status';
+import { FarmerMetricCard } from '../ui/farmer-metric-card';
 import { Badge } from '../ui/badge';
 import { 
   Leaf, Activity, TrendingUp, TrendingDown, Download, 
   RefreshCw, AlertTriangle, Target, Zap, Eye,
-  BarChart3, Satellite, Brain
+  BarChart3, Satellite, Brain, Shield, Droplets
 } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { convertHealthScore, getFarmerTerm } from '../../lib/farmer-language';
 
 interface CropHealthData {
   summary: {
@@ -48,8 +51,8 @@ interface CropHealthData {
   alerts: Array<{
     level: 'low' | 'medium' | 'high' | 'critical';
     message: string;
-    affectedFields: string[];
-    actionRequired: string;
+    fieldId: string;
+    actionRequired: boolean;
   }>;
 }
 
@@ -74,6 +77,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
+        // Use demo data
         setData(getMockHealthData());
       }
     } catch (error) {
@@ -117,11 +121,11 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
 
   const getMockHealthData = (): CropHealthData => ({
     summary: {
-      overallHealth: 87,
+      overallHealth: 84,
       avgNDVI: 0.78,
-      stressedArea: 8.5,
-      healthyArea: 91.5,
-      improvementTrend: 12.3
+      stressedArea: 12,
+      healthyArea: 88,
+      improvementTrend: 5.2
     },
     fieldAnalysis: [
       {
@@ -129,78 +133,80 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         fieldName: 'North Field',
         cropType: 'Corn',
         healthScore: 92,
-        ndvi: 0.82,
-        stressFactors: [
-          { type: 'drought', severity: 15, affected_area: 2.3 },
-          { type: 'nutrient', severity: 8, affected_area: 1.1 }
-        ],
-        recommendations: [
-          'Monitor soil moisture in southwest section',
-          'Consider nitrogen application in low-NDVI areas'
-        ]
+        ndvi: 0.85,
+        stressFactors: [],
+        recommendations: ['Continue current management practices', 'Monitor for late-season stress']
       },
       {
         fieldId: '2',
         fieldName: 'South Field',
         cropType: 'Soybeans',
-        healthScore: 85,
-        ndvi: 0.75,
+        healthScore: 76,
+        ndvi: 0.71,
         stressFactors: [
-          { type: 'disease', severity: 22, affected_area: 3.7 },
-          { type: 'pest', severity: 12, affected_area: 1.8 }
+          { type: 'drought', severity: 3, affected_area: 15 }
         ],
-        recommendations: [
-          'Apply fungicide to affected areas',
-          'Increase pest scouting frequency'
-        ]
+        recommendations: ['Increase irrigation frequency', 'Apply foliar nutrients']
+      },
+      {
+        fieldId: '3',
+        fieldName: 'West Field',
+        cropType: 'Wheat',
+        healthScore: 89,
+        ndvi: 0.82,
+        stressFactors: [
+          { type: 'nutrient', severity: 2, affected_area: 8 }
+        ],
+        recommendations: ['Apply nitrogen in stressed areas']
       }
     ],
     trends: {
       healthHistory: [
-        { date: '2024-05-01', avgHealth: 72, ndvi: 0.65 },
-        { date: '2024-06-01', avgHealth: 81, ndvi: 0.73 },
-        { date: '2024-07-01', avgHealth: 87, ndvi: 0.78 },
-        { date: '2024-08-01', avgHealth: 89, ndvi: 0.82 }
+        { date: '2024-08-01', avgHealth: 79, ndvi: 0.75 },
+        { date: '2024-08-15', avgHealth: 82, ndvi: 0.77 },
+        { date: '2024-09-01', avgHealth: 84, ndvi: 0.78 }
       ],
       seasonalPattern: {
         spring: 75,
         summer: 88,
         fall: 82,
-        winter: 45
+        winter: 65
       }
     },
     alerts: [
       {
         level: 'medium',
-        message: 'Disease pressure detected in South Field',
-        affectedFields: ['South Field'],
-        actionRequired: 'Apply preventive fungicide within 48 hours'
+        message: 'South Field showing drought stress in northeast corner',
+        fieldId: '2',
+        actionRequired: true
       },
       {
         level: 'low',
-        message: 'Minor nutrient deficiency in North Field',
-        affectedFields: ['North Field'],
-        actionRequired: 'Plan fertilizer application for next week'
+        message: 'West Field nitrogen levels slightly below optimal',
+        fieldId: '3',
+        actionRequired: false
       }
     ]
   });
 
-  const getHealthColor = (score: number) => {
-    if (score >= 85) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+  const getStressFactorIcon = (type: string) => {
+    switch (type) {
+      case 'drought': return <Droplets className="h-4 w-4 text-orange-600" />;
+      case 'disease': return <Shield className="h-4 w-4 text-red-600" />;
+      case 'nutrient': return <Zap className="h-4 w-4 text-yellow-600" />;
+      case 'pest': return <AlertTriangle className="h-4 w-4 text-red-600" />;
+      default: return <Activity className="h-4 w-4 text-gray-600" />;
+    }
   };
 
-  const getHealthBackground = (score: number) => {
-    if (score >= 85) return 'bg-green-50 border-green-200';
-    if (score >= 70) return 'bg-yellow-50 border-yellow-200';
-    return 'bg-red-50 border-red-200';
-  };
-
-  const getStressColor = (severity: number) => {
-    if (severity <= 10) return 'text-green-600';
-    if (severity <= 30) return 'text-yellow-600';
-    return 'text-red-600';
+  const getStressFactorName = (type: string) => {
+    switch (type) {
+      case 'drought': return 'Water Stress';
+      case 'disease': return 'Disease';
+      case 'nutrient': return 'Nutrient Deficiency';
+      case 'pest': return 'Pest Pressure';
+      default: return 'Unknown';
+    }
   };
 
   const getAlertColor = (level: string) => {
@@ -213,257 +219,273 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
     }
   };
 
-  const getStressIcon = (type: string) => {
-    switch (type) {
-      case 'drought': return <Zap className="h-4 w-4 text-orange-600" />;
-      case 'disease': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'nutrient': return <Target className="h-4 w-4 text-blue-600" />;
-      case 'pest': return <Eye className="h-4 w-4 text-purple-600" />;
-      default: return <Activity className="h-4 w-4 text-gray-600" />;
-    }
-  };
-
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-center h-32">
-          <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
-        </div>
-      </div>
+      <ModernCard variant="soft">
+        <ModernCardContent className="p-8">
+          <div className="flex items-center justify-center">
+            <RefreshCw className="h-6 w-6 animate-spin text-sage-400 mr-3" />
+            <span className="text-sage-600">Analyzing crop health...</span>
+          </div>
+        </ModernCardContent>
+      </ModernCard>
     );
   }
 
   if (!data) {
     return (
-      <div className="text-center py-8">
-        <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-600">Unable to load crop health data</p>
-      </div>
+      <ModernCard variant="soft">
+        <ModernCardContent className="p-8 text-center">
+          <AlertTriangle className="h-8 w-8 text-sage-400 mx-auto mb-4" />
+          <p className="text-sage-600">Unable to load crop health data</p>
+          <Button 
+            onClick={fetchHealthData}
+            variant="outline"
+            className="mt-4"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Try Again
+          </Button>
+        </ModernCardContent>
+      </ModernCard>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h3 className="text-lg font-semibold">Crop Health Analysis</h3>
-          <p className="text-sm text-gray-600">Satellite-based vegetation health monitoring and analysis</p>
+          <h3 className="text-xl font-semibold text-sage-800 mb-2">
+            How Healthy Your Crops Are
+          </h3>
+          <p className="text-sage-600">
+            Satellite analysis of your crop health and stress levels
+          </p>
         </div>
         <Button
           onClick={generateReport}
           disabled={generating}
-          size="sm"
-          className="bg-green-600 hover:bg-green-700"
+          className="bg-sage-700 hover:bg-sage-800 w-full sm:w-auto"
         >
           {generating ? (
             <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
           ) : (
             <Download className="h-4 w-4 mr-2" />
           )}
-          {generating ? 'Generating...' : 'Download Report'}
+          {generating ? 'Creating Report...' : 'Download Report'}
         </Button>
       </div>
 
-      {/* Health Summary */}
-      <Card className={`border-2 ${getHealthBackground(data.summary.overallHealth)}`}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Leaf className="h-5 w-5" />
-            Overall Crop Health Status
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+      {/* Overall Health Summary */}
+      <ModernCard variant="glow" className="overflow-hidden">
+        <ModernCardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
+          <div className="flex items-center gap-3">
+            <Leaf className="h-6 w-6 text-green-700" />
             <div>
-              <div className={`text-3xl font-bold ${getHealthColor(data.summary.overallHealth)}`}>
-                {data.summary.overallHealth}%
-              </div>
-              <p className="text-xs text-gray-600">Overall Health</p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-green-600">{data.summary.avgNDVI.toFixed(2)}</div>
-              <p className="text-xs text-gray-600">Avg NDVI</p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-green-600">{data.summary.healthyArea.toFixed(1)}%</div>
-              <p className="text-xs text-gray-600">Healthy Area</p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-red-600">{data.summary.stressedArea.toFixed(1)}%</div>
-              <p className="text-xs text-gray-600">Stressed Area</p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-blue-600">
-                {data.summary.improvementTrend >= 0 ? '+' : ''}{data.summary.improvementTrend.toFixed(1)}%
-              </div>
-              <p className="text-xs text-gray-600">Trend</p>
+              <ModernCardTitle className="text-sage-800">
+                Overall Crop Health
+              </ModernCardTitle>
+              <ModernCardDescription>
+                How healthy your crops are right now
+              </ModernCardDescription>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardHeader>
+        <ModernCardContent className="p-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <TrafficLightStatus 
+                status={getHealthStatus(data.summary.overallHealth)} 
+                size="lg"
+                showIcon={true}
+                showText={false}
+              />
+              <div className="text-4xl font-bold text-sage-800">
+                {data.summary.overallHealth}%
+              </div>
+            </div>
+            <p className="text-lg text-sage-600 mb-4">
+              {convertHealthScore(data.summary.overallHealth, 'crop')}
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-sage-600">
+              {data.summary.improvementTrend > 0 ? (
+                <TrendingUp className="h-4 w-4 text-green-600" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-red-600" />
+              )}
+              <span>
+                {data.summary.improvementTrend > 0 ? '+' : ''}{data.summary.improvementTrend.toFixed(1)}% 
+                improvement this week
+              </span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <FarmerMetricCard
+              title="Healthy Areas"
+              value={`${data.summary.healthyArea}%`}
+              subtitle="Of your fields look good"
+              status="excellent"
+              icon={<Leaf className="h-5 w-5 text-green-600" />}
+            />
+            
+            <FarmerMetricCard
+              title="Stressed Areas"
+              value={`${data.summary.stressedArea}%`}
+              subtitle="Of your fields need attention"
+              status={getStressStatus(data.summary.stressedArea)}
+              icon={<AlertTriangle className="h-5 w-5 text-orange-600" />}
+            />
+            
+            <FarmerMetricCard
+              title="Plant Vigor"
+              value={data.summary.avgNDVI.toFixed(2)}
+              subtitle="Satellite vegetation index"
+              status={data.summary.avgNDVI > 0.7 ? 'excellent' : data.summary.avgNDVI > 0.5 ? 'good' : 'warning'}
+              icon={<Satellite className="h-5 w-5 text-blue-600" />}
+            />
+          </div>
+        </ModernCardContent>
+      </ModernCard>
 
-      {/* Field Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Field-by-Field Analysis</CardTitle>
-          <CardDescription>Detailed health assessment for each field</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
+      {/* Field-by-Field Analysis */}
+      <ModernCard variant="soft">
+        <ModernCardHeader>
+          <ModernCardTitle className="flex items-center gap-2">
+            <Target className="h-5 w-5 text-sage-700" />
+            Field-by-Field Health
+          </ModernCardTitle>
+          <ModernCardDescription>
+            How each of your fields is doing
+          </ModernCardDescription>
+        </ModernCardHeader>
+        <ModernCardContent>
+          <div className="space-y-4">
             {data.fieldAnalysis.map((field) => (
-              <div key={field.fieldId} className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h4 className="font-semibold text-lg">{field.fieldName}</h4>
-                    <p className="text-sm text-gray-600">{field.cropType}</p>
+              <div key={field.fieldId} className="p-4 bg-white rounded-xl border border-sage-100">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <TrafficLightStatus 
+                      status={getHealthStatus(field.healthScore)} 
+                      size="md"
+                      showText={false}
+                    />
+                    <div>
+                      <h4 className="font-semibold text-sage-800">{field.fieldName}</h4>
+                      <p className="text-sm text-sage-600">{field.cropType}</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className={`text-xl font-bold ${getHealthColor(field.healthScore)}`}>
-                      {field.healthScore}%
-                    </div>
-                    <p className="text-xs text-gray-600">Health Score</p>
+                    <div className="text-lg font-bold text-sage-800">{field.healthScore}%</div>
+                    <div className="text-sm text-sage-600">Health Score</div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Health Metrics */}
-                  <div>
-                    <h5 className="font-medium mb-3 flex items-center gap-2">
-                      <Satellite className="h-4 w-4" />
-                      Vegetation Metrics
-                    </h5>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm">NDVI Index:</span>
-                        <span className="font-medium">{field.ndvi.toFixed(3)}</span>
-                      </div>
-                      <Progress value={field.ndvi * 100} className="mt-1" />
-                    </div>
-                  </div>
-
-                  {/* Stress Factors */}
-                  <div>
-                    <h5 className="font-medium mb-3 flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4" />
-                      Stress Factors
-                    </h5>
+                {/* Stress Factors */}
+                {field.stressFactors.length > 0 && (
+                  <div className="mb-4">
+                    <h5 className="text-sm font-medium text-sage-800 mb-2">Issues Found:</h5>
                     <div className="space-y-2">
                       {field.stressFactors.map((stress, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            {getStressIcon(stress.type)}
-                            <span className="text-sm capitalize">{stress.type}</span>
-                          </div>
-                          <div className="text-right">
-                            <span className={`text-sm font-medium ${getStressColor(stress.severity)}`}>
-                              {stress.severity}%
-                            </span>
-                            <p className="text-xs text-gray-500">{stress.affected_area}ha</p>
-                          </div>
+                        <div key={index} className="flex items-center gap-2 text-sm">
+                          {getStressFactorIcon(stress.type)}
+                          <span className="text-sage-700">
+                            {getStressFactorName(stress.type)} affecting {stress.affected_area}% of field
+                          </span>
+                          <Badge variant="outline" className="ml-auto">
+                            Severity: {stress.severity}/5
+                          </Badge>
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Recommendations */}
-                <div className="mt-4">
-                  <h5 className="font-medium mb-2 flex items-center gap-2">
-                    <Brain className="h-4 w-4" />
-                    AI Recommendations
-                  </h5>
-                  <div className="space-y-1">
+                <div>
+                  <h5 className="text-sm font-medium text-sage-800 mb-2">What to do:</h5>
+                  <ul className="space-y-1">
                     {field.recommendations.map((rec, index) => (
-                      <p key={index} className="text-sm text-gray-700 flex items-start gap-2">
-                        <span className="w-1 h-1 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
+                      <li key={index} className="text-sm text-sage-700 flex items-start gap-2">
+                        <span className="text-sage-400 mt-1">•</span>
                         {rec}
-                      </p>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
+
+      {/* Health Alerts */}
+      {data.alerts.length > 0 && (
+        <ModernCard variant="soft">
+          <ModernCardHeader>
+            <ModernCardTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-orange-600" />
+              Health Alerts
+            </ModernCardTitle>
+            <ModernCardDescription>
+              Issues that need your attention
+            </ModernCardDescription>
+          </ModernCardHeader>
+          <ModernCardContent>
+            <div className="space-y-3">
+              {data.alerts.map((alert, index) => (
+                <div key={index} className="p-4 bg-white rounded-xl border border-sage-100">
+                  <div className="flex items-start justify-between mb-2">
+                    <Badge className={cn("border", getAlertColor(alert.level))}>
+                      {alert.level.toUpperCase()}
+                    </Badge>
+                    {alert.actionRequired && (
+                      <span className="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded">
+                        Action Required
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sage-700 leading-relaxed">{alert.message}</p>
+                </div>
+              ))}
+            </div>
+          </ModernCardContent>
+        </ModernCard>
+      )}
 
       {/* Health Trends */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Health Trends</CardTitle>
-          <CardDescription>Historical health patterns and seasonal analysis</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Historical Trend */}
-            <div>
-              <h5 className="font-medium mb-3">Health History</h5>
-              <div className="space-y-2">
-                {data.trends.healthHistory.map((entry, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                    <span className="text-sm">{new Date(entry.date).toLocaleDateString()}</span>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-sm font-medium ${getHealthColor(entry.avgHealth)}`}>
-                        {entry.avgHealth}%
-                      </span>
-                      <span className="text-xs text-gray-500">NDVI: {entry.ndvi.toFixed(2)}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <ModernCard variant="soft">
+        <ModernCardHeader>
+          <ModernCardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-sage-700" />
+            Health Trends
+          </ModernCardTitle>
+          <ModernCardDescription>
+            How your crop health has changed over time
+          </ModernCardDescription>
+        </ModernCardHeader>
+        <ModernCardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-green-50 rounded-xl border border-green-100">
+              <div className="text-sm font-medium text-sage-600 mb-1">Spring</div>
+              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.spring}%</div>
             </div>
-
-            {/* Seasonal Pattern */}
-            <div>
-              <h5 className="font-medium mb-3">Seasonal Patterns</h5>
-              <div className="space-y-3">
-                {Object.entries(data.trends.seasonalPattern).map(([season, value]) => (
-                  <div key={season} className="flex items-center justify-between">
-                    <span className="text-sm capitalize">{season}</span>
-                    <div className="flex items-center gap-2">
-                      <Progress value={value} className="w-20" />
-                      <span className={`text-sm font-medium ${getHealthColor(value)}`}>
-                        {value}%
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="text-center p-4 bg-yellow-50 rounded-xl border border-yellow-100">
+              <div className="text-sm font-medium text-sage-600 mb-1">Summer</div>
+              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.summer}%</div>
+            </div>
+            <div className="text-center p-4 bg-orange-50 rounded-xl border border-orange-100">
+              <div className="text-sm font-medium text-sage-600 mb-1">Fall</div>
+              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.fall}%</div>
+            </div>
+            <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
+              <div className="text-sm font-medium text-sage-600 mb-1">Winter</div>
+              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.winter}%</div>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Current Alerts */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Current Health Alerts</CardTitle>
-          <CardDescription>Issues requiring immediate attention</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {data.alerts.map((alert, index) => (
-              <div key={index} className={`p-4 border-2 rounded-lg ${getAlertColor(alert.level)}`}>
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <div className="font-medium">{alert.message}</div>
-                    <div className="text-sm opacity-75">
-                      Affected: {alert.affectedFields.join(', ')}
-                    </div>
-                  </div>
-                  <Badge className={getAlertColor(alert.level)}>
-                    {alert.level}
-                  </Badge>
-                </div>
-                <p className="text-sm font-medium mt-2">
-                  Action Required: {alert.actionRequired}
-                </p>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
     </div>
   );
 }

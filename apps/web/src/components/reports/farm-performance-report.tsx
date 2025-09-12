@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Progress } from '../ui/progress';
+import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status';
+import { FarmerMetricCard } from '../ui/farmer-metric-card';
 import { 
   TrendingUp, TrendingDown, Download, RefreshCw, BarChart3, 
-  Target, Leaf, DollarSign, Activity, AlertCircle
+  Target, Leaf, DollarSign, Activity, AlertCircle, Award, Tractor
 } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { convertHealthScore, getFarmerTerm } from '../../lib/farmer-language';
 
 interface FarmPerformanceData {
   overallScore: number;
@@ -128,16 +131,11 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
     }).format(amount);
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getScoreBackground = (score: number) => {
-    if (score >= 85) return 'bg-green-50 border-green-200';
-    if (score >= 70) return 'bg-yellow-50 border-yellow-200';
-    return 'bg-red-50 border-red-200';
+  const getScoreStatus = (score: number) => {
+    if (score >= 85) return 'excellent';
+    if (score >= 70) return 'good';
+    if (score >= 50) return 'warning';
+    return 'critical';
   };
 
   const getTrendIcon = (change: number) => {
@@ -148,197 +146,261 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'high': return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-center h-32">
-          <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
-        </div>
-      </div>
+      <ModernCard variant="soft">
+        <ModernCardContent className="p-8">
+          <div className="flex items-center justify-center">
+            <RefreshCw className="h-6 w-6 animate-spin text-sage-400 mr-3" />
+            <span className="text-sage-600">Loading farm performance data...</span>
+          </div>
+        </ModernCardContent>
+      </ModernCard>
     );
   }
 
   if (!data) {
     return (
-      <div className="text-center py-8">
-        <AlertCircle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-600">Unable to load performance data</p>
-      </div>
+      <ModernCard variant="soft">
+        <ModernCardContent className="p-8 text-center">
+          <AlertCircle className="h-8 w-8 text-sage-400 mx-auto mb-4" />
+          <p className="text-sage-600">Unable to load performance data</p>
+          <Button 
+            onClick={fetchPerformanceData}
+            variant="outline"
+            className="mt-4"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Try Again
+          </Button>
+        </ModernCardContent>
+      </ModernCard>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h3 className="text-lg font-semibold">Farm Performance Analysis</h3>
-          <p className="text-sm text-gray-600">Comprehensive productivity and efficiency metrics</p>
+          <h3 className="text-xl font-semibold text-sage-800 mb-2">
+            How Your Farm is Performing
+          </h3>
+          <p className="text-sage-600">
+            See how well your farm is doing compared to last year
+          </p>
         </div>
         <Button
           onClick={generateReport}
           disabled={generating}
-          size="sm"
-          className="bg-green-600 hover:bg-green-700"
+          className="bg-sage-700 hover:bg-sage-800 w-full sm:w-auto"
         >
           {generating ? (
             <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
           ) : (
             <Download className="h-4 w-4 mr-2" />
           )}
-          {generating ? 'Generating...' : 'Download Report'}
+          {generating ? 'Creating Report...' : 'Download Report'}
         </Button>
       </div>
 
       {/* Overall Performance Score */}
-      <Card className={`border-2 ${getScoreBackground(data.overallScore)}`}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Overall Performance Score
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center mb-4">
-            <div className={`text-4xl font-bold ${getScoreColor(data.overallScore)}`}>
-              {data.overallScore}%
+      <ModernCard variant="glow" className="overflow-hidden">
+        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
+          <div className="flex items-center gap-3">
+            <Award className="h-6 w-6 text-sage-700" />
+            <div>
+              <ModernCardTitle className="text-sage-800">
+                Overall Farm Score
+              </ModernCardTitle>
+              <ModernCardDescription>
+                How well your farm is performing overall
+              </ModernCardDescription>
             </div>
-            <p className="text-sm text-gray-600 mt-1">Excellent performance</p>
+          </div>
+        </ModernCardHeader>
+        <ModernCardContent className="p-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <TrafficLightStatus 
+                status={getScoreStatus(data.overallScore)} 
+                size="lg"
+                showIcon={true}
+                showText={false}
+              />
+              <div className="text-4xl font-bold text-sage-800">
+                {data.overallScore}%
+              </div>
+            </div>
+            <p className="text-lg text-sage-600">
+              {convertHealthScore(data.overallScore, 'performance')}
+            </p>
           </div>
           
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className={`text-lg font-semibold ${getScoreColor(data.yieldEfficiency)}`}>
-                {data.yieldEfficiency}%
-              </div>
-              <p className="text-xs text-gray-600">Yield Efficiency</p>
-            </div>
-            <div>
-              <div className={`text-lg font-semibold ${getScoreColor(data.resourceUtilization)}`}>
-                {data.resourceUtilization}%
-              </div>
-              <p className="text-xs text-gray-600">Resource Use</p>
-            </div>
-            <div>
-              <div className={`text-lg font-semibold ${getScoreColor(data.profitability)}`}>
-                {data.profitability}%
-              </div>
-              <p className="text-xs text-gray-600">Profitability</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <FarmerMetricCard
+              title="Crop Production"
+              value={`${data.yieldEfficiency}%`}
+              subtitle="How much you're growing"
+              status={getScoreStatus(data.yieldEfficiency)}
+              icon={<Leaf className="h-5 w-5 text-green-600" />}
+            />
+            
+            <FarmerMetricCard
+              title="Resource Efficiency"
+              value={`${data.resourceUtilization}%`}
+              subtitle="How well you use inputs"
+              status={getScoreStatus(data.resourceUtilization)}
+              icon={<Tractor className="h-5 w-5 text-earth-600" />}
+            />
+            
+            <FarmerMetricCard
+              title="Profit Margin"
+              value={`${data.profitability}%`}
+              subtitle="How profitable you are"
+              status={getScoreStatus(data.profitability)}
+              icon={<DollarSign className="h-5 w-5 text-sage-600" />}
+            />
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
 
       {/* Performance Trends */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Performance Trends</CardTitle>
-          <CardDescription>Year-over-year comparison</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <ModernCard variant="soft">
+        <ModernCardHeader>
+          <ModernCardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-sage-700" />
+            How You're Trending
+          </ModernCardTitle>
+          <ModernCardDescription>
+            Comparing this year to last year
+          </ModernCardDescription>
+        </ModernCardHeader>
+        <ModernCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Leaf className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium">Yield</span>
+            <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Leaf className="h-5 w-5 text-green-600" />
+                <span className="font-medium text-sage-800">Crop Yield</span>
                 {getTrendIcon(data.trends.yield.change)}
               </div>
-              <div className="text-xl font-bold">{data.trends.yield.current}</div>
-              <div className="text-xs text-gray-600">
+              <div className="text-2xl font-bold text-sage-800 mb-1">
+                {data.trends.yield.current} bu/acre
+              </div>
+              <div className="text-sm text-sage-600">
                 {data.trends.yield.change >= 0 ? '+' : ''}{data.trends.yield.change.toFixed(1)}% vs last year
               </div>
             </div>
             
-            <div className="text-center p-4 bg-orange-50 rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <DollarSign className="h-4 w-4 text-orange-600" />
-                <span className="text-sm font-medium">Costs</span>
-                {getTrendIcon(data.trends.costs.change)}
+            <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-100">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <DollarSign className="h-5 w-5 text-orange-600" />
+                <span className="font-medium text-sage-800">Operating Costs</span>
+                {getTrendIcon(-data.trends.costs.change)} {/* Negative because lower costs are better */}
               </div>
-              <div className="text-xl font-bold">{formatCurrency(data.trends.costs.current)}</div>
-              <div className="text-xs text-gray-600">
+              <div className="text-2xl font-bold text-sage-800 mb-1">
+                {formatCurrency(data.trends.costs.current)}/acre
+              </div>
+              <div className="text-sm text-sage-600">
                 {data.trends.costs.change >= 0 ? '+' : ''}{data.trends.costs.change.toFixed(1)}% vs last year
               </div>
             </div>
             
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Target className="h-4 w-4 text-green-600" />
-                <span className="text-sm font-medium">Profit</span>
+            <div className="text-center p-4 bg-gradient-to-br from-sage-50 to-green-50 rounded-xl border border-sage-100">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Target className="h-5 w-5 text-sage-600" />
+                <span className="font-medium text-sage-800">Profit per Acre</span>
                 {getTrendIcon(data.trends.profit.change)}
               </div>
-              <div className="text-xl font-bold">{formatCurrency(data.trends.profit.current)}</div>
-              <div className="text-xs text-gray-600">
+              <div className="text-2xl font-bold text-sage-800 mb-1">
+                {formatCurrency(data.trends.profit.current)}
+              </div>
+              <div className="text-sm text-sage-600">
                 {data.trends.profit.change >= 0 ? '+' : ''}{data.trends.profit.change.toFixed(1)}% vs last year
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
 
       {/* Top Performing Fields */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Top Performing Fields</CardTitle>
-          <CardDescription>Your most efficient and profitable fields</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <ModernCard variant="soft">
+        <ModernCardHeader>
+          <ModernCardTitle className="flex items-center gap-2">
+            <Award className="h-5 w-5 text-yellow-600" />
+            Your Best Fields
+          </ModernCardTitle>
+          <ModernCardDescription>
+            Fields that are making you the most money
+          </ModernCardDescription>
+        </ModernCardHeader>
+        <ModernCardContent>
           <div className="space-y-3">
             {data.topPerformingFields.map((field, index) => (
-              <div key={field.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                    index === 1 ? 'bg-gray-100 text-gray-800' :
-                    'bg-orange-100 text-orange-800'
-                  }`}>
+              <div key={field.id} className="flex items-center justify-between p-4 bg-white rounded-xl border border-sage-100 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-4">
+                  <div className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm",
+                    index === 0 && "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
+                    index === 1 && "bg-gray-100 text-gray-700 border-2 border-gray-300",
+                    index === 2 && "bg-orange-100 text-orange-800 border-2 border-orange-300"
+                  )}>
                     #{index + 1}
                   </div>
                   <div>
-                    <div className="font-medium">{field.name}</div>
-                    <div className="text-sm text-gray-600">{field.cropType}</div>
+                    <div className="font-semibold text-sage-800">{field.name}</div>
+                    <div className="text-sm text-sage-600">{field.cropType}</div>
                   </div>
                 </div>
                 
                 <div className="text-right">
-                  <div className="font-semibold">{formatCurrency(field.profitPerAcre)}/acre</div>
-                  <div className="text-sm text-gray-600">{field.efficiency}% efficient</div>
+                  <div className="font-bold text-lg text-sage-800">
+                    {formatCurrency(field.profitPerAcre)}<span className="text-sm font-normal">/acre</span>
+                  </div>
+                  <div className="text-sm text-sage-600">{field.efficiency}% efficient</div>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
 
       {/* Improvement Areas */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Improvement Opportunities</CardTitle>
-          <CardDescription>AI-identified areas for optimization</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
+      <ModernCard variant="soft">
+        <ModernCardHeader>
+          <ModernCardTitle className="flex items-center gap-2">
+            <Target className="h-5 w-5 text-sage-700" />
+            Ways to Improve
+          </ModernCardTitle>
+          <ModernCardDescription>
+            AI suggestions to make your farm even better
+          </ModernCardDescription>
+        </ModernCardHeader>
+        <ModernCardContent>
+          <div className="space-y-4">
             {data.improvementAreas.map((area, index) => (
-              <div key={index} className="p-4 border rounded-lg">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="font-medium">{area.area}</div>
-                  <Badge className={getImpactColor(area.impact)}>
-                    {area.impact} impact
+              <div key={index} className="p-4 bg-white rounded-xl border border-sage-100">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="font-semibold text-sage-800">{area.area}</div>
+                  <Badge className={cn("border", getImpactColor(area.impact))}>
+                    {area.impact === 'high' ? '🔥 High Impact' : 
+                     area.impact === 'medium' ? '⚡ Medium Impact' : 
+                     '✨ Low Impact'}
                   </Badge>
                 </div>
-                <p className="text-sm text-gray-700">{area.recommendation}</p>
+                <p className="text-sage-700 leading-relaxed">{area.recommendation}</p>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
     </div>
   );
 }

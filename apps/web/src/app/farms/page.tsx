@@ -106,7 +106,7 @@ export default async function FarmsPage() {
                   icon={<MapPin className="h-5 w-5" />}
                   label="Advanced Setup"
                   showLabel={true}
-                  variant="outline"
+                  variant="secondary"
                   size="lg"
                   className="min-w-[160px]"
                 />

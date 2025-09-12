@@ -18,10 +18,19 @@ export async function GET(request: NextRequest) {
     const symbolsParam = searchParams.get('symbols')
     const includeHistory = searchParams.get('history') === 'true'
 
-    // Default agricultural commodities if none specified
-    const symbols = symbolsParam 
-      ? symbolsParam.split(',').map(s => s.trim().toUpperCase())
-      : ['ZC', 'ZW', 'ZS'] // Corn, Wheat, Soybeans
+    // Get user's commodity preferences
+    let symbols: string[]
+    
+    if (symbolsParam) {
+      symbols = symbolsParam.split(',').map(s => s.trim().toUpperCase())
+    } else {
+      // Try to get user preferences from database
+      const userPrefs = await prisma.userPreferences.findUnique({
+        where: { userId: user.id }
+      }).catch(() => null)
+      
+      symbols = userPrefs?.commodities || ['CORN', 'WHEAT', 'SOYBEANS']
+    }
 
     // Get current prices
     const prices = await cmePricingService.getMultiplePrices(symbols)

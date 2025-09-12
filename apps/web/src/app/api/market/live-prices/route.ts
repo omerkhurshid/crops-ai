@@ -24,12 +24,9 @@ export async function GET(request: NextRequest) {
     if (symbolsParam) {
       symbols = symbolsParam.split(',').map(s => s.trim().toUpperCase())
     } else {
-      // Try to get user preferences from database
-      const userPrefs = await prisma.userPreferences.findUnique({
-        where: { userId: user.id }
-      }).catch(() => null)
-      
-      symbols = userPrefs?.commodities || ['CORN', 'WHEAT', 'SOYBEANS']
+      // Use default commodity symbols for now
+      // TODO: Implement user preferences in the future
+      symbols = ['CORN', 'WHEAT', 'SOYBEANS']
     }
 
     // Get current prices

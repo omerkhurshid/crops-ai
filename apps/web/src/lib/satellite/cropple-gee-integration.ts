@@ -120,7 +120,7 @@ export class CroppleGEEService {
       return -3                              // Much worse than historical
     })
 
-    return trends.reduce((sum, trend) => sum + trend, 0) / trends.length
+    return trends.reduce((sum: number, trend: number) => sum + trend, 0) / trends.length
   }
 
   /**
@@ -225,8 +225,8 @@ export class CroppleGEEService {
 
   private ndviToYield(ndvi: number, model: any): number {
     // Linear correlation model (simplified)
-    const yield = model.baseYield + (ndvi - 0.5) * model.ndviCoeff
-    return Math.max(0, Math.min(yield, model.maxYield))
+    const yieldValue = model.baseYield + (ndvi - 0.5) * model.ndviCoeff
+    return Math.max(0, Math.min(yieldValue, model.maxYield))
   }
 
   /**
@@ -263,8 +263,12 @@ export class CroppleGEEService {
     return highlights
   }
 
-  private getBestPerformingField(analyses: any[], fields: any[]) {
-    let bestField = null
+  private getBestPerformingField(analyses: any[], fields: any[]): {
+    name: string
+    ndvi: number
+    score: number
+  } | null {
+    let bestField: { name: string; ndvi: number; score: number } | null = null
     let bestScore = 0
 
     analyses.forEach((analysis, index) => {

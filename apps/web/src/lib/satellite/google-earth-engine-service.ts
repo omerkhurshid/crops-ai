@@ -107,6 +107,7 @@ export class GoogleEarthEngineService {
       
       return {
         ...analysis,
+        fieldId: request.fieldId || 'unknown',
         recommendations,
         analysisDate: new Date()
       }

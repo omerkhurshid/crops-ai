@@ -11,6 +11,7 @@ import {
   CustomReportPreview
 } from '../../components/reports/farmer-friendly-preview-cards'
 import { RecentReports } from '../../components/reports/recent-reports'
+import { BenchmarkingSection } from '../../components/reports/benchmarking-section'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
@@ -162,6 +163,11 @@ export default async function ReportsPage() {
               <CustomReportPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
+        </div>
+
+        {/* Benchmarking Section */}
+        <div className="mb-16">
+          <BenchmarkingSection farm={{ id: user.id, name: 'Your Farm', totalArea: 100, region: 'Midwest' }} />
         </div>
 
         <ModernCard variant="soft">

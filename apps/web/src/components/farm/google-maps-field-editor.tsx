@@ -222,8 +222,10 @@ export function GoogleMapsFieldEditor({
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   
   console.log('Google Maps API Key Status:', apiKey ? 'Available' : 'Missing')
+  console.log('Google Maps API Key Length:', apiKey?.length || 0)
+  console.log('Google Maps API Key Prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'Not set')
   
-  if (!apiKey) {
+  if (!apiKey || apiKey.includes('AIza') === false) {
     return (
       <Card>
         <CardHeader>
@@ -259,9 +261,23 @@ export function GoogleMapsFieldEditor({
     <LoadScript
       googleMapsApiKey={apiKey}
       libraries={libraries}
-      loadingElement={<div>Loading Google Maps...</div>}
-      onLoad={() => console.log('Google Maps script loaded successfully')}
-      onError={(error) => console.error('Google Maps script failed to load:', error)}
+      loadingElement={
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+            <p>Loading Google Maps...</p>
+            <p className="text-sm text-gray-500 mt-1">API Key: {apiKey ? apiKey.substring(0, 10) + '...' : 'Missing'}</p>
+          </div>
+        </div>
+      }
+      onLoad={() => {
+        console.log('Google Maps script loaded successfully')
+        console.log('Google object available:', typeof window.google !== 'undefined')
+      }}
+      onError={(error) => {
+        console.error('Google Maps script failed to load:', error)
+        console.error('API Key being used:', apiKey ? apiKey.substring(0, 10) + '...' : 'Missing')
+      }}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map Container */}

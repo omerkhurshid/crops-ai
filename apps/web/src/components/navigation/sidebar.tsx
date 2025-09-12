@@ -78,7 +78,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
               />
             </div>
             <span className="text-lg font-semibold text-white/90 tracking-tight drop-shadow-lg">
-              Crops<span className="text-green-300">.AI</span>
+              Cropple<span className="text-green-300">.ai</span>
             </span>
           </Link>
         )}

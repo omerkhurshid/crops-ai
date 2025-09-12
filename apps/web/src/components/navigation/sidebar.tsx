@@ -16,6 +16,7 @@ import {
   HelpCircle,
   Users,
   CheckSquare,
+  Sprout,
   Menu,
   ChevronLeft,
   LogOut,
@@ -38,6 +39,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
   const navLinks = [
     { href: '/dashboard', label: 'Command Center', icon: Home },
     { href: '/farms', label: 'Farms', icon: BarChart3 },
+    { href: '/crops', label: 'Crop Planning', icon: Sprout },
     { href: '/weather', label: 'Weather', icon: CloudRain },
     { href: '/crop-health', label: 'Crop Health', icon: Activity },
     { href: '/livestock', label: 'Livestock', icon: Users },

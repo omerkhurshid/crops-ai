@@ -103,8 +103,8 @@ export class AgroMonitoringService {
 
   constructor(config: AgroMonitoringConfig) {
     this.config = {
-      baseUrl: 'http://api.agromonitoring.com/agro/1.0',
-      ...config
+      ...config,
+      baseUrl: config.baseUrl || 'http://api.agromonitoring.com/agro/1.0'
     }
   }
 

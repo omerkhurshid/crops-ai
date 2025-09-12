@@ -225,7 +225,7 @@ export function GoogleMapsFieldEditor({
   console.log('Google Maps API Key Length:', apiKey?.length || 0)
   console.log('Google Maps API Key Prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'Not set')
   
-  if (!apiKey || apiKey.includes('AIza') === false) {
+  if (!apiKey || apiKey.length < 10) {
     return (
       <Card>
         <CardHeader>

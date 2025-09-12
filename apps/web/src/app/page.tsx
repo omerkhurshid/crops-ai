@@ -13,11 +13,22 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-agricultural">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/homepage_image.jpg')",
+        }}
+      >
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+      
       <Navbar />
       
       {/* Full Page Glassmorphic Layout - Extended */}
-      <section className="relative overflow-hidden py-8 px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden py-8 px-4 sm:px-6 lg:px-8 z-10">
         
         <div className="relative z-10 max-w-7xl mx-auto w-full">
           {/* Large Extended Glass Container - Goes all the way down */}
@@ -220,9 +231,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="glass-hero-extended p-8 md:p-12 lg:p-16 rounded-3xl">
             <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-white/80">
+              <div className="flex flex-col items-center gap-2 text-sm text-white/80 text-center">
                 <p>© 2025 Crops.AI. All rights reserved.</p>
-                <p>Photo by <span className="font-medium">Bernd 📷 Dittrich</span></p>
+                <p>Photo by <span className="font-medium text-white">Franz Michael Schneeberger</span> 📸</p>
+                <p className="text-xs">Special thanks to Franz Michael Schneeberger for the beautiful corn field photography</p>
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-sm text-white/80">Built with</span>

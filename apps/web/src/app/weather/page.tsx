@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
@@ -66,8 +66,7 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
   const longitude = farm.longitude || -87.6298
 
   return (
-    <div className="minimal-page">
-      <Navbar />
+    <DashboardLayout>
       
       {/* Floating Action Button */}
       <ClientFloatingButton
@@ -174,6 +173,6 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
           </ModernCard>
         </div>
       </main>
-    </div>
+    </DashboardLayout>
   )
 }

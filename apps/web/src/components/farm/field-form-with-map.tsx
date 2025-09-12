@@ -26,6 +26,7 @@ interface DetectedField {
   id: string
   area: number
   boundaries: Array<{ lat: number; lng: number }>
+  confidence: number
   selected?: boolean
 }
 
@@ -80,6 +81,7 @@ export function FieldFormWithMap({
         id: 'manual-field',
         area: area,
         boundaries: boundaries,
+        confidence: 100,
         selected: true
       }
       setSelectedFields([manualField])
@@ -305,7 +307,12 @@ export function FieldFormWithMap({
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-green-900">Manually Drawn Field</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="font-medium text-green-900">Manually Drawn Field</p>
+                      <Badge className="bg-green-100 text-green-700 border-green-300 text-xs">
+                        {selectedFields[0]?.confidence || 100}% Confidence
+                      </Badge>
+                    </div>
                     <p className="text-sm text-green-700">
                       Area: {selectedFields[0]?.area.toFixed(1)} ha ({(selectedFields[0]?.area * 2.47).toFixed(1)} acres)
                     </p>
@@ -348,14 +355,110 @@ export function FieldFormWithMap({
       {currentStep === 2 && (
         <Card className="shadow-soft">
           <CardHeader>
-            <CardTitle>Field Information</CardTitle>
+            <CardTitle>Field Details & Crop Assignment</CardTitle>
             <CardDescription>
-              Provide details for each selected field
+              Complete field information and assign crops in one streamlined step
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            
+            {/* Bulk Actions for Multiple Fields */}
+            {selectedFields.length > 1 && (
+              <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
+                <h3 className="text-lg font-semibold text-blue-900 mb-3">Quick Setup - Apply to All Fields</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-blue-800">Same Crop for All</Label>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-blue-300 bg-white px-3 py-2 text-sm"
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          selectedFields.forEach(field => {
+                            setFieldDetails(prev => ({
+                              ...prev,
+                              [field.id]: { ...prev[field.id], cropType: e.target.value }
+                            }));
+                          });
+                        }
+                      }}
+                    >
+                      <option value="">Select crop...</option>
+                      {cropTypes.map(crop => (
+                        <option key={crop} value={crop}>{crop}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-blue-800">Same Soil Type</Label>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-blue-300 bg-white px-3 py-2 text-sm"
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          selectedFields.forEach(field => {
+                            setFieldDetails(prev => ({
+                              ...prev,
+                              [field.id]: { ...prev[field.id], soilType: e.target.value }
+                            }));
+                          });
+                        }
+                      }}
+                    >
+                      <option value="">Select soil...</option>
+                      {soilTypes.map(soil => (
+                        <option key={soil} value={soil}>{soil}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-blue-800">Auto-Name Fields</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-blue-300 text-blue-700 hover:bg-blue-100"
+                      onClick={() => {
+                        selectedFields.forEach((field, idx) => {
+                          setFieldDetails(prev => ({
+                            ...prev,
+                            [field.id]: { ...prev[field.id], name: `Field ${String.fromCharCode(65 + idx)}` }
+                          }));
+                        });
+                      }}
+                    >
+                      A, B, C...
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-xs text-blue-700 mt-2">
+                  💡 Apply common settings to all {selectedFields.length} fields, then customize individual fields below if needed
+                </p>
+              </div>
+            )}
+
             {selectedFields.map((field, index) => (
-              <div key={field.id} className="p-4 border rounded-lg space-y-4">
+              <div key={field.id} className="p-4 border-2 border-sage-200 rounded-xl space-y-6 bg-gradient-to-br from-sage-50 to-cream-50">
+                
+                {/* Field Header with Visual Card */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-sage-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                      {index + 1}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-sage-900">
+                        {fieldDetails[field.id]?.name || `Field ${index + 1}`}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-sage-600">
+                          {field.area.toFixed(1)} ha ({(field.area * 2.47).toFixed(1)} acres)
+                        </span>
+                        <Badge className="bg-green-100 text-green-700 border-green-300 text-xs">
+                          {field.confidence}% confident
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                </div>
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-medium text-gray-900">
                     {field.id === 'manual-field' ? 'Manually Drawn Field' : `Detected Field ${index + 1}`}

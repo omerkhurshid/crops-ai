@@ -14,8 +14,10 @@ import {
   DollarSign, 
   FileText,
   HelpCircle,
+  Users,
+  CheckSquare,
   Menu,
-  X,
+  ChevronLeft,
   LogOut,
   User
 } from 'lucide-react'
@@ -38,6 +40,8 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
     { href: '/farms', label: 'Farms', icon: BarChart3 },
     { href: '/weather', label: 'Weather', icon: CloudRain },
     { href: '/crop-health', label: 'Crop Health', icon: Activity },
+    { href: '/livestock', label: 'Livestock', icon: Users },
+    { href: '/tasks', label: 'Tasks', icon: CheckSquare },
     { href: '/recommendations', label: 'AI Insights', icon: Brain },
     { href: '/financial', label: 'Financials', icon: DollarSign },
     { href: '/reports', label: 'Reports', icon: FileText },
@@ -76,7 +80,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
           onClick={() => setCollapsed(!collapsed)}
           className="p-2 rounded-lg text-corn-muted hover:text-corn-light hover:bg-corn-accent/20 transition-colors"
         >
-          {collapsed ? <Menu className="h-5 w-5" /> : <X className="h-5 w-5" />}
+          {collapsed ? <Menu className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </button>
       </div>
 

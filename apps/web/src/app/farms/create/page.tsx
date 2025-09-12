@@ -24,6 +24,7 @@ import {
 interface Farm {
   name: string
   type: 'crops' | 'livestock'
+  role: 'operator' | 'landowner'
   location: {
     lat: number
     lng: number
@@ -37,9 +38,17 @@ interface Farm {
     boundaries: Array<{ lat: number; lng: number }>
     centerLat: number
     centerLng: number
+    confidence?: number
   }>
   primaryProduct?: string
   secondaryProducts?: string[]
+  expectedProfitPerAcre?: number
+  topCropRecommendations?: Array<{
+    id: string
+    name: string
+    roi: number
+    yieldPerAcre: number
+  }>
 }
 
 export default function CreateFarmPage() {
@@ -47,6 +56,7 @@ export default function CreateFarmPage() {
   const [farm, setFarm] = useState<Farm>({
     name: '',
     type: 'crops',
+    role: 'operator',
     location: { lat: 0, lng: 0 },
     totalArea: 0
   })
@@ -75,6 +85,36 @@ export default function CreateFarmPage() {
 
   // Get crops organized by category from comprehensive database
   const cropsByCategory = getComprehensiveCropsByCategory();
+  
+  // Calculate ROI and profit comparisons for crops
+  const calculateCropROI = (cropId: string): { roi: number; profitPerAcre: number } => {
+    const crop = COMPREHENSIVE_CROP_DATABASE[cropId];
+    if (!crop) return { roi: 0, profitPerAcre: 0 };
+    
+    const revenue = (crop.yield.typical || 150) * (crop.marketValue.avgPrice || 4);
+    const costs = revenue * 0.7; // Assume 70% of revenue goes to costs
+    const profit = revenue - costs;
+    const roi = (profit / costs) * 100;
+    
+    return { roi, profitPerAcre: profit };
+  };
+
+  // Get top 3 crop recommendations with ROI
+  const getTopCropRecommendations = () => {
+    if (!regionalRecommendations?.primary) return [];
+    
+    return regionalRecommendations.primary.slice(0, 3).map((crop: any) => {
+      const roiData = calculateCropROI(crop.id);
+      return {
+        id: crop.id,
+        name: crop.name,
+        roi: roiData.roi,
+        yieldPerAcre: crop.yield?.typical || 150,
+        profitPerAcre: roiData.profitPerAcre,
+        icon: crop.icon
+      };
+    });
+  };
 
   // Auto-fetch regional recommendations when location changes
   useEffect(() => {
@@ -392,6 +432,40 @@ export default function CreateFarmPage() {
                 />
               </div>
 
+              {/* Role Selection */}
+              <div>
+                <Label className="text-base font-medium mb-3 block text-sage-700">
+                  Are you an operator or landowner?
+                </Label>
+                <div className="grid grid-cols-2 gap-6">
+                  <button
+                    onClick={() => setFarm(prev => ({ ...prev, role: 'operator' }))}
+                    className={`p-6 rounded-xl border-2 transition-all hover:shadow-md ${farm.role === 'operator'
+                        ? 'border-green-700 bg-green-50 shadow-soft'
+                        : 'border-gray-200 hover:border-green-300'
+                    }`}
+                  >
+                    <div className="text-xl font-semibold mb-2">Farm Operator</div>
+                    <div className="text-sm text-gray-600">
+                      I actively manage the farming operations
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setFarm(prev => ({ ...prev, role: 'landowner' }))}
+                    className={`p-6 rounded-xl border-2 transition-all hover:shadow-md ${farm.role === 'landowner'
+                        ? 'border-green-700 bg-green-50 shadow-soft'
+                        : 'border-gray-200 hover:border-green-300'
+                    }`}
+                  >
+                    <div className="text-xl font-semibold mb-2">Landowner</div>
+                    <div className="text-sm text-gray-600">
+                      I own the land and lease it out
+                    </div>
+                  </button>
+                </div>
+              </div>
+
               {/* Farm Type Selection */}
               <div>
                 <Label className="text-base font-medium mb-3 block text-sage-700">
@@ -569,7 +643,7 @@ export default function CreateFarmPage() {
                   {/* Primary Selection */}
                   <div>
                     <Label className="text-base font-medium text-sage-700 mb-3 block">
-                      Primary {farm.type === 'crops' ? 'Crop' : 'Livestock'}
+                      {farm.type === 'crops' ? "What's your main crop this season?" : "What livestock do you raise?"}
                     </Label>
                 
                 {farm.type === 'crops' ? (
@@ -579,7 +653,7 @@ export default function CreateFarmPage() {
                       {/* Step 1: Select Crop Type/Category */}
                       <div>
                         <Label className="text-sm font-medium text-sage-700 mb-2 block">
-                          Step 1: Select Crop Type
+                          What type of crops do you grow?
                         </Label>
                         <Select
                           value={selectedCropCategory || (farm.primaryProduct ? COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct]?.category : '')}
@@ -623,7 +697,7 @@ export default function CreateFarmPage() {
                       {selectedCropCategory && cropsByCategory[selectedCropCategory] && (
                         <div>
                           <Label className="text-sm font-medium text-sage-700 mb-2 block">
-                            Step 2: Select Specific {CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'Crop'}
+                            Which specific {CROP_CATEGORIES[selectedCropCategory as keyof typeof CROP_CATEGORIES]?.name || 'crop'} is your main one?
                           </Label>
                           <Select
                             value={farm.primaryProduct && cropsByCategory[selectedCropCategory].find((c: any) => c.id === farm.primaryProduct) ? farm.primaryProduct : ''}
@@ -704,6 +778,10 @@ export default function CreateFarmPage() {
                                 <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.typical} {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.unit}/acre</p>
                               </div>
                               <div>
+                                <span className="font-medium text-gray-700">Expected Profit:</span>
+                                <p className="text-green-700 font-bold text-lg">${calculateCropROI(farm.primaryProduct).profitPerAcre.toFixed(0)}/acre</p>
+                              </div>
+                              <div>
                                 <span className="font-medium text-gray-700">Market Value:</span>
                                 <p className="text-green-700 font-medium">${COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].marketValue.avgPrice}/{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].yield.unit}</p>
                               </div>
@@ -712,14 +790,25 @@ export default function CreateFarmPage() {
                                 <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].harvestWindow.duration} days</p>
                               </div>
                               <div>
-                                <span className="font-medium text-gray-700">Water Needs:</span>
-                                <p className="text-sage-800 capitalize">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].waterRequirements}</p>
-                              </div>
-                              <div>
-                                <span className="font-medium text-gray-700">Soil pH:</span>
-                                <p className="text-sage-800">{COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].soilRequirements.ph.min} - {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].soilRequirements.ph.max}</p>
+                                <span className="font-medium text-gray-700">ROI:</span>
+                                <p className="text-blue-700 font-medium">{calculateCropROI(farm.primaryProduct).roi.toFixed(0)}%</p>
                               </div>
                             </div>
+
+                            {/* Total Expected Profit */}
+                            {farm.totalArea > 0 && (
+                              <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+                                <div className="text-center">
+                                  <div className="text-sm font-medium text-green-800">Total Expected Profit for {farm.totalArea.toFixed(0)} acres</div>
+                                  <div className="text-2xl font-bold text-green-700">
+                                    ${(calculateCropROI(farm.primaryProduct).profitPerAcre * farm.totalArea).toLocaleString()}
+                                  </div>
+                                  <div className="text-xs text-green-600 mt-1">
+                                    Based on current market prices and typical yields
+                                  </div>
+                                </div>
+                              </div>
+                            )}
 
                             {/* Key Benefits */}
                             {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].benefits.length > 0 && (
@@ -757,42 +846,104 @@ export default function CreateFarmPage() {
                 )}
               </div>
 
-              {/* Livestock Count Selection (only for livestock farms) */}
+              {/* Expanded Livestock Flow */}
               {farm.type === 'livestock' && farm.primaryProduct && (
-                <div>
-                  <Label className="text-base font-medium mb-3 block">
-                    How many {livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.name.toLowerCase()} do you plan to raise?
-                  </Label>
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                    {[10, 25, 50, 100, 250, 500, 1000, 2500].map((count) => (
-                      <button
-                        key={count}
-                        onClick={() => setLivestockCounts(prev => ({ ...prev, [farm.primaryProduct!]: count }))}
-                        className={`p-3 rounded-lg border-2 transition-all ${
-                          livestockCounts[farm.primaryProduct!] === count
-                            ? 'border-sage-600 bg-sage-50 shadow-soft'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        <div className="text-lg font-semibold">{count}+</div>
-                        <div className="text-xs text-gray-600">head</div>
-                      </button>
-                    ))}
+                <div className="space-y-6">
+                  {/* Herd Size Selection */}
+                  <div>
+                    <Label className="text-base font-medium mb-3 block">
+                      How many {livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.name.toLowerCase()} do you plan to raise?
+                    </Label>
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                      {[10, 25, 50, 100, 250, 500, 1000, 2500].map((count) => (
+                        <button
+                          key={count}
+                          onClick={() => setLivestockCounts(prev => ({ ...prev, [farm.primaryProduct!]: count }))}
+                          className={`p-3 rounded-lg border-2 transition-all ${
+                            livestockCounts[farm.primaryProduct!] === count
+                              ? 'border-sage-600 bg-sage-50 shadow-soft'
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="text-lg font-semibold">{count}+</div>
+                          <div className="text-xs text-gray-600">head</div>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex items-center space-x-4">
+                      <Input
+                        type="number"
+                        placeholder="Custom amount"
+                        value={livestockCounts[farm.primaryProduct!] || ''}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value) || 0;
+                          setLivestockCounts(prev => ({ ...prev, [farm.primaryProduct!]: value }));
+                        }}
+                        className="w-32"
+                        min="1"
+                      />
+                      <span className="text-sm text-gray-600">or enter custom amount</span>
+                    </div>
                   </div>
-                  <div className="mt-3 flex items-center space-x-4">
-                    <Input
-                      type="number"
-                      placeholder="Custom amount"
-                      value={livestockCounts[farm.primaryProduct!] || ''}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value) || 0;
-                        setLivestockCounts(prev => ({ ...prev, [farm.primaryProduct!]: value }));
-                      }}
-                      className="w-32"
-                      min="1"
-                    />
-                    <span className="text-sm text-gray-600">or enter custom amount</span>
-                  </div>
+
+                  {/* Farming Goals */}
+                  {livestockCounts[farm.primaryProduct!] && (
+                    <div>
+                      <Label className="text-base font-medium mb-3 block">
+                        What's your main goal with these animals?
+                      </Label>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {farm.primaryProduct.includes('cattle') ? (
+                          <>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Beef Production</div>
+                              <div className="text-xs text-gray-600">Raising cattle for meat</div>
+                            </div>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Dairy Production</div>
+                              <div className="text-xs text-gray-600">Milk and dairy products</div>
+                            </div>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Breeding Stock</div>
+                              <div className="text-xs text-gray-600">Selling breeding animals</div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Meat Production</div>
+                              <div className="text-xs text-gray-600">Primary meat source</div>
+                            </div>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Breeding Program</div>
+                              <div className="text-xs text-gray-600">Genetics and breeding</div>
+                            </div>
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-sage-300 cursor-pointer">
+                              <div className="font-semibold text-sm mb-1">Mixed Purpose</div>
+                              <div className="text-xs text-gray-600">Multiple revenue streams</div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Feed Strategy Suggestions */}
+                  {livestockCounts[farm.primaryProduct!] && (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <h4 className="text-sm font-semibold text-green-800 mb-2">
+                        💡 Smart Feed Strategy for {livestockCounts[farm.primaryProduct!]} {livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.name}
+                      </h4>
+                      <div className="space-y-2 text-sm text-green-700">
+                        <div>• You'll need approximately {Math.ceil((livestockCounts[farm.primaryProduct!] * 2.5) / 100) * 100} lbs of feed per day</div>
+                        <div>• Consider rotational grazing across {Math.ceil(farm.totalArea / 10)} paddocks</div>
+                        <div>• Recommended pasture: {Math.ceil(livestockCounts[farm.primaryProduct!] * 1.5)} acres for optimal grazing</div>
+                        {farm.primaryProduct.includes('cattle') && (
+                          <div>• Supplement with hay during winter months (est. {Math.ceil(livestockCounts[farm.primaryProduct!] * 4)} tons/year)</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -804,23 +955,31 @@ export default function CreateFarmPage() {
                 
                 {farm.type === 'crops' ? (
                   <div className="space-y-4">
-                    {/* Seasonal Recommendations */}
-                    {regionalRecommendations?.seasonal && (
-                      <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Seasonal Rotation Options</h4>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          {Object.entries(regionalRecommendations.seasonal).map(([season, crops]: [string, any]) => (
-                            <div key={season} className="bg-white p-2 rounded">
-                              <span className="font-medium capitalize">{season}:</span>
-                              <div className="mt-1">
-                                {crops.slice(0, 2).map((crop: any) => crop.name).join(', ')}
-                                {crops.length > 2 && ` +${crops.length - 2} more`}
-                              </div>
-                            </div>
-                          ))}
+                    {/* Smart Rotation Recommendations */}
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <h4 className="text-sm font-semibold text-green-800 mb-2">💡 Smart Rotation Strategy</h4>
+                      {farm.primaryProduct && COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct] ? (
+                        <div className="space-y-2 text-sm text-green-700">
+                          <div>
+                            <span className="font-medium">After {COMPREHENSIVE_CROP_DATABASE[farm.primaryProduct].name}:</span>
+                          </div>
+                          <div>• Plant soybeans → improves soil nitrogen, saves $75/acre in fertilizer</div>
+                          <div>• Consider cover crops → prevents erosion, adds organic matter</div>
+                          <div>• Rotate every 2-3 seasons → breaks pest cycles, improves yields</div>
+                          {farm.totalArea > 50 && (
+                            <div>• With {farm.totalArea.toFixed(0)} acres, split into 3 sections for optimal rotation</div>
+                          )}
+                          <div className="mt-3 p-2 bg-white/60 rounded border border-green-300">
+                            <span className="font-medium text-green-800">Expected benefit:</span>
+                            <div className="text-green-700">15-20% yield increase + $50-75/acre cost savings</div>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="text-sm text-green-700">
+                          Select your main crop above to see personalized rotation recommendations
+                        </div>
+                      )}
+                    </div>
                     
                     {/* Step-by-Step Secondary Crop Selection */}
                     <div className="space-y-4">
@@ -1020,18 +1179,58 @@ export default function CreateFarmPage() {
                       <TrendingUp className="h-5 w-5 text-blue-600 mt-1" />
                       <div className="flex-1">
                         <h4 className="text-sm font-semibold text-blue-900 mb-2">
-                          🤖 AI Regional Analysis
+                          🤖 Best Crops for Your Land (AI Suggestion)
                         </h4>
-                        <p className="text-xs text-blue-800 leading-relaxed">
-                          {regionalRecommendations ? regionalRecommendations.reasoning : 
-                            farm.location.lat !== 0 && farm.location.lng !== 0 ? 
-                              `Analyzing agricultural conditions for your location...` :
-                              `Please set your farm location to receive personalized insights.`
-                          }
-                          {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
-                            ` With ${livestockCounts[farm.primaryProduct!]} head, you'll need approximately ${Math.ceil(farm.totalArea * 0.5)} acres of pasture.`
-                          )}
-                        </p>
+                        
+                        {farm.type === 'crops' && regionalRecommendations ? (
+                          <div className="space-y-3">
+                            <p className="text-xs text-blue-800 leading-relaxed">
+                              Based on your location, here are the top 3 most profitable crops:
+                            </p>
+                            
+                            {/* Top 3 Crop ROI Comparison */}
+                            <div className="space-y-2">
+                              {getTopCropRecommendations().map((crop: any, index: number) => (
+                                <div key={crop.id} className="bg-white/60 p-3 rounded-lg border border-blue-200">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-2">
+                                      <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                        index === 0 ? 'bg-yellow-200 text-yellow-800' :
+                                        index === 1 ? 'bg-gray-200 text-gray-800' :
+                                        'bg-orange-200 text-orange-800'
+                                      }`}>
+                                        {index + 1}
+                                      </span>
+                                      <div>
+                                        <div className="text-sm font-semibold text-blue-900">{crop.name}</div>
+                                        <div className="text-xs text-blue-700">{crop.yieldPerAcre} bu/acre</div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <div className="text-sm font-bold text-green-700">${crop.profitPerAcre.toFixed(0)}/acre</div>
+                                      <div className="text-xs text-blue-600">{crop.roi.toFixed(0)}% ROI</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            
+                            <div className="text-xs text-blue-700 italic">
+                              💡 Tip: {getTopCropRecommendations()[0]?.name} typically nets ${getTopCropRecommendations()[0]?.profitPerAcre.toFixed(0) || '400'} more per acre than {getTopCropRecommendations()[2]?.name || 'other crops'}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-blue-800 leading-relaxed">
+                            {regionalRecommendations ? regionalRecommendations.reasoning : 
+                              farm.location.lat !== 0 && farm.location.lng !== 0 ? 
+                                `Analyzing agricultural conditions for your location...` :
+                                `Please set your farm location to receive personalized insights.`
+                            }
+                            {farm.type === 'livestock' && livestockCounts[farm.primaryProduct!] && (
+                              ` With ${livestockCounts[farm.primaryProduct!]} head, you'll need approximately ${Math.ceil(farm.totalArea * 0.5)} acres of pasture.`
+                            )}
+                          </p>
+                        )}
                         {regionalRecommendations?.region && (
                           <div className="mt-3 p-2 bg-white/60 rounded-lg">
                             <div className="space-y-1 text-xs">

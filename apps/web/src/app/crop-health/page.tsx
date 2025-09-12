@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
 import { AdvancedVisualizations } from '../../components/crop-health/advanced-visualizations'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
@@ -64,8 +64,7 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
   const farmName = selectedFarm?.name || farms[0].name
 
   return (
-    <div className="minimal-page">
-      <Navbar />
+    <DashboardLayout>
       
       {/* Floating Action Button */}
       <ClientFloatingButton
@@ -201,6 +200,6 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
           </div>
         )}
       </main>
-    </div>
+    </DashboardLayout>
   )
 }

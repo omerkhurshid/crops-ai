@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Badge } from '../../components/ui/badge'
 import { Alert, AlertDescription } from '../../components/ui/alert'
@@ -248,8 +248,7 @@ export default async function HelpPage() {
   }
 
   return (
-    <div className="minimal-page">
-      <Navbar />
+    <DashboardLayout>
       
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <Book className="h-8 w-8 text-sage-600" />
@@ -402,6 +401,6 @@ export default async function HelpPage() {
           </Alert>
         </div>
       </main>
-    </div>
+    </DashboardLayout>
   )
 }

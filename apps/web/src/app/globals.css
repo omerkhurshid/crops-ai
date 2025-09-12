@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --background: 120 25% 15%; /* Dark corn field green */
+    --foreground: 0 0% 95%; /* Light text for contrast */
+    --card: 120 20% 18%; /* Slightly lighter green for cards */
+    --card-foreground: 0 0% 95%; /* Light text */
+    --popover: 120 20% 18%;
+    --popover-foreground: 0 0% 95%;
     --primary: 98 84% 47%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 98%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 98%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --secondary: 120 15% 25%; /* Muted green */
+    --secondary-foreground: 0 0% 90%;
+    --muted: 120 15% 22%;
+    --muted-foreground: 0 0% 75%;
     --accent: 84 100% 59%;
     --accent-foreground: 222.2 84% 4.9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 120 15% 35%; /* Green border */
+    --input: 120 20% 20%; /* Dark input background */
     --ring: 98 84% 47%;
     --radius: 1rem;
     
@@ -398,5 +398,50 @@
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 15s ease infinite;
+  }
+
+  /* Dark Corn Field Theme - Primary backgrounds */
+  .bg-corn-field-dark {
+    background: hsl(120, 25%, 15%); /* Main dark green from corn field */
+  }
+
+  .bg-corn-field-medium {
+    background: hsl(120, 20%, 18%); /* Slightly lighter for cards */
+  }
+
+  .bg-corn-field-light {
+    background: hsl(120, 15%, 25%); /* Even lighter for elevated elements */
+  }
+
+  .bg-corn-field-gradient {
+    background: linear-gradient(135deg, hsl(120, 30%, 12%) 0%, hsl(120, 25%, 18%) 50%, hsl(120, 20%, 22%) 100%);
+  }
+
+  /* Text colors for dark theme */
+  .text-corn-light {
+    color: hsl(0, 0%, 95%);
+  }
+
+  .text-corn-muted {
+    color: hsl(0, 0%, 75%);
+  }
+
+  .text-corn-accent {
+    color: hsl(120, 40%, 70%);
+  }
+
+  /* Updated page backgrounds */
+  .page-background {
+    background: hsl(120, 25%, 15%);
+    min-height: 100vh;
+  }
+
+  .page-background-gradient {
+    background: linear-gradient(135deg, 
+      hsl(120, 30%, 12%) 0%, 
+      hsl(120, 25%, 15%) 40%, 
+      hsl(120, 20%, 18%) 100%
+    );
+    min-height: 100vh;
   }
 }

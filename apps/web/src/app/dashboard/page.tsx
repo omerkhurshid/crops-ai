@@ -177,14 +177,14 @@ export default async function DashboardPage() {
     // Show onboarding for new users
     if (totalFarms === 0) {
       return (
-        <div className="minimal-page">
+        <div className="page-background-gradient">
           <Navbar />
           <main className="max-w-4xl mx-auto pt-12 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <div className="mb-6">
-                <Sprout className="h-16 w-16 text-sage-600 mx-auto mb-4" />
-                <h1 className="text-4xl font-light text-sage-800 mb-4">Welcome to Your Farm Command Center</h1>
-                <p className="text-xl text-sage-600 max-w-2xl mx-auto">
+                <Sprout className="h-16 w-16 text-corn-accent mx-auto mb-4" />
+                <h1 className="text-4xl font-light text-corn-light mb-4">Welcome to Your Farm Command Center</h1>
+                <p className="text-xl text-corn-muted max-w-2xl mx-auto">
                   Get started by adding your first farm to unlock AI-powered insights, weather alerts, and financial tracking.
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default async function DashboardPage() {
     }
     
     return (
-      <div className="minimal-page">
+      <div className="page-background-gradient">
         <Navbar />
         
         <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">

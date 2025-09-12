@@ -63,7 +63,7 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms(user.id)
 
   return (
-    <div className="minimal-page">
+    <div className="page-background-gradient">
       <Navbar />
       
       {/* Animated Background with Floating Elements */}

@@ -26,7 +26,7 @@ export default async function ReportsPage() {
   }
 
   return (
-    <div className="minimal-page">
+    <div className="page-background-gradient">
       <Navbar />
       
       {/* Floating Action Button */}

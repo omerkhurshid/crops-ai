@@ -179,7 +179,7 @@ export class CroppleGEEService {
     // Area-weighted average NDVI
     let totalWeightedNDVI = 0
     let totalWeight = 0
-    let dominantCrop = 'Corn'
+    const dominantCrop = 'Corn'
 
     analyses.forEach((analysis, index) => {
       const fieldAcres = fields[index].acres

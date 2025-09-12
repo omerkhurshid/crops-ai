@@ -13,7 +13,7 @@ import {
   Users, AlertCircle, Navigation, Satellite,
   FastForward, Play
 } from 'lucide-react'
-import { GoogleMap, LoadScript, Polygon, DrawingManager } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
 
 interface Farm {
@@ -336,20 +336,54 @@ export function UnifiedFarmCreator() {
               </Button>
             </div>
 
-            {/* Location Preview */}
+            {/* Location Preview with Map */}
             {farm.location.lat !== 0 && (
-              <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <div className="flex items-start space-x-2">
-                  <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-green-800">
-                      Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
-                    </p>
-                    {farm.location.address && (
-                      <p className="text-sm text-green-700">{farm.location.address}</p>
-                    )}
+              <div className="mt-3 space-y-3">
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-start space-x-2">
+                    <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-green-800">
+                        Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
+                      </p>
+                      {farm.location.address && (
+                        <p className="text-sm text-green-700">{farm.location.address}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
+                
+                {/* Map Preview */}
+                {apiKey && (
+                  <div className="rounded-lg overflow-hidden border border-green-200">
+                    <LoadScript
+                      googleMapsApiKey={apiKey}
+                      libraries={libraries}
+                      loadingElement={
+                        <div className="h-48 flex items-center justify-center bg-gray-100">
+                          <div className="text-center">
+                            <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
+                            <p className="text-sm text-gray-600">Loading map preview...</p>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <GoogleMap
+                        mapContainerStyle={{ width: '100%', height: '200px' }}
+                        center={farm.location}
+                        zoom={15}
+                        options={{
+                          mapTypeId: 'satellite',
+                          disableDefaultUI: true,
+                          zoomControl: true,
+                          gestureHandling: 'cooperative'
+                        }}
+                      >
+                        <Marker position={farm.location} />
+                      </GoogleMap>
+                    </LoadScript>
+                  </div>
+                )}
               </div>
             )}
           </div>

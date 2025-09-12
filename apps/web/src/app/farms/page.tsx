@@ -90,15 +90,25 @@ export default async function FarmsPage() {
               Manage and monitor your agricultural operations with AI-powered insights
             </p>
             
-            <div className="flex justify-center">
-              <Link href="/farms/create">
+            <div className="flex justify-center gap-4">
+              <Link href="/farms/create-simple">
                 <InlineFloatingButton
                   icon={<Plus className="h-5 w-5" />}
-                  label="Add New Farm"
+                  label="Quick Setup"
                   showLabel={true}
                   variant="primary"
                   size="lg"
-                  className="min-w-[200px]"
+                  className="min-w-[160px]"
+                />
+              </Link>
+              <Link href="/farms/create">
+                <InlineFloatingButton
+                  icon={<MapPin className="h-5 w-5" />}
+                  label="Advanced Setup"
+                  showLabel={true}
+                  variant="outline"
+                  size="lg"
+                  className="min-w-[160px]"
                 />
               </Link>
             </div>

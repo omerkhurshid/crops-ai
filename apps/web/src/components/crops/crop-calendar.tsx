@@ -243,9 +243,12 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
   return (
     <div className="space-y-6">
       {/* Header Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-semibold text-gray-900">Crop Plan</h2>
+          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <Calendar className="h-6 w-6 text-sage-600" />
+            Crop Timeline
+          </h2>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -254,8 +257,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <div className="px-4 py-2 bg-white border rounded-md font-medium">
-              Planting Year {currentYear}
+            <div className="px-4 py-2 bg-sage-50 border-2 border-sage-200 rounded-md font-medium text-sage-800">
+              {currentYear} Season
             </div>
             <Button
               variant="outline"
@@ -376,17 +379,17 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   {/* Timeline Section */}
                   <div className="col-span-8 p-2 relative">
                     <div className="relative h-12 bg-white">
-                      {/* Timeline Bar */}
+                      {/* Timeline Bar - Enhanced */}
                       <div
-                        className={`absolute top-2 h-8 rounded-md ${statusColors[planning.status]} shadow-sm flex items-center px-2 text-white text-xs font-medium transition-all hover:shadow-md cursor-pointer`}
+                        className={`absolute top-1 h-10 rounded-lg ${statusColors[planning.status]} shadow-lg flex items-center px-3 text-white text-sm font-semibold transition-all hover:shadow-xl hover:scale-105 cursor-pointer border-2 border-white`}
                         style={{
                           left: `${timeline.left}%`,
                           width: `${timeline.width}%`,
-                          minWidth: '40px'
+                          minWidth: '60px'
                         }}
                         title={`${planning.cropName} - ${planning.status}`}
                       >
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           {statusIcons[planning.status]}
                           <span className="hidden sm:inline truncate">
                             {planning.cropName}

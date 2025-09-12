@@ -6,7 +6,9 @@ import { FarmerFriendlyCropView } from '../../components/crops/farmer-friendly-c
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
-import { Sprout, Plus, Calendar, TrendingUp, MapPin, Scissors } from 'lucide-react'
+import { Sprout, Plus, Calendar, TrendingUp, MapPin, Scissors, Phone } from 'lucide-react'
+import { Button } from '../../components/ui/button'
+import { FarmerFriendlyActionsList } from '../../components/crops/farmer-friendly-actions-list'
 
 export const dynamic = 'force-dynamic'
 
@@ -52,36 +54,69 @@ export default async function CropsPage() {
           </div>
         </div>
 
-        {/* Main Farmer-Friendly View */}
-        <FarmerFriendlyCropView farmId={user.id} />
+        {/* Main Content Grid - Timeline Featured */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Timeline View - 2/3 width on desktop */}
+          <div className="lg:col-span-2">
+            <ModernCard variant="floating">
+              <ModernCardContent className="p-6">
+                <CropCalendar farmId={user.id} />
+              </ModernCardContent>
+            </ModernCard>
+          </div>
 
-        {/* Advanced Planning Tools - Secondary */}
-        <div className="mt-12">
+          {/* Right Sidebar - What Needs Attention */}
+          <div className="space-y-6">
+            {/* Quick Actions Card */}
+            <ModernCard variant="soft" className="border-l-4 border-l-orange-500">
+              <ModernCardHeader>
+                <ModernCardTitle className="flex items-center gap-2 text-lg">
+                  📌 What Needs Your Attention
+                </ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <FarmerFriendlyActionsList farmId={user.id} />
+              </ModernCardContent>
+            </ModernCard>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <ModernCard variant="soft" className="text-center p-4">
+                <div className="text-2xl mb-1">🌱</div>
+                <div className="text-xl font-bold text-green-600">3</div>
+                <div className="text-xs text-gray-600">Growing</div>
+              </ModernCard>
+              
+              <ModernCard variant="soft" className="text-center p-4">
+                <div className="text-2xl mb-1">💰</div>
+                <div className="text-xl font-bold text-purple-600">$23.3k</div>
+                <div className="text-xs text-gray-600">Expected</div>
+              </ModernCard>
+            </div>
+
+            {/* Mobile View Toggle */}
+            <ModernCard variant="glass">
+              <ModernCardContent className="p-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2"
+                  onClick={() => window.scrollTo({ top: document.getElementById('mobile-view')?.offsetTop || 0, behavior: 'smooth' })}
+                >
+                  <Phone className="h-4 w-4" />
+                  Mobile Card View
+                </Button>
+              </ModernCardContent>
+            </ModernCard>
+          </div>
+        </div>
+
+        {/* Mobile-Friendly Card View - Below the fold */}
+        <div id="mobile-view" className="mt-12">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Planning Tools</h2>
-            <p className="text-gray-600">Advanced features for detailed crop management</p>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Mobile View</h2>
+            <p className="text-gray-600">Simplified cards for easy field access</p>
           </div>
-          
-          {/* Tabbed Interface for Advanced Features */}
-          <div className="bg-white rounded-xl shadow-sm border">
-            <div className="border-b border-gray-200">
-              <nav className="flex space-x-8 px-6 py-4">
-                <button className="text-sage-600 border-b-2 border-sage-600 pb-2 font-medium">
-                  📅 Timeline View
-                </button>
-                <button className="text-gray-500 hover:text-gray-700 pb-2">
-                  🔄 Rotation Planner
-                </button>
-                <button className="text-gray-500 hover:text-gray-700 pb-2">
-                  📊 Yield Forecasts
-                </button>
-              </nav>
-            </div>
-            
-            <div className="p-6">
-              <CropCalendar farmId={user.id} />
-            </div>
-          </div>
+          <FarmerFriendlyCropView farmId={user.id} />
         </div>
       </main>
     </DashboardLayout>

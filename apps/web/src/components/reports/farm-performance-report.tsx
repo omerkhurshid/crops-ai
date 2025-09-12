@@ -240,7 +240,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
               </div>
             </div>
             <p className="text-lg text-sage-600">
-              {convertHealthScore(data.overallScore, 'performance')}
+              {convertHealthScore(data.overallScore)}
             </p>
           </div>
           
@@ -277,7 +277,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-sage-700" />
-            How You're Trending
+            How You&apos;re Trending
           </ModernCardTitle>
           <ModernCardDescription>
             Comparing this year to last year

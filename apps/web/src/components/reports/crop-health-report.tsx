@@ -306,7 +306,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               </div>
             </div>
             <p className="text-lg text-sage-600 mb-4">
-              {convertHealthScore(data.summary.overallHealth, 'crop')}
+              {convertHealthScore(data.summary.overallHealth)}
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-sage-600">
               {data.summary.improvementTrend > 0 ? (

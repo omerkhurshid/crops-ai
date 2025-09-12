@@ -65,58 +65,112 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
   const [showDetailedView, setShowDetailedView] = useState(false)
   const { isMobile } = useScreenSize()
 
-  // Mock data for demonstration
+  // Fetch real satellite data
   useEffect(() => {
-    const mockData: FarmSummary = {
-      farmName: "Johnson Family Farm",
-      totalAcres: 78,
-      overallHealth: 82,
-      healthTrend: 3,
-      stressedAreas: 8.5,
-      stressTrend: -2,
-      currentWeather: {
-        temperature: 75,
-        condition: "Partly Cloudy",
-        precipitation: 0.2,
-        humidity: 68
-      },
-      yieldForecast: {
-        current: 185,
-        potential: 220,
-        unit: "bu/acre",
-        cropType: "Corn"
-      },
-      todayHighlights: [
-        "North field showing excellent growth",
-        "Light rain expected tomorrow afternoon",
-        "Corn is 5 days ahead of schedule"
-      ],
-      urgentTasks: [
-        {
-          id: 'urgent-1',
-          title: 'Check irrigation in North Field',
-          field: 'North Field (Section A)',
-          urgency: 'critical',
-          timeframe: '4 hours',
-          impact: '$1,200 potential crop loss',
-          category: 'water'
-        },
-        {
-          id: 'urgent-2',
-          title: 'Apply fungicide to wheat',
-          field: 'South Field',
-          urgency: 'high',
-          timeframe: '24 hours',
-          impact: '$800 prevention cost',
-          category: 'pest'
+    const fetchFarmData = async () => {
+      try {
+        // Import the real satellite service
+        const { RealSatelliteService } = await import('../../lib/satellite/real-data-service')
+        const satelliteService = new RealSatelliteService()
+        
+        // Get real satellite data
+        const satelliteData = await satelliteService.getFarmDashboardData(farmId)
+        
+        const farmData: FarmSummary = {
+          farmName: "Johnson Family Farm",
+          totalAcres: 78,
+          overallHealth: satelliteData.overallHealth,
+          healthTrend: satelliteData.healthTrend,
+          stressedAreas: satelliteData.stressedAreas,
+          stressTrend: satelliteData.stressTrend,
+          currentWeather: {
+            temperature: 75,
+            condition: "Partly Cloudy",
+            precipitation: 0.2,
+            humidity: 68
+          },
+          yieldForecast: satelliteData.yieldForecast,
+          todayHighlights: satelliteData.todayHighlights,
+          urgentTasks: [
+            {
+              id: 'urgent-1',
+              title: 'Check irrigation in North Field',
+              field: 'North Field (Section A)',
+              urgency: 'critical',
+              timeframe: '4 hours',
+              impact: '$1,200 potential crop loss',
+              category: 'water'
+            },
+            {
+              id: 'urgent-2',
+              title: 'Apply fungicide to wheat',
+              field: 'South Field',
+              urgency: 'high',
+              timeframe: '24 hours',
+              impact: '$800 prevention cost',
+              category: 'pest'
+            }
+          ]
         }
-      ]
+
+        setFarmData(farmData)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching farm data:', error)
+        
+        // Fallback to mock data
+        const mockData: FarmSummary = {
+          farmName: "Johnson Family Farm",
+          totalAcres: 78,
+          overallHealth: 82,
+          healthTrend: 3,
+          stressedAreas: 8.5,
+          stressTrend: -2,
+          currentWeather: {
+            temperature: 75,
+            condition: "Partly Cloudy",
+            precipitation: 0.2,
+            humidity: 68
+          },
+          yieldForecast: {
+            current: 185,
+            potential: 220,
+            unit: "bu/acre",
+            cropType: "Corn"
+          },
+          todayHighlights: [
+            "Satellite data unavailable - using simulated data",
+            "North field showing good growth patterns",
+            "Light rain expected tomorrow afternoon"
+          ],
+          urgentTasks: [
+            {
+              id: 'urgent-1',
+              title: 'Check irrigation in North Field',
+              field: 'North Field (Section A)',
+              urgency: 'critical',
+              timeframe: '4 hours',
+              impact: '$1,200 potential crop loss',
+              category: 'water'
+            },
+            {
+              id: 'urgent-2',
+              title: 'Apply fungicide to wheat',
+              field: 'South Field',
+              urgency: 'high',
+              timeframe: '24 hours',
+              impact: '$800 prevention cost',
+              category: 'pest'
+            }
+          ]
+        }
+        
+        setFarmData(mockData)
+        setLoading(false)
+      }
     }
 
-    setTimeout(() => {
-      setFarmData(mockData)
-      setLoading(false)
-    }, 1000)
+    fetchFarmData()
   }, [farmId])
 
   const sampleActions = createSampleActions()

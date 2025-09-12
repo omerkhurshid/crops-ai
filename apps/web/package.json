@@ -63,6 +63,7 @@
     "eslint-config-next": "14.2.5",
     "eslint-plugin-security": "^3.0.1",
     "framer-motion": "^12.23.12",
+    "google-auth-library": "^10.3.0",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "graphql-type-json": "^0.3.2",

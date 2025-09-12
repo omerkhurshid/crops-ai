@@ -57,11 +57,15 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
   }
 
   return (
-    <div className={`fixed left-0 top-0 h-full bg-corn-dark/95 backdrop-blur-sm border-r border-corn-accent/20 z-40 transition-all duration-300 hidden lg:block ${
+    <div className={`fixed left-0 top-0 h-full bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl z-40 transition-all duration-300 hidden lg:block ${
       collapsed ? 'w-16' : 'w-64'
-    }`}>
+    }`} style={{
+      background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
+      backdropFilter: 'blur(20px)',
+      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 25px 50px -12px rgba(0,0,0,0.25)'
+    }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-corn-accent/20">
+      <div className="flex items-center justify-between p-4 border-b border-white/10">
         {!collapsed && (
           <Link href="/" className="flex items-center group">
             <div className="w-8 h-8 mr-3 group-hover:scale-105 transition-transform">
@@ -73,14 +77,14 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-lg font-medium text-corn-light tracking-tight">
-              Crops<span className="text-green-200">.AI</span>
+            <span className="text-lg font-semibold text-white/90 tracking-tight drop-shadow-lg">
+              Crops<span className="text-green-300">.AI</span>
             </span>
           </Link>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg text-corn-muted hover:text-corn-light hover:bg-corn-accent/20 transition-colors"
+          className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors backdrop-blur-sm"
         >
           {collapsed ? <Menu className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </button>
@@ -98,12 +102,12 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
               href={link.href}
               className={`flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
                 active
-                  ? 'bg-corn-accent/20 text-corn-light border-r-2 border-corn-accent'
-                  : 'text-corn-muted hover:text-corn-light hover:bg-corn-accent/10'
+                  ? 'bg-white/20 text-white border-r-2 border-green-400 backdrop-blur-sm shadow-lg'
+                  : 'text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm'
               }`}
             >
               <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
-                active ? 'text-corn-accent' : 'group-hover:text-corn-accent'
+                active ? 'text-green-400' : 'group-hover:text-green-300'
               }`} />
               {!collapsed && (
                 <span className="truncate">{link.label}</span>
@@ -114,18 +118,18 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
       </nav>
 
       {/* User Menu */}
-      <div className="border-t border-corn-accent/20 p-4">
+      <div className="border-t border-white/10 p-4">
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} mb-3`}>
           {!collapsed && (
             <div className="flex items-center min-w-0">
-              <div className="w-8 h-8 bg-corn-accent/20 rounded-full flex items-center justify-center mr-3">
-                <User className="h-4 w-4 text-corn-accent" />
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3 backdrop-blur-sm">
+                <User className="h-4 w-4 text-green-400" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-corn-light truncate">
+                <p className="text-sm font-medium text-white truncate">
                   {session.user?.name || 'Farmer'}
                 </p>
-                <p className="text-xs text-corn-muted truncate">
+                <p className="text-xs text-white/60 truncate">
                   {session.user?.email}
                 </p>
               </div>
@@ -133,7 +137,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
           )}
           <button
             onClick={handleSignOut}
-            className={`p-2 rounded-lg text-corn-muted hover:text-corn-light hover:bg-red-500/20 transition-colors ${
+            className={`p-2 rounded-lg text-white/70 hover:text-white hover:bg-red-500/20 transition-colors backdrop-blur-sm ${
               collapsed ? 'mx-auto' : ''
             }`}
             title="Sign Out"

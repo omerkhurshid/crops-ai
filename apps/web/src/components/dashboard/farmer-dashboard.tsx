@@ -11,6 +11,7 @@ import { UrgentTasks, UrgentTasksMobile } from './urgent-tasks'
 import { MarketTicker, MobileMarketTicker } from './market-ticker'
 import { Button } from '../ui/button'
 import { useScreenSize } from '../../hooks/useResponsive'
+import { TodaysTasksSummary } from './todays-tasks-summary'
 import { 
   Leaf, 
   Droplets, 
@@ -179,21 +180,6 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
         urgentTasksCount={farmData.urgentTasks.length}
       />
 
-      {/* Urgent Tasks - Most Prominent */}
-      {farmData.urgentTasks.length > 0 && (
-        isMobile ? (
-          <UrgentTasksMobile 
-            tasks={farmData.urgentTasks}
-            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
-          />
-        ) : (
-          <UrgentTasks 
-            tasks={farmData.urgentTasks}
-            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
-          />
-        )
-      )}
-
       {/* Key Metrics - Simplified to 3 Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <CropHealthCard
@@ -219,7 +205,22 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
         />
       </div>
 
-      {/* Priority Actions */}
+      {/* Urgent Tasks - Moved below metrics */}
+      {farmData.urgentTasks.length > 0 && (
+        isMobile ? (
+          <UrgentTasksMobile 
+            tasks={farmData.urgentTasks}
+            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
+          />
+        ) : (
+          <UrgentTasks 
+            tasks={farmData.urgentTasks}
+            onTaskClick={(taskId) => console.log('Task clicked:', taskId)}
+          />
+        )
+      )}
+
+      {/* Today's Tasks from Task Board */}
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -227,23 +228,17 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
               What to do today
             </h2>
             <p className="text-sage-600">
-              Your most important farm tasks right now
+              Summary of your urgent and high priority tasks
             </p>
           </div>
           
           <Button variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            View All Tasks
           </Button>
         </div>
         
-        <PriorityActionsList
-          actions={sampleActions}
-          maxActions={2}
-          onActionUpdate={(id, status) => {
-            console.log(`Action ${id} updated to ${status}`)
-          }}
-        />
+        <TodaysTasksSummary farmId={farmId} />
       </div>
 
       {/* Progressive Disclosure - Detailed View Button */}

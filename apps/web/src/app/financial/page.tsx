@@ -143,15 +143,7 @@ export default function FinancialPage() {
   // Multiple farms - farm selection
   if (farms.length > 1 && !selectedFarm) {
     return (
-      <DashboardLayout>
-        {/* Animated Background with Floating Elements */}
-        <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-          <DollarSign className="h-8 w-8 text-sage-600" />
-        </div>
-        <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-          <TrendingUp className="h-8 w-8 text-sage-600" />
-        </div>
-        
+      <DashboardLayout>        
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="mb-16">
             {/* Enhanced Header with Icon */}
@@ -163,10 +155,10 @@ export default function FinancialPage() {
                 </div>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
+              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">
                 Financial Management
               </h1>
-              <p className="text-xl text-sage-600 font-light leading-relaxed mb-4">
+              <p className="text-xl text-white font-medium leading-relaxed mb-4 drop-shadow-md">
                 Select a farm to view its financial performance and profitability insights
               </p>
               <Badge className="bg-sage-100 text-sage-700 border-sage-200">
@@ -233,19 +225,19 @@ export default function FinancialPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-4 mb-3">
-                      <h1 className="text-4xl md:text-6xl font-light text-sage-800 tracking-tight">
+                      <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight drop-shadow-lg">
                         Financial Management
                       </h1>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
-                      <p className="text-xl text-sage-600 font-light">
-                        Track income, expenses, and profitability for <span className="font-semibold text-sage-800">{farmToUse.name}</span>
+                      <p className="text-xl text-white font-medium drop-shadow-md">
+                        Track income, expenses, and profitability for <span className="font-semibold text-white">{farmToUse.name}</span>
                       </p>
                       <Badge className="bg-sage-100 text-sage-700 border-sage-200">
                         Live Data
                       </Badge>
                     </div>
-                    <p className="text-sm text-sage-500 leading-relaxed">
+                    <p className="text-sm text-white/90 leading-relaxed drop-shadow-sm">
                       Advanced financial analytics powered by real-time market data and AI-driven insights for precision agriculture profitability
                     </p>
                   </div>

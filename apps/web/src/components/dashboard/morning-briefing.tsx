@@ -86,11 +86,14 @@ export function MorningBriefing({
 
         {/* Main Content Grid */}
         <div className="p-6 pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-sage-200">
             
             {/* Farm Status */}
-            <div>
-              <h3 className="text-sm font-medium text-sage-600 mb-3">Farm Status</h3>
+            <div className="pb-6 md:pb-0 md:pr-6">
+              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
+                <div className="w-2 h-2 bg-sage-500 rounded-full mr-2"></div>
+                Farm Status
+              </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -128,8 +131,11 @@ export function MorningBriefing({
             </div>
 
             {/* Weather Summary */}
-            <div>
-              <h3 className="text-sm font-medium text-sage-600 mb-3">Weather Now</h3>
+            <div className="py-6 md:py-0 md:px-6">
+              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
+                <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                Weather Now
+              </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -174,8 +180,11 @@ export function MorningBriefing({
             </div>
 
             {/* Financial Snapshot */}
-            <div>
-              <h3 className="text-sm font-medium text-sage-600 mb-3">Financials</h3>
+            <div className="pt-6 md:pt-0 md:pl-6">
+              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                Financials
+              </h3>
               <div className="space-y-3">
                 <div>
                   <div className="flex items-center justify-between mb-1">

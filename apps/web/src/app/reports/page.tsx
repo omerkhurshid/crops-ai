@@ -2,17 +2,19 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Navbar } from '../../components/navigation/navbar'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
-import { FarmPerformanceReport } from '../../components/reports/farm-performance-report'
-import { WeatherImpactReport } from '../../components/reports/weather-impact-report' 
-import { CropHealthReport } from '../../components/reports/crop-health-report'
-import { FinancialReport } from '../../components/reports/financial-report'
-import { SustainabilityReport } from '../../components/reports/sustainability-report'
-import { CustomReportBuilder } from '../../components/reports/custom-report-builder'
+import { 
+  FarmPerformancePreview,
+  WeatherImpactPreview,
+  CropHealthPreview,
+  FinancialSummaryPreview,
+  SustainabilityPreview,
+  CustomReportPreview
+} from '../../components/reports/report-preview-cards'
 import { RecentReports } from '../../components/reports/recent-reports'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
-import { BarChart, FileText, TrendingUp, DollarSign, Leaf, Plus } from 'lucide-react'
+import { BarChart, FileText, TrendingUp, DollarSign, Leaf, Plus, CloudRain, TreePine } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,15 +71,15 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <FarmPerformanceReport farmId={user.id} />
+              <FarmPerformancePreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl">
-                  <TrendingUp className="h-6 w-6 text-earth-700" />
+                <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl">
+                  <CloudRain className="h-6 w-6 text-blue-700" />
                 </div>
                 <InfoTooltip {...TOOLTIP_CONTENT.precipitation} />
               </div>
@@ -87,7 +89,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <WeatherImpactReport farmId={user.id} />
+              <WeatherImpactPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -105,7 +107,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <CropHealthReport farmId={user.id} />
+              <CropHealthPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -123,15 +125,15 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <FinancialReport farmId={user.id} />
+              <FinancialSummaryPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl">
-                  <Leaf className="h-6 w-6 text-earth-700" />
+                <div className="p-3 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl">
+                  <TreePine className="h-6 w-6 text-green-700" />
                 </div>
                 <InfoTooltip title="Sustainability Metrics" description="Environmental impact tracking and sustainable farming practice analysis." />
               </div>
@@ -141,7 +143,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <SustainabilityReport farmId={user.id} />
+              <SustainabilityPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -159,7 +161,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <CustomReportBuilder farmId={user.id} />
+              <CustomReportPreview farmId={user.id} />
             </ModernCardContent>
           </ModernCard>
         </div>

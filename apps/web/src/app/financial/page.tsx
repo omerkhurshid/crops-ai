@@ -8,7 +8,7 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InlineFloatingButton } from '../../components/ui/floating-button';
 import { Badge } from '../../components/ui/badge';
 import { AlertCircle, Plus, DollarSign, TrendingUp, BarChart, MapPin } from 'lucide-react';
-import { Navbar } from '../../components/navigation/navbar';
+import { DashboardLayout } from '../../components/layout/dashboard-layout';
 
 interface Farm {
   id: string;
@@ -67,8 +67,7 @@ export default function FinancialPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen">
-        <Navbar />
+      <DashboardLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse space-y-6">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
@@ -80,7 +79,7 @@ export default function FinancialPage() {
             <div className="h-96 bg-gray-200 rounded"></div>
           </div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
@@ -91,9 +90,8 @@ export default function FinancialPage() {
   // No farms state
   if (farms.length === 0) {
     return (
-      <div className="minimal-page">
-        <Navbar />
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <DashboardLayout>
+        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <ModernCard variant="floating" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 pb-8">
@@ -137,17 +135,15 @@ export default function FinancialPage() {
               </ModernCardContent>
             </ModernCard>
           </div>
-        </main>
-      </div>
+        </div>
+      </DashboardLayout>
     );
   }
 
   // Multiple farms - farm selection
   if (farms.length > 1 && !selectedFarm) {
     return (
-      <div className="minimal-page">
-        <Navbar />
-        
+      <DashboardLayout>
         {/* Animated Background with Floating Elements */}
         <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
           <DollarSign className="h-8 w-8 text-sage-600" />
@@ -156,7 +152,7 @@ export default function FinancialPage() {
           <TrendingUp className="h-8 w-8 text-sage-600" />
         </div>
         
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="mb-16">
             {/* Enhanced Header with Icon */}
             <div className="text-center max-w-4xl mx-auto">
@@ -215,8 +211,8 @@ export default function FinancialPage() {
               </div>
             ))}
           </div>
-        </main>
-      </div>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -224,12 +220,8 @@ export default function FinancialPage() {
   if (selectedFarm || farms.length === 1) {
     const farmToUse = selectedFarm || farms[0];
     return (
-      <div className="minimal-page">
-        <Navbar />
-        
-        {/* Subtle Background */}
-        
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      <DashboardLayout>
+        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="mb-16">
             {/* Enhanced Header with Icon and Asymmetric Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -293,8 +285,8 @@ export default function FinancialPage() {
           
           {/* Financial Dashboard */}
           <FinancialDashboard farm={farmToUse} />
-        </main>
-      </div>
+        </div>
+      </DashboardLayout>
     );
   }
 

@@ -26,6 +26,8 @@ import { PLSummaryTable } from './pl-summary-table';
 import { TrendChart } from './trend-chart';
 import { ForecastView } from './forecast-view';
 import { AnalyticsView } from './analytics-view';
+import { SimplifiedFinancialMetrics } from './simplified-metrics';
+import { SimpleCashFlowForecast } from './simple-cashflow-forecast';
 
 interface Farm {
   id: string;
@@ -194,14 +196,18 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       )}
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+      <Tabs defaultValue="simple" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="simple" className="flex items-center gap-2">
+            <DollarSign className="h-4 w-4" />
+            Simple View
+          </TabsTrigger>
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Overview
+            Detailed
           </TabsTrigger>
           <TabsTrigger value="transactions" className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
             Transactions
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex items-center gap-2">
@@ -213,6 +219,11 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
             Forecast
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="simple" className="space-y-8">
+          <SimplifiedFinancialMetrics farm={farm} />
+          <SimpleCashFlowForecast farm={farm} />
+        </TabsContent>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

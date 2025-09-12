@@ -9,7 +9,7 @@ import {
   FinancialSummaryPreview,
   SustainabilityPreview,
   CustomReportPreview
-} from '../../components/reports/report-preview-cards'
+} from '../../components/reports/farmer-friendly-preview-cards'
 import { RecentReports } from '../../components/reports/recent-reports'
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
@@ -46,10 +46,10 @@ export default async function ReportsPage() {
         <div className="mb-16">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
-              Reports & Analytics
+              Your Farm Story
             </h1>
             <p className="text-xl text-sage-600 font-light leading-relaxed">
-              Generate comprehensive insights and detailed reports for your agricultural operations.
+              See how your farm is doing, spot opportunities, and compare with neighbors.
             </p>
           </div>
         </div>
@@ -63,9 +63,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip {...TOOLTIP_CONTENT.yieldPrediction} />
               </div>
-              <ModernCardTitle>Farm Performance</ModernCardTitle>
+              <ModernCardTitle>How's Your Farm Doing?</ModernCardTitle>
               <ModernCardDescription>
-                Comprehensive analysis of farm productivity and efficiency
+                See if you're making more money than your neighbors and where you stand
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -81,9 +81,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip {...TOOLTIP_CONTENT.precipitation} />
               </div>
-              <ModernCardTitle>Weather Impact</ModernCardTitle>
+              <ModernCardTitle>Did Weather Help or Hurt?</ModernCardTitle>
               <ModernCardDescription>
-                How weather conditions affected your crops
+                Find out if Mother Nature was on your side this season
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -99,9 +99,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
               </div>
-              <ModernCardTitle>Crop Health</ModernCardTitle>
+              <ModernCardTitle>Are Your Crops Happy?</ModernCardTitle>
               <ModernCardDescription>
-                Satellite and sensor data analysis
+                Spot problem areas before they cost you money
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -117,9 +117,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip {...TOOLTIP_CONTENT.commodityPrice} />
               </div>
-              <ModernCardTitle>Financial Summary</ModernCardTitle>
+              <ModernCardTitle>Show Me the Money</ModernCardTitle>
               <ModernCardDescription>
-                Revenue, costs, and profitability analysis
+                Where your dollars come from and where they go
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -135,9 +135,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip title="Sustainability Metrics" description="Environmental impact tracking and sustainable farming practice analysis." />
               </div>
-              <ModernCardTitle>Sustainability</ModernCardTitle>
+              <ModernCardTitle>Taking Care of the Land</ModernCardTitle>
               <ModernCardDescription>
-                Environmental impact and sustainability metrics
+                See how you're protecting the environment (and find incentive money)
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -153,9 +153,9 @@ export default async function ReportsPage() {
                 </div>
                 <InfoTooltip title="Custom Reports" description="Create tailored reports with specific metrics and date ranges for your unique needs." />
               </div>
-              <ModernCardTitle>Custom Report</ModernCardTitle>
+              <ModernCardTitle>Build Your Own</ModernCardTitle>
               <ModernCardDescription>
-                Create a tailored report with specific metrics
+                Mix and match the information that matters most to you
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
@@ -166,8 +166,8 @@ export default async function ReportsPage() {
 
         <ModernCard variant="soft">
           <ModernCardHeader>
-            <ModernCardTitle>Recent Reports</ModernCardTitle>
-            <ModernCardDescription>Your previously generated reports</ModernCardDescription>
+            <ModernCardTitle>Your Recent Reports</ModernCardTitle>
+            <ModernCardDescription>Reports you've looked at before</ModernCardDescription>
           </ModernCardHeader>
           <ModernCardContent>
             <RecentReports farmId={user.id} />

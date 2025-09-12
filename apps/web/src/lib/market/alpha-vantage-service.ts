@@ -281,25 +281,35 @@ class AlphaVantageService {
     
     // Store in database
     try {
-      await prisma.marketPrice.upsert({
+      // Check if record already exists for today
+      const existingPrice = await prisma.marketPrice.findFirst({
         where: {
-          commodity_date: {
-            commodity: symbol,
-            date: price.timestamp
-          }
-        },
-        create: {
           commodity: symbol,
-          market: 'Alpha Vantage',
-          price: price.price,
-          currency: 'USD',
-          unit: this.getCommodityUnit(symbol),
           date: price.timestamp
-        },
-        update: {
-          price: price.price
         }
       })
+
+      if (existingPrice) {
+        // Update existing record
+        await prisma.marketPrice.update({
+          where: { id: existingPrice.id },
+          data: {
+            price: price.price
+          }
+        })
+      } else {
+        // Create new record
+        await prisma.marketPrice.create({
+          data: {
+            commodity: symbol,
+            market: 'Alpha Vantage',
+            price: price.price,
+            currency: 'USD',
+            unit: this.getCommodityUnit(symbol),
+            date: price.timestamp
+          }
+        })
+      }
     } catch (error) {
       console.error('Error caching to database:', error)
     }

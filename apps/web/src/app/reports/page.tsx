@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { 
   FarmPerformancePreview,
@@ -26,9 +26,7 @@ export default async function ReportsPage() {
   }
 
   return (
-    <div className="page-background-gradient">
-      <Navbar />
-      
+    <DashboardLayout>
       {/* Floating Action Button */}
       <ClientFloatingButton
         icon={<Plus className="h-5 w-5" />}
@@ -44,7 +42,7 @@ export default async function ReportsPage() {
         <FileText className="h-8 w-8 text-sage-600" />
       </div>
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-6 tracking-tight">
@@ -175,7 +173,7 @@ export default async function ReportsPage() {
             <RecentReports farmId={user.id} />
           </ModernCardContent>
         </ModernCard>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   )
 }

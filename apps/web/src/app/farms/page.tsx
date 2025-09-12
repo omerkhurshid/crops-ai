@@ -6,7 +6,7 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -63,9 +63,7 @@ export default async function FarmsPage() {
   const userFarms = await getUserFarms(user.id)
 
   return (
-    <div className="page-background-gradient">
-      <Navbar />
-      
+    <DashboardLayout>
       {/* Animated Background with Floating Elements */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <Sprout className="h-8 w-8 text-sage-600" />
@@ -74,7 +72,7 @@ export default async function FarmsPage() {
         <MapPin className="h-8 w-8 text-sage-600" />
       </div>
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           {/* Enhanced Header */}
           <div className="text-center max-w-4xl mx-auto mb-12">
@@ -247,7 +245,7 @@ export default async function FarmsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   )
 }

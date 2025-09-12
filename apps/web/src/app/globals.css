@@ -430,6 +430,10 @@
     color: hsl(120, 40%, 70%);
   }
 
+  .bg-corn-dark {
+    background: hsl(120, 25%, 15%); /* Same as field dark */
+  }
+
   /* Updated page backgrounds */
   .page-background {
     background: hsl(120, 25%, 15%);

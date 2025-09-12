@@ -4,10 +4,9 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
-import { Navbar } from '../../components/navigation/navbar'
+import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { FarmerDashboard } from '../../components/dashboard/farmer-dashboard'
 import { GlobalFAB, MobileFAB } from '../../components/ui/global-fab'
-import { useScreenSize } from '../../hooks/useResponsive'
 import NBARecommendations from '../../components/dashboard/nba-recommendations'
 import { 
   Sprout, MapPin, AlertTriangle, TrendingUp, Clock, Plus, Brain, CloudRain, DollarSign,
@@ -177,9 +176,8 @@ export default async function DashboardPage() {
     // Show onboarding for new users
     if (totalFarms === 0) {
       return (
-        <div className="page-background-gradient">
-          <Navbar />
-          <main className="max-w-4xl mx-auto pt-12 pb-12 px-4 sm:px-6 lg:px-8">
+        <DashboardLayout>
+          <div className="max-w-4xl mx-auto pt-12 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <div className="mb-6">
                 <Sprout className="h-16 w-16 text-corn-accent mx-auto mb-4" />
@@ -213,23 +211,21 @@ export default async function DashboardPage() {
                 <p className="text-sage-600 text-sm">Track costs, revenue, and profitability with automated insights.</p>
               </div>
             </div>
-          </main>
-        </div>
+          </div>
+        </DashboardLayout>
       )
     }
     
     return (
-      <div className="page-background-gradient">
-        <Navbar />
-        
-        <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <DashboardLayout>
+        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           {/* Use the new farmer-friendly dashboard */}
           <FarmerDashboard farmId={farms[0]?.id || 'default'} />
-        </main>
+        </div>
 
         {/* Global Floating Action Button */}
         <GlobalFAB role="farmer" />
-      </div>
+      </DashboardLayout>
     )
   } catch (error) {
     console.error('Dashboard page error:', error)

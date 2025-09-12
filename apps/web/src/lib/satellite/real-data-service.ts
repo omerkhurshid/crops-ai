@@ -161,7 +161,7 @@ export class RealSatelliteService {
     // Calculate area-weighted average yield
     let totalWeightedYield = 0
     let totalWeight = 0
-    let dominantCrop = 'Corn'
+    const dominantCrop = 'Corn'
 
     analyses.forEach((analysis, index) => {
       const fieldAcres = fields[index].acres

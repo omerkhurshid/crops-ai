@@ -78,5 +78,5 @@ export function getRecommendedCommodities(farmProfile: {
   recommendations.push(...regional)
   
   // Return unique list, max 6 commodities
-  return [...new Set(recommendations)].slice(0, 6)
+  return Array.from(new Set(recommendations)).slice(0, 6)
 }

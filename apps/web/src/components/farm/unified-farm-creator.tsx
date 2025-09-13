@@ -249,183 +249,134 @@ export function UnifiedFarmCreator() {
         <p className="text-lg text-gray-600">Set up your farm profile and map your fields</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left Column - Farm Details */}
-        <div className="space-y-6">
-          {/* Basic Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sprout className="h-5 w-5 text-green-600" />
-                Farm Information
-              </CardTitle>
-              <CardDescription>Basic details about your farming operation</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="farm-name">Farm Name</Label>
-                <Input
-                  id="farm-name"
-                  placeholder="e.g., Smith Family Farm"
-                  value={farm.name}
-                  onChange={(e) => setFarm(prev => ({ ...prev, name: e.target.value }))}
-                  className="mt-1"
-                />
-              </div>
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Basic Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-green-600" />
+              Farm Information
+            </CardTitle>
+            <CardDescription>Basic details about your farming operation</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="farm-name">Farm Name</Label>
+              <Input
+                id="farm-name"
+                placeholder="e.g., Smith Family Farm"
+                value={farm.name}
+                onChange={(e) => setFarm(prev => ({ ...prev, name: e.target.value }))}
+                className="mt-1"
+              />
+            </div>
 
-              <div>
-                <Label>Farm Type</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                  {farmTypes.map((type) => {
-                    const Icon = type.icon
-                    return (
-                      <button
-                        key={type.id}
-                        onClick={() => setFarm(prev => ({ ...prev, type: type.id }))}
-                        className={`p-3 rounded-lg border-2 transition-all text-left ${
-                          farm.type === type.id
-                            ? 'border-green-500 bg-green-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <Icon className="h-4 w-4" />
-                          <span className="font-medium">{type.label}</span>
-                        </div>
-                        <p className="text-sm text-gray-600">{type.desc}</p>
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Location */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-blue-600" />
-                Farm Location
-              </CardTitle>
-              <CardDescription>Where is your farm located?</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Address or coordinates (lat, lng)"
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
-                  className="flex-1"
-                />
-                <Button onClick={parseLocationInput} variant="outline">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={getCurrentLocation}
-                  disabled={detectingLocation}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  {detectingLocation ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <Locate className="h-4 w-4 mr-2" />
-                  )}
-                  Use Current Location
-                </Button>
-              </div>
-
-              {farm.location.lat !== 0 && (
-                <div className="flex items-center gap-2 text-sm text-green-600">
-                  <CheckCircle className="h-4 w-4" />
-                  Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Field Summary */}
-          {hasValidBoundaries && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Satellite className="h-5 w-5 text-purple-600" />
-                  Fields ({farm.fields?.length || 0})
-                </CardTitle>
-                <CardDescription>
-                  {farm.totalArea ? `Total farm area: ${farm.totalArea} acres` : 'Draw farm boundary first'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {farm.fields && farm.fields.length > 0 ? (
-                  <div className="space-y-2">
-                    {farm.fields.map((field, index) => (
-                      <div key={field.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-4 h-4 rounded-full"
-                            style={{ backgroundColor: field.color }}
-                          />
-                          <div>
-                            <p className="font-medium">{field.name}</p>
-                            <p className="text-sm text-gray-600">{field.area} acres</p>
-                          </div>
-                        </div>
-                        <Button
-                          onClick={() => deleteField(field.id)}
-                          variant="ghost"
-                          size="sm"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600 text-center py-4">
-                    No fields created yet. Draw your farm boundary first, then add fields.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {/* Right Column - Map */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-blue-600" />
-                Farm Mapping
-              </CardTitle>
-              <CardDescription>
-                {!hasValidBoundaries 
-                  ? "First, draw your farm boundaries" 
-                  : "Farm boundaries set. Now you can add field boundaries."
-                }
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {!showMap ? (
-                <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                  <div className="text-center">
-                    <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 mb-4">Set your farm location first</p>
-                    <Button
-                      onClick={() => setShowMap(true)}
-                      disabled={farm.location.lat === 0}
-                      variant={farm.location.lat === 0 ? "outline" : "default"}
+            <div>
+              <Label>Farm Type</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2 mt-2">
+                {farmTypes.map((type) => {
+                  const Icon = type.icon
+                  return (
+                    <button
+                      key={type.id}
+                      onClick={() => setFarm(prev => ({ ...prev, type: type.id }))}
+                      className={`p-3 rounded-lg border-2 transition-all text-left ${
+                        farm.type === type.id
+                          ? 'border-green-500 bg-green-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
                     >
-                      Load Map
-                    </Button>
-                  </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Icon className="h-4 w-4" />
+                        <span className="font-medium text-sm">{type.label}</span>
+                      </div>
+                      <p className="text-xs text-gray-600">{type.desc}</p>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Location */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-blue-600" />
+              Farm Location
+            </CardTitle>
+            <CardDescription>Where is your farm located?</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Address or coordinates (lat, lng)"
+                value={locationInput}
+                onChange={(e) => setLocationInput(e.target.value)}
+                className="flex-1"
+              />
+              <Button onClick={parseLocationInput} variant="outline">
+                <Search className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                onClick={getCurrentLocation}
+                disabled={detectingLocation}
+                variant="outline"
+                className="flex-1"
+              >
+                {detectingLocation ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Locate className="h-4 w-4 mr-2" />
+                )}
+                Use Current Location
+              </Button>
+            </div>
+
+            {farm.location.lat !== 0 && (
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <CheckCircle className="h-4 w-4" />
+                Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Farm Mapping */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Satellite className="h-5 w-5 text-green-600" />
+              Farm Mapping {hasValidBoundaries && <Badge variant="secondary" className="ml-2">Boundaries Set</Badge>}
+            </CardTitle>
+            <CardDescription>
+              {!hasValidBoundaries 
+                ? "Draw your farm boundaries on the map" 
+                : "Farm boundaries set. Now you can add field boundaries."
+              }
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!showMap ? (
+              <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                <div className="text-center">
+                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600 mb-4">Set your farm location first</p>
+                  <Button
+                    onClick={() => setShowMap(true)}
+                    disabled={farm.location.lat === 0}
+                    variant={farm.location.lat === 0 ? "outline" : "default"}
+                  >
+                    Load Map
+                  </Button>
                 </div>
-              ) : apiKey ? (
+              </div>
+            ) : apiKey ? (
+              <div className="space-y-4">
                 <div className="h-96 rounded-lg overflow-hidden border">
                   <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
                     <GoogleMap
@@ -496,37 +447,108 @@ export function UnifiedFarmCreator() {
                     </GoogleMap>
                   </LoadScript>
                 </div>
+                
+                {/* Enhanced Map Instructions */}
+                <div className="space-y-3">
+                  {!hasValidBoundaries ? (
+                    <Alert className="border-green-200 bg-green-50">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">1</span>
+                          </div>
+                        </div>
+                        <div className="flex-grow">
+                          <AlertDescription className="text-green-800">
+                            <strong>Click the Polygon Tool</strong> (📐) on the map above, then click around your farm perimeter to draw boundaries. Click your first point again to close the shape.
+                          </AlertDescription>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="bg-green-200 p-2 rounded-lg animate-pulse">
+                            <div className="w-6 h-6 border-2 border-green-600 bg-green-100 flex items-center justify-center text-xs">📐</div>
+                          </div>
+                        </div>
+                      </div>
+                    </Alert>
+                  ) : (
+                    <Alert className="border-blue-200 bg-blue-50">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <AlertDescription className="text-blue-800">
+                        <strong>✅ Farm boundaries complete!</strong> Now you can optionally use the polygon tool to draw individual field boundaries within your farm.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  {farm.totalArea && (
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-600">
+                        Farm Area: <span className="font-semibold text-green-600">{farm.totalArea} acres</span>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg">
+                <p className="text-gray-600">Google Maps API key required</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Field Summary */}
+        {hasValidBoundaries && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Satellite className="h-5 w-5 text-purple-600" />
+                Fields ({farm.fields?.length || 0})
+              </CardTitle>
+              <CardDescription>
+                Individual field boundaries within your farm
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {farm.fields && farm.fields.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {farm.fields.map((field, index) => (
+                    <div key={field.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-4 h-4 rounded-full border-2 border-white shadow"
+                          style={{ backgroundColor: field.color }}
+                        />
+                        <div>
+                          <p className="font-medium">{field.name}</p>
+                          <p className="text-sm text-gray-600">{field.area} acres</p>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={() => deleteField(field.id)}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg">
-                  <p className="text-gray-600">Google Maps API key required</p>
+                <div className="text-center py-8 text-gray-500">
+                  <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <p className="font-medium">No fields created yet</p>
+                  <p className="text-sm">Use the polygon tool on the map above to draw field boundaries</p>
                 </div>
               )}
-
-              {/* Map Instructions */}
-              <div className="mt-4 space-y-2">
-                {!hasValidBoundaries ? (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      <strong>Step 1:</strong> Click the polygon tool on the map and draw your farm boundaries by clicking to create points. Click the first point again to close the shape.
-                    </AlertDescription>
-                  </Alert>
-                ) : (
-                  <Alert>
-                    <CheckCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      <strong>Farm boundaries set!</strong> Now you can use the polygon tool to draw individual field boundaries within your farm.
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
             </CardContent>
           </Card>
+        )}
 
-          {/* Create Farm Button */}
-          <div className="space-y-4">
+        {/* Create Farm Button */}
+        <Card>
+          <CardContent className="pt-6">
             {!isBasicInfoComplete && (
-              <Alert>
+              <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   Please complete farm name, type, and location to continue.
@@ -553,14 +575,14 @@ export function UnifiedFarmCreator() {
               )}
             </Button>
 
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-gray-600 text-center mt-3">
               {hasValidBoundaries 
                 ? "Fields are optional - you can add them later from your dashboard"
                 : "Farm boundaries are optional - you can add them later for field mapping"
               }
             </p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

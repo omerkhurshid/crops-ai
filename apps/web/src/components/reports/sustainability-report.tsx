@@ -12,6 +12,7 @@ import {
   TrendingDown, TrendingUp, Target, Shield,
   Award, CheckCircle, AlertCircle
 } from 'lucide-react';
+import { ensureArray } from '../../lib/utils';
 
 interface SustainabilityData {
   overview: {
@@ -402,7 +403,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(data.practices?.implemented || []).map((practice, index) => (
+                  {ensureArray(data.practices?.implemented).map((practice, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -428,7 +429,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(data.practices?.recommendations || []).map((rec, index) => (
+                  {ensureArray(data.practices?.recommendations).map((rec, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <span className="font-medium">{rec.practice}</span>
@@ -460,7 +461,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(data.certifications?.current || []).map((cert, index) => (
+                  {ensureArray(data.certifications?.current).map((cert, index) => (
                     <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                       <div>
                         <span className="font-medium">{cert.name}</span>
@@ -484,7 +485,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(data.certifications?.eligible || []).map((cert, index) => (
+                  {ensureArray(data.certifications?.eligible).map((cert, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <span className="font-medium">{cert.name}</span>
                       <div className="text-sm text-gray-600 mt-1">

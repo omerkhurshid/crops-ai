@@ -20,6 +20,7 @@ import {
   Scissors,
   Eye
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface CropPlanning {
   id: string
@@ -102,8 +103,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
   })
 
   // Get unique crops and locations for filtering
-  const uniqueCrops = Array.from(new Set((plannings || []).map(p => p.cropName)))
-  const uniqueLocations = Array.from(new Set((plannings || []).map(p => p.location)))
+  const uniqueCrops = Array.from(new Set(ensureArray(plannings).map(p => p.cropName)))
+  const uniqueLocations = Array.from(new Set(ensureArray(plannings).map(p => p.location)))
 
   // Filter plannings based on selected filters
   const filteredPlannings = yearPlannings.filter(planning => {

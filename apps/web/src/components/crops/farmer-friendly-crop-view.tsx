@@ -20,6 +20,7 @@ import {
   DollarSign,
   Target
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface CropAction {
   id: string
@@ -195,7 +196,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {(nextActions || []).slice(0, 3).map((action) => (
+              {ensureArray(nextActions).slice(0, 3).map((action) => (
                 <div key={action.id} className="flex items-center justify-between p-4 bg-canvas rounded-card border border-fk-border hover:border-fk-primary/30 hover:shadow-fk-sm transition-all duration-micro">
                   <div className="flex items-center gap-4">
                     <div className="text-2xl">{action.icon}</div>
@@ -209,7 +210,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                     </div>
                   </div>
                   <div className="text-right">
-                    <Badge className={priorityConfig[action.priority].color}>
+                    <Badge className={priorityConfig[action.priority as keyof typeof priorityConfig]?.color || 'bg-gray-100 text-gray-600'}>
                       {action.daysUntil === 0 ? 'Today!' : getDaysText(action.daysUntil)}
                     </Badge>
                   </div>

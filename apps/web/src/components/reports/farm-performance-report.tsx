@@ -10,7 +10,7 @@ import {
   TrendingUp, TrendingDown, Download, RefreshCw, BarChart3, 
   Target, Leaf, DollarSign, Activity, AlertCircle, Award, Tractor
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn, ensureArray } from '../../lib/utils';
 import { convertHealthScore, getFarmerTerm } from '../../lib/farmer-language';
 
 interface FarmPerformanceData {
@@ -343,7 +343,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="space-y-3">
-            {(data.topPerformingFields || []).map((field, index) => (
+            {ensureArray(data.topPerformingFields).map((field, index) => (
               <div key={field.id} className="flex items-center justify-between p-4 bg-white rounded-xl border border-sage-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-4">
                   <div className={cn(
@@ -385,7 +385,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="space-y-4">
-            {(data.improvementAreas || []).map((area, index) => (
+            {ensureArray(data.improvementAreas).map((area, index) => (
               <div key={index} className="p-4 bg-white rounded-xl border border-sage-100">
                 <div className="flex items-start justify-between mb-3">
                   <div className="font-semibold text-sage-800">{area.area}</div>

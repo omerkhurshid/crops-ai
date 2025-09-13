@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { TrendingUp, TrendingDown, BarChart3, Calendar, Download } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface ChartDataPoint {
   date: string
@@ -41,8 +42,8 @@ interface AnalyticsDashboardProps {
 export function SimpleLineChart({ title, description, data, color = '#10b981', unit = '', height = 200, showTrend = true }: TimeSeriesChartProps) {
   if (!data || data.length === 0) return null
 
-  const minValue = Math.min(...(data || []).map(d => d.value))
-  const maxValue = Math.max(...(data || []).map(d => d.value))
+  const minValue = Math.min(...ensureArray(data).map(d => d.value))
+  const maxValue = Math.max(...ensureArray(data).map(d => d.value))
   const range = maxValue - minValue || 1
 
   const points = data.map((point, index) => {

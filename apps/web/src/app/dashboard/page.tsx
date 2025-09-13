@@ -156,11 +156,20 @@ export default async function DashboardPage() {
     // Get crops and livestock data
     const [crops, livestock] = await Promise.all([
       prisma.crop.findMany({
-        where: { userId: user.id },
-        orderBy: { plantedDate: 'desc' }
+        where: { 
+          field: {
+            farm: {
+              ownerId: user.id
+            }
+          }
+        },
+        include: {
+          field: true
+        },
+        orderBy: { plantingDate: 'desc' }
       }).catch(() => []),
       
-      prisma.livestock.findMany({
+      prisma.livestockEvent.findMany({
         where: { userId: user.id },
         orderBy: { createdAt: 'desc' }
       }).catch(() => [])

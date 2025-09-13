@@ -111,7 +111,7 @@ export const POST = apiMiddleware.protected(
       const body = await request.json()
       console.log('📝 Request body:', body)
       
-      const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary } = body
+      const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary, color } = body
 
       // Basic validation
       if (!farmId) {
@@ -149,6 +149,9 @@ export const POST = apiMiddleware.protected(
         name: name.trim(),
         area: parseFloat(area),
         soilType: soilType || null,
+        color: color || null,
+        cropType: cropType || null,
+        status: 'active'
       };
       
       const field = await prisma.field.create({

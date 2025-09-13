@@ -227,7 +227,8 @@ export function UnifiedFarmCreator() {
       
       // Create fields if mapped
       if (farm.fields && result.farm?.id) {
-        for (const field of farm.fields) {
+        for (let i = 0; i < farm.fields.length; i++) {
+          const field = farm.fields[i]
           await fetch('/api/fields', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -237,7 +238,10 @@ export function UnifiedFarmCreator() {
               area: field.area,
               latitude: field.boundaries[0]?.lat || farm.location.lat,
               longitude: field.boundaries[0]?.lng || farm.location.lng,
-              boundaries: field.boundaries
+              boundaries: field.boundaries,
+              color: getFieldColor(i),
+              cropType: null,
+              status: 'active'
             })
           })
         }

@@ -8,10 +8,11 @@ import { TOOLTIP_CONTENT } from '../../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { NoFieldsEmptyState, EmptyStateCard } from '../../../components/ui/empty-states'
-import { Navbar } from '../../../components/navigation/navbar'
+import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { SatelliteViewer } from '../../../components/satellite/satellite-viewer'
 import { MarketDashboard } from '../../../components/market/market-dashboard'
 import { AnalyticsDashboard } from '../../../components/analytics/charts'
+import { VisualFarmMap } from '../../../components/farm/visual-farm-map'
 import { prisma } from '../../../lib/prisma'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
@@ -85,9 +86,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
   }
 
   return (
-    <div className="minimal-page">
-      <Navbar />
-      
+    <DashboardLayout>
       {/* Floating Action Button */}
       <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
@@ -95,7 +94,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
         variant="primary"
       />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         {/* Modern Header with Asymmetric Layout */}
         <div className="mb-12 relative">
           <Link href="/farms" className="inline-flex items-center text-sm text-sage-600 hover:text-sage-800 mb-6 transition-colors">
@@ -302,6 +301,22 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                 )}
               </ModernCardContent>
             </ModernCard>
+
+            {/* Visual Farm Map */}
+            <VisualFarmMap 
+              farm={{
+                id: farm.id,
+                name: farm.name,
+                latitude: farm.latitude,
+                longitude: farm.longitude,
+                totalArea: farm.totalArea,
+                address: farm.address || undefined
+              }}
+              onFieldUpdate={(fieldId, updates) => {
+                // Handle field updates - refresh page or update state
+                window.location.reload()
+              }}
+            />
 
             {/* Satellite Imagery */}
             {farm.fields.length > 0 && (
@@ -555,6 +570,6 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
           </ModernCard>
         </div>
       </main>
-    </div>
+    </DashboardLayout>
   )
 }

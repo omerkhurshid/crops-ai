@@ -57,15 +57,11 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
   }
 
   return (
-    <div className={`fixed left-0 top-0 h-full bg-white/10 backdrop-blur-xl border-r border-white/20 shadow-2xl z-40 transition-all duration-300 hidden lg:block ${
-      collapsed ? 'w-16' : 'w-64'
-    }`} style={{
-      background: 'linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))',
-      backdropFilter: 'blur(20px)',
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 25px 50px -12px rgba(0,0,0,0.25)'
-    }}>
+    <div className={`fixed left-0 top-0 h-full bg-sidebar border-r border-white/20 shadow-fk-md z-40 transition-all duration-standard ease-fk hidden lg:block ${
+      collapsed ? 'w-18' : 'w-64'
+    }`} style={{ width: collapsed ? '72px' : '256px' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-white/10">
+      <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
         {!collapsed && (
           <Link href="/" className="flex items-center group">
             <div className="w-8 h-8 mr-3 group-hover:scale-105 transition-transform">
@@ -77,14 +73,14 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-lg font-semibold text-white/90 tracking-tight drop-shadow-lg">
-              Cropple<span className="text-green-300">.ai</span>
+            <span className="text-lg font-semibold text-white tracking-tight">
+              Cropple<span className="text-fk-primary-200">.ai</span>
             </span>
           </Link>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors backdrop-blur-sm"
+          className="p-2 rounded-control text-white/70 hover:text-white hover:bg-sidebar-600 transition-colors duration-micro"
         >
           {collapsed ? <Menu className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </button>
@@ -100,14 +96,16 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
+              className={`relative flex items-center px-3 py-3 rounded-control text-sm font-semibold transition-all duration-micro ease-fk group ${
                 active
-                  ? 'bg-white/20 text-green-300 border-r-2 border-green-400 backdrop-blur-sm shadow-lg'
-                  : 'text-white/90 hover:text-green-200 hover:bg-white/10 backdrop-blur-sm'
+                  ? 'text-white'
+                  : 'text-white/90 hover:text-white hover:bg-sidebar-600'
               }`}
+              style={active ? { backgroundColor: 'rgba(255,255,255,0.14)' } : {}}
             >
+              {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-fk-primary rounded-r" />}
               <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
-                active ? 'text-green-400' : 'group-hover:text-green-300'
+                active ? 'text-white' : 'text-white/90 group-hover:text-white'
               }`} />
               {!collapsed && (
                 <span className="truncate">{link.label}</span>
@@ -118,18 +116,18 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
       </nav>
 
       {/* User Menu */}
-      <div className="border-t border-white/10 p-4">
+      <div className="border-t p-4" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} mb-3`}>
           {!collapsed && (
             <div className="flex items-center min-w-0">
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3 backdrop-blur-sm">
-                <User className="h-4 w-4 text-green-400" />
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                <User className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-semibold text-white truncate">
                   {session.user?.name || 'Farmer'}
                 </p>
-                <p className="text-xs text-white/60 truncate">
+                <p className="text-xs text-white/70 truncate">
                   {session.user?.email}
                 </p>
               </div>
@@ -137,7 +135,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
           )}
           <button
             onClick={handleSignOut}
-            className={`p-2 rounded-lg text-white/70 hover:text-white hover:bg-red-500/20 transition-colors backdrop-blur-sm ${
+            className={`p-2 rounded-control text-white/70 hover:text-white hover:bg-fk-danger/20 transition-colors duration-micro ${
               collapsed ? 'mx-auto' : ''
             }`}
             title="Sign Out"

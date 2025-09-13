@@ -180,52 +180,52 @@ const mockNextActions: CropAction[] = [
 const statusConfig = {
   planned: {
     label: 'Planned',
-    color: 'bg-blue-500',
-    textColor: 'text-blue-600',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200'
+    color: 'bg-fk-info',
+    textColor: 'text-fk-info',
+    bgColor: 'bg-fk-info/10',
+    borderColor: 'border-fk-info/30'
   },
   planted: {
     label: 'Planted',
-    color: 'bg-green-500',
-    textColor: 'text-green-600',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200'
+    color: 'bg-fk-success',
+    textColor: 'text-fk-success',
+    bgColor: 'bg-fk-success/10',
+    borderColor: 'border-fk-success/30'
   },
   growing: {
     label: 'Growing',
-    color: 'bg-emerald-500',
-    textColor: 'text-emerald-600',
-    bgColor: 'bg-emerald-50',
-    borderColor: 'border-emerald-200'
+    color: 'bg-fk-primary',
+    textColor: 'text-fk-primary',
+    bgColor: 'bg-fk-primary/10',
+    borderColor: 'border-fk-primary/30'
   },
   ready_harvest: {
     label: 'Ready to Harvest',
-    color: 'bg-orange-500',
-    textColor: 'text-orange-600',
-    bgColor: 'bg-orange-50',
-    borderColor: 'border-orange-200'
+    color: 'bg-fk-accent-wheat',
+    textColor: 'text-fk-accent-wheat',
+    bgColor: 'bg-fk-accent-wheat/10',
+    borderColor: 'border-fk-accent-wheat/30'
   },
   completed: {
     label: 'Harvested',
-    color: 'bg-gray-600',
-    textColor: 'text-gray-600',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200'
+    color: 'bg-fk-neutral',
+    textColor: 'text-fk-neutral',
+    bgColor: 'bg-fk-neutral/10',
+    borderColor: 'border-fk-neutral/30'
   }
 }
 
 const priorityConfig = {
   urgent: {
-    color: 'bg-red-100 text-red-800 border-red-200',
+    color: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30',
     label: 'Urgent'
   },
   due_soon: {
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    color: 'bg-fk-warning/10 text-fk-warning border-fk-warning/30',
     label: 'Due Soon'
   },
   upcoming: {
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    color: 'bg-fk-info/10 text-fk-info border-fk-info/30',
     label: 'Upcoming'
   }
 }
@@ -268,24 +268,24 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
     <div className="space-y-6">
       {/* Quick Actions - Most Important */}
       {mockNextActions.length > 0 && (
-        <Card className="border-l-4 border-l-orange-500 shadow-lg">
+        <Card className="border-l-4 border-l-fk-warning bg-surface rounded-card shadow-fk-md">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Bell className="h-5 w-5 text-orange-500" />
+            <CardTitle className="flex items-center gap-2 text-lg font-bold text-fk-text">
+              <Bell className="h-5 w-5 text-fk-warning" />
               📌 What Needs Your Attention
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {mockNextActions.slice(0, 3).map((action) => (
-                <div key={action.id} className="flex items-center justify-between p-4 bg-white rounded-xl border-2 border-gray-100 hover:border-orange-200 transition-colors">
+                <div key={action.id} className="flex items-center justify-between p-4 bg-canvas rounded-card border border-fk-border hover:border-fk-primary/30 hover:shadow-fk-sm transition-all duration-micro">
                   <div className="flex items-center gap-4">
                     <div className="text-2xl">{action.icon}</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">
+                      <h4 className="font-semibold text-fk-text">
                         {action.action}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-fk-text-muted">
                         {action.cropName} • {action.location}
                       </p>
                     </div>
@@ -302,39 +302,40 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
         </Card>
       )}
 
-      {/* Quick Overview Stats - Visual & Simple */}
+      {/* Quick Overview Stats - FieldKit KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="text-center p-4">
+        <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">🌱</div>
-          <div className="text-2xl font-bold text-green-600">{growingCrops.length}</div>
-          <div className="text-sm text-gray-600">Crops Growing</div>
+          <div className="text-2xl font-bold text-fk-success">{growingCrops.length}</div>
+          <div className="text-sm font-medium text-fk-text-muted">Crops Growing</div>
         </Card>
         
-        <Card className="text-center p-4">
+        <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">✂️</div>
-          <div className="text-2xl font-bold text-orange-600">{readyToHarvest.length}</div>
-          <div className="text-sm text-gray-600">Ready to Harvest</div>
+          <div className="text-2xl font-bold text-fk-accent-wheat">{readyToHarvest.length}</div>
+          <div className="text-sm font-medium text-fk-text-muted">Ready to Harvest</div>
         </Card>
 
-        <Card className="text-center p-4">
+        <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">🎯</div>
-          <div className="text-2xl font-bold text-blue-600">{mockNextActions.length}</div>
-          <div className="text-sm text-gray-600">Tasks Due</div>
+          <div className="text-2xl font-bold text-fk-accent-sky">{mockNextActions.length}</div>
+          <div className="text-sm font-medium text-fk-text-muted">Tasks Due</div>
         </Card>
 
-        <Card className="text-center p-4">
+        <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">💰</div>
-          <div className="text-2xl font-bold text-purple-600">{formatCurrency(totalExpectedRevenue)}</div>
-          <div className="text-sm text-gray-600">Expected Income</div>
+          <div className="text-2xl font-bold text-fk-earth">{formatCurrency(totalExpectedRevenue)}</div>
+          <div className="text-sm font-medium text-fk-text-muted">Expected Income</div>
         </Card>
       </div>
 
       {/* View Toggle */}
       <div className="flex justify-center">
-        <div className="bg-gray-100 rounded-lg p-1 flex">
+        <div className="bg-fk-border/30 rounded-control p-1 flex">
           <Button
             variant={viewMode === 'cards' ? 'default' : 'ghost'}
             size="sm"
+            className={viewMode === 'cards' ? 'bg-fk-primary hover:bg-fk-primary-600 text-white' : 'text-fk-text hover:text-fk-primary'}
             onClick={() => setViewMode('cards')}
           >
             📱 Card View
@@ -342,6 +343,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           <Button
             variant={viewMode === 'timeline' ? 'default' : 'ghost'}
             size="sm"
+            className={viewMode === 'timeline' ? 'bg-fk-primary hover:bg-fk-primary-600 text-white' : 'text-fk-text hover:text-fk-primary'}
             onClick={() => setViewMode('timeline')}
           >
             📅 Timeline
@@ -355,22 +357,22 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           {mockCropCards.map((crop) => {
             const statusInfo = statusConfig[crop.status]
             return (
-              <Card key={crop.id} className={`${statusInfo.borderColor} border-2 hover:shadow-lg transition-all`}>
-                <CardContent className="p-4">
+              <Card key={crop.id} className={`${statusInfo.borderColor} border-2 bg-surface rounded-card shadow-fk-sm hover:shadow-fk-md transition-all duration-micro`}>
+                <CardContent className="p-5">
                   {/* Header Row */}
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="text-3xl">{crop.icon}</div>
                       <div>
-                        <h3 className="font-bold text-lg text-gray-900">
+                        <h3 className="font-bold text-lg text-fk-text">
                           {crop.cropName}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-fk-text-muted">
                           {crop.variety} • {crop.location}
                         </p>
                       </div>
                     </div>
-                    <Badge className={`${statusInfo.color} text-white`}>
+                    <Badge className={`${statusInfo.color} text-white font-semibold`}>
                       {statusInfo.label}
                     </Badge>
                   </div>

@@ -172,11 +172,11 @@ const months = [
 ]
 
 const statusColors = {
-  planned: 'bg-gray-200',
-  planted: 'bg-blue-400',
-  growing: 'bg-green-400',
-  harvesting: 'bg-yellow-400',
-  completed: 'bg-gray-400'
+  planned: 'bg-fk-text-muted',
+  planted: 'bg-fk-info',
+  growing: 'bg-fk-success',
+  harvesting: 'bg-fk-accent-wheat',
+  completed: 'bg-fk-neutral'
 }
 
 const statusIcons = {
@@ -245,8 +245,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-sage-600" />
+          <h2 className="text-2xl font-bold text-fk-text flex items-center gap-2">
+            <Calendar className="h-6 w-6 text-fk-primary" />
             Crop Timeline
           </h2>
           <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <div className="px-4 py-2 bg-sage-50 border-2 border-sage-200 rounded-md font-medium text-sage-800">
+            <div className="px-4 py-2 bg-fk-primary-200 border-2 border-fk-primary rounded-control font-semibold text-fk-primary-600">
               {currentYear} Season
             </div>
             <Button
@@ -295,7 +295,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </SelectContent>
           </Select>
 
-          <Button className="bg-sage-600 hover:bg-sage-700">
+          <Button className="bg-fk-primary hover:bg-fk-primary-600 text-white rounded-control">
             <Plus className="h-4 w-4 mr-2" />
             Add Planting
           </Button>
@@ -308,14 +308,14 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       </div>
 
       {/* Main Calendar View */}
-      <Card>
+      <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <div className="min-w-[800px]">
               {/* Header Row */}
-              <div className="grid grid-cols-12 gap-0 border-b bg-gray-50">
-                <div className="col-span-5 p-4 border-r">
-                  <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-700">
+              <div className="grid grid-cols-12 gap-0 border-b border-fk-border bg-surface">
+                <div className="col-span-5 p-4 border-r border-fk-border">
+                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-fk-text">
                     <span className="truncate">Crop</span>
                     <span className="truncate">Location</span>
                     <span className="truncate">Dates</span>
@@ -324,7 +324,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 <div className="col-span-7 p-2">
                   <div className="grid grid-cols-12 gap-0">
                     {months.map((month, index) => (
-                      <div key={month} className="text-center text-xs font-medium text-gray-700 py-2 px-1">
+                      <div key={month} className="text-center text-xs font-semibold text-fk-text py-2 px-1">
                         {month}
                       </div>
                     ))}
@@ -338,31 +338,31 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   const timeline = getTimelinePosition(planning)
                   
                   return (
-                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-gray-50 transition-colors min-h-[80px]">
+                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-fk-primary-200/30 transition-colors min-h-[80px]">
                       {/* Left Info Panel */}
-                      <div className="col-span-5 p-3 border-r">
+                      <div className="col-span-5 p-3 border-r border-fk-border">
                         <div className="grid grid-cols-3 gap-2">
                           {/* Crop Name */}
                           <div className="min-w-0">
-                            <h4 className="font-semibold text-blue-600 text-xs hover:text-blue-700 cursor-pointer truncate">
+                            <h4 className="font-semibold text-fk-accent-sky text-xs hover:text-fk-primary cursor-pointer truncate">
                               {planning.cropName}
                             </h4>
-                            <p className="text-xs text-gray-600 truncate">
+                            <p className="text-xs text-fk-text-muted truncate">
                               {formatQuantity(planning.plantedQuantity, planning.unit)}
                             </p>
                           </div>
 
                           {/* Location */}
                           <div className="min-w-0">
-                            <p className="text-xs font-medium text-gray-900 truncate">{planning.location}</p>
+                            <p className="text-xs font-semibold text-fk-text truncate">{planning.location}</p>
                             {planning.bedNumber && (
-                              <p className="text-xs text-gray-500 truncate">{planning.bedNumber}</p>
+                              <p className="text-xs text-fk-text-muted truncate">{planning.bedNumber}</p>
                             )}
                           </div>
 
                           {/* Key Dates */}
                           <div className="min-w-0">
-                            <div className="text-xs text-gray-600 space-y-1">
+                            <div className="text-xs text-fk-text-muted space-y-1">
                               <div className="truncate">Start: {formatDate(planning.startDate)}</div>
                               <div className="truncate">Harvest: {formatDate(planning.harvestDate)}</div>
                             </div>
@@ -372,17 +372,17 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
 
                       {/* Timeline Section */}
                       <div className="col-span-7 p-2 relative">
-                        <div className="relative h-16 bg-white">
+                        <div className="relative h-16 bg-canvas">
                           {/* Month Grid Lines (subtle) */}
-                          <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-10">
+                          <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-20">
                             {months.map((_, index) => (
-                              <div key={index} className="border-r border-gray-200"></div>
+                              <div key={index} className="border-r border-fk-border"></div>
                             ))}
                           </div>
                           
-                          {/* Timeline Bar - Enhanced */}
+                          {/* Timeline Bar - FieldKit Enhanced */}
                           <div
-                            className={`absolute top-2 h-12 rounded-lg ${statusColors[planning.status]} shadow-sm flex items-center px-2 text-white text-xs font-medium transition-all hover:shadow-md cursor-pointer`}
+                            className={`absolute top-2 h-12 rounded-control ${statusColors[planning.status]} shadow-fk-sm flex items-center px-2 text-white text-xs font-semibold transition-all hover:shadow-fk-md cursor-pointer`}
                             style={{
                               left: `${Math.max(1, timeline.left)}%`,
                               width: `${Math.max(8, timeline.width)}%`,
@@ -410,74 +410,74 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
         </CardContent>
       </Card>
 
-      {/* Summary Stats */}
+      {/* Summary Stats - FieldKit KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Plantings</p>
-                <p className="text-2xl font-bold text-gray-900">{filteredPlannings.length}</p>
+                <p className="text-sm font-semibold text-fk-text-muted">Total Plantings</p>
+                <p className="text-2xl font-bold text-fk-text">{filteredPlannings.length}</p>
               </div>
-              <Sprout className="h-8 w-8 text-green-400" />
+              <Sprout className="h-8 w-8 text-fk-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Growing Now</p>
-                <p className="text-2xl font-bold text-green-900">
+                <p className="text-sm font-semibold text-fk-text-muted">Growing Now</p>
+                <p className="text-2xl font-bold text-fk-success">
                   {filteredPlannings.filter(p => p.status === 'growing').length}
                 </p>
               </div>
-              <Sprout className="h-8 w-8 text-green-400" />
+              <Sprout className="h-8 w-8 text-fk-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Ready to Harvest</p>
-                <p className="text-2xl font-bold text-yellow-900">
+                <p className="text-sm font-semibold text-fk-text-muted">Ready to Harvest</p>
+                <p className="text-2xl font-bold text-fk-accent-wheat">
                   {filteredPlannings.filter(p => p.status === 'harvesting').length}
                 </p>
               </div>
-              <Scissors className="h-8 w-8 text-yellow-400" />
+              <Scissors className="h-8 w-8 text-fk-accent-wheat" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Planned Yield</p>
-                <p className="text-2xl font-bold text-blue-900">
+                <p className="text-sm font-semibold text-fk-text-muted">Planned Yield</p>
+                <p className="text-2xl font-bold text-fk-accent-sky">
                   {filteredPlannings.reduce((sum, p) => sum + p.estimatedYield, 0).toLocaleString()}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-400" />
+              <TrendingUp className="h-8 w-8 text-fk-accent-sky" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Legend */}
-      <Card>
+      <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
         <CardHeader>
-          <CardTitle className="text-lg">Status Legend</CardTitle>
+          <CardTitle className="text-lg font-bold text-fk-text">Status Legend</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
             {Object.entries(statusColors).map(([status, color]) => (
               <div key={status} className="flex items-center gap-2">
-                <div className={`w-4 h-4 rounded ${color}`}></div>
-                <span className="text-sm capitalize text-gray-700">{status}</span>
+                <div className={`w-4 h-4 rounded-control ${color}`}></div>
+                <span className="text-sm capitalize font-medium text-fk-text">{status}</span>
               </div>
             ))}
           </div>

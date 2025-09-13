@@ -4,32 +4,63 @@
 
 @layer base {
   :root {
-    --background: 120 25% 15%; /* Dark corn field green */
-    --foreground: 0 0% 95%; /* Light text for contrast */
-    --card: 120 20% 18%; /* Slightly lighter green for cards */
-    --card-foreground: 0 0% 95%; /* Light text */
-    --popover: 120 20% 18%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 98 84% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 120 15% 25%; /* Muted green */
-    --secondary-foreground: 0 0% 90%;
-    --muted: 120 15% 22%;
-    --muted-foreground: 0 0% 75%;
-    --accent: 84 100% 59%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 120 15% 35%; /* Green border */
-    --input: 120 20% 20%; /* Dark input background */
-    --ring: 98 84% 47%;
-    --radius: 1rem;
+    /* FieldKit Design System Variables */
+    --fk-color-white: #FFFFFF;
+    --fk-color-offwhite: #FAFAF7;
+    --fk-color-surface: #F6F3EA;
+    --fk-color-sidebar: #7F8F73;
+    --fk-color-sidebar-600: #6E7E63;
+    --fk-color-sidebar-300: #98A78C;
+    --fk-color-primary: #2E7D32;
+    --fk-color-primary-600: #1E6A25;
+    --fk-color-primary-200: #E2F2E4;
+    --fk-color-accent-wheat: #E6B422;
+    --fk-color-accent-sky: #3D8BF2;
+    --fk-color-earth: #8D6E63;
+    --fk-color-text: #213127;
+    --fk-color-text-muted: #6B7767;
+    --fk-color-border: #E4E1D7;
+    --fk-color-success: #2E7D32;
+    --fk-color-info: #1976D2;
+    --fk-color-warning: #C77700;
+    --fk-color-danger: #C62828;
+    --fk-color-stress: #E65100;
+    --fk-color-up: #1B8A3A;
+    --fk-color-down: #C62828;
+    --fk-color-neutral: #8D6E63;
+    --fk-shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+    --fk-shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+    --fk-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --fk-radius-card: 16px;
+    --fk-radius-control: 10px;
+
+    /* Shadcn/UI compatibility (mapped to FieldKit colors) */
+    --background: #FAFAF7; /* offwhite */
+    --foreground: #213127; /* text */
+    --card: #F6F3EA; /* surface */
+    --card-foreground: #213127; /* text */
+    --popover: #F6F3EA;
+    --popover-foreground: #213127;
+    --primary: #2E7D32;
+    --primary-foreground: #FFFFFF;
+    --secondary: #E4E1D7;
+    --secondary-foreground: #213127;
+    --muted: #F6F3EA;
+    --muted-foreground: #6B7767;
+    --accent: #E6B422;
+    --accent-foreground: #213127;
+    --destructive: #C62828;
+    --destructive-foreground: #FFFFFF;
+    --border: #E4E1D7;
+    --input: #FFFFFF;
+    --ring: #2E7D32;
+    --radius: 16px;
     
-    /* New gradient colors - Darker Green Theme */
-    --gradient-start: 120 30% 25%;
-    --gradient-end: 140 35% 20%;
-    --gradient-lime: 120 40% 30%;
-    --gradient-emerald: 140 50% 15%;
+    /* Legacy gradient colors for compatibility */
+    --gradient-start: #7F8F73;
+    --gradient-end: #6E7E63;
+    --gradient-lime: #98A78C;
+    --gradient-emerald: #2E7D32;
   }
 
   .dark {

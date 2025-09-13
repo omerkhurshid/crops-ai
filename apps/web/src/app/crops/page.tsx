@@ -78,15 +78,15 @@ export default function CropsPage() {
       
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-12">
-          {/* Simplified Header - More Farmer-Friendly */}
+          {/* FieldKit Header */}
           <div className="text-center max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="text-6xl">🌱</div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-semibold text-sage-800 tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-fk-text tracking-tight">
                   Your Crops
                 </h1>
-                <p className="text-lg text-sage-600 font-normal mt-2">
+                <p className="text-lg text-fk-text-muted font-normal mt-2">
                   Track what's growing and what needs your attention
                 </p>
               </div>

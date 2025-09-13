@@ -65,16 +65,19 @@ const mockNextActions: CropAction[] = [
 
 const priorityConfig = {
   urgent: {
-    color: 'bg-red-100 text-red-800 border-red-200',
-    label: 'Urgent'
+    color: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30',
+    label: 'Urgent',
+    iconBg: 'bg-fk-danger/10'
   },
   due_soon: {
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    label: 'Due Soon'
+    color: 'bg-fk-warning/10 text-fk-warning border-fk-warning/30',
+    label: 'Due Soon',
+    iconBg: 'bg-fk-warning/10'
   },
   upcoming: {
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
-    label: 'Upcoming'
+    color: 'bg-fk-info/10 text-fk-info border-fk-info/30',
+    label: 'Upcoming',
+    iconBg: 'bg-fk-info/10'
   }
 }
 
@@ -96,38 +99,34 @@ export function FarmerFriendlyActionsList({ farmId }: FarmerFriendlyActionsListP
       {mockNextActions.map((action) => (
         <div 
           key={action.id} 
-          className="p-3 bg-white rounded-lg border-2 border-gray-100 hover:border-orange-200 transition-all cursor-pointer"
+          className="p-4 bg-surface rounded-card border border-fk-border hover:border-fk-primary/30 hover:shadow-fk-md transition-all duration-micro cursor-pointer"
         >
           <div className="flex items-start gap-3">
-            <div className={`p-2 rounded-lg ${
-              action.priority === 'urgent' ? 'bg-red-50' : 
-              action.priority === 'due_soon' ? 'bg-yellow-50' : 
-              'bg-blue-50'
-            }`}>
+            <div className={`p-2 rounded-control ${priorityConfig[action.priority].iconBg}`}>
               {action.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-sm text-gray-900 truncate">
+              <h4 className="font-semibold text-sm text-fk-text truncate">
                 {action.action}
               </h4>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-fk-text-muted">
                 {action.cropName} • {action.location}
               </p>
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between">
-            <Badge className={`text-xs ${priorityConfig[action.priority].color}`}>
+          <div className="mt-3 flex items-center justify-between">
+            <Badge className={`text-xs font-medium ${priorityConfig[action.priority].color}`}>
               {getDaysText(action.daysUntil)}
             </Badge>
             {action.priority === 'urgent' && (
-              <span className="text-xs text-red-600 font-medium">Action needed</span>
+              <span className="text-xs text-fk-danger font-semibold">Action needed</span>
             )}
           </div>
         </div>
       ))}
       
       {/* View All Link */}
-      <button className="w-full text-center py-2 text-sm text-sage-600 hover:text-sage-700 font-medium">
+      <button className="w-full text-center py-3 text-sm text-fk-accent-sky hover:text-fk-primary font-semibold transition-colors duration-micro">
         View all tasks →
       </button>
     </div>

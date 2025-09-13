@@ -508,7 +508,7 @@ export function SatelliteMapViewer({
                 </div>
                 {detectedFields.length > 0 && (
                   <div className="text-xs text-green-600">
-                    {detectedFields.length} fields detected • {detectedFields.reduce((sum, f) => sum + f.area, 0).toFixed(1)} acres
+                    {(detectedFields || []).length} fields detected • {(detectedFields || []).reduce((sum, f) => sum + f.area, 0).toFixed(1)} acres
                   </div>
                 )}
                 {boundaryPins.length > 0 && (

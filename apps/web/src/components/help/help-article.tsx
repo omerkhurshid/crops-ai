@@ -311,7 +311,7 @@ export function HelpArticle({
               </ModernCardDescription>
 
               <div className="flex flex-wrap gap-2 mt-4">
-                {tags.map((tag, index) => (
+                {(tags || []).map((tag, index) => (
                   <Badge key={index} variant="secondary">
                     {tag}
                   </Badge>

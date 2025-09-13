@@ -392,8 +392,8 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
               <div>
                 <p className="text-sm font-semibold text-fk-text-muted">Average NDVI</p>
                 <p className="text-2xl font-bold text-fk-success">
-                  {fields.length > 0 
-                    ? (fields.reduce((sum, f) => sum + (f.ndvi || 0), 0) / fields.filter(f => f.ndvi).length).toFixed(2)
+                  {(fields || []).length > 0 
+                    ? ((fields || []).reduce((sum, f) => sum + (f.ndvi || 0), 0) / (fields || []).filter(f => f.ndvi).length).toFixed(2)
                     : 'N/A'}
                 </p>
               </div>
@@ -408,7 +408,7 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
               <div>
                 <p className="text-sm font-semibold text-fk-text-muted">Healthy Fields</p>
                 <p className="text-2xl font-bold text-fk-primary">
-                  {fields.filter(f => f.ndvi && f.ndvi > 0.5).length}/{fields.length}
+                  {(fields || []).filter(f => f.ndvi && f.ndvi > 0.5).length}/{(fields || []).length}
                 </p>
               </div>
               <Activity className="h-8 w-8 text-fk-primary" />
@@ -422,7 +422,7 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
               <div>
                 <p className="text-sm font-semibold text-fk-text-muted">Stressed Areas</p>
                 <p className="text-2xl font-bold text-fk-warning">
-                  {fields.filter(f => f.stressLevel && f.stressLevel !== 'none' && f.stressLevel !== 'low').length}
+                  {(fields || []).filter(f => f.stressLevel && f.stressLevel !== 'none' && f.stressLevel !== 'low').length}
                 </p>
               </div>
               <AlertTriangle className="h-8 w-8 text-fk-warning" />

@@ -199,7 +199,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                   <div className="text-sm text-sage-600 mb-3">
                     {results.length} article{results.length !== 1 ? 's' : ''} found
                   </div>
-                  {results.map((article) => (
+                  {(results || []).map((article) => (
                     <button
                       key={article.id}
                       onClick={() => handleArticleClick(article)}
@@ -219,7 +219,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                           <Badge variant="outline" className="text-xs">
                             {article.section}
                           </Badge>
-                          {article.tags.slice(0, 2).map((tag, index) => (
+                          {(article.tags || []).slice(0, 2).map((tag, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
@@ -248,7 +248,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                 <div className="mt-4 pt-4 border-t border-sage-200">
                   <div className="text-sm text-sage-600 mb-2">Recent searches</div>
                   <div className="flex flex-wrap gap-2">
-                    {recentSearches.map((term, index) => (
+                    {(recentSearches || []).map((term, index) => (
                       <button
                         key={index}
                         onClick={() => handleSearch(term)}

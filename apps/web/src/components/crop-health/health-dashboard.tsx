@@ -263,10 +263,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {Math.round(fields.reduce((sum, f) => sum + f.healthScore, 0) / fields.length)}%
+              {Math.round((fields || []).reduce((sum, f) => sum + f.healthScore, 0) / (fields || []).length)}%
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Average across {fields.length} fields
+              Average across {(fields || []).length} fields
             </p>
           </CardContent>
         </Card>
@@ -280,7 +280,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-600">
-              {fields.reduce((sum, f) => sum + f.zones.stressed.percentage, 0).toFixed(1)}%
+              {(fields || []).reduce((sum, f) => sum + f.zones?.stressed?.percentage || 0, 0).toFixed(1)}%
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Requiring attention
@@ -297,7 +297,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {(fields.reduce((sum, f) => sum + f.indices.ndvi, 0) / fields.length).toFixed(2)}
+              {((fields || []).reduce((sum, f) => sum + f.indices?.ndvi || 0, 0) / (fields || []).length).toFixed(2)}
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Vegetation index
@@ -314,7 +314,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">
-              {fields.reduce((sum, f) => sum + f.area, 0).toFixed(1)} ha
+              {(fields || []).reduce((sum, f) => sum + f.area, 0).toFixed(1)} ha
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Under monitoring

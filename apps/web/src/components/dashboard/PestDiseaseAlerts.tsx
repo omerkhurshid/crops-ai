@@ -33,6 +33,7 @@ import {
   Wind,
   Eye
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface PestThreat {
   name: string
@@ -311,7 +312,7 @@ export default function PestDiseaseAlerts({
 
           {/* Threat Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(prediction.threats || []).slice(0, 4).map((threat, index) => (
+            {ensureArray(prediction.threats).slice(0, 4).map((threat, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer" 
                     onClick={() => setSelectedThreat(threat)}>
                 <CardHeader className="pb-3">

@@ -13,6 +13,7 @@ import {
   Satellite, TrendingUp, MapPin, Calendar, BarChart3,
   AlertTriangle, CheckCircle, RefreshCw, Settings, Download
 } from 'lucide-react'
+import { ensureArray } from '../../../lib/utils'
 
 interface Farm {
   id: string
@@ -34,7 +35,7 @@ export default function SatelliteHealthPage() {
         const response = await fetch('/api/farms')
         if (response.ok) {
           const data = await response.json()
-          setFarms(data.farms || [])
+          setFarms(ensureArray(data.farms))
           if (data.farms && data.farms.length > 0) {
             setSelectedFarmId(data.farms[0].id)
           }

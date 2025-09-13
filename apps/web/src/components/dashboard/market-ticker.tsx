@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown } from 'lucide-react'
-import { cn } from '../../lib/utils'
+import { cn, ensureArray } from '../../lib/utils'
 
 interface MarketPrice {
   commodity: string
@@ -68,7 +68,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
     )}>
       <div className="animate-scroll-left flex gap-6 px-4 py-2 text-sm">
         {/* Duplicate for seamless scroll */}
-        {[...(prices || []), ...(prices || [])].map((price, index) => (
+        {[...ensureArray(prices), ...ensureArray(prices)].map((price, index) => (
           <div key={index} className="flex items-center gap-2 whitespace-nowrap">
             <span className="font-medium text-sage-800">{price.commodity}:</span>
             <span className="font-semibold text-sage-900">

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { cn } from '../../lib/utils'
+import { cn, ensureArray } from '../../lib/utils'
 import { 
   AlertTriangle, 
   Clock, 
@@ -92,8 +92,8 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
 
       {/* Urgent Task Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {(tasks || []).slice(0, 2).map((task) => {
-          const config = categoryConfig[task.category]
+        {ensureArray(tasks).slice(0, 2).map((task) => {
+          const config = categoryConfig[task.category as keyof typeof categoryConfig] || categoryConfig.health
           const Icon = config.icon
           
           return (
@@ -197,8 +197,8 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
         </div>
       </div>
 
-      {(tasks || []).slice(0, 2).map((task) => {
-        const config = categoryConfig[task.category]
+      {ensureArray(tasks).slice(0, 2).map((task) => {
+        const config = categoryConfig[task.category as keyof typeof categoryConfig] || categoryConfig.health
         const Icon = config.icon
         
         return (

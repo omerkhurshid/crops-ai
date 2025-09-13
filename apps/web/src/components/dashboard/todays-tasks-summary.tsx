@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ArrowRight
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface Task {
   id: string
@@ -145,7 +146,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
 
   return (
     <div className="space-y-4">
-      {(todaysTasks || []).map((task) => (
+      {ensureArray(todaysTasks).map((task) => (
         <ModernCard 
           key={task.id} 
           variant="soft" 
@@ -160,7 +161,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
                     task.priority === 'high' ? 'bg-orange-50' :
                     'bg-blue-50'
                   }`}>
-                    {categoryIcons[task.category]}
+                    {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
                   </div>
                   
                   <div className="flex-1 min-w-0">
@@ -173,11 +174,11 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
                     
                     {/* Task Meta */}
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className={`text-xs ${priorityConfig[task.priority].color}`}>
-                        {priorityConfig[task.priority].label}
+                      <Badge className={`text-xs ${priorityConfig[task.priority as keyof typeof priorityConfig]?.color || ''}`}>
+                        {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
                       </Badge>
-                      <Badge className={`text-xs ${statusConfig[task.status].color}`}>
-                        {statusConfig[task.status].label}
+                      <Badge className={`text-xs ${statusConfig[task.status as keyof typeof statusConfig]?.color || ''}`}>
+                        {statusConfig[task.status as keyof typeof statusConfig]?.label || task.status}
                       </Badge>
                       {task.assignedToName && (
                         <div className="text-xs text-sage-500">

@@ -153,6 +153,19 @@ export default async function DashboardPage() {
 
     const { farms, weatherAlerts, financialData, marketPrices } = await getFarmData(user.id)
     
+    // Get crops and livestock data
+    const [crops, livestock] = await Promise.all([
+      prisma.crop.findMany({
+        where: { userId: user.id },
+        orderBy: { plantedDate: 'desc' }
+      }).catch(() => []),
+      
+      prisma.livestock.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' }
+      }).catch(() => [])
+    ])
+    
     // Calculate key metrics
     const totalFarms = farms.length
     const totalArea = ensureArray(farms).reduce((sum, farm) => sum + (farm.totalArea || 0), 0)
@@ -221,7 +234,14 @@ export default async function DashboardPage() {
       <DashboardLayout>
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           {/* Use the new farmer-friendly dashboard */}
-          <FarmerDashboard farmId={farms[0]?.id || 'default'} />
+          <FarmerDashboard 
+            farmId={farms[0]?.id || 'default'}
+            farmData={farms[0]}
+            financialData={financialData}
+            weatherAlerts={weatherAlerts}
+            crops={crops}
+            livestock={livestock}
+          />
         </div>
 
         {/* Global Floating Action Button */}

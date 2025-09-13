@@ -181,6 +181,13 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   const uniqueCrops = Array.from(new Set(ensureArray(plannings).map(p => p.cropName)))
   const uniqueLocations = Array.from(new Set(ensureArray(plannings).map(p => p.location)))
   
+  // Filter plannings based on selected filters
+  const filteredPlannings = yearPlannings.filter(planning => {
+    const matchesCrop = selectedCrop === 'all' || planning.cropName === selectedCrop
+    const matchesLocation = selectedLocation === 'all' || planning.location === selectedLocation
+    return matchesCrop && matchesLocation
+  })
+  
   // Calculate summary statistics
   const totalPlanned = filteredPlannings.filter(p => p.status === 'planned').length
   const growingNow = filteredPlannings.filter(p => p.status === 'growing').length
@@ -192,13 +199,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   }).length
   
   const attentionItems = getAttentionItems(filteredPlannings)
-
-  // Filter plannings based on selected filters
-  const filteredPlannings = yearPlannings.filter(planning => {
-    const matchesCrop = selectedCrop === 'all' || planning.cropName === selectedCrop
-    const matchesLocation = selectedLocation === 'all' || planning.location === selectedLocation
-    return matchesCrop && matchesLocation
-  })
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)

@@ -5,9 +5,11 @@ import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status'
 import { 
   Sun, CloudRain, TrendingUp, TrendingDown, MapPin, 
-  DollarSign, Thermometer, Droplets, Wind, AlertTriangle
+  DollarSign, Thermometer, Droplets, Wind, AlertTriangle,
+  Sprout, Scissors, Heart, Plus, Link
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import Link from 'next/link'
 
 interface MorningBriefingProps {
   farmName: string
@@ -41,6 +43,12 @@ interface MorningBriefingProps {
   }
   urgentTasksCount: number
   className?: string
+  plantingsCount?: number
+  readyToHarvestCount?: number
+  fieldsNeedingAttention?: string[]
+  livestockCount?: number
+  livestockHealthStatus?: 'good' | 'warning' | 'critical'
+  lastSatelliteUpdate?: Date
 }
 
 const weatherIcons = {
@@ -60,7 +68,13 @@ export function MorningBriefing({
   weather,
   financials,
   urgentTasksCount,
-  className
+  className,
+  plantingsCount = 0,
+  readyToHarvestCount = 0,
+  fieldsNeedingAttention = [],
+  livestockCount = 0,
+  livestockHealthStatus = 'good',
+  lastSatelliteUpdate
 }: MorningBriefingProps) {
   const WeatherIcon = weatherIcons[weather.current.icon]
   const healthStatus = getHealthStatus(overallHealth)
@@ -77,7 +91,7 @@ export function MorningBriefing({
       <ModernCardContent className="p-0">
         {/* Header */}
         <div className="bg-gradient-to-r from-sage-700 to-earth-700 text-white p-6 pb-4">
-          <h1 className="text-2xl font-bold mb-2">{greeting()}! 👋</h1>
+          <h1 className="text-2xl font-bold mb-2">{greeting()}!</h1>
           <div className="flex items-center gap-2 text-sage-100">
             <MapPin className="h-4 w-4" />
             <span>{farmName} • {totalAcres} acres</span>
@@ -95,34 +109,90 @@ export function MorningBriefing({
                 Farm Status
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <TrafficLightStatus status={healthStatus} size="sm" showIcon={true} />
-                    <span className="text-sm text-sage-700">Overall Health</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="font-semibold text-sage-800">{overallHealth}%</span>
+                {/* Health Summary */}
+                <div className="p-3 bg-sage-50 rounded-lg border border-sage-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-sage-700">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm text-sage-700">Areas Needing Attention</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="font-semibold text-sage-800">{stressedAreas}%</span>
-                    <TrendIndicator value={stressTrend} />
+                    <div className={cn(
+                      'text-2xl font-bold',
+                      overallHealth >= 80 ? 'text-green-700' : 
+                      overallHealth >= 60 ? 'text-yellow-700' : 
+                      overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
+                    )}>
+                      {overallHealth}%
+                    </div>
+                    <span className={cn(
+                      'text-xs font-medium px-2 py-1 rounded-full',
+                      overallHealth >= 80 ? 'bg-green-100 text-green-700' : 
+                      overallHealth >= 60 ? 'bg-yellow-100 text-yellow-700' : 
+                      overallHealth >= 40 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
+                    )}>
+                      {overallHealth >= 80 ? 'Excellent' : 
+                       overallHealth >= 60 ? 'Good' : 
+                       overallHealth >= 40 ? 'Average' : 'Critical'}
+                    </span>
                   </div>
                 </div>
 
-                {urgentTasksCount > 0 && (
-                  <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                {/* Crop Stats */}
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <Sprout className="h-3.5 w-3.5 text-green-600" />
+                      <span className="text-sage-700">Plantings</span>
+                    </div>
+                    <span className="font-semibold text-sage-800">{plantingsCount}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <Scissors className="h-3.5 w-3.5 text-orange-600" />
+                      <span className="text-sage-700">Ready</span>
+                    </div>
+                    <span className="font-semibold text-sage-800">{readyToHarvestCount}</span>
+                  </div>
+                </div>
+
+                {/* Fields Needing Attention */}
+                {fieldsNeedingAttention.length > 0 && (
+                  <div className="mt-2">
+                    <div className="text-xs font-medium text-sage-600 mb-1">Fields needing attention:</div>
+                    <div className="flex flex-wrap gap-1">
+                      {fieldsNeedingAttention.slice(0, 3).map((field, i) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">
+                          {field}
+                        </span>
+                      ))}
+                      {fieldsNeedingAttention.length > 3 && (
+                        <Link href="/ai-insights" className="text-xs px-2 py-1 bg-sage-100 text-sage-700 rounded-full hover:bg-sage-200">
+                          +{fieldsNeedingAttention.length - 3} more →
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Livestock Status */}
+                {livestockCount > 0 && (
+                  <div className="flex items-center justify-between pt-2 border-t border-sage-200">
                     <div className="flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-red-600" />
-                      <span className="text-sm font-medium text-red-800">
-                        {urgentTasksCount} urgent task{urgentTasksCount > 1 ? 's' : ''} waiting
+                      <Heart className={cn(
+                        "h-4 w-4",
+                        livestockHealthStatus === 'good' ? 'text-green-600' :
+                        livestockHealthStatus === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                      )} />
+                      <span className="text-sm text-sage-700">Livestock</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-sage-800">{livestockCount} head</span>
+                      <span className={cn(
+                        'text-xs px-2 py-0.5 rounded-full',
+                        livestockHealthStatus === 'good' ? 'bg-green-100 text-green-700' :
+                        livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                      )}>
+                        {livestockHealthStatus}
                       </span>
                     </div>
                   </div>
@@ -203,15 +273,12 @@ export function MorningBriefing({
                 </div>
 
                 <div className="pt-3 border-t border-sage-200">
-                  <div className="text-xs font-medium text-sage-600 mb-1">Quick Actions</div>
-                  <div className="flex gap-2">
-                    <button className="text-xs px-3 py-1.5 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
-                      + Income
+                  <Link href="/financials">
+                    <button className="w-full flex items-center justify-center gap-2 text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
+                      <Plus className="h-4 w-4" />
+                      Add Transaction
                     </button>
-                    <button className="text-xs px-3 py-1.5 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
-                      + Expense
-                    </button>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -226,12 +293,17 @@ export function MorningBriefing({
                   <span className="text-sage-600">All systems operational</span>
                 </div>
                 <div className="text-sage-500">
-                  Last satellite update: 2 hours ago
+                  Last satellite update: {lastSatelliteUpdate ? 
+                    getTimeAgo(lastSatelliteUpdate) : 
+                    'No recent updates'
+                  }
                 </div>
               </div>
-              <button className="text-sm text-sage-700 hover:text-sage-800 font-medium">
-                View detailed analytics →
-              </button>
+              <Link href="/crop-health">
+                <button className="text-sm text-sage-700 hover:text-sage-800 font-medium">
+                  View detailed analytics →
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -263,4 +335,21 @@ function TrendIndicator({
       </span>
     </div>
   )
+}
+
+// Helper function to get time ago
+function getTimeAgo(date: Date): string {
+  const now = new Date()
+  const diffInMs = now.getTime() - date.getTime()
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
+  const diffInDays = Math.floor(diffInHours / 24)
+  
+  if (diffInDays > 0) {
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
+  } else if (diffInHours > 0) {
+    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
+  } else {
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
+    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`
+  }
 }

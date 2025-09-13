@@ -8,6 +8,7 @@ import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-sta
 import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { prisma } from '../../lib/prisma'
+import { FarmFieldsMap } from '../../components/farm/farm-fields-map'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,6 +22,14 @@ async function getUserFarms(userId: string) {
             id: true,
             name: true,
             email: true
+          }
+        },
+        fields: {
+          select: {
+            id: true,
+            name: true,
+            area: true,
+            cropType: true
           }
         },
         _count: {
@@ -43,6 +52,7 @@ async function getUserFarms(userId: string) {
       country: farm.country,
       location: farm.location,
       fieldsCount: farm._count.fields,
+      fields: farm.fields,
       createdAt: farm.createdAt,
       updatedAt: farm.updatedAt,
       owner: farm.owner
@@ -148,6 +158,11 @@ export default async function FarmsPage() {
               <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Geographic coverage</div>
             </div>
           </div>
+
+          {/* Farm Fields Map */}
+          {userFarms.length > 0 && (
+            <FarmFieldsMap farms={userFarms} />
+          )}
 
           {/* Farms Grid - Mobile Optimized */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">

@@ -116,14 +116,30 @@ const statusConfig = {
 }
 
 export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
-  // Filter tasks for today - high priority, urgent, or due today
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  
+  // Filter tasks for today
   const todaysTasks = mockTasks.filter(task => {
-    const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
-    const isInProgress = task.status === 'in_progress'
-    const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === new Date().toDateString()
+    if (task.status === 'done') return false
     
-    return (isHighPriority || isInProgress || isDueToday) && task.status !== 'done'
-  }).slice(0, 3) // Show top 3 tasks
+    const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
+    const isInProgress = task.status === 'in_progress'
+    const isOverdue = task.dueDate && new Date(task.dueDate) < today
+    
+    return isDueToday || isInProgress || isOverdue
+  }).slice(0, 5)
+  
+  // Filter tasks for tomorrow
+  const tomorrowsTasks = mockTasks.filter(task => {
+    if (task.status === 'done') return false
+    
+    const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
+    const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
+    
+    return isDueTomorrow || (isHighPriority && !task.dueDate)
+  }).slice(0, 5)
 
   const getDaysUntilDue = (dueDate: string) => {
     const due = new Date(dueDate)
@@ -144,110 +160,101 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
     return `${hours} hours`
   }
 
-  return (
-    <div className="space-y-4">
-      {ensureArray(todaysTasks).map((task) => (
-        <ModernCard 
-          key={task.id} 
-          variant="soft" 
-          className="hover:shadow-md transition-all duration-200 cursor-pointer border-l-4 border-l-orange-400"
-        >
-          <ModernCardContent className="p-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-lg ${
-                    task.priority === 'urgent' ? 'bg-red-50' :
-                    task.priority === 'high' ? 'bg-orange-50' :
-                    'bg-blue-50'
-                  }`}>
-                    {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sage-900 text-sm mb-1 truncate">
-                      {task.title}
-                    </h4>
-                    <p className="text-xs text-sage-600 mb-2 line-clamp-2">
-                      {task.description}
-                    </p>
-                    
-                    {/* Task Meta */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge className={`text-xs ${priorityConfig[task.priority as keyof typeof priorityConfig]?.color || ''}`}>
-                        {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
-                      </Badge>
-                      <Badge className={`text-xs ${statusConfig[task.status as keyof typeof statusConfig]?.color || ''}`}>
-                        {statusConfig[task.status as keyof typeof statusConfig]?.label || task.status}
-                      </Badge>
-                      {task.assignedToName && (
-                        <div className="text-xs text-sage-500">
-                          → {task.assignedToName}
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Due date and time estimate */}
-                    <div className="flex items-center gap-4 text-xs text-sage-500">
-                      {task.dueDate && (
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          <span className={
-                            getDaysUntilDue(task.dueDate).includes('Overdue') || getDaysUntilDue(task.dueDate) === 'Due today'
-                              ? 'text-red-600 font-medium'
-                              : ''
-                          }>
-                            {getDaysUntilDue(task.dueDate)}
-                          </span>
-                        </div>
-                      )}
-                      {task.estimatedHours && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          <span>~{formatEstimatedTime(task.estimatedHours)}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <Button variant="ghost" size="sm" className="flex-shrink-0 ml-2">
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </ModernCardContent>
-        </ModernCard>
-      ))}
-      
-      {todaysTasks.length === 0 && (
-        <ModernCard variant="soft" className="text-center">
-          <ModernCardContent className="p-8">
-            <div className="text-4xl mb-4">🎉</div>
-            <h4 className="font-semibold text-sage-800 mb-2">All caught up!</h4>
-            <p className="text-sage-600 text-sm mb-4">
-              No urgent tasks for today. Great work staying on top of your farm operations!
-            </p>
-            <Link href="/tasks">
-              <Button variant="outline" size="sm">
-                View All Tasks
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </ModernCardContent>
-        </ModernCard>
-      )}
-      
-      {todaysTasks.length > 0 && (
-        <div className="text-center">
-          <Link href="/tasks">
-            <Button variant="outline" className="w-full">
-              View Complete Task Board
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </Link>
+  const TaskCard = ({ task }: { task: Task }) => (
+    <div className="bg-white/50 rounded-lg border border-sage-200 p-3 hover:shadow-sm transition-all duration-200 cursor-pointer">
+      <div className="flex items-start gap-2">
+        <div className={`p-1.5 rounded ${
+          task.priority === 'urgent' ? 'bg-red-100' :
+          task.priority === 'high' ? 'bg-orange-100' :
+          'bg-blue-100'
+        }`}>
+          {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
         </div>
-      )}
+        
+        <div className="flex-1 min-w-0">
+          <h4 className="font-medium text-sage-900 text-sm mb-1 truncate">
+            {task.title}
+          </h4>
+          
+          <div className="flex items-center gap-2 mb-1">
+            <Badge className={`text-xs px-1.5 py-0.5 ${priorityConfig[task.priority as keyof typeof priorityConfig]?.color || ''}`}>
+              {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
+            </Badge>
+            {task.assignedToName && (
+              <span className="text-xs text-sage-500">{task.assignedToName}</span>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-3 text-xs text-sage-500">
+            {task.dueDate && (
+              <span className={
+                getDaysUntilDue(task.dueDate).includes('Overdue') ? 'text-red-600 font-medium' : ''
+              }>
+                {getDaysUntilDue(task.dueDate)}
+              </span>
+            )}
+            {task.estimatedHours && (
+              <span>~{formatEstimatedTime(task.estimatedHours)}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Today's Tasks */}
+      <div>
+        <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
+          <Calendar className="h-5 w-5 text-sage-600" />
+          Today
+          <span className="text-sm font-normal text-sage-600">({todaysTasks.length} tasks)</span>
+        </h3>
+        <div className="space-y-3">
+          {todaysTasks.length > 0 ? (
+            ensureArray(todaysTasks).map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))
+          ) : (
+            <div className="text-center py-8 bg-sage-50 rounded-lg border border-sage-200">
+              <div className="text-2xl mb-2">✅</div>
+              <p className="text-sage-600 text-sm">No tasks due today!</p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Tomorrow's Tasks */}
+      <div>
+        <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
+          <Calendar className="h-5 w-5 text-sage-600" />
+          Tomorrow
+          <span className="text-sm font-normal text-sage-600">({tomorrowsTasks.length} tasks)</span>
+        </h3>
+        <div className="space-y-3">
+          {tomorrowsTasks.length > 0 ? (
+            ensureArray(tomorrowsTasks).map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))
+          ) : (
+            <div className="text-center py-8 bg-sage-50 rounded-lg border border-sage-200">
+              <div className="text-2xl mb-2">🌟</div>
+              <p className="text-sage-600 text-sm">Clear schedule tomorrow!</p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* View All Tasks Button */}
+      <div className="md:col-span-2 text-center mt-4">
+        <Link href="/tasks">
+          <Button variant="outline" className="w-full md:w-auto">
+            View Complete Task Board
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }

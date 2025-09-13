@@ -273,7 +273,7 @@ export function MorningBriefing({
                 </div>
 
                 <div className="pt-3 border-t border-sage-200">
-                  <Link href="/financials">
+                  <Link href="/financial">
                     <button className="w-full flex items-center justify-center gap-2 text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
                       <Plus className="h-4 w-4" />
                       Add Transaction

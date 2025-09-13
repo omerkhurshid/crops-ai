@@ -157,8 +157,29 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
         const response = await fetch(`/api/crops?farmId=${farmId}&year=${currentYear}`)
         if (response.ok) {
           const data = await response.json()
-          // Transform API data to component format if needed
-          setPlannings(data)
+          // Transform API data from Crop entities to CropPlanning format
+          const transformedData = data.map((crop: any): CropPlanning => ({
+            id: crop.id,
+            cropName: crop.cropType || 'Unknown Crop',
+            variety: crop.variety || '',
+            location: crop.field?.name || 'Unknown Field',
+            bedNumber: crop.field?.name || '',
+            plantedQuantity: crop.field?.area || 0,
+            unit: 'acres' as const,
+            startDate: crop.plantingDate || crop.createdAt,
+            plantDate: crop.plantingDate || crop.createdAt,
+            harvestDate: crop.expectedHarvestDate || crop.actualHarvestDate || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+            estimatedYield: crop.yield || 0,
+            yieldUnit: 'kg/ha',
+            status: crop.status?.toLowerCase() === 'planned' ? 'planned' :
+                   crop.status?.toLowerCase() === 'planted' ? 'planted' :
+                   crop.status?.toLowerCase() === 'growing' ? 'growing' :
+                   crop.status?.toLowerCase() === 'ready_to_harvest' ? 'harvesting' :
+                   crop.status?.toLowerCase() === 'harvested' ? 'completed' :
+                   'planned',
+            notes: `Field: ${crop.field?.name || 'Unknown'}, Area: ${crop.field?.area || 0} acres`
+          }))
+          setPlannings(transformedData)
         }
       } catch (error) {
         console.error('Failed to fetch crop planning data:', error)

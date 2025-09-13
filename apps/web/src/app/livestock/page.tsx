@@ -6,6 +6,7 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InfoTooltip } from '../../components/ui/info-tooltip'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Users, Plus, Stethoscope, Heart, Activity, TrendingUp } from 'lucide-react'
+import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +16,58 @@ export default async function LivestockPage() {
   if (!user) {
     redirect('/login')
   }
+
+  // Get real livestock data from database
+  const [livestockEvents, animals] = await Promise.all([
+    prisma.livestockEvent.findMany({
+      where: {
+        farm: {
+          ownerId: user.id
+        }
+      },
+      include: {
+        farm: {
+          select: {
+            name: true
+          }
+        }
+      }
+    }),
+    // Check if we have any animals (you might need to create this table)
+    // For now, we'll calculate stats from livestockEvent data
+    prisma.livestockEvent.groupBy({
+      by: ['animalId'],
+      where: {
+        farm: {
+          ownerId: user.id
+        }
+      }
+    })
+  ])
+
+  // Calculate real statistics
+  const totalAnimals = animals.length
+  const healthEvents = livestockEvents.filter(event => event.eventType?.includes('health'))
+  const healthAlerts = healthEvents.filter(event => event.notes?.toLowerCase().includes('alert') || event.notes?.toLowerCase().includes('sick')).length
+  
+  // Calculate health score based on recent events
+  const recentHealthEvents = healthEvents.filter(event => {
+    const eventDate = new Date(event.date)
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    return eventDate >= thirtyDaysAgo
+  })
+  
+  const healthScore = totalAnimals > 0 ? 
+    Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 10
+  
+  // Calculate average daily gain from weight events
+  const weightEvents = livestockEvents.filter(event => event.eventType?.includes('weight'))
+  const avgDailyGain = weightEvents.length > 0 ? 
+    weightEvents.reduce((sum, event) => {
+      const weight = parseFloat(event.notes || '0')
+      return sum + (isNaN(weight) ? 0 : weight)
+    }, 0) / weightEvents.length : 0
 
   return (
     <DashboardLayout>
@@ -69,7 +122,7 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-blue-600 mb-2">247</div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">{totalAnimals || 0}</div>
                 <div className="text-sm text-blue-600">animals registered</div>
               </div>
             </ModernCardContent>
@@ -90,8 +143,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-green-600 mb-2">8.7/10</div>
-                <div className="text-sm text-green-600">excellent condition</div>
+                <div className="text-3xl font-bold text-green-600 mb-2">{totalAnimals > 0 ? `${healthScore.toFixed(1)}/10` : '--'}</div>
+                <div className="text-sm text-green-600">{totalAnimals > 0 ? (healthScore >= 8 ? 'excellent condition' : healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -111,8 +164,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-orange-600 mb-2">3</div>
-                <div className="text-sm text-orange-600">require attention</div>
+                <div className="text-3xl font-bold text-orange-600 mb-2">{healthAlerts || 0}</div>
+                <div className="text-sm text-orange-600">{healthAlerts === 1 ? 'requires attention' : 'require attention'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -132,7 +185,7 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-purple-600 mb-2">2.3kg</div>
+                <div className="text-3xl font-bold text-purple-600 mb-2">{avgDailyGain > 0 ? `${avgDailyGain.toFixed(1)}kg` : '--'}</div>
                 <div className="text-sm text-purple-600">daily average</div>
               </div>
             </ModernCardContent>

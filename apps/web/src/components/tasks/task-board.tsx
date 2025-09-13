@@ -92,7 +92,9 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
     description: '',
     priority: 'medium' as Task['priority'],
     category: '',
-    dueDate: ''
+    dueDate: '',
+    tags: [] as string[],
+    assignedTo: ''
   })
 
   // Fetch tasks from API
@@ -170,8 +172,7 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...newTask,
-          farmId: farmId,
-          tags: []
+          farmId: farmId
         })
       })
       
@@ -183,7 +184,9 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           description: '',
           priority: 'medium',
           category: '',
-          dueDate: ''
+          dueDate: '',
+          tags: [],
+          assignedTo: ''
         })
         setShowAddForm(false)
       }
@@ -371,7 +374,27 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                 </div>
                               )}
 
-                              {/* Assignment - Will be added when user assignment is implemented */}
+                              {/* Tags */}
+                              {task.tags && task.tags.length > 0 && (
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  {task.tags.map((tag, index) => (
+                                    <Badge 
+                                      key={index} 
+                                      className="text-xs bg-fk-primary/10 text-fk-primary border-fk-primary/30"
+                                    >
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Assignment */}
+                              {(task as any).assignedTo && (
+                                <div className="flex items-center gap-2 text-xs text-fk-text-muted">
+                                  <User className="h-3 w-3" />
+                                  <span>Assigned to {(task as any).assignedTo}</span>
+                                </div>
+                              )}
                             </CardContent>
                           </Card>
                         )}
@@ -459,6 +482,30 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
                   className="mt-1 rounded-control border-fk-border"
                 />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="assignedTo" className="text-sm font-semibold text-fk-text">Assigned To</Label>
+                  <Input
+                    id="assignedTo"
+                    value={newTask.assignedTo}
+                    onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}
+                    placeholder="Enter owner name..."
+                    className="mt-1 rounded-control border-fk-border"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="tags" className="text-sm font-semibold text-fk-text">Tags</Label>
+                  <Input
+                    id="tags"
+                    value={newTask.tags.join(', ')}
+                    onChange={(e) => setNewTask({...newTask, tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)})}
+                    placeholder="urgent, field1, irrigation..."
+                    className="mt-1 rounded-control border-fk-border"
+                  />
+                </div>
               </div>
               
               <div className="flex gap-3 pt-4">

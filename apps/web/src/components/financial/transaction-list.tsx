@@ -50,6 +50,7 @@ interface Transaction {
 
 interface TransactionListProps {
   farmId: string;
+  fieldId?: string;
   onRefresh: () => void;
 }
 
@@ -72,7 +73,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   OTHER_EXPENSE: 'Other Expenses',
 };
 
-export function TransactionList({ farmId, onRefresh }: TransactionListProps) {
+export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -103,6 +104,10 @@ export function TransactionList({ farmId, onRefresh }: TransactionListProps) {
         offset: ((currentPage - 1) * itemsPerPage).toString(),
       });
 
+      if (fieldId) {
+        params.append('fieldId', fieldId);
+      }
+
       if (typeFilter !== 'all') {
         params.append('type', typeFilter);
       }
@@ -127,7 +132,7 @@ export function TransactionList({ farmId, onRefresh }: TransactionListProps) {
 
   useEffect(() => {
     fetchTransactions();
-  }, [farmId, currentPage, typeFilter, categoryFilter]);
+  }, [farmId, fieldId, currentPage, typeFilter, categoryFilter]);
 
   const handleDelete = async (transactionId: string) => {
     if (!confirm('Are you sure you want to delete this transaction?')) {

@@ -19,6 +19,8 @@ import {
   AlertCircle,
   Target,
 } from 'lucide-react';
+import { FarmFinancialOverview } from './farm-financial-overview';
+import { FieldFinancialDashboard } from './field-financial-dashboard';
 import { SeasonSnapshot } from './season-snapshot';
 import { TransactionList } from './transaction-list';
 import { TransactionModal } from './transaction-modal';
@@ -54,6 +56,8 @@ interface FinancialDashboardProps {
 export function FinancialDashboard({ farm, initialData }: FinancialDashboardProps) {
   const [summary, setSummary] = useState<FinancialSummary | null>(initialData || null);
   const [loading, setLoading] = useState(!initialData);
+  const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
+  const [selectedField, setSelectedField] = useState<any>(null);
   const [dateRange, setDateRange] = useState({
     start: new Date(new Date().getFullYear(), 0, 1), // Start of current year
     end: new Date(),
@@ -116,6 +120,28 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
     fetchSummary(); // Refresh summary
   };
 
+  const handleFieldSelect = async (fieldId: string) => {
+    try {
+      // Fetch field details
+      const response = await fetch(`/api/fields?farmId=${farm.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        const field = data.fields.find((f: any) => f.id === fieldId);
+        if (field) {
+          setSelectedField(field);
+          setSelectedFieldId(fieldId);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching field details:', error);
+    }
+  };
+
+  const handleBackToFarmOverview = () => {
+    setSelectedFieldId(null);
+    setSelectedField(null);
+  };
+
   if (loading && !summary) {
     return (
       <div className="p-6">
@@ -131,140 +157,24 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
     );
   }
 
+  // Show field-level dashboard if a field is selected
+  if (selectedFieldId && selectedField) {
+    return (
+      <FieldFinancialDashboard
+        field={selectedField}
+        onBack={handleBackToFarmOverview}
+      />
+    );
+  }
+
+  // Show farm-level overview by default
   return (
     <div className="space-y-6">
-      {/* Enhanced Header with Currency Selector */}
-      <div className="polished-card card-golden rounded-2xl p-6 text-white">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Financial Dashboard</h1>
-            <p className="text-white/90">{farm.name} • {farm.totalArea.toFixed(1)} hectares</p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
-              <select
-                value={selectedCurrency}
-                onChange={(e) => setSelectedCurrency(e.target.value)}
-                className="bg-transparent border-0 text-white font-medium focus:outline-none cursor-pointer"
-              >
-                {currencies.map((currency) => (
-                  <option key={currency.code} value={currency.code} className="text-gray-900 bg-white">
-                    {currency.symbol} {currency.code}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <InlineFloatingButton
-              onClick={() => handleAddTransaction('INCOME')}
-              icon={<Plus className="h-4 w-4" />}
-              label="Income"
-              showLabel={true}
-              variant="secondary"
-              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-            />
-            
-            <InlineFloatingButton
-              onClick={() => handleAddTransaction('EXPENSE')}
-              icon={<Plus className="h-4 w-4" />}
-              label="Expense"
-              showLabel={true}
-              variant="ghost"
-              className="text-white border-white/30 hover:bg-white/10"
-            />
-            
-            <InlineFloatingButton
-              icon={<Upload className="h-4 w-4" />}
-              label="Import"
-              variant="ghost"
-              className="text-white border-white/30 hover:bg-white/10"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Season Snapshot */}
-      {summary && (
-        <SeasonSnapshot
-          summary={summary}
-          farm={farm}
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-        />
-      )}
-
-      {/* Main Content Tabs */}
-      <Tabs defaultValue="simple" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="simple" className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
-            Simple View
-          </TabsTrigger>
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Detailed
-          </TabsTrigger>
-          <TabsTrigger value="transactions" className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Transactions
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
-            <PieChart className="h-4 w-4" />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="forecast" className="flex items-center gap-2">
-            <Target className="h-4 w-4" />
-            Forecast
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="simple" className="space-y-8">
-          <SimplifiedFinancialMetrics farm={farm} />
-          <SimpleCashFlowForecast farm={farm} />
-        </TabsContent>
-
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* P&L Summary Table */}
-            {summary && (
-              <PLSummaryTable
-                summary={summary}
-                farmId={farm.id}
-                dateRange={dateRange}
-              />
-            )}
-            
-            {/* Trends Chart */}
-            <TrendChart
-              farmId={farm.id}
-              dateRange={dateRange}
-            />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="transactions">
-          <TransactionList
-            farmId={farm.id}
-            onRefresh={fetchSummary}
-          />
-        </TabsContent>
-
-        <TabsContent value="analytics">
-          <AnalyticsView
-            farmId={farm.id}
-            dateRange={dateRange}
-          />
-        </TabsContent>
-
-        <TabsContent value="forecast">
-          <ForecastView
-            farmId={farm.id}
-            onRefresh={fetchSummary}
-          />
-        </TabsContent>
-      </Tabs>
+      <FarmFinancialOverview
+        farm={farm}
+        onFieldSelect={handleFieldSelect}
+        onAddTransaction={() => handleAddTransaction('INCOME')}
+      />
 
       {/* Transaction Modal */}
       <TransactionModal

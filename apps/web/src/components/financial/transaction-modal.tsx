@@ -33,6 +33,7 @@ interface TransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
   farmId: string;
+  fieldId?: string;
   type: 'INCOME' | 'EXPENSE';
   onSuccess: () => void;
   editTransaction?: any;
@@ -64,6 +65,7 @@ export function TransactionModal({
   isOpen,
   onClose,
   farmId,
+  fieldId,
   type,
   onSuccess,
   editTransaction,
@@ -82,7 +84,7 @@ export function TransactionModal({
     unitPrice: '',
     transactionDate: new Date().toISOString().split('T')[0],
     paymentDate: '',
-    fieldId: '',
+    fieldId: fieldId || '',
     cropId: '',
     notes: '',
     tags: [] as string[],

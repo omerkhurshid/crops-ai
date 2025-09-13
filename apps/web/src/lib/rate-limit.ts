@@ -36,10 +36,10 @@ const rateLimitConfigs = {
     prefix: 'write',
   }),
   
-  // Heavy operations (satellite, ML) - strict limits
+  // Heavy operations (satellite, ML) - more permissive limits
   heavy: new Ratelimit({
     redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(10, '5 m'), // 10 requests per 5 minutes
+    limiter: Ratelimit.slidingWindow(50, '1 m'), // 50 requests per minute
     analytics: true,
     prefix: 'heavy',
   }),
@@ -147,7 +147,7 @@ const fallbackLimiters = {
   auth: new InMemoryRateLimiter(5, 15 * 60 * 1000), // 5 per 15 min
   api: new InMemoryRateLimiter(150, 60 * 1000), // 150 per min
   write: new InMemoryRateLimiter(60, 60 * 1000), // 60 per min
-  heavy: new InMemoryRateLimiter(10, 5 * 60 * 1000), // 10 per 5 min
+  heavy: new InMemoryRateLimiter(50, 60 * 1000), // 50 per min
 }
 
 // Rate limit function with fallback

@@ -59,7 +59,7 @@ export class RealSatelliteService {
       
       // Get satellite analysis for each field
       const analyses = await Promise.all(
-        fields.map(field => this.analyzeField(field))
+        (fields || []).map(field => this.analyzeField(field))
       )
 
       // Calculate farm-wide metrics from real satellite data
@@ -120,8 +120,11 @@ export class RealSatelliteService {
     let totalWeightedHealth = 0
     let totalWeight = 0
 
-    analyses.forEach((analysis, index) => {
-      const fieldAcres = fields[index].acres
+    ;(analyses || []).forEach((analysis, index) => {
+      const field = (fields || [])[index]
+      if (!field || !analysis?.healthAssessment) return
+      
+      const fieldAcres = field.acres
       const fieldHealth = analysis.healthAssessment.score
       
       totalWeightedHealth += fieldHealth * fieldAcres
@@ -135,8 +138,11 @@ export class RealSatelliteService {
     let totalStressedAcres = 0
     let totalAcres = 0
 
-    analyses.forEach((analysis, index) => {
-      const fieldAcres = fields[index].acres
+    ;(analyses || []).forEach((analysis, index) => {
+      const field = (fields || [])[index]
+      if (!field || !analysis?.healthAssessment) return
+      
+      const fieldAcres = field.acres
       const stressLevel = analysis.healthAssessment.stressLevel
       
       // Map stress levels to percentages
@@ -163,8 +169,11 @@ export class RealSatelliteService {
     let totalWeight = 0
     const dominantCrop = 'Corn'
 
-    analyses.forEach((analysis, index) => {
-      const fieldAcres = fields[index].acres
+    ;(analyses || []).forEach((analysis, index) => {
+      const field = (fields || [])[index]
+      if (!field || !analysis?.yieldForecast) return
+      
+      const fieldAcres = field.acres
       const fieldYield = analysis.yieldForecast.predicted
       
       totalWeightedYield += fieldYield * fieldAcres
@@ -187,10 +196,13 @@ export class RealSatelliteService {
     // Find best performing field
     let bestField = null
     let bestScore = 0
-    analyses.forEach((analysis, index) => {
+    ;(analyses || []).forEach((analysis, index) => {
+      const field = (fields || [])[index]
+      if (!field || !analysis?.healthAssessment) return
+      
       if (analysis.healthAssessment.score > bestScore) {
         bestScore = analysis.healthAssessment.score
-        bestField = fields[index].name
+        bestField = field.name
       }
     })
 
@@ -199,8 +211,8 @@ export class RealSatelliteService {
     }
 
     // Count stressed fields
-    const stressedCount = analyses.filter(a => 
-      ['high', 'severe'].includes(a.healthAssessment.stressLevel)
+    const stressedCount = (analyses || []).filter(a => 
+      a?.healthAssessment && ['high', 'severe'].includes(a.healthAssessment.stressLevel)
     ).length
 
     if (stressedCount > 0) {
@@ -208,7 +220,7 @@ export class RealSatelliteService {
     }
 
     // Recent satellite data available
-    const latestDate = analyses[0]?.satelliteData?.ndvi?.date
+    const latestDate = (analyses || [])[0]?.satelliteData?.ndvi?.date
     if (latestDate) {
       highlights.push(`Latest satellite data from ${new Date(latestDate).toLocaleDateString()}`)
     }

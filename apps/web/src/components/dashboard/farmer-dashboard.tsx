@@ -274,7 +274,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         fieldsNeedingAttention={fieldsNeedingAttention}
         livestockCount={livestockCount}
         livestockHealthStatus={livestockHealthStatus}
-        lastSatelliteUpdate={lastSatelliteUpdate}
+        lastSatelliteUpdate={lastSatelliteUpdate || undefined}
       />
 
       {/* Technical Details (moved from detailed view) */}

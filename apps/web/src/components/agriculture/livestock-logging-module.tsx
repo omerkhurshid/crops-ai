@@ -380,7 +380,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                         ...newLogEntry, 
                         vitals: { 
                           ...newLogEntry.vitals, 
-                          temperature: parseFloat(e.target.value) 
+                          temperature: parseFloat(e.target.value),
+                          weight: newLogEntry.vitals?.weight || 0
                         }
                       })}
                       placeholder="38.5"
@@ -394,8 +395,9 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                       onChange={(e) => setNewLogEntry({
                         ...newLogEntry, 
                         vitals: { 
+                          temperature: newLogEntry.vitals?.temperature || 0,
                           ...newLogEntry.vitals, 
-                          weight: parseFloat(e.target.value) 
+                          weight: parseFloat(e.target.value)
                         }
                       })}
                       placeholder="625"
@@ -409,7 +411,9 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                       onChange={(e) => setNewLogEntry({
                         ...newLogEntry, 
                         vitals: { 
-                          ...newLogEntry.vitals, 
+                          temperature: newLogEntry.vitals?.temperature || 0,
+                          weight: newLogEntry.vitals?.weight || 0,
+                          ...newLogEntry.vitals,
                           heartRate: parseFloat(e.target.value) 
                         }
                       })}

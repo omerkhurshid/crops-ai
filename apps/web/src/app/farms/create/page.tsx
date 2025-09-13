@@ -8,7 +8,7 @@ import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Badge } from '../../../components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
-import { Navbar } from '../../../components/navigation/navbar'
+import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { InteractiveFieldMap } from '../../../components/farm/interactive-field-map'
 import { GoogleMapsFieldEditor } from '../../../components/farm/google-maps-field-editor'
 import { getCropRecommendations, getLivestockRecommendations } from '../../../lib/farm/regional-crops'
@@ -370,10 +370,8 @@ export default function CreateFarmPage() {
   const stepTitles = ['Farm Basics', farm.type === 'crops' ? 'Crop Selection' : 'Livestock Selection', 'Review & Create']
 
   return (
-    <div className="minimal-page">
-      <Navbar />
-      
-      <main className="max-w-4xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <DashboardLayout>
+      <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         {/* Progress Indicator */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
@@ -1450,7 +1448,6 @@ export default function CreateFarmPage() {
           </Card>
         )}
       </main>
-
-    </div>
+    </DashboardLayout>
   )
 }

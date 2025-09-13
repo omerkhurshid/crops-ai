@@ -24,6 +24,8 @@ interface Farm {
     lng: number
     address?: string
   }
+  boundaries?: Array<{ lat: number; lng: number }>
+  totalArea?: number
   fields?: Array<{
     id: string
     name: string
@@ -70,6 +72,21 @@ const mapContainerStyle = {
 
 // Libraries needed for Google Maps
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
+
+// Helper function to get consistent field colors
+const getFieldColor = (index: number): string => {
+  const colors = [
+    '#3b82f6', // blue
+    '#10b981', // emerald
+    '#f59e0b', // amber
+    '#ef4444', // red
+    '#8b5cf6', // violet
+    '#06b6d4', // cyan
+    '#84cc16', // lime
+    '#f97316', // orange
+  ]
+  return colors[index % colors.length]
+}
 
 export function UnifiedFarmCreator() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -193,11 +210,13 @@ export function UnifiedFarmCreator() {
           longitude: farm.location.lng,
           address: farm.location.address || '',
           country: 'US',
-          totalArea: farm.fields?.reduce((sum, field) => sum + field.area, 0) || 100, // Default 100 acres
+          totalArea: farm.totalArea || farm.fields?.reduce((sum, field) => sum + field.area, 0) || 100,
           primaryProduct: farm.type === 'crops' ? 'corn-field' : 'cattle-beef',
+          boundaries: farm.boundaries,
           metadata: {
             farmType: farm.type,
-            hasFields: !!farm.fields?.length
+            hasFields: !!farm.fields?.length,
+            hasBoundaries: !!farm.boundaries?.length
           }
         })
       })
@@ -298,42 +317,45 @@ export function UnifiedFarmCreator() {
             <Label className="text-base font-medium mb-3 block">
               Where is your farm located?
             </Label>
-            <div className="space-y-3">
-              <div className="flex gap-2">
-                <Input
-                  type="text"
-                  placeholder="Enter address or GPS coordinates (lat, lng)"
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
-                  className="flex-1"
-                />
-                <Button
-                  onClick={parseLocationInput}
-                  disabled={!locationInput}
-                  variant="outline"
-                >
-                  <Search className="h-4 w-4 mr-1" />
-                  Find
-                </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Enter address or GPS coordinates (lat, lng)"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    onClick={parseLocationInput}
+                    disabled={!locationInput}
+                    variant="outline"
+                  >
+                    <Search className="h-4 w-4 mr-1" />
+                    Find
+                  </Button>
+                </div>
               </div>
               
-              <div className="text-center">
-                <span className="text-sm text-gray-500">or</span>
+              <div className="flex items-center justify-center">
+                <div className="text-center space-y-2 w-full">
+                  <span className="text-sm text-gray-500 block">or</span>
+                  <Button
+                    onClick={getCurrentLocation}
+                    disabled={detectingLocation}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    {detectingLocation ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Navigation className="h-4 w-4 mr-2" />
+                    )}
+                    Use My Current Location
+                  </Button>
+                </div>
               </div>
-              
-              <Button
-                onClick={getCurrentLocation}
-                disabled={detectingLocation}
-                variant="outline"
-                className="w-full"
-              >
-                {detectingLocation ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Navigation className="h-4 w-4 mr-2" />
-                )}
-                Use My Current Location
-              </Button>
             </div>
 
             {/* Location Preview with Map */}
@@ -353,35 +375,269 @@ export function UnifiedFarmCreator() {
                   </div>
                 </div>
                 
-                {/* Map Preview */}
+                {/* Map with Boundary Drawing */}
                 {apiKey && (
-                  <div className="rounded-lg overflow-hidden border border-green-200">
-                    <LoadScript
-                      googleMapsApiKey={apiKey}
-                      libraries={libraries}
-                      loadingElement={
-                        <div className="h-48 flex items-center justify-center bg-gray-100">
-                          <div className="text-center">
-                            <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
-                            <p className="text-sm text-gray-600">Loading map preview...</p>
+                  <div className="space-y-3">
+                    {/* Instructions */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex items-start space-x-3">
+                        <MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
+                        <div>
+                          <h4 className="text-sm font-medium text-blue-800 mb-1">
+                            Optional: Draw Your Farm Boundaries
+                          </h4>
+                          <p className="text-sm text-blue-700">
+                            Use the drawing tools to outline your farm's perimeter. This helps us provide more accurate satellite analysis and field management.
+                          </p>
+                          <div className="mt-2 text-xs text-blue-600">
+                            💡 Tip: Use satellite view to see property lines clearly
                           </div>
                         </div>
-                      }
-                    >
-                      <GoogleMap
-                        mapContainerStyle={{ width: '100%', height: '200px' }}
-                        center={farm.location}
-                        zoom={15}
-                        options={{
-                          mapTypeId: 'satellite',
-                          disableDefaultUI: true,
-                          zoomControl: true,
-                          gestureHandling: 'cooperative'
-                        }}
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg overflow-hidden border border-green-200">
+                      <LoadScript
+                        googleMapsApiKey={apiKey}
+                        libraries={libraries}
+                        loadingElement={
+                          <div className="h-48 flex items-center justify-center bg-gray-100">
+                            <div className="text-center">
+                              <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
+                              <p className="text-sm text-gray-600">Loading map...</p>
+                            </div>
+                          </div>
+                        }
                       >
-                        <Marker position={farm.location} />
-                      </GoogleMap>
-                    </LoadScript>
+                        <GoogleMap
+                          mapContainerStyle={{ width: '100%', height: '400px' }}
+                          center={farm.location}
+                          zoom={16}
+                          options={{
+                            mapTypeId: 'satellite',
+                            disableDefaultUI: true,
+                            zoomControl: true,
+                            mapTypeControl: true,
+                            gestureHandling: 'greedy'
+                          }}
+                          onPolygonComplete={(polygon) => {
+                            const path = polygon.getPath()
+                            const boundaries = []
+                            for (let i = 0; i < path.getLength(); i++) {
+                              const point = path.getAt(i)
+                              boundaries.push({
+                                lat: point.lat(),
+                                lng: point.lng()
+                              })
+                            }
+                            setFarm(prev => ({ ...prev, boundaries }))
+                          }}
+                        >
+                          <Marker position={farm.location} />
+                          
+                          {/* Farm boundary if drawn */}
+                          {farm.boundaries && farm.boundaries.length > 0 && (
+                            <Polygon
+                              paths={farm.boundaries}
+                              options={{
+                                fillColor: '#22c55e',
+                                fillOpacity: 0.15,
+                                strokeColor: '#22c55e',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 3,
+                              }}
+                            />
+                          )}
+
+                          {/* Field boundaries */}
+                          {farm.fields?.map((field, index) => (
+                            field.boundaries.length > 0 && (
+                              <Polygon
+                                key={field.id}
+                                paths={field.boundaries}
+                                options={{
+                                  fillColor: getFieldColor(index),
+                                  fillOpacity: 0.3,
+                                  strokeColor: getFieldColor(index),
+                                  strokeOpacity: 1,
+                                  strokeWeight: 2,
+                                }}
+                              />
+                            )
+                          ))}
+
+                          {/* Drawing Manager */}
+                          <DrawingManager
+                            options={{
+                              drawingMode: null,
+                              drawingControl: true,
+                              drawingControlOptions: {
+                                position: 2, // TOP_CENTER
+                                drawingModes: ['polygon']
+                              },
+                              polygonOptions: {
+                                fillColor: '#22c55e',
+                                fillOpacity: 0.2,
+                                strokeColor: '#22c55e',
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                clickable: false,
+                                editable: true,
+                                zIndex: 1
+                              }
+                            }}
+                            onPolygonComplete={(polygon) => {
+                              const path = polygon.getPath()
+                              const boundaries = []
+                              for (let i = 0; i < path.getLength(); i++) {
+                                const point = path.getAt(i)
+                                boundaries.push({
+                                  lat: point.lat(),
+                                  lng: point.lng()
+                                })
+                              }
+                              setFarm(prev => ({ ...prev, boundaries }))
+                              
+                              // Calculate area (rough approximation)
+                              const area = google.maps.geometry.spherical.computeArea(path) * 0.000247105 // Convert to acres
+                              setFarm(prev => ({ ...prev, totalArea: area }))
+                              
+                              // Remove the polygon to prevent multiple overlays
+                              polygon.setMap(null)
+                            }}
+                          />
+                        </GoogleMap>
+                      </LoadScript>
+                    </div>
+
+                    {/* Boundary Info */}
+                    {farm.boundaries && farm.boundaries.length > 0 && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <div>
+                            <p className="text-sm font-medium text-green-800">
+                              Farm boundary saved!
+                            </p>
+                            <p className="text-xs text-green-700">
+                              Area: {farm.totalArea?.toFixed(1) || 'calculating...'} acres
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Field Creation Section */}
+                {farm.location.lat !== 0 && apiKey && (
+                  <div className="space-y-4 mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Add Fields (Optional)
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Create individual fields within your farm boundaries for better management
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          const newField = {
+                            id: `field-${Date.now()}`,
+                            name: `Field ${(farm.fields?.length || 0) + 1}`,
+                            area: 0,
+                            boundaries: []
+                          }
+                          setFarm(prev => ({
+                            ...prev,
+                            fields: [...(prev.fields || []), newField]
+                          }))
+                        }}
+                        variant="outline"
+                        size="sm"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Field
+                      </Button>
+                    </div>
+
+                    {/* Instructions for Field Drawing */}
+                    {farm.fields && farm.fields.length > 0 && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <div className="flex items-start space-x-3">
+                          <Sprout className="h-5 w-5 text-amber-600 mt-0.5" />
+                          <div>
+                            <h4 className="text-sm font-medium text-amber-800 mb-1">
+                              How to Add Field Boundaries
+                            </h4>
+                            <div className="text-sm text-amber-700 space-y-1">
+                              <p>1. Click on a field below to select it</p>
+                              <p>2. Use the polygon tool in the map to draw the field boundaries</p>
+                              <p>3. Fields will appear in different colors for easy identification</p>
+                              <p>4. You can edit field names by clicking on them</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Field List */}
+                    {farm.fields && farm.fields.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-gray-700">Your Fields:</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {farm.fields.map((field, index) => (
+                            <div
+                              key={field.id}
+                              className="p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                  <div
+                                    className="w-4 h-4 rounded-full"
+                                    style={{ backgroundColor: getFieldColor(index) }}
+                                  />
+                                  <Input
+                                    value={field.name}
+                                    onChange={(e) => {
+                                      const updatedFields = farm.fields!.map(f =>
+                                        f.id === field.id ? { ...f, name: e.target.value } : f
+                                      )
+                                      setFarm(prev => ({ ...prev, fields: updatedFields }))
+                                    }}
+                                    className="border-none p-0 h-auto font-medium text-sm"
+                                  />
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  {field.area > 0 && (
+                                    <span className="text-xs text-gray-500">
+                                      {field.area.toFixed(1)} acres
+                                    </span>
+                                  )}
+                                  <Button
+                                    onClick={() => {
+                                      const updatedFields = farm.fields!.filter(f => f.id !== field.id)
+                                      setFarm(prev => ({ ...prev, fields: updatedFields }))
+                                    }}
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0 text-gray-400 hover:text-red-600"
+                                  >
+                                    ×
+                                  </Button>
+                                </div>
+                              </div>
+                              {field.boundaries.length === 0 && (
+                                <p className="text-xs text-gray-500 mt-1">
+                                  Click "Add Field", then draw on the map
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

@@ -102,6 +102,7 @@ model Farm {
   region    String?
   country   String   @default("US")
   totalArea Float // in hectares
+  boundary  Unsupported("geography")? // PostGIS geography type for farm boundaries
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

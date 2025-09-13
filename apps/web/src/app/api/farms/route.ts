@@ -90,7 +90,7 @@ export const POST = apiMiddleware.protected(
       console.log('Validated farm data:', JSON.stringify(farmData, null, 2))
 
       // Extract and prepare data - only keep fields that exist in database schema
-      const { description, metadata, primaryProduct, ...dbFarmData } = farmData
+      const { description, metadata, primaryProduct, boundaries, ...dbFarmData } = farmData
       
       // Only include fields that actually exist in the database schema
       const finalData = {
@@ -118,6 +118,26 @@ export const POST = apiMiddleware.protected(
           }
         }
       })
+
+      // If boundary coordinates are provided, update with PostGIS geography using raw SQL
+      if (boundaries && Array.isArray(boundaries) && boundaries.length >= 3) {
+        try {
+          console.log('Updating farm boundary with:', boundaries.length, 'points')
+          // Convert boundary array to WKT polygon format
+          const wktCoordinates = boundaries.map((point: any) => `${point.lng} ${point.lat}`).join(', ');
+          const wktPolygon = `POLYGON((${wktCoordinates}, ${boundaries[0].lng} ${boundaries[0].lat}))`; // Close the polygon
+          
+          await prisma.$executeRaw`
+            UPDATE farms 
+            SET boundary = ST_GeogFromText(${wktPolygon})
+            WHERE id = ${farm.id}
+          `;
+          console.log('✅ Farm boundary updated successfully');
+        } catch (boundaryError) {
+          console.warn('Failed to update farm boundary:', boundaryError);
+          // Continue without boundary - farm was created successfully
+        }
+      }
 
       console.log('Farm created successfully:', JSON.stringify(farm, null, 2))
       return createSuccessResponse({ farm }, 201)

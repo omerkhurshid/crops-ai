@@ -264,7 +264,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         financials={{
           netYTD: netYTD,
           trend: financialTrend,
-          lastUpdate: passedFinancialData?.length > 0 ? 
+          lastUpdate: passedFinancialData && passedFinancialData.length > 0 ? 
             new Date(passedFinancialData[0].transactionDate).toLocaleDateString() : 
             'No data'
         }}

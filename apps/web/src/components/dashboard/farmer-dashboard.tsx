@@ -143,16 +143,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
           financialTrend = netYTD > 0 ? 8 : -5
         }
         
-        // Set state values
-        setLastSatelliteUpdate(new Date())
-        setPlantingsCount(plantingsCount)
-        setReadyToHarvestCount(readyToHarvestCount)
-        setFieldsNeedingAttention(fieldsNeedingAttention)
-        setLivestockCount(livestockCount)
-        setLivestockHealthStatus(livestockHealthStatus)
-        setNetYTD(netYTD)
-        setFinancialTrend(financialTrend)
-        
         // Calculate plantings and harvest counts from crops data
         const plantingsCount = ensureArray(passedCrops).filter(c => c.status === 'planted' || c.status === 'growing').length
         const readyToHarvestCount = ensureArray(passedCrops).filter(c => {
@@ -172,6 +162,16 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         // Calculate livestock metrics
         const livestockCount = ensureArray(passedLivestock).reduce((sum, l) => sum + (l.count || 1), 0)
         const livestockHealthStatus = livestockCount > 0 ? 'good' : 'good' // Mock for now
+        
+        // Set state values
+        setLastSatelliteUpdate(new Date())
+        setPlantingsCount(plantingsCount)
+        setReadyToHarvestCount(readyToHarvestCount)
+        setFieldsNeedingAttention(fieldsNeedingAttention)
+        setLivestockCount(livestockCount)
+        setLivestockHealthStatus(livestockHealthStatus)
+        setNetYTD(netYTD)
+        setFinancialTrend(financialTrend)
         
         const farmData: FarmSummary = {
           farmName,

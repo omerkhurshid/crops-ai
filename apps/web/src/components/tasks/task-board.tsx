@@ -152,9 +152,9 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
 
   const getTaskStats = () => {
     const total = tasks.length
-    const completed = tasksByStatus.done.length
+    const completed = tasksByStatus.done.length // This references the 'done' key in tasksByStatus which maps to 'completed' status
     const inProgress = tasksByStatus.in_progress.length
-    const urgent = tasks.filter(task => task.priority === 'urgent' && task.status !== 'done').length
+    const urgent = tasks.filter(task => task.priority === 'urgent' && task.status !== 'completed').length
     
     return { total, completed, inProgress, urgent }
   }
@@ -310,12 +310,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                   {task.priority}
                                 </Badge>
                                 
-                                {task.estimatedHours && (
-                                  <span className="text-xs text-gray-500 flex items-center gap-1">
-                                    <Clock className="h-3 w-3" />
-                                    {task.estimatedHours}h
-                                  </span>
-                                )}
                               </div>
 
                               {/* Due Date */}
@@ -330,17 +324,7 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                 </div>
                               )}
 
-                              {/* Assignment */}
-                              {showAssignments && task.assignedToName && (
-                                <div className="flex items-center gap-2">
-                                  <Avatar className="h-6 w-6">
-                                    <AvatarFallback className="text-xs">
-                                      {task.assignedToName.split(' ').map(n => n[0]).join('')}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="text-xs text-gray-600">{task.assignedToName}</span>
-                                </div>
-                              )}
+                              {/* Assignment - Will be added when user assignment is implemented */}
                             </CardContent>
                           </Card>
                         )}

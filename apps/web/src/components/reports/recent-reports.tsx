@@ -30,38 +30,17 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   const fetchReports = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      setTimeout(() => {
-        setReports([
-          {
-            id: '1',
-            name: 'Farm Performance Report - August 2024',
-            type: 'Performance',
-            createdAt: '2024-08-15T10:30:00Z',
-            status: 'completed',
-            size: '2.3 MB'
-          },
-          {
-            id: '2',
-            name: 'Weather Impact Analysis - July 2024',
-            type: 'Weather',
-            createdAt: '2024-08-10T14:15:00Z',
-            status: 'completed',
-            size: '1.8 MB'
-          },
-          {
-            id: '3',
-            name: 'Crop Health Report - August 2024',
-            type: 'Health',
-            createdAt: '2024-08-05T09:45:00Z',
-            status: 'completed',
-            size: '3.1 MB'
-          }
-        ]);
-        setLoading(false);
-      }, 1000);
+      const response = await fetch(`/api/reports?farmId=${farmId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data.reports || []);
+      } else {
+        setReports([]);
+      }
     } catch (error) {
       console.error('Error fetching reports:', error);
+      setReports([]);
+    } finally {
       setLoading(false);
     }
   };

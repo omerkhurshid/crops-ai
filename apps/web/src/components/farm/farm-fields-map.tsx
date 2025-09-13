@@ -9,7 +9,7 @@ interface Field {
   id: string
   name: string
   area: number
-  cropType?: string
+  cropType?: string | null
   healthScore?: number
   stressLevel?: 'none' | 'low' | 'moderate' | 'high' | 'severe'
   coordinates?: number[][][]
@@ -18,8 +18,8 @@ interface Field {
 interface Farm {
   id: string
   name: string
-  latitude?: number
-  longitude?: number
+  latitude?: number | null
+  longitude?: number | null
   fields?: Field[]
 }
 

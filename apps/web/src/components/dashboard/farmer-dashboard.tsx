@@ -23,7 +23,6 @@ import {
   Thermometer,
   ChevronRight,
   RefreshCw,
-  Cow,
   Heart
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'

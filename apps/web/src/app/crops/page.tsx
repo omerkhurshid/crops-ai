@@ -25,7 +25,7 @@ export default async function CropsPage() {
     let farmId = user.id // fallback
     try {
       const farm = await prisma.farm.findFirst({
-        where: { userId: user.id }
+        where: { ownerId: user.id }
       })
       if (farm) {
         farmId = farm.id

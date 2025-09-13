@@ -18,8 +18,14 @@ import {
   ChevronRight,
   Circle,
   Scissors,
-  Eye
+  Eye,
+  AlertTriangle,
+  Clock,
+  Thermometer,
+  CloudRain,
+  Bug
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface CropPlanning {
   id: string
@@ -75,6 +81,75 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   const [plannings, setPlannings] = useState<CropPlanning[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Calculate attention items based on real logic
+  const getAttentionItems = (plannings: CropPlanning[]) => {
+    const today = new Date()
+    const items: Array<{
+      type: 'harvest' | 'overdue' | 'weather' | 'pest'
+      priority: 'high' | 'medium' | 'low'
+      message: string
+      crop: string
+      location: string
+    }> = []
+
+    plannings.forEach(planning => {
+      const harvestDate = new Date(planning.harvestDate)
+      const plantDate = new Date(planning.plantDate)
+      const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+      const daysFromPlant = Math.ceil((today.getTime() - plantDate.getTime()) / (1000 * 60 * 60 * 24))
+
+      // Approaching harvest window (within 7 days)
+      if (daysToHarvest > 0 && daysToHarvest <= 7 && planning.status === 'growing') {
+        items.push({
+          type: 'harvest',
+          priority: daysToHarvest <= 3 ? 'high' : 'medium',
+          message: `Ready to harvest in ${daysToHarvest} days`,
+          crop: planning.cropName,
+          location: planning.location
+        })
+      }
+
+      // Overdue harvest
+      if (daysToHarvest < 0 && planning.status !== 'completed') {
+        items.push({
+          type: 'harvest',
+          priority: 'high',
+          message: `Harvest overdue by ${Math.abs(daysToHarvest)} days`,
+          crop: planning.cropName,
+          location: planning.location
+        })
+      }
+
+      // Overdue planting (planned but not planted past plant date)
+      if (planning.status === 'planned' && today > plantDate) {
+        const overdueDays = Math.ceil((today.getTime() - plantDate.getTime()) / (1000 * 60 * 60 * 24))
+        items.push({
+          type: 'overdue',
+          priority: overdueDays > 14 ? 'high' : 'medium',
+          message: `Planting overdue by ${overdueDays} days`,
+          crop: planning.cropName,
+          location: planning.location
+        })
+      }
+
+      // Pest risk based on growth stage (30-60 days from planting)
+      if (planning.status === 'growing' && daysFromPlant >= 30 && daysFromPlant <= 60) {
+        items.push({
+          type: 'pest',
+          priority: 'medium',
+          message: `Monitor for pests - peak vulnerability period`,
+          crop: planning.cropName,
+          location: planning.location
+        })
+      }
+    })
+
+    return items.sort((a, b) => {
+      const priorityOrder = { high: 3, medium: 2, low: 1 }
+      return priorityOrder[b.priority] - priorityOrder[a.priority]
+    })
+  }
+
   // Fetch crop planning data from API
   useEffect(() => {
     async function fetchPlannings() {
@@ -103,8 +178,20 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   })
 
   // Get unique crops and locations for filtering
-  const uniqueCrops = Array.from(new Set((plannings || []).map(p => p.cropName)))
-  const uniqueLocations = Array.from(new Set((plannings || []).map(p => p.location)))
+  const uniqueCrops = Array.from(new Set(ensureArray(plannings).map(p => p.cropName)))
+  const uniqueLocations = Array.from(new Set(ensureArray(plannings).map(p => p.location)))
+  
+  // Calculate summary statistics
+  const totalPlanned = filteredPlannings.filter(p => p.status === 'planned').length
+  const growingNow = filteredPlannings.filter(p => p.status === 'growing').length
+  const inHarvestWindow = filteredPlannings.filter(p => {
+    const today = new Date()
+    const harvestDate = new Date(p.harvestDate)
+    const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    return daysToHarvest >= 0 && daysToHarvest <= 14
+  }).length
+  
+  const attentionItems = getAttentionItems(filteredPlannings)
 
   // Filter plannings based on selected filters
   const filteredPlannings = yearPlannings.filter(planning => {
@@ -236,23 +323,67 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
         </div>
       </div>
 
-      {/* Simplified Single Column Timeline */}
+      {/* Summary Stats - Moved to Top */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-fk-text-muted">Total Planned</p>
+                <p className="text-2xl font-bold text-fk-info">{totalPlanned}</p>
+              </div>
+              <Calendar className="h-8 w-8 text-fk-info" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-fk-text-muted">Growing Now</p>
+                <p className="text-2xl font-bold text-fk-success">{growingNow}</p>
+              </div>
+              <Sprout className="h-8 w-8 text-fk-success" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-fk-text-muted">In Harvest Window</p>
+                <p className="text-2xl font-bold text-fk-accent-wheat">{inHarvestWindow}</p>
+              </div>
+              <Scissors className="h-8 w-8 text-fk-accent-wheat" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Timeline */}
       <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
+        <CardHeader>
+          <CardTitle className="text-lg text-fk-text flex items-center gap-2">
+            <Sprout className="h-5 w-5 text-fk-primary" />
+            Crop Timeline
+          </CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
           {filteredPlannings.length > 0 ? (
             <div className="space-y-4">
               {filteredPlannings.map((planning) => (
                 <div key={planning.id} className="bg-canvas rounded-card border border-fk-border p-4 hover:shadow-fk-sm transition-all duration-micro">
-                  {/* Crop Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h3 className="font-bold text-lg text-fk-text flex items-center gap-2">
+                      <h3 className="font-semibold text-base text-fk-text flex items-center gap-2">
                         {statusIcons[planning.status]}
                         {planning.cropName}
-                        {planning.variety && <span className="text-fk-text-muted">({planning.variety})</span>}
+                        {planning.variety && <span className="text-fk-text-muted font-normal">({planning.variety})</span>}
                       </h3>
                       <p className="text-sm text-fk-text-muted">
-                        {planning.location} {planning.bedNumber && `• ${planning.bedNumber}`} • {formatQuantity(planning.plantedQuantity, planning.unit)}
+                        {planning.location} {planning.bedNumber && `• ${planning.bedNumber}`}
                       </p>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[planning.status]}`}>
@@ -260,24 +391,26 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
                     </div>
                   </div>
 
-                  {/* Timeline Info */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
                     <div>
-                      <span className="font-semibold text-fk-text">Planted:</span>
-                      <p className="text-fk-text-muted">{formatDate(planning.plantDate)}</p>
+                      <span className="font-medium text-fk-text-muted">Planted:</span>
+                      <p className="text-fk-text">{formatDate(planning.plantDate)}</p>
                     </div>
                     <div>
-                      <span className="font-semibold text-fk-text">Expected Harvest:</span>
-                      <p className="text-fk-text-muted">{formatDate(planning.harvestDate)}</p>
+                      <span className="font-medium text-fk-text-muted">Harvest:</span>
+                      <p className="text-fk-text">{formatDate(planning.harvestDate)}</p>
                     </div>
                     <div>
-                      <span className="font-semibold text-fk-text">Expected Yield:</span>
-                      <p className="text-fk-text-muted">{planning.estimatedYield} {planning.yieldUnit}</p>
+                      <span className="font-medium text-fk-text-muted">Quantity:</span>
+                      <p className="text-fk-text">{formatQuantity(planning.plantedQuantity, planning.unit)}</p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-fk-text-muted">Est. Yield:</span>
+                      <p className="text-fk-text">{planning.estimatedYield} {planning.yieldUnit}</p>
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="mt-4">
+                  <div className="mt-3">
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-fk-text-muted">Season Progress</span>
                       <span className="text-fk-text">{getSeasonProgress(planning)}%</span>
@@ -289,12 +422,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
                       ></div>
                     </div>
                   </div>
-
-                  {planning.notes && (
-                    <div className="mt-3 p-3 bg-fk-primary/5 rounded-card">
-                      <p className="text-sm text-fk-text-muted italic">{planning.notes}</p>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -308,62 +435,62 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
         </CardContent>
       </Card>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-fk-text-muted">Total Plantings</p>
-                <p className="text-2xl font-bold text-fk-text">{filteredPlannings.length}</p>
-              </div>
-              <Sprout className="h-8 w-8 text-fk-success" />
+      {/* What Needs Your Attention - Real Logic */}
+      {attentionItems.length > 0 && (
+        <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
+          <CardHeader>
+            <CardTitle className="text-lg text-fk-text flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              What Needs Your Attention
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-3">
+              {attentionItems.map((item, index) => {
+                const priorityColors = {
+                  high: 'border-red-200 bg-red-50',
+                  medium: 'border-orange-200 bg-orange-50',
+                  low: 'border-yellow-200 bg-yellow-50'
+                }
+                const priorityIcons = {
+                  harvest: <Scissors className="h-4 w-4" />,
+                  overdue: <Clock className="h-4 w-4" />,
+                  weather: <CloudRain className="h-4 w-4" />,
+                  pest: <Bug className="h-4 w-4" />
+                }
+                const priorityTextColors = {
+                  high: 'text-red-700',
+                  medium: 'text-orange-700',
+                  low: 'text-yellow-700'
+                }
+                
+                return (
+                  <div key={index} className={`p-3 rounded-card border ${priorityColors[item.priority]}`}>
+                    <div className="flex items-start gap-3">
+                      <div className={`mt-0.5 ${priorityTextColors[item.priority]}`}>
+                        {priorityIcons[item.type]}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className={`font-medium ${priorityTextColors[item.priority]}`}>
+                            {item.crop} • {item.location}
+                          </span>
+                          <Badge variant="outline" className={`text-xs ${priorityTextColors[item.priority]} border-current`}>
+                            {item.priority.toUpperCase()}
+                          </Badge>
+                        </div>
+                        <p className={`text-sm ${priorityTextColors[item.priority]}`}>
+                          {item.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </CardContent>
         </Card>
-
-        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-fk-text-muted">Growing Now</p>
-                <p className="text-2xl font-bold text-fk-success">
-                  {filteredPlannings.filter(p => p.status === 'growing').length}
-                </p>
-              </div>
-              <Sprout className="h-8 w-8 text-fk-success" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-fk-text-muted">Ready to Harvest</p>
-                <p className="text-2xl font-bold text-fk-accent-wheat">
-                  {filteredPlannings.filter(p => p.status === 'harvesting').length}
-                </p>
-              </div>
-              <Scissors className="h-8 w-8 text-fk-accent-wheat" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-fk-text-muted">Expected Yield</p>
-                <p className="text-2xl font-bold text-fk-earth">
-                  {filteredPlannings.reduce((sum, p) => sum + p.estimatedYield, 0).toLocaleString()}
-                </p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-fk-earth" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      )}
     </div>
   )
 }

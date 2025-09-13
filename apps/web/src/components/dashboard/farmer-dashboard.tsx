@@ -13,6 +13,7 @@ import { MarketTicker, MobileMarketTicker } from './market-ticker'
 import { Button } from '../ui/button'
 import { useScreenSize } from '../../hooks/useResponsive'
 import { TodaysTasksSummary } from './todays-tasks-summary'
+import { RecommendationsWidget } from '../analytics/recommendations-widget'
 import { 
   Leaf, 
   Droplets, 
@@ -372,6 +373,13 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         
         <TodaysTasksSummary farmId={farmId} />
       </div>
+
+      {/* Smart Recommendations */}
+      <RecommendationsWidget 
+        farmId={farmId} 
+        limit={4}
+        className="hover:shadow-soft transition-all duration-300"
+      />
 
       {/* Progressive Disclosure - Detailed View Button */}
       {!showDetailedView && (

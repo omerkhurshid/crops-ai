@@ -120,6 +120,7 @@ model Farm {
   decisionRecommendations DecisionRecommendation[]
   decisionExecutions    DecisionExecution[]
   weatherAlerts         WeatherAlert[] @relation("FarmWeatherAlerts")
+  farmRecommendations   Recommendation[] @relation("FarmRecommendations")
 
   @@map("farms")
 }
@@ -159,6 +160,12 @@ model Field {
   financialTransactions FinancialTransaction[]
   financialForecasts    FinancialForecast[]
   tasks                 Task[]
+  
+  // New analytics relations
+  satelliteAnalytics    SatelliteAnalytics[]
+  soilAnalyses          SoilAnalysis[]
+  weatherComprehensive  WeatherComprehensive[]
+  analyticsPredictions  AnalyticsPrediction[]
 
   @@map("fields")
 }
@@ -777,4 +784,133 @@ model WeatherAlert {
   farm          Farm?    @relation("FarmWeatherAlerts", fields: [farmId], references: [id], onDelete: Cascade)
   
   @@map("weather_alerts")
+}
+
+// ==================== ANALYTICS & ML MODELS ====================
+
+model SatelliteAnalytics {
+  id                     String   @id @default(cuid())
+  fieldId                String
+  captureDate            DateTime @db.Date
+  ndviAvg                Decimal? @db.Decimal(5,3)
+  ndviStd                Decimal? @db.Decimal(5,3)
+  ndviTrend             Decimal? @db.Decimal(5,3) // 30-day trend
+  stressZones           Json?    // GeoJSON of stress areas
+  biomassEstimate       Decimal? @db.Decimal(8,2)
+  growthStageDetected   String?  @db.VarChar(50)
+  anomalyScore          Decimal? @db.Decimal(5,3) // ML-detected anomalies
+  confidenceScore       Decimal? @db.Decimal(3,2)
+  createdAt             DateTime @default(now())
+  
+  // Relations
+  field                 Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("satellite_analytics")
+  @@index([fieldId, captureDate(sort: Desc)])
+}
+
+model SoilAnalysis {
+  id                    String   @id @default(cuid())
+  fieldId               String
+  sampleDate            DateTime @db.Date
+  sampleLat             Decimal? @db.Decimal(10,6)
+  sampleLng             Decimal? @db.Decimal(10,6)
+  phLevel               Decimal? @db.Decimal(3,1)
+  nitrogenPpm           Decimal? @db.Decimal(8,2)
+  phosphorusPpm         Decimal? @db.Decimal(8,2)
+  potassiumPpm          Decimal? @db.Decimal(8,2)
+  organicMatterPct      Decimal? @db.Decimal(5,2)
+  cec                   Decimal? @db.Decimal(5,2) // Cation exchange capacity
+  soilType              String?  @db.VarChar(100)
+  drainageClass         String?  @db.VarChar(50)
+  createdAt             DateTime @default(now())
+  
+  // Relations
+  field                 Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("soil_analysis")
+}
+
+model WeatherComprehensive {
+  id                    String   @id @default(cuid())
+  fieldId               String
+  recordedAt            DateTime
+  temperature           Decimal? @db.Decimal(5,2)
+  humidity              Decimal? @db.Decimal(5,2)
+  precipitation         Decimal? @db.Decimal(6,2)
+  windSpeed             Decimal? @db.Decimal(5,2)
+  solarRadiation        Decimal? @db.Decimal(8,2)
+  evapotranspiration    Decimal? @db.Decimal(6,2)
+  growingDegreeDays     Decimal? @db.Decimal(8,2)
+  stressDegreeDays      Decimal? @db.Decimal(8,2)
+  soilTemperature       Decimal? @db.Decimal(5,2)
+  createdAt             DateTime @default(now())
+  
+  // Relations
+  field                 Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("weather_comprehensive")
+  @@index([fieldId, recordedAt(sort: Desc)])
+}
+
+model AnalyticsPrediction {
+  id                    String   @id @default(cuid())
+  fieldId               String
+  modelName             String   @db.VarChar(100) // 'yield_prediction', 'pest_risk', etc.
+  modelVersion          String   @db.VarChar(20)
+  predictionDate        DateTime @db.Date
+  predictionValue       Json     // Flexible JSON for different prediction types
+  confidenceScore       Decimal? @db.Decimal(3,2)
+  featureImportance     Json?
+  createdAt             DateTime @default(now())
+  
+  // Relations
+  field                 Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("analytics_predictions")
+  @@index([fieldId, modelName, predictionDate(sort: Desc)])
+}
+
+model RegionalBenchmark {
+  id                    String   @id @default(cuid())
+  region                String   @db.VarChar(100)
+  cropType              String   @db.VarChar(100)
+  metricName            String   @db.VarChar(100) // 'yield_per_acre', 'cost_per_acre', etc.
+  percentile25          Decimal? @db.Decimal(10,2)
+  percentile50          Decimal? @db.Decimal(10,2)
+  percentile75          Decimal? @db.Decimal(10,2)
+  percentile90          Decimal? @db.Decimal(10,2)
+  sampleSize            Int?
+  year                  Int
+  updatedAt             DateTime @updatedAt
+  
+  @@map("regional_benchmarks")
+  @@index([region, cropType, year])
+}
+
+model Recommendation {
+  id                    String    @id @default(cuid())
+  farmId                String?
+  fieldId               String?
+  recommendationType    String    @db.VarChar(100) // 'fertilizer', 'irrigation', 'pest_control', etc.
+  priority              String    @db.VarChar(20) // 'low', 'medium', 'high', 'urgent'
+  title                 String    @db.VarChar(200)
+  description           String?   @db.Text
+  actionRequired        String?   @db.Text
+  potentialImpact       String?   @db.VarChar(500) // e.g., "Could increase yield by 8-12%"
+  confidenceLevel       String?   @db.VarChar(20) // 'low', 'medium', 'high'
+  estimatedCost         Decimal?  @db.Decimal(10,2)
+  estimatedRoi          Decimal?  @db.Decimal(5,2) // ROI percentage
+  optimalTiming         DateTime? @db.Date
+  createdAt             DateTime  @default(now())
+  expiresAt             DateTime?
+  status                String    @default("active") @db.VarChar(20) // 'active', 'completed', 'dismissed', 'expired'
+  
+  // Relations
+  farm                  Farm?     @relation("FarmRecommendations", fields: [farmId], references: [id], onDelete: Cascade)
+  field                 Field?    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("recommendations")
+  @@index([farmId, status, createdAt(sort: Desc)])
+  @@index([fieldId, priority, optimalTiming])
 }

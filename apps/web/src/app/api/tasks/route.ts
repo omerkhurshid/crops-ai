@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '../../../lib/auth/session'
 import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
+import { rateLimitWithFallback } from '../../../lib/rate-limit'
 
 const taskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -16,6 +17,20 @@ const taskSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
+  // Apply rate limiting for API endpoints
+  const { success, headers } = await rateLimitWithFallback(request, 'api')
+  
+  if (!success) {
+    return new Response('Too Many Requests. Please try again later.', {
+      status: 429,
+      headers: {
+        ...headers,
+        'Retry-After': headers['X-RateLimit-Reset'],
+        'Content-Type': 'text/plain',
+      },
+    })
+  }
+
   try {
     const user = await getCurrentUser()
     if (!user) {
@@ -70,6 +85,20 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting for write operations
+  const { success, headers } = await rateLimitWithFallback(request, 'write')
+  
+  if (!success) {
+    return new Response('Too Many Requests. Please try again later.', {
+      status: 429,
+      headers: {
+        ...headers,
+        'Retry-After': headers['X-RateLimit-Reset'],
+        'Content-Type': 'text/plain',
+      },
+    })
+  }
+
   try {
     const user = await getCurrentUser()
     if (!user) {

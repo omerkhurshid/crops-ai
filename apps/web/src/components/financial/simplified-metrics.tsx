@@ -50,34 +50,19 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
     try {
       setLoading(true)
       
-      // For now, let's generate sample data since the API might not exist yet
-      // In production, this would call: `/api/financial/simplified-metrics?farmId=${farm.id}`
+      // Fetch real financial data from API
+      const response = await fetch(`/api/financial/metrics?farmId=${farm.id}`)
       
-      // Simulate realistic farming data
-      const acreage = farm.totalArea * 2.47105 // Convert hectares to acres
-      const mockRevenue = Math.random() * 800 + 600 // $600-1400 per acre
-      const mockCosts = Math.random() * 400 + 300   // $300-700 per acre
-      const mockMarketPrice = Math.random() * 6 + 4 // $4-10 per bushel
-      
-      const profitPerAcre = mockRevenue - mockCosts
-      const breakEvenPrice = mockCosts / 150 // Assuming 150 bushels per acre average
-      
-      const mockMetrics: SimplifiedMetrics = {
-        profitPerAcre: profitPerAcre,
-        revenuePerAcre: mockRevenue,
-        costPerAcre: mockCosts,
-        breakEvenPrice: breakEvenPrice,
-        currentMarketPrice: mockMarketPrice,
-        profitMargin: (profitPerAcre / mockRevenue) * 100,
-        isAboveBreakeven: mockMarketPrice > breakEvenPrice,
-        totalProfit: profitPerAcre * acreage,
-        totalRevenue: mockRevenue * acreage,
-        totalCosts: mockCosts * acreage
+      if (response.ok) {
+        const data = await response.json()
+        setMetrics(data)
+      } else {
+        // No data available
+        setMetrics(null)
       }
-      
-      setMetrics(mockMetrics)
     } catch (error) {
       console.error('Error fetching simplified metrics:', error)
+      setMetrics(null)
     } finally {
       setLoading(false)
     }
@@ -111,9 +96,34 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
     )
   }
 
-  if (!metrics) return null
-
   const acreage = farm.totalArea * 2.47105
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <ModernCard variant="floating">
+          <ModernCardContent className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+            <p className="text-sage-600 mt-4">Loading financial data...</p>
+          </ModernCardContent>
+        </ModernCard>
+      </div>
+    )
+  }
+
+  if (!metrics) {
+    return (
+      <div className="space-y-6">
+        <ModernCard variant="floating">
+          <ModernCardContent className="text-center py-12">
+            <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
+            <h3 className="text-lg font-semibold mb-2 text-sage-700">No financial data available yet</h3>
+            <p className="text-sage-600">Connect your financial records to see your farm's metrics.</p>
+          </ModernCardContent>
+        </ModernCard>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

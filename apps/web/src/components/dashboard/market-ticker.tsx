@@ -20,18 +20,24 @@ export function MarketTicker({ className }: MarketTickerProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Mock data for demonstration - replace with API call
-    const mockPrices: MarketPrice[] = [
-      { commodity: 'Corn', price: 4.82, change: 2.3, unit: 'bu' },
-      { commodity: 'Soy', price: 11.20, change: -0.7, unit: 'bu' },
-      { commodity: 'Wheat', price: 5.45, change: 1.2, unit: 'bu' },
-      { commodity: 'Cotton', price: 0.82, change: -1.5, unit: 'lb' },
-    ]
-    
-    setTimeout(() => {
-      setPrices(mockPrices)
-      setLoading(false)
-    }, 500)
+    async function fetchMarketPrices() {
+      try {
+        const response = await fetch('/api/market/live-prices')
+        if (response.ok) {
+          const data = await response.json()
+          setPrices(data)
+        } else {
+          setPrices([])
+        }
+      } catch (error) {
+        console.error('Failed to fetch market prices:', error)
+        setPrices([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMarketPrices()
   }, [])
 
   if (loading) {
@@ -42,6 +48,14 @@ export function MarketTicker({ className }: MarketTickerProps) {
             <div key={i} className="h-4 bg-sage-200 rounded w-24"></div>
           ))}
         </div>
+      </div>
+    )
+  }
+
+  if (prices.length === 0) {
+    return (
+      <div className={cn('bg-sage-50 border-b border-sage-200 px-4 py-2 text-center', className)}>
+        <span className="text-sm text-sage-600">Market data unavailable</span>
       </div>
     )
   }

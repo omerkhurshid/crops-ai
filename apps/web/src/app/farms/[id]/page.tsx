@@ -13,6 +13,7 @@ import { SatelliteViewer } from '../../../components/satellite/satellite-viewer'
 import { MarketDashboard } from '../../../components/market/market-dashboard'
 import { AnalyticsDashboard } from '../../../components/analytics/charts'
 import { VisualFarmMap } from '../../../components/farm/visual-farm-map'
+import { EnhancedFarmMap } from '../../../components/farm/enhanced-farm-map'
 import { prisma } from '../../../lib/prisma'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
@@ -201,6 +202,11 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
               3 days
             </div>
           </div>
+        </div>
+
+        {/* Enhanced Farm Map with NDVI - Full Width */}
+        <div className="mb-8">
+          <EnhancedFarmMap farm={farm} />
         </div>
 
         {/* Asymmetric Magazine-Style Layout - Mobile Optimized */}

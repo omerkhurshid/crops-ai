@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
@@ -51,131 +51,7 @@ interface CropCard {
   icon: string
 }
 
-const mockCropCards: CropCard[] = [
-  {
-    id: '1',
-    cropName: 'Winter Wheat',
-    variety: 'Hard Red',
-    location: 'North Field',
-    status: 'growing',
-    progress: 65,
-    nextAction: 'Apply nitrogen fertilizer',
-    nextActionDate: '2024-03-20',
-    plantedArea: 45.2,
-    unit: 'acres',
-    expectedYield: 1500,
-    yieldUnit: 'bushels',
-    expectedRevenue: 7500,
-    daysToHarvest: 85,
-    healthScore: 92,
-    icon: '🌾'
-  },
-  {
-    id: '2',
-    cropName: 'Sweet Corn',
-    variety: 'Silver Queen',
-    location: 'South Field A',
-    status: 'ready_harvest',
-    progress: 100,
-    nextAction: 'Start harvesting',
-    nextActionDate: '2024-03-15',
-    plantedArea: 12.5,
-    unit: 'acres',
-    expectedYield: 850,
-    yieldUnit: 'dozen ears',
-    expectedRevenue: 3400,
-    daysToHarvest: 0,
-    healthScore: 88,
-    icon: '🌽'
-  },
-  {
-    id: '3',
-    cropName: 'Cucumbers',
-    variety: 'Marketmore 76',
-    location: 'Greenhouse B',
-    status: 'growing',
-    progress: 45,
-    nextAction: 'Check for cucumber beetles',
-    nextActionDate: '2024-03-18',
-    plantedArea: 0.8,
-    unit: 'acres',
-    expectedYield: 800,
-    yieldUnit: 'lbs',
-    expectedRevenue: 1600,
-    daysToHarvest: 35,
-    healthScore: 85,
-    icon: '🥒'
-  },
-  {
-    id: '4',
-    cropName: 'Tomatoes',
-    variety: 'Cherokee Purple',
-    location: 'Greenhouse A',
-    status: 'planted',
-    progress: 15,
-    nextAction: 'Transplant seedlings',
-    nextActionDate: '2024-03-25',
-    plantedArea: 1.2,
-    unit: 'acres',
-    expectedYield: 2400,
-    yieldUnit: 'lbs',
-    expectedRevenue: 4800,
-    daysToHarvest: 75,
-    healthScore: 95,
-    icon: '🍅'
-  },
-  {
-    id: '5',
-    cropName: 'Potatoes',
-    variety: 'Yukon Gold',
-    location: 'East Field',
-    status: 'planned',
-    progress: 0,
-    nextAction: 'Prepare soil and plant',
-    nextActionDate: '2024-04-01',
-    plantedArea: 8.0,
-    unit: 'acres',
-    expectedYield: 1200,
-    yieldUnit: 'cwt',
-    expectedRevenue: 6000,
-    daysToHarvest: 120,
-    healthScore: 0,
-    icon: '🥔'
-  }
-]
-
-const mockNextActions: CropAction[] = [
-  {
-    id: '1',
-    cropName: 'Sweet Corn',
-    action: 'Start harvesting',
-    dueDate: '2024-03-15',
-    priority: 'urgent',
-    location: 'South Field A',
-    daysUntil: 0,
-    icon: <Scissors className="h-5 w-5" />
-  },
-  {
-    id: '2',
-    cropName: 'Cucumbers',
-    action: 'Pest inspection',
-    dueDate: '2024-03-18',
-    priority: 'due_soon',
-    location: 'Greenhouse B',
-    daysUntil: 3,
-    icon: <AlertTriangle className="h-5 w-5" />
-  },
-  {
-    id: '3',
-    cropName: 'Winter Wheat',
-    action: 'Fertilizer application',
-    dueDate: '2024-03-20',
-    priority: 'due_soon',
-    location: 'North Field',
-    daysUntil: 5,
-    icon: <Droplets className="h-5 w-5" />
-  }
-]
+// Removed mock data - will fetch real data from database
 
 const statusConfig = {
   planned: {
@@ -236,6 +112,37 @@ interface FarmerFriendlyCropViewProps {
 
 export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) {
   const [viewMode, setViewMode] = useState<'cards' | 'timeline'>('cards')
+  const [crops, setCrops] = useState<CropCard[]>([])
+  const [nextActions, setNextActions] = useState<CropAction[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // Fetch crops data from API
+  useEffect(() => {
+    async function fetchCropsData() {
+      try {
+        // Fetch crops for this farm
+        const cropsResponse = await fetch(`/api/crops?farmId=${farmId}`)
+        if (cropsResponse.ok) {
+          const cropsData = await cropsResponse.json()
+          // Transform API data to component format if needed
+          setCrops(cropsData)
+        }
+
+        // Fetch related tasks/recommendations
+        const actionsResponse = await fetch(`/api/recommendations?farmId=${farmId}&limit=5`)
+        if (actionsResponse.ok) {
+          const actionsData = await actionsResponse.json()
+          setNextActions(actionsData)
+        }
+      } catch (error) {
+        console.error('Failed to fetch crops data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCropsData()
+  }, [farmId])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -260,14 +167,25 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
     return weeks === 1 ? '1 week' : `${weeks} weeks`
   }
 
-  const totalExpectedRevenue = mockCropCards.reduce((sum, crop) => sum + crop.expectedRevenue, 0)
-  const growingCrops = mockCropCards.filter(c => c.status === 'growing' || c.status === 'planted')
-  const readyToHarvest = mockCropCards.filter(c => c.status === 'ready_harvest')
+  const totalExpectedRevenue = crops.reduce((sum, crop) => sum + crop.expectedRevenue, 0)
+  const growingCrops = crops.filter(c => c.status === 'growing' || c.status === 'planted')
+  const readyToHarvest = crops.filter(c => c.status === 'ready_harvest')
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fk-primary mx-auto"></div>
+          <p className="text-fk-text-muted mt-4">Loading crop data...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
       {/* Quick Actions - Most Important */}
-      {mockNextActions.length > 0 && (
+      {nextActions.length > 0 ? (
         <Card className="border-l-4 border-l-fk-warning bg-surface rounded-card shadow-fk-md">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-lg font-bold text-fk-text">
@@ -277,7 +195,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockNextActions.slice(0, 3).map((action) => (
+              {nextActions.slice(0, 3).map((action) => (
                 <div key={action.id} className="flex items-center justify-between p-4 bg-canvas rounded-card border border-fk-border hover:border-fk-primary/30 hover:shadow-fk-sm transition-all duration-micro">
                   <div className="flex items-center gap-4">
                     <div className="text-2xl">{action.icon}</div>
@@ -300,6 +218,15 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
             </div>
           </CardContent>
         </Card>
+      ) : (
+        <Card className="border-l-4 border-l-fk-info bg-surface rounded-card shadow-fk-md">
+          <CardContent className="p-6 text-center">
+            <div className="text-fk-text-muted">
+              <Bell className="h-8 w-8 mx-auto mb-3 opacity-50" />
+              <p>No crop actions available yet</p>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Quick Overview Stats - FieldKit KPI Cards */}
@@ -318,7 +245,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
 
         <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">🎯</div>
-          <div className="text-2xl font-bold text-fk-accent-sky">{mockNextActions.length}</div>
+          <div className="text-2xl font-bold text-fk-accent-sky">{nextActions.length}</div>
           <div className="text-sm font-medium text-fk-text-muted">Tasks Due</div>
         </Card>
 
@@ -354,7 +281,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
       {/* Mobile-First Crop Cards */}
       {viewMode === 'cards' && (
         <div className="space-y-4">
-          {mockCropCards.map((crop) => {
+          {crops.length > 0 ? crops.map((crop) => {
             const statusInfo = statusConfig[crop.status]
             return (
               <Card key={crop.id} className={`${statusInfo.borderColor} border-2 bg-surface rounded-card shadow-fk-sm hover:shadow-fk-md transition-all duration-micro`}>
@@ -442,7 +369,17 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                 </CardContent>
               </Card>
             )
-          })}
+          }) : (
+            <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+              <CardContent className="p-8 text-center">
+                <div className="text-fk-text-muted">
+                  <Sprout className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <h3 className="text-lg font-semibold mb-2">No crops available yet</h3>
+                  <p>Start by planning your first crop to see it here.</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
 
@@ -454,7 +391,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {mockCropCards.map((crop) => {
+              {crops.length > 0 ? crops.map((crop) => {
                 const statusInfo = statusConfig[crop.status]
                 return (
                   <div key={crop.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
@@ -480,7 +417,12 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                     </div>
                   </div>
                 )
-              })}
+              }) : (
+                <div className="text-center py-8 text-fk-text-muted">
+                  <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No crop timeline available yet</p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

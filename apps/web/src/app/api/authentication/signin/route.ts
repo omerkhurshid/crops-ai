@@ -4,8 +4,23 @@ import bcrypt from 'bcryptjs'
 import { encode } from 'next-auth/jwt'
 import { UserRole } from '@crops-ai/shared'
 import { prisma } from '@/lib/prisma'
+import { rateLimitWithFallback } from '../../../../lib/rate-limit'
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting for auth endpoints
+  const { success, headers } = await rateLimitWithFallback(request, 'auth')
+  
+  if (!success) {
+    return new Response('Too Many Requests. Please try again later.', {
+      status: 429,
+      headers: {
+        ...headers,
+        'Retry-After': headers['X-RateLimit-Reset'],
+        'Content-Type': 'text/plain',
+      },
+    })
+  }
+
   try {
     const { email, password } = await request.json()
     

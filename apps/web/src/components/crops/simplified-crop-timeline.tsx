@@ -38,17 +38,10 @@ interface CropPlanning {
   notes?: string
 }
 
-interface CropCalendarProps {
+interface SimplifiedCropTimelineProps {
   farmId: string
   year?: number
 }
-
-// Removed mock data - will fetch from database
-
-const months = [
-  'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-  'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
-]
 
 const statusColors = {
   planned: 'bg-fk-text-muted',
@@ -56,6 +49,14 @@ const statusColors = {
   growing: 'bg-fk-success',
   harvesting: 'bg-fk-accent-wheat',
   completed: 'bg-fk-neutral'
+}
+
+const statusLabels = {
+  planned: 'Planned',
+  planted: 'Planted',
+  growing: 'Growing',
+  harvesting: 'Ready to Harvest',
+  completed: 'Harvested'
 }
 
 const statusIcons = {
@@ -66,7 +67,7 @@ const statusIcons = {
   completed: <TrendingUp className="h-4 w-4" />
 }
 
-export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
+export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTimelineProps) {
   const [currentYear, setCurrentYear] = useState(year)
   const [selectedCrop, setSelectedCrop] = useState<string>('all')
   const [selectedLocation, setSelectedLocation] = useState<string>('all')
@@ -111,21 +112,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
     const matchesLocation = selectedLocation === 'all' || planning.location === selectedLocation
     return matchesCrop && matchesLocation
   })
-
-  const getTimelinePosition = (planning: CropPlanning) => {
-    const startDate = new Date(planning.startDate)
-    const endDate = new Date(planning.harvestDate)
-    
-    // Calculate position within the year
-    const yearStart = new Date(currentYear, 0, 1)
-    const yearEnd = new Date(currentYear, 11, 31)
-    
-    const startPos = Math.max(0, (startDate.getTime() - yearStart.getTime()) / (yearEnd.getTime() - yearStart.getTime())) * 100
-    const endPos = Math.min(100, (endDate.getTime() - yearStart.getTime()) / (yearEnd.getTime() - yearStart.getTime())) * 100
-    const width = Math.max(2, endPos - startPos)
-    
-    return { left: startPos, width }
-  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -180,26 +166,50 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               variant="outline"
               size="sm"
               onClick={() => setCurrentYear(currentYear - 1)}
+              className="border-fk-border text-fk-text hover:bg-fk-primary/10"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <div className="px-4 py-2 bg-fk-primary-200 border-2 border-fk-primary rounded-control font-semibold text-fk-primary-600">
+            <div className="px-4 py-2 bg-fk-primary/10 border-2 border-fk-primary rounded-control font-semibold text-fk-primary">
               {currentYear} Season
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCurrentYear(currentYear + 1)}
+              className="border-fk-border text-fk-text hover:bg-fk-primary/10"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
 
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="border-fk-border text-fk-text hover:bg-fk-primary/10"
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            Filter
+          </Button>
+          <Button 
+            className="bg-fk-primary hover:bg-fk-primary-600 text-white rounded-control"
+            onClick={() => setShowAddForm(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Crop
+          </Button>
+        </div>
+      </div>
+
+      {/* Filter Controls */}
+      <div className="flex flex-wrap gap-4 p-4 bg-surface rounded-card border border-fk-border">
         <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-fk-text">Crop:</span>
           <Select value={selectedCrop} onValueChange={setSelectedCrop}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="All Crops" />
+            <SelectTrigger className="w-32 border-fk-border">
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Crops</SelectItem>
@@ -208,10 +218,13 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               ))}
             </SelectContent>
           </Select>
-
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-fk-text">Location:</span>
           <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="All Locations" />
+            <SelectTrigger className="w-32 border-fk-border">
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Locations</SelectItem>
@@ -220,129 +233,82 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               ))}
             </SelectContent>
           </Select>
-
-          <Button className="bg-fk-primary hover:bg-fk-primary-600 text-white rounded-control">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Planting
-          </Button>
-
-          <Button variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
         </div>
       </div>
 
-      {/* Main Calendar View */}
+      {/* Simplified Single Column Timeline */}
       <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
-              {/* Header Row */}
-              <div className="grid grid-cols-12 gap-0 border-b border-fk-border bg-surface">
-                <div className="col-span-5 p-4 border-r border-fk-border">
-                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-fk-text">
-                    <span className="truncate">Crop</span>
-                    <span className="truncate">Location</span>
-                    <span className="truncate">Dates</span>
-                  </div>
-                </div>
-                <div className="col-span-7 p-2">
-                  <div className="grid grid-cols-12 gap-0">
-                    {months.map((month, index) => (
-                      <div key={month} className="text-center text-xs font-semibold text-fk-text py-2 px-1">
-                        {month}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Planning Rows */}
-              <div className="divide-y">
-                {filteredPlannings.length > 0 ? filteredPlannings.map((planning) => {
-                  const timeline = getTimelinePosition(planning)
-                  
-                  return (
-                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-fk-primary-200/30 transition-colors min-h-[80px]">
-                      {/* Left Info Panel */}
-                      <div className="col-span-5 p-3 border-r border-fk-border">
-                        <div className="grid grid-cols-3 gap-2">
-                          {/* Crop Name */}
-                          <div className="min-w-0">
-                            <h4 className="font-semibold text-fk-accent-sky text-xs hover:text-fk-primary cursor-pointer truncate">
-                              {planning.cropName}
-                            </h4>
-                            <p className="text-xs text-fk-text-muted truncate">
-                              {formatQuantity(planning.plantedQuantity, planning.unit)}
-                            </p>
-                          </div>
-
-                          {/* Location */}
-                          <div className="min-w-0">
-                            <p className="text-xs font-semibold text-fk-text truncate">{planning.location}</p>
-                            {planning.bedNumber && (
-                              <p className="text-xs text-fk-text-muted truncate">{planning.bedNumber}</p>
-                            )}
-                          </div>
-
-                          {/* Key Dates */}
-                          <div className="min-w-0">
-                            <div className="text-xs text-fk-text-muted space-y-1">
-                              <div className="truncate">Start: {formatDate(planning.startDate)}</div>
-                              <div className="truncate">Harvest: {formatDate(planning.harvestDate)}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Timeline Section */}
-                      <div className="col-span-7 p-2 relative">
-                        <div className="relative h-16 bg-canvas">
-                          {/* Month Grid Lines (subtle) */}
-                          <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-20">
-                            {months.map((_, index) => (
-                              <div key={index} className="border-r border-fk-border"></div>
-                            ))}
-                          </div>
-                          
-                          {/* Timeline Bar - FieldKit Enhanced */}
-                          <div
-                            className={`absolute top-2 h-12 rounded-control ${statusColors[planning.status]} shadow-fk-sm flex items-center px-2 text-white text-xs font-semibold transition-all hover:shadow-fk-md cursor-pointer`}
-                            style={{
-                              left: `${Math.max(1, timeline.left)}%`,
-                              width: `${Math.max(8, timeline.width)}%`,
-                              minWidth: '40px'
-                            }}
-                            title={`${planning.cropName} - ${planning.status}`}
-                          >
-                            <div className="flex items-center gap-1 w-full">
-                              <span className="w-3 h-3 flex-shrink-0">
-                                {statusIcons[planning.status]}
-                              </span>
-                              <span className="truncate text-xs">
-                                {planning.cropName.split(' ')[0]}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+        <CardContent className="p-6">
+          {filteredPlannings.length > 0 ? (
+            <div className="space-y-4">
+              {filteredPlannings.map((planning) => (
+                <div key={planning.id} className="bg-canvas rounded-card border border-fk-border p-4 hover:shadow-fk-sm transition-all duration-micro">
+                  {/* Crop Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg text-fk-text flex items-center gap-2">
+                        {statusIcons[planning.status]}
+                        {planning.cropName}
+                        {planning.variety && <span className="text-fk-text-muted">({planning.variety})</span>}
+                      </h3>
+                      <p className="text-sm text-fk-text-muted">
+                        {planning.location} {planning.bedNumber && `• ${planning.bedNumber}`} • {formatQuantity(planning.plantedQuantity, planning.unit)}
+                      </p>
                     </div>
-                  )
-                }) : (
-                  <div className="text-center py-12">
-                    <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-fk-text-muted" />
-                    <h3 className="text-lg font-semibold mb-2 text-fk-text-muted">No crop planning data available yet</h3>
-                    <p className="text-fk-text-muted">Start planning your crops to see them on the timeline.</p>
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[planning.status]}`}>
+                      {statusLabels[planning.status]}
+                    </div>
                   </div>
-                )}
-              </div>
+
+                  {/* Timeline Info */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <span className="font-semibold text-fk-text">Planted:</span>
+                      <p className="text-fk-text-muted">{formatDate(planning.plantDate)}</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-fk-text">Expected Harvest:</span>
+                      <p className="text-fk-text-muted">{formatDate(planning.harvestDate)}</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-fk-text">Expected Yield:</span>
+                      <p className="text-fk-text-muted">{planning.estimatedYield} {planning.yieldUnit}</p>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-4">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-fk-text-muted">Season Progress</span>
+                      <span className="text-fk-text">{getSeasonProgress(planning)}%</span>
+                    </div>
+                    <div className="w-full bg-fk-border rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full transition-all duration-standard ${statusColors[planning.status]}`}
+                        style={{ width: `${getSeasonProgress(planning)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {planning.notes && (
+                    <div className="mt-3 p-3 bg-fk-primary/5 rounded-card">
+                      <p className="text-sm text-fk-text-muted italic">{planning.notes}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-12">
+              <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-fk-text-muted" />
+              <h3 className="text-lg font-semibold mb-2 text-fk-text-muted">No crop planning data available yet</h3>
+              <p className="text-fk-text-muted">Start planning your crops to see them here.</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      {/* Summary Stats - FieldKit KPI Cards */}
+      {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
@@ -388,33 +354,16 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-fk-text-muted">Planned Yield</p>
-                <p className="text-2xl font-bold text-fk-accent-sky">
+                <p className="text-sm font-semibold text-fk-text-muted">Expected Yield</p>
+                <p className="text-2xl font-bold text-fk-earth">
                   {filteredPlannings.reduce((sum, p) => sum + p.estimatedYield, 0).toLocaleString()}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-fk-accent-sky" />
+              <TrendingUp className="h-8 w-8 text-fk-earth" />
             </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Legend */}
-      <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
-        <CardHeader>
-          <CardTitle className="text-lg font-bold text-fk-text">Status Legend</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            {Object.entries(statusColors).map(([status, color]) => (
-              <div key={status} className="flex items-center gap-2">
-                <div className={`w-4 h-4 rounded-control ${color}`}></div>
-                <span className="text-sm capitalize font-medium text-fk-text">{status}</span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

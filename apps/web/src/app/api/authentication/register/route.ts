@@ -3,8 +3,23 @@ import { hash } from 'bcryptjs'
 import { prisma } from '@crops-ai/database'
 import { UserRole } from '@crops-ai/shared'
 import { sendVerificationEmail } from '../../../../lib/auth/email-verification'
+import { rateLimitWithFallback } from '../../../../lib/rate-limit'
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting for auth endpoints
+  const { success, headers } = await rateLimitWithFallback(request, 'auth')
+  
+  if (!success) {
+    return new Response('Too Many Requests. Please try again later.', {
+      status: 429,
+      headers: {
+        ...headers,
+        'Retry-After': headers['X-RateLimit-Reset'],
+        'Content-Type': 'text/plain',
+      },
+    })
+  }
+
   try {
     console.log('🔍 Register endpoint called')
     const { name, email, password, role } = await request.json()

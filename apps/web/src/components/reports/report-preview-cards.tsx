@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { 
@@ -12,6 +12,50 @@ import Link from 'next/link';
 
 // Farm Performance Preview Card
 export function FarmPerformancePreview({ farmId }: { farmId: string }) {
+  const [performanceData, setPerformanceData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchPerformanceData() {
+      try {
+        const response = await fetch(`/api/reports/performance-summary?farmId=${farmId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setPerformanceData(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch performance data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPerformanceData()
+  }, [farmId])
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse space-y-3">
+          <div className="h-8 bg-sage-200 rounded"></div>
+          <div className="h-4 bg-sage-200 rounded"></div>
+          <div className="h-16 bg-sage-200 rounded"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!performanceData) {
+    return (
+      <div className="space-y-4">
+        <div className="text-center py-8">
+          <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
+          <h3 className="text-lg font-semibold mb-2 text-sage-700">No performance data available yet</h3>
+          <p className="text-sage-600">Performance reports will appear here once data is collected.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -19,28 +63,28 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
             <TrendingUp className="h-4 w-4 text-green-600" />
           </div>
-          <span className="text-2xl font-bold text-sage-800">87%</span>
+          <span className="text-2xl font-bold text-sage-800">{performanceData.overallScore || 'N/A'}%</span>
         </div>
         <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-          +5% vs last month
+          {performanceData.monthlyChange || 'No data'}
         </Badge>
       </div>
       
       <p className="text-sm text-sage-600">
-        Your farm is performing well above average this season
+        {performanceData.summary || 'Performance summary not available'}
       </p>
 
       <div className="flex gap-4 text-center">
         <div className="flex-1">
-          <div className="text-lg font-semibold text-sage-800">185</div>
+          <div className="text-lg font-semibold text-sage-800">{performanceData.yield || 'N/A'}</div>
           <div className="text-xs text-sage-600">bu/acre yield</div>
         </div>
         <div className="flex-1 border-x border-sage-200">
-          <div className="text-lg font-semibold text-sage-800">$850</div>
+          <div className="text-lg font-semibold text-sage-800">{performanceData.cost || 'N/A'}</div>
           <div className="text-xs text-sage-600">cost/acre</div>
         </div>
         <div className="flex-1">
-          <div className="text-lg font-semibold text-sage-800">$1,250</div>
+          <div className="text-lg font-semibold text-sage-800">{performanceData.profit || 'N/A'}</div>
           <div className="text-xs text-sage-600">profit/acre</div>
         </div>
       </div>
@@ -57,6 +101,50 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
 
 // Weather Impact Preview Card
 export function WeatherImpactPreview({ farmId }: { farmId: string }) {
+  const [weatherData, setWeatherData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchWeatherData() {
+      try {
+        const response = await fetch(`/api/reports/weather-impact?farmId=${farmId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setWeatherData(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchWeatherData()
+  }, [farmId])
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse space-y-3">
+          <div className="h-8 bg-sage-200 rounded"></div>
+          <div className="h-4 bg-sage-200 rounded"></div>
+          <div className="h-20 bg-sage-200 rounded"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!weatherData) {
+    return (
+      <div className="space-y-4">
+        <div className="text-center py-8">
+          <CloudRain className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
+          <h3 className="text-lg font-semibold mb-2 text-sage-700">No weather impact data available yet</h3>
+          <p className="text-sage-600">Weather reports will appear here once data is collected.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -65,26 +153,26 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <span className="text-lg font-semibold text-sage-800">Weather Impact</span>
         </div>
         <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-          Favorable
+          {weatherData.status || 'N/A'}
         </Badge>
       </div>
 
       <p className="text-sm text-sage-600">
-        Weather conditions have been mostly favorable this season
+        {weatherData.summary || 'Weather impact summary not available'}
       </p>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-sage-600">Rainfall</span>
-          <span className="font-medium text-sage-800">+15% above normal</span>
+          <span className="font-medium text-sage-800">{weatherData.rainfall || 'N/A'}</span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-sage-600">Temperature</span>
-          <span className="font-medium text-sage-800">Optimal range</span>
+          <span className="font-medium text-sage-800">{weatherData.temperature || 'N/A'}</span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-sage-600">Frost Risk</span>
-          <span className="font-medium text-green-600">Low</span>
+          <span className="font-medium text-green-600">{weatherData.frostRisk || 'N/A'}</span>
         </div>
       </div>
 

@@ -118,54 +118,8 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
       } catch (error) {
         console.error('Error fetching farm data:', error)
         
-        // Fallback to mock data
-        const mockData: FarmSummary = {
-          farmName: "Johnson Family Farm",
-          totalAcres: 78,
-          overallHealth: 82,
-          healthTrend: 3,
-          stressedAreas: 8.5,
-          stressTrend: -2,
-          currentWeather: {
-            temperature: 75,
-            condition: "Partly Cloudy",
-            precipitation: 0.2,
-            humidity: 68
-          },
-          yieldForecast: {
-            current: 185,
-            potential: 220,
-            unit: "bu/acre",
-            cropType: "Corn"
-          },
-          todayHighlights: [
-            "Satellite data unavailable - using simulated data",
-            "North field showing good growth patterns",
-            "Light rain expected tomorrow afternoon"
-          ],
-          urgentTasks: [
-            {
-              id: 'urgent-1',
-              title: 'Check irrigation in North Field',
-              field: 'North Field (Section A)',
-              urgency: 'critical',
-              timeframe: '4 hours',
-              impact: '$1,200 potential crop loss',
-              category: 'water'
-            },
-            {
-              id: 'urgent-2',
-              title: 'Apply fungicide to wheat',
-              field: 'South Field',
-              urgency: 'high',
-              timeframe: '24 hours',
-              impact: '$800 prevention cost',
-              category: 'pest'
-            }
-          ]
-        }
-        
-        setFarmData(mockData)
+        // No data available - set to empty/null state
+        setFarmData(null)
         setLoading(false)
       }
     }
@@ -190,7 +144,17 @@ export function FarmerDashboard({ farmId }: FarmerDashboardProps) {
     )
   }
 
-  if (!farmData) return null
+  if (!farmData) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <Leaf className="h-12 w-12 mx-auto mb-4 opacity-50 text-fk-text-muted" />
+          <h3 className="text-lg font-semibold mb-2 text-fk-text-muted">No farm data available yet</h3>
+          <p className="text-fk-text-muted">Connect your farm data sources to see your dashboard.</p>
+        </div>
+      </div>
+    )
+  }
 
   const healthStatus = getHealthStatus(farmData.overallHealth)
   const stressStatus = getStressStatus(farmData.stressedAreas)

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -9,56 +10,43 @@ interface LivestockOverviewProps {
   farmId: string
 }
 
-const mockLivestockData = {
-  totalAnimals: 156,
-  species: [
-    { type: 'Cattle', count: 124, health: 'good' },
-    { type: 'Sheep', count: 32, health: 'excellent' }
-  ],
-  alerts: [
-    {
-      id: '1',
-      type: 'Vaccination Due',
-      message: '12 cattle due for annual vaccination',
-      priority: 'high',
-      dueDate: '2025-01-15'
-    },
-    {
-      id: '2', 
-      type: 'Breeding Schedule',
-      message: '5 cows entering optimal breeding window',
-      priority: 'medium',
-      dueDate: '2025-01-12'
-    }
-  ],
-  recentEvents: [
-    {
-      id: '1',
-      type: 'Calving',
-      description: 'Cow #47 delivered healthy calf',
-      date: '2025-01-08',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      type: 'Health Check',
-      description: 'Monthly herd health inspection',
-      date: '2025-01-07',
-      status: 'completed'
-    }
-  ],
-  healthMetrics: {
-    avgWeight: 580,
-    birthsThisMonth: 3,
-    mortalityRate: 0.02,
-    milkProduction: 2450
-  }
-}
+// Removed mock data - will fetch from database
 
 export function LivestockOverview({ farmId }: LivestockOverviewProps) {
-  const data = mockLivestockData
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
 
-  if (data.totalAnimals === 0) {
+  // Fetch livestock data from API
+  useEffect(() => {
+    async function fetchLivestockData() {
+      try {
+        const response = await fetch(`/api/livestock?farmId=${farmId}`)
+        if (response.ok) {
+          const livestockData = await response.json()
+          setData(livestockData)
+        }
+      } catch (error) {
+        console.error('Failed to fetch livestock data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchLivestockData()
+  }, [farmId])
+
+  if (loading) {
+    return (
+      <ModernCard>
+        <ModernCardContent className="text-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600 mx-auto"></div>
+          <p className="text-sage-600 mt-4">Loading livestock data...</p>
+        </ModernCardContent>
+      </ModernCard>
+    )
+  }
+
+  if (!data || data.totalAnimals === 0) {
     return (
       <ModernCard>
         <ModernCardHeader>
@@ -119,7 +107,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           
           <div className="space-y-3">
             <h4 className="font-semibold text-sage-800">Species Breakdown</h4>
-            {data.species.map((species, index) => (
+            {data.species.map((species: any, index: number) => (
               <div key={index} className="flex justify-between items-center p-3 bg-sage-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Cat className="h-5 w-5 text-sage-600" />
@@ -156,7 +144,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
         </ModernCardHeader>
         <ModernCardContent className="p-0">
           <div className="space-y-0">
-            {data.alerts.map((alert, index) => (
+            {data.alerts.map((alert: any, index: number) => (
               <div key={alert.id} className={`p-4 border-b border-sage-100 hover:bg-sage-50 transition-colors ${
                 index === data.alerts.length - 1 ? 'border-b-0' : ''
               }`}>
@@ -193,7 +181,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="space-y-3">
-            {data.recentEvents.map((event) => (
+            {data.recentEvents.map((event: any) => (
               <div key={event.id} className="flex items-center gap-3 p-3 bg-sage-50 rounded-lg">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Heart className="h-4 w-4 text-green-600" />

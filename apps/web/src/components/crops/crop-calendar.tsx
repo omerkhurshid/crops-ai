@@ -310,104 +310,102 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       {/* Main Calendar View */}
       <Card>
         <CardContent className="p-0">
-          {/* Header Row */}
-          <div className="grid grid-cols-12 gap-0 border-b bg-gray-50">
-            <div className="col-span-4 p-4 border-r">
-              <div className="grid grid-cols-3 gap-4 text-sm font-medium text-gray-700">
-                <span># Planted</span>
-                <span>Location</span>
-                <span>Key Dates</span>
-              </div>
-            </div>
-            <div className="col-span-8 p-2">
-              <div className="grid grid-cols-12 gap-0">
-                {months.map((month, index) => (
-                  <div key={month} className="text-center text-sm font-medium text-gray-700 py-2">
-                    {month}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Planning Rows */}
-          <div className="divide-y">
-            {filteredPlannings.map((planning) => {
-              const timeline = getTimelinePosition(planning)
-              
-              return (
-                <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-gray-50 transition-colors">
-                  {/* Left Info Panel */}
-                  <div className="col-span-4 p-4 border-r">
-                    <div className="grid grid-cols-3 gap-4">
-                      {/* Planted Quantity */}
-                      <div>
-                        <h4 className="font-semibold text-blue-600 text-sm hover:text-blue-700 cursor-pointer">
-                          {planning.cropName} {planning.variety}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {formatQuantity(planning.plantedQuantity, planning.unit)}
-                        </p>
-                      </div>
-
-                      {/* Location */}
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{planning.location}</p>
-                        {planning.bedNumber && (
-                          <p className="text-xs text-gray-500">Beds: {planning.bedNumber}</p>
-                        )}
-                      </div>
-
-                      {/* Key Dates */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1 text-xs">
-                          <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                          <span>Start: {formatDate(planning.startDate)}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs">
-                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                          <span>Plant: {formatDate(planning.plantDate)}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs">
-                          <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                          <span>Harvest: {formatDate(planning.harvestDate)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Timeline Section */}
-                  <div className="col-span-8 p-2 relative">
-                    <div className="relative h-12 bg-white">
-                      {/* Timeline Bar - Enhanced */}
-                      <div
-                        className={`absolute top-1 h-10 rounded-lg ${statusColors[planning.status]} shadow-lg flex items-center px-3 text-white text-sm font-semibold transition-all hover:shadow-xl hover:scale-105 cursor-pointer border-2 border-white`}
-                        style={{
-                          left: `${timeline.left}%`,
-                          width: `${timeline.width}%`,
-                          minWidth: '60px'
-                        }}
-                        title={`${planning.cropName} - ${planning.status}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          {statusIcons[planning.status]}
-                          <span className="hidden sm:inline truncate">
-                            {planning.cropName}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Month Grid Lines (subtle) */}
-                      <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-20">
-                        {months.map((_, index) => (
-                          <div key={index} className="border-r border-gray-200"></div>
-                        ))}
-                      </div>
-                    </div>
+          <div className="overflow-x-auto">
+            <div className="min-w-[800px]">
+              {/* Header Row */}
+              <div className="grid grid-cols-12 gap-0 border-b bg-gray-50">
+                <div className="col-span-5 p-4 border-r">
+                  <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-700">
+                    <span className="truncate">Crop</span>
+                    <span className="truncate">Location</span>
+                    <span className="truncate">Dates</span>
                   </div>
                 </div>
-              )
-            })}
+                <div className="col-span-7 p-2">
+                  <div className="grid grid-cols-12 gap-0">
+                    {months.map((month, index) => (
+                      <div key={month} className="text-center text-xs font-medium text-gray-700 py-2 px-1">
+                        {month}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Planning Rows */}
+              <div className="divide-y">
+                {filteredPlannings.map((planning) => {
+                  const timeline = getTimelinePosition(planning)
+                  
+                  return (
+                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-gray-50 transition-colors min-h-[80px]">
+                      {/* Left Info Panel */}
+                      <div className="col-span-5 p-3 border-r">
+                        <div className="grid grid-cols-3 gap-2">
+                          {/* Crop Name */}
+                          <div className="min-w-0">
+                            <h4 className="font-semibold text-blue-600 text-xs hover:text-blue-700 cursor-pointer truncate">
+                              {planning.cropName}
+                            </h4>
+                            <p className="text-xs text-gray-600 truncate">
+                              {formatQuantity(planning.plantedQuantity, planning.unit)}
+                            </p>
+                          </div>
+
+                          {/* Location */}
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium text-gray-900 truncate">{planning.location}</p>
+                            {planning.bedNumber && (
+                              <p className="text-xs text-gray-500 truncate">{planning.bedNumber}</p>
+                            )}
+                          </div>
+
+                          {/* Key Dates */}
+                          <div className="min-w-0">
+                            <div className="text-xs text-gray-600 space-y-1">
+                              <div className="truncate">Start: {formatDate(planning.startDate)}</div>
+                              <div className="truncate">Harvest: {formatDate(planning.harvestDate)}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Timeline Section */}
+                      <div className="col-span-7 p-2 relative">
+                        <div className="relative h-16 bg-white">
+                          {/* Month Grid Lines (subtle) */}
+                          <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-10">
+                            {months.map((_, index) => (
+                              <div key={index} className="border-r border-gray-200"></div>
+                            ))}
+                          </div>
+                          
+                          {/* Timeline Bar - Enhanced */}
+                          <div
+                            className={`absolute top-2 h-12 rounded-lg ${statusColors[planning.status]} shadow-sm flex items-center px-2 text-white text-xs font-medium transition-all hover:shadow-md cursor-pointer`}
+                            style={{
+                              left: `${Math.max(1, timeline.left)}%`,
+                              width: `${Math.max(8, timeline.width)}%`,
+                              minWidth: '40px'
+                            }}
+                            title={`${planning.cropName} - ${planning.status}`}
+                          >
+                            <div className="flex items-center gap-1 w-full">
+                              <span className="w-3 h-3 flex-shrink-0">
+                                {statusIcons[planning.status]}
+                              </span>
+                              <span className="truncate text-xs">
+                                {planning.cropName.split(' ')[0]}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

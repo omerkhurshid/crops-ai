@@ -1,5 +1,8 @@
-import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { CropCalendar } from '../../components/crops/crop-calendar'
 import { FarmerFriendlyCropView } from '../../components/crops/farmer-friendly-crop-view'
@@ -9,46 +12,61 @@ import { ClientFloatingButton } from '../../components/ui/client-floating-button
 import { Sprout, Plus, Calendar, TrendingUp, MapPin, Scissors, Phone } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { FarmerFriendlyActionsList } from '../../components/crops/farmer-friendly-actions-list'
-import { prisma } from '../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
+export default function CropsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farmId, setFarmId] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
 
-export default async function CropsPage() {
-  try {
-    const user = await getCurrentUser()
+  useEffect(() => {
+    if (status === 'loading') return
 
-    if (!user) {
-      redirect('/login')
+    if (!session) {
+      router.push('/login')
+      return
     }
 
-    // Get the user's first farm or create a default farm ID
-    let farmId = user.id // fallback - use user ID if no farm found
-    
-    // Try to get farm data, but don't fail if database is unavailable
-    try {
-      // Add a timeout to prevent hanging
-      const farmPromise = prisma.farm.findFirst({
-        where: { ownerId: user.id },
-        select: { id: true }
-      })
-      
-      // Race condition: either get the farm or timeout after 3 seconds
-      const farm = await Promise.race([
-        farmPromise,
-        new Promise<null>((_, reject) => 
-          setTimeout(() => reject(new Error('Farm query timeout')), 3000)
-        )
-      ])
-      
-      if (farm) {
-        farmId = farm.id
+    // Set initial farmId - use user ID as fallback
+    const initialFarmId = session.user?.id || 'default-farm'
+    setFarmId(initialFarmId)
+
+    // Try to fetch actual farm data in the background
+    const fetchFarmData = async () => {
+      try {
+        const response = await fetch('/api/farms')
+        if (response.ok) {
+          const farms = await response.json()
+          if (farms && farms.length > 0) {
+            setFarmId(farms[0].id)
+          }
+        }
+      } catch (error) {
+        console.warn('Could not fetch farm data, using fallback ID')
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.warn('Database connection issue or timeout, using user ID as farm fallback:', error)
-      // Continue with user.id as farmId - components will handle the fallback gracefully
     }
 
+    fetchFarmData()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
     return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading crops...</p>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!session) {
+    return null // Will redirect
+  }
+
+  return (
     <DashboardLayout>
       {/* Floating Action Button */}
       <ClientFloatingButton
@@ -143,8 +161,4 @@ export default async function CropsPage() {
       </main>
     </DashboardLayout>
   )
-  } catch (error) {
-    console.error('Error in CropsPage:', error)
-    throw error
-  }
 }

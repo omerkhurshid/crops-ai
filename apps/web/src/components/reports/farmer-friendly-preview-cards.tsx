@@ -8,7 +8,7 @@ import { InfoTooltip } from '../ui/info-tooltip';
 import { 
   TrendingUp, TrendingDown, Eye, ArrowRight,
   BarChart3, Leaf, DollarSign, CloudRain, TreePine, Users,
-  CheckCircle, AlertCircle, ThumbsUp, Target
+  CheckCircle, AlertCircle, ThumbsUp, Target, Plus
 } from 'lucide-react';
 import Link from 'next/link';
 

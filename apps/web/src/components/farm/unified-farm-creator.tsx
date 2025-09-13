@@ -11,7 +11,7 @@ import {
   MapPin, Locate, Search, Loader2, ChevronRight, CheckCircle,
   Wheat, Beef, TreePine, Apple, Flower2, 
   Users, AlertCircle, Navigation, Satellite,
-  FastForward, Play
+  FastForward, Play, Plus, Sprout
 } from 'lucide-react'
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
@@ -424,18 +424,6 @@ export function UnifiedFarmCreator() {
                             mapTypeControl: true,
                             gestureHandling: 'greedy'
                           }}
-                          onPolygonComplete={(polygon) => {
-                            const path = polygon.getPath()
-                            const boundaries = []
-                            for (let i = 0; i < path.getLength(); i++) {
-                              const point = path.getAt(i)
-                              boundaries.push({
-                                lat: point.lat(),
-                                lng: point.lng()
-                              })
-                            }
-                            setFarm(prev => ({ ...prev, boundaries }))
-                          }}
                         >
                           <Marker position={farm.location} />
                           
@@ -477,7 +465,7 @@ export function UnifiedFarmCreator() {
                               drawingControl: true,
                               drawingControlOptions: {
                                 position: 2, // TOP_CENTER
-                                drawingModes: ['polygon']
+                                drawingModes: [window.google?.maps?.drawing?.OverlayType?.POLYGON].filter(Boolean)
                               },
                               polygonOptions: {
                                 fillColor: '#22c55e',
@@ -492,7 +480,7 @@ export function UnifiedFarmCreator() {
                             }}
                             onPolygonComplete={(polygon) => {
                               const path = polygon.getPath()
-                              const boundaries = []
+                              const boundaries: Array<{ lat: number; lng: number }> = []
                               for (let i = 0; i < path.getLength(); i++) {
                                 const point = path.getAt(i)
                                 boundaries.push({

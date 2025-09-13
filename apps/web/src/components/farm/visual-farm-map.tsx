@@ -83,6 +83,8 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   const [showInfoWindow, setShowInfoWindow] = useState(false)
   const [mapCenter, setMapCenter] = useState({ lat: farm.latitude, lng: farm.longitude })
   const [mapZoom, setMapZoom] = useState(15)
+  const [mapLoaded, setMapLoaded] = useState(false)
+  const [showMap, setShowMap] = useState(false)
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
@@ -123,6 +125,10 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   useEffect(() => {
     fetchFields()
   }, [farm.id])
+
+  const handleLoadMap = () => {
+    setShowMap(true)
+  }
 
   // Parse field boundary from database format
   const parseFieldBoundary = (boundary: any): Array<{ lat: number; lng: number }> | undefined => {
@@ -237,18 +243,38 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
         </CardHeader>
         <CardContent>
           <div className="rounded-lg overflow-hidden border">
-            <LoadScript
-              googleMapsApiKey={apiKey}
-              libraries={libraries}
-              loadingElement={
-                <div className="h-96 flex items-center justify-center bg-gray-100">
-                  <div className="text-center">
-                    <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
-                    <p className="text-sm text-gray-600">Loading farm map...</p>
-                  </div>
+            {!showMap ? (
+              <div className="h-96 flex items-center justify-center bg-gray-100">
+                <div className="text-center">
+                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Interactive Farm Map
+                  </h3>
+                  <p className="text-gray-600 mb-4 max-w-sm">
+                    View your farm boundaries and color-coded fields in satellite view
+                  </p>
+                  <Button onClick={handleLoadMap} className="mb-2">
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Load Map
+                  </Button>
+                  <p className="text-xs text-gray-500">
+                    {fields.length} fields ready to display
+                  </p>
                 </div>
-              }
-            >
+              </div>
+            ) : (
+              <LoadScript
+                googleMapsApiKey={apiKey}
+                libraries={libraries}
+                loadingElement={
+                  <div className="h-96 flex items-center justify-center bg-gray-100">
+                    <div className="text-center">
+                      <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
+                      <p className="text-sm text-gray-600">Loading farm map...</p>
+                    </div>
+                  </div>
+                }
+              >
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={mapCenter}
@@ -329,7 +355,8 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                   </InfoWindow>
                 )}
               </GoogleMap>
-            </LoadScript>
+              </LoadScript>
+            )}
           </div>
         </CardContent>
       </Card>

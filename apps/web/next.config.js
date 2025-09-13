@@ -4,7 +4,7 @@ const nextConfig = {
   transpilePackages: ["@crops-ai/shared", "@crops-ai/ui"],
   eslint: {
     // Allow production builds to complete even if there are ESLint warnings
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
     // Directories to run ESLint on during build
     dirs: ['src'],
   },

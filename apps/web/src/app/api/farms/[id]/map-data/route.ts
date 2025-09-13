@@ -42,27 +42,25 @@ export const GET = apiMiddleware.protected(
 
       // Get farm boundary from PostGIS
       let farmBoundary = null
-      if (farm.boundary) {
-        try {
-          const boundaryResult = await prisma.$queryRaw`
-            SELECT ST_AsGeoJSON(boundary) as boundary_geojson 
-            FROM farms 
-            WHERE id = ${farmId} AND boundary IS NOT NULL
-          ` as any[]
-          
-          if (boundaryResult.length > 0 && boundaryResult[0].boundary_geojson) {
-            const geoJson = JSON.parse(boundaryResult[0].boundary_geojson)
-            // Convert GeoJSON coordinates to lat/lng format
-            if (geoJson.type === 'Polygon' && geoJson.coordinates && geoJson.coordinates[0]) {
-              farmBoundary = geoJson.coordinates[0].map((coord: number[]) => ({
-                lat: coord[1],
-                lng: coord[0]
-              }))
-            }
+      try {
+        const boundaryResult = await prisma.$queryRaw`
+          SELECT ST_AsGeoJSON(boundary) as boundary_geojson 
+          FROM farms 
+          WHERE id = ${farmId} AND boundary IS NOT NULL
+        ` as any[]
+        
+        if (boundaryResult.length > 0 && boundaryResult[0].boundary_geojson) {
+          const geoJson = JSON.parse(boundaryResult[0].boundary_geojson)
+          // Convert GeoJSON coordinates to lat/lng format
+          if (geoJson.type === 'Polygon' && geoJson.coordinates && geoJson.coordinates[0]) {
+            farmBoundary = geoJson.coordinates[0].map((coord: number[]) => ({
+              lat: coord[1],
+              lng: coord[0]
+            }))
           }
-        } catch (error) {
-          console.warn('Failed to parse farm boundary:', error)
         }
+      } catch (error) {
+        console.warn('Failed to parse farm boundary:', error)
       }
 
       // Process fields with boundaries
@@ -71,26 +69,24 @@ export const GET = apiMiddleware.protected(
           let fieldBoundary = null
           
           // Get field boundary from PostGIS
-          if (field.boundary) {
-            try {
-              const fieldBoundaryResult = await prisma.$queryRaw`
-                SELECT ST_AsGeoJSON(boundary) as boundary_geojson 
-                FROM fields 
-                WHERE id = ${field.id} AND boundary IS NOT NULL
-              ` as any[]
-              
-              if (fieldBoundaryResult.length > 0 && fieldBoundaryResult[0].boundary_geojson) {
-                const geoJson = JSON.parse(fieldBoundaryResult[0].boundary_geojson)
-                if (geoJson.type === 'Polygon' && geoJson.coordinates && geoJson.coordinates[0]) {
-                  fieldBoundary = geoJson.coordinates[0].map((coord: number[]) => ({
-                    lat: coord[1],
-                    lng: coord[0]
-                  }))
-                }
+          try {
+            const fieldBoundaryResult = await prisma.$queryRaw`
+              SELECT ST_AsGeoJSON(boundary) as boundary_geojson 
+              FROM fields 
+              WHERE id = ${field.id} AND boundary IS NOT NULL
+            ` as any[]
+            
+            if (fieldBoundaryResult.length > 0 && fieldBoundaryResult[0].boundary_geojson) {
+              const geoJson = JSON.parse(fieldBoundaryResult[0].boundary_geojson)
+              if (geoJson.type === 'Polygon' && geoJson.coordinates && geoJson.coordinates[0]) {
+                fieldBoundary = geoJson.coordinates[0].map((coord: number[]) => ({
+                  lat: coord[1],
+                  lng: coord[0]
+                }))
               }
-            } catch (error) {
-              console.warn(`Failed to parse boundary for field ${field.id}:`, error)
             }
+          } catch (error) {
+            console.warn(`Failed to parse boundary for field ${field.id}:`, error)
           }
 
           return {

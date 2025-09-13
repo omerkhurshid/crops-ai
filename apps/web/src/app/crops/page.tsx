@@ -13,13 +13,14 @@ import { FarmerFriendlyActionsList } from '../../components/crops/farmer-friendl
 export const dynamic = 'force-dynamic'
 
 export default async function CropsPage() {
-  const user = await getCurrentUser()
+  try {
+    const user = await getCurrentUser()
 
-  if (!user) {
-    redirect('/login')
-  }
+    if (!user) {
+      redirect('/login')
+    }
 
-  return (
+    return (
     <DashboardLayout>
       {/* Floating Action Button */}
       <ClientFloatingButton
@@ -121,4 +122,8 @@ export default async function CropsPage() {
       </main>
     </DashboardLayout>
   )
+  } catch (error) {
+    console.error('Error in CropsPage:', error)
+    throw error
+  }
 }

@@ -22,17 +22,22 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 interface Task {
   id: string
   title: string
-  description: string
-  status: 'todo' | 'in_progress' | 'done'
+  description?: string
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled'
   priority: 'low' | 'medium' | 'high' | 'urgent'
-  category: 'crop' | 'livestock' | 'equipment' | 'general'
-  assignedTo?: string
-  assignedToName?: string
+  category?: string
   dueDate?: string
-  farmId?: string
+  farmId: string
   fieldId?: string
+  cropId?: string
+  userId: string
   createdAt: string
-  estimatedHours?: number
+  updatedAt: string
+  completedAt?: string
+  tags: string[]
+  farm?: { name: string }
+  field?: { name: string }
+  crop?: { cropType: string; variety: string }
 }
 
 interface TaskBoardProps {
@@ -40,82 +45,7 @@ interface TaskBoardProps {
   showAssignments?: boolean
 }
 
-const mockTasks: Task[] = [
-  {
-    id: '1',
-    title: 'Plant Corn in North Field',
-    description: 'Plant 500 acres of corn in the north field. Weather window looks optimal for next 3 days.',
-    status: 'todo',
-    priority: 'high',
-    category: 'crop',
-    assignedTo: 'john',
-    assignedToName: 'John Smith',
-    dueDate: '2024-04-15',
-    farmId: 'farm1',
-    fieldId: 'field1',
-    createdAt: '2024-04-10',
-    estimatedHours: 16
-  },
-  {
-    id: '2', 
-    title: 'Check Cattle Health',
-    description: 'Weekly health check for Herd A. Look for signs of respiratory issues.',
-    status: 'in_progress',
-    priority: 'medium',
-    category: 'livestock',
-    assignedTo: 'sarah',
-    assignedToName: 'Sarah Johnson',
-    dueDate: '2024-04-12',
-    farmId: 'farm1',
-    createdAt: '2024-04-08',
-    estimatedHours: 4
-  },
-  {
-    id: '3',
-    title: 'Service Tractor #2',
-    description: 'Scheduled maintenance on John Deere 8000 - oil change, filters, hydraulic check.',
-    status: 'done',
-    priority: 'medium',
-    category: 'equipment',
-    assignedTo: 'mike',
-    assignedToName: 'Mike Rodriguez',
-    dueDate: '2024-04-10',
-    farmId: 'farm1',
-    createdAt: '2024-04-08',
-    estimatedHours: 6
-  },
-  {
-    id: '4',
-    title: 'Apply Fertilizer - South Field',
-    description: 'Apply nitrogen fertilizer to south field corn. Rate: 150 lbs/acre.',
-    status: 'todo',
-    priority: 'urgent',
-    category: 'crop',
-    assignedTo: 'john',
-    assignedToName: 'John Smith', 
-    dueDate: '2024-04-13',
-    farmId: 'farm1',
-    fieldId: 'field2',
-    createdAt: '2024-04-11',
-    estimatedHours: 8
-  },
-  {
-    id: '5',
-    title: 'Rotate Cattle to Pasture B',
-    description: 'Move cattle from Pasture A to Pasture B. Pasture A needs rest for 3 weeks.',
-    status: 'in_progress',
-    priority: 'high',
-    category: 'livestock',
-    assignedTo: 'sarah',
-    assignedToName: 'Sarah Johnson',
-    dueDate: '2024-04-12',
-    farmId: 'farm1',
-    createdAt: '2024-04-11',
-    estimatedHours: 2
-  }
-]
-
-const categoryIcons = {
+const categoryIcons: Record<string, React.ReactNode> = {
   crop: <Sprout className="h-4 w-4" />,
   livestock: <Users className="h-4 w-4" />,
   equipment: <Tractor className="h-4 w-4" />,
@@ -151,17 +81,36 @@ const statusConfig = {
 }
 
 export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks)
-  const [loading, setLoading] = useState(false)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // Fetch tasks from API
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch(`/api/tasks?farmId=${farmId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setTasks(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTasks()
+  }, [farmId])
 
   // Group tasks by status
   const tasksByStatus = {
-    todo: tasks.filter(task => task.status === 'todo'),
+    todo: tasks.filter(task => task.status === 'pending'),
     in_progress: tasks.filter(task => task.status === 'in_progress'),
-    done: tasks.filter(task => task.status === 'done')
+    done: tasks.filter(task => task.status === 'completed')
   }
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
@@ -171,15 +120,34 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
       destination.index === source.index
     ) return
 
-    const newStatus = destination.droppableId as 'todo' | 'in_progress' | 'done'
+    const statusMap: Record<string, Task['status']> = {
+      'todo': 'pending',
+      'in_progress': 'in_progress', 
+      'done': 'completed'
+    }
+
+    const newStatus = statusMap[destination.droppableId]
     
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.id === draggableId 
-          ? { ...task, status: newStatus }
-          : task
-      )
-    )
+    try {
+      const response = await fetch(`/api/tasks/${draggableId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      })
+
+      if (response.ok) {
+        const updatedTask = await response.json()
+        setTasks(prevTasks => 
+          prevTasks.map(task => 
+            task.id === draggableId ? updatedTask : task
+          )
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update task status:', error)
+    }
   }
 
   const getTaskStats = () => {
@@ -203,6 +171,17 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
     if (diffDays === 0) return 'Due today'
     if (diffDays === 1) return 'Due tomorrow'
     return `Due in ${diffDays} days`
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+          <p className="text-gray-600 mt-4">Loading tasks...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -312,7 +291,7 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                               {/* Task Header */}
                               <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
-                                  {categoryIcons[task.category]}
+                                  {categoryIcons[task.category || 'general']}
                                   <h4 className="font-semibold text-gray-900 text-sm">{task.title}</h4>
                                 </div>
                                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
@@ -321,7 +300,9 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                               </div>
 
                               {/* Task Description */}
-                              <p className="text-sm text-gray-600 line-clamp-2">{task.description}</p>
+                              {task.description && (
+                                <p className="text-sm text-gray-600 line-clamp-2">{task.description}</p>
+                              )}
 
                               {/* Task Meta */}
                               <div className="flex items-center justify-between">

@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const monthlyTrends = transactions.reduce((acc, transaction) => {
+    const monthlyTrends = (transactions || []).reduce((acc, transaction) => {
       const monthKey = `${transaction.transactionDate.getFullYear()}-${String(transaction.transactionDate.getMonth() + 1).padStart(2, '0')}`;
       
       if (!acc[monthKey]) {
@@ -253,12 +253,12 @@ export async function GET(request: NextRequest) {
         transactionCount,
       },
       breakdown: {
-        incomeByCategory: incomeByCategory.map(item => ({
+        incomeByCategory: (incomeByCategory || []).map(item => ({
           category: item.category,
           amount: Number(item._sum.amount || 0),
           count: item._count,
         })),
-        expensesByCategory: expensesByCategory.map(item => ({
+        expensesByCategory: (expensesByCategory || []).map(item => ({
           category: item.category,
           amount: Number(item._sum.amount || 0),
           count: item._count,

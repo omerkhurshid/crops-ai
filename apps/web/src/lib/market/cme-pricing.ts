@@ -132,7 +132,7 @@ class CMEPricingService {
    */
   async getMultiplePrices(symbols: string[]): Promise<CommodityPrice[]> {
     try {
-      const pricePromises = symbols.map(symbol => this.getCommodityPrice(symbol))
+      const pricePromises = (symbols || []).map(symbol => this.getCommodityPrice(symbol))
       const prices = await Promise.all(pricePromises)
       return prices.filter(price => price !== null) as CommodityPrice[]
     } catch (error) {
@@ -235,7 +235,7 @@ class CMEPricingService {
       if (!history) return null
 
       // Simple trend-based forecast (in production would use more sophisticated models)
-      const recentPrices = history.prices.slice(-30).map(p => p.close)
+      const recentPrices = (history.prices || []).slice(-30).map(p => p.close)
       const trend = this.calculateTrend(recentPrices)
       const volatility = this.calculateVolatility(recentPrices)
 
@@ -368,7 +368,7 @@ class CMEPricingService {
   private calculateGrainIndex(grains: CommodityPrice[]): number {
     if (grains.length === 0) return 100
     
-    const totalChange = grains.reduce((sum, grain) => sum + grain.changePercent, 0)
+    const totalChange = (grains || []).reduce((sum, grain) => sum + grain.changePercent, 0)
     return 100 + (totalChange / grains.length)
   }
 
@@ -378,7 +378,7 @@ class CMEPricingService {
   private calculateVolatilityIndex(commodities: CommodityPrice[]): number {
     if (commodities.length === 0) return 0
     
-    const changes = commodities.map(c => Math.abs(c.changePercent))
+    const changes = (commodities || []).map(c => Math.abs(c.changePercent))
     const avgVolatility = changes.reduce((a, b) => a + b, 0) / changes.length
     return Math.round(avgVolatility * 100) / 100
   }
@@ -387,9 +387,9 @@ class CMEPricingService {
    * Analyze market trends
    */
   private analyzeTrends(commodities: CommodityPrice[]) {
-    const bullish = commodities.filter(c => c.changePercent > 2).map(c => c.symbol)
-    const bearish = commodities.filter(c => c.changePercent < -2).map(c => c.symbol)
-    const neutral = commodities.filter(c => Math.abs(c.changePercent) <= 2).map(c => c.symbol)
+    const bullish = (commodities || []).filter(c => c.changePercent > 2).map(c => c.symbol)
+    const bearish = (commodities || []).filter(c => c.changePercent < -2).map(c => c.symbol)
+    const neutral = (commodities || []).filter(c => Math.abs(c.changePercent) <= 2).map(c => c.symbol)
     
     return { bullish, bearish, neutral }
   }
@@ -485,7 +485,7 @@ class CMEPricingService {
   private formatHistoricalData(symbol: string, data: any): PriceHistory {
     return {
       symbol,
-      prices: data.map((item: any) => ({
+      prices: (data || []).map((item: any) => ({
         date: item.date,
         open: item.open,
         high: item.high,

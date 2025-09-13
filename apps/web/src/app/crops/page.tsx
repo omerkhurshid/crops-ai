@@ -9,6 +9,7 @@ import { ClientFloatingButton } from '../../components/ui/client-floating-button
 import { Sprout, Plus, Calendar, TrendingUp, MapPin, Scissors, Phone } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { FarmerFriendlyActionsList } from '../../components/crops/farmer-friendly-actions-list'
+import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,19 @@ export default async function CropsPage() {
       redirect('/login')
     }
 
+    // Get the user's first farm or create a default farm ID
+    let farmId = user.id // fallback
+    try {
+      const farm = await prisma.farm.findFirst({
+        where: { userId: user.id }
+      })
+      if (farm) {
+        farmId = farm.id
+      }
+    } catch (error) {
+      console.warn('Could not fetch farm for user, using user ID as fallback:', error)
+    }
+
     return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -29,13 +43,6 @@ export default async function CropsPage() {
         variant="primary"
       />
       
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Sprout className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Calendar className="h-8 w-8 text-sage-600" />
-      </div>
       
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-12">
@@ -61,7 +68,7 @@ export default async function CropsPage() {
           <div className="lg:col-span-2">
             <ModernCard variant="floating">
               <ModernCardContent className="p-6">
-                <CropCalendar farmId={user.id} />
+                <CropCalendar farmId={farmId} />
               </ModernCardContent>
             </ModernCard>
           </div>
@@ -76,7 +83,7 @@ export default async function CropsPage() {
                 </ModernCardTitle>
               </ModernCardHeader>
               <ModernCardContent>
-                <FarmerFriendlyActionsList farmId={user.id} />
+                <FarmerFriendlyActionsList farmId={farmId} />
               </ModernCardContent>
             </ModernCard>
 
@@ -117,7 +124,7 @@ export default async function CropsPage() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">Mobile View</h2>
             <p className="text-gray-600">Simplified cards for easy field access</p>
           </div>
-          <FarmerFriendlyCropView farmId={user.id} />
+          <FarmerFriendlyCropView farmId={farmId} />
         </div>
       </main>
     </DashboardLayout>

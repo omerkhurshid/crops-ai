@@ -102,8 +102,8 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
               href={link.href}
               className={`flex items-center px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
                 active
-                  ? 'bg-white/20 text-white border-r-2 border-green-400 backdrop-blur-sm shadow-lg'
-                  : 'text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm'
+                  ? 'bg-white/20 text-green-300 border-r-2 border-green-400 backdrop-blur-sm shadow-lg'
+                  : 'text-white/90 hover:text-green-200 hover:bg-white/10 backdrop-blur-sm'
               }`}
             >
               <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${

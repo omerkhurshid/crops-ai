@@ -32,13 +32,6 @@ export default async function TasksPage() {
         variant="primary"
       />
       
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <CheckSquare className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Calendar className="h-8 w-8 text-sage-600" />
-      </div>
       
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">

@@ -134,7 +134,7 @@ export function useNBARecommendations(farmId?: string) {
         throw new Error('Invalid response format from server')
       }
 
-      const processedRecommendations = data.recommendations.map((rec: any) => {
+      const processedRecommendations = (data.recommendations || []).map((rec: any) => {
         try {
           return {
             ...rec,
@@ -213,7 +213,7 @@ export function useNBARecommendations(farmId?: string) {
       }
 
       const data = await response.json()
-      const formattedRecs = data.recommendations.map((rec: any) => ({
+      const formattedRecs = (data.recommendations || []).map((rec: any) => ({
         ...rec,
         createdAt: new Date(rec.createdAt),
         updatedAt: new Date(rec.updatedAt),

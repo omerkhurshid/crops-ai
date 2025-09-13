@@ -52,18 +52,18 @@ async function getFarmDetails(farmId: string, userId: string) {
     }
 
     // Calculate aggregate stats
-    const totalArea = farm.fields.reduce((sum, field) => sum + field.area, 0)
-    const averageNDVI = farm.fields.reduce((sum, field) => {
-      const latestData = field.satelliteData[0]
+    const totalArea = (farm.fields || []).reduce((sum, field) => sum + field.area, 0)
+    const averageNDVI = (farm.fields || []).reduce((sum, field) => {
+      const latestData = field.satelliteData?.[0]
       return sum + (latestData?.ndvi || 0)
-    }, 0) / (farm.fields.length || 1)
+    }, 0) / ((farm.fields || []).length || 1)
 
     return {
       ...farm,
       stats: {
         totalArea,
         averageNDVI,
-        fieldsCount: farm.fields.length,
+        fieldsCount: (farm.fields || []).length,
         healthScore: Math.round(averageNDVI * 100)
       }
     }
@@ -235,9 +235,9 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>
-                {farm.fields.length > 0 ? (
+                {(farm.fields || []).length > 0 ? (
                   <div className="space-y-4">
-                    {farm.fields.map((field, index) => (
+                    {(farm.fields || []).map((field, index) => (
                       <ModernCard key={field.id} variant="soft" className="hover:variant-floating transition-all duration-300 cursor-pointer group">
                         <ModernCardContent className="p-5">
                           <div className="flex justify-between items-start">
@@ -325,9 +325,9 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             />
 
             {/* Satellite Imagery */}
-            {farm.fields.length > 0 && (
+            {(farm.fields || []).length > 0 && (
               <div className="space-y-6">
-                {farm.fields.map((field) => (
+                {(farm.fields || []).map((field) => (
                   <SatelliteViewer
                     key={field.id}
                     fieldId={field.id}
@@ -340,7 +340,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             {/* Market Intelligence */}
             <div className="mt-8">
               <MarketDashboard 
-                cropTypes={farm.fields.map(f => f.crops[0]?.cropType).filter(Boolean)}
+                cropTypes={(farm.fields || []).map(f => f.crops?.[0]?.cropType).filter(Boolean)}
               />
             </div>
 

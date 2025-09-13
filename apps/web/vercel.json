@@ -25,13 +25,17 @@
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.vercel.app *.nextjs.org maps.googleapis.com maps.gstatic.com *.googletagmanager.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com maps.googleapis.com; img-src 'self' data: blob: maps.googleapis.com maps.gstatic.com *.googleusercontent.com *.gstatic.com; font-src 'self' fonts.gstatic.com; connect-src 'self' maps.googleapis.com *.google-analytics.com *.analytics.google.com *.googletagmanager.com; frame-src 'self' maps.googleapis.com"
         }
       ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://crops-ai.vercel.app, https://beta.crops.ai" },
+        { "key": "Access-Control-Allow-Origin", "value": "https://crops-ai.vercel.app, https://beta.crops.ai, https://cropple.ai, https://www.cropple.ai" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" },
         { "key": "Access-Control-Allow-Credentials", "value": "true" }

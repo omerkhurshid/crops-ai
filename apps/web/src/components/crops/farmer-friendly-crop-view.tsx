@@ -195,7 +195,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {nextActions.slice(0, 3).map((action) => (
+              {(nextActions || []).slice(0, 3).map((action) => (
                 <div key={action.id} className="flex items-center justify-between p-4 bg-canvas rounded-card border border-fk-border hover:border-fk-primary/30 hover:shadow-fk-sm transition-all duration-micro">
                   <div className="flex items-center gap-4">
                     <div className="text-2xl">{action.icon}</div>

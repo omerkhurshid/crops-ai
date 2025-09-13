@@ -107,7 +107,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           
           <div className="space-y-3">
             <h4 className="font-semibold text-sage-800">Species Breakdown</h4>
-            {data.species.map((species: any, index: number) => (
+            {(data.species || []).map((species: any, index: number) => (
               <div key={index} className="flex justify-between items-center p-3 bg-sage-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Cat className="h-5 w-5 text-sage-600" />
@@ -144,9 +144,9 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
         </ModernCardHeader>
         <ModernCardContent className="p-0">
           <div className="space-y-0">
-            {data.alerts.map((alert: any, index: number) => (
+            {(data.alerts || []).map((alert: any, index: number) => (
               <div key={alert.id} className={`p-4 border-b border-sage-100 hover:bg-sage-50 transition-colors ${
-                index === data.alerts.length - 1 ? 'border-b-0' : ''
+                index === (data.alerts || []).length - 1 ? 'border-b-0' : ''
               }`}>
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-3">
@@ -181,7 +181,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="space-y-3">
-            {data.recentEvents.map((event: any) => (
+            {(data.recentEvents || []).map((event: any) => (
               <div key={event.id} className="flex items-center gap-3 p-3 bg-sage-50 rounded-lg">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Heart className="h-4 w-4 text-green-600" />

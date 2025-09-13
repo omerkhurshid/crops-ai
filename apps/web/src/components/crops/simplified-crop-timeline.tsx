@@ -103,8 +103,8 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   })
 
   // Get unique crops and locations for filtering
-  const uniqueCrops = Array.from(new Set(plannings.map(p => p.cropName)))
-  const uniqueLocations = Array.from(new Set(plannings.map(p => p.location)))
+  const uniqueCrops = Array.from(new Set((plannings || []).map(p => p.cropName)))
+  const uniqueLocations = Array.from(new Set((plannings || []).map(p => p.location)))
 
   // Filter plannings based on selected filters
   const filteredPlannings = yearPlannings.filter(planning => {

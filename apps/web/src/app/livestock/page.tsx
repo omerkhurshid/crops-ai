@@ -18,54 +18,54 @@ export default async function LivestockPage() {
   }
 
   // Get real livestock data from database
-  const [livestockEvents, animals] = await Promise.all([
-    prisma.livestockEvent.findMany({
-      where: {
-        farm: {
-          ownerId: user.id
-        }
-      },
-      include: {
-        farm: {
-          select: {
-            name: true
-          }
+  const livestockEvents = await prisma.livestockEvent.findMany({
+    where: {
+      farm: {
+        ownerId: user.id
+      }
+    },
+    include: {
+      farm: {
+        select: {
+          name: true
         }
       }
-    }),
-    // Check if we have any animals (you might need to create this table)
-    // For now, we'll calculate stats from livestockEvent data
-    prisma.livestockEvent.groupBy({
-      by: ['animalId'],
-      where: {
-        farm: {
-          ownerId: user.id
-        }
-      }
-    })
-  ])
+    }
+  })
 
-  // Calculate real statistics
-  const totalAnimals = animals.length
-  const healthEvents = livestockEvents.filter(event => event.eventType?.includes('health'))
-  const healthAlerts = healthEvents.filter(event => event.notes?.toLowerCase().includes('alert') || event.notes?.toLowerCase().includes('sick')).length
+  // Calculate real statistics from livestockEvent data
+  const totalAnimals = livestockEvents.reduce((sum, event) => sum + event.animalCount, 0)
+  const healthEvents = livestockEvents.filter(event => 
+    event.eventType?.toLowerCase().includes('health') || 
+    event.eventType?.toLowerCase().includes('vaccination') ||
+    event.eventType?.toLowerCase().includes('treatment')
+  )
+  const healthAlerts = healthEvents.filter(event => 
+    event.notes?.toLowerCase().includes('alert') || 
+    event.notes?.toLowerCase().includes('sick') ||
+    event.notes?.toLowerCase().includes('urgent')
+  ).length
   
   // Calculate health score based on recent events
   const recentHealthEvents = healthEvents.filter(event => {
-    const eventDate = new Date(event.date)
+    const eventDate = new Date(event.eventDate)
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
     return eventDate >= thirtyDaysAgo
   })
   
   const healthScore = totalAnimals > 0 ? 
-    Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 10
+    Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 0
   
-  // Calculate average daily gain from weight events
-  const weightEvents = livestockEvents.filter(event => event.eventType?.includes('weight'))
+  // Calculate average daily gain from weight/growth related events
+  const weightEvents = livestockEvents.filter(event => 
+    event.eventType?.toLowerCase().includes('weight') ||
+    event.eventType?.toLowerCase().includes('growth') ||
+    event.eventType?.toLowerCase().includes('gain')
+  )
   const avgDailyGain = weightEvents.length > 0 ? 
     weightEvents.reduce((sum, event) => {
-      const weight = parseFloat(event.notes || '0')
+      const weight = parseFloat(event.notes?.match(/(\d+\.?\d*)/)?.[1] || '0')
       return sum + (isNaN(weight) ? 0 : weight)
     }, 0) / weightEvents.length : 0
 

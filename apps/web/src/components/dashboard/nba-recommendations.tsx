@@ -20,6 +20,7 @@ import {
   ThumbsUp,
   ThumbsDown
 } from 'lucide-react'
+import { ensureArray } from '../../lib/utils'
 
 interface NBARecommendationsProps {
   farmId: string
@@ -107,7 +108,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
   // Memoized computed values for performance
   const urgentRecs = useMemo(() => getUrgentRecommendations(), [getUrgentRecommendations])
   const highValueRecs = useMemo(() => getHighValueRecommendations(1000), [getHighValueRecommendations])
-  const pendingRecs = useMemo(() => recommendations.filter(r => r.status === 'PENDING'), [recommendations])
+  const pendingRecs = useMemo(() => ensureArray(recommendations).filter(r => r.status === 'PENDING'), [recommendations])
 
   // Memoized event handlers
   const handleAcceptRecommendation = useCallback(async (id: string) => {
@@ -225,7 +226,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
         >
           <div className="p-6">
             <div className="space-y-4">
-              {(pendingRecs || []).slice(0, 5).map((rec) => (
+              {ensureArray(pendingRecs).slice(0, 5).map((rec) => (
               <div
                 key={rec.id}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"

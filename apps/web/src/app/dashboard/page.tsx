@@ -13,6 +13,7 @@ import {
   ThermometerSun, Droplets, Bell, ChevronDown, BarChart3, Activity, Zap, Cat
 } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
+import { ensureArray } from '../../lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,7 +78,7 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
   const now = new Date()
   
   // Weather-based urgent tasks
-  ;(weatherAlerts || []).forEach(alert => {
+  ensureArray(weatherAlerts).forEach(alert => {
     if (alert.severity === 'high' || alert.severity === 'severe') {
       tasks.push({
         id: `weather-${alert.id}`,
@@ -91,7 +92,7 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
   })
   
   // Field inspection tasks based on farm health
-  ;(farms || []).forEach(farm => {
+  ensureArray(farms).forEach(farm => {
     farm.fields?.forEach((field: any) => {
       // Simulate NDVI-based recommendations
       const randomNdvi = Math.random()
@@ -110,7 +111,7 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
   })
   
   // Financial tasks
-  const recentExpenses = (financialData || []).filter(t => 
+  const recentExpenses = ensureArray(financialData).filter(t => 
     t.type === 'EXPENSE' && 
     new Date(t.transactionDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   )
@@ -131,9 +132,9 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
 
 // Generate market-based recommendations
 function generateMarketInsights(marketPrices: any[]) {
-  if (!(marketPrices || []).length) return []
+  if (!ensureArray(marketPrices).length) return []
   
-  return (marketPrices || []).slice(0, 2).map(price => ({
+  return ensureArray(marketPrices).slice(0, 2).map(price => ({
     commodity: price.commodity,
     price: price.price,
     change: ((Math.random() - 0.5) * 10).toFixed(1),
@@ -154,12 +155,12 @@ export default async function DashboardPage() {
     
     // Calculate key metrics
     const totalFarms = farms.length
-    const totalArea = (farms || []).reduce((sum, farm) => sum + (farm.totalArea || 0), 0)
-    const totalFields = (farms || []).reduce((sum, farm) => sum + (farm.fields?.length || 0), 0)
+    const totalArea = ensureArray(farms).reduce((sum, farm) => sum + (farm.totalArea || 0), 0)
+    const totalFields = ensureArray(farms).reduce((sum, farm) => sum + (farm.fields?.length || 0), 0)
     
     // Calculate financials
     const currentYear = new Date().getFullYear()
-    const yearlyFinancials = (financialData || []).filter(t => 
+    const yearlyFinancials = ensureArray(financialData).filter(t => 
       new Date(t.transactionDate).getFullYear() === currentYear
     )
     const totalRevenue = yearlyFinancials

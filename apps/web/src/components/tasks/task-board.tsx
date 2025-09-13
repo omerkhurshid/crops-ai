@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Avatar, AvatarFallback } from '../ui/avatar'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
 import { 
   Plus, 
   Calendar, 
@@ -53,36 +56,44 @@ const categoryIcons: Record<string, React.ReactNode> = {
 }
 
 const priorityColors = {
-  low: 'bg-gray-100 text-gray-700 border-gray-300',
-  medium: 'bg-blue-100 text-blue-700 border-blue-300', 
-  high: 'bg-orange-100 text-orange-700 border-orange-300',
-  urgent: 'bg-red-100 text-red-700 border-red-300'
+  low: 'bg-fk-neutral/10 text-fk-neutral border-fk-neutral/30',
+  medium: 'bg-fk-info/10 text-fk-info border-fk-info/30', 
+  high: 'bg-fk-warning/10 text-fk-warning border-fk-warning/30',
+  urgent: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30'
 }
 
 const statusConfig = {
   todo: {
     title: 'To Do',
     icon: <Clock className="h-5 w-5" />,
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-50'
+    color: 'text-fk-text-muted',
+    bgColor: 'bg-fk-neutral/10'
   },
   in_progress: {
     title: 'In Progress', 
     icon: <AlertCircle className="h-5 w-5" />,
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50'
+    color: 'text-fk-accent-sky',
+    bgColor: 'bg-fk-accent-sky/10'
   },
   done: {
     title: 'Done',
     icon: <CheckCircle className="h-5 w-5" />,
-    color: 'text-green-600', 
-    bgColor: 'bg-green-50'
+    color: 'text-fk-success', 
+    bgColor: 'bg-fk-success/10'
   }
 }
 
 export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newTask, setNewTask] = useState({
+    title: '',
+    description: '',
+    priority: 'medium' as Task['priority'],
+    category: '',
+    dueDate: ''
+  })
 
   // Fetch tasks from API
   useEffect(() => {
@@ -150,6 +161,37 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
     }
   }
 
+  const handleAddTask = async () => {
+    if (!newTask.title.trim()) return
+    
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newTask,
+          farmId: farmId,
+          tags: []
+        })
+      })
+      
+      if (response.ok) {
+        const createdTask = await response.json()
+        setTasks(prevTasks => [...prevTasks, createdTask])
+        setNewTask({
+          title: '',
+          description: '',
+          priority: 'medium',
+          category: '',
+          dueDate: ''
+        })
+        setShowAddForm(false)
+      }
+    } catch (error) {
+      console.error('Failed to create task:', error)
+    }
+  }
+
   const getTaskStats = () => {
     const total = tasks.length
     const completed = tasksByStatus.done.length // This references the 'done' key in tasksByStatus which maps to 'completed' status
@@ -186,52 +228,52 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
 
   return (
     <div className="space-y-6">
-      {/* Task Stats Header */}
+      {/* Task Stats Header - FieldKit KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Tasks</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-semibold text-fk-text-muted">Total Tasks</p>
+                <p className="text-2xl font-bold text-fk-text">{stats.total}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-gray-400" />
+              <AlertCircle className="h-8 w-8 text-fk-text-muted" />
             </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-600">In Progress</p>
-                <p className="text-2xl font-bold text-blue-900">{stats.inProgress}</p>
+                <p className="text-sm font-semibold text-fk-accent-sky">In Progress</p>
+                <p className="text-2xl font-bold text-fk-accent-sky">{stats.inProgress}</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-400" />
+              <Clock className="h-8 w-8 text-fk-accent-sky" />
             </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-green-600">Completed</p>
-                <p className="text-2xl font-bold text-green-900">{stats.completed}</p>
+                <p className="text-sm font-semibold text-fk-success">Completed</p>
+                <p className="text-2xl font-bold text-fk-success">{stats.completed}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-400" />
+              <CheckCircle className="h-8 w-8 text-fk-success" />
             </div>
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
+        <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-600">Urgent</p>
-                <p className="text-2xl font-bold text-red-900">{stats.urgent}</p>
+                <p className="text-sm font-semibold text-fk-danger">Urgent</p>
+                <p className="text-2xl font-bold text-fk-danger">{stats.urgent}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-red-400" />
+              <AlertCircle className="h-8 w-8 text-fk-danger" />
             </div>
           </CardContent>
         </Card>
@@ -239,8 +281,11 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
 
       {/* Add Task Button */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-900">Task Board</h2>
-        <Button className="bg-sage-600 hover:bg-sage-700">
+        <h2 className="text-2xl font-bold text-fk-text">Task Board</h2>
+        <Button 
+          className="bg-fk-primary hover:bg-fk-primary-600 text-white rounded-control"
+          onClick={() => setShowAddForm(true)}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Add Task
         </Button>
@@ -251,15 +296,15 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {Object.entries(statusConfig).map(([status, config]) => (
             <div key={status} className="space-y-4">
-              {/* Column Header */}
-              <div className={`p-4 rounded-lg ${config.bgColor} border-2 border-dashed border-gray-200`}>
+              {/* Column Header - FieldKit Style */}
+              <div className={`p-4 rounded-card ${config.bgColor} border border-fk-border`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={config.color}>
                       {config.icon}
                     </div>
-                    <h3 className="font-semibold text-gray-900">{config.title}</h3>
-                    <Badge variant="secondary" className="text-xs">
+                    <h3 className="font-bold text-fk-text">{config.title}</h3>
+                    <Badge className="text-xs bg-fk-primary/10 text-fk-primary border-fk-primary/30">
                       {tasksByStatus[status as keyof typeof tasksByStatus].length}
                     </Badge>
                   </div>
@@ -283,30 +328,32 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`cursor-move transition-shadow ${
-                              snapshot.isDragging ? 'shadow-lg rotate-3' : 'hover:shadow-md'
+                            className={`cursor-move transition-all duration-micro bg-surface rounded-card shadow-fk-sm border border-fk-border ${
+                              snapshot.isDragging ? 'shadow-fk-lg rotate-3' : 'hover:shadow-fk-md'
                             }`}
                           >
                             <CardContent className="p-4 space-y-3">
                               {/* Task Header */}
                               <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
-                                  {categoryIcons[task.category || 'general']}
-                                  <h4 className="font-semibold text-gray-900 text-sm">{task.title}</h4>
+                                  <div className="text-fk-primary">
+                                    {categoryIcons[task.category || 'general']}
+                                  </div>
+                                  <h4 className="font-semibold text-fk-text text-sm">{task.title}</h4>
                                 </div>
-                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                  <MoreHorizontal className="h-4 w-4" />
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0 hover:bg-fk-primary/10">
+                                  <MoreHorizontal className="h-4 w-4 text-fk-text-muted" />
                                 </Button>
                               </div>
 
                               {/* Task Description */}
                               {task.description && (
-                                <p className="text-sm text-gray-600 line-clamp-2">{task.description}</p>
+                                <p className="text-sm text-fk-text-muted line-clamp-2">{task.description}</p>
                               )}
 
                               {/* Task Meta */}
                               <div className="flex items-center justify-between">
-                                <Badge className={`text-xs ${priorityColors[task.priority]}`}>
+                                <Badge className={`text-xs font-medium ${priorityColors[task.priority]}`}>
                                   {task.priority}
                                 </Badge>
                                 
@@ -314,10 +361,10 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
 
                               {/* Due Date */}
                               {task.dueDate && (
-                                <div className="flex items-center gap-2 text-xs text-gray-600">
+                                <div className="flex items-center gap-2 text-xs text-fk-text-muted">
                                   <Calendar className="h-3 w-3" />
                                   <span className={
-                                    new Date(task.dueDate) < new Date() ? 'text-red-600 font-medium' : ''
+                                    new Date(task.dueDate) < new Date() ? 'text-fk-danger font-semibold' : ''
                                   }>
                                     {formatDueDate(task.dueDate)}
                                   </span>
@@ -338,6 +385,102 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           ))}
         </div>
       </DragDropContext>
+
+      {/* Simple Add Task Modal */}
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 bg-surface rounded-card shadow-fk-lg border border-fk-border">
+            <CardHeader>
+              <CardTitle className="text-lg font-bold text-fk-text">Add New Task</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="title" className="text-sm font-semibold text-fk-text">Task Title</Label>
+                <Input
+                  id="title"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  placeholder="Enter task title..."
+                  className="mt-1 rounded-control border-fk-border"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="description" className="text-sm font-semibold text-fk-text">Description</Label>
+                <Textarea
+                  id="description"
+                  value={newTask.description}
+                  onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                  placeholder="Task description (optional)..."
+                  className="mt-1 rounded-control border-fk-border"
+                  rows={3}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="priority" className="text-sm font-semibold text-fk-text">Priority</Label>
+                  <select
+                    id="priority"
+                    value={newTask.priority}
+                    onChange={(e) => setNewTask({...newTask, priority: e.target.value as Task['priority']})}
+                    className="mt-1 w-full p-2 rounded-control border border-fk-border bg-canvas text-fk-text"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <Label htmlFor="category" className="text-sm font-semibold text-fk-text">Category</Label>
+                  <select
+                    id="category"
+                    value={newTask.category}
+                    onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                    className="mt-1 w-full p-2 rounded-control border border-fk-border bg-canvas text-fk-text"
+                  >
+                    <option value="">Select category</option>
+                    <option value="crop">Crop</option>
+                    <option value="livestock">Livestock</option>
+                    <option value="equipment">Equipment</option>
+                    <option value="general">General</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="dueDate" className="text-sm font-semibold text-fk-text">Due Date</Label>
+                <Input
+                  id="dueDate"
+                  type="date"
+                  value={newTask.dueDate}
+                  onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                  className="mt-1 rounded-control border-fk-border"
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={handleAddTask}
+                  disabled={!newTask.title.trim()}
+                  className="flex-1 bg-fk-primary hover:bg-fk-primary-600 text-white rounded-control"
+                >
+                  Add Task
+                </Button>
+                <Button
+                  onClick={() => setShowAddForm(false)}
+                  variant="outline"
+                  className="flex-1 border-fk-border text-fk-text hover:bg-fk-primary/10 rounded-control"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

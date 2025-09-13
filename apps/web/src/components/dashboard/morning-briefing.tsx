@@ -6,7 +6,7 @@ import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status'
 import { 
   Sun, CloudRain, TrendingUp, TrendingDown, MapPin, 
   DollarSign, Thermometer, Droplets, Wind, AlertTriangle,
-  Sprout, Scissors, Heart, Plus, Link
+  Sprout, Scissors, Heart, Plus
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import Link from 'next/link'

@@ -268,7 +268,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.breakdown.revenue.map((item, index) => (
+                  {(data.breakdown?.revenue || []).map((item, index) => (
                     <div key={index} className="flex justify-between items-center">
                       <div>
                         <span className="text-sm font-medium">{item.category}</span>
@@ -293,7 +293,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.breakdown.expenses.map((item, index) => (
+                  {(data.breakdown?.expenses || []).map((item, index) => (
                     <div key={index} className="flex justify-between items-center">
                       <div>
                         <span className="text-sm font-medium">{item.category}</span>
@@ -319,7 +319,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.profitability.byField.map((field, index) => (
+                  {(data.profitability?.byField || []).map((field, index) => (
                     <div key={index} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -344,7 +344,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data.profitability.byCrop.map((crop, index) => (
+                  {(data.profitability?.byCrop || []).map((crop, index) => (
                     <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                       <div>
                         <span className="font-medium">{crop.crop}</span>

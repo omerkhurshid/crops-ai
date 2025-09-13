@@ -145,7 +145,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
 
   return (
     <div className="space-y-4">
-      {todaysTasks.map((task) => (
+      {(todaysTasks || []).map((task) => (
         <ModernCard 
           key={task.id} 
           variant="soft" 

@@ -235,7 +235,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
             </CardContent>
           </Card>
         ) : (
-          recommendations.map((recommendation) => {
+          (recommendations || []).map((recommendation) => {
             const Icon = categoryIcons[recommendation.category as keyof typeof categoryIcons] || Target
             return (
               <Card key={recommendation.id} className="border-2 hover:shadow-lg transition-shadow">
@@ -296,7 +296,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                       <div>
                         <div className="text-sm font-medium mb-2">Recommended Actions</div>
                         <div className="space-y-2">
-                          {recommendation.actions.slice(0, 2).map((action, index) => (
+                          {(recommendation.actions || []).slice(0, 2).map((action, index) => (
                             <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                               <div>
                                 <div className="text-sm font-medium">{action.title}</div>

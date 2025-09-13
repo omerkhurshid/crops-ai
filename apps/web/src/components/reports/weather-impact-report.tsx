@@ -372,7 +372,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {data.events.map((event, index) => (
+            {(data.events || []).map((event, index) => (
               <div key={index} className="p-4 border rounded-lg">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -409,7 +409,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {data.recommendations.map((rec, index) => (
+            {(data.recommendations || []).map((rec, index) => (
               <div key={index} className={`p-4 border-2 rounded-lg ${getPriorityColor(rec.priority)}`}>
                 <div className="flex items-start justify-between mb-2">
                   <div className="font-medium">{rec.action}</div>

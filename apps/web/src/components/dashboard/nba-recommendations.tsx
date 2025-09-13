@@ -225,7 +225,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
         >
           <div className="p-6">
             <div className="space-y-4">
-              {pendingRecs.slice(0, 5).map((rec) => (
+              {(pendingRecs || []).slice(0, 5).map((rec) => (
               <div
                 key={rec.id}
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"

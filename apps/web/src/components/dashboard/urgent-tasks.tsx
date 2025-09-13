@@ -92,7 +92,7 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
 
       {/* Urgent Task Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tasks.slice(0, 2).map((task) => {
+        {(tasks || []).slice(0, 2).map((task) => {
           const config = categoryConfig[task.category]
           const Icon = config.icon
           
@@ -197,7 +197,7 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
         </div>
       </div>
 
-      {tasks.slice(0, 2).map((task) => {
+      {(tasks || []).slice(0, 2).map((task) => {
         const config = categoryConfig[task.category]
         const Icon = config.icon
         

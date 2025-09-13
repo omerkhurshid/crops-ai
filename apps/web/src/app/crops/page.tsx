@@ -22,16 +22,30 @@ export default async function CropsPage() {
     }
 
     // Get the user's first farm or create a default farm ID
-    let farmId = user.id // fallback
+    let farmId = user.id // fallback - use user ID if no farm found
+    
+    // Try to get farm data, but don't fail if database is unavailable
     try {
-      const farm = await prisma.farm.findFirst({
-        where: { ownerId: user.id }
+      // Add a timeout to prevent hanging
+      const farmPromise = prisma.farm.findFirst({
+        where: { ownerId: user.id },
+        select: { id: true }
       })
+      
+      // Race condition: either get the farm or timeout after 3 seconds
+      const farm = await Promise.race([
+        farmPromise,
+        new Promise<null>((_, reject) => 
+          setTimeout(() => reject(new Error('Farm query timeout')), 3000)
+        )
+      ])
+      
       if (farm) {
         farmId = farm.id
       }
     } catch (error) {
-      console.warn('Could not fetch farm for user, using user ID as fallback:', error)
+      console.warn('Database connection issue or timeout, using user ID as farm fallback:', error)
+      // Continue with user.id as farmId - components will handle the fallback gracefully
     }
 
     return (

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FinancialDashboard } from '../../components/financial/financial-dashboard';
 import { UserFinancialDashboard } from '../../components/financial/user-financial-dashboard';
+import { ProfitCalculator } from '../../components/financial/profit-calculator';
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card';
 import { InlineFloatingButton } from '../../components/ui/floating-button';
 import { Badge } from '../../components/ui/badge';

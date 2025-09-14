@@ -15,6 +15,10 @@ import { useScreenSize } from '../../hooks/useResponsive'
 import { TodaysTasksSummary } from './todays-tasks-summary'
 import { RecommendationsWidget } from '../analytics/recommendations-widget'
 import { FarmsMap } from '../farms/farms-map'
+import { QuickActions } from './quick-actions'
+import { WeatherAlertsWidget } from './weather-alerts-widget'
+import { HarvestAlerts } from './harvest-alerts'
+import { WeatherTasksGenerator } from './weather-tasks-generator'
 import { 
   Leaf, 
   Droplets, 
@@ -413,6 +417,46 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         </div>
         
         <TodaysTasksSummary farmId={farmId} />
+      </div>
+
+      {/* Weather-Based Tasks */}
+      <WeatherTasksGenerator 
+        farmData={{
+          latitude: passedFarmData?.latitude,
+          longitude: passedFarmData?.longitude
+        }}
+        crops={passedCrops}
+        className="mb-8"
+      />
+
+      {/* Alerts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Weather Alerts */}
+        <WeatherAlertsWidget 
+          farmData={{
+            latitude: passedFarmData?.latitude,
+            longitude: passedFarmData?.longitude
+          }}
+        />
+
+        {/* Harvest Alerts */}
+        <HarvestAlerts farmId={farmId} />
+      </div>
+
+      {/* Quick Actions */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
+              Quick Actions
+            </h2>
+            <p className="text-sage-600">
+              Record expenses and harvest data instantly
+            </p>
+          </div>
+        </div>
+        
+        <QuickActions farmId={farmId} />
       </div>
 
       {/* Smart Recommendations */}

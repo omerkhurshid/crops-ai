@@ -6,6 +6,7 @@ import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { InlineFloatingButton } from '../ui/floating-button'
 import { TransactionModal } from './transaction-modal'
+import { ProfitCalculator } from './profit-calculator'
 import { 
   DollarSign, TrendingUp, TrendingDown, MapPin, BarChart3, 
   Plus, Calendar, Users, Activity, ArrowRight, Building2 
@@ -303,6 +304,9 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           </ModernCardContent>
         </ModernCard>
       )}
+
+      {/* Profit Calculator */}
+      <ProfitCalculator farmId={farmBreakdown[0]?.id} />
     </div>
   )
 }

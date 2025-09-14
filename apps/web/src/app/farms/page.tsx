@@ -14,8 +14,9 @@ export const dynamic = 'force-dynamic'
 
 async function getUserFarms(userId: string) {
   try {
+    // TEMPORARY: Show all farms regardless of owner for debugging
     const farms = await prisma.farm.findMany({
-      where: { ownerId: userId },
+      // where: { ownerId: userId }, // Commented out temporarily
       include: {
         owner: {
           select: {

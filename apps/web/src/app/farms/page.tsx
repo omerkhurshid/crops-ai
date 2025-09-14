@@ -68,14 +68,32 @@ async function getUserFarms(userId: string) {
 }
 
 export default async function FarmsPage() {
-  const user = await getCurrentUser()
+  console.log('🔍 FarmsPage: Starting execution');
+  
+  let user;
+  try {
+    user = await getCurrentUser()
+    console.log('👤 FarmsPage: getCurrentUser result:', user ? `User found: ${user.email}` : 'No user found');
+  } catch (error) {
+    console.error('❌ FarmsPage: getCurrentUser failed:', error);
+    throw error;
+  }
 
   if (!user) {
+    console.log('🚫 FarmsPage: No user, redirecting to login');
     redirect('/login')
   }
 
-  const userFarms = await getUserFarms(user.id)
-  console.log(`📊 Final result: ${userFarms.length} farms for display`);
+  let userFarms: any[] = [];
+  try {
+    console.log('📞 FarmsPage: Calling getUserFarms with userId:', user.id);
+    userFarms = await getUserFarms(user.id)
+    console.log(`📊 FarmsPage: getUserFarms returned ${userFarms.length} farms`);
+    console.log('🏡 FarmsPage: Farm details:', userFarms.map(f => ({ id: f.id, name: f.name })));
+  } catch (error) {
+    console.error('❌ FarmsPage: getUserFarms failed:', error);
+    userFarms = [];
+  }
 
   return (
     <DashboardLayout>
@@ -168,6 +186,17 @@ export default async function FarmsPage() {
           {/* {userFarms.length > 0 && (
             <FarmFieldsMap farms={userFarms} />
           )} */}
+
+          {/* DEBUG: Show current state */}
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 rounded">
+            <h3 className="font-bold text-red-800">DEBUG INFO:</h3>
+            <p>userFarms.length: {userFarms.length}</p>
+            <p>userFarms type: {typeof userFarms}</p>
+            <p>Is array: {Array.isArray(userFarms) ? 'Yes' : 'No'}</p>
+            {userFarms.length > 0 && (
+              <p>First farm: {JSON.stringify(userFarms[0], null, 2)}</p>
+            )}
+          </div>
 
           {/* Farms Grid - Mobile Optimized */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">

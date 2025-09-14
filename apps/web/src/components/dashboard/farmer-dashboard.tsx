@@ -67,6 +67,8 @@ interface FarmerDashboardProps {
     name: string
     totalArea: number
     ownerId: string
+    latitude?: number
+    longitude?: number
     fields?: any[]
   }
   financialData?: any[]
@@ -366,8 +368,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
             id: String(farmId) || "farm-1",
             name: passedFarmData?.name || farmData?.farmName || "Your Farm",
             totalArea: passedFarmData?.totalArea || farmData?.totalAcres || 0,
-            latitude: 41.8781, // Default to US Midwest - in real app this would come from farm data
-            longitude: -87.6298,
+            latitude: passedFarmData?.latitude || 41.8781, // Use real farm coordinates if available
+            longitude: passedFarmData?.longitude || -87.6298, // Default to US Midwest as fallback
             health: farmData?.overallHealth || 85,
             healthTrend: farmData?.healthTrend || 3,
             stressedAreas: farmData?.stressedAreas || 15,

@@ -186,7 +186,10 @@ export default async function LivestockPage() {
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
                 <p className="text-gray-600 mb-6">Start by adding your first livestock event to track your animals.</p>
-                <button className="bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700">
+                <button 
+                  className="bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700"
+                  onClick={() => window.location.href = '/livestock/add-event'}
+                >
                   Add Livestock Event
                 </button>
               </div>

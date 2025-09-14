@@ -94,52 +94,6 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
           </div>
         </div>
 
-        {/* Technology Overview Cards */}
-        <div className="mb-8">
-          <ModernCard variant="floating" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-              <div className="flex items-center gap-3">
-                <ModernCardTitle className="text-sage-800">Crop Health Technology</ModernCardTitle>
-              </div>
-              <ModernCardDescription>
-                Satellite imagery and vegetation analysis to monitor crop health
-              </ModernCardDescription>
-            </ModernCardHeader>
-            <ModernCardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="text-center group">
-                  <div className="p-6 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
-                    <Satellite className="h-10 w-10 text-sage-700 mx-auto mb-4" />
-                    <div className="font-semibold text-sage-900 text-lg mb-2">Satellite Data</div>
-                    <div className="text-sm text-sage-700 leading-relaxed">
-                      High-resolution imagery updated every few days
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-center group">
-                  <div className="p-6 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
-                    <Leaf className="h-10 w-10 text-earth-700 mx-auto mb-4" />
-                    <div className="font-semibold text-earth-900 text-lg mb-2">Vegetation Health</div>
-                    <div className="text-sm text-earth-700 leading-relaxed">
-                      NDVI and other metrics to assess plant vigor
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="text-center group">
-                  <div className="p-6 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
-                    <Brain className="h-10 w-10 text-sage-700 mx-auto mb-4" />
-                    <div className="font-semibold text-sage-900 text-lg mb-2">Analysis</div>
-                    <div className="text-sm text-sage-700 leading-relaxed">
-                      Identify problem areas and trends over time
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ModernCardContent>
-          </ModernCard>
-        </div>
 
         {/* Health Dashboard with Modern Wrapper */}
         {showEmptyState ? (

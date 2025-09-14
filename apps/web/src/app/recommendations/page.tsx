@@ -3,8 +3,6 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { RecommendationsDashboard } from '../../components/ai/recommendations-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
-import { InfoTooltip } from '../../components/ui/info-tooltip'
-import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { NoRecommendationsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
@@ -73,44 +71,16 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
         variant="primary"
       />
       
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Brain className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Target className="h-8 w-8 text-sage-600" />
-      </div>
-      
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-16">
-          {/* Modern Header with Asymmetric Layout */}
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-8">
+          {/* Page Header - Consistent with other pages */}
+          <h1 className="text-4xl font-light text-sage-800 mb-2">AI Recommendations</h1>
+          <p className="text-lg text-sage-600 mb-6">
+            AI-powered farming insights and recommendations for {farmName}
+          </p>
+          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
-              <div className="flex items-start gap-6">
-                <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
-                  <Brain className="h-10 w-10 text-sage-700 relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-3">
-                    <h1 className="text-4xl md:text-6xl font-light text-sage-800 tracking-tight">
-                      AI Recommendations
-                    </h1>
-                    <InfoTooltip {...TOOLTIP_CONTENT.confidence} size="md" />
-                  </div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <p className="text-xl text-sage-600 font-light">
-                      Intelligent farming insights for <span className="font-semibold text-sage-800">{farmName}</span>
-                    </p>
-                    <Badge className="bg-sage-100 text-sage-700 border-sage-200">
-                      AI-Powered
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-sage-500 leading-relaxed">
-                    Advanced machine learning algorithms analyze satellite data, weather patterns, and crop science to deliver precision farming recommendations
-                  </p>
-                </div>
-              </div>
             </div>
             <div className="lg:col-span-4">
               {farms.length > 1 && (
@@ -125,15 +95,14 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
         </div>
 
         {/* AI Intelligence Overview */}
-        <div className="mb-16">
+        <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-sage-50/90 to-cream-50/90">
               <div className="flex items-center gap-3">
-                <ModernCardTitle className="text-sage-800">AI Intelligence Overview - {farmName}</ModernCardTitle>
-                <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
+                <ModernCardTitle className="text-sage-800">AI Analysis Overview</ModernCardTitle>
               </div>
               <ModernCardDescription>
-                Real-time data processing and machine learning analysis powering intelligent agricultural recommendations
+                Smart recommendations based on your farm data and conditions
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="p-8">
@@ -145,7 +114,6 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
                     </div>
                     <div className="text-2xl font-bold text-sage-800 mb-2">Active</div>
                     <div className="text-sm text-sage-600">Farm Status</div>
-                    <InfoTooltip title="Farm Status" description="Real-time operational status and system connectivity for continuous monitoring." size="sm" className="mt-2" />
                   </div>
                 </div>
                 
@@ -156,7 +124,6 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
                     </div>
                     <div className="text-2xl font-bold text-earth-800 mb-2">Real-time</div>
                     <div className="text-sm text-earth-600">Data Sources</div>
-                    <InfoTooltip title="Real-time Data" description="Live satellite imagery, weather data, and sensor networks updated continuously." size="sm" className="mt-2" />
                   </div>
                 </div>
                 
@@ -165,9 +132,8 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
                     <div className="p-3 bg-cream-200 rounded-xl mx-auto w-fit mb-4">
                       <Brain className="h-6 w-6 text-sage-700" />
                     </div>
-                    <div className="text-2xl font-bold text-sage-800 mb-2">ML-Powered</div>
+                    <div className="text-2xl font-bold text-sage-800 mb-2">Smart</div>
                     <div className="text-sm text-sage-600">Analysis</div>
-                    <InfoTooltip {...TOOLTIP_CONTENT.confidence} size="sm" className="mt-2" />
                   </div>
                 </div>
                 
@@ -178,7 +144,6 @@ export default async function RecommendationsPage({ searchParams }: { searchPara
                     </div>
                     <div className="text-2xl font-bold text-sage-800 mb-2">Actionable</div>
                     <div className="text-sm text-sage-600">Insights</div>
-                    <InfoTooltip title="Actionable Insights" description="Practical recommendations with clear steps for implementation and expected outcomes." size="sm" className="mt-2" />
                   </div>
                 </div>
               </div>

@@ -19,6 +19,9 @@ import {
   Sprout,
   Menu,
   ChevronLeft,
+  ChevronDown,
+  ChevronRight,
+  Settings,
   LogOut,
   User
 } from 'lucide-react'
@@ -31,6 +34,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(propCollapsed)
+  const [expandedSections, setExpandedSections] = useState<string[]>(['farms'])
 
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' })
@@ -38,19 +42,41 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
 
   const navLinks = [
     { href: '/dashboard', label: 'Command Center', icon: Home },
-    { href: '/farms', label: 'Farms', icon: BarChart3 },
-    { href: '/crops', label: 'Crop Planning', icon: Sprout },
+    { 
+      href: '/farms', 
+      label: 'Farms', 
+      icon: BarChart3,
+      id: 'farms',
+      children: [
+        { href: '/crops', label: 'Crop Planning', icon: Sprout },
+        { href: '/crop-health', label: 'Crop Health', icon: Activity },
+        { href: '/livestock', label: 'Livestock', icon: Users },
+      ]
+    },
     { href: '/weather', label: 'Weather', icon: CloudRain },
-    { href: '/crop-health', label: 'Crop Health', icon: Activity },
-    { href: '/livestock', label: 'Livestock', icon: Users },
     { href: '/tasks', label: 'Tasks', icon: CheckSquare },
     { href: '/recommendations', label: 'AI Insights', icon: Brain },
     { href: '/financial', label: 'Financials', icon: DollarSign },
     { href: '/reports', label: 'Reports', icon: FileText },
+    { href: '/settings', label: 'Settings', icon: Settings },
     { href: '/help', label: 'Help', icon: HelpCircle },
   ]
 
   const isActive = (href: string) => pathname?.startsWith(href) || pathname === href
+  
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
+    )
+  }
+
+  const isSectionExpanded = (sectionId: string) => expandedSections.includes(sectionId)
+  
+  const isParentActive = (children: any[]) => {
+    return children?.some(child => isActive(child.href))
+  }
 
   if (!session) {
     return null
@@ -91,26 +117,84 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
         {navLinks.map((link) => {
           const Icon = link.icon
           const active = isActive(link.href)
+          const hasChildren = link.children && link.children.length > 0
+          const isExpanded = hasChildren && link.id ? isSectionExpanded(link.id) : false
+          const parentActive = hasChildren ? isParentActive(link.children) : false
           
           return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`relative flex items-center px-3 py-3 rounded-control text-sm font-semibold transition-all duration-micro ease-fk group ${
-                active
-                  ? 'text-white'
-                  : 'text-white/90 hover:text-white hover:bg-sidebar-600'
-              }`}
-              style={active ? { backgroundColor: 'rgba(255,255,255,0.14)' } : {}}
-            >
-              {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-fk-primary rounded-r" />}
-              <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
-                active ? 'text-white' : 'text-white/90 group-hover:text-white'
-              }`} />
-              {!collapsed && (
-                <span className="truncate">{link.label}</span>
+            <div key={link.href}>
+              {/* Parent Link */}
+              <div
+                className={`relative flex items-center px-3 py-3 rounded-control text-sm font-semibold transition-all duration-micro ease-fk group ${
+                  active || parentActive
+                    ? 'text-white'
+                    : 'text-white/90 hover:text-white hover:bg-sidebar-600'
+                }`}
+                style={(active || parentActive) ? { backgroundColor: 'rgba(255,255,255,0.14)' } : {}}
+              >
+                {(active || parentActive) && <div className="absolute left-0 top-0 bottom-0 w-1 bg-fk-primary rounded-r" />}
+                
+                {hasChildren ? (
+                  <>
+                    <button
+                      onClick={() => link.id && toggleSection(link.id)}
+                      className="flex items-center w-full"
+                    >
+                      <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
+                        active || parentActive ? 'text-white' : 'text-white/90 group-hover:text-white'
+                      }`} />
+                      {!collapsed && (
+                        <>
+                          <span className="truncate flex-1 text-left">{link.label}</span>
+                          {isExpanded ? (
+                            <ChevronDown className="h-4 w-4 ml-2" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4 ml-2" />
+                          )}
+                        </>
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <Link href={link.href} className="flex items-center w-full">
+                    <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
+                      active ? 'text-white' : 'text-white/90 group-hover:text-white'
+                    }`} />
+                    {!collapsed && (
+                      <span className="truncate">{link.label}</span>
+                    )}
+                  </Link>
+                )}
+              </div>
+              
+              {/* Child Links */}
+              {hasChildren && isExpanded && !collapsed && (
+                <div className="ml-4 mt-1 space-y-1">
+                  {link.children.map((child) => {
+                    const ChildIcon = child.icon
+                    const childActive = isActive(child.href)
+                    
+                    return (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className={`relative flex items-center px-3 py-2 rounded-control text-sm transition-all duration-micro ease-fk group ${
+                          childActive
+                            ? 'text-white bg-white/10'
+                            : 'text-white/80 hover:text-white hover:bg-sidebar-600'
+                        }`}
+                      >
+                        {childActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-fk-primary rounded-r" />}
+                        <ChildIcon className={`h-4 w-4 mr-3 ${
+                          childActive ? 'text-white' : 'text-white/80 group-hover:text-white'
+                        }`} />
+                        <span className="truncate">{child.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
               )}
-            </Link>
+            </div>
           )
         })}
       </nav>

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { getCurrentUser } from '../../../lib/auth/session'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors'
-import { apiMiddleware, withMethods } from '../../../lib/api/middleware'
+import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
 import { prisma } from '../../../lib/prisma'
 
 // GET /api/fields - Get user's fields
@@ -27,8 +27,10 @@ export const GET = apiMiddleware.protected(
         whereConditions.farmId = farmId
       }
 
-      // Note: isActive field doesn't exist in current schema
-      // All fields are considered active for now
+      // Filter by active status unless explicitly including inactive fields
+      if (!includeInactive) {
+        whereConditions.isActive = true
+      }
 
       // Fetch fields with farm information
       const fields = await prisma.field.findMany({
@@ -64,6 +66,7 @@ export const GET = apiMiddleware.protected(
         farmName: field.farm?.name || 'Unknown Farm',
         area: field.area,
         soilType: field.soilType,
+        isActive: field.isActive,
         createdAt: field.createdAt,
         displayName: `${field.farm?.name || 'Unknown'} - ${field.name}`,
         lastAnalysis: field.satelliteData?.[0] ? {
@@ -88,7 +91,7 @@ export const GET = apiMiddleware.protected(
         fieldsByFarm,
         summary: {
           totalFields: transformedFields.length,
-          activeFields: transformedFields.length, // All fields considered active
+          activeFields: transformedFields.filter(field => field.isActive).length,
           farmsCount: Object.keys(fieldsByFarm).length,
           totalArea: transformedFields.reduce((sum, field) => sum + (field.area || 0), 0)
         },
@@ -151,7 +154,8 @@ export const POST = apiMiddleware.protected(
         soilType: soilType || null,
         color: color || null,
         cropType: cropType || null,
-        status: 'active'
+        status: 'active',
+        isActive: true  // Fields are auto-default as active
       };
       
       const field = await prisma.field.create({
@@ -226,6 +230,71 @@ export const POST = apiMiddleware.protected(
           createdAt: field.createdAt
         },
         message: 'Field created successfully' + (crop ? ' with crop plan' : '')
+      })
+
+    } catch (error) {
+      return handleApiError(error)
+    }
+  })
+)
+
+// PATCH /api/fields - Update field (toggle active status)
+export const PATCH = apiMiddleware.protected(
+  withMethods(['PATCH'], async (request: AuthenticatedRequest) => {
+    try {
+      const body = await request.json()
+      const { fieldId, isActive } = body
+
+      if (!fieldId) {
+        throw new ValidationError('Field ID is required')
+      }
+
+      if (typeof isActive !== 'boolean') {
+        throw new ValidationError('isActive must be a boolean value')
+      }
+
+      // Verify field ownership through farm ownership
+      const field = await prisma.field.findFirst({
+        where: {
+          id: fieldId,
+          farm: {
+            ownerId: request.user.id
+          }
+        },
+        include: {
+          farm: {
+            select: {
+              name: true
+            }
+          }
+        }
+      })
+
+      if (!field) {
+        throw new ValidationError('Field not found or access denied')
+      }
+
+      // Update field active status
+      const updatedField = await prisma.field.update({
+        where: { id: fieldId },
+        data: { isActive },
+        include: {
+          farm: {
+            select: {
+              name: true
+            }
+          }
+        }
+      })
+
+      return createSuccessResponse({
+        field: {
+          id: updatedField.id,
+          name: updatedField.name,
+          farmName: updatedField.farm?.name,
+          isActive: updatedField.isActive
+        },
+        message: `Field ${isActive ? 'activated' : 'deactivated'} successfully`
       })
 
     } catch (error) {

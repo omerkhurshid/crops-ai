@@ -15,6 +15,7 @@ import { AnalyticsDashboard } from '../../../components/analytics/charts'
 import { VisualFarmMap } from '../../../components/farm/visual-farm-map'
 import { EnhancedFarmMap } from '../../../components/farm/enhanced-farm-map'
 import { FarmHealthCard } from '../../../components/farms/farm-health-card'
+import { FieldStatusToggle } from '../../../components/farm/field-status-toggle'
 import { prisma } from '../../../lib/prisma'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
@@ -250,7 +251,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                                 <h4 className="font-semibold text-sage-800 group-hover:text-sage-900">{field.name}</h4>
                                 <InfoTooltip {...TOOLTIP_CONTENT.field} size="sm" />
                               </div>
-                              <div className="flex items-center gap-4 text-sm text-sage-600">
+                              <div className="flex items-center gap-4 text-sm text-sage-600 mb-2">
                                 <div className="flex items-center gap-1">
                                   <Sprout className="h-3 w-3" />
                                   <span>{field.crops[0]?.cropType || 'No crop'}</span>
@@ -262,6 +263,11 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                                   <InfoTooltip {...TOOLTIP_CONTENT.area} size="sm" />
                                 </div>
                               </div>
+                              <FieldStatusToggle
+                                fieldId={field.id}
+                                fieldName={field.name}
+                                initialStatus={field.isActive ?? true}
+                              />
                             </div>
                             
                             <div className="text-right">

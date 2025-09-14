@@ -4,10 +4,13 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FinancialDashboard } from '../../components/financial/financial-dashboard';
+import { UserFinancialDashboard } from '../../components/financial/user-financial-dashboard';
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card';
 import { InlineFloatingButton } from '../../components/ui/floating-button';
 import { Badge } from '../../components/ui/badge';
-import { AlertCircle, Plus, DollarSign, TrendingUp, BarChart, MapPin } from 'lucide-react';
+import { Button } from '../../components/ui/button';
+import { TransactionModal } from '../../components/financial/transaction-modal';
+import { AlertCircle, Plus, DollarSign, TrendingUp, BarChart, MapPin, ArrowLeft } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/dashboard-layout';
 
 interface Farm {
@@ -17,12 +20,17 @@ interface Farm {
   location?: string;
 }
 
+type ViewLevel = 'user' | 'farm' | 'field'
+
 export default function FinancialPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [farms, setFarms] = useState<Farm[]>([]);
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null);
+  const [viewLevel, setViewLevel] = useState<ViewLevel>('user');
   const [loading, setLoading] = useState(true);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [transactionType, setTransactionType] = useState<'INCOME' | 'EXPENSE'>('INCOME');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -63,6 +71,30 @@ export default function FinancialPage() {
 
   const handleCreateFarm = () => {
     router.push('/farms/create');
+  };
+
+  const handleFarmSelect = async (farmId: string) => {
+    const farm = farms.find(f => f.id === farmId);
+    if (farm) {
+      setSelectedFarm(farm);
+      setViewLevel('farm');
+    }
+  };
+
+  const handleBackToUserView = () => {
+    setSelectedFarm(null);
+    setViewLevel('user');
+  };
+
+  const handleAddTransaction = (type: 'INCOME' | 'EXPENSE' = 'INCOME') => {
+    setTransactionType(type);
+    setShowTransactionModal(true);
+  };
+
+  const handleTransactionAdded = () => {
+    setShowTransactionModal(false);
+    // Refresh data by updating component state
+    fetchFarms();
   };
 
   if (status === 'loading' || loading) {
@@ -139,113 +171,55 @@ export default function FinancialPage() {
     );
   }
 
-  // Multiple farms - farm selection
-  if (farms.length > 1 && !selectedFarm) {
-    return (
-      <DashboardLayout>        
-        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-8">
-            {/* Page Header - Consistent with other pages */}
-            <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
-            <p className="text-lg text-sage-600 mb-6">
-              Select a farm to view its financial performance and insights
-            </p>
+  return (
+    <DashboardLayout>
+      <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb Navigation */}
+        {viewLevel !== 'user' && (
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              onClick={handleBackToUserView}
+              className="text-sage-600 hover:text-sage-800 p-0"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Portfolio Overview
+            </Button>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {farms.map((farm) => (
-              <div key={farm.id} className="group">
-                <div 
-                  className="polished-card card-sage rounded-2xl p-6 text-white cursor-pointer hover:scale-105 transition-all duration-300 hover:shadow-soft"
-                  onClick={() => setSelectedFarm(farm)}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                      <MapPin className="h-6 w-6 text-white" />
-                    </div>
-                    <Badge className="bg-white/20 text-white border-white/30">
-                      Active
-                    </Badge>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{farm.name}</h3>
-                  <div className="space-y-2 mb-4">
-                    <p className="text-white/90">
-                      <span className="font-medium">{farm.totalArea.toFixed(1)}</span> hectares
-                    </p>
-                    {farm.location && (
-                      <p className="text-sm text-white/80">{farm.location}</p>
-                    )}
-                  </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="flex items-center gap-2 text-white/90">
-                      <BarChart className="h-4 w-4" />
-                      <span className="text-sm font-medium">View Financial Dashboard</span>
-                      <TrendingUp className="h-4 w-4" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+        )}
 
-  // Show financial dashboard for selected farm
-  if (selectedFarm || farms.length === 1) {
-    const farmToUse = selectedFarm || farms[0];
-    return (
-      <DashboardLayout>
-        <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-8">
-            {/* Page Header - Consistent with other pages */}
-            <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
-            <p className="text-lg text-sage-600 mb-6">
-              Track income, expenses, and profitability for {farmToUse.name}
-            </p>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
-              </div>
-              
-              {/* Farm Selector Card */}
-              {farms.length > 1 && (
-                <div className="lg:col-span-4">
-                  <ModernCard variant="glass">
-                    <ModernCardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="p-2 bg-sage-100 rounded-lg">
-                            <MapPin className="h-5 w-5 text-sage-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-sage-500">Current Farm</p>
-                            <p className="font-semibold text-sage-800">{farmToUse.name}</p>
-                            <p className="text-sm text-sage-600">{farmToUse.totalArea.toFixed(1)} hectares</p>
-                          </div>
-                        </div>
-                        <InlineFloatingButton
-                          icon={<MapPin className="h-4 w-4" />}
-                          label="Switch"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedFarm(null)}
-                        />
-                      </div>
-                    </ModernCardContent>
-                  </ModernCard>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Financial Dashboard */}
-          <FinancialDashboard farm={farmToUse} />
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
+          <p className="text-lg text-sage-600">
+            {viewLevel === 'user' 
+              ? 'Comprehensive financial overview across all your farming operations'
+              : `Financial details for ${selectedFarm?.name || 'selected farm'}`
+            }
+          </p>
         </div>
-      </DashboardLayout>
-    );
-  }
 
-  return null;
+        {/* Content based on view level */}
+        {viewLevel === 'user' && (
+          <UserFinancialDashboard 
+            onFarmSelect={handleFarmSelect}
+            onAddTransaction={() => handleAddTransaction('INCOME')}
+          />
+        )}
+
+        {viewLevel === 'farm' && selectedFarm && (
+          <FinancialDashboard farm={selectedFarm} />
+        )}
+
+        {/* Global Transaction Modal */}
+        <TransactionModal
+          isOpen={showTransactionModal}
+          onClose={() => setShowTransactionModal(false)}
+          farmId={selectedFarm?.id || farms[0]?.id || ''}
+          type={transactionType}
+          onSuccess={handleTransactionAdded}
+        />
+      </div>
+    </DashboardLayout>
+  );
 }

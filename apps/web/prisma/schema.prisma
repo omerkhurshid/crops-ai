@@ -21,6 +21,13 @@ enum UserRole {
   ADMIN
 }
 
+enum UserType {
+  CROPS
+  LIVESTOCK
+  ORCHARD
+  MIXED // For users with multiple interests
+}
+
 enum CropStatus {
   PLANNED
   PLANTED
@@ -73,8 +80,16 @@ model User {
   passwordHash  String?
   emailVerified DateTime?
   role          UserRole  @default(FARM_OWNER)
+  userType      UserType? // Optional farming interest/type
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  
+  // User Preferences
+  currency         String? @default("USD")
+  landUnit         String? @default("hectares") // hectares, acres, square_meters
+  temperatureUnit  String? @default("celsius")  // celsius, fahrenheit
+  timezone         String? @default("UTC")
+  language         String? @default("en")
 
   // Relations
   ownedFarms            Farm[]
@@ -148,6 +163,7 @@ model Field {
   color       String?                   // Hex color code for field visualization
   cropType    String?                   // Current crop type
   status      String?                   // Field status (active, fallow, etc.)
+  isActive    Boolean                   @default(true) // Fields are active by default
   createdAt   DateTime                   @default(now())
   updatedAt   DateTime                   @updatedAt
 

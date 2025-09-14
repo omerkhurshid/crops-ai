@@ -5,7 +5,7 @@ import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
-import { Sprout, MapPin, BarChart, Plus, Eye, Activity } from 'lucide-react'
+import { Sprout, MapPin, BarChart, Plus, Activity } from 'lucide-react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { FarmHealthCard } from '../../components/farms/farm-health-card'
 import { prisma } from '../../lib/prisma'
@@ -141,10 +141,9 @@ export default async function FarmsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {userFarms.slice(0, 6).map((farm: any) => (
                     <div key={farm.id} className="p-4 bg-sage-50/30 rounded-lg border border-sage-200/30">
-                      <div className="flex justify-between items-start mb-3">
-                        <h4 className="font-medium text-sage-800 truncate">{farm.name}</h4>
+                      <div className="mb-3">
                         <Link href={`/farms/${farm.id}`}>
-                          <Eye className="h-4 w-4 text-sage-500 hover:text-sage-700 cursor-pointer" />
+                          <h4 className="font-medium text-sage-800 hover:text-sage-900 truncate cursor-pointer transition-colors">{farm.name}</h4>
                         </Link>
                       </div>
                       <FarmHealthCard 
@@ -185,21 +184,20 @@ export default async function FarmsPage() {
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Area</th>
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Fields</th>
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Health Status</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-sage-200/30">
                       {userFarms.map((farm: any) => (
                         <tr key={farm.id} className="hover:bg-sage-50/30 transition-colors">
                           <td className="p-4">
-                            <div>
-                              <div className="font-medium text-sage-800">{farm.name}</div>
+                            <Link href={`/farms/${farm.id}`} className="block hover:text-sage-900 transition-colors">
+                              <div className="font-medium text-sage-800 hover:text-sage-900">{farm.name}</div>
                               <div className="text-sm text-sage-500 capitalize">{farm.location || 'No location'}</div>
-                            </div>
+                            </Link>
                           </td>
                           <td className="p-4">
                             <div className="text-sm text-sage-600">
-                              {farm.address || `${farm.region || 'Unknown region'}, ${farm.country || 'Unknown'}`}
+                              {farm.address || (farm.latitude && farm.longitude ? `${farm.latitude.toFixed(4)}, ${farm.longitude.toFixed(4)}` : 'Location not set')}
                             </div>
                           </td>
                           <td className="p-4">
@@ -219,17 +217,6 @@ export default async function FarmsPage() {
                               farmName={farm.name} 
                               compact={true} 
                             />
-                          </td>
-                          <td className="p-4">
-                            <Link href={`/farms/${farm.id}`}>
-                              <InlineFloatingButton
-                                icon={<Eye className="h-4 w-4" />}
-                                label="View Details"
-                                variant="ghost"
-                                size="sm"
-                                className="hover:bg-sage-100"
-                              />
-                            </Link>
                           </td>
                         </tr>
                       ))}

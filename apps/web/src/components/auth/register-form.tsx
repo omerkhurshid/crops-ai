@@ -8,6 +8,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { UserRole } from '@crops-ai/shared'
+import { Sprout, Users, TreePine, Info } from 'lucide-react'
 
 interface RegisterFormProps {
   callbackUrl?: string
@@ -19,7 +20,8 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     email: '',
     password: '',
     confirmPassword: '',
-    role: UserRole.FARM_OWNER
+    role: UserRole.FARM_OWNER,
+    userType: '' // Will be 'CROPS', 'LIVESTOCK', 'ORCHARD', or 'MIXED'
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -96,6 +98,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
           email: formData.email,
           password: formData.password,
           role: formData.role,
+          userType: formData.userType || null,
         }),
       })
 
@@ -203,6 +206,101 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               required
               disabled={isLoading}
             />
+          </div>
+
+          {/* User Type Selection */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Label>Primary Interest</Label>
+              <div className="text-xs text-gray-500 flex items-center gap-1">
+                <Info className="h-3 w-3" />
+                <span>This helps us share relevant features and updates</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'CROPS' ? '' : 'CROPS' }))}
+                disabled={isLoading}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  formData.userType === 'CROPS' 
+                    ? 'border-green-500 bg-green-50 text-green-900' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                } ${isLoading ? 'opacity-50' : ''}`}
+              >
+                <div className="flex items-center gap-3">
+                  <Sprout className={`h-6 w-6 ${formData.userType === 'CROPS' ? 'text-green-600' : 'text-gray-400'}`} />
+                  <div>
+                    <div className="font-medium">Crops</div>
+                    <div className="text-xs opacity-80">Grains, vegetables, fruits</div>
+                  </div>
+                </div>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'LIVESTOCK' ? '' : 'LIVESTOCK' }))}
+                disabled={isLoading}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  formData.userType === 'LIVESTOCK' 
+                    ? 'border-blue-500 bg-blue-50 text-blue-900' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                } ${isLoading ? 'opacity-50' : ''}`}
+              >
+                <div className="flex items-center gap-3">
+                  <Users className={`h-6 w-6 ${formData.userType === 'LIVESTOCK' ? 'text-blue-600' : 'text-gray-400'}`} />
+                  <div>
+                    <div className="font-medium">Livestock</div>
+                    <div className="text-xs opacity-80">Cattle, sheep, poultry</div>
+                  </div>
+                </div>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'ORCHARD' ? '' : 'ORCHARD' }))}
+                disabled={isLoading}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  formData.userType === 'ORCHARD' 
+                    ? 'border-purple-500 bg-purple-50 text-purple-900' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                } ${isLoading ? 'opacity-50' : ''}`}
+              >
+                <div className="flex items-center gap-3">
+                  <TreePine className={`h-6 w-6 ${formData.userType === 'ORCHARD' ? 'text-purple-600' : 'text-gray-400'}`} />
+                  <div>
+                    <div className="font-medium">Orchard</div>
+                    <div className="text-xs opacity-80">Tree fruits, nuts</div>
+                  </div>
+                </div>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'MIXED' ? '' : 'MIXED' }))}
+                disabled={isLoading}
+                className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  formData.userType === 'MIXED' 
+                    ? 'border-orange-500 bg-orange-50 text-orange-900' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                } ${isLoading ? 'opacity-50' : ''}`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center ${
+                    formData.userType === 'MIXED' ? 'border-orange-600 text-orange-600' : 'border-gray-400 text-gray-400'
+                  }`}>
+                    <span className="text-xs font-bold">ALL</span>
+                  </div>
+                  <div>
+                    <div className="font-medium">Mixed</div>
+                    <div className="text-xs opacity-80">Multiple interests</div>
+                  </div>
+                </div>
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 italic">
+              Optional: Skip this to explore all features
+            </p>
           </div>
 
           <div className="space-y-2">

@@ -110,13 +110,13 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
                     <ModernCardTitle className="text-sage-800">Weather Data</ModernCardTitle>
                   </div>
                   <TabsList className="bg-white/60 border border-sage-200/50">
-                    <TabsTrigger value="current" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-800">
+                    <TabsTrigger value="current">
                       <div className="flex items-center gap-2">
                         <Thermometer className="h-4 w-4" />
                         Current Weather
                       </div>
                     </TabsTrigger>
-                    <TabsTrigger value="analytics" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-800">
+                    <TabsTrigger value="analytics">
                       <div className="flex items-center gap-2">
                         <BarChart className="h-4 w-4" />
                         Advanced Analytics

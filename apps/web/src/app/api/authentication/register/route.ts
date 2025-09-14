@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
   try {
     console.log('🔍 Register endpoint called')
-    const { name, email, password, role } = await request.json()
+    const { name, email, password, role, userType } = await request.json()
 
     // Validation
     if (!name || !email || !password) {
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         email,
         passwordHash: hashedPassword,
         role: role as UserRole || UserRole.FARM_OWNER,
+        userType: userType || null, // Optional farming type
         emailVerified: null // Not verified yet
       },
       select: {

@@ -136,24 +136,28 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
                 
                 {hasChildren ? (
                   <>
-                    <button
-                      onClick={() => link.id && toggleSection(link.id)}
-                      className="flex items-center w-full"
-                    >
-                      <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
-                        active || parentActive ? 'text-white' : 'text-white/90 group-hover:text-white'
-                      }`} />
-                      {!collapsed && (
-                        <>
+                    <div className="flex items-center w-full">
+                      <Link href={link.href} className="flex items-center flex-1">
+                        <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
+                          active || parentActive ? 'text-white' : 'text-white/90 group-hover:text-white'
+                        }`} />
+                        {!collapsed && (
                           <span className="truncate flex-1 text-left">{link.label}</span>
+                        )}
+                      </Link>
+                      {!collapsed && (
+                        <button
+                          onClick={() => link.id && toggleSection(link.id)}
+                          className="p-1 hover:bg-white/10 rounded"
+                        >
                           {isExpanded ? (
-                            <ChevronDown className="h-4 w-4 ml-2" />
+                            <ChevronDown className="h-4 w-4" />
                           ) : (
-                            <ChevronRight className="h-4 w-4 ml-2" />
+                            <ChevronRight className="h-4 w-4" />
                           )}
-                        </>
+                        </button>
                       )}
-                    </button>
+                    </div>
                   </>
                 ) : (
                   <Link href={link.href} className="flex items-center w-full">

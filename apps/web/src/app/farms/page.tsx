@@ -16,7 +16,17 @@ async function getUserFarms(userId: string) {
   try {
     console.log('🔍 getUserFarms: Starting with userId:', userId);
     
-    // Use the EXACT same simple query as working weather page
+    console.log('🔍 Testing: First show ALL farms to confirm they exist...');
+    const allFarmsTest = await prisma.farm.findMany({
+      include: {
+        owner: { select: { id: true, name: true, email: true } }
+      }
+    });
+    console.log(`🏡 ALL FARMS: Found ${allFarmsTest.length} total farms:`);
+    allFarmsTest.forEach(f => console.log(`  - ${f.name} (Owner: ${f.owner.email}, ID: ${f.ownerId})`));
+    
+    // Now try the user-specific query
+    console.log(`🎯 Now querying farms for specific userId: "${userId}"`);
     const farms = await prisma.farm.findMany({
       where: { ownerId: userId },
       include: {
@@ -31,8 +41,7 @@ async function getUserFarms(userId: string) {
           select: {
             id: true,
             name: true,
-            area: true,
-            cropType: true
+            area: true
           }
         },
         _count: {

@@ -17,20 +17,26 @@ export default async function LivestockPage() {
   }
 
   // Get real livestock data from database
-  const livestockEvents = await prisma.livestockEvent.findMany({
-    where: {
-      farm: {
-        ownerId: user.id
-      }
-    },
-    include: {
-      farm: {
-        select: {
-          name: true
+  let livestockEvents: any[] = []
+  try {
+    livestockEvents = await prisma.livestockEvent.findMany({
+      where: {
+        farm: {
+          ownerId: user.id
+        }
+      },
+      include: {
+        farm: {
+          select: {
+            name: true
+          }
         }
       }
-    }
-  })
+    })
+  } catch (error: any) {
+    console.warn('Failed to fetch livestock events, using empty array:', error.message)
+    livestockEvents = []
+  }
 
   // Calculate real statistics from livestockEvent data
   const totalAnimals = livestockEvents.reduce((sum, event) => sum + event.animalCount, 0)

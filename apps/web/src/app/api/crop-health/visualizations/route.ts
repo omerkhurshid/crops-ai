@@ -24,19 +24,39 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user has access to this farm
-    const farm = await prisma.farm.findUnique({
-      where: { id: farmId },
-      include: {
-        fields: {
-          include: {
-            satelliteData: {
-              orderBy: { captureDate: 'desc' },
-              take: timeframe === '1m' ? 30 : timeframe === '3m' ? 90 : 365
+    let farm
+    try {
+      farm = await prisma.farm.findUnique({
+        where: { id: farmId },
+        include: {
+          fields: {
+            include: {
+              satelliteData: {
+                orderBy: { captureDate: 'desc' },
+                take: timeframe === '1m' ? 30 : timeframe === '3m' ? 90 : 365
+              }
             }
           }
         }
+      })
+    } catch (dbError: any) {
+      console.warn('Database query failed, falling back to basic farm data:', dbError.message)
+      // Fall back to basic farm query without satellite data
+      farm = await prisma.farm.findUnique({
+        where: { id: farmId },
+        include: {
+          fields: true
+        }
+      })
+      
+      // Add empty satelliteData arrays to fields
+      if (farm) {
+        farm.fields = farm.fields.map((field: any) => ({
+          ...field,
+          satelliteData: []
+        }))
       }
-    })
+    }
 
     if (!farm) {
       return NextResponse.json({ 

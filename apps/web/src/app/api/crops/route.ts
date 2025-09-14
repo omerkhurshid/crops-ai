@@ -61,20 +61,27 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    const crops = await prisma.crop.findMany({
-      where,
-      include: {
-        field: {
-          select: { 
-            name: true,
-            area: true
+    let crops: any[] = []
+    try {
+      crops = await prisma.crop.findMany({
+        where,
+        include: {
+          field: {
+            select: { 
+              name: true,
+              area: true
+            }
           }
-        }
-      },
-      orderBy: [
-        { plantingDate: 'asc' }
-      ]
-    })
+        },
+        orderBy: [
+          { plantingDate: 'asc' }
+        ]
+      })
+    } catch (dbError: any) {
+      console.warn('Failed to query crops, returning empty array:', dbError.message)
+      // Return empty array if table doesn't exist yet
+      crops = []
+    }
 
     return NextResponse.json(crops)
   } catch (error) {

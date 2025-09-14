@@ -36,12 +36,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify user owns the farm
-    const farm = await prisma.farm.findFirst({
-      where: { 
-        id: farmId,
-        ownerId: user.id
-      }
-    })
+    let farm
+    try {
+      farm = await prisma.farm.findFirst({
+        where: { 
+          id: farmId,
+          ownerId: user.id
+        }
+      })
+    } catch (error: any) {
+      console.error('Failed to query farm:', error.message)
+      return NextResponse.json({ error: 'Database error' }, { status: 500 })
+    }
 
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 })
@@ -65,37 +71,43 @@ export async function GET(request: NextRequest) {
       })
     } else {
       // Get existing recommendations from database (updated schema)
-      const existingRecommendations = await prisma.recommendation.findMany({
-        where: {
-          OR: [
-            { farmId: farmId },
-            { 
-              field: {
-                farmId: farmId
+      let existingRecommendations: any[] = []
+      try {
+        existingRecommendations = await prisma.recommendation.findMany({
+          where: {
+            OR: [
+              { farmId: farmId },
+              { 
+                field: {
+                  farmId: farmId
+                }
+              }
+            ],
+            status: 'active',
+            ...(fieldId && { fieldId })
+          },
+          include: {
+            field: {
+              select: {
+                name: true,
+                cropType: true
               }
             }
-          ],
-          status: 'active',
-          ...(fieldId && { fieldId })
-        },
-        include: {
-          field: {
-            select: {
-              name: true,
-              cropType: true
-            }
-          }
-        },
-        orderBy: [
-          { 
-            priority: 'desc' // urgent, high, medium, low
           },
-          { 
-            optimalTiming: 'asc' 
-          }
-        ],
-        take: limit ? parseInt(limit) : undefined
-      })
+          orderBy: [
+            { 
+              priority: 'desc' // urgent, high, medium, low
+            },
+            { 
+              optimalTiming: 'asc' 
+            }
+          ],
+          take: limit ? parseInt(limit) : undefined
+        })
+      } catch (dbError: any) {
+        console.warn('Failed to query recommendations, returning empty array:', dbError.message)
+        existingRecommendations = []
+      }
 
       // Transform to API format
       const formattedRecommendations = existingRecommendations.map(rec => ({

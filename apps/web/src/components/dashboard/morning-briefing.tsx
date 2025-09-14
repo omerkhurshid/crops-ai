@@ -92,8 +92,7 @@ export function MorningBriefing({
         {/* Header */}
         <div className="bg-gradient-to-r from-sage-700 to-earth-700 text-white p-6 pb-4">
           <h1 className="text-2xl font-bold mb-2">{greeting()}!</h1>
-          <div className="flex items-center gap-2 text-sage-100">
-            <MapPin className="h-4 w-4" />
+          <div className="text-sage-100">
             <span>{farmName} • {totalAcres} acres</span>
           </div>
         </div>
@@ -104,8 +103,7 @@ export function MorningBriefing({
             
             {/* Farm Status */}
             <div className="pb-6 md:pb-0 md:pr-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
-                <div className="w-2 h-2 bg-sage-500 rounded-full mr-2"></div>
+              <h3 className="text-sm font-semibold text-sage-700 mb-4">
                 Farm Status
               </h3>
               <div className="space-y-3">
@@ -140,17 +138,11 @@ export function MorningBriefing({
                 {/* Crop Stats */}
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Sprout className="h-3.5 w-3.5 text-green-600" />
-                      <span className="text-sage-700">Plantings</span>
-                    </div>
+                    <span className="text-sage-700">Plantings</span>
                     <span className="font-semibold text-sage-800">{plantingsCount}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Scissors className="h-3.5 w-3.5 text-orange-600" />
-                      <span className="text-sage-700">Ready</span>
-                    </div>
+                    <span className="text-sage-700">Ready to Harvest</span>
                     <span className="font-semibold text-sage-800">{readyToHarvestCount}</span>
                   </div>
                 </div>
@@ -177,14 +169,7 @@ export function MorningBriefing({
                 {/* Livestock Status */}
                 {livestockCount > 0 && (
                   <div className="flex items-center justify-between pt-2 border-t border-sage-200">
-                    <div className="flex items-center gap-2">
-                      <Heart className={cn(
-                        "h-4 w-4",
-                        livestockHealthStatus === 'good' ? 'text-green-600' :
-                        livestockHealthStatus === 'warning' ? 'text-yellow-600' : 'text-red-600'
-                      )} />
-                      <span className="text-sm text-sage-700">Livestock</span>
-                    </div>
+                    <span className="text-sm text-sage-700">Livestock</span>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-sage-800">{livestockCount} head</span>
                       <span className={cn(
@@ -202,9 +187,8 @@ export function MorningBriefing({
 
             {/* Weather Summary */}
             <div className="py-6 md:py-0 md:px-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
-                <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
-                Weather Now
+              <h3 className="text-sm font-semibold text-sage-700 mb-4">
+                Today's Weather
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -224,13 +208,11 @@ export function MorningBriefing({
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Droplets className="h-4 w-4 text-blue-500" />
-                    <span className="text-sage-700">{weather.today.precipitation}" rain</span>
+                  <div>
+                    <span className="text-sage-700">Rain: {weather.today.precipitation}"</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Wind className="h-4 w-4 text-gray-500" />
-                    <span className="text-sage-700">{weather.today.windSpeed} mph</span>
+                  <div>
+                    <span className="text-sage-700">Wind: {weather.today.windSpeed} mph</span>
                   </div>
                 </div>
 
@@ -251,9 +233,8 @@ export function MorningBriefing({
 
             {/* Financial Snapshot */}
             <div className="pt-6 md:pt-0 md:pl-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4 flex items-center">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Financials
+              <h3 className="text-sm font-semibold text-sage-700 mb-4">
+                Financials This Year
               </h3>
               <div className="space-y-3">
                 <div>
@@ -274,8 +255,7 @@ export function MorningBriefing({
 
                 <div className="pt-3 border-t border-sage-200">
                   <Link href="/financial">
-                    <button className="w-full flex items-center justify-center gap-2 text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
-                      <Plus className="h-4 w-4" />
+                    <button className="w-full text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
                       Add Transaction
                     </button>
                   </Link>

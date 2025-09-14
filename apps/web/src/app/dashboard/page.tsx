@@ -200,13 +200,12 @@ export default async function DashboardPage() {
     if (totalFarms === 0) {
       return (
         <DashboardLayout>
-          <div className="max-w-4xl mx-auto pt-12 pb-12 px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
+          <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+            <div className="text-left mb-12">
               <div className="mb-6">
-                <Sprout className="h-16 w-16 text-corn-accent mx-auto mb-4" />
-                <h1 className="text-4xl font-light text-corn-light mb-4">Welcome to Your Farm Command Center</h1>
-                <p className="text-xl text-corn-muted max-w-2xl mx-auto">
-                  Get started by adding your first farm to unlock AI-powered insights, weather alerts, and financial tracking.
+                <h1 className="text-4xl font-light text-sage-800 mb-4">Welcome to Your Farm Dashboard</h1>
+                <p className="text-xl text-sage-600 max-w-2xl">
+                  Add your first farm to start tracking crops, weather, and financials
                 </p>
               </div>
               <Link href="/farms/create">
@@ -217,21 +216,18 @@ export default async function DashboardPage() {
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="p-6 bg-white rounded-lg shadow-sm border">
-                <CloudRain className="h-8 w-8 text-sage-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-sage-800 mb-2">Weather Intelligence</h3>
-                <p className="text-sage-600 text-sm">Get hyperlocal weather alerts and optimal timing for farming operations.</p>
+                <h3 className="font-semibold text-sage-800 mb-2">Weather Tracking</h3>
+                <p className="text-sage-600 text-sm">Get weather alerts to help you time planting, irrigation, and harvests</p>
               </div>
               <div className="p-6 bg-white rounded-lg shadow-sm border">
-                <Activity className="h-8 w-8 text-sage-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-sage-800 mb-2">Crop Health Monitoring</h3>
-                <p className="text-sage-600 text-sm">Satellite-powered NDVI analysis to detect stress before it's visible.</p>
+                <h3 className="font-semibold text-sage-800 mb-2">Crop Health</h3>
+                <p className="text-sage-600 text-sm">Monitor your fields to catch problems early and maximize yields</p>
               </div>
               <div className="p-6 bg-white rounded-lg shadow-sm border">
-                <DollarSign className="h-8 w-8 text-sage-600 mx-auto mb-3" />
-                <h3 className="font-semibold text-sage-800 mb-2">Financial Tracking</h3>
-                <p className="text-sage-600 text-sm">Track costs, revenue, and profitability with automated insights.</p>
+                <h3 className="font-semibold text-sage-800 mb-2">Financial Reports</h3>
+                <p className="text-sage-600 text-sm">Track your income and expenses to improve farm profitability</p>
               </div>
             </div>
           </div>
@@ -242,6 +238,12 @@ export default async function DashboardPage() {
     return (
       <DashboardLayout>
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          {/* Page Header - Consistent with other pages */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-light text-sage-800 mb-2">Farm Dashboard</h1>
+            <p className="text-lg text-sage-600">Monitor your operations and stay on top of important tasks</p>
+          </div>
+          
           {/* Use the new farmer-friendly dashboard */}
           <FarmerDashboard 
             farmId={farms[0]?.id || 'default'}

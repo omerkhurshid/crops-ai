@@ -104,8 +104,7 @@ export default function FinancialPage() {
                 </ModernCardTitle>
                 
                 <ModernCardDescription className="text-lg max-w-lg mx-auto">
-                  Track your farm&apos;s income and expenses, generate profit insights, and forecast future profitability 
-                  with AI-powered analytics.
+                  Track your farm's income and expenses, and get insights into profitability.
                 </ModernCardDescription>
               </ModernCardHeader>
               
@@ -145,27 +144,12 @@ export default function FinancialPage() {
     return (
       <DashboardLayout>        
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-16">
-            {/* Enhanced Header with Icon */}
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="flex justify-center mb-6">
-                <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
-                  <DollarSign className="h-10 w-10 text-sage-700 relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
-                </div>
-              </div>
-              
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">
-                Financial Management
-              </h1>
-              <p className="text-xl text-white font-medium leading-relaxed mb-4 drop-shadow-md">
-                Select a farm to view its financial performance and profitability insights
-              </p>
-              <Badge className="bg-sage-100 text-sage-700 border-sage-200">
-                <BarChart className="h-4 w-4 mr-2" />
-                AI-Powered Financial Analytics
-              </Badge>
-            </div>
+          <div className="mb-8">
+            {/* Page Header - Consistent with other pages */}
+            <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
+            <p className="text-lg text-sage-600 mb-6">
+              Select a farm to view its financial performance and insights
+            </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -214,34 +198,15 @@ export default function FinancialPage() {
     return (
       <DashboardLayout>
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mb-16">
-            {/* Enhanced Header with Icon and Asymmetric Layout */}
+          <div className="mb-8">
+            {/* Page Header - Consistent with other pages */}
+            <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
+            <p className="text-lg text-sage-600 mb-6">
+              Track income, expenses, and profitability for {farmToUse.name}
+            </p>
+            
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8">
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
-                    <DollarSign className="h-10 w-10 text-sage-700 relative z-10" />
-                    <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-3">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight drop-shadow-lg">
-                        Financial Management
-                      </h1>
-                    </div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <p className="text-xl text-white font-medium drop-shadow-md">
-                        Track income, expenses, and profitability for <span className="font-semibold text-white">{farmToUse.name}</span>
-                      </p>
-                      <Badge className="bg-sage-100 text-sage-700 border-sage-200">
-                        Live Data
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-white/90 leading-relaxed drop-shadow-sm">
-                      Advanced financial analytics powered by real-time market data and AI-driven insights for precision agriculture profitability
-                    </p>
-                  </div>
-                </div>
               </div>
               
               {/* Farm Selector Card */}

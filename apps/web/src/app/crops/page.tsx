@@ -77,21 +77,12 @@ export default function CropsPage() {
       
       
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-12">
-          {/* FieldKit Header */}
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="text-6xl">🌱</div>
-              <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-fk-text tracking-tight">
-                  Your Crops
-                </h1>
-                <p className="text-lg text-fk-text-muted font-normal mt-2">
-                  Track what's growing and what needs your attention
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="mb-8">
+          {/* Page Header - Consistent with other pages */}
+          <h1 className="text-4xl font-light text-sage-800 mb-2">Crop Planning</h1>
+          <p className="text-lg text-sage-600 mb-6">
+            Plan your plantings and track crop progress throughout the season
+          </p>
         </div>
 
         {/* Main Timeline View - Full Width */}
@@ -110,11 +101,11 @@ export default function CropsPage() {
             <div className="lg:col-span-3">
               <ModernCard variant="soft" className="border-l-4 border-l-orange-500">
                 <ModernCardHeader>
-                  <ModernCardTitle className="flex items-center gap-2 text-xl">
-                    📌 What Needs Your Attention
+                  <ModernCardTitle className="text-xl text-sage-800">
+                    What Needs Your Attention
                   </ModernCardTitle>
                   <ModernCardDescription>
-                    Key actions and reminders for your crops
+                    Important tasks for your crops this week
                   </ModernCardDescription>
                 </ModernCardHeader>
                 <ModernCardContent>
@@ -126,37 +117,35 @@ export default function CropsPage() {
             {/* Quick Stats Sidebar */}
             <div className="space-y-4">
               <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-3xl mb-2">🌱</div>
                 <div className="text-2xl font-bold text-green-600">3</div>
-                <div className="text-sm text-gray-600">Growing Now</div>
+                <div className="text-sm text-sage-600">Crops Growing</div>
               </ModernCard>
               
               <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-3xl mb-2">💰</div>
-                <div className="text-2xl font-bold text-purple-600">$23.3k</div>
-                <div className="text-sm text-gray-600">Expected Value</div>
+                <div className="text-2xl font-bold text-sage-600">--</div>
+                <div className="text-sm text-sage-600">Expected Value</div>
+                <div className="text-xs text-sage-500">Add crop data to see value</div>
               </ModernCard>
 
               <ModernCard variant="glass" className="text-center p-4">
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="w-full flex items-center justify-center gap-2"
+                  className="w-full"
                   onClick={() => window.scrollTo({ top: document.getElementById('mobile-view')?.offsetTop || 0, behavior: 'smooth' })}
                 >
-                  <Phone className="h-4 w-4" />
-                  Mobile View
+                  Card View
                 </Button>
               </ModernCard>
             </div>
           </div>
         </div>
 
-        {/* Mobile-Friendly Card View - Below the fold */}
+        {/* Card View - Alternative layout */}
         <div id="mobile-view" className="mt-12">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Mobile View</h2>
-            <p className="text-gray-600">Simplified cards for easy field access</p>
+          <div className="mb-6">
+            <h2 className="text-2xl font-light text-sage-800 mb-2">Card View</h2>
+            <p className="text-sage-600">Alternative layout for your crops</p>
           </div>
           <FarmerFriendlyCropView farmId={farmId} />
         </div>

@@ -5,8 +5,6 @@ import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
-import { InfoTooltip } from '../../components/ui/info-tooltip'
-import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
@@ -75,41 +73,21 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
         variant="primary"
       />
       
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <CloudRain className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Thermometer className="h-8 w-8 text-sage-600" />
-      </div>
-      
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-16">
-          {/* Modern Header with Asymmetric Layout */}
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-8">
+          {/* Page Header - Consistent with other pages */}
+          <h1 className="text-4xl font-light text-sage-800 mb-2">Weather Intelligence</h1>
+          <p className="text-lg text-sage-600 mb-6">
+            Real-time weather data and forecasting for {farm.name}
+          </p>
+          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="p-4 bg-gradient-to-br from-sage-100 to-cream-100 rounded-2xl">
-                  <CloudRain className="h-8 w-8 text-sage-700" />
-                </div>
-                <div>
-                  <h1 className="text-4xl md:text-6xl font-light text-sage-800 mb-2 tracking-tight">
-                    Weather Intelligence
-                  </h1>
-                  <div className="flex items-center gap-3">
-                    <p className="text-xl text-sage-600 font-light">
-                      Real-time data for <span className="font-semibold text-sage-800">{farm.name}</span>
-                    </p>
-                    <InfoTooltip {...TOOLTIP_CONTENT.farm} />
-                  </div>
-                </div>
-              </div>
               <div className="flex items-center gap-2 text-sage-600">
                 <MapPin className="h-4 w-4" />
                 <span className="text-sm font-medium">
                   {latitude.toFixed(4)}°N, {Math.abs(longitude).toFixed(4)}°{longitude < 0 ? 'W' : 'E'}
                 </span>
-                <InfoTooltip title="Location" description="GPS coordinates used for precise weather data collection and forecasting accuracy." size="sm" />
               </div>
             </div>
             <div className="lg:col-span-4">
@@ -130,7 +108,6 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <ModernCardTitle className="text-sage-800">Weather Data</ModernCardTitle>
-                    <InfoTooltip {...TOOLTIP_CONTENT.temperature} />
                   </div>
                   <TabsList className="bg-white/60 border border-sage-200/50">
                     <TabsTrigger value="current" className="data-[state=active]:bg-sage-100 data-[state=active]:text-sage-800">
@@ -148,7 +125,7 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
                   </TabsList>
                 </div>
                 <ModernCardDescription>
-                  Comprehensive weather monitoring and forecasting for precise agricultural decision making
+                  Current conditions and forecasting data to help with farming decisions
                 </ModernCardDescription>
               </ModernCardHeader>
               

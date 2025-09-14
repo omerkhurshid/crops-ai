@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Generate visualization data
-    const hasRealData = farm.fields.some(field => field.satelliteData.length > 0)
+    const hasRealData = farm.fields.some((field: any) => field.satelliteData && field.satelliteData.length > 0)
 
     if (!hasRealData) {
       // Return mock visualization data that matches the component's interface
@@ -269,7 +269,7 @@ function generateMockAlertHistory() {
 // Real data processors (for when satellite data exists)
 function processNDVITrendsForComponent(fields: any[]) {
   return fields.flatMap(field => 
-    field.satelliteData.map((data: any) => ({
+    (field.satelliteData || []).map((data: any) => ({
       date: data.captureDate.toISOString().split('T')[0],
       fieldId: field.id,
       fieldName: field.name,
@@ -284,7 +284,7 @@ function processStressHeatmapForComponent(fields: any[]) {
   return fields.map(field => ({
     fieldId: field.id,
     fieldName: field.name,
-    zones: field.satelliteData.slice(0, 5).map((data: any, index: number) => ({
+    zones: (field.satelliteData || []).slice(0, 5).map((data: any, index: number) => ({
       id: `${field.id}-zone-${index}`,
       coordinates: [
         field.latitude + (Math.random() - 0.5) * 0.01, 
@@ -328,7 +328,7 @@ function processAlertHistoryForComponent(fields: any[]) {
   const severities = ['low', 'medium', 'high', 'critical'] as const
   
   return fields.flatMap(field => 
-    field.satelliteData.slice(0, 3).map((data: any, index: number) => ({
+    (field.satelliteData || []).slice(0, 3).map((data: any, index: number) => ({
       date: data.captureDate.toISOString().split('T')[0],
       type: alertTypes[index % alertTypes.length],
       severity: data.stressLevel === 'HIGH' ? 'high' : data.stressLevel === 'MODERATE' ? 'medium' : 'low' as any,

@@ -14,6 +14,7 @@ import { Button } from '../ui/button'
 import { useScreenSize } from '../../hooks/useResponsive'
 import { TodaysTasksSummary } from './todays-tasks-summary'
 import { RecommendationsWidget } from '../analytics/recommendations-widget'
+import { FarmsMap } from '../farms/farms-map'
 import { 
   Leaf, 
   Droplets, 
@@ -24,7 +25,8 @@ import {
   Thermometer,
   ChevronRight,
   RefreshCw,
-  Heart
+  Heart,
+  MapPin
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
 
@@ -86,6 +88,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
   const [livestockHealthStatus, setLivestockHealthStatus] = useState<'good' | 'warning' | 'critical'>('good')
   const [netYTD, setNetYTD] = useState(0)
   const [financialTrend, setFinancialTrend] = useState(0)
+  const [selectedFarmId, setSelectedFarmId] = useState<string>()
   const { isMobile } = useScreenSize()
 
   // Fetch real satellite data
@@ -341,6 +344,42 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
           trend={5} // Mock trend
           showMore={true}
           onShowMore={() => setShowDetailedView(true)}
+        />
+      </div>
+
+      {/* Farms Overview Map */}
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
+              <MapPin className="inline h-6 w-6 mr-2" />
+              Your Farms
+            </h2>
+            <p className="text-sage-600">
+              Interactive map showing all your farm locations and their health status
+            </p>
+          </div>
+        </div>
+        
+        <FarmsMap 
+          farms={[{
+            id: passedFarmData?.id || farmId,
+            name: passedFarmData?.name || farmData?.farmName || "Your Farm",
+            totalArea: passedFarmData?.totalArea || farmData?.totalAcres || 0,
+            latitude: 41.8781, // Default to US Midwest - in real app this would come from farm data
+            longitude: -87.6298,
+            health: farmData?.overallHealth || 85,
+            healthTrend: farmData?.healthTrend || 3,
+            stressedAreas: farmData?.stressedAreas || 15,
+            fieldsCount: passedFarmData?.fields?.length || 0,
+            isPrimary: true
+          }]}
+          onFarmSelect={(farmId) => {
+            setSelectedFarmId(farmId)
+            // In a real app, you might navigate to the farm detail page
+          }}
+          selectedFarmId={selectedFarmId}
+          className="mb-6"
         />
       </div>
 

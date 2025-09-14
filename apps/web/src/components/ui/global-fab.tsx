@@ -33,28 +33,28 @@ const farmerActions: QuickAction[] = [
     label: 'Log Expense',
     icon: <DollarSign className="h-5 w-5" />,
     color: 'bg-green-500 hover:bg-green-600',
-    onClick: () => console.log('Add expense')
+    onClick: () => window.location.href = '/financials?action=add-expense'
   },
   {
     id: 'irrigation',
     label: 'Log Irrigation',
     icon: <Droplets className="h-5 w-5" />,
     color: 'bg-blue-500 hover:bg-blue-600',
-    onClick: () => console.log('Log irrigation')
+    onClick: () => window.location.href = '/tasks?action=add-task&type=irrigation'
   },
   {
     id: 'pest',
     label: 'Report Pest',
     icon: <Bug className="h-5 w-5" />,
     color: 'bg-orange-500 hover:bg-orange-600',
-    onClick: () => console.log('Report pest')
+    onClick: () => window.location.href = '/crop-health?action=report-pest'
   },
   {
     id: 'harvest',
     label: 'Log Harvest',
     icon: <Package className="h-5 w-5" />,
     color: 'bg-purple-500 hover:bg-purple-600',
-    onClick: () => console.log('Log harvest')
+    onClick: () => window.location.href = '/crops?action=add-harvest'
   }
 ]
 
@@ -64,14 +64,14 @@ const landowenerActions: QuickAction[] = [
     label: 'Record Payment',
     icon: <DollarSign className="h-5 w-5" />,
     color: 'bg-green-500 hover:bg-green-600',
-    onClick: () => console.log('Record payment')
+    onClick: () => window.location.href = '/financials?action=add-income'
   },
   {
     id: 'meeting',
     label: 'Schedule Meeting',
     icon: <Calendar className="h-5 w-5" />,
     color: 'bg-blue-500 hover:bg-blue-600',
-    onClick: () => console.log('Schedule meeting')
+    onClick: () => window.location.href = '/tasks?action=add-task&type=meeting'
   }
 ]
 

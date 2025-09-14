@@ -25,9 +25,9 @@ async function getUserFarms(userId: string) {
       return [];
     }
     
-    // TEMPORARY: Show all farms regardless of owner for debugging
+    // Use the EXACT same query as the working weather page
     const farms = await prisma.farm.findMany({
-      // where: { ownerId: userId }, // Commented out temporarily
+      where: { ownerId: userId }, // Restored - this works in weather page!
       include: {
         owner: {
           select: {

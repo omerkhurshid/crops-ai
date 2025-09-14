@@ -14,6 +14,17 @@ export const dynamic = 'force-dynamic'
 
 async function getUserFarms(userId: string) {
   try {
+    console.log('🔍 getUserFarms: Starting database query...');
+    
+    // First, let's test if we can even connect to the database
+    try {
+      const farmCount = await prisma.farm.count();
+      console.log(`📊 getUserFarms: Total farms in database: ${farmCount}`);
+    } catch (countError) {
+      console.error('❌ getUserFarms: Failed to count farms:', countError);
+      return [];
+    }
+    
     // TEMPORARY: Show all farms regardless of owner for debugging
     const farms = await prisma.farm.findMany({
       // where: { ownerId: userId }, // Commented out temporarily
@@ -42,8 +53,13 @@ async function getUserFarms(userId: string) {
       orderBy: { createdAt: 'desc' }
     })
     
-    console.log(`🔍 Found ${farms.length} farms in database`);
-    console.log('🏡 Farm names:', farms.map(f => f.name));
+    console.log(`🔍 getUserFarms: Found ${farms.length} farms in database`);
+    console.log('🏡 getUserFarms: Farm names:', farms.map(f => f.name));
+    
+    // Log database connection info (without credentials)
+    const dbUrl = process.env.DATABASE_URL || 'No DATABASE_URL';
+    const dbHost = dbUrl.includes('@') ? dbUrl.split('@')[1]?.split('/')[0] : 'Unknown host';
+    console.log('🔗 getUserFarms: Database host:', dbHost);
     
     return farms.map(farm => ({
       id: farm.id,

@@ -250,36 +250,23 @@ export default async function HelpPage() {
   return (
     <DashboardLayout>
       
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Book className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <HelpCircle className="h-8 w-8 text-sage-600" />
-      </div>
       
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl">
-              <HelpCircle className="h-10 w-10 text-sage-700" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-light text-sage-800 tracking-tight">
-              Help Center
-            </h1>
-          </div>
-          <p className="text-xl text-sage-600 font-light max-w-2xl mx-auto leading-relaxed mb-8">
-            Simple guides to help you get the most out of your farm with Crops.AI
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Page Header - Consistent with other pages */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-light text-sage-800 mb-2">Help Center</h1>
+          <p className="text-lg text-sage-600 mb-6">
+            Find guides and support for using your farm management platform
           </p>
           
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl">
             <HelpSearch placeholder="Search help articles, guides, and tutorials..." />
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-16">
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold text-sage-800 mb-6">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
@@ -303,7 +290,7 @@ export default async function HelpPage() {
         </div>
 
         {/* Support Contact Info */}
-        <div className="mb-16">
+        <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
               <ModernCardTitle className="text-sage-800 flex items-center gap-3">
@@ -311,7 +298,7 @@ export default async function HelpPage() {
                 Need Personal Support?
               </ModernCardTitle>
               <ModernCardDescription>
-                Our agricultural technology experts are here to help you succeed
+                Our support team is here to help you succeed
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="p-8">

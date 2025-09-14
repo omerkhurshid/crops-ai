@@ -14,6 +14,7 @@ import { MarketDashboard } from '../../../components/market/market-dashboard'
 import { AnalyticsDashboard } from '../../../components/analytics/charts'
 import { VisualFarmMap } from '../../../components/farm/visual-farm-map'
 import { EnhancedFarmMap } from '../../../components/farm/enhanced-farm-map'
+import { FarmHealthCard } from '../../../components/farms/farm-health-card'
 import { prisma } from '../../../lib/prisma'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
@@ -213,6 +214,9 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Main Content Area - Takes 8 columns, full width on mobile */}
           <div className="lg:col-span-8 space-y-6 lg:space-y-8 order-2 lg:order-1">
+            {/* Farm Health Metrics */}
+            <FarmHealthCard farmId={farm.id} farmName={farm.name} />
+
             {/* Fields Overview with Modern Design */}
             <ModernCard variant="floating" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">

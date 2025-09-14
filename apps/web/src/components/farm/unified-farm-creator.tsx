@@ -56,6 +56,7 @@ export function UnifiedFarmCreator() {
   const [locationInput, setLocationInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [detectingLocation, setDetectingLocation] = useState(false)
+  const [geocodingLocation, setGeocodingLocation] = useState(false)
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false)
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [drawingManager, setDrawingManager] = useState<google.maps.drawing.DrawingManager | null>(null)
@@ -72,41 +73,131 @@ export function UnifiedFarmCreator() {
     setDetectingLocation(true)
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFarm(prev => ({
-            ...prev,
-            location: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
+        async (position) => {
+          const lat = position.coords.latitude
+          const lng = position.coords.longitude
+          
+          try {
+            // Try to get a friendly location name using reverse geocoding
+            const response = await fetch(`/api/weather/reverse-geocoding?latitude=${lat}&longitude=${lng}&limit=1`)
+            if (response.ok) {
+              const data = await response.json()
+              const locationName = data.results?.[0]?.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`
+              
+              setFarm(prev => ({
+                ...prev,
+                location: { lat, lng, address: locationName }
+              }))
+            } else {
+              setFarm(prev => ({
+                ...prev,
+                location: { lat, lng }
+              }))
             }
-          }))
+          } catch (error) {
+            console.error('Error getting location name:', error)
+            setFarm(prev => ({
+              ...prev,
+              location: { lat, lng }
+            }))
+          }
+          
           setDetectingLocation(false)
           setShowMap(true)
         },
         (error) => {
           console.error('Error getting location:', error)
           setDetectingLocation(false)
-          alert('Unable to get your location. Please enter it manually.')
+          
+          let errorMessage = 'Unable to get your location. Please enter it manually.'
+          if (error.code === error.PERMISSION_DENIED) {
+            errorMessage = 'Location access denied. Please enable location permissions or enter your address manually.'
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            errorMessage = 'Location information unavailable. Please enter your address manually.'
+          } else if (error.code === error.TIMEOUT) {
+            errorMessage = 'Location request timed out. Please try again or enter your address manually.'
+          }
+          
+          alert(errorMessage)
         }
       )
+    } else {
+      setDetectingLocation(false)
+      alert('Geolocation is not supported by this browser. Please enter your address manually.')
     }
   }
 
   const parseLocationInput = async () => {
+    if (!locationInput.trim()) return
+
+    setGeocodingLocation(true)
     const coordPattern = /^-?\d+\.?\d*,\s*-?\d+\.?\d*$/
     
     if (coordPattern.test(locationInput.trim())) {
+      // Direct coordinate input
       const [lat, lng] = locationInput.split(',').map(coord => parseFloat(coord.trim()))
-      setFarm(prev => ({ ...prev, location: { lat, lng } }))
+      
+      try {
+        // Try to get location name from coordinates using reverse geocoding
+        const response = await fetch(`/api/weather/reverse-geocoding?latitude=${lat}&longitude=${lng}&limit=1`)
+        if (response.ok) {
+          const data = await response.json()
+          const locationName = data.results?.[0]?.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`
+          
+          setFarm(prev => ({ 
+            ...prev, 
+            location: { lat, lng, address: locationName }
+          }))
+        } else {
+          setFarm(prev => ({ ...prev, location: { lat, lng } }))
+        }
+      } catch (error) {
+        console.error('Error getting location name:', error)
+        setFarm(prev => ({ ...prev, location: { lat, lng } }))
+      }
+      
       setShowMap(true)
     } else {
-      // For address input, use default coordinates (in production would geocode)
-      setFarm(prev => ({
-        ...prev,
-        location: { lat: 40.7128, lng: -74.0060, address: locationInput }
-      }))
-      setShowMap(true)
+      // Address input - use geocoding to get coordinates
+      try {
+        const response = await fetch(`/api/weather/geocoding?address=${encodeURIComponent(locationInput.trim())}&limit=1`)
+        if (response.ok) {
+          const data = await response.json()
+          
+          if (data.results && data.results.length > 0) {
+            const result = data.results[0]
+            setFarm(prev => ({
+              ...prev,
+              location: { 
+                lat: result.lat, 
+                lng: result.lon, 
+                address: result.display_name || locationInput 
+              }
+            }))
+            setShowMap(true)
+          } else {
+            alert('Location not found. Please try a different address or use coordinates.')
+          }
+        } else {
+          // Fallback to default coordinates if geocoding fails
+          setFarm(prev => ({
+            ...prev,
+            location: { lat: 40.7128, lng: -74.0060, address: locationInput }
+          }))
+          setShowMap(true)
+        }
+      } catch (error) {
+        console.error('Geocoding error:', error)
+        // Fallback to default coordinates
+        setFarm(prev => ({
+          ...prev,
+          location: { lat: 40.7128, lng: -74.0060, address: locationInput }
+        }))
+        setShowMap(true)
+      }
     }
+    
+    setGeocodingLocation(false)
   }
 
   const resetCoordinates = () => {
@@ -373,8 +464,16 @@ export function UnifiedFarmCreator() {
                 onChange={(e) => setLocationInput(e.target.value)}
                 className="flex-1"
               />
-              <Button onClick={parseLocationInput} variant="outline">
-                <Search className="h-4 w-4" />
+              <Button 
+                onClick={parseLocationInput} 
+                variant="outline" 
+                disabled={geocodingLocation}
+              >
+                {geocodingLocation ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4" />
+                )}
               </Button>
             </div>
 

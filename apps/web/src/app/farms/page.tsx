@@ -5,8 +5,9 @@ import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
-import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
+import { Sprout, MapPin, BarChart, Plus, Eye, Activity } from 'lucide-react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
+import { FarmHealthCard } from '../../components/farms/farm-health-card'
 import { prisma } from '../../lib/prisma'
 // import { FarmFieldsMap } from '../../components/farm/farm-fields-map' // Temporarily disabled
 
@@ -124,11 +125,46 @@ export default async function FarmsPage() {
             </div>
           </div>
 
-          {/* Farm Fields Map - TEMPORARILY DISABLED FOR DEBUGGING */}
-          {/* {userFarms.length > 0 && (
-            <FarmFieldsMap farms={userFarms} />
-          )} */}
-
+          {/* Farm Health Overview */}
+          {userFarms.length > 0 && (
+            <ModernCard variant="floating" className="overflow-hidden mb-8">
+              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">
+                <ModernCardTitle className="text-sage-800 flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-sage-600" />
+                  Farm Health Dashboard
+                </ModernCardTitle>
+                <ModernCardDescription>
+                  Real-time health metrics and alerts across all your farms
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {userFarms.slice(0, 6).map((farm: any) => (
+                    <div key={farm.id} className="p-4 bg-sage-50/30 rounded-lg border border-sage-200/30">
+                      <div className="flex justify-between items-start mb-3">
+                        <h4 className="font-medium text-sage-800 truncate">{farm.name}</h4>
+                        <Link href={`/farms/${farm.id}`}>
+                          <Eye className="h-4 w-4 text-sage-500 hover:text-sage-700 cursor-pointer" />
+                        </Link>
+                      </div>
+                      <FarmHealthCard 
+                        farmId={farm.id} 
+                        farmName={farm.name} 
+                        compact={true} 
+                      />
+                    </div>
+                  ))}
+                </div>
+                {userFarms.length > 6 && (
+                  <div className="text-center mt-4">
+                    <p className="text-sm text-sage-600">
+                      Showing 6 of {userFarms.length} farms. View individual farms for complete health details.
+                    </p>
+                  </div>
+                )}
+              </ModernCardContent>
+            </ModernCard>
+          )}
 
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
@@ -148,7 +184,7 @@ export default async function FarmsPage() {
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Location</th>
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Area</th>
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Fields</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Created</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Health Status</th>
                         <th className="text-left p-4 text-sm font-semibold text-sage-700">Actions</th>
                       </tr>
                     </thead>
@@ -178,13 +214,11 @@ export default async function FarmsPage() {
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="text-sm text-sage-600">
-                              {new Date(farm.createdAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric'
-                              })}
-                            </div>
+                            <FarmHealthCard 
+                              farmId={farm.id} 
+                              farmName={farm.name} 
+                              compact={true} 
+                            />
                           </td>
                           <td className="p-4">
                             <Link href={`/farms/${farm.id}`}>

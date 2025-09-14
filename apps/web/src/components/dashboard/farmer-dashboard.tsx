@@ -363,7 +363,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         
         <FarmsMap 
           farms={[{
-            id: passedFarmData?.id || farmId,
+            id: String(farmId) || "farm-1",
             name: passedFarmData?.name || farmData?.farmName || "Your Farm",
             totalArea: passedFarmData?.totalArea || farmData?.totalAcres || 0,
             latitude: 41.8781, // Default to US Midwest - in real app this would come from farm data

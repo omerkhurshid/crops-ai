@@ -195,7 +195,18 @@ export default async function LivestockPage() {
         {/* Main Livestock Dashboard */}
         <ModernCard variant="floating">
           <ModernCardContent className="p-6">
-            <LivestockDashboard farmId={user.id} />
+            {livestockEvents.length > 0 ? (
+              <LivestockDashboard farmId={livestockEvents[0].farmId} />
+            ) : (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
+                <p className="text-gray-600 mb-6">Start by adding your first livestock event to track your animals.</p>
+                <button className="bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700">
+                  Add Livestock Event
+                </button>
+              </div>
+            )}
           </ModernCardContent>
         </ModernCard>
       </main>

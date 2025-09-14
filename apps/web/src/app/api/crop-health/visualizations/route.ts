@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
         timeframe,
         data: {
           ndviTrends: generateMockNDVITrendsForComponent(farm.fields),
-          stressHeatmap: generateMockStressHeatmap(farm.fields),
+          stressHeatmap: generateMockStressHeatmap(farm.fields, farm),
           seasonalPatterns: generateMockSeasonalPatterns(),
           comparisonData: generateMockComparisonData(),
           alertHistory: generateMockAlertHistory()
@@ -179,21 +179,21 @@ function generateMockYieldPrediction() {
   }
 }
 
-function generateMockStressHeatmap(fields: any[]) {
+function generateMockStressHeatmap(fields: any[], farm: any) {
   return fields.map(field => ({
     fieldId: field.id,
     fieldName: field.name,
     zones: [
       {
         id: `${field.id}-zone-1`,
-        coordinates: [field.latitude || 40.7128, field.longitude || -74.0060] as [number, number],
+        coordinates: [(farm.latitude || 40.7128) + Math.random() * 0.01, (farm.longitude || -74.0060) + Math.random() * 0.01] as [number, number],
         stressLevel: Math.random() * 50 + 10,
         stressType: 'drought' as const,
         severity: 'low' as const
       },
       {
         id: `${field.id}-zone-2`, 
-        coordinates: [field.latitude + 0.001 || 40.7138, field.longitude + 0.001 || -74.0050] as [number, number],
+        coordinates: [(farm.latitude || 40.7138) + 0.001, (farm.longitude || -74.0050) + 0.001] as [number, number],
         stressLevel: Math.random() * 30 + 5,
         stressType: 'nutrient' as const,
         severity: 'medium' as const

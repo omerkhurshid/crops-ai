@@ -164,69 +164,87 @@ export default async function FarmsPage() {
           )} */}
 
 
-          {/* Farms Grid - Mobile Optimized */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
-            {userFarms.length > 0 ? userFarms.map((farm: any) => (
-              <Link key={farm.id} href={`/farms/${farm.id}`}>
-                <ModernCard variant="floating" className="hover:scale-105 transition-all duration-300 cursor-pointer group">
-                  <ModernCardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <ModernCardTitle className="text-lg text-sage-800">{farm.name}</ModernCardTitle>
-                        <ModernCardDescription>
-                          {farm.address || `${farm.region || 'Unknown'}, ${farm.country || 'Unknown'}`}
-                        </ModernCardDescription>
-                      </div>
-                      <Badge className="bg-sage-100 text-sage-700 border-sage-200">
-                        Active
-                      </Badge>
-                    </div>
-                  </ModernCardHeader>
-                  <ModernCardContent>
-                    <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-sage-600">Area:</span>
-                      <span className="text-sm font-medium text-sage-800">{farm.totalArea?.toFixed(1) || 0} ha</span>
-                    </div>
-                    
-                    <div className="flex justify-between">
-                      <span className="text-sm text-sage-600">Fields:</span>
-                      <span className="text-sm font-medium text-sage-800">{farm.fieldsCount || 0} fields</span>
-                    </div>
-
-                    {farm.fieldsTotalArea && (
-                      <div className="flex justify-between">
-                        <span className="text-sm text-sage-600">Field Area:</span>
-                        <span className="text-sm font-medium text-sage-800">{farm.fieldsTotalArea} ha</span>
-                      </div>
-                    )}
-
-                    <div className="pt-3 border-t border-sage-200/50">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-sage-500">
-                          Created {new Date(farm.createdAt).toLocaleDateString()}
-                        </span>
-                        <InlineFloatingButton
-                          icon={<Eye className="h-4 w-4" />}
-                          label="View Details"
-                          variant="ghost"
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </ModernCardContent>
-                </ModernCard>
-              </Link>
-            )) : (
-              <div className="col-span-full">
-                <EmptyStateCard className="max-w-3xl mx-auto">
-                  <NoFarmsEmptyState />
-                </EmptyStateCard>
-              </div>
-            )}
-          </div>
+          {/* Modern Farms Table */}
+          <ModernCard variant="floating" className="overflow-hidden">
+            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">
+              <ModernCardTitle className="text-sage-800">Your Farms</ModernCardTitle>
+              <ModernCardDescription>
+                Manage and monitor your agricultural operations
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent className="p-0">
+              {userFarms.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-sage-50/50 border-b border-sage-200/30">
+                      <tr>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Farm Name</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Location</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Area</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Fields</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Created</th>
+                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-sage-200/30">
+                      {userFarms.map((farm: any) => (
+                        <tr key={farm.id} className="hover:bg-sage-50/30 transition-colors">
+                          <td className="p-4">
+                            <div>
+                              <div className="font-medium text-sage-800">{farm.name}</div>
+                              <div className="text-sm text-sage-500 capitalize">{farm.location || 'No location'}</div>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="text-sm text-sage-600">
+                              {farm.address || `${farm.region || 'Unknown region'}, ${farm.country || 'Unknown'}`}
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="text-sm font-medium text-sage-800">
+                              {farm.totalArea?.toFixed(1) || '0.0'} <span className="text-sage-500">ha</span>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-sage-800">{farm.fieldsCount || 0}</span>
+                              <span className="text-xs text-sage-500">fields</span>
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="text-sm text-sage-600">
+                              {new Date(farm.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              })}
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <Link href={`/farms/${farm.id}`}>
+                              <InlineFloatingButton
+                                icon={<Eye className="h-4 w-4" />}
+                                label="View Details"
+                                variant="ghost"
+                                size="sm"
+                                className="hover:bg-sage-100"
+                              />
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="p-8">
+                  <EmptyStateCard>
+                    <NoFarmsEmptyState />
+                  </EmptyStateCard>
+                </div>
+              )}
+            </ModernCardContent>
+          </ModernCard>
 
           {/* Quick Actions */}
           <ModernCard variant="floating" className="overflow-hidden">

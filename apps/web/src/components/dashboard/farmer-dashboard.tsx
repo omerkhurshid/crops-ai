@@ -19,6 +19,7 @@ import { QuickActions } from './quick-actions'
 import { WeatherAlertsWidget } from './weather-alerts-widget'
 import { HarvestAlerts } from './harvest-alerts'
 import { WeatherTasksGenerator } from './weather-tasks-generator'
+import { RegionalComparison } from './regional-comparison'
 import { 
   Leaf, 
   Droplets, 
@@ -442,6 +443,17 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         {/* Harvest Alerts */}
         <HarvestAlerts farmId={farmId} />
       </div>
+
+      {/* Regional Comparison */}
+      <RegionalComparison 
+        farmData={{
+          latitude: passedFarmData?.latitude,
+          longitude: passedFarmData?.longitude,
+          totalArea: passedFarmData?.totalArea
+        }}
+        crops={passedCrops}
+        className="mb-8"
+      />
 
       {/* Quick Actions */}
       <div>

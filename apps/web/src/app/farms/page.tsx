@@ -73,88 +73,54 @@ export default async function FarmsPage() {
 
   return (
     <DashboardLayout>
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Sprout className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <MapPin className="h-8 w-8 text-sage-600" />
-      </div>
       
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
-          {/* Enhanced Header */}
-          <div className="text-center max-w-4xl mx-auto mb-12">
-            <div className="flex justify-center mb-6">
-              <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl relative overflow-hidden">
-                <Sprout className="h-10 w-10 text-sage-700 relative z-10" />
-                <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
-              </div>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-sage-800 mb-4 sm:mb-6 tracking-tight">
-              My Farms
-            </h1>
-            <p className="text-lg sm:text-xl text-sage-600 font-light leading-relaxed mb-4 sm:mb-6">
-              Manage and monitor your agricultural operations with AI-powered insights
+          {/* Page Header - Consistent with other pages */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-light text-sage-800 mb-2">My Farms</h1>
+            <p className="text-lg text-sage-600 mb-6">
+              View and manage all your farm locations
             </p>
             
-            <div className="flex justify-center">
-              <Link href="/farms/create-unified">
-                <InlineFloatingButton
-                  icon={<Plus className="h-5 w-5" />}
-                  label="Add New Farm"
-                  showLabel={true}
-                  variant="primary"
-                  size="lg"
-                  className="min-w-[200px]"
-                />
-              </Link>
-            </div>
+            <Link href="/farms/create-unified">
+              <button className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                Add New Farm
+              </button>
+            </Link>
           </div>
         
           {/* Stats Cards - Mobile Optimized */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
             <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <Sprout className="h-8 w-8 text-white" />
-              </div>
               <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">{userFarms.length}</div>
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Farms</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Active operations</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Farm locations</div>
             </div>
 
             <div className="polished-card card-forest rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <MapPin className="h-8 w-8 text-white" />
-              </div>
               <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha
               </div>
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Area</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Under management</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Hectares farmed</div>
             </div>
 
             <div className="polished-card card-earth rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <BarChart className="h-8 w-8 text-white" />
-              </div>
               <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0)}
               </div>
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Active Fields</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">In production</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Fields created</div>
             </div>
 
             <div className="polished-card card-golden rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
-                <MapPin className="h-8 w-8 text-white" />
-              </div>
               <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
                 {new Set(userFarms.map((farm: any) => farm.region || 'Unknown').filter((r: string) => r !== 'Unknown')).size}
               </div>
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Regions</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Geographic coverage</div>
+              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Different areas</div>
             </div>
           </div>
 

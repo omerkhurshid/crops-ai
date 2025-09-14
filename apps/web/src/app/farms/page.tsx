@@ -14,20 +14,11 @@ export const dynamic = 'force-dynamic'
 
 async function getUserFarms(userId: string) {
   try {
-    console.log('🔍 getUserFarms: Starting database query...');
+    console.log('🔍 getUserFarms: Starting with userId:', userId);
     
-    // First, let's test if we can even connect to the database
-    try {
-      const farmCount = await prisma.farm.count();
-      console.log(`📊 getUserFarms: Total farms in database: ${farmCount}`);
-    } catch (countError) {
-      console.error('❌ getUserFarms: Failed to count farms:', countError);
-      return [];
-    }
-    
-    // Use the EXACT same query as the working weather page
+    // Use the EXACT same simple query as working weather page
     const farms = await prisma.farm.findMany({
-      where: { ownerId: userId }, // Restored - this works in weather page!
+      where: { ownerId: userId },
       include: {
         owner: {
           select: {
@@ -50,16 +41,13 @@ async function getUserFarms(userId: string) {
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { name: 'asc' }  // Same as weather page
     })
     
-    console.log(`🔍 getUserFarms: Found ${farms.length} farms in database`);
-    console.log('🏡 getUserFarms: Farm names:', farms.map(f => f.name));
-    
-    // Log database connection info (without credentials)
-    const dbUrl = process.env.DATABASE_URL || 'No DATABASE_URL';
-    const dbHost = dbUrl.includes('@') ? dbUrl.split('@')[1]?.split('/')[0] : 'Unknown host';
-    console.log('🔗 getUserFarms: Database host:', dbHost);
+    console.log(`✅ getUserFarms: Found ${farms.length} farms for user ${userId}`);
+    if (farms.length > 0) {
+      console.log('🏡 Farm names:', farms.map(f => f.name));
+    }
     
     return farms.map(farm => ({
       id: farm.id,
@@ -78,34 +66,46 @@ async function getUserFarms(userId: string) {
       owner: farm.owner
     }))
   } catch (error) {
-    console.error('Error fetching user farms:', error)
+    console.error('❌ Error fetching user farms:', error)
     return []
   }
 }
 
 export default async function FarmsPage() {
-  console.log('🔍 FarmsPage: Starting execution');
+  console.log('🚀 FarmsPage: Starting execution');
   
   let user;
   try {
     user = await getCurrentUser()
-    console.log('👤 FarmsPage: getCurrentUser result:', user ? `User found: ${user.email}` : 'No user found');
+    console.log('👤 FarmsPage: User details:', {
+      found: !!user,
+      id: user?.id,
+      email: user?.email,
+      name: user?.name
+    });
   } catch (error) {
     console.error('❌ FarmsPage: getCurrentUser failed:', error);
     throw error;
   }
 
   if (!user) {
-    console.log('🚫 FarmsPage: No user, redirecting to login');
+    console.log('🚫 FarmsPage: No user found, redirecting to login');
     redirect('/login')
   }
 
   let userFarms: any[] = [];
   try {
-    console.log('📞 FarmsPage: Calling getUserFarms with userId:', user.id);
+    console.log('📞 FarmsPage: About to call getUserFarms with exact userId:', user.id);
     userFarms = await getUserFarms(user.id)
     console.log(`📊 FarmsPage: getUserFarms returned ${userFarms.length} farms`);
-    console.log('🏡 FarmsPage: Farm details:', userFarms.map(f => ({ id: f.id, name: f.name })));
+    if (userFarms.length > 0) {
+      console.log('🏡 FarmsPage: Farm summary:', userFarms.map(f => ({ 
+        id: f.id, 
+        name: f.name, 
+        owner: f.owner?.email,
+        fieldsCount: f.fieldsCount
+      })));
+    }
   } catch (error) {
     console.error('❌ FarmsPage: getUserFarms failed:', error);
     userFarms = [];

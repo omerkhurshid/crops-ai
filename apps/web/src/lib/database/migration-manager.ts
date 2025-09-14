@@ -682,7 +682,7 @@ class DatabaseMigrationManager {
           const existing = await prisma.recommendation.findFirst({
             where: { 
               fieldId: field.id,
-              type: rec.type
+              recommendationType: rec.type
             }
           })
 
@@ -690,11 +690,14 @@ class DatabaseMigrationManager {
             await prisma.recommendation.create({
               data: {
                 fieldId: field.id,
-                type: rec.type,
+                recommendationType: rec.type,
                 title: rec.title,
                 description: rec.description,
                 priority: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
-                dueDate: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000) // Next 30 days
+                optimalTiming: new Date(Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000), // Next 30 days
+                actionRequired: 'Sample action required',
+                potentialImpact: 'Sample potential impact',
+                confidenceLevel: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)]
               }
             })
             created++

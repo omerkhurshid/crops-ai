@@ -243,23 +243,6 @@ model SatelliteData {
   @@map("satellite_data")
 }
 
-model Recommendation {
-  id          String   @id @default(cuid())
-  fieldId     String
-  type        String // irrigation, fertilization, planting, harvest, etc.
-  title       String
-  description String
-  priority    String   @default("medium") // low, medium, high, urgent
-  isCompleted Boolean  @default(false)
-  dueDate     DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-
-  @@map("recommendations")
-}
 
 model FinancialTransaction {
   id              String            @id @default(cuid())

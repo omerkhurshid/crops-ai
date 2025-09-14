@@ -10,7 +10,7 @@ import { Badge } from '../ui/badge'
 import { 
   MapPin, Locate, Search, Loader2, CheckCircle,
   Wheat, Beef, TreePine, Apple, Flower2, 
-  AlertCircle, Satellite, Plus, Sprout, Trash2, Edit
+  AlertCircle, Satellite, Plus, Sprout, Trash2, Edit, RotateCcw
 } from 'lucide-react'
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
@@ -109,6 +109,31 @@ export function UnifiedFarmCreator() {
     }
   }
 
+  const resetCoordinates = () => {
+    const hasData = farm.boundaries || farm.fields?.length
+    const message = hasData 
+      ? 'This will reset your location and remove all farm boundaries and fields. Are you sure?'
+      : 'This will reset your farm location. Are you sure?'
+    
+    if (window.confirm(message)) {
+      setFarm(prev => ({
+        ...prev,
+        location: { lat: 0, lng: 0 },
+        boundaries: undefined,
+        totalArea: undefined,
+        fields: undefined
+      }))
+      setLocationInput('')
+      setShowMap(false)
+      setActiveField(null)
+      
+      // Reset drawing manager if it exists
+      if (drawingManager) {
+        drawingManager.setDrawingMode(null)
+      }
+    }
+  }
+
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
     setGoogleMapsLoaded(true)
@@ -183,6 +208,38 @@ export function UnifiedFarmCreator() {
       ...prev,
       fields: prev.fields?.filter(f => f.id !== fieldId) || []
     }))
+  }
+
+  const resetBoundaries = () => {
+    const hasFields = farm.fields?.length
+    const message = hasFields
+      ? 'This will remove farm boundaries and all field boundaries. Are you sure?'
+      : 'This will remove your farm boundaries. Are you sure?'
+    
+    if (window.confirm(message)) {
+      setFarm(prev => ({
+        ...prev,
+        boundaries: undefined,
+        totalArea: undefined,
+        fields: undefined
+      }))
+      setActiveField(null)
+      
+      // Reset drawing manager if it exists
+      if (drawingManager) {
+        drawingManager.setDrawingMode(null)
+      }
+    }
+  }
+
+  const clearAllFields = () => {
+    if (window.confirm('This will remove all field boundaries. Are you sure?')) {
+      setFarm(prev => ({
+        ...prev,
+        fields: undefined
+      }))
+      setActiveField(null)
+    }
   }
 
   const getFieldColor = (index: number) => fieldColors[index % fieldColors.length]
@@ -338,9 +395,23 @@ export function UnifiedFarmCreator() {
             </div>
 
             {farm.location.lat !== 0 && (
-              <div className="flex items-center gap-2 text-sm text-green-600">
-                <CheckCircle className="h-4 w-4" />
-                Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
+              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center gap-2 text-sm text-green-600">
+                  <CheckCircle className="h-4 w-4" />
+                  Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
+                  {farm.location.address && (
+                    <span className="text-green-700 font-medium">({farm.location.address})</span>
+                  )}
+                </div>
+                <Button
+                  onClick={resetCoordinates}
+                  variant="outline"
+                  size="sm"
+                  className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-orange-300"
+                >
+                  <RotateCcw className="h-4 w-4 mr-1" />
+                  Reset
+                </Button>
               </div>
             )}
           </CardContent>
@@ -349,16 +420,31 @@ export function UnifiedFarmCreator() {
         {/* Farm Mapping */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Satellite className="h-5 w-5 text-green-600" />
-              Farm Mapping {hasValidBoundaries && <Badge variant="secondary" className="ml-2">Boundaries Set</Badge>}
-            </CardTitle>
-            <CardDescription>
-              {!hasValidBoundaries 
-                ? "Draw your farm boundaries on the map" 
-                : "Farm boundaries set. Now you can add field boundaries."
-              }
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Satellite className="h-5 w-5 text-green-600" />
+                  Farm Mapping {hasValidBoundaries && <Badge variant="secondary" className="ml-2">Boundaries Set</Badge>}
+                </CardTitle>
+                <CardDescription>
+                  {!hasValidBoundaries 
+                    ? "Draw your farm boundaries on the map" 
+                    : "Farm boundaries set. Now you can add field boundaries."
+                  }
+                </CardDescription>
+              </div>
+              {hasValidBoundaries && (
+                <Button
+                  onClick={resetBoundaries}
+                  variant="outline"
+                  size="sm"
+                  className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 border-orange-300"
+                >
+                  <RotateCcw className="h-4 w-4 mr-1" />
+                  Reset Boundaries
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             {!showMap ? (
@@ -500,13 +586,28 @@ export function UnifiedFarmCreator() {
         {hasValidBoundaries && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Satellite className="h-5 w-5 text-purple-600" />
-                Fields ({farm.fields?.length || 0})
-              </CardTitle>
-              <CardDescription>
-                Individual field boundaries within your farm
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Satellite className="h-5 w-5 text-purple-600" />
+                    Fields ({farm.fields?.length || 0})
+                  </CardTitle>
+                  <CardDescription>
+                    Individual field boundaries within your farm
+                  </CardDescription>
+                </div>
+                {farm.fields && farm.fields.length > 0 && (
+                  <Button
+                    onClick={clearAllFields}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-300"
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    Clear All Fields
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {farm.fields && farm.fields.length > 0 ? (

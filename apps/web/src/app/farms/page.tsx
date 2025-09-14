@@ -8,7 +8,7 @@ import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-sta
 import { Sprout, MapPin, BarChart, Plus, Eye } from 'lucide-react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { prisma } from '../../lib/prisma'
-import { FarmFieldsMap } from '../../components/farm/farm-fields-map'
+// import { FarmFieldsMap } from '../../components/farm/farm-fields-map' // Temporarily disabled
 
 export const dynamic = 'force-dynamic'
 
@@ -42,6 +42,9 @@ async function getUserFarms(userId: string) {
       orderBy: { createdAt: 'desc' }
     })
     
+    console.log(`🔍 Found ${farms.length} farms in database`);
+    console.log('🏡 Farm names:', farms.map(f => f.name));
+    
     return farms.map(farm => ({
       id: farm.id,
       name: farm.name,
@@ -72,6 +75,7 @@ export default async function FarmsPage() {
   }
 
   const userFarms = await getUserFarms(user.id)
+  console.log(`📊 Final result: ${userFarms.length} farms for display`);
 
   return (
     <DashboardLayout>
@@ -160,10 +164,10 @@ export default async function FarmsPage() {
             </div>
           </div>
 
-          {/* Farm Fields Map */}
-          {userFarms.length > 0 && (
+          {/* Farm Fields Map - TEMPORARILY DISABLED FOR DEBUGGING */}
+          {/* {userFarms.length > 0 && (
             <FarmFieldsMap farms={userFarms} />
-          )}
+          )} */}
 
           {/* Farms Grid - Mobile Optimized */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">

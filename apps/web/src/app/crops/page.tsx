@@ -94,59 +94,61 @@ export default function CropsPage() {
           </div>
         </div>
 
-        {/* Main Content Grid - Timeline Featured */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Timeline View - 2/3 width on desktop */}
-          <div className="lg:col-span-2">
-            <ModernCard variant="floating">
-              <ModernCardContent className="p-6">
-                <CropCalendar farmId={farmId} />
-              </ModernCardContent>
-            </ModernCard>
-          </div>
+        {/* Main Timeline View - Full Width */}
+        <div className="space-y-6">
+          <ModernCard variant="floating">
+            <ModernCardContent className="p-6">
+              <CropCalendar farmId={farmId} />
+            </ModernCardContent>
+          </ModernCard>
+        </div>
 
-          {/* Right Sidebar - What Needs Attention */}
-          <div className="space-y-6">
-            {/* Quick Actions Card */}
-            <ModernCard variant="soft" className="border-l-4 border-l-orange-500">
-              <ModernCardHeader>
-                <ModernCardTitle className="flex items-center gap-2 text-lg">
-                  📌 What Needs Your Attention
-                </ModernCardTitle>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <FarmerFriendlyActionsList farmId={farmId} />
-              </ModernCardContent>
-            </ModernCard>
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-2xl mb-1">🌱</div>
-                <div className="text-xl font-bold text-green-600">3</div>
-                <div className="text-xs text-gray-600">Growing</div>
-              </ModernCard>
-              
-              <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-2xl mb-1">💰</div>
-                <div className="text-xl font-bold text-purple-600">$23.3k</div>
-                <div className="text-xs text-gray-600">Expected</div>
+        {/* What Needs Attention Section - Bottom */}
+        <div className="mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* What Needs Attention - Main Section */}
+            <div className="lg:col-span-3">
+              <ModernCard variant="soft" className="border-l-4 border-l-orange-500">
+                <ModernCardHeader>
+                  <ModernCardTitle className="flex items-center gap-2 text-xl">
+                    📌 What Needs Your Attention
+                  </ModernCardTitle>
+                  <ModernCardDescription>
+                    Key actions and reminders for your crops
+                  </ModernCardDescription>
+                </ModernCardHeader>
+                <ModernCardContent>
+                  <FarmerFriendlyActionsList farmId={farmId} />
+                </ModernCardContent>
               </ModernCard>
             </div>
 
-            {/* Mobile View Toggle */}
-            <ModernCard variant="glass">
-              <ModernCardContent className="p-4">
+            {/* Quick Stats Sidebar */}
+            <div className="space-y-4">
+              <ModernCard variant="soft" className="text-center p-4">
+                <div className="text-3xl mb-2">🌱</div>
+                <div className="text-2xl font-bold text-green-600">3</div>
+                <div className="text-sm text-gray-600">Growing Now</div>
+              </ModernCard>
+              
+              <ModernCard variant="soft" className="text-center p-4">
+                <div className="text-3xl mb-2">💰</div>
+                <div className="text-2xl font-bold text-purple-600">$23.3k</div>
+                <div className="text-sm text-gray-600">Expected Value</div>
+              </ModernCard>
+
+              <ModernCard variant="glass" className="text-center p-4">
                 <Button 
                   variant="outline" 
+                  size="sm"
                   className="w-full flex items-center justify-center gap-2"
                   onClick={() => window.scrollTo({ top: document.getElementById('mobile-view')?.offsetTop || 0, behavior: 'smooth' })}
                 >
                   <Phone className="h-4 w-4" />
-                  Mobile Card View
+                  Mobile View
                 </Button>
-              </ModernCardContent>
-            </ModernCard>
+              </ModernCard>
+            </div>
           </div>
         </div>
 

@@ -14,19 +14,6 @@ export const dynamic = 'force-dynamic'
 
 async function getUserFarms(userId: string) {
   try {
-    console.log('🔍 getUserFarms: Starting with userId:', userId);
-    
-    console.log('🔍 Testing: First show ALL farms to confirm they exist...');
-    const allFarmsTest = await prisma.farm.findMany({
-      include: {
-        owner: { select: { id: true, name: true, email: true } }
-      }
-    });
-    console.log(`🏡 ALL FARMS: Found ${allFarmsTest.length} total farms:`);
-    allFarmsTest.forEach(f => console.log(`  - ${f.name} (Owner: ${f.owner.email}, ID: ${f.ownerId})`));
-    
-    // Now try the user-specific query
-    console.log(`🎯 Now querying farms for specific userId: "${userId}"`);
     const farms = await prisma.farm.findMany({
       where: { ownerId: userId },
       include: {
@@ -50,13 +37,8 @@ async function getUserFarms(userId: string) {
           }
         }
       },
-      orderBy: { name: 'asc' }  // Same as weather page
+      orderBy: { name: 'asc' }
     })
-    
-    console.log(`✅ getUserFarms: Found ${farms.length} farms for user ${userId}`);
-    if (farms.length > 0) {
-      console.log('🏡 Farm names:', farms.map(f => f.name));
-    }
     
     return farms.map(farm => ({
       id: farm.id,
@@ -75,50 +57,19 @@ async function getUserFarms(userId: string) {
       owner: farm.owner
     }))
   } catch (error) {
-    console.error('❌ Error fetching user farms:', error)
+    console.error('Error fetching user farms:', error)
     return []
   }
 }
 
 export default async function FarmsPage() {
-  console.log('🚀 FarmsPage: Starting execution');
-  
-  let user;
-  try {
-    user = await getCurrentUser()
-    console.log('👤 FarmsPage: User details:', {
-      found: !!user,
-      id: user?.id,
-      email: user?.email,
-      name: user?.name
-    });
-  } catch (error) {
-    console.error('❌ FarmsPage: getCurrentUser failed:', error);
-    throw error;
-  }
+  const user = await getCurrentUser()
 
   if (!user) {
-    console.log('🚫 FarmsPage: No user found, redirecting to login');
     redirect('/login')
   }
 
-  let userFarms: any[] = [];
-  try {
-    console.log('📞 FarmsPage: About to call getUserFarms with exact userId:', user.id);
-    userFarms = await getUserFarms(user.id)
-    console.log(`📊 FarmsPage: getUserFarms returned ${userFarms.length} farms`);
-    if (userFarms.length > 0) {
-      console.log('🏡 FarmsPage: Farm summary:', userFarms.map(f => ({ 
-        id: f.id, 
-        name: f.name, 
-        owner: f.owner?.email,
-        fieldsCount: f.fieldsCount
-      })));
-    }
-  } catch (error) {
-    console.error('❌ FarmsPage: getUserFarms failed:', error);
-    userFarms = [];
-  }
+  const userFarms = await getUserFarms(user.id)
 
   return (
     <DashboardLayout>
@@ -212,16 +163,6 @@ export default async function FarmsPage() {
             <FarmFieldsMap farms={userFarms} />
           )} */}
 
-          {/* DEBUG: Show current state */}
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 rounded">
-            <h3 className="font-bold text-red-800">DEBUG INFO:</h3>
-            <p>userFarms.length: {userFarms.length}</p>
-            <p>userFarms type: {typeof userFarms}</p>
-            <p>Is array: {Array.isArray(userFarms) ? 'Yes' : 'No'}</p>
-            {userFarms.length > 0 && (
-              <p>First farm: {JSON.stringify(userFarms[0], null, 2)}</p>
-            )}
-          </div>
 
           {/* Farms Grid - Mobile Optimized */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">

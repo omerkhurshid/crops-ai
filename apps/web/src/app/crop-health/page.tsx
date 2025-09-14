@@ -4,8 +4,6 @@ import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
 import { AdvancedVisualizations } from '../../components/crop-health/advanced-visualizations'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
-import { InfoTooltip } from '../../components/ui/info-tooltip'
-import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { NoHealthDataEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
@@ -73,38 +71,16 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
         variant="primary"
       />
       
-      {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Leaf className="h-8 w-8 text-sage-600" />
-      </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Activity className="h-8 w-8 text-sage-600" />
-      </div>
-      
-      <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-16">
-          {/* Modern Header with Asymmetric Layout */}
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-8">
+          {/* Page Header - Consistent with other pages */}
+          <h1 className="text-4xl font-light text-sage-800 mb-2">Crop Health Monitoring</h1>
+          <p className="text-lg text-sage-600 mb-6">
+            Monitor crop health and vegetation status for {farmName}
+          </p>
+          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
-              <div className="flex items-start gap-6">
-                <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl">
-                  <Activity className="h-10 w-10 text-sage-700" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h1 className="text-4xl md:text-6xl font-light text-sage-800 tracking-tight">
-                      Crop Health Monitoring
-                    </h1>
-                    <InfoTooltip {...TOOLTIP_CONTENT.healthScore} size="md" />
-                  </div>
-                  <p className="text-xl text-sage-600 font-light mb-2">
-                    Real-time vegetation health analysis for <span className="font-semibold text-sage-800">{farmName}</span>
-                  </p>
-                  <p className="text-sm text-sage-500 leading-relaxed">
-                    Powered by satellite imagery, AI analysis, and advanced vegetation indices for precision agriculture
-                  </p>
-                </div>
-              </div>
             </div>
             <div className="lg:col-span-4">
               {farms.length > 1 && (
@@ -119,15 +95,14 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
         </div>
 
         {/* Technology Overview Cards */}
-        <div className="mb-16">
+        <div className="mb-8">
           <ModernCard variant="floating" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
               <div className="flex items-center gap-3">
-                <ModernCardTitle className="text-sage-800">Advanced Crop Health Technology</ModernCardTitle>
-                <InfoTooltip title="Health Monitoring" description="Comprehensive vegetation monitoring using cutting-edge remote sensing and AI-powered analysis." />
+                <ModernCardTitle className="text-sage-800">Crop Health Technology</ModernCardTitle>
               </div>
               <ModernCardDescription>
-                Multi-layered agricultural intelligence combining satellite data, vegetation science, and machine learning
+                Satellite imagery and vegetation analysis to monitor crop health
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="p-8">
@@ -135,34 +110,31 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
                 <div className="text-center group">
                   <div className="p-6 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
                     <Satellite className="h-10 w-10 text-sage-700 mx-auto mb-4" />
-                    <div className="font-semibold text-sage-900 text-lg mb-2">Satellite Imagery</div>
+                    <div className="font-semibold text-sage-900 text-lg mb-2">Satellite Data</div>
                     <div className="text-sm text-sage-700 leading-relaxed">
-                      Multi-spectral analysis from Copernicus Sentinel-2 satellites with 10m resolution
+                      High-resolution imagery updated every few days
                     </div>
                   </div>
-                  <InfoTooltip title="Satellite Technology" description="High-resolution multi-spectral imagery captured every 5-10 days from ESA Sentinel missions." size="sm" />
                 </div>
                 
                 <div className="text-center group">
                   <div className="p-6 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
                     <Leaf className="h-10 w-10 text-earth-700 mx-auto mb-4" />
-                    <div className="font-semibold text-earth-900 text-lg mb-2">Vegetation Indices</div>
+                    <div className="font-semibold text-earth-900 text-lg mb-2">Vegetation Health</div>
                     <div className="text-sm text-earth-700 leading-relaxed">
-                      NDVI, EVI, SAVI, GNDVI, LAI and 8+ specialized metrics for comprehensive crop analysis
+                      NDVI and other metrics to assess plant vigor
                     </div>
                   </div>
-                  <InfoTooltip {...TOOLTIP_CONTENT.ndvi} size="sm" />
                 </div>
                 
                 <div className="text-center group">
                   <div className="p-6 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl mb-4 group-hover:shadow-soft transition-all duration-300">
                     <Brain className="h-10 w-10 text-sage-700 mx-auto mb-4" />
-                    <div className="font-semibold text-sage-900 text-lg mb-2">AI Analysis</div>
+                    <div className="font-semibold text-sage-900 text-lg mb-2">Analysis</div>
                     <div className="text-sm text-sage-700 leading-relaxed">
-                      Machine learning algorithms for stress detection, yield prediction, and anomaly identification
+                      Identify problem areas and trends over time
                     </div>
                   </div>
-                  <InfoTooltip {...TOOLTIP_CONTENT.confidence} size="sm" />
                 </div>
               </div>
             </ModernCardContent>
@@ -190,7 +162,7 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
                   Advanced Health Analytics
                 </ModernCardTitle>
                 <ModernCardDescription>
-                  In-depth visualization and trend analysis of your crop health data
+                  Detailed charts and analysis of crop health trends
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>

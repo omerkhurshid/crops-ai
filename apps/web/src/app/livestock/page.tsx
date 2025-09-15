@@ -21,9 +21,7 @@ export default async function LivestockPage() {
   try {
     livestockEvents = await prisma.livestockEvent.findMany({
       where: {
-        farm: {
-          ownerId: user.id
-        }
+        userId: user.id
       },
       include: {
         farm: {
@@ -31,7 +29,8 @@ export default async function LivestockPage() {
             name: true
           }
         }
-      }
+      },
+      orderBy: { eventDate: 'desc' }
     })
   } catch (error: any) {
     console.warn('Failed to fetch livestock events, using empty array:', error.message)

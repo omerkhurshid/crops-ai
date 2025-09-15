@@ -5,13 +5,9 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { CropCalendar } from '../../components/crops/crop-calendar'
-import { FarmerFriendlyCropView } from '../../components/crops/farmer-friendly-crop-view'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
-import { InfoTooltip } from '../../components/ui/info-tooltip'
+import { ModernCard, ModernCardContent } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
-import { Sprout, Plus, Calendar, TrendingUp, MapPin, Scissors, Phone } from 'lucide-react'
-import { Button } from '../../components/ui/button'
-import { FarmerFriendlyActionsList } from '../../components/crops/farmer-friendly-actions-list'
+import { Plus } from 'lucide-react'
 
 export default function CropsPage() {
   const { data: session, status } = useSession()
@@ -94,61 +90,6 @@ export default function CropsPage() {
           </ModernCard>
         </div>
 
-        {/* What Needs Attention Section - Bottom */}
-        <div className="mt-12">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* What Needs Attention - Main Section */}
-            <div className="lg:col-span-3">
-              <ModernCard variant="soft" className="border-l-4 border-l-orange-500">
-                <ModernCardHeader>
-                  <ModernCardTitle className="text-xl text-sage-800">
-                    What Needs Your Attention
-                  </ModernCardTitle>
-                  <ModernCardDescription>
-                    Important tasks for your crops this week
-                  </ModernCardDescription>
-                </ModernCardHeader>
-                <ModernCardContent>
-                  <FarmerFriendlyActionsList farmId={farmId} />
-                </ModernCardContent>
-              </ModernCard>
-            </div>
-
-            {/* Quick Stats Sidebar */}
-            <div className="space-y-4">
-              <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-2xl font-bold text-green-600">3</div>
-                <div className="text-sm text-sage-600">Crops Growing</div>
-              </ModernCard>
-              
-              <ModernCard variant="soft" className="text-center p-4">
-                <div className="text-2xl font-bold text-sage-600">--</div>
-                <div className="text-sm text-sage-600">Expected Value</div>
-                <div className="text-xs text-sage-500">Add crop data to see value</div>
-              </ModernCard>
-
-              <ModernCard variant="glass" className="text-center p-4">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="w-full"
-                  onClick={() => window.scrollTo({ top: document.getElementById('mobile-view')?.offsetTop || 0, behavior: 'smooth' })}
-                >
-                  Card View
-                </Button>
-              </ModernCard>
-            </div>
-          </div>
-        </div>
-
-        {/* Card View - Alternative layout */}
-        <div id="mobile-view" className="mt-12">
-          <div className="mb-6">
-            <h2 className="text-2xl font-light text-sage-800 mb-2">Card View</h2>
-            <p className="text-sage-600">Alternative layout for your crops</p>
-          </div>
-          <FarmerFriendlyCropView farmId={farmId} />
-        </div>
       </main>
     </DashboardLayout>
   )

@@ -40,7 +40,8 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
     signOut({ callbackUrl: '/' })
   }
 
-  const navLinks = [
+  // Main navigation links
+  const mainNavLinks = [
     { href: '/dashboard', label: 'Command Center', icon: Home },
     { 
       href: '/farms', 
@@ -58,6 +59,10 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
     { href: '/recommendations', label: 'AI Insights', icon: Brain },
     { href: '/financial', label: 'Financials', icon: DollarSign },
     { href: '/reports', label: 'Reports', icon: FileText },
+  ]
+
+  // Secondary navigation links (below divider)
+  const secondaryNavLinks = [
     { href: '/settings', label: 'Settings', icon: Settings },
     { href: '/help', label: 'Help', icon: HelpCircle },
   ]
@@ -93,7 +98,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
             <div className="w-8 h-8 mr-3 group-hover:scale-105 transition-transform">
               <Image 
                 src="/crops-ai-logo.png" 
-                alt="Crops.AI Logo" 
+                alt="Cropple.ai Logo" 
                 width={32} 
                 height={32}
                 className="w-full h-full object-contain"

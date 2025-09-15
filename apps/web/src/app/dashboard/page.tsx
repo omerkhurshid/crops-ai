@@ -252,6 +252,7 @@ export default async function DashboardPage() {
             weatherAlerts={weatherAlerts}
             crops={crops}
             livestock={livestock}
+            user={user}
           />
         </div>
 

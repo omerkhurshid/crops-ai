@@ -21,7 +21,9 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     password: '',
     confirmPassword: '',
     role: UserRole.FARM_OWNER,
-    userType: '' // Will be 'CROPS', 'LIVESTOCK', 'ORCHARD', or 'MIXED'
+    userType: '', // Will be 'CROPS', 'LIVESTOCK', 'ORCHARD', or 'MIXED'
+    acceptTerms: false,
+    subscribeNewsletter: false
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -29,9 +31,10 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
   const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     }))
   }
 
@@ -71,6 +74,9 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     }
     if (formData.password !== formData.confirmPassword) {
       return 'Passwords do not match'
+    }
+    if (!formData.acceptTerms) {
+      return 'You must accept the Terms & Conditions to continue'
     }
     return null
   }
@@ -175,7 +181,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       <CardHeader>
         <CardTitle>Create Account</CardTitle>
         <CardDescription>
-          Join Crops.AI to start optimizing your farm management
+          Join Cropple.ai to start optimizing your farm management
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -371,6 +377,57 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               required
               disabled={isLoading}
             />
+          </div>
+
+          {/* Terms & Conditions and Newsletter */}
+          <div className="space-y-3 pt-2 border-t border-gray-200">
+            <div className="flex items-start space-x-2">
+              <input
+                id="acceptTerms"
+                name="acceptTerms"
+                type="checkbox"
+                checked={formData.acceptTerms}
+                onChange={handleChange}
+                required
+                disabled={isLoading}
+                className="mt-0.5 h-4 w-4 text-sage-600 focus:ring-sage-500 border-gray-300 rounded"
+              />
+              <label htmlFor="acceptTerms" className="text-sm text-gray-700 leading-tight">
+                I accept the{' '}
+                <a 
+                  href="/terms" 
+                  target="_blank" 
+                  className="text-sage-600 hover:text-sage-700 underline"
+                >
+                  Terms & Conditions
+                </a>{' '}
+                and{' '}
+                <a 
+                  href="/privacy" 
+                  target="_blank" 
+                  className="text-sage-600 hover:text-sage-700 underline"
+                >
+                  Privacy Policy
+                </a>
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+            </div>
+            
+            <div className="flex items-start space-x-2">
+              <input
+                id="subscribeNewsletter"
+                name="subscribeNewsletter"
+                type="checkbox"
+                checked={formData.subscribeNewsletter}
+                onChange={handleChange}
+                disabled={isLoading}
+                className="mt-0.5 h-4 w-4 text-sage-600 focus:ring-sage-500 border-gray-300 rounded"
+              />
+              <label htmlFor="subscribeNewsletter" className="text-sm text-gray-700 leading-tight">
+                <span className="font-medium">Join our newsletter</span> for farming tips, feature updates, and insights to maximize your yield{' '}
+                <span className="text-gray-500">(optional)</span>
+              </label>
+            </div>
           </div>
           
           {error && (

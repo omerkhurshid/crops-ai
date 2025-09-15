@@ -72,7 +72,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
             <Menu className="h-6 w-6" />
           </button>
           <Link href="/dashboard" className="ml-4 text-xl font-semibold text-sage-800">
-            Crops.AI
+            Cropple.ai
           </Link>
         </div>
         

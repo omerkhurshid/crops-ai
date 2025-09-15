@@ -13,6 +13,7 @@ import Link from 'next/link'
 
 interface MorningBriefingProps {
   farmName: string
+  userName?: string
   totalAcres: number
   overallHealth: number
   healthTrend: number
@@ -30,6 +31,13 @@ interface MorningBriefingProps {
       precipitation: number
       windSpeed: number
     }
+    forecast?: Array<{
+      date: string
+      high: number
+      low: number
+      condition: string
+      precipitation: number
+    }>
     alerts: Array<{
       type: string
       severity: 'low' | 'medium' | 'high'
@@ -44,6 +52,7 @@ interface MorningBriefingProps {
   urgentTasksCount: number
   className?: string
   plantingsCount?: number
+  growingCount?: number
   readyToHarvestCount?: number
   fieldsNeedingAttention?: string[]
   livestockCount?: number
@@ -60,6 +69,7 @@ const weatherIcons = {
 
 export function MorningBriefing({
   farmName,
+  userName,
   totalAcres,
   overallHealth,
   healthTrend,
@@ -70,6 +80,7 @@ export function MorningBriefing({
   urgentTasksCount,
   className,
   plantingsCount = 0,
+  growingCount = 0,
   readyToHarvestCount = 0,
   fieldsNeedingAttention = [],
   livestockCount = 0,
@@ -81,9 +92,25 @@ export function MorningBriefing({
   
   const greeting = () => {
     const hour = new Date().getHours()
-    if (hour < 12) return 'Good morning'
-    if (hour < 17) return 'Good afternoon'
-    return 'Good evening'
+    const firstName = userName ? userName.split(' ')[0] : ''
+    const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+    return firstName ? `${timeGreeting}, ${firstName}` : timeGreeting
+  }
+
+  const getHealthExplanation = (health: number) => {
+    if (health >= 85) return 'Excellent (85%+ is considered excellent)'
+    if (health >= 70) return 'Good (70-84% is considered good)'  
+    if (health >= 55) return 'Average (55-69% is considered average)'
+    return 'Needs Attention (below 55% needs immediate attention)'
+  }
+
+  const getLivestockHealthExplanation = (status: 'good' | 'warning' | 'critical') => {
+    switch (status) {
+      case 'good': return 'Good (95%+ healthy animals)'
+      case 'warning': return 'Warning (85-94% healthy animals)'
+      case 'critical': return 'Critical (below 85% healthy animals)'
+      default: return 'Good'
+    }
   }
 
   return (
@@ -93,7 +120,8 @@ export function MorningBriefing({
         <div className="bg-gradient-to-r from-sage-700 to-earth-700 text-white p-6 pb-4">
           <h1 className="text-2xl font-bold mb-2">{greeting()}!</h1>
           <div className="text-sage-100">
-            <span>{farmName} • {totalAcres} acres</span>
+            <span>{totalAcres} acres under management</span>
+            {farmName && <span className="opacity-75 ml-2">• {farmName}</span>}
           </div>
         </div>
 
@@ -113,7 +141,7 @@ export function MorningBriefing({
                     <span className="text-sm font-semibold text-sage-700">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mb-1">
                     <div className={cn(
                       'text-2xl font-bold',
                       overallHealth >= 80 ? 'text-green-700' : 
@@ -133,17 +161,40 @@ export function MorningBriefing({
                        overallHealth >= 40 ? 'Average' : 'Critical'}
                     </span>
                   </div>
+                  <div className="text-xs text-sage-600">
+                    {getHealthExplanation(overallHealth)}
+                  </div>
                 </div>
 
-                {/* Crop Stats */}
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sage-700">Plantings</span>
-                    <span className="font-semibold text-sage-800">{plantingsCount}</span>
+                {/* Livestock Health */}
+                {livestockCount > 0 && (
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-semibold text-blue-700 flex items-center gap-1">
+                        <Heart className="h-4 w-4" />
+                        Livestock Health
+                      </span>
+                      <span className={cn(
+                        'text-xs font-medium px-2 py-1 rounded-full',
+                        livestockHealthStatus === 'good' ? 'bg-green-100 text-green-700' :
+                        livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      )}>
+                        {livestockCount} animals
+                      </span>
+                    </div>
+                    <div className="text-xs text-blue-600">
+                      {getLivestockHealthExplanation(livestockHealthStatus)}
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sage-700">Ready to Harvest</span>
-                    <span className="font-semibold text-sage-800">{readyToHarvestCount}</span>
+                )}
+
+                {/* Crop Stats - Updated */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-sage-700">{plantingsCount} crops planned</span>
+                    <span className="text-sage-700">{growingCount} growing</span>
+                    <span className="text-sage-700">{readyToHarvestCount} ready to harvest</span>
                   </div>
                 </div>
 
@@ -185,36 +236,62 @@ export function MorningBriefing({
               </div>
             </div>
 
-            {/* Weather Summary */}
+            {/* Weather Summary - Improved */}
             <div className="py-6 md:py-0 md:px-6">
               <h3 className="text-sm font-semibold text-sage-700 mb-4">
-                Today's Weather
+                Weather Conditions
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <WeatherIcon className="h-8 w-8 text-orange-500" />
-                    <div>
-                      <div className="text-2xl font-bold text-sage-800">
-                        {weather.current.temp}°F
+              <div className="space-y-4">
+                {/* Current Weather */}
+                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <WeatherIcon className="h-8 w-8 text-blue-600" />
+                      <div>
+                        <div className="text-2xl font-bold text-blue-800">
+                          {weather.current.temp}°F
+                        </div>
+                        <div className="text-xs text-blue-600 capitalize">{weather.current.condition}</div>
                       </div>
-                      <div className="text-xs text-sage-600">{weather.current.condition}</div>
+                    </div>
+                    <div className="text-right text-sm">
+                      <div className="text-blue-700 font-medium">H: {weather.today.high}°</div>
+                      <div className="text-blue-700 font-medium">L: {weather.today.low}°</div>
                     </div>
                   </div>
-                  <div className="text-right text-sm">
-                    <div className="text-sage-600">H: {weather.today.high}°</div>
-                    <div className="text-sage-600">L: {weather.today.low}°</div>
+                  
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="flex items-center gap-1">
+                      <Droplets className="h-3 w-3 text-blue-500" />
+                      <span className="text-blue-700">Precipitation: {weather.today.precipitation}%</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Wind className="h-3 w-3 text-blue-500" />
+                      <span className="text-blue-700">Wind: {weather.today.windSpeed} mph</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                {/* 3-Day Forecast */}
+                {weather.forecast && weather.forecast.length > 0 && (
                   <div>
-                    <span className="text-sage-700">Rain: {weather.today.precipitation}"</span>
+                    <div className="text-xs font-medium text-sage-600 mb-2">3-Day Forecast:</div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {weather.forecast.slice(0, 3).map((day, i) => (
+                        <div key={i} className="text-center p-2 bg-sage-50 rounded border">
+                          <div className="text-xs text-sage-600 mb-1">
+                            {new Date(day.date).toLocaleDateString('en', { weekday: 'short' })}
+                          </div>
+                          <div className="text-sm font-medium text-sage-800">
+                            {day.high}°/{day.low}°
+                          </div>
+                          <div className="text-xs text-sage-600 capitalize">{day.condition}</div>
+                          <div className="text-xs text-blue-600">{day.precipitation}%</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-sage-700">Wind: {weather.today.windSpeed} mph</span>
-                  </div>
-                </div>
+                )}
 
                 {weather.alerts.length > 0 && (
                   <div className={cn(
@@ -223,7 +300,11 @@ export function MorningBriefing({
                       ? 'bg-red-50 border-red-200' 
                       : 'bg-yellow-50 border-yellow-200'
                   )}>
-                    <div className="text-xs font-medium text-sage-800">
+                    <div className="flex items-center gap-2 mb-1">
+                      <AlertTriangle className="h-4 w-4 text-orange-600" />
+                      <span className="text-xs font-medium text-orange-700">Weather Alert</span>
+                    </div>
+                    <div className="text-xs text-sage-800">
                       {weather.alerts[0].type}: {weather.alerts[0].message}
                     </div>
                   </div>

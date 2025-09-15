@@ -8,10 +8,10 @@ import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Crops.AI - AI-Powered Farm Management',
+  title: 'Cropple.ai - AI-Powered Farm Management',
   description: 'Optimize agricultural productivity with intelligent decision-support, real-time monitoring, and predictive analytics.',
   keywords: 'agriculture, farming, AI, precision agriculture, crop monitoring, farm management',
-  authors: [{ name: 'Crops.AI Team' }],
+  authors: [{ name: 'Cropple.ai Team' }],
   viewport: 'width=device-width, initial-scale=1',
   icons: {
     icon: [
@@ -22,24 +22,24 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico'
   },
   openGraph: {
-    title: 'Crops.AI - AI-Powered Farm Management',
+    title: 'Cropple.ai - AI-Powered Farm Management',
     description: 'Transform your agricultural operations with intelligent decision-support, real-time monitoring, and predictive analytics.',
-    url: 'https://crops.ai',
-    siteName: 'Crops.AI',
+    url: 'https://cropple.ai',
+    siteName: 'Cropple.ai',
     type: 'website',
     images: [
       {
         url: '/crops-ai-logo.png',
         width: 400,
         height: 400,
-        alt: 'Crops.AI - Satellite and agricultural field logo'
+        alt: 'Cropple.ai - Satellite and agricultural field logo'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@cropsai',
-    title: 'Crops.AI - AI-Powered Farm Management',
+    site: '@croppleai',
+    title: 'Cropple.ai - AI-Powered Farm Management',
     description: 'Transform your agricultural operations with intelligent decision-support, real-time monitoring, and predictive analytics.',
     images: ['/crops-ai-logo.png']
   },

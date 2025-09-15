@@ -7,7 +7,7 @@ import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Sprout, MapPin, BarChart, Plus, Activity } from 'lucide-react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
-import { FarmHealthCard } from '../../components/farms/farm-health-card'
+import { ExpandableFarmRow } from '../../components/farms/expandable-farm-row'
 import { prisma } from '../../lib/prisma'
 // import { FarmFieldsMap } from '../../components/farm/farm-fields-map' // Temporarily disabled
 
@@ -92,8 +92,8 @@ export default async function FarmsPage() {
             </Link>
           </div>
         
-          {/* Stats Cards - Mobile Optimized */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
+          {/* Stats Cards - Mobile Optimized (Removed Regions) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
             <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
               <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">{userFarms.length}</div>
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Farms</div>
@@ -115,55 +115,8 @@ export default async function FarmsPage() {
               <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Active Fields</div>
               <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Fields created</div>
             </div>
-
-            <div className="polished-card card-golden rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
-                {new Set(userFarms.map((farm: any) => farm.region || 'Unknown').filter((r: string) => r !== 'Unknown')).size}
-              </div>
-              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Regions</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Different areas</div>
-            </div>
           </div>
 
-          {/* Farm Health Overview */}
-          {userFarms.length > 0 && (
-            <ModernCard variant="floating" className="overflow-hidden mb-8">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">
-                <ModernCardTitle className="text-sage-800 flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-sage-600" />
-                  Farm Health Dashboard
-                </ModernCardTitle>
-                <ModernCardDescription>
-                  Real-time health metrics and alerts across all your farms
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {userFarms.slice(0, 6).map((farm: any) => (
-                    <div key={farm.id} className="p-4 bg-sage-50/30 rounded-lg border border-sage-200/30">
-                      <div className="mb-3">
-                        <Link href={`/farms/${farm.id}`}>
-                          <h4 className="font-medium text-sage-800 hover:text-sage-900 truncate cursor-pointer transition-colors">{farm.name}</h4>
-                        </Link>
-                      </div>
-                      <FarmHealthCard 
-                        farmId={farm.id} 
-                        farmName={farm.name} 
-                        compact={true} 
-                      />
-                    </div>
-                  ))}
-                </div>
-                {userFarms.length > 6 && (
-                  <div className="text-center mt-4">
-                    <p className="text-sm text-sage-600">
-                      Showing 6 of {userFarms.length} farms. View individual farms for complete health details.
-                    </p>
-                  </div>
-                )}
-              </ModernCardContent>
-            </ModernCard>
-          )}
 
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
@@ -188,37 +141,10 @@ export default async function FarmsPage() {
                     </thead>
                     <tbody className="divide-y divide-sage-200/30">
                       {userFarms.map((farm: any) => (
-                        <tr key={farm.id} className="hover:bg-sage-50/30 transition-colors">
-                          <td className="p-4">
-                            <Link href={`/farms/${farm.id}`} className="block hover:text-sage-900 transition-colors">
-                              <div className="font-medium text-sage-800 hover:text-sage-900">{farm.name}</div>
-                              <div className="text-sm text-sage-500 capitalize">{farm.location || 'No location'}</div>
-                            </Link>
-                          </td>
-                          <td className="p-4">
-                            <div className="text-sm text-sage-600">
-                              {farm.address || (farm.latitude && farm.longitude ? `${farm.latitude.toFixed(4)}, ${farm.longitude.toFixed(4)}` : 'Location not set')}
-                            </div>
-                          </td>
-                          <td className="p-4">
-                            <div className="text-sm font-medium text-sage-800">
-                              {farm.totalArea?.toFixed(1) || '0.0'} <span className="text-sage-500">ha</span>
-                            </div>
-                          </td>
-                          <td className="p-4">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-sage-800">{farm.fieldsCount || 0}</span>
-                              <span className="text-xs text-sage-500">fields</span>
-                            </div>
-                          </td>
-                          <td className="p-4">
-                            <FarmHealthCard 
-                              farmId={farm.id} 
-                              farmName={farm.name} 
-                              compact={true} 
-                            />
-                          </td>
-                        </tr>
+                        <ExpandableFarmRow 
+                          key={farm.id} 
+                          farm={farm}
+                        />
                       ))}
                     </tbody>
                   </table>

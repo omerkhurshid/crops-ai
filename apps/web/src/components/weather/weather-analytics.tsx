@@ -327,11 +327,18 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Growing Degree Days</CardTitle>
-                  <CardDescription>Accumulated heat units for crop development</CardDescription>
+                  <CardDescription>Heat accumulation that drives crop growth and development</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600">
+                  <div className="text-3xl font-bold text-green-600 mb-3">
                     {Math.round(aggregatedData.agricultureMetrics.growingDegreeDays)}
+                  </div>
+                  <div className="text-sm text-gray-600 bg-green-50 p-3 rounded border-l-4 border-green-400">
+                    <p className="font-medium text-green-800 mb-2">What this means:</p>
+                    <p>• Each crop needs a specific amount of heat to mature</p>
+                    <p>• Corn needs ~2,700 GDD, Soybeans need ~2,500 GDD</p>
+                    <p>• Higher numbers = faster crop development</p>
+                    <p>• Use this to time planting, harvest, and treatments</p>
                   </div>
                 </CardContent>
               </Card>
@@ -339,33 +346,48 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Chill Hours</CardTitle>
-                  <CardDescription>Hours below 7°C for dormancy requirements</CardDescription>
+                  <CardDescription>Cold hours needed for fruit trees and perennial crops</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-blue-600 mb-3">
                     {aggregatedData.agricultureMetrics.chillHours}
                   </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Heat Stress</CardTitle>
-                  <CardDescription>Hours above 32°C causing crop stress</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-red-600">
-                    {aggregatedData.agricultureMetrics.heatStressHours}
+                  <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+                    <p className="font-medium text-blue-800 mb-2">What this means:</p>
+                    <p>• Many fruit trees need winter cold to produce fruit</p>
+                    <p>• Apples need 800-1,200 hours, Peaches need 150-1,000</p>
+                    <p>• Not enough chill = poor fruit production</p>
+                    <p>• Monitor if you grow fruit trees or nuts</p>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Precipitation Days</CardTitle>
+                  <CardTitle className="text-lg">Heat Stress Hours</CardTitle>
+                  <CardDescription>Excessive heat that can damage crops and reduce yields</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
+                  <div className="text-3xl font-bold text-red-600 mb-3">
+                    {aggregatedData.agricultureMetrics.heatStressHours}
+                  </div>
+                  <div className="text-sm text-gray-600 bg-red-50 p-3 rounded border-l-4 border-red-400">
+                    <p className="font-medium text-red-800 mb-2">What this means:</p>
+                    <p>• Temperatures above 32°C stress most crops</p>
+                    <p>• Can cause poor pollination, wilting, reduced yields</p>
+                    <p>• High numbers = consider shade, irrigation, heat-tolerant varieties</p>
+                    <p>• Critical during flowering and grain filling</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Precipitation Patterns</CardTitle>
+                  <CardDescription>Wet and dry day patterns affecting field work and irrigation</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 mb-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Wet Days</span>
                       <span className="font-semibold text-blue-600">{aggregatedData.agricultureMetrics.wetDays}</span>
@@ -375,17 +397,93 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                       <span className="font-semibold text-orange-600">{aggregatedData.agricultureMetrics.dryDays}</span>
                     </div>
                   </div>
+                  <div className="text-sm text-gray-600 bg-yellow-50 p-3 rounded border-l-4 border-yellow-400">
+                    <p className="font-medium text-yellow-800 mb-2">What this means:</p>
+                    <p>• Too many wet days = delayed field work, disease risk</p>
+                    <p>• Too many dry days = drought stress, irrigation needed</p>
+                    <p>• Balance is key for healthy crops and field access</p>
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Irrigation Status</CardTitle>
+                  <CardTitle className="text-lg">Soil Moisture Status</CardTitle>
+                  <CardDescription>Current water availability for your crops</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Badge variant={aggregatedData.agricultureMetrics.irrigationNeeded ? "destructive" : "default"}>
-                    {aggregatedData.agricultureMetrics.irrigationNeeded ? 'Irrigation Needed' : 'Adequate Moisture'}
-                  </Badge>
+                  <div className="mb-3">
+                    <Badge variant={aggregatedData.agricultureMetrics.irrigationNeeded ? "destructive" : "default"} className="text-lg px-4 py-2">
+                      {aggregatedData.agricultureMetrics.irrigationNeeded ? 'Irrigation Needed' : 'Adequate Moisture'}
+                    </Badge>
+                  </div>
+                  <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+                    <p className="font-medium text-blue-800 mb-2">Action needed:</p>
+                    {aggregatedData.agricultureMetrics.irrigationNeeded ? (
+                      <>
+                        <p>• Check soil moisture in your fields</p>
+                        <p>• Consider turning on irrigation systems</p>
+                        <p>• Monitor crops for wilting or stress signs</p>
+                        <p>• Priority: vegetative crops and fruit trees</p>
+                      </>
+                    ) : (
+                      <>
+                        <p>• Current moisture levels are adequate</p>
+                        <p>• Continue monitoring weather forecasts</p>
+                        <p>• Good time for field work if soil isn't too wet</p>
+                        <p>• Watch for signs of overwatering in low areas</p>
+                      </>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Additional practical advice card */}
+              <Card className="md:col-span-2 lg:col-span-3">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    💡 Practical Application Tips
+                  </CardTitle>
+                  <CardDescription>How to use these agriculture conditions for better farming decisions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-green-50 p-4 rounded border border-green-200">
+                      <h4 className="font-medium text-green-800 mb-2">📊 For Crop Planning:</h4>
+                      <ul className="text-sm text-green-700 space-y-1">
+                        <li>• Use GDD to time herbicide and fertilizer applications</li>
+                        <li>• Plan harvest timing based on heat accumulation</li>
+                        <li>• Choose varieties based on your typical GDD totals</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-blue-50 p-4 rounded border border-blue-200">
+                      <h4 className="font-medium text-blue-800 mb-2">💧 For Water Management:</h4>
+                      <ul className="text-sm text-blue-700 space-y-1">
+                        <li>• Monitor wet/dry patterns for irrigation scheduling</li>
+                        <li>• Use heat stress data to time irrigation during hot periods</li>
+                        <li>• Adjust irrigation based on recent precipitation</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-orange-50 p-4 rounded border border-orange-200">
+                      <h4 className="font-medium text-orange-800 mb-2">🌡️ For Heat Management:</h4>
+                      <ul className="text-sm text-orange-700 space-y-1">
+                        <li>• High heat stress hours = consider shade cloth or cooling</li>
+                        <li>• Avoid spraying during extreme heat periods</li>
+                        <li>• Plan harvest for cooler parts of the day</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-purple-50 p-4 rounded border border-purple-200">
+                      <h4 className="font-medium text-purple-800 mb-2">📅 For Timing Operations:</h4>
+                      <ul className="text-sm text-purple-700 space-y-1">
+                        <li>• Use dry day counts to plan field work windows</li>
+                        <li>• Combine GDD with calendar for accurate timing</li>
+                        <li>• Consider heat stress when scheduling treatments</li>
+                      </ul>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>

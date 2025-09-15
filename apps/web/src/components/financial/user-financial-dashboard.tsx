@@ -7,6 +7,9 @@ import { Badge } from '../ui/badge'
 import { InlineFloatingButton } from '../ui/floating-button'
 import { TransactionModal } from './transaction-modal'
 import { ProfitCalculator } from './profit-calculator'
+import { ColorfulFarmTable } from './colorful-farm-table'
+import { ColoredTransactionList } from './colored-transaction-list'
+import { FarmFinancialDetail } from './farm-financial-detail'
 import { 
   DollarSign, TrendingUp, TrendingDown, MapPin, BarChart3, 
   Plus, Calendar, Users, Activity, ArrowRight, Building2 
@@ -61,6 +64,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
   const [monthlyTrends, setMonthlyTrends] = useState<MonthlyTrend[]>([])
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown | null>(null)
   const [loading, setLoading] = useState(true)
+  const [selectedFarmId, setSelectedFarmId] = useState<string | null>(null)
   const [dateRange, setDateRange] = useState({
     start: new Date(new Date().getFullYear(), 0, 1),
     end: new Date(),
@@ -125,6 +129,16 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
     )
   }
 
+  // Show farm detail view if a farm is selected
+  if (selectedFarmId) {
+    return (
+      <FarmFinancialDetail 
+        farmId={selectedFarmId}
+        onBack={() => setSelectedFarmId(null)}
+      />
+    )
+  }
+
   return (
     <div className="space-y-8">
       {/* Header with Add Transaction */}
@@ -178,18 +192,18 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           </div>
         </div>
 
-        {/* Farm Portfolio */}
+        {/* Profit per Hectare */}
         <div className="polished-card card-earth rounded-xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
             <Building2 className="h-8 w-8 text-white" />
             <Badge className="bg-white/20 text-white border-white/30">
-              {summary.totalArea.toFixed(1)} ha
+              {summary.totalFarms} farms
             </Badge>
           </div>
-          <div className="text-3xl font-bold mb-2">{summary.totalFarms}</div>
-          <div className="text-lg font-medium mb-2">Farms</div>
+          <div className="text-3xl font-bold mb-2">{formatCurrency(summary.profitPerArea)}</div>
+          <div className="text-lg font-medium mb-2">Profit per ha</div>
           <div className="text-sm opacity-90">
-            {formatCurrency(summary.profitPerArea)}/ha
+            Across {summary.totalArea.toFixed(1)} hectares
           </div>
         </div>
 
@@ -206,84 +220,25 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
         </div>
       </div>
 
-      {/* Farm Breakdown */}
-      <ModernCard variant="floating" className="overflow-hidden">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-          <ModernCardTitle className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-sage-600" />
-            Farm Performance
-          </ModernCardTitle>
-          <ModernCardDescription>
-            Click on any farm to view detailed financial breakdown
-          </ModernCardDescription>
-        </ModernCardHeader>
-        <ModernCardContent className="p-0">
-          {farmBreakdown.length > 0 ? (
-            <div className="divide-y divide-sage-100">
-              {farmBreakdown.map((farm) => (
-                <div
-                  key={farm.id}
-                  onClick={() => onFarmSelect(farm.id)}
-                  className="p-6 hover:bg-sage-50 cursor-pointer transition-colors group"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-sage-800 group-hover:text-sage-900">
-                          {farm.name}
-                        </h3>
-                        <Badge variant="outline" className="text-xs">
-                          {farm.totalArea.toFixed(1)} ha
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-sage-600 mb-3">
-                        {farm.address || farm.location || 'No location set'}
-                      </p>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <p className="text-xs text-sage-500 mb-1">Revenue</p>
-                          <p className="font-medium text-sage-800">{formatCurrency(farm.income)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-sage-500 mb-1">Expenses</p>
-                          <p className="font-medium text-sage-800">{formatCurrency(farm.expenses)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-sage-500 mb-1">Profit/ha</p>
-                          <p className="font-medium text-sage-800">{formatCurrency(farm.profitPerArea)}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <div className={`text-xl font-bold ${
-                          farm.netProfit >= 0 ? 'text-sage-800' : 'text-red-600'
-                        }`}>
-                          {formatCurrency(farm.netProfit)}
-                        </div>
-                        <div className="text-sm text-sage-600">
-                          {farm.profitMargin.toFixed(1)}% margin
-                        </div>
-                        <div className="text-xs text-sage-500 mt-1">
-                          {farm.transactionCount} transactions
-                        </div>
-                      </div>
-                      <ArrowRight className="h-5 w-5 text-sage-400 group-hover:text-sage-600 transition-colors" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-6 text-center">
-              <p className="text-sage-600">No farms found</p>
-              <Button variant="outline" className="mt-4">
-                Create Your First Farm
-              </Button>
-            </div>
-          )}
-        </ModernCardContent>
-      </ModernCard>
+      {/* Main Content Grid with Transaction List on RHS */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - Farm Table (2/3 width) */}
+        <div className="lg:col-span-2">
+          <ColorfulFarmTable 
+            farms={farmBreakdown}
+            onFarmSelect={setSelectedFarmId}
+          />
+        </div>
+        
+        {/* Right Column - Transaction List (1/3 width) */}
+        <div className="lg:col-span-1">
+          <ColoredTransactionList 
+            farmId={farmBreakdown[0]?.id}
+            limit={15}
+            onAddTransaction={onAddTransaction}
+          />
+        </div>
+      </div>
 
       {/* Monthly Trends Chart - Placeholder */}
       {monthlyTrends.length > 0 && (

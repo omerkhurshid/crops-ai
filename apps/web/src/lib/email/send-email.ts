@@ -17,7 +17,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
     }
 
     const data = await resend.emails.send({
-      from: `Crops.AI <${process.env.EMAIL_FROM || 'noreply@crops.ai'}>`,
+      from: `Cropple.ai <${process.env.EMAIL_FROM || 'noreply@cropple.ai'}>`,
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
@@ -35,7 +35,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
 // Email Templates
 export const emailTemplates = {
   verification: (verifyUrl: string, userName?: string) => ({
-    subject: 'Verify your Crops.AI account',
+    subject: 'Verify your Cropple.ai account',
     html: `
       <!DOCTYPE html>
       <html>
@@ -48,7 +48,7 @@ export const emailTemplates = {
           <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <!-- Header -->
             <div style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 30px; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">🌾 Crops.AI</h1>
+              <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">🌾 Cropple.ai</h1>
               <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Welcome to Smart Farming</p>
             </div>
             
@@ -58,7 +58,7 @@ export const emailTemplates = {
                 ${userName ? `Welcome, ${userName}!` : 'Welcome!'}
               </h2>
               <p style="color: #4b5563; font-size: 16px; line-height: 24px; margin: 0 0 30px 0;">
-                Thanks for signing up for Crops.AI. Please verify your email address to get started with intelligent farm management.
+                Thanks for signing up for Cropple.ai. Please verify your email address to get started with intelligent farm management.
               </p>
               
               <div style="text-align: center; margin: 30px 0;">
@@ -87,18 +87,18 @@ export const emailTemplates = {
                 Need help? Contact us at support@crops.ai
               </p>
               <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-                © 2024 Crops.AI. All rights reserved.
+                © 2024 Cropple.ai. All rights reserved.
               </p>
             </div>
           </div>
         </body>
       </html>
     `,
-    text: `Welcome to Crops.AI! Please verify your email by visiting: ${verifyUrl}`
+    text: `Welcome to Cropple.ai! Please verify your email by visiting: ${verifyUrl}`
   }),
   
   passwordReset: (resetUrl: string, userName?: string) => ({
-    subject: 'Reset your Crops.AI password',
+    subject: 'Reset your Cropple.ai password',
     html: `
       <!DOCTYPE html>
       <html>
@@ -146,7 +146,7 @@ export const emailTemplates = {
             <!-- Footer -->
             <div style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 14px; margin: 0;">
-                © 2024 Crops.AI. All rights reserved.
+                © 2024 Cropple.ai. All rights reserved.
               </p>
             </div>
           </div>

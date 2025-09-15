@@ -80,15 +80,21 @@ interface FarmerDashboardProps {
   weatherAlerts?: any[]
   crops?: any[]
   livestock?: any[]
+  user?: {
+    id: string
+    name: string
+    email: string
+  }
 }
 
-export function FarmerDashboard({ farmId, farmData: passedFarmData, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock }: FarmerDashboardProps) {
+export function FarmerDashboard({ farmId, farmData: passedFarmData, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDetailedView, setShowDetailedView] = useState(false)
   const [weatherData, setWeatherData] = useState<any>(null)
   const [lastSatelliteUpdate, setLastSatelliteUpdate] = useState<Date | null>(null)
   const [plantingsCount, setPlantingsCount] = useState(0)
+  const [growingCount, setGrowingCount] = useState(0)
   const [readyToHarvestCount, setReadyToHarvestCount] = useState(0)
   const [fieldsNeedingAttention, setFieldsNeedingAttention] = useState<string[]>([])
   const [livestockCount, setLivestockCount] = useState(0)
@@ -154,8 +160,9 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
           financialTrend = netYTD > 0 ? 8 : -5
         }
         
-        // Calculate plantings and harvest counts from crops data
-        const plantingsCount = ensureArray(passedCrops).filter(c => c.status === 'planted' || c.status === 'growing').length
+        // Calculate crop counts from crops data
+        const plantingsCount = ensureArray(passedCrops).filter(c => c.status === 'PLANNED').length
+        const growingCount = ensureArray(passedCrops).filter(c => c.status === 'PLANTED' || c.status === 'GROWING').length  
         const readyToHarvestCount = ensureArray(passedCrops).filter(c => {
           if (!c.expectedHarvestDate) return false
           const harvestDate = new Date(c.expectedHarvestDate)
@@ -177,6 +184,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         // Set state values
         setLastSatelliteUpdate(new Date())
         setPlantingsCount(plantingsCount)
+        setGrowingCount(growingCount)
         setReadyToHarvestCount(readyToHarvestCount)
         setFieldsNeedingAttention(fieldsNeedingAttention)
         setLivestockCount(livestockCount)
@@ -248,6 +256,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
       {/* Morning Briefing - Unified Dashboard */}
       <MorningBriefing 
         farmName={farmData.farmName}
+        userName={user?.name}
         totalAcres={farmData.totalAcres}
         overallHealth={farmData.overallHealth}
         healthTrend={farmData.healthTrend}
@@ -266,6 +275,29 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
             precipitation: farmData.currentWeather.precipitation,
             windSpeed: Math.round(weatherData?.wind?.speed * 2.237 || 12) // Convert m/s to mph
           },
+          forecast: [
+            { 
+              date: new Date(Date.now() + 86400000).toISOString(), 
+              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
+              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
+              condition: 'partly cloudy', 
+              precipitation: Math.round(Math.random() * 30)
+            },
+            { 
+              date: new Date(Date.now() + 172800000).toISOString(), 
+              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
+              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
+              condition: 'sunny', 
+              precipitation: Math.round(Math.random() * 20)
+            },
+            { 
+              date: new Date(Date.now() + 259200000).toISOString(), 
+              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
+              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
+              condition: 'rainy', 
+              precipitation: Math.round(Math.random() * 60 + 20)
+            }
+          ],
           alerts: ensureArray(passedWeatherAlerts).map(alert => ({
             type: alert.alertType,
             severity: alert.severity || 'low',
@@ -281,6 +313,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         }}
         urgentTasksCount={farmData.urgentTasks.length}
         plantingsCount={plantingsCount}
+        growingCount={growingCount}
         readyToHarvestCount={readyToHarvestCount}
         fieldsNeedingAttention={fieldsNeedingAttention}
         livestockCount={livestockCount}
@@ -288,71 +321,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         lastSatelliteUpdate={lastSatelliteUpdate || undefined}
       />
 
-      {/* Technical Details (moved from detailed view) */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <FarmerMetricCard
-          title={getFarmerTerm('ndvi', 'vegetation')}
-          value="0.78"
-          subtitle="Excellent plant health"
-          status="excellent"
-          icon={<Leaf className="h-5 w-5 text-green-600" />}
-        />
-        
-        <FarmerMetricCard
-          title={getFarmerTerm('ndwi', 'vegetation')}
-          value="0.35"
-          subtitle="Good moisture levels"
-          status="good"
-          icon={<Droplets className="h-5 w-5 text-blue-600" />}
-        />
-        
-        <FarmerMetricCard
-          title="Growth Rate"
-          value="105%"
-          subtitle="Ahead of normal schedule"
-          status="excellent"
-          trend={{
-            direction: 'up',
-            percentage: 5,
-            label: 'vs. average'
-          }}
-          icon={<TrendingUp className="h-5 w-5 text-green-600" />}
-        />
-        
-        <FarmerMetricCard
-          title="Weather Forecast"
-          value="Favorable"
-          subtitle="Good conditions for next 7 days"
-          status="good"
-          icon={<Sun className="h-5 w-5 text-orange-600" />}
-        />
-      </div>
-
-      {/* Key Metrics - Simplified to 3 Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        <CropHealthCard
-          healthScore={farmData.overallHealth}
-          healthTrend={farmData.healthTrend}
-          showMore={true}
-          onShowMore={() => setShowDetailedView(true)}
-        />
-        
-        <StressLevelCard
-          stressPercentage={farmData.stressedAreas}
-          stressTrend={farmData.stressTrend}
-          showMore={true}
-          onShowMore={() => setShowDetailedView(true)}
-        />
-        
-        <LivestockMetricCard
-          totalCount={livestockCount}
-          healthyCount={Math.round(livestockCount * 0.95)} // Mock healthy count
-          sickCount={Math.round(livestockCount * 0.05)}
-          trend={5} // Mock trend
-          showMore={true}
-          onShowMore={() => setShowDetailedView(true)}
-        />
-      </div>
 
       {/* Farms Overview Map */}
       <div>
@@ -407,14 +375,9 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
               What to do today
             </h2>
             <p className="text-sage-600">
-              Summary of your urgent and high priority tasks
+              Your prioritized task list for today and tomorrow
             </p>
           </div>
-          
-          <Button variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            View All Tasks
-          </Button>
         </div>
         
         <TodaysTasksSummary farmId={farmId} />
@@ -455,21 +418,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         className="mb-8"
       />
 
-      {/* Quick Actions */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
-              Quick Actions
-            </h2>
-            <p className="text-sage-600">
-              Record expenses and harvest data instantly
-            </p>
-          </div>
-        </div>
-        
-        <QuickActions farmId={farmId} />
-      </div>
 
       {/* Smart Recommendations */}
       <RecommendationsWidget 
@@ -478,23 +426,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         className="hover:shadow-soft transition-all duration-300"
       />
 
-      {/* Progressive Disclosure - Detailed View Button */}
-      {!showDetailedView && (
-        <ModernCard variant="soft" className="hover:shadow-soft transition-all duration-300 cursor-pointer touch-manipulation active:scale-[0.98]">
-          <ModernCardContent 
-            className="p-6 text-center min-h-[48px] flex items-center justify-center"
-            onClick={() => setShowDetailedView(true)}
-          >
-            <div className="flex items-center justify-center gap-3">
-              <Eye className="h-5 w-5 text-sage-600" />
-              <span className="text-lg font-medium text-sage-800">
-                View Detailed Analysis
-              </span>
-              <ChevronRight className="h-5 w-5 text-sage-600" />
-            </div>
-          </ModernCardContent>
-        </ModernCard>
-      )}
 
       {/* Detailed View (Progressive Disclosure) */}
       {showDetailedView && (

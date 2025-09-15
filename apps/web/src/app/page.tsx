@@ -44,7 +44,7 @@ export default function Home() {
             
             {/* Main Title - Smaller */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-extralight mb-6 text-cream-50 tracking-tight drop-shadow-2xl leading-none">
-              Crops<span className="text-sage-200">.AI</span>
+              Cropple<span className="text-sage-200">.ai</span>
             </h1>
             
             {/* Updated Tagline - Farmer-focused messaging */}
@@ -121,7 +121,7 @@ export default function Home() {
               Real Farmers. Real Results.
             </h2>
             <p className="text-lg md:text-xl text-cream-200 max-w-3xl mx-auto">
-              See how Crops.AI is transforming farms across the world
+              See how Cropple.ai is transforming farms across the world
             </p>
           </div>
           
@@ -139,7 +139,7 @@ export default function Home() {
               </div>
               <p className="text-cream-100 leading-relaxed mb-4">
                 "I used to spend 3 hours every morning checking weather, walking fields, and planning my day. 
-                Now Crops.AI tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
+                Now Cropple.ai tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <div className="text-cream-300">
@@ -232,7 +232,7 @@ export default function Home() {
           <div className="bg-sage-900/40 backdrop-blur-lg border border-sage-400/30 p-8 md:p-12 lg:p-16 rounded-3xl shadow-xl">
             <div className="border-t border-sage-400/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex flex-col items-center gap-2 text-sm text-cream-200 text-center">
-                <p>© 2025 Crops.AI. All rights reserved.</p>
+                <p>© 2025 Cropple.ai. All rights reserved.</p>
                 <p>Photo by <span className="font-medium text-cream-100">Franz Michael Schneeberger</span> 📸</p>
                 <p className="text-xs">Special thanks to Franz Michael Schneeberger for the beautiful corn field photography</p>
               </div>

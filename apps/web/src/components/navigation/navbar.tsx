@@ -37,14 +37,14 @@ export function Navbar() {
               <div className="w-10 h-10 mr-3 group-hover:scale-105 transition-transform">
                 <Image 
                   src="/crops-ai-logo.png" 
-                  alt="Crops.AI Logo" 
+                  alt="Cropple.ai Logo" 
                   width={40} 
                   height={40}
                   className="w-full h-full object-contain"
                 />
               </div>
               <span className="text-2xl font-medium text-white tracking-tight drop-shadow-sm">
-                Crops<span className="text-green-200">.AI</span>
+                Cropple<span className="text-green-200">.ai</span>
               </span>
             </Link>
           </div>

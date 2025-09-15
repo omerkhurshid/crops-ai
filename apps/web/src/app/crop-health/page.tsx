@@ -4,7 +4,7 @@ import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { FarmerFocusedDashboard } from '../../components/crop-health/farmer-focused-dashboard'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
 import { AdvancedVisualizations } from '../../components/crop-health/advanced-visualizations'
-import { NDVIMap } from '../../components/crop-health/ndvi-map'
+// import { NDVIMap } from '../../components/crop-health/ndvi-map' // Temporarily disabled
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
@@ -163,7 +163,15 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>
-                <NDVIMap farmId={farmId} fields={fields} />
+                <ModernCard>
+                  <ModernCardHeader>
+                    <ModernCardTitle>NDVI Mapping</ModernCardTitle>
+                    <ModernCardDescription>Under construction</ModernCardDescription>
+                  </ModernCardHeader>
+                  <ModernCardContent>
+                    <p>NDVI mapping component will be recreated here.</p>
+                  </ModernCardContent>
+                </ModernCard>
               </ModernCardContent>
             </ModernCard>
 
@@ -184,7 +192,15 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>
-                <NDVIMap farmId={farmId} fields={fields} />
+                <ModernCard>
+                  <ModernCardHeader>
+                    <ModernCardTitle>NDVI Mapping</ModernCardTitle>
+                    <ModernCardDescription>Under construction</ModernCardDescription>
+                  </ModernCardHeader>
+                  <ModernCardContent>
+                    <p>NDVI mapping component will be recreated here.</p>
+                  </ModernCardContent>
+                </ModernCard>
               </ModernCardContent>
             </ModernCard>
 

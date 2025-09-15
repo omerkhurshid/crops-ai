@@ -119,7 +119,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
 
       {/* Navigation Links */}
       <nav className="flex-1 px-2 py-4 space-y-1">
-        {navLinks.map((link) => {
+        {mainNavLinks.map((link) => {
           const Icon = link.icon
           const active = isActive(link.href)
           const hasChildren = link.children && link.children.length > 0

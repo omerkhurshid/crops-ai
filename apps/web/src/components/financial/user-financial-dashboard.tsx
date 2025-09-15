@@ -7,9 +7,7 @@ import { Badge } from '../ui/badge'
 import { InlineFloatingButton } from '../ui/floating-button'
 import { TransactionModal } from './transaction-modal'
 import { ProfitCalculator } from './profit-calculator'
-import { ColorfulFarmTable } from './colorful-farm-table'
 import { ColoredTransactionList } from './colored-transaction-list'
-import { FarmFinancialDetail } from './farm-financial-detail'
 import { 
   DollarSign, TrendingUp, TrendingDown, MapPin, BarChart3, 
   Plus, Calendar, Users, Activity, ArrowRight, Building2 
@@ -132,10 +130,10 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
   // Show farm detail view if a farm is selected
   if (selectedFarmId) {
     return (
-      <FarmFinancialDetail 
-        farmId={selectedFarmId}
-        onBack={() => setSelectedFarmId(null)}
-      />
+      <div className="p-8">
+        <Button onClick={() => setSelectedFarmId(null)}>Back to Overview</Button>
+        <h3>Farm Detail View - Under Construction</h3>
+      </div>
     )
   }
 
@@ -224,10 +222,15 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Farm Table (2/3 width) */}
         <div className="lg:col-span-2">
-          <ColorfulFarmTable 
-            farms={farmBreakdown}
-            onFarmSelect={setSelectedFarmId}
-          />
+          <ModernCard>
+            <ModernCardHeader>
+              <ModernCardTitle>Farm Overview</ModernCardTitle>
+              <ModernCardDescription>Under construction</ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent>
+              <p>Farm table component will be recreated here.</p>
+            </ModernCardContent>
+          </ModernCard>
         </div>
         
         {/* Right Column - Transaction List (1/3 width) */}

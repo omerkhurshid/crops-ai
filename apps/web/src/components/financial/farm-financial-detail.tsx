@@ -104,21 +104,21 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
   const getMockFarmData = (): FarmFinancialData => ({
     id: farmId,
     name: 'Green Valley Farm',
-    totalArea: 245.5,
-    income: 156000,
-    expenses: 89000,
-    netProfit: 67000,
-    profitMargin: 42.9,
-    profitPerArea: 273,
-    transactionCount: 28,
+    totalArea: 250.5,
+    income: 485000,
+    expenses: 325000,
+    netProfit: 160000,
+    profitMargin: 33,
+    profitPerArea: 638.52,
+    transactionCount: 127,
     transactions: [
       {
         id: '1',
         type: 'INCOME',
         category: 'CROP_SALES',
-        amount: 45000,
+        amount: 125000,
         transactionDate: new Date().toISOString(),
-        notes: 'Corn harvest - 200 bushels @ $225/bushel',
+        notes: 'Corn harvest - 500 bushels',
         field: { id: '1', name: 'North Field' },
         crop: { id: '1', cropType: 'Corn' }
       },
@@ -126,44 +126,32 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
         id: '2',
         type: 'EXPENSE',
         category: 'FERTILIZER',
-        amount: 3500,
-        transactionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Spring fertilizer application - 15 tons',
-        field: { id: '1', name: 'North Field' }
+        amount: 15000,
+        transactionDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        notes: 'Spring fertilizer application'
       },
       {
         id: '3',
         type: 'EXPENSE',
         category: 'SEEDS',
-        amount: 2800,
-        transactionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Soybean seeds - premium variety',
-        field: { id: '2', name: 'South Field' }
-      },
-      {
-        id: '4',
-        type: 'INCOME',
-        category: 'SUBSIDIES',
-        amount: 12000,
-        transactionDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Federal crop insurance payment'
-      },
-      {
-        id: '5',
-        type: 'EXPENSE',
-        category: 'LABOR',
-        amount: 4200,
-        transactionDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Harvest crew wages - 3 days'
+        amount: 8500,
+        transactionDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+        notes: 'Hybrid corn seeds'
       }
     ],
     monthlyData: [
-      { month: 'Jan', income: 8000, expenses: 12000, profit: -4000 },
-      { month: 'Feb', income: 5000, expenses: 8000, profit: -3000 },
-      { month: 'Mar', income: 15000, expenses: 18000, profit: -3000 },
-      { month: 'Apr', income: 25000, expenses: 20000, profit: 5000 },
-      { month: 'May', income: 35000, expenses: 15000, profit: 20000 },
-      { month: 'Jun', income: 68000, expenses: 16000, profit: 52000 }
+      { month: 'Jan', income: 12000, expenses: 28000, profit: -16000 },
+      { month: 'Feb', income: 8000, expenses: 22000, profit: -14000 },
+      { month: 'Mar', income: 15000, expenses: 35000, profit: -20000 },
+      { month: 'Apr', income: 18000, expenses: 42000, profit: -24000 },
+      { month: 'May', income: 22000, expenses: 38000, profit: -16000 },
+      { month: 'Jun', income: 85000, expenses: 25000, profit: 60000 },
+      { month: 'Jul', income: 95000, expenses: 20000, profit: 75000 },
+      { month: 'Aug', income: 120000, expenses: 22000, profit: 98000 },
+      { month: 'Sep', income: 85000, expenses: 45000, profit: 40000 },
+      { month: 'Oct', income: 15000, expenses: 28000, profit: -13000 },
+      { month: 'Nov', income: 8000, expenses: 12000, profit: -4000 },
+      { month: 'Dec', income: 2000, expenses: 8000, profit: -6000 }
     ]
   })
 
@@ -178,19 +166,8 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: date.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
-    })
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }
-
-  const filteredTransactions = farmData?.transactions.filter(t => {
-    if (filter === 'all') return true
-    if (filter === 'income') return t.type === 'INCOME'
-    if (filter === 'expense') return t.type === 'EXPENSE'
-    return true
-  }) || []
 
   const handleAddTransaction = (type: 'INCOME' | 'EXPENSE') => {
     setTransactionType(type)
@@ -199,175 +176,198 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-sage-100 rounded w-64 mb-4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-32 bg-sage-100 rounded-xl"></div>
-            ))}
-          </div>
-          <div className="h-96 bg-sage-100 rounded-xl"></div>
-        </div>
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-600"></div>
       </div>
     )
   }
 
   if (!farmData) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-sage-600">Farm financial data not found</p>
-        <Button onClick={onBack} className="mt-4">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Overview
-        </Button>
-      </div>
-    )
+    return null
   }
 
+  const filteredTransactions = farmData.transactions.filter(t => {
+    if (filter === 'all') return true
+    if (filter === 'income') return t.type === 'INCOME'
+    if (filter === 'expense') return t.type === 'EXPENSE'
+    return true
+  })
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={onBack}>
+          <Button variant="outline" onClick={onBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            Back to Overview
           </Button>
           <div>
             <h2 className="text-2xl font-semibold text-sage-800">{farmData.name}</h2>
-            <p className="text-sage-600 flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              {farmData.totalArea.toFixed(1)} hectares
-            </p>
+            <p className="text-sage-600">{farmData.totalArea.toFixed(1)} hectares</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button onClick={() => handleAddTransaction('INCOME')} className="bg-green-600 hover:bg-green-700">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Income
-          </Button>
-          <Button onClick={() => handleAddTransaction('EXPENSE')} variant="outline">
-            <Plus className="h-4 w-4 mr-2" />
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => handleAddTransaction('EXPENSE')}>
+            <Plus className="h-4 w-4 mr-1" />
             Add Expense
           </Button>
+          <Button onClick={() => handleAddTransaction('INCOME')}>
+            <Plus className="h-4 w-4 mr-1" />
+            Add Income
+          </Button>
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="polished-card card-sage rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <DollarSign className="h-8 w-8 text-white" />
-            <Badge className={`${farmData.netProfit >= 0 ? 'bg-green-500' : 'bg-red-500'} text-white`}>
-              {farmData.profitMargin.toFixed(1)}% margin
-            </Badge>
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(farmData.netProfit)}</div>
-          <div className="text-lg font-medium mb-2">Net Profit</div>
-          <div className="text-sm opacity-90 flex items-center gap-1">
-            {farmData.netProfit >= 0 ? (
-              <TrendingUp className="h-4 w-4" />
-            ) : (
-              <TrendingDown className="h-4 w-4" />
-            )}
-            {formatCurrency(farmData.profitPerArea)} per ha
-          </div>
-        </div>
+      {/* Financial Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Income</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {formatCurrency(farmData.income)}
+                </p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-full">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </ModernCardContent>
+        </ModernCard>
 
-        <div className="polished-card card-forest rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <TrendingUp className="h-8 w-8 text-white" />
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(farmData.income)}</div>
-          <div className="text-lg font-medium mb-2">Total Income</div>
-          <div className="text-sm opacity-90">
-            This year to date
-          </div>
-        </div>
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Expenses</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {formatCurrency(farmData.expenses)}
+                </p>
+              </div>
+              <div className="p-3 bg-red-100 rounded-full">
+                <TrendingDown className="h-6 w-6 text-red-600" />
+              </div>
+            </div>
+          </ModernCardContent>
+        </ModernCard>
 
-        <div className="polished-card card-earth rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <TrendingDown className="h-8 w-8 text-white" />
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(farmData.expenses)}</div>
-          <div className="text-lg font-medium mb-2">Total Expenses</div>
-          <div className="text-sm opacity-90">
-            {farmData.transactionCount} transactions
-          </div>
-        </div>
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Net Profit</p>
+                <p className={cn(
+                  "text-2xl font-bold",
+                  farmData.netProfit >= 0 ? "text-green-600" : "text-red-600"
+                )}>
+                  {formatCurrency(farmData.netProfit)}
+                </p>
+              </div>
+              <div className={cn(
+                "p-3 rounded-full",
+                farmData.netProfit >= 0 ? "bg-green-100" : "bg-red-100"
+              )}>
+                <DollarSign className={cn(
+                  "h-6 w-6",
+                  farmData.netProfit >= 0 ? "text-green-600" : "text-red-600"
+                )} />
+              </div>
+            </div>
+          </ModernCardContent>
+        </ModernCard>
+
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Profit Margin</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {farmData.profitMargin.toFixed(1)}%
+                </p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-full">
+                <BarChart3 className="h-6 w-6 text-blue-600" />
+              </div>
+            </div>
+          </ModernCardContent>
+        </ModernCard>
       </div>
 
-      {/* P&L Statement */}
-      <ModernCard variant="floating">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-          <ModernCardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-sage-600" />
-            Profit & Loss Statement
-          </ModernCardTitle>
-          <ModernCardDescription>
-            Financial performance breakdown for {farmData.name}
-          </ModernCardDescription>
+      {/* Monthly Trend Chart */}
+      <ModernCard>
+        <ModernCardHeader>
+          <ModernCardTitle>Monthly Financial Trend</ModernCardTitle>
+          <ModernCardDescription>Income, expenses, and profit over the year</ModernCardDescription>
         </ModernCardHeader>
-        <ModernCardContent className="p-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center py-3 border-b border-sage-200">
-              <span className="font-medium text-sage-800">Total Income</span>
-              <span className="font-bold text-green-600">{formatCurrency(farmData.income)}</span>
+        <ModernCardContent>
+          <div className="h-64 flex items-end justify-between gap-2">
+            {farmData.monthlyData.map((month) => {
+              const maxValue = Math.max(...farmData.monthlyData.map(m => Math.max(m.income, m.expenses)))
+              const incomeHeight = (month.income / maxValue) * 100
+              const expenseHeight = (month.expenses / maxValue) * 100
+
+              return (
+                <div key={month.month} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="relative w-full h-48 flex items-end gap-1">
+                    <div className="flex-1 bg-green-500 rounded-t transition-all hover:bg-green-600"
+                         style={{ height: `${incomeHeight}%` }}
+                         title={`Income: ${formatCurrency(month.income)}`}
+                    />
+                    <div className="flex-1 bg-red-500 rounded-t transition-all hover:bg-red-600"
+                         style={{ height: `${expenseHeight}%` }}
+                         title={`Expenses: ${formatCurrency(month.expenses)}`}
+                    />
+                  </div>
+                  <span className="text-xs text-gray-600">{month.month}</span>
+                </div>
+              )
+            })}
+          </div>
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded"></div>
+              <span className="text-sm text-gray-600">Income</span>
             </div>
-            <div className="flex justify-between items-center py-3 border-b border-sage-200">
-              <span className="font-medium text-sage-800">Total Expenses</span>
-              <span className="font-bold text-red-600">({formatCurrency(farmData.expenses)})</span>
-            </div>
-            <div className="flex justify-between items-center py-3 border-t-2 border-sage-300">
-              <span className="font-bold text-lg text-sage-800">Net Profit</span>
-              <span className={`font-bold text-lg ${farmData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {formatCurrency(farmData.netProfit)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-sm text-sage-600">Profit Margin</span>
-              <span className="text-sm font-medium">{farmData.profitMargin.toFixed(1)}%</span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-sm text-sage-600">Profit per Hectare</span>
-              <span className="text-sm font-medium">{formatCurrency(farmData.profitPerArea)}</span>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded"></div>
+              <span className="text-sm text-gray-600">Expenses</span>
             </div>
           </div>
         </ModernCardContent>
       </ModernCard>
 
-      {/* Transactions List */}
-      <ModernCard variant="floating">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+      {/* Recent Transactions */}
+      <ModernCard>
+        <ModernCardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <ModernCardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-sage-600" />
-                Transaction History
-              </ModernCardTitle>
-              <ModernCardDescription>
-                All financial transactions for {farmData.name}
-              </ModernCardDescription>
+              <ModernCardTitle>Recent Transactions</ModernCardTitle>
+              <ModernCardDescription>{farmData.transactionCount} total transactions</ModernCardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 onClick={() => setFilter(filter === 'all' ? 'income' : filter === 'income' ? 'expense' : 'all')}
               >
-                <Filter className="h-4 w-4 mr-2" />
-                {filter === 'all' ? 'All' : filter === 'income' ? 'Income' : 'Expenses'}
+                <Filter className="h-4 w-4 mr-1" />
+                {filter === 'all' ? 'All' : filter === 'income' ? 'Income' : 'Expense'}
+              </Button>
+              <Button variant="outline" size="sm">
+                <FileText className="h-4 w-4 mr-1" />
+                Export
               </Button>
             </div>
           </div>
         </ModernCardHeader>
         <ModernCardContent className="p-0">
-          <ScrollArea className="h-[600px]">
+          <ScrollArea className="h-96">
             <div className="p-6 space-y-3">
               {filteredTransactions.map((transaction) => {
                 const categoryStyle = CATEGORY_COLORS[transaction.category] || CATEGORY_COLORS.OTHER_EXPENSE
-                
+
                 return (
                   <div
                     key={transaction.id}
@@ -378,33 +378,32 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                         : "bg-gradient-to-r from-red-50 to-pink-50 border-red-200"
                     )}
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                           <Badge 
                             variant="outline" 
                             className={cn(
-                              "text-xs font-medium",
+                              "text-xs font-medium border",
                               categoryStyle.bg,
                               categoryStyle.text,
                               categoryStyle.border
                             )}
                           >
-                            {transaction.category.replace('_', ' ')}
+                            {transaction.category.replace(/_/g, ' ')}
                           </Badge>
-                          <span className="text-xs text-gray-500 flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
+                          <span className="text-xs text-gray-500">
                             {formatDate(transaction.transactionDate)}
                           </span>
                         </div>
                         
                         {transaction.notes && (
-                          <p className="text-sm text-gray-700 mb-2">
+                          <p className="text-sm text-gray-700">
                             {transaction.notes}
                           </p>
                         )}
                         
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                           {transaction.field && (
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3" />
@@ -413,19 +412,18 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                           )}
                           {transaction.crop && (
                             <span className="flex items-center gap-1">
-                              🌾 {transaction.crop.cropType}
+                              <Activity className="h-3 w-3" />
+                              {transaction.crop.cropType}
                             </span>
                           )}
                         </div>
                       </div>
                       
-                      <div className="text-right">
-                        <div className={cn(
-                          "text-lg font-bold",
-                          transaction.type === 'INCOME' ? "text-green-700" : "text-red-700"
-                        )}>
-                          {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                        </div>
+                      <div className={cn(
+                        "text-lg font-bold",
+                        transaction.type === 'INCOME' ? "text-green-700" : "text-red-700"
+                      )}>
+                        {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </div>
                     </div>
                   </div>
@@ -440,12 +438,12 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
       {showTransactionModal && (
         <TransactionModal
           isOpen={showTransactionModal}
-          onClose={() => setShowTransactionModal(false)}
-          farmId={farmId}
           type={transactionType}
+          farmId={farmId}
+          onClose={() => setShowTransactionModal(false)}
           onSuccess={() => {
-            fetchFarmData()
             setShowTransactionModal(false)
+            fetchFarmData()
           }}
         />
       )}

@@ -16,6 +16,22 @@ export default async function LivestockPage() {
     redirect('/login')
   }
 
+  // First, get user's farms
+  let userFarms: any[] = []
+  try {
+    userFarms = await prisma.farm.findMany({
+      where: { ownerId: user.id },
+      select: { id: true, name: true }
+    })
+  } catch (error: any) {
+    console.warn('Failed to fetch user farms:', error.message)
+  }
+
+  // If no farms, redirect to farm creation
+  if (userFarms.length === 0) {
+    redirect('/farms/create?from=livestock')
+  }
+
   // Get real livestock data from database
   let livestockEvents: any[] = []
   try {
@@ -38,7 +54,7 @@ export default async function LivestockPage() {
   }
 
   // Calculate real statistics from livestockEvent data
-  const totalAnimals = livestockEvents.reduce((sum, event) => sum + event.animalCount, 0)
+  const totalAnimals = livestockEvents.reduce((sum, event) => sum + (event.animalCount || 0), 0)
   const healthEvents = livestockEvents.filter(event => 
     event.eventType?.toLowerCase().includes('health') || 
     event.eventType?.toLowerCase().includes('vaccination') ||
@@ -178,19 +194,21 @@ export default async function LivestockPage() {
         {/* Main Livestock Dashboard */}
         <ModernCard variant="floating">
           <ModernCardContent className="p-6">
-            {livestockEvents.length > 0 ? (
+            {livestockEvents.length > 0 && livestockEvents[0].farmId ? (
               <LivestockDashboard farmId={livestockEvents[0].farmId} />
+            ) : userFarms.length > 0 ? (
+              <LivestockDashboard farmId={userFarms[0].id} />
             ) : (
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
                 <p className="text-gray-600 mb-6">Start by adding your first livestock event to track your animals.</p>
-                <button 
-                  className="bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700"
-                  onClick={() => window.location.href = '/livestock/add-event'}
+                <a 
+                  href="/livestock/add-event"
+                  className="inline-block bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700"
                 >
                   Add Livestock Event
-                </button>
+                </a>
               </div>
             )}
           </ModernCardContent>

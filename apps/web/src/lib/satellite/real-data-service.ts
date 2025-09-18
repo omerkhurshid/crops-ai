@@ -65,7 +65,7 @@ export class RealSatelliteService {
       // Calculate farm-wide metrics from real satellite data
       const overallHealth = this.calculateOverallHealth(analyses, fields)
       const stressedAreas = this.calculateStressedAreas(analyses, fields)
-      const yieldForecast = this.calculateYieldForecast(analyses, fields)
+      const yieldForecast = await this.calculateYieldForecast(analyses, fields)
       const highlights = this.generateHighlights(analyses, fields)
 
       return {
@@ -163,11 +163,86 @@ export class RealSatelliteService {
     return totalAcres > 0 ? (totalStressedAcres / totalAcres) * 100 : 5
   }
 
-  private calculateYieldForecast(analyses: SatelliteAnalysis[], fields: FieldData[]) {
-    // Calculate area-weighted average yield
+  private async calculateYieldForecast(analyses: SatelliteAnalysis[], fields: FieldData[]) {
+    // Try to get ML-based yield predictions first
+    try {
+      const mlPredictions = await Promise.all(
+        (fields || []).map(async (field) => {
+          try {
+            // Get detailed yield prediction from ML service
+            const response = await fetch('/api/ml/predict', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                fieldId: field.id,
+                cropType: field.cropType || 'corn',
+                plantingDate: new Date(new Date().getFullYear(), 3, 15).toISOString(), // April 15th default
+                features: {
+                  satellite: {
+                    avgNDVI: analyses.find((_, i) => i === fields.indexOf(field))?.satelliteData?.ndvi?.mean || 0.7
+                  }
+                },
+                options: {
+                  includeRecommendations: false,
+                  includeUncertainty: true
+                }
+              })
+            })
+
+            if (response.ok) {
+              const result = await response.json()
+              return {
+                fieldId: field.id,
+                acres: field.acres,
+                yield: result.data.predictedYield,
+                confidence: result.data.confidence,
+                cropType: field.cropType || 'corn'
+              }
+            }
+          } catch (error) {
+            console.log(`ML prediction failed for field ${field.id}, using satellite data`)
+          }
+          return null
+        })
+      )
+
+      // Filter successful ML predictions
+      const validPredictions = mlPredictions.filter(p => p !== null)
+      
+      if (validPredictions.length > 0) {
+        // Use ML predictions for yield forecast
+        let totalWeightedYield = 0
+        let totalWeight = 0
+        const cropTypes = validPredictions.map(p => p.cropType)
+        const dominantCrop = cropTypes.length > 0 ? cropTypes[0] : 'corn'
+
+        validPredictions.forEach(prediction => {
+          totalWeightedYield += prediction.yield * prediction.acres
+          totalWeight += prediction.acres
+        })
+
+        const avgYield = totalWeight > 0 ? totalWeightedYield / totalWeight : 185
+        const avgConfidence = validPredictions.reduce((sum, p) => sum + p.confidence, 0) / validPredictions.length
+
+        return {
+          current: Math.round(avgYield),
+          potential: Math.round(avgYield * (1 + avgConfidence * 0.3)), // Confidence-based potential
+          unit: 'bu/acre',
+          cropType: dominantCrop,
+          isMLPrediction: true,
+          confidence: Math.round(avgConfidence * 100)
+        }
+      }
+    } catch (error) {
+      console.log('ML yield prediction service unavailable, using satellite data:', error)
+    }
+
+    // Fallback to satellite-based yield calculation
     let totalWeightedYield = 0
     let totalWeight = 0
-    const dominantCrop = 'Corn'
+    const dominantCrop = 'corn'
 
     ;(analyses || []).forEach((analysis, index) => {
       const field = (fields || [])[index]
@@ -186,7 +261,8 @@ export class RealSatelliteService {
       current: Math.round(avgYield),
       potential: Math.round(avgYield * 1.2), // 20% potential improvement
       unit: 'bu/acre',
-      cropType: dominantCrop
+      cropType: dominantCrop,
+      isMLPrediction: false
     }
   }
 

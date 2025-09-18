@@ -20,6 +20,7 @@ import { WeatherAlertsWidget } from './weather-alerts-widget'
 import { HarvestAlerts } from './harvest-alerts'
 import { WeatherTasksGenerator } from './weather-tasks-generator'
 import { RegionalComparison } from './regional-comparison'
+import { DiseasePestAlertsWidget } from './disease-pest-alerts-widget'
 import { 
   Leaf, 
   Droplets, 
@@ -406,6 +407,12 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         {/* Harvest Alerts */}
         <HarvestAlerts farmId={farmId} />
       </div>
+
+      {/* Disease & Pest Monitoring */}
+      <DiseasePestAlertsWidget 
+        farmId={farmId}
+        className="mb-8"
+      />
 
       {/* Regional Comparison */}
       <RegionalComparison 

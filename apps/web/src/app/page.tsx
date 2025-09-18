@@ -13,237 +13,249 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/homepage_image.jpg')",
-        }}
-      >
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
-      
+    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
       <Navbar />
       
-      {/* Full Page Glassmorphic Layout - Extended */}
-      <section className="relative overflow-hidden py-8 px-4 sm:px-6 lg:px-8 z-10">
-        
-        <div className="relative z-10 max-w-7xl mx-auto w-full">
-          {/* Large Extended Glass Container - Goes all the way down */}
-          <div className="bg-gradient-to-br from-sage-900/30 via-sage-800/25 to-earth-900/30 backdrop-blur-3xl border border-sage-400/20 shadow-2xl p-8 md:p-12 lg:p-16 text-center rounded-3xl">
+      {/* Hero Section with Modern Design */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Hero Card */}
+          <ModernCard variant="floating" className="text-center mb-16 p-8 md:p-16 bg-gradient-to-br from-white to-sage-50/50">
             
-            {/* Top Badge */}
-            <div className="mb-8">
-              <div className="bg-sage-600/90 backdrop-blur-sm text-white border-sage-400/30 px-6 py-3 text-sm font-medium rounded-full inline-flex items-center shadow-lg">
-                <Sparkles className="h-4 w-4 mr-2" />
-                Trusted by 10,000+ Farmers Worldwide
+            <ModernCardContent>
+              {/* Top Badge */}
+              <div className="mb-8">
+                <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Trusted by 10,000+ Farmers Worldwide
+                </Badge>
               </div>
-            </div>
-            
-            {/* Main Title - Smaller */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extralight mb-6 text-cream-50 tracking-tight drop-shadow-2xl leading-none">
-              Cropple<span className="text-sage-200">.ai</span>
-            </h1>
-            
-            {/* Updated Tagline - Farmer-focused messaging */}
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-cream-100 mb-4 max-w-4xl mx-auto leading-tight font-light">
-              Your Farm Command Center. Make Smarter Decisions Daily.
-            </h2>
-            
-            <p className="text-lg md:text-xl text-cream-200 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Get instant answers to "Should I spray today?", "When should I harvest?", and "Which fields need attention?"
-              — all from one unified dashboard that saves you 2 hours every day.
-            </p>
-            
-            {/* Single CTA Button */}
-            <div className="mb-12">
-              <Link href="/register">
-                <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-12 py-5 text-cream-50 font-medium text-lg rounded-full min-w-[300px] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
-                  <ArrowRight className="h-5 w-5 mr-3 inline" />
-                  Start Your Free 30-Day Trial
-                </button>
-              </Link>
-              <p className="text-cream-300 text-sm mt-3">No credit card required • Setup in 5 minutes</p>
-            </div>
-            
-            {/* Feature Tiles */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               
-              {/* Satellite Imagery Tile */}
-              <div className="bg-sage-800/20 backdrop-blur-md border border-sage-400/30 p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300 hover:bg-sage-700/25 shadow-lg">
-                <div className="p-4 bg-sage-600/40 backdrop-blur-sm rounded-full w-fit mx-auto mb-4">
-                  <Satellite className="h-8 w-8 text-cream-100" />
+              {/* Main Title */}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-light mb-6 text-sage-800 tracking-tight leading-none">
+                Cropple<span className="text-sage-600">.ai</span>
+              </h1>
+              
+              {/* Tagline */}
+              <h2 className="text-xl md:text-2xl lg:text-3xl text-sage-700 mb-6 max-w-4xl mx-auto leading-tight font-normal">
+                Your Farm Command Center. Make Smarter Decisions Daily.
+              </h2>
+              
+              <p className="text-lg text-sage-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Get instant answers to "Should I spray today?", "When should I harvest?", and "Which fields need attention?"
+                — all from one unified dashboard that saves you 2 hours every day.
+              </p>
+              
+              {/* CTA Button */}
+              <div className="mb-8">
+                <Link href="/register">
+                  <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-8 py-4 text-white font-medium text-lg rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center">
+                    <ArrowRight className="h-5 w-5 mr-2" />
+                    Start Your Free 30-Day Trial
+                  </button>
+                </Link>
+                <p className="text-sage-500 text-sm mt-3">No credit card required • Setup in 5 minutes</p>
+              </div>
+            </ModernCardContent>
+          </ModernCard>
+            
+          {/* Feature Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            {/* Decision Support Card */}
+            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
+              <ModernCardHeader className="pb-4">
+                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
+                  <Satellite className="h-8 w-8 text-sage-700" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-cream-50">"Should I Spray Today?"</h3>
-                <p className="text-cream-200/90 leading-relaxed text-sm">
+                <ModernCardTitle className="text-sage-800">"Should I Spray Today?"</ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <ModernCardDescription className="text-sage-600 leading-relaxed">
                   Get instant yes/no answers with weather windows, crop readiness, and application timing. 
                   Never miss the perfect spray window again.
-                </p>
-              </div>
-              
-              {/* Weather Data Tile */}
-              <div className="bg-earth-800/20 backdrop-blur-md border border-earth-400/30 p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300 hover:bg-earth-700/25 shadow-lg">
-                <div className="p-4 bg-earth-600/40 backdrop-blur-sm rounded-full w-fit mx-auto mb-4">
-                  <CloudRain className="h-8 w-8 text-cream-100" />
+                </ModernCardDescription>
+              </ModernCardContent>
+            </ModernCard>
+            
+            {/* Harvest Timing Card */}
+            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
+              <ModernCardHeader className="pb-4">
+                <div className="p-4 bg-earth-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-earth-200 transition-colors">
+                  <CloudRain className="h-8 w-8 text-earth-700" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-cream-50">"When Should I Harvest?"</h3>
-                <p className="text-cream-200/90 leading-relaxed text-sm">
+                <ModernCardTitle className="text-sage-800">"When Should I Harvest?"</ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <ModernCardDescription className="text-sage-600 leading-relaxed">
                   Combine crop maturity, weather forecasts, and market prices into clear harvest timing recommendations. 
                   Maximize quality and profits.
-                </p>
-              </div>
-              
-              {/* Financial Management Tile */}
-              <div className="bg-sage-700/20 backdrop-blur-md border border-sage-300/30 p-6 rounded-2xl text-center hover:scale-105 transition-all duration-300 hover:bg-sage-600/25 shadow-lg">
-                <div className="p-4 bg-sage-500/40 backdrop-blur-sm rounded-full w-fit mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-cream-100" />
+                </ModernCardDescription>
+              </ModernCardContent>
+            </ModernCard>
+            
+            {/* Financial Insights Card */}
+            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
+              <ModernCardHeader className="pb-4">
+                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
+                  <TrendingUp className="h-8 w-8 text-sage-700" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-cream-50">"Which Fields Are Making Money?"</h3>
-                <p className="text-cream-200/90 leading-relaxed text-sm">
+                <ModernCardTitle className="text-sage-800">"Which Fields Are Making Money?"</ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <ModernCardDescription className="text-sage-600 leading-relaxed">
                   See profit per acre by field, track every expense with voice logging, and get market signals. 
                   Focus your efforts where they matter most.
-                </p>
-              </div>
-              
-            </div>
+                </ModernCardDescription>
+              </ModernCardContent>
+            </ModernCard>
             
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-cream-50 mb-4 drop-shadow-lg">
+            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">
               Real Farmers. Real Results.
             </h2>
-            <p className="text-lg md:text-xl text-cream-200 max-w-3xl mx-auto">
+            <p className="text-lg text-sage-600 max-w-3xl mx-auto">
               See how Cropple.ai is transforming farms across the world
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonial 1 - Small Farm */}
-            <div className="bg-sage-800/25 backdrop-blur-md border border-sage-400/30 p-8 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="bg-sage-600/40 backdrop-blur-sm p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-cream-100" />
+            <ModernCard variant="soft" className="p-8">
+              <ModernCardHeader>
+                <div className="flex items-center mb-4">
+                  <div className="bg-sage-100 p-2 rounded-full mr-3">
+                    <Users className="h-6 w-6 text-sage-700" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-sage-800">Sarah Chen</h4>
+                    <p className="text-sage-600 text-sm">120-acre Family Farm, Iowa</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-cream-50">Sarah Chen</h4>
-                  <p className="text-cream-300 text-sm">120-acre Family Farm, Iowa</p>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <p className="text-sage-700 leading-relaxed mb-4">
+                  "I used to spend 3 hours every morning checking weather, walking fields, and planning my day. 
+                  Now Cropple.ai tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
+                </p>
+                <div className="flex items-center gap-4 text-sm">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    +23% Yield
+                  </Badge>
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    $18K Saved
+                  </Badge>
                 </div>
-              </div>
-              <p className="text-cream-100 leading-relaxed mb-4">
-                "I used to spend 3 hours every morning checking weather, walking fields, and planning my day. 
-                Now Cropple.ai tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">+23%</span> Yield
-                </div>
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">$18K</span> Saved
-                </div>
-              </div>
-            </div>
+              </ModernCardContent>
+            </ModernCard>
             
             {/* Testimonial 2 - Medium Farm */}
-            <div className="bg-earth-800/25 backdrop-blur-md border border-earth-400/30 p-8 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="bg-earth-600/40 backdrop-blur-sm p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-cream-100" />
+            <ModernCard variant="soft" className="p-8">
+              <ModernCardHeader>
+                <div className="flex items-center mb-4">
+                  <div className="bg-earth-100 p-2 rounded-full mr-3">
+                    <Users className="h-6 w-6 text-earth-700" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-sage-800">Marcus Johnson</h4>
+                    <p className="text-sage-600 text-sm">850-acre Wheat & Soy, Kansas</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-cream-50">Marcus Johnson</h4>
-                  <p className="text-cream-300 text-sm">850-acre Wheat & Soy, Kansas</p>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <p className="text-sage-700 leading-relaxed mb-4">
+                  "The 'Should I harvest today?' feature saved our wheat crop. It warned us about incoming hail 
+                  48 hours early, so we harvested just in time. That one alert paid for 10 years of subscription."
+                </p>
+                <div className="flex items-center gap-4 text-sm">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    40% Crop Saved
+                  </Badge>
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    10x ROI
+                  </Badge>
                 </div>
-              </div>
-              <p className="text-cream-100 leading-relaxed mb-4">
-                "The 'Should I harvest today?' feature saved our wheat crop. It warned us about incoming hail 
-                48 hours early, so we harvested just in time. That one alert paid for 10 years of subscription."
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">40%</span> Crop Saved
-                </div>
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">10x</span> ROI
-                </div>
-              </div>
-            </div>
+              </ModernCardContent>
+            </ModernCard>
             
             {/* Testimonial 3 - Large Operation */}
-            <div className="bg-sage-700/25 backdrop-blur-md border border-sage-300/30 p-8 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="bg-sage-500/40 backdrop-blur-sm p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-cream-100" />
+            <ModernCard variant="soft" className="p-8">
+              <ModernCardHeader>
+                <div className="flex items-center mb-4">
+                  <div className="bg-sage-100 p-2 rounded-full mr-3">
+                    <Users className="h-6 w-6 text-sage-700" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-sage-800">Rodriguez Farms LLC</h4>
+                    <p className="text-sage-600 text-sm">3,200 acres, California</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-cream-50">Rodriguez Farms LLC</h4>
-                  <p className="text-cream-300 text-sm">3,200 acres, California</p>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <p className="text-sage-700 leading-relaxed mb-4">
+                  "Instead of driving to each field every morning, I get a priority list on my phone: 
+                  'Irrigate Field 7', 'Spray Field 12 between 6-10am'. Cut labor costs by $45,000 this year."
+                </p>
+                <div className="flex items-center gap-4 text-sm">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    -30% Water
+                  </Badge>
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    $45K Labor Saved
+                  </Badge>
                 </div>
-              </div>
-              <p className="text-cream-100 leading-relaxed mb-4">
-                "Instead of driving to each field every morning, I get a priority list on my phone: 
-                'Irrigate Field 7', 'Spray Field 12 between 6-10am'. Cut labor costs by $45,000 this year."
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">-30%</span> Water
-                </div>
-                <div className="text-cream-300">
-                  <span className="text-cream-100 font-semibold">$45K</span> Labor Saved
-                </div>
-              </div>
-            </div>
+              </ModernCardContent>
+            </ModernCard>
           </div>
           
           {/* Impact Stats */}
-          <div className="mt-16 bg-gradient-to-r from-sage-800/30 to-earth-800/30 backdrop-blur-lg border border-sage-400/30 p-8 rounded-3xl shadow-xl">
+          <ModernCard variant="floating" className="mt-16 p-8 bg-gradient-to-r from-sage-600/10 to-earth-600/10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-cream-50 mb-2">$2.3M</div>
-                <div className="text-cream-300">Saved by farmers in 2024</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">$2.3M</div>
+                <div className="text-sage-600">Saved by farmers in 2024</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-cream-50 mb-2">15,000+</div>
-                <div className="text-cream-300">Active fields monitored</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">15,000+</div>
+                <div className="text-sage-600">Active fields monitored</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-cream-50 mb-2">98%</div>
-                <div className="text-cream-300">Customer satisfaction</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">98%</div>
+                <div className="text-sage-600">Customer satisfaction</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-cream-50 mb-2">24/7</div>
-                <div className="text-cream-300">AI monitoring & alerts</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">24/7</div>
+                <div className="text-sage-600">AI monitoring & alerts</div>
               </div>
             </div>
-          </div>
+          </ModernCard>
         </div>
       </section>
       
-      {/* Footer inside glass container */}
-      <footer className="pt-16 px-4 sm:px-6 lg:px-8">
+      {/* Footer */}
+      <footer className="bg-sage-100/50 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-sage-900/40 backdrop-blur-lg border border-sage-400/30 p-8 md:p-12 lg:p-16 rounded-3xl shadow-xl">
-            <div className="border-t border-sage-400/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex flex-col items-center gap-2 text-sm text-cream-200 text-center">
+          <div className="border-t border-sage-200 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="text-sm text-sage-600 text-center md:text-left">
                 <p>© 2025 Cropple.ai. All rights reserved.</p>
-                <p>Photo by <span className="font-medium text-cream-100">Franz Michael Schneeberger</span> 📸</p>
-                <p className="text-xs">Special thanks to Franz Michael Schneeberger for the beautiful corn field photography</p>
+                <p className="text-xs mt-1">Empowering farmers with intelligent technology</p>
               </div>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-cream-200">Built with</span>
-                <div className="bg-sage-600/40 backdrop-blur-sm px-3 py-1 rounded-full">
-                  <span className="text-xs font-medium text-cream-100">Next.js</span>
-                </div>
-                <div className="bg-earth-600/40 backdrop-blur-sm px-3 py-1 rounded-full">
-                  <span className="text-xs font-medium text-cream-100">AI/ML</span>
-                </div>
+                <span className="text-sm text-sage-600">Built with</span>
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-300">
+                  Next.js
+                </Badge>
+                <Badge variant="outline" className="bg-earth-50 text-earth-700 border-earth-300">
+                  AI/ML
+                </Badge>
               </div>
             </div>
           </div>

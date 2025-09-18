@@ -182,6 +182,7 @@ model Field {
   soilAnalyses          SoilAnalysis[]
   weatherComprehensive  WeatherComprehensive[]
   analyticsPredictions  AnalyticsPrediction[]
+  soilReadings          SoilReading[]
 
   @@map("fields")
 }
@@ -912,4 +913,29 @@ model Recommendation {
   @@map("recommendations")
   @@index([farmId, status, createdAt(sort: Desc)])
   @@index([fieldId, priority, optimalTiming])
+}
+
+model SoilReading {
+  id                    String    @id @default(cuid())
+  fieldId               String
+  sensorId              String?   @db.VarChar(100)
+  timestamp             DateTime  @default(now())
+  depth                 Float     // cm
+  temperature           Float     // °C
+  moisture              Float     // %
+  ph                    Float
+  electricalConductivity Float    // dS/m
+  nitrogen              Float     // ppm
+  phosphorus            Float     // ppm
+  potassium             Float     // ppm
+  latitude              Float     @db.DoublePrecision
+  longitude             Float     @db.DoublePrecision
+  quality               String    @default("medium") @db.VarChar(10) // 'high', 'medium', 'low'
+  
+  // Relations
+  field                 Field     @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("soil_readings")
+  @@index([fieldId, timestamp(sort: Desc)])
+  @@index([timestamp, quality])
 }

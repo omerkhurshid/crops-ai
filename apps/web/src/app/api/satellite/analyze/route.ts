@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleAuth } from 'google-auth-library'
 import { rateLimitWithFallback } from '../../../../lib/rate-limit'
+import { liveSatelliteService } from '../../../../lib/satellite/live-satellite-service'
+import { getCurrentUser } from '../../../../lib/auth/session'
+import { prisma } from '../../../../lib/prisma'
 
 interface FieldAnalysisRequest {
   fieldId: string
@@ -29,25 +32,57 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const user = await getCurrentUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { fieldId, geometry, startDate, endDate, cropType } = await request.json() as FieldAnalysisRequest
 
-    // For now, return mock data that matches the expected interface
-    // Real GEE integration requires more complex setup than simple REST API calls
+    // Verify field ownership
+    const field = await prisma.field.findFirst({
+      where: {
+        id: fieldId,
+        farm: {
+          ownerId: user.id
+        }
+      },
+      include: {
+        farm: true
+      }
+    })
+
+    if (!field) {
+      return NextResponse.json({ error: 'Field not found' }, { status: 404 })
+    }
+
     console.log('Analyzing field:', fieldId, 'from', startDate, 'to', endDate)
     
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Use real satellite service to get latest data
+    const satelliteData = await liveSatelliteService.getLatestFieldData(fieldId)
     
-    // Generate realistic NDVI based on field location and season
-    const mockNdvi = generateRealisticNDVI(geometry, startDate, cropType)
+    if (!satelliteData) {
+      // Fallback to mock data if no real data is available
+      const mockNdvi = generateRealisticNDVI(geometry, startDate, cropType)
+      const analysis = processSatelliteData({ nd: mockNdvi }, fieldId, cropType)
+      
+      return NextResponse.json({
+        success: true,
+        fieldId,
+        analysisDate: new Date().toISOString(),
+        dataSource: 'fallback_mock',
+        ...analysis
+      })
+    }
     
-    // Process the simulated satellite data into farmer-friendly metrics
-    const analysis = processSatelliteData({ nd: mockNdvi }, fieldId, cropType)
+    // Process real satellite data into farmer-friendly metrics
+    const analysis = processRealSatelliteData(satelliteData, fieldId, cropType)
 
     return NextResponse.json({
       success: true,
       fieldId,
       analysisDate: new Date().toISOString(),
+      dataSource: satelliteData.metadata.source,
       ...analysis
     })
 
@@ -61,6 +96,73 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     )
+  }
+}
+
+function processRealSatelliteData(satelliteData: any, fieldId: string, cropType?: string) {
+  const ndviValue = satelliteData.ndvi
+  
+  // Convert NDVI to health score (0-100)
+  const healthScore = Math.round(Math.max(0, Math.min(100, (ndviValue + 0.2) * 125)))
+  
+  // Use satellite service stress level mapping
+  const stressLevelMap: Record<string, string> = {
+    'NONE': 'none',
+    'LOW': 'low', 
+    'MODERATE': 'moderate',
+    'HIGH': 'high',
+    'SEVERE': 'severe'
+  }
+  const stressLevel = stressLevelMap[satelliteData.stressLevel] || 'moderate'
+
+  // Calculate yield potential based on NDVI and crop type
+  let yieldPotential: number
+  if (cropType === 'Corn') {
+    yieldPotential = Math.round(120 + (ndviValue - 0.5) * 200) // bushels per acre
+  } else {
+    yieldPotential = Math.round(35 + (ndviValue - 0.5) * 80) // soybeans bu/acre
+  }
+
+  // Generate recommendations based on real data
+  const recommendations = generateRecommendations(ndviValue, stressLevel, cropType)
+
+  // Calculate trend from NDVI change
+  let trend = 'stable'
+  if (satelliteData.ndviChange !== null) {
+    if (satelliteData.ndviChange > 0.05) trend = 'improving'
+    else if (satelliteData.ndviChange < -0.05) trend = 'declining'
+  }
+
+  return {
+    satelliteData: {
+      ndvi: {
+        mean: Math.round(ndviValue * 1000) / 1000,
+        date: satelliteData.captureDate.toISOString().split('T')[0],
+        change: satelliteData.ndviChange
+      },
+      satellite: satelliteData.metadata.source === 'planet-labs' ? 'PlanetScope' : 'Sentinel-2',
+      resolution: `${satelliteData.metadata.resolution || 10}m`,
+      cloudCover: satelliteData.metadata.cloudCoverage ? `<${Math.round(satelliteData.metadata.cloudCoverage)}%` : '<20%',
+      confidence: satelliteData.metadata.analysisConfidence || 0.8
+    },
+    healthAssessment: {
+      score: healthScore,
+      status: getHealthStatus(healthScore),
+      stressLevel,
+      trend
+    },
+    yieldForecast: {
+      predicted: yieldPotential,
+      confidence: satelliteData.metadata.analysisConfidence > 0.8 ? 'high' : 'medium',
+      unit: cropType === 'Corn' ? 'bu/acre' : 'bu/acre'
+    },
+    recommendations,
+    metadata: {
+      isRealData: true,
+      source: satelliteData.metadata.source,
+      acquisitionDate: satelliteData.captureDate,
+      imageId: satelliteData.metadata.planetImageId
+    }
   }
 }
 

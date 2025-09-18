@@ -74,8 +74,18 @@ export async function GET(request: NextRequest) {
     // Generate visualization data
     const hasRealData = farm.fields.some((field: any) => field.satelliteData && field.satelliteData.length > 0)
 
+    // Get disease/pest analysis for enhanced visualizations
+    let diseasePestData = null
+    try {
+      const { diseasePestPredictionService } = await import('../../../../lib/crop-health/disease-pest-prediction')
+      const farmAnalysis = await diseasePestPredictionService.analyzeFarmRisks(farmId)
+      diseasePestData = farmAnalysis
+    } catch (error) {
+      console.warn('Disease/pest analysis not available:', error)
+    }
+
     if (!hasRealData) {
-      // Return mock visualization data that matches the component's interface
+      // Return enhanced mock visualization data with disease/pest integration
       return NextResponse.json({
         success: true,
         hasRealData: false,
@@ -85,7 +95,8 @@ export async function GET(request: NextRequest) {
           stressHeatmap: generateMockStressHeatmap(farm.fields, farm),
           seasonalPatterns: generateMockSeasonalPatterns(),
           comparisonData: generateMockComparisonData(),
-          alertHistory: generateMockAlertHistory()
+          alertHistory: generateMockAlertHistory(),
+          diseasePestAnalysis: diseasePestData || generateMockDiseasePestData()
         }
       })
     }
@@ -96,7 +107,8 @@ export async function GET(request: NextRequest) {
       stressHeatmap: processStressHeatmapForComponent(farm.fields),
       seasonalPatterns: processSeasonalPatternsForComponent(farm.fields),
       comparisonData: processComparisonDataForComponent(farm.fields),
-      alertHistory: processAlertHistoryForComponent(farm.fields)
+      alertHistory: processAlertHistoryForComponent(farm.fields),
+      diseasePestAnalysis: diseasePestData || generateMockDiseasePestData()
     }
 
     return NextResponse.json({
@@ -264,6 +276,45 @@ function generateMockAlertHistory() {
       resolved: Math.random() > 0.3
     }
   })
+}
+
+function generateMockDiseasePestData() {
+  return {
+    farmRiskSummary: {
+      overallRiskLevel: 'moderate',
+      highRiskFields: ['North Field'],
+      immediateActions: 2,
+      monitoring: 3
+    },
+    topThreats: [
+      {
+        name: 'Corn Borer',
+        type: 'pest',
+        riskLevel: 'moderate',
+        affectedFields: 2,
+        economicImpact: 450
+      },
+      {
+        name: 'Leaf Blight',
+        type: 'disease',
+        riskLevel: 'low',
+        affectedFields: 1,
+        economicImpact: 200
+      },
+      {
+        name: 'Soybean Aphid',
+        type: 'pest',
+        riskLevel: 'low',
+        affectedFields: 1,
+        economicImpact: 180
+      }
+    ],
+    seasonalOutlook: {
+      nextWeek: 'Moderate pest pressure with warm temperatures',
+      nextMonth: 'Peak disease activity expected with forecast rainfall',
+      nextSeason: 'Consider resistant varieties for next planting'
+    }
+  }
 }
 
 // Real data processors (for when satellite data exists)

@@ -75,49 +75,130 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
 
-    // For now, return mock recommendations to prevent errors
-    // TODO: Fix NBA engine dependencies and caching system
-    const mockRecommendations = [
-      {
-        type: 'IRRIGATE',
-        priority: 'HIGH',
-        title: 'Irrigation Recommended',
-        description: 'Weather forecast suggests dry conditions ahead',
-        confidence: 85,
-        timing: {
-          idealStart: new Date(),
-          idealEnd: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-          mustCompleteBy: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        },
-        estimatedImpact: {
-          revenue: 500,
-          costSavings: 0,
-          yieldIncrease: 12
-        },
-        explanation: 'Weather patterns indicate irrigation would benefit crop health',
-        actionSteps: ['Check soil moisture', 'Schedule irrigation', 'Monitor weather'],
-        targetField: farm.fields[0]?.id,
-        status: 'PENDING'
+    // Get weather context for the farm
+    const weatherContext = await getWeatherContext(farm.latitude, farm.longitude)
+    
+    // Get financial context for the farm
+    const financialContext = await getFinancialContext(farmId)
+    
+    // Get livestock context if any livestock exists
+    const livestockContext = await getLivestockContext(farmId)
+    
+    // Build comprehensive farm context for NBA engine
+    const farmContext: FarmContext = {
+      farmId: farm.id,
+      userId: user.id,
+      location: {
+        latitude: farm.latitude,
+        longitude: farm.longitude
+      },
+      fields: farm.fields.map(field => ({
+        id: field.id,
+        name: field.name || 'Unnamed Field',
+        area: field.area || 0,
+        cropType: field.crops[0]?.cropType || 'wheat',
+        plantingDate: field.crops[0]?.plantingDate || undefined,
+        lastSprayDate: undefined, // TODO: Get from spray records
+        lastHarvestDate: undefined // TODO: Get from harvest records
+      })),
+      weather: weatherContext,
+      financials: financialContext,
+      livestock: livestockContext
+    }
+    
+    // Initialize NBA engine and generate real decisions
+    const nbaEngine = new NBAEngine(process.env.OPENWEATHER_API_KEY)
+    const decisions = await nbaEngine.generateDecisions(farmContext)
+    
+    // Filter decisions based on request parameters
+    let filteredDecisions = decisions
+    if (includeDecisionTypes && includeDecisionTypes.length > 0) {
+      filteredDecisions = decisions.filter(decision => 
+        includeDecisionTypes.includes(decision.type)
+      )
+    }
+    
+    // Limit results
+    const limitedDecisions = filteredDecisions.slice(0, maxRecommendations)
+    
+    // Convert to response format and calculate scores
+    const recommendations = limitedDecisions.map((decision, index) => {
+      const scores = calculateDecisionScore(decision)
+      return {
+        id: `nba-${farmId}-${Date.now()}-${index}`,
+        type: decision.type,
+        priority: decision.priority,
+        title: decision.title,
+        description: decision.description,
+        confidence: decision.confidence,
+        timing: decision.timing,
+        estimatedImpact: decision.estimatedImpact,
+        explanation: decision.explanation,
+        actionSteps: decision.actionSteps,
+        targetField: decision.targetField,
+        status: 'PENDING',
+        urgencyScore: scores.urgency,
+        roiScore: scores.roi,
+        feasibilityScore: scores.feasibility,
+        totalScore: scores.total
       }
-    ]
+    })
+    
+    // Store recommendations in database for tracking
+    const savedRecommendations = await Promise.all(
+      recommendations.map(async (rec) => {
+        try {
+          return await prisma.decisionRecommendation.create({
+            data: {
+              userId: user.id,
+              farmId: farmId,
+              type: rec.type,
+              priority: rec.priority,
+              title: rec.title,
+              description: rec.description,
+              urgencyScore: Math.round(rec.urgencyScore),
+              roiScore: Math.round(rec.roiScore),
+              feasibilityScore: Math.round(rec.feasibilityScore),
+              totalScore: Math.round(rec.totalScore),
+              confidence: rec.confidence,
+              idealStart: rec.timing.idealStart,
+              idealEnd: rec.timing.idealEnd,
+              mustCompleteBy: rec.timing.mustCompleteBy,
+              estimatedRevenue: rec.estimatedImpact.revenue || 0,
+              estimatedCostSaving: rec.estimatedImpact.costSavings || 0,
+              estimatedYieldGain: rec.estimatedImpact.yieldIncrease || 0,
+              explanation: rec.explanation,
+              actionSteps: rec.actionSteps,
+              targetField: rec.targetField,
+              status: 'PENDING'
+            }
+          })
+        } catch (error) {
+          console.warn('Failed to save recommendation:', error)
+          return rec
+        }
+      })
+    )
 
     const response = {
       success: true,
-      recommendations: mockRecommendations.map((rec, index) => ({
-        id: `mock-${index}`,
-        ...rec
-      })),
+      recommendations,
       metadata: {
         farmName: farm.name,
-        totalDecisionsEvaluated: 1,
-        recommendationsReturned: 1,
-        averageConfidence: 85,
+        totalDecisionsEvaluated: decisions.length,
+        recommendationsReturned: recommendations.length,
+        averageConfidence: recommendations.length > 0 
+          ? Math.round(recommendations.reduce((sum, r) => sum + r.confidence, 0) / recommendations.length)
+          : 0,
         generatedAt: new Date().toISOString(),
         performanceMs: PerformanceMonitor.endTimer(timerId),
         cached: false
       }
     }
 
+    // Cache the response for future requests (5 minutes TTL)
+    await cache.set(cacheKey, response, { ttl: 300, tags: [CacheTags.FARM, CacheTags.NBA] })
+    
     return NextResponse.json(response)
 
   } catch (error) {

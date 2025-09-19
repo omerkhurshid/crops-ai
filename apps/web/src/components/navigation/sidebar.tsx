@@ -208,6 +208,35 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
         })}
       </nav>
 
+      {/* Secondary Navigation Links */}
+      <div className="px-2 py-2 border-t" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
+        {secondaryNavLinks.map((link) => {
+          const Icon = link.icon
+          const active = isActive(link.href)
+          
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`relative flex items-center px-3 py-3 rounded-control text-sm font-semibold transition-all duration-micro ease-fk group ${
+                active
+                  ? 'text-white'
+                  : 'text-white/90 hover:text-white hover:bg-sidebar-600'
+              }`}
+              style={active ? { backgroundColor: 'rgba(255,255,255,0.14)' } : {}}
+            >
+              {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-fk-primary rounded-r" />}
+              <Icon className={`h-5 w-5 ${collapsed ? 'mx-auto' : 'mr-3'} ${
+                active ? 'text-white' : 'text-white/90 group-hover:text-white'
+              }`} />
+              {!collapsed && (
+                <span className="truncate">{link.label}</span>
+              )}
+            </Link>
+          )
+        })}
+      </div>
+
       {/* User Menu */}
       <div className="border-t p-4" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} mb-3`}>

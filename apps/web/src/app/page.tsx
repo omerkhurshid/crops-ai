@@ -32,12 +32,12 @@ export default function Home() {
               </div>
               
               {/* Main Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-light mb-6 text-sage-800 tracking-tight leading-none">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-6 text-sage-800 tracking-tight leading-none">
                 Cropple<span className="text-sage-600">.ai</span>
               </h1>
               
               {/* Tagline */}
-              <h2 className="text-xl md:text-2xl lg:text-3xl text-sage-700 mb-6 max-w-4xl mx-auto leading-tight font-normal">
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-sage-700 mb-6 max-w-4xl mx-auto leading-tight font-normal">
                 Your Farm Command Center. Make Smarter Decisions Daily.
               </h2>
               
@@ -49,12 +49,13 @@ export default function Home() {
               {/* CTA Button */}
               <div className="mb-8">
                 <Link href="/register">
-                  <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-8 py-4 text-white font-medium text-lg rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center">
-                    <ArrowRight className="h-5 w-5 mr-2" />
-                    Start Your Free 30-Day Trial
+                  <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-6 py-3 sm:px-8 sm:py-4 text-white font-medium text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center">
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                    <span className="hidden sm:inline">Start Your Free 30-Day Trial</span>
+                    <span className="sm:hidden">Start Free Trial</span>
                   </button>
                 </Link>
-                <p className="text-sage-500 text-sm mt-3">No credit card required • Setup in 5 minutes</p>
+                <p className="text-sage-500 text-xs sm:text-sm mt-3">No credit card required • Setup in 5 minutes</p>
               </div>
             </ModernCardContent>
           </ModernCard>

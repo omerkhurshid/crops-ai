@@ -230,12 +230,12 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 disabled={isLoading}
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   formData.userType === 'CROPS' 
-                    ? 'border-green-500 bg-green-50 text-green-900' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                    ? 'border-sage-500 bg-sage-50 text-sage-900' 
+                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
                 } ${isLoading ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-3">
-                  <Sprout className={`h-6 w-6 ${formData.userType === 'CROPS' ? 'text-green-600' : 'text-gray-400'}`} />
+                  <Sprout className={`h-6 w-6 ${formData.userType === 'CROPS' ? 'text-sage-600' : 'text-sage-400'}`} />
                   <div>
                     <div className="font-medium">Crops</div>
                     <div className="text-xs opacity-80">Grains, vegetables, fruits</div>
@@ -249,12 +249,12 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 disabled={isLoading}
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   formData.userType === 'LIVESTOCK' 
-                    ? 'border-blue-500 bg-blue-50 text-blue-900' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                    ? 'border-earth-500 bg-earth-50 text-earth-900' 
+                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
                 } ${isLoading ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-3">
-                  <Users className={`h-6 w-6 ${formData.userType === 'LIVESTOCK' ? 'text-blue-600' : 'text-gray-400'}`} />
+                  <Users className={`h-6 w-6 ${formData.userType === 'LIVESTOCK' ? 'text-earth-600' : 'text-sage-400'}`} />
                   <div>
                     <div className="font-medium">Livestock</div>
                     <div className="text-xs opacity-80">Cattle, sheep, poultry</div>
@@ -268,12 +268,12 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 disabled={isLoading}
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   formData.userType === 'ORCHARD' 
-                    ? 'border-purple-500 bg-purple-50 text-purple-900' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                    ? 'border-green-500 bg-green-50 text-green-900' 
+                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
                 } ${isLoading ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-3">
-                  <TreePine className={`h-6 w-6 ${formData.userType === 'ORCHARD' ? 'text-purple-600' : 'text-gray-400'}`} />
+                  <TreePine className={`h-6 w-6 ${formData.userType === 'ORCHARD' ? 'text-green-600' : 'text-sage-400'}`} />
                   <div>
                     <div className="font-medium">Orchard</div>
                     <div className="text-xs opacity-80">Tree fruits, nuts</div>
@@ -287,13 +287,13 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 disabled={isLoading}
                 className={`p-4 rounded-lg border-2 transition-all text-left ${
                   formData.userType === 'MIXED' 
-                    ? 'border-orange-500 bg-orange-50 text-orange-900' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
+                    ? 'border-cream-500 bg-cream-50 text-cream-900' 
+                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
                 } ${isLoading ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center ${
-                    formData.userType === 'MIXED' ? 'border-orange-600 text-orange-600' : 'border-gray-400 text-gray-400'
+                    formData.userType === 'MIXED' ? 'border-cream-600 text-cream-600' : 'border-sage-400 text-sage-400'
                   }`}>
                     <span className="text-xs font-bold">ALL</span>
                   </div>

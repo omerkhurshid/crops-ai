@@ -418,7 +418,7 @@ export default async function SatelliteImageryGuidePage() {
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-sage-400">•</span>
-                    <span className="text-sage-700"><strong>Cloud Cover:</strong> Images with >20% clouds are filtered out for accuracy</span>
+                    <span className="text-sage-700"><strong>Cloud Cover:</strong> Images with {'>'}20% clouds are filtered out for accuracy</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-sage-400">•</span>

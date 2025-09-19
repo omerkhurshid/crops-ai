@@ -353,10 +353,10 @@ export default async function DiseasePestRiskAssessmentPage() {
                 <div className="bg-red-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-red-800 mb-2">High Disease Risk Conditions</h4>
                   <ul className="text-sm text-red-700 space-y-1">
-                    <li>• <strong>Leaf Wetness:</strong> >10 hours with temps 60-80°F</li>
-                    <li>• <strong>Humidity:</strong> >85% for 48+ hours</li>
+                    <li>• <strong>Leaf Wetness:</strong> {'>'}10 hours with temps 60-80°F</li>
+                    <li>• <strong>Humidity:</strong> {'>'}85% for 48+ hours</li>
                     <li>• <strong>Temperature:</strong> Consistent 70-85°F range</li>
-                    <li>• <strong>Rainfall:</strong> >0.1" daily for 3+ consecutive days</li>
+                    <li>• <strong>Rainfall:</strong> {'>'}0.1" daily for 3+ consecutive days</li>
                   </ul>
                 </div>
 
@@ -373,9 +373,9 @@ export default async function DiseasePestRiskAssessmentPage() {
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-blue-800 mb-2">Protective Conditions</h4>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• <strong>Dry Periods:</strong> <40% humidity for 5+ days</li>
-                    <li>• <strong>Temperature Extremes:</strong> <50°F or >95°F</li>
-                    <li>• <strong>High Winds:</strong> >15 mph sustained speeds</li>
+                    <li>• <strong>Dry Periods:</strong> {'<'}40% humidity for 5+ days</li>
+                    <li>• <strong>Temperature Extremes:</strong> {'<'}50°F or {'>'}95°F</li>
+                    <li>• <strong>High Winds:</strong> {'>'}15 mph sustained speeds</li>
                     <li>• <strong>Beneficial Weather:</strong> Conditions favoring natural enemies</li>
                   </ul>
                 </div>

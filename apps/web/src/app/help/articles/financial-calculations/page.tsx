@@ -81,7 +81,7 @@ export default async function FinancialCalculationsPage() {
 
               <div>
                 <h3 className="font-semibold text-sage-800 mb-3">2. Cost per Hectare</h3>
-                <div class="bg-earth-50 p-4 rounded-lg">
+                <div className="bg-earth-50 p-4 rounded-lg">
                   <p className="text-sm font-mono text-earth-700 mb-2">
                     Cost/ha = (Total Input Costs + Labor + Equipment) / Field Area
                   </p>
@@ -317,7 +317,7 @@ export default async function FinancialCalculationsPage() {
               <div className="border-l-4 border-green-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle className="h-5 w-5 text-green-600" />
-                  <Badge className="bg-green-100 text-green-800">Profit Margin >15%</Badge>
+                  <Badge className="bg-green-100 text-green-800">Profit Margin {'>'}15%</Badge>
                 </div>
                 <p className="text-sage-700 text-sm">
                   <strong>Excellent Performance:</strong> Your operation is highly profitable. 
@@ -339,7 +339,7 @@ export default async function FinancialCalculationsPage() {
               <div className="border-l-4 border-red-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
-                  <Badge className="bg-red-100 text-red-800">Profit Margin <5%</Badge>
+                  <Badge className="bg-red-100 text-red-800">Profit Margin {'<'}5%</Badge>
                 </div>
                 <p className="text-sage-700 text-sm">
                   <strong>Needs Attention:</strong> Margins are thin. Review input costs and consider 

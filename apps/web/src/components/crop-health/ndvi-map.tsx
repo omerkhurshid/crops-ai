@@ -378,7 +378,6 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                       </div>
                     </div>
                   )}
-                </div>
               </>
             )}
           </div>

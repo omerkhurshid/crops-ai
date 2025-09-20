@@ -31,10 +31,10 @@ async function getAdminStats() {
       // Total fields
       prisma.field.count(),
       
-      // Active users (logged in last 30 days)
+      // Active users (updated in last 30 days - using updatedAt as proxy for activity)
       prisma.user.count({
         where: {
-          lastLoginAt: {
+          updatedAt: {
             gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
           }
         }

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
           role: true,
           userType: true,
           createdAt: true,
-          lastLoginAt: true,
+          updatedAt: true,
           emailVerified: true
         }
       }),
@@ -115,9 +115,9 @@ export async function GET(request: NextRequest) {
     const recentUsers = users.filter(user => new Date(user.createdAt) >= thirtyDaysAgo)
     csvData.push(['New Users (30d)', recentUsers.length.toString(), 'Growth', now])
 
-    // Add activity metrics
+    // Add activity metrics (using updatedAt as proxy for activity)
     const activeUsers = users.filter(user => 
-      user.lastLoginAt && new Date(user.lastLoginAt) >= thirtyDaysAgo
+      user.updatedAt && new Date(user.updatedAt) >= thirtyDaysAgo
     )
     csvData.push(['Active Users (30d)', activeUsers.length.toString(), 'Engagement', now])
     

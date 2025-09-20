@@ -62,85 +62,49 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
   const fetchSimpleHealthData = async () => {
     setLoading(true)
     try {
-      // In a real app, this would call a simplified API endpoint
-      // For now, we'll transform complex data into farmer-friendly format
-      setFields(getMockSimpleData())
+      // Fetch real farm data
+      const response = await fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`)
+      if (response.ok) {
+        const data = await response.json()
+        
+        // Transform real API data into farmer-friendly format
+        const transformedFields = data.fieldAnalysis?.map((field: any) => ({
+          fieldId: field.fieldId,
+          fieldName: field.fieldName || `Field ${field.fieldId}`,
+          cropType: field.cropType || 'Mixed Crops',
+          healthScore: Math.round(field.healthScore || 75),
+          stressLevel: field.healthScore > 80 ? 'healthy' : field.healthScore > 60 ? 'watch' : 'action_needed',
+          lastUpdate: new Date().toISOString(),
+          area: field.area || 25,
+          mainIssues: field.risks?.filter((r: any) => r.level === 'high').map((r: any) => r.description) || [],
+          simpleRecommendations: field.recommendations?.slice(0, 3) || ['Monitor field conditions regularly'],
+          yieldOutlook: field.healthScore > 85 ? 'excellent' : field.healthScore > 70 ? 'good' : field.healthScore > 50 ? 'concerning' : 'poor',
+          yieldChange: Math.round((field.healthScore - 75) / 2), // Convert health to yield change estimate
+          nextAction: {
+            task: field.recommendations?.[0] || 'Regular monitoring',
+            priority: field.healthScore < 60 ? 'high' : field.healthScore < 80 ? 'medium' : 'low',
+            daysUntil: field.healthScore < 60 ? 1 : field.healthScore < 80 ? 3 : 7
+          }
+        })) || []
+        
+        setFields(transformedFields.length > 0 ? transformedFields : getEmptyStateData())
+      } else {
+        // Fallback to empty state if API fails
+        setFields(getEmptyStateData())
+      }
     } catch (error) {
       console.error('Failed to fetch health data:', error)
-      setFields(getMockSimpleData())
+      setFields(getEmptyStateData())
     } finally {
       setLoading(false)
     }
   }
 
-  const getMockSimpleData = (): SimpleFieldHealth[] => [
-    {
-      fieldId: 'field-1',
-      fieldName: 'North Field',
-      cropType: 'Corn',
-      healthScore: 85,
-      stressLevel: 'watch',
-      lastUpdate: new Date().toISOString(),
-      area: 45.2,
-      mainIssues: ['Dry spots in southwest corner', 'Minor nitrogen deficiency'],
-      simpleRecommendations: [
-        'Check irrigation in southwest area this week',
-        'Plan nitrogen application for next month',
-        'Continue regular field walks'
-      ],
-      yieldOutlook: 'good',
-      yieldChange: +12, // 12% above expected
-      nextAction: {
-        task: 'Check irrigation system',
-        priority: 'medium',
-        daysUntil: 3
-      }
-    },
-    {
-      fieldId: 'field-2',
-      fieldName: 'South Field',
-      cropType: 'Soybeans',
-      healthScore: 92,
-      stressLevel: 'healthy',
-      lastUpdate: new Date().toISOString(),
-      area: 32.7,
-      mainIssues: [],
-      simpleRecommendations: [
-        'Field is performing excellently',
-        'Monitor for aphids weekly',
-        'Start planning harvest timeline'
-      ],
-      yieldOutlook: 'excellent',
-      yieldChange: +8,
-      nextAction: {
-        task: 'Scout for aphids',
-        priority: 'low',
-        daysUntil: 7
-      }
-    },
-    {
-      fieldId: 'field-3',
-      fieldName: 'East Field',
-      cropType: 'Wheat',
-      healthScore: 68,
-      stressLevel: 'action_needed',
-      lastUpdate: new Date().toISOString(),
-      area: 28.5,
-      mainIssues: ['Fungal disease pressure', 'Uneven emergence'],
-      simpleRecommendations: [
-        'Apply fungicide treatment immediately',
-        'Investigate drainage issues',
-        'Consider replanting affected areas'
-      ],
-      yieldOutlook: 'concerning',
-      yieldChange: -15,
-      nextAction: {
-        task: 'Apply fungicide',
-        priority: 'high',
-        daysUntil: 1
-      }
-    }
-  ]
+  const getEmptyStateData = (): SimpleFieldHealth[] => {
+    // Return empty array when no real data is available
+    // This will trigger the appropriate empty state UI
+    return []
+  }
 
   const getHealthIcon = (stressLevel: string) => {
     switch (stressLevel) {

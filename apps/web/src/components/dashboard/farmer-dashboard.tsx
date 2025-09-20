@@ -172,11 +172,10 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
           return daysToHarvest >= 0 && daysToHarvest <= 14
         }).length
         
-        // Identify fields needing attention based on stress level
-        const fieldsNeedingAttention = ensureArray(passedFarmData?.fields).filter(field => {
-          // Mock logic - in real app would check NDVI/stress data
-          return Math.random() < 0.3
-        }).map(f => f.name).slice(0, 5)
+        // Identify fields needing attention based on real satellite data
+        const fieldsNeedingAttention = []
+        // Note: Real field stress analysis will be handled by satellite service
+        // Removed placeholder random data generation
         
         // Calculate livestock metrics
         const livestockCount = ensureArray(passedLivestock).reduce((sum, l) => sum + (l.count || 1), 0)
@@ -276,29 +275,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
             precipitation: farmData.currentWeather.precipitation,
             windSpeed: Math.round(weatherData?.wind?.speed * 2.237 || 12) // Convert m/s to mph
           },
-          forecast: [
-            { 
-              date: new Date(Date.now() + 86400000).toISOString(), 
-              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
-              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
-              condition: 'partly cloudy', 
-              precipitation: Math.round(Math.random() * 30)
-            },
-            { 
-              date: new Date(Date.now() + 172800000).toISOString(), 
-              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
-              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
-              condition: 'sunny', 
-              precipitation: Math.round(Math.random() * 20)
-            },
-            { 
-              date: new Date(Date.now() + 259200000).toISOString(), 
-              high: Math.round(weatherData?.main?.temp_max || 82) + Math.round(Math.random() * 6 - 3),
-              low: Math.round(weatherData?.main?.temp_min || 65) + Math.round(Math.random() * 6 - 3),
-              condition: 'rainy', 
-              precipitation: Math.round(Math.random() * 60 + 20)
-            }
-          ],
+          forecast: [], // Will be populated by real weather API data
+          // Note: Removed placeholder random weather data
           alerts: ensureArray(passedWeatherAlerts).map(alert => ({
             type: alert.alertType,
             severity: alert.severity || 'low',

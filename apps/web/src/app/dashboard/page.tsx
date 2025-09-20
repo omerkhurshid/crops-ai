@@ -91,24 +91,7 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
     }
   })
   
-  // Field inspection tasks based on farm health
-  ensureArray(farms).forEach(farm => {
-    farm.fields?.forEach((field: any) => {
-      // Simulate NDVI-based recommendations
-      const randomNdvi = Math.random()
-      if (randomNdvi < 0.3) { // Low NDVI = stress detected
-        tasks.push({
-          id: `inspect-${field.id}`,
-          title: `Inspect ${field.name} - Stress Detected`,
-          description: `Field showing signs of stress. Check for pest damage, nutrient deficiency, or irrigation issues.`,
-          urgency: 'high',
-          estimatedTime: '45 min',
-          action: 'Field Inspection',
-          estimatedImpact: '+$1,200 potential savings'
-        })
-      }
-    })
-  })
+  // Field inspection tasks - remove placeholder data, will be populated by client-side components
   
   // Financial tasks
   const recentExpenses = ensureArray(financialData).filter(t => 
@@ -130,17 +113,36 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
   return tasks.slice(0, 8) // Top 8 most important tasks
 }
 
-// Generate market-based recommendations
+// Generate market-based recommendations using real data
 function generateMarketInsights(marketPrices: any[]) {
   if (!ensureArray(marketPrices).length) return []
   
-  return ensureArray(marketPrices).slice(0, 2).map(price => ({
-    commodity: price.commodity,
-    price: price.price,
-    change: ((Math.random() - 0.5) * 10).toFixed(1),
-    recommendation: Math.random() > 0.5 ? 'SELL' : 'HOLD',
-    confidence: Math.floor(Math.random() * 30 + 70)
-  }))
+  return ensureArray(marketPrices).slice(0, 2).map(price => {
+    // Calculate real price change if we have historical data
+    const priceChange = price.previousPrice ? 
+      ((price.price - price.previousPrice) / price.previousPrice * 100).toFixed(1) : 
+      '0.0'
+    
+    // Determine recommendation based on actual price trends and market conditions
+    let recommendation = 'HOLD'
+    let confidence = 75
+    
+    if (price.price > (price.averagePrice || price.price) * 1.05) {
+      recommendation = 'SELL'
+      confidence = 85
+    } else if (price.price < (price.averagePrice || price.price) * 0.95) {
+      recommendation = 'BUY'
+      confidence = 80
+    }
+    
+    return {
+      commodity: price.commodity,
+      price: price.price,
+      change: priceChange,
+      recommendation,
+      confidence
+    }
+  })
 }
 
 export default async function DashboardPage() {

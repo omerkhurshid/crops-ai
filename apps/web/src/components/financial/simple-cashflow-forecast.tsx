@@ -58,74 +58,25 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
     try {
       setLoading(true)
       
-      // For now, generate realistic mock data
-      // In production: `/api/financial/cashflow-forecast?farmId=${farm.id}`
+      // Fetch real cashflow forecast from API
+      const response = await fetch(`/api/financial/cashflow-forecast?farmId=${farm.id}`)
       
-      const acreage = farm.totalArea * 2.47105
-      const currentDate = new Date()
-      
-      // Generate 30-day forecast
-      const thirtyDayIncome = Math.random() * 50000 + 20000 // $20k-70k expected
-      const thirtyDayExpenses = Math.random() * 30000 + 15000 // $15k-45k expected
-      
-      const thirtyDay: CashFlowProjection = {
-        period: '30_days',
-        expectedIncome: thirtyDayIncome,
-        expectedExpenses: thirtyDayExpenses,
-        netCashFlow: thirtyDayIncome - thirtyDayExpenses,
-        startingBalance: 45000, // Mock current balance
-        endingBalance: 45000 + (thirtyDayIncome - thirtyDayExpenses),
-        keyEvents: [
-          {
-            date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            type: 'expense',
-            description: 'Fertilizer payment due',
-            amount: 12500
-          },
-          {
-            date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            type: 'income',
-            description: 'Crop insurance payment expected',
-            amount: 8500
-          },
-          {
-            date: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            type: 'expense',
-            description: 'Equipment maintenance',
-            amount: 3200
-          }
-        ]
-      }
-
-      // Generate 60-day forecast (usually more income from harvest)
-      const sixtyDayIncome = thirtyDayIncome + Math.random() * 80000 + 30000
-      const sixtyDayExpenses = thirtyDayExpenses + Math.random() * 25000 + 10000
-      
-      const sixtyDay: CashFlowProjection = {
-        period: '60_days',
-        expectedIncome: sixtyDayIncome,
-        expectedExpenses: sixtyDayExpenses,
-        netCashFlow: sixtyDayIncome - sixtyDayExpenses,
-        startingBalance: 45000,
-        endingBalance: 45000 + (sixtyDayIncome - sixtyDayExpenses),
-        keyEvents: [
-          ...thirtyDay.keyEvents,
-          {
-            date: new Date(Date.now() + 40 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            type: 'income',
-            description: 'Harvest sales (estimated)',
-            amount: 85000
-          },
-          {
-            date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            type: 'expense',
-            description: 'Harvest labor costs',
-            amount: 15000
-          }
-        ]
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.data) {
+          setForecasts({
+            thirtyDay: result.data.thirtyDay || null,
+            sixtyDay: result.data.sixtyDay || null
+          })
+          return
+        }
       }
       
-      setForecasts({ thirtyDay, sixtyDay })
+      // No data available
+      setForecasts({
+        thirtyDay: null,
+        sixtyDay: null
+      })
     } catch (error) {
       console.error('Error fetching cashflow forecasts:', error)
     } finally {

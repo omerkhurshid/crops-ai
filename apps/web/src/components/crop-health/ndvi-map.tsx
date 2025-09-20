@@ -85,45 +85,22 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
         return
       }
 
-      // Generate realistic NDVI data based on field characteristics
-      const fieldArea = field.area
-      const baseNDVI = 0.65 + (Math.random() * 0.2) // 0.65-0.85 base range
-      const variability = Math.random() * 0.3 // Add some field variability
-      
-      // Calculate realistic zone distributions
-      const stressedPct = Math.max(2, Math.min(15, Math.random() * 12))
-      const moderatePct = Math.max(10, Math.min(30, 15 + Math.random() * 15))
-      const healthyPct = Math.max(30, Math.min(50, 40 + Math.random() * 10))
-      const veryHealthyPct = 100 - stressedPct - moderatePct - healthyPct
-
-      const mockData: NDVIData = {
-        fieldId,
-        fieldName: field.name,
-        ndviAverage: Number((baseNDVI - variability/2).toFixed(2)),
-        ndviMin: Number((baseNDVI - variability).toFixed(2)),
-        ndviMax: Number((baseNDVI + variability/2).toFixed(2)),
-        trend: Number(((Math.random() - 0.5) * 10).toFixed(1)), // -5 to +5% trend
-        lastUpdate: new Date().toISOString(),
-        zones: {
-          stressed: { 
-            percentage: Number(stressedPct.toFixed(1)), 
-            area: Number((fieldArea * stressedPct / 100).toFixed(1)) 
-          },
-          moderate: { 
-            percentage: Number(moderatePct.toFixed(1)), 
-            area: Number((fieldArea * moderatePct / 100).toFixed(1)) 
-          },
-          healthy: { 
-            percentage: Number(healthyPct.toFixed(1)), 
-            area: Number((fieldArea * healthyPct / 100).toFixed(1)) 
-          },
-          veryHealthy: { 
-            percentage: Number(veryHealthyPct.toFixed(1)), 
-            area: Number((fieldArea * veryHealthyPct / 100).toFixed(1)) 
+      // Try to fetch real NDVI data from satellite service
+      try {
+        const ndviResponse = await fetch(`/api/satellite/ndvi/${fieldId}`)
+        if (ndviResponse.ok) {
+          const ndviResult = await ndviResponse.json()
+          if (ndviResult.data && ndviResult.data.ndviData) {
+            setNdviData([ndviResult.data.ndviData])
+            return
           }
         }
+      } catch (ndviError) {
+        console.error('Failed to fetch real NDVI data:', ndviError)
       }
-      setNdviData([mockData])
+      
+      // No real data available
+      setNdviData([])
     } catch (error) {
       console.error('Failed to fetch NDVI data:', error)
     } finally {

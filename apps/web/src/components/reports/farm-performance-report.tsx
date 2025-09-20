@@ -59,12 +59,12 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        // Use demo data
-        setData(getMockPerformanceData());
+        // No data available
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching performance data:', error);
-      setData(getMockPerformanceData());
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -101,27 +101,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
     }
   };
 
-  const getMockPerformanceData = (): FarmPerformanceData => ({
-    overallScore: 87,
-    yieldEfficiency: 82,
-    resourceUtilization: 91,
-    profitability: 78,
-    trends: {
-      yield: { current: 185, previous: 170, change: 8.8 },
-      costs: { current: 850, previous: 920, change: -7.6 },
-      profit: { current: 1250, previous: 980, change: 27.6 }
-    },
-    topPerformingFields: [
-      { id: '1', name: 'North Field', cropType: 'Corn', yield: 195, profitPerAcre: 180, efficiency: 92 },
-      { id: '2', name: 'South Field', cropType: 'Soybeans', yield: 58, profitPerAcre: 120, efficiency: 89 },
-      { id: '3', name: 'East Field', cropType: 'Wheat', yield: 65, profitPerAcre: 95, efficiency: 85 }
-    ],
-    improvementAreas: [
-      { area: 'Water Management', impact: 'high', recommendation: 'Install precision irrigation systems in fields 4 and 5' },
-      { area: 'Nutrient Optimization', impact: 'medium', recommendation: 'Implement variable-rate fertilizer application' },
-      { area: 'Pest Management', impact: 'low', recommendation: 'Enhance integrated pest management practices' }
-    ]
-  });
+  // Removed mock data function - only show real data from API
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

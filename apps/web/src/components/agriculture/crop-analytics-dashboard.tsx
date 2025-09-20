@@ -46,43 +46,25 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Mock data - in production, this would fetch from your database
-    const mockPerformanceData: CropPerformanceData[] = [
-      {
-        cropId: 'corn',
-        plantedArea: 25.5,
-        plantedDate: '2024-04-15',
-        expectedYield: 9.2,
-        actualYield: undefined,
-        growthStage: 'Reproductive',
-        healthScore: 85,
-        riskFactors: [
-          { type: 'pest', severity: 'moderate', description: 'Corn borer detected in 15% of plants' },
-          { type: 'weather', severity: 'low', description: 'Optimal rainfall this month' }
-        ],
-        interventions: [
-          { date: '2024-05-01', type: 'fertilizer', description: 'Side-dress nitrogen application', cost: 120 },
-          { date: '2024-05-15', type: 'pesticide', description: 'Corn borer treatment', cost: 85 }
-        ]
-      },
-      {
-        cropId: 'wheat',
-        plantedArea: 18.2,
-        plantedDate: '2023-10-01',
-        expectedYield: 6.8,
-        actualYield: 7.1,
-        growthStage: 'Harvested',
-        healthScore: 92,
-        riskFactors: [],
-        interventions: [
-          { date: '2024-03-15', type: 'fertilizer', description: 'Spring nitrogen application', cost: 95 },
-          { date: '2024-05-20', type: 'pesticide', description: 'Fungicide application', cost: 65 }
-        ]
+    // Fetch real crop performance data from API
+    const fetchPerformanceData = async () => {
+      try {
+        const response = await fetch(`/api/farms/${farmId}/crop-analytics`)
+        if (response.ok) {
+          const result = await response.json()
+          setPerformanceData(result.data || [])
+        } else {
+          setPerformanceData([])
+        }
+      } catch (error) {
+        console.error('Error fetching crop analytics:', error)
+        setPerformanceData([])
+      } finally {
+        setLoading(false)
       }
-    ]
-
-    setPerformanceData(mockPerformanceData)
-    setLoading(false)
+    }
+    
+    fetchPerformanceData()
   }, [farmId])
 
   const selectedCropData = CropAnalytics.getCropById(selectedCropId)

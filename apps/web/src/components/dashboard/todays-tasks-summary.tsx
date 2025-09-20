@@ -34,20 +34,10 @@ interface TodaysTasksSummaryProps {
   farmId: string
 }
 
-// Default tasks to show when no real tasks are available
-const defaultTasks: Task[] = [
-  {
-    id: 'default-1',
-    title: 'Review Weather Forecast',
-    description: 'Check 7-day weather forecast for optimal field operations timing.',
-    status: 'todo',
-    priority: 'medium',
-    category: 'general',
-    assignedToName: 'Farm Manager',
-    dueDate: new Date().toISOString().split('T')[0], // Today
-    estimatedHours: 1
-  },
-  {
+// Removed default tasks - only show real data
+const defaultTasks: Task[] = []
+
+/*{
     id: 'default-2',
     title: 'Field Inspection Walk',
     description: 'Visual inspection of main fields for any emerging issues or opportunities.',
@@ -155,37 +145,14 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
             setTomorrowsTasks(tomorrowFiltered)
           }
         } else {
-          // Use fallback mock data
-          const today = new Date()
-          const tomorrow = new Date(today)
-          tomorrow.setDate(tomorrow.getDate() + 1)
-          
-          setTodaysTasks(defaultTasks.filter(task => {
-            if (task.status === 'done') return false
-            const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
-            const isInProgress = task.status === 'in_progress'
-            const isOverdue = task.dueDate && new Date(task.dueDate) < today
-            return isDueToday || isInProgress || isOverdue
-          }).slice(0, 5))
-          
-          setTomorrowsTasks(defaultTasks.filter(task => {
-            if (task.status === 'done') return false
-            const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
-            const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
-            return isDueTomorrow || (isHighPriority && !task.dueDate)
-          }).slice(0, 5))
+          // No data available
+          setTodaysTasks([])
+          setTomorrowsTasks([])
         }
       } catch (error) {
         console.error('Error fetching tasks:', error)
-        // Use fallback mock data on error
-        const today = new Date()
-        setTodaysTasks(defaultTasks.filter(task => {
-          if (task.status === 'done') return false
-          const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
-          const isInProgress = task.status === 'in_progress'
-          const isOverdue = task.dueDate && new Date(task.dueDate) < today
-          return isDueToday || isInProgress || isOverdue
-        }).slice(0, 5))
+        // No data available
+        setTodaysTasks([])
         setTomorrowsTasks([])
       } finally {
         setLoading(false)

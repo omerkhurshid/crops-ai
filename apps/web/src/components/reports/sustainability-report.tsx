@@ -92,79 +92,17 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        setData(getMockSustainabilityData());
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching sustainability data:', error);
-      setData(getMockSustainabilityData());
+      setData(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const getMockSustainabilityData = (): SustainabilityData => ({
-    overview: {
-      sustainabilityScore: 87.5,
-      carbonFootprint: -12.3,
-      carbonReduction: 18.7,
-      waterEfficiency: 92.1,
-      soilHealth: 84.2,
-      biodiversityIndex: 78.9,
-      renewableEnergy: 45.3,
-      wasteReduction: 76.8
-    },
-    environmental: {
-      waterUsage: {
-        total: 125000,
-        perAcre: 1180,
-        efficiency: 92.1,
-        savings: 15600
-      },
-      carbon: {
-        emissions: 45.2,
-        sequestration: 67.8,
-        netEmissions: -22.6,
-        offsetTarget: 30.0
-      },
-      soil: {
-        organicMatter: 4.8,
-        erosionRate: 0.3,
-        compaction: 15.2,
-        phBalance: 6.7
-      }
-    },
-    practices: {
-      implemented: [
-        { name: 'Cover Cropping', category: 'Soil Health', impact: 85, status: 'active', description: 'Year-round soil cover with nitrogen-fixing legumes' },
-        { name: 'Precision Irrigation', category: 'Water Conservation', impact: 78, status: 'active', description: 'Smart irrigation system with soil moisture sensors' },
-        { name: 'Integrated Pest Management', category: 'Chemical Reduction', impact: 72, status: 'active', description: 'Biological pest control reducing pesticide use by 45%' },
-        { name: 'No-Till Farming', category: 'Carbon Sequestration', impact: 89, status: 'active', description: 'Minimal soil disturbance preserving soil structure' },
-        { name: 'Crop Rotation', category: 'Biodiversity', impact: 68, status: 'active', description: '4-year rotation cycle enhancing soil nutrients' },
-        { name: 'Solar Energy System', category: 'Renewable Energy', impact: 65, status: 'completed', description: '50kW solar array powering farm operations' }
-      ],
-      recommendations: [
-        { practice: 'Agroforestry Integration', potentialImpact: 92, priority: 'high', timeline: '6-12 months' },
-        { practice: 'Biogas Production', potentialImpact: 78, priority: 'medium', timeline: '12-18 months' },
-        { practice: 'Pollinator Habitat Creation', potentialImpact: 71, priority: 'medium', timeline: '3-6 months' },
-        { practice: 'Composting System', potentialImpact: 65, priority: 'low', timeline: '6-9 months' }
-      ]
-    },
-    certifications: {
-      current: [
-        { name: 'USDA Organic', expiry: '2025-08-15', status: 'Active' },
-        { name: 'Carbon Trust Standard', expiry: '2024-12-31', status: 'Renewal Needed' }
-      ],
-      eligible: [
-        { name: 'Regenerative Organic Certified', requirements: 'Enhanced soil health practices', benefit: 'Premium pricing +15%' },
-        { name: 'Rainforest Alliance', requirements: 'Biodiversity conservation', benefit: 'Market access expansion' }
-      ]
-    },
-    benchmarks: {
-      regional: { score: 87.5, rank: 'Top 15%' },
-      national: { score: 87.5, percentile: 88 },
-      industry: { score: 87.5, rating: 'Excellent' }
-    }
-  });
+  // Removed mock data function - only show real data from API
 
   const generateReport = async () => {
     setGenerating(true);

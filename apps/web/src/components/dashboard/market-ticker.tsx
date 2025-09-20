@@ -35,29 +35,17 @@ export function MarketTicker({ className }: MarketTickerProps) {
             }))
             setPrices(transformedPrices)
           } else {
-            // Use fallback data with farmer-friendly names
-            setPrices([
-              { commodity: 'Corn', price: 4.82, change: 2.3, unit: 'bu' },
-              { commodity: 'Soybeans', price: 11.20, change: -0.7, unit: 'bu' },
-              { commodity: 'Wheat', price: 5.45, change: 1.2, unit: 'bu' },
-            ])
+            // No data available
+            setPrices([])
           }
         } else {
-          // Use fallback data
-          setPrices([
-            { commodity: 'Corn', price: 4.82, change: 2.3, unit: 'bu' },
-            { commodity: 'Soybeans', price: 11.20, change: -0.7, unit: 'bu' },
-            { commodity: 'Wheat', price: 5.45, change: 1.2, unit: 'bu' },
-          ])
+          // No data available
+          setPrices([])
         }
       } catch (error) {
         console.error('Failed to fetch market prices:', error)
-        // Use fallback data
-        setPrices([
-          { commodity: 'Corn', price: 4.82, change: 2.3, unit: 'bu' },
-          { commodity: 'Soybeans', price: 11.20, change: -0.7, unit: 'bu' },
-          { commodity: 'Wheat', price: 5.45, change: 1.2, unit: 'bu' },
-        ])
+        // No data available
+        setPrices([])
       } finally {
         setLoading(false)
       }
@@ -131,11 +119,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
 // Mobile-optimized version
 export function MobileMarketTicker({ className }: MarketTickerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [prices, setPrices] = useState<MarketPrice[]>([
-    { commodity: 'Corn', price: 4.82, change: 2.3, unit: 'bu' },
-    { commodity: 'Soybeans', price: 11.20, change: -0.7, unit: 'bu' },
-    { commodity: 'Wheat', price: 5.45, change: 1.2, unit: 'bu' },
-  ])
+  const [prices, setPrices] = useState<MarketPrice[]>([])
 
   useEffect(() => {
     async function fetchPrices() {

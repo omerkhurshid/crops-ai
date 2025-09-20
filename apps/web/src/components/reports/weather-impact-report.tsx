@@ -78,11 +78,11 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        setData(getMockWeatherData());
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching weather impact data:', error);
-      setData(getMockWeatherData());
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -119,74 +119,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
     }
   };
 
-  const getMockWeatherData = (): WeatherImpactData => ({
-    summary: {
-      overallImpact: 'positive',
-      impactScore: 78,
-      criticalEvents: 2,
-      avgTemperature: 22.5,
-      totalRainfall: 485,
-      stressDays: 12
-    },
-    impacts: {
-      temperature: {
-        effect: 'beneficial',
-        score: 85,
-        details: 'Optimal temperature range maintained for 85% of growing season'
-      },
-      precipitation: {
-        effect: 'neutral',
-        score: 72,
-        details: 'Above average rainfall with good distribution throughout season'
-      },
-      humidity: {
-        effect: 'beneficial',
-        score: 80,
-        details: 'Humidity levels favorable for crop development with minimal disease pressure'
-      },
-      wind: {
-        effect: 'neutral',
-        score: 68,
-        details: 'Moderate wind speeds, occasional high winds during storm events'
-      }
-    },
-    events: [
-      {
-        date: '2024-06-15',
-        type: 'drought',
-        severity: 'medium',
-        impact: '2-week dry period during critical growth phase',
-        yieldEffect: -8.5
-      },
-      {
-        date: '2024-08-03',
-        type: 'storm',
-        severity: 'low',
-        impact: 'Heavy rainfall and wind, minimal crop damage',
-        yieldEffect: -2.1
-      }
-    ],
-    recommendations: [
-      {
-        priority: 'high',
-        action: 'Install supplemental irrigation for drought resilience',
-        benefit: 'Reduce yield risk by 15-20% during dry periods',
-        timeframe: 'Before next growing season'
-      },
-      {
-        priority: 'medium',
-        action: 'Implement windbreaks on exposed field edges',
-        benefit: 'Protect crops from wind damage and reduce evaporation',
-        timeframe: 'Next 2-3 years'
-      },
-      {
-        priority: 'low',
-        action: 'Consider heat-tolerant varieties for changing climate',
-        benefit: 'Maintain yields under increasing temperature stress',
-        timeframe: 'Next 3-5 years'
-      }
-    ]
-  });
+  // Removed mock data function - only show real data from API
 
   const getImpactColor = (impact: string) => {
     switch (impact) {

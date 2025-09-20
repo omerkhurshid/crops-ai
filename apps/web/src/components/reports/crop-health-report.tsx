@@ -77,12 +77,11 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        // Use demo data
-        setData(getMockHealthData());
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching health data:', error);
-      setData(getMockHealthData());
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -119,75 +118,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
     }
   };
 
-  const getMockHealthData = (): CropHealthData => ({
-    summary: {
-      overallHealth: 84,
-      avgNDVI: 0.78,
-      stressedArea: 12,
-      healthyArea: 88,
-      improvementTrend: 5.2
-    },
-    fieldAnalysis: [
-      {
-        fieldId: '1',
-        fieldName: 'North Field',
-        cropType: 'Corn',
-        healthScore: 92,
-        ndvi: 0.85,
-        stressFactors: [],
-        recommendations: ['Continue current management practices', 'Monitor for late-season stress']
-      },
-      {
-        fieldId: '2',
-        fieldName: 'South Field',
-        cropType: 'Soybeans',
-        healthScore: 76,
-        ndvi: 0.71,
-        stressFactors: [
-          { type: 'drought', severity: 3, affected_area: 15 }
-        ],
-        recommendations: ['Increase irrigation frequency', 'Apply foliar nutrients']
-      },
-      {
-        fieldId: '3',
-        fieldName: 'West Field',
-        cropType: 'Wheat',
-        healthScore: 89,
-        ndvi: 0.82,
-        stressFactors: [
-          { type: 'nutrient', severity: 2, affected_area: 8 }
-        ],
-        recommendations: ['Apply nitrogen in stressed areas']
-      }
-    ],
-    trends: {
-      healthHistory: [
-        { date: '2024-08-01', avgHealth: 79, ndvi: 0.75 },
-        { date: '2024-08-15', avgHealth: 82, ndvi: 0.77 },
-        { date: '2024-09-01', avgHealth: 84, ndvi: 0.78 }
-      ],
-      seasonalPattern: {
-        spring: 75,
-        summer: 88,
-        fall: 82,
-        winter: 65
-      }
-    },
-    alerts: [
-      {
-        level: 'medium',
-        message: 'South Field showing drought stress in northeast corner',
-        fieldId: '2',
-        actionRequired: true
-      },
-      {
-        level: 'low',
-        message: 'West Field nitrogen levels slightly below optimal',
-        fieldId: '3',
-        actionRequired: false
-      }
-    ]
-  });
+  // Removed mock data function - only show real data from API
 
   const getStressFactorIcon = (type: string) => {
     switch (type) {

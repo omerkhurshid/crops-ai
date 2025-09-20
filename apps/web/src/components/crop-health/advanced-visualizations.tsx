@@ -73,86 +73,17 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
         const result = await response.json();
         setData(result.data);
       } else {
-        setData(getMockVisualizationData());
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching visualization data:', error);
-      setData(getMockVisualizationData());
+      setData(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const getMockVisualizationData = (): VisualizationData => ({
-    ndviTrends: [
-      { date: '2024-05-01', fieldId: '1', fieldName: 'North Field', ndvi: 0.65, evi: 0.52, savi: 0.58 },
-      { date: '2024-06-01', fieldId: '1', fieldName: 'North Field', ndvi: 0.73, evi: 0.61, savi: 0.67 },
-      { date: '2024-07-01', fieldId: '1', fieldName: 'North Field', ndvi: 0.82, evi: 0.68, savi: 0.75 },
-      { date: '2024-08-01', fieldId: '1', fieldName: 'North Field', ndvi: 0.79, evi: 0.65, savi: 0.72 },
-      { date: '2024-05-01', fieldId: '2', fieldName: 'South Field', ndvi: 0.62, evi: 0.49, savi: 0.55 },
-      { date: '2024-06-01', fieldId: '2', fieldName: 'South Field', ndvi: 0.71, evi: 0.58, savi: 0.64 },
-      { date: '2024-07-01', fieldId: '2', fieldName: 'South Field', ndvi: 0.75, evi: 0.62, savi: 0.68 },
-      { date: '2024-08-01', fieldId: '2', fieldName: 'South Field', ndvi: 0.78, evi: 0.64, savi: 0.71 }
-    ],
-    stressHeatmap: [
-      {
-        fieldId: '1',
-        fieldName: 'North Field',
-        zones: [
-          { id: 'z1', coordinates: [0.2, 0.3], stressLevel: 15, stressType: 'drought', severity: 'low' },
-          { id: 'z2', coordinates: [0.7, 0.8], stressLevel: 35, stressType: 'nutrient', severity: 'medium' },
-          { id: 'z3', coordinates: [0.5, 0.1], stressLevel: 8, stressType: 'disease', severity: 'low' }
-        ]
-      }
-    ],
-    seasonalPatterns: {
-      spring: { avgNdvi: 0.68, stressEvents: 2 },
-      summer: { avgNdvi: 0.81, stressEvents: 1 },
-      fall: { avgNdvi: 0.72, stressEvents: 3 },
-      winter: { avgNdvi: 0.35, stressEvents: 0 }
-    },
-    comparisonData: {
-      thisYear: [
-        { month: 'May', health: 72 },
-        { month: 'Jun', health: 81 },
-        { month: 'Jul', health: 87 },
-        { month: 'Aug', health: 85 }
-      ],
-      lastYear: [
-        { month: 'May', health: 68 },
-        { month: 'Jun', health: 76 },
-        { month: 'Jul', health: 82 },
-        { month: 'Aug', health: 79 }
-      ],
-      benchmark: 78
-    },
-    alertHistory: [
-      {
-        date: '2024-08-10',
-        type: 'stress_detected',
-        severity: 'medium',
-        field: 'North Field',
-        message: 'Nutrient deficiency detected in central zone',
-        resolved: true
-      },
-      {
-        date: '2024-07-25',
-        type: 'health_decline',
-        severity: 'low',
-        field: 'South Field',
-        message: 'NDVI declined by 5% in northwest section',
-        resolved: true
-      },
-      {
-        date: '2024-07-15',
-        type: 'improvement',
-        severity: 'low',
-        field: 'North Field',
-        message: 'Health improvement following irrigation',
-        resolved: true
-      }
-    ]
-  });
+  // Removed mock data function - only show real data from API
 
   const getStressColor = (severity: string) => {
     switch (severity) {

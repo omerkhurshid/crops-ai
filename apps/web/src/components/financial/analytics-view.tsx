@@ -99,17 +99,18 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        setData(getMockAnalyticsData());
+        setData(null);
       }
     } catch (error) {
       console.error('Error fetching analytics data:', error);
-      setData(getMockAnalyticsData());
+      setData(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const getMockAnalyticsData = (): AnalyticsData => ({
+  // Removed mock data function - only show real data
+  /*const getMockAnalyticsData = (): AnalyticsData => ({
     profitability: {
       byField: [
         {
@@ -221,7 +222,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
         action: 'Consider automation or efficiency improvements'
       }
     ]
-  });
+  });*/
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

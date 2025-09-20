@@ -97,7 +97,11 @@ export function MorningBriefing({
     const hour = new Date().getHours()
     const firstName = userName ? userName.split(' ')[0] : ''
     const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-    return firstName ? `${timeGreeting}, ${firstName}` : timeGreeting
+    
+    // Debug logging to see what's happening
+    console.log('MorningBriefing Debug:', { userName, firstName, timeGreeting })
+    
+    return firstName ? `${timeGreeting}, ${firstName}!` : `${timeGreeting}!`
   }
 
   const getHealthExplanation = (health: number) => {

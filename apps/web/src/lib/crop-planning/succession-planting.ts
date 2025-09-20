@@ -328,7 +328,7 @@ function calculateResourceRequirements(
     totalSeeds,
     seedsPerPlanting,
     laborHours: Math.ceil(laborHours),
-    irrigationSchedule: [...new Set(irrigationSchedule.map(d => d.toDateString()))]
+    irrigationSchedule: Array.from(new Set(irrigationSchedule.map(d => d.toDateString())))
       .map(d => new Date(d))
       .sort((a, b) => a.getTime() - b.getTime())
   }

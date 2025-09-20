@@ -34,43 +34,40 @@ interface TodaysTasksSummaryProps {
   farmId: string
 }
 
-// Mock data matching the task board structure
-const mockTasks: Task[] = [
+// Default tasks to show when no real tasks are available
+const defaultTasks: Task[] = [
   {
-    id: '4',
-    title: 'Apply Fertilizer - South Field',
-    description: 'Apply nitrogen fertilizer to south field corn. Rate: 150 lbs/acre.',
+    id: 'default-1',
+    title: 'Review Weather Forecast',
+    description: 'Check 7-day weather forecast for optimal field operations timing.',
     status: 'todo',
-    priority: 'urgent',
-    category: 'crop',
-    assignedTo: 'john',
-    assignedToName: 'John Smith',
-    dueDate: '2024-04-13',
-    estimatedHours: 8
-  },
-  {
-    id: '1',
-    title: 'Plant Corn in North Field',
-    description: 'Plant 500 acres of corn in the north field. Weather window looks optimal for next 3 days.',
-    status: 'todo',
-    priority: 'high',
-    category: 'crop',
-    assignedTo: 'john',
-    assignedToName: 'John Smith',
-    dueDate: '2024-04-15',
-    estimatedHours: 16
-  },
-  {
-    id: '2',
-    title: 'Check Cattle Health',
-    description: 'Weekly health check for Herd A. Look for signs of respiratory issues.',
-    status: 'in_progress',
     priority: 'medium',
-    category: 'livestock',
-    assignedTo: 'sarah',
-    assignedToName: 'Sarah Johnson',
-    dueDate: '2024-04-12',
-    estimatedHours: 4
+    category: 'general',
+    assignedToName: 'Farm Manager',
+    dueDate: new Date().toISOString().split('T')[0], // Today
+    estimatedHours: 1
+  },
+  {
+    id: 'default-2',
+    title: 'Field Inspection Walk',
+    description: 'Visual inspection of main fields for any emerging issues or opportunities.',
+    status: 'todo',
+    priority: 'medium',
+    category: 'crop',
+    assignedToName: 'Farm Manager',
+    dueDate: new Date().toISOString().split('T')[0], // Today
+    estimatedHours: 2
+  },
+  {
+    id: 'default-3',
+    title: 'Equipment Maintenance Check',
+    description: 'Routine inspection and maintenance of key farm equipment.',
+    status: 'todo',
+    priority: 'low',
+    category: 'equipment',
+    assignedToName: 'Farm Manager',
+    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Tomorrow
+    estimatedHours: 3
   }
 ]
 
@@ -163,7 +160,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
           const tomorrow = new Date(today)
           tomorrow.setDate(tomorrow.getDate() + 1)
           
-          setTodaysTasks(mockTasks.filter(task => {
+          setTodaysTasks(defaultTasks.filter(task => {
             if (task.status === 'done') return false
             const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
             const isInProgress = task.status === 'in_progress'
@@ -171,7 +168,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
             return isDueToday || isInProgress || isOverdue
           }).slice(0, 5))
           
-          setTomorrowsTasks(mockTasks.filter(task => {
+          setTomorrowsTasks(defaultTasks.filter(task => {
             if (task.status === 'done') return false
             const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
             const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
@@ -182,7 +179,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
         console.error('Error fetching tasks:', error)
         // Use fallback mock data on error
         const today = new Date()
-        setTodaysTasks(mockTasks.filter(task => {
+        setTodaysTasks(defaultTasks.filter(task => {
           if (task.status === 'done') return false
           const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
           const isInProgress = task.status === 'in_progress'

@@ -173,7 +173,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         }).length
         
         // Identify fields needing attention based on real satellite data
-        const fieldsNeedingAttention = []
+        const fieldsNeedingAttention: string[] = []
         // Note: Real field stress analysis will be handled by satellite service
         // Removed placeholder random data generation
         

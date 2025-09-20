@@ -119,7 +119,7 @@ function DashboardContent({
           current: {
             temp: 75,
             condition: "Partly Cloudy",
-            icon: "partly-cloudy"
+            icon: "cloud"
           },
           today: {
             high: 82,
@@ -152,7 +152,7 @@ function DashboardContent({
         fieldsNeedingAttention={[]}
         livestockCount={livestock?.length || 0}
         livestockHealthStatus="good"
-        lastSatelliteUpdate={lastUpdated}
+        lastSatelliteUpdate={lastUpdated || undefined}
       />
 
       {/* Market Ticker */}

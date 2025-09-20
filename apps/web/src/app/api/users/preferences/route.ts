@@ -1,9 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { getCurrentUser } from '../../../../lib/auth/session';
 import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
-import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
+import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../lib/api/middleware';
 
 const preferencesSchema = z.object({
   currency: z.string().optional(),
@@ -14,13 +13,10 @@ const preferencesSchema = z.object({
 });
 
 // GET /api/users/preferences
-export const GET = apiMiddleware.basic(
-  withMethods(['GET'], async (request: NextRequest) => {
+export const GET = apiMiddleware.protected(
+  withMethods(['GET'], async (request: AuthenticatedRequest) => {
     try {
-      const user = await getCurrentUser();
-      if (!user) {
-        throw new ValidationError('Authentication required');
-      }
+      const user = request.user;
 
       // Get user preferences from database
       const userPreferences = await prisma.user.findUnique({
@@ -56,13 +52,10 @@ export const GET = apiMiddleware.basic(
 );
 
 // PUT /api/users/preferences
-export const PUT = apiMiddleware.basic(
-  withMethods(['PUT'], async (request: NextRequest) => {
+export const PUT = apiMiddleware.protected(
+  withMethods(['PUT'], async (request: AuthenticatedRequest) => {
     try {
-      const user = await getCurrentUser();
-      if (!user) {
-        throw new ValidationError('Authentication required');
-      }
+      const user = request.user;
 
       const body = await request.json();
       const validation = preferencesSchema.safeParse(body);

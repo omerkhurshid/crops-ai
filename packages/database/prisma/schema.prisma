@@ -56,11 +56,26 @@ model User {
   updatedAt       DateTime @updatedAt
 
   // Relations
-  ownedFarms    Farm[]
-  managedFarms  FarmManager[]
-  weatherAlerts WeatherAlert[]
+  ownedFarms          Farm[]
+  managedFarms        FarmManager[]
+  weatherAlerts       WeatherAlert[]
+  verificationTokens  VerificationToken[]
 
   @@map("users")
+}
+
+model VerificationToken {
+  id         String   @id @default(cuid())
+  identifier String   // email for verification, etc.
+  token      String   @unique
+  expires    DateTime
+  type       String   // email-verify, password-reset, etc.
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 enum FarmType {

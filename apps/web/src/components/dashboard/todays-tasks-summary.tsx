@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -116,30 +116,87 @@ const statusConfig = {
 }
 
 export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
-  const today = new Date()
-  const tomorrow = new Date(today)
-  tomorrow.setDate(tomorrow.getDate() + 1)
+  const [todaysTasks, setTodaysTasks] = useState<Task[]>([])
+  const [tomorrowsTasks, setTomorrowsTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
   
-  // Filter tasks for today
-  const todaysTasks = mockTasks.filter(task => {
-    if (task.status === 'done') return false
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch(`/api/tasks?farmId=${farmId}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success && data.data) {
+            const today = new Date()
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            
+            const tasks = ensureArray(data.data.tasks || data.data)
+            
+            // Filter tasks for today
+            const todayFiltered = tasks.filter((task: any) => {
+              if (task.status === 'completed') return false
+              
+              const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
+              const isInProgress = task.status === 'in_progress'
+              const isOverdue = task.dueDate && new Date(task.dueDate) < today
+              
+              return isDueToday || isInProgress || isOverdue
+            }).slice(0, 5)
+            
+            // Filter tasks for tomorrow
+            const tomorrowFiltered = tasks.filter((task: any) => {
+              if (task.status === 'completed') return false
+              
+              const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
+              const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
+              
+              return isDueTomorrow || (isHighPriority && !task.dueDate)
+            }).slice(0, 5)
+            
+            setTodaysTasks(todayFiltered)
+            setTomorrowsTasks(tomorrowFiltered)
+          }
+        } else {
+          // Use fallback mock data
+          const today = new Date()
+          const tomorrow = new Date(today)
+          tomorrow.setDate(tomorrow.getDate() + 1)
+          
+          setTodaysTasks(mockTasks.filter(task => {
+            if (task.status === 'done') return false
+            const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
+            const isInProgress = task.status === 'in_progress'
+            const isOverdue = task.dueDate && new Date(task.dueDate) < today
+            return isDueToday || isInProgress || isOverdue
+          }).slice(0, 5))
+          
+          setTomorrowsTasks(mockTasks.filter(task => {
+            if (task.status === 'done') return false
+            const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
+            const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
+            return isDueTomorrow || (isHighPriority && !task.dueDate)
+          }).slice(0, 5))
+        }
+      } catch (error) {
+        console.error('Error fetching tasks:', error)
+        // Use fallback mock data on error
+        const today = new Date()
+        setTodaysTasks(mockTasks.filter(task => {
+          if (task.status === 'done') return false
+          const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
+          const isInProgress = task.status === 'in_progress'
+          const isOverdue = task.dueDate && new Date(task.dueDate) < today
+          return isDueToday || isInProgress || isOverdue
+        }).slice(0, 5))
+        setTomorrowsTasks([])
+      } finally {
+        setLoading(false)
+      }
+    }
     
-    const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === today.toDateString()
-    const isInProgress = task.status === 'in_progress'
-    const isOverdue = task.dueDate && new Date(task.dueDate) < today
-    
-    return isDueToday || isInProgress || isOverdue
-  }).slice(0, 5)
-  
-  // Filter tasks for tomorrow
-  const tomorrowsTasks = mockTasks.filter(task => {
-    if (task.status === 'done') return false
-    
-    const isDueTomorrow = task.dueDate && new Date(task.dueDate).toDateString() === tomorrow.toDateString()
-    const isHighPriority = task.priority === 'urgent' || task.priority === 'high'
-    
-    return isDueTomorrow || (isHighPriority && !task.dueDate)
-  }).slice(0, 5)
+    fetchTasks()
+  }, [farmId])
 
   const getDaysUntilDue = (dueDate: string) => {
     const due = new Date(dueDate)

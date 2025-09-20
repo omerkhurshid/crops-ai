@@ -52,6 +52,7 @@ export class RealSatelliteService {
     }
     todayHighlights: string[]
     satelliteDataAvailable: boolean
+    lastSatelliteUpdate: Date | null
   }> {
     try {
       // Get farm fields (mock data for now - replace with actual database query)
@@ -67,6 +68,9 @@ export class RealSatelliteService {
       const stressedAreas = this.calculateStressedAreas(analyses, fields)
       const yieldForecast = await this.calculateYieldForecast(analyses, fields)
       const highlights = this.generateHighlights(analyses, fields)
+      
+      // Extract the most recent satellite timestamp from analyses
+      const latestSatelliteDate = this.extractLatestSatelliteDate(analyses)
 
       return {
         overallHealth: Math.round(overallHealth),
@@ -75,7 +79,8 @@ export class RealSatelliteService {
         stressTrend: -1, // Mock trend
         yieldForecast,
         todayHighlights: highlights,
-        satelliteDataAvailable: true
+        satelliteDataAvailable: true,
+        lastSatelliteUpdate: latestSatelliteDate
       }
     } catch (error) {
       console.error('Error fetching real satellite data:', error)
@@ -304,6 +309,21 @@ export class RealSatelliteService {
     return highlights.slice(0, 3) // Limit to 3 highlights
   }
 
+  private extractLatestSatelliteDate(analyses: SatelliteAnalysis[]): Date | null {
+    let latestDate: Date | null = null
+    
+    for (const analysis of analyses) {
+      if (analysis?.satelliteData?.ndvi?.date) {
+        const analysisDate = new Date(analysis.satelliteData.ndvi.date)
+        if (!latestDate || analysisDate > latestDate) {
+          latestDate = analysisDate
+        }
+      }
+    }
+    
+    return latestDate
+  }
+
   private async getFarmFields(farmId: string): Promise<FieldData[]> {
     // Mock farm fields - replace with actual database query
     return [
@@ -347,7 +367,8 @@ export class RealSatelliteService {
         'North field showing good growth patterns',
         'Weather conditions favorable for next 7 days'
       ],
-      satelliteDataAvailable: false
+      satelliteDataAvailable: false,
+      lastSatelliteUpdate: null
     }
   }
 }

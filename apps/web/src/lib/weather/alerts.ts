@@ -96,7 +96,7 @@ class WeatherAlertService {
   };
 
   /**
-   * Monitor weather conditions and generate alerts
+   * Monitor weather conditions and generate alerts using ML models first, then rule-based fallback
    */
   async monitorWeatherConditions(
     latitude: number,
@@ -105,7 +105,6 @@ class WeatherAlertService {
   ): Promise<WeatherAlert[]> {
     try {
       const thresholds = { ...this.DEFAULT_THRESHOLDS, ...customThresholds };
-      const alerts: WeatherAlert[] = [];
 
       // Get current and forecast data
       const [currentWeather, forecast, aggregatedData] = await Promise.all([
@@ -124,34 +123,287 @@ class WeatherAlertService {
         return [];
       }
 
-      // Check for different types of alerts
-      const frostAlert = this.checkFrostConditions(currentWeather, forecast, thresholds);
-      if (frostAlert) alerts.push(frostAlert);
-
-      const heatAlert = this.checkHeatConditions(currentWeather, forecast, thresholds);
-      if (heatAlert) alerts.push(heatAlert);
-
-      const windAlert = this.checkWindConditions(currentWeather, forecast, thresholds);
-      if (windAlert) alerts.push(windAlert);
-
-      const precipitationAlert = this.checkPrecipitationConditions(currentWeather, forecast, thresholds);
-      if (precipitationAlert) alerts.push(precipitationAlert);
-
-      if (aggregatedData) {
-        const droughtAlert = this.checkDroughtConditions(aggregatedData, thresholds);
-        if (droughtAlert) alerts.push(droughtAlert);
-
-        const fireRiskAlert = this.checkFireRiskConditions(currentWeather, aggregatedData);
-        if (fireRiskAlert) alerts.push(fireRiskAlert);
+      // Try to use ML model for alert prediction first
+      try {
+        const modelAlerts = await this.getMLModelAlerts(currentWeather, forecast, aggregatedData, thresholds);
+        if (modelAlerts && modelAlerts.length > 0) {
+          return modelAlerts.sort((a, b) => b.priority - a.priority);
+        }
+      } catch (error) {
+        console.log('ML model alert generation not available, using rule-based fallback:', error);
       }
 
-      // Sort alerts by priority
-      return alerts.sort((a, b) => b.priority - a.priority);
+      // Fallback to rule-based alert generation
+      return this.generateRuleBasedAlerts(currentWeather, forecast, aggregatedData, thresholds);
 
     } catch (error) {
       console.error('Error monitoring weather conditions:', error);
       return [];
     }
+  }
+
+  /**
+   * Generate alerts using ML model prediction
+   */
+  private async getMLModelAlerts(
+    currentWeather: CurrentWeather,
+    forecast: WeatherForecast[],
+    aggregatedData: any,
+    thresholds: AlertThresholds
+  ): Promise<WeatherAlert[]> {
+    const modelInput = {
+      current: {
+        temperature: currentWeather.temperature,
+        humidity: currentWeather.humidity,
+        windSpeed: currentWeather.windSpeed,
+        pressure: currentWeather.pressure,
+        cloudCover: currentWeather.cloudCover,
+        uvIndex: currentWeather.uvIndex,
+        visibility: currentWeather.visibility
+      },
+      forecast: forecast.slice(0, 5).map(f => ({
+        date: f.date,
+        temperature: f.temperature,
+        precipitationProbability: f.precipitationProbability,
+        windSpeed: f.windSpeed,
+        humidity: f.humidity,
+        condition: f.conditions?.[0]?.main || 'Clear'
+      })),
+      historical: aggregatedData ? {
+        dryDays: aggregatedData.agricultureMetrics?.dryDays || 0,
+        irrigationNeeded: aggregatedData.agricultureMetrics?.irrigationNeeded || false,
+        averageTemperature: aggregatedData.statistics?.temperature?.average || currentWeather.temperature,
+        totalPrecipitation: aggregatedData.statistics?.precipitation?.total || 0
+      } : null,
+      location: {
+        latitude: currentWeather.location.latitude,
+        longitude: currentWeather.location.longitude,
+        elevation: 0
+      },
+      thresholds: thresholds,
+      date: new Date().toISOString(),
+      season: this.getCurrentSeason()
+    };
+
+    const response = await fetch('/api/ml/weather-alerts/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        modelId: 'weather-alert-generator',
+        input: modelInput,
+        options: {
+          maxAlerts: 10,
+          confidenceThreshold: 0.6,
+          priorityFilter: 'all',
+          timeWindow: 72 // hours
+        }
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      if (data.success && data.prediction && data.prediction.alerts) {
+        // Transform model output to WeatherAlert format
+        return data.prediction.alerts.map((alert: any, index: number) => ({
+          id: alert.id || `ml-alert-${Date.now()}-${index}`,
+          alertType: this.normalizeAlertType(alert.alertType || alert.type),
+          severity: this.normalizeSeverity(alert.severity),
+          title: alert.title || this.generateAlertTitle(alert.alertType, alert.severity),
+          description: alert.description || alert.message || 'Weather alert generated by ML model',
+          startTime: alert.startTime || new Date().toISOString(),
+          endTime: alert.endTime || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          location: {
+            latitude: currentWeather.location.latitude,
+            longitude: currentWeather.location.longitude,
+            name: currentWeather.location.name
+          },
+          recommendations: Array.isArray(alert.recommendations) ? alert.recommendations : 
+                          alert.actions ? Array.isArray(alert.actions) ? alert.actions : [alert.actions] :
+                          this.getDefaultRecommendations(alert.alertType),
+          affectedAreas: alert.affectedAreas || [],
+          confidence: alert.confidence || 0.8,
+          isActive: alert.isActive !== undefined ? alert.isActive : true,
+          priority: alert.priority || this.calculatePriorityFromSeverity(alert.severity),
+          farmImpact: {
+            cropsAtRisk: alert.farmImpact?.cropsAtRisk || alert.cropsAtRisk || 
+                        this.identifyVulnerableCrops(alert.alertType),
+            estimatedDamage: alert.farmImpact?.estimatedDamage || alert.estimatedDamage || 
+                           this.estimateDamageFromSeverity(alert.severity),
+            urgencyLevel: alert.farmImpact?.urgencyLevel || alert.urgencyLevel || 
+                         this.calculateUrgencyFromSeverity(alert.severity)
+          },
+          actionRequired: {
+            immediate: alert.actionRequired?.immediate || alert.immediateActions || [],
+            shortTerm: alert.actionRequired?.shortTerm || alert.shortTermActions || [],
+            monitoring: alert.actionRequired?.monitoring || alert.monitoringActions || []
+          }
+        }));
+      }
+    }
+
+    return [];
+  }
+
+  /**
+   * Generate alerts using rule-based logic (fallback)
+   */
+  private generateRuleBasedAlerts(
+    currentWeather: CurrentWeather,
+    forecast: WeatherForecast[],
+    aggregatedData: any,
+    thresholds: AlertThresholds
+  ): WeatherAlert[] {
+    const alerts: WeatherAlert[] = [];
+
+    // Check for different types of alerts using existing logic
+    const frostAlert = this.checkFrostConditions(currentWeather, forecast, thresholds);
+    if (frostAlert) alerts.push(frostAlert);
+
+    const heatAlert = this.checkHeatConditions(currentWeather, forecast, thresholds);
+    if (heatAlert) alerts.push(heatAlert);
+
+    const windAlert = this.checkWindConditions(currentWeather, forecast, thresholds);
+    if (windAlert) alerts.push(windAlert);
+
+    const precipitationAlert = this.checkPrecipitationConditions(currentWeather, forecast, thresholds);
+    if (precipitationAlert) alerts.push(precipitationAlert);
+
+    if (aggregatedData) {
+      const droughtAlert = this.checkDroughtConditions(aggregatedData, thresholds);
+      if (droughtAlert) alerts.push(droughtAlert);
+
+      const fireRiskAlert = this.checkFireRiskConditions(currentWeather, aggregatedData);
+      if (fireRiskAlert) alerts.push(fireRiskAlert);
+    }
+
+    return alerts.sort((a, b) => b.priority - a.priority);
+  }
+
+  // Helper methods for ML model integration
+  private getCurrentSeason(): string {
+    const month = new Date().getMonth();
+    if (month >= 2 && month <= 4) return 'spring';
+    if (month >= 5 && month <= 7) return 'summer';
+    if (month >= 8 && month <= 10) return 'fall';
+    return 'winter';
+  }
+
+  private normalizeAlertType(type: string): 'frost' | 'storm' | 'drought' | 'heat' | 'wind' | 'hail' | 'flood' | 'fire_risk' {
+    const typeMap: Record<string, 'frost' | 'storm' | 'drought' | 'heat' | 'wind' | 'hail' | 'flood' | 'fire_risk'> = {
+      'freeze': 'frost',
+      'freezing': 'frost',
+      'cold': 'frost',
+      'temperature_low': 'frost',
+      'hot': 'heat',
+      'temperature_high': 'heat',
+      'high_temperature': 'heat',
+      'storm': 'storm',
+      'thunderstorm': 'storm',
+      'severe_weather': 'storm',
+      'precipitation': 'flood',
+      'heavy_rain': 'flood',
+      'flooding': 'flood',
+      'wind': 'wind',
+      'high_wind': 'wind',
+      'windy': 'wind',
+      'dry': 'drought',
+      'dry_conditions': 'drought',
+      'fire': 'fire_risk',
+      'wildfire': 'fire_risk'
+    };
+    
+    return typeMap[type.toLowerCase()] || 'storm';
+  }
+
+  private normalizeSeverity(severity: string): 'minor' | 'moderate' | 'severe' | 'extreme' {
+    const severityMap: Record<string, 'minor' | 'moderate' | 'severe' | 'extreme'> = {
+      'low': 'minor',
+      'light': 'minor',
+      'small': 'minor',
+      'medium': 'moderate',
+      'moderate': 'moderate',
+      'high': 'severe',
+      'strong': 'severe',
+      'severe': 'severe',
+      'extreme': 'extreme',
+      'critical': 'extreme',
+      'dangerous': 'extreme'
+    };
+    
+    return severityMap[severity.toLowerCase()] || 'moderate';
+  }
+
+  private generateAlertTitle(alertType: string, severity: string): string {
+    const typeNames = {
+      frost: 'Frost Warning',
+      heat: 'Heat Alert',
+      wind: 'Wind Advisory',
+      flood: 'Flooding Risk',
+      drought: 'Drought Conditions',
+      storm: 'Storm Warning',
+      fire_risk: 'Fire Danger',
+      hail: 'Hail Warning'
+    };
+    
+    const severityAdj = {
+      minor: 'Minor',
+      moderate: 'Moderate',
+      severe: 'Severe',
+      extreme: 'Extreme'
+    };
+
+    const typeName = typeNames[alertType as keyof typeof typeNames] || 'Weather Alert';
+    const severityName = severityAdj[severity as keyof typeof severityAdj] || '';
+    
+    return `${severityName} ${typeName}`.trim();
+  }
+
+  private calculatePriorityFromSeverity(severity: string): number {
+    const severityMap = {
+      'minor': 3,
+      'moderate': 5,
+      'severe': 8,
+      'extreme': 10
+    };
+    return severityMap[severity as keyof typeof severityMap] || 5;
+  }
+
+  private estimateDamageFromSeverity(severity: string): 'low' | 'medium' | 'high' | 'severe' {
+    const damageMap = {
+      'minor': 'low' as const,
+      'moderate': 'medium' as const,
+      'severe': 'high' as const,
+      'extreme': 'severe' as const
+    };
+    return damageMap[severity as keyof typeof damageMap] || 'medium';
+  }
+
+  private calculateUrgencyFromSeverity(severity: string): 'watch' | 'warning' | 'critical' {
+    const urgencyMap = {
+      'minor': 'watch' as const,
+      'moderate': 'watch' as const,
+      'severe': 'warning' as const,
+      'extreme': 'critical' as const
+    };
+    return urgencyMap[severity as keyof typeof urgencyMap] || 'watch';
+  }
+
+  private getDefaultRecommendations(alertType: string): string[] {
+    const defaultRecs = {
+      frost: ['Protect sensitive plants', 'Monitor overnight temperatures'],
+      heat: ['Increase irrigation', 'Provide shade for crops'],
+      wind: ['Secure equipment', 'Support tall plants'],
+      flood: ['Clear drainage', 'Move equipment to higher ground'],
+      drought: ['Conserve water', 'Prioritize irrigation'],
+      storm: ['Secure loose items', 'Prepare for damage assessment'],
+      fire_risk: ['Clear dry vegetation', 'Prepare firefighting equipment'],
+      hail: ['Protect crops if possible', 'Prepare for damage assessment']
+    };
+    
+    return defaultRecs[alertType as keyof typeof defaultRecs] || ['Monitor conditions closely'];
   }
 
   /**

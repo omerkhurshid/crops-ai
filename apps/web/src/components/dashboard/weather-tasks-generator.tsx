@@ -104,8 +104,8 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
 
       setWeatherData(weather)
       
-      // Generate tasks based on weather conditions
-      const generatedTasks = generateTasksFromWeather(weather, crops || [])
+      // Generate tasks based on weather conditions using analytical model
+      const generatedTasks = await generateTasksFromWeather(weather, crops || [])
       setTasks(generatedTasks)
       
     } catch (error) {
@@ -116,7 +116,93 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
     }
   }
 
-  const generateTasksFromWeather = (weather: WeatherData, cropsList: any[]): WeatherTask[] => {
+  const generateTasksFromWeather = async (weather: WeatherData, cropsList: any[]): Promise<WeatherTask[]> => {
+    try {
+      // Try to use the real analytical model first
+      const modelInput = {
+        weather: {
+          temperature: weather.temperature,
+          humidity: weather.humidity,
+          windSpeed: weather.windSpeed,
+          precipitation: weather.precipitation,
+          forecast: weather.forecast3Day
+        },
+        crops: cropsList.map(crop => ({
+          type: crop.cropType || crop.type || 'corn',
+          stage: crop.status || 'growing',
+          area: crop.area || 100,
+          plantingDate: crop.plantingDate,
+          expectedHarvestDate: crop.expectedHarvestDate
+        })),
+        date: new Date().toISOString(),
+        season: getSeason(),
+        location: {
+          latitude: farmData?.latitude || 41.8781,
+          longitude: farmData?.longitude || -87.6298
+        }
+      }
+
+      // Call the weather task prediction model
+      const response = await fetch('/api/ml/weather-tasks/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          modelId: 'weather-task-generator',
+          input: modelInput
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        
+        if (data.success && data.prediction) {
+          // Transform model output to our WeatherTask format
+          const modelTasks = data.prediction.tasks || []
+          
+          return modelTasks.map((task: any, index: number) => ({
+            id: task.id || `model-task-${index}`,
+            title: task.title || 'Model Generated Task',
+            description: task.description || task.details || '',
+            priority: task.priority || 'medium',
+            timeframe: task.timeframe || 'Today',
+            weatherTrigger: task.weatherTrigger || task.trigger || formatWeatherConditions(weather),
+            category: task.category || 'monitoring',
+            estimatedTime: task.estimatedTime || task.duration || '1-2 hours',
+            tools: task.tools || task.equipment || [],
+            conditions: task.conditions || formatWeatherConditions(weather),
+            farmImpact: task.farmImpact || task.impact || 'Optimize farm operations',
+            isRecommended: task.isRecommended !== undefined ? task.isRecommended : task.confidence > 0.7
+          })).sort((a: WeatherTask, b: WeatherTask) => {
+            const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 }
+            return priorityOrder[b.priority] - priorityOrder[a.priority]
+          })
+        }
+      } else {
+        console.log('Weather task model API not available, using fallback logic')
+      }
+    } catch (error) {
+      console.error('Error calling weather task model:', error)
+    }
+
+    // Fallback to original logic if model is not available
+    return generateFallbackTasks(weather, cropsList)
+  }
+
+  const getSeason = (): string => {
+    const month = new Date().getMonth()
+    if (month >= 2 && month <= 4) return 'spring'
+    if (month >= 5 && month <= 7) return 'summer'
+    if (month >= 8 && month <= 10) return 'fall'
+    return 'winter'
+  }
+
+  const formatWeatherConditions = (weather: WeatherData): string => {
+    return `${weather.temperature}°F, ${weather.humidity}% humidity, ${weather.windSpeed}mph wind, ${weather.precipitation}in rain`
+  }
+
+  const generateFallbackTasks = (weather: WeatherData, cropsList: any[]): WeatherTask[] => {
     const tasks: WeatherTask[] = []
     const today = new Date()
     

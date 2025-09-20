@@ -120,8 +120,10 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         const farmName = passedFarmData?.name || "Your Farm"
         const totalAcres = passedFarmData?.totalArea || 0
         
-        // Fetch real weather data
-        const weatherResponse = await fetch('/api/weather/current')
+        // Fetch real weather data with coordinates if available
+        const lat = passedFarmData?.latitude || 41.8781
+        const lon = passedFarmData?.longitude || -87.6298
+        const weatherResponse = await fetch(`/api/weather/current?latitude=${lat}&longitude=${lon}`)
         let currentWeather = {
           temperature: 75,
           condition: "Partly Cloudy",
@@ -130,13 +132,14 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         }
         
         if (weatherResponse.ok) {
-          const weather = await weatherResponse.json()
+          const result = await weatherResponse.json()
+          const weather = result.weather || result // Handle different response formats
           setWeatherData(weather)
           currentWeather = {
-            temperature: Math.round(weather.main?.temp || 75),
-            condition: weather.weather?.[0]?.description || "Clear",
-            precipitation: weather.rain?.['1h'] || 0,
-            humidity: weather.main?.humidity || 65
+            temperature: Math.round(weather.temperature || weather.main?.temp || 75),
+            condition: weather.conditions?.[0]?.description || weather.weather?.[0]?.description || "Clear",
+            precipitation: weather.precipitation?.rain1h || weather.rain?.['1h'] || 0,
+            humidity: weather.humidity || weather.main?.humidity || 65
           }
         }
         
@@ -181,8 +184,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         const livestockCount = ensureArray(passedLivestock).reduce((sum, l) => sum + (l.count || 1), 0)
         const livestockHealthStatus = livestockCount > 0 ? 'good' : 'good' // Mock for now
         
-        // Set state values
-        setLastSatelliteUpdate(new Date())
+        // Set state values - use real satellite timestamp from service
+        setLastSatelliteUpdate(satelliteData.lastSatelliteUpdate || new Date()) // Use real timestamp or fallback to current time
         setPlantingsCount(plantingsCount)
         setGrowingCount(growingCount)
         setReadyToHarvestCount(readyToHarvestCount)
@@ -404,12 +407,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
       />
 
 
-      {/* Smart Recommendations */}
-      <RecommendationsWidget 
-        farmId={farmId} 
-        limit={4}
-        className="hover:shadow-soft transition-all duration-300"
-      />
 
 
       {/* Detailed View (Progressive Disclosure) */}

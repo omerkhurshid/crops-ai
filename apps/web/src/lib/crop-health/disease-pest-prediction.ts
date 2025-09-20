@@ -128,7 +128,7 @@ class DiseasePestPredictionService {
   }
 
   /**
-   * Analyze field for disease and pest risks
+   * Analyze field for disease and pest risks using ML models first, then rule-based fallback
    */
   async analyzeFieldRisks(context: FieldAnalysisContext): Promise<{
     diseases: DiseasePrediction[]
@@ -140,36 +140,19 @@ class DiseasePestPredictionService {
     try {
       Logger.info(`Analyzing disease/pest risks for field ${context.fieldId}`)
 
-      // Get crop-specific diseases and pests
-      const relevantDiseases = this.getRelevantDiseases(context.cropType)
-      const relevantPests = this.getRelevantPests(context.cropType)
-
-      // Calculate disease predictions
-      const diseases = await Promise.all(
-        relevantDiseases.map(disease => this.predictDiseaseRisk(disease, context))
-      )
-
-      // Calculate pest predictions
-      const pests = await Promise.all(
-        relevantPests.map(pest => this.predictPestRisk(pest, context))
-      )
-
-      // Calculate overall risk score
-      const overallRiskScore = this.calculateOverallRisk(diseases, pests)
-
-      // Generate critical actions
-      const criticalActions = this.generateCriticalActions(diseases, pests)
-      
-      // Generate monitoring recommendations
-      const monitoringRecommendations = this.generateMonitoringRecommendations(diseases, pests, context)
-
-      return {
-        diseases: diseases.sort((a, b) => b.riskScore - a.riskScore),
-        pests: pests.sort((a, b) => b.riskScore - a.riskScore),
-        overallRiskScore,
-        criticalActions,
-        monitoringRecommendations
+      // Try ML model prediction first
+      try {
+        const mlResult = await this.getMLModelPredictions(context)
+        if (mlResult && (mlResult.diseases.length > 0 || mlResult.pests.length > 0)) {
+          Logger.info(`Using ML model predictions for field ${context.fieldId}`)
+          return mlResult
+        }
+      } catch (error) {
+        Logger.warn(`ML model prediction failed for field ${context.fieldId}, using rule-based fallback:`, error)
       }
+
+      // Fallback to rule-based analysis
+      return this.getRuleBasedPredictions(context)
 
     } catch (error) {
       Logger.error(`Error analyzing field risks for ${context.fieldId}:`, error)
@@ -181,6 +164,254 @@ class DiseasePestPredictionService {
         monitoringRecommendations: []
       }
     }
+  }
+
+  /**
+   * Get ML model predictions for diseases and pests
+   */
+  private async getMLModelPredictions(context: FieldAnalysisContext): Promise<{
+    diseases: DiseasePrediction[]
+    pests: PestPrediction[]
+    overallRiskScore: number
+    criticalActions: string[]
+    monitoringRecommendations: string[]
+  }> {
+    const modelInput = {
+      field: {
+        id: context.fieldId,
+        cropType: context.cropType,
+        plantingDate: context.plantingDate.toISOString(),
+        location: context.location
+      },
+      weather: {
+        current: context.currentWeather,
+        forecast: context.forecastWeather
+      },
+      satellite: {
+        ndvi: context.satelliteData.ndvi,
+        ndviTrend: context.satelliteData.ndviTrend,
+        stressLevel: context.satelliteData.stressLevel,
+        lastCapture: context.satelliteData.lastCapture.toISOString()
+      },
+      soil: context.soilConditions,
+      historical: {
+        outbreaks: context.historicalOutbreaks
+      },
+      season: this.getCurrentSeason(),
+      growthStage: this.calculateGrowthStage(context.plantingDate),
+      date: new Date().toISOString()
+    }
+
+    const response = await fetch('/api/ml/disease-pest/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        modelId: 'disease-pest-predictor',
+        input: modelInput,
+        options: {
+          includeDisease: true,
+          includePest: true,
+          confidenceThreshold: 0.6,
+          maxPredictions: 10,
+          timeHorizon: 14 // days
+        }
+      })
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      
+      if (data.success && data.prediction) {
+        const mlDiseases = this.transformMLDiseases(data.prediction.diseases || [], context)
+        const mlPests = this.transformMLPests(data.prediction.pests || [], context)
+        
+        return {
+          diseases: mlDiseases.sort((a, b) => b.riskScore - a.riskScore),
+          pests: mlPests.sort((a, b) => b.riskScore - a.riskScore),
+          overallRiskScore: data.prediction.overallRiskScore || this.calculateOverallRisk(mlDiseases, mlPests),
+          criticalActions: data.prediction.criticalActions || this.generateCriticalActions(mlDiseases, mlPests),
+          monitoringRecommendations: data.prediction.monitoringRecommendations || 
+            this.generateMonitoringRecommendations(mlDiseases, mlPests, context)
+        }
+      }
+    }
+
+    throw new Error('ML model prediction failed or returned invalid data')
+  }
+
+  /**
+   * Rule-based predictions (original logic as fallback)
+   */
+  private async getRuleBasedPredictions(context: FieldAnalysisContext): Promise<{
+    diseases: DiseasePrediction[]
+    pests: PestPrediction[]
+    overallRiskScore: number
+    criticalActions: string[]
+    monitoringRecommendations: string[]
+  }> {
+    // Get crop-specific diseases and pests
+    const relevantDiseases = this.getRelevantDiseases(context.cropType)
+    const relevantPests = this.getRelevantPests(context.cropType)
+
+    // Calculate disease predictions
+    const diseases = await Promise.all(
+      relevantDiseases.map(disease => this.predictDiseaseRisk(disease, context))
+    )
+
+    // Calculate pest predictions
+    const pests = await Promise.all(
+      relevantPests.map(pest => this.predictPestRisk(pest, context))
+    )
+
+    // Calculate overall risk score
+    const overallRiskScore = this.calculateOverallRisk(diseases, pests)
+
+    // Generate critical actions
+    const criticalActions = this.generateCriticalActions(diseases, pests)
+    
+    // Generate monitoring recommendations
+    const monitoringRecommendations = this.generateMonitoringRecommendations(diseases, pests, context)
+
+    return {
+      diseases: diseases.sort((a, b) => b.riskScore - a.riskScore),
+      pests: pests.sort((a, b) => b.riskScore - a.riskScore),
+      overallRiskScore,
+      criticalActions,
+      monitoringRecommendations
+    }
+  }
+
+  /**
+   * Transform ML model disease predictions to our format
+   */
+  private transformMLDiseases(mlDiseases: any[], context: FieldAnalysisContext): DiseasePrediction[] {
+    return mlDiseases.map((disease, index) => ({
+      diseaseId: disease.id || disease.diseaseId || `ml-disease-${index}`,
+      diseaseName: disease.name || disease.diseaseName || 'Unknown Disease',
+      commonName: disease.commonName || disease.name || 'Unknown',
+      cropTypes: disease.cropTypes || [context.cropType],
+      riskLevel: this.normalizeRiskLevel(disease.riskLevel || disease.risk),
+      riskScore: disease.riskScore || disease.score || Math.round((disease.confidence || 0.5) * 100),
+      confidence: Math.round((disease.confidence || 0.8) * 100),
+      peakRiskPeriod: {
+        start: disease.peakRiskPeriod?.start ? new Date(disease.peakRiskPeriod.start) : new Date(),
+        end: disease.peakRiskPeriod?.end ? new Date(disease.peakRiskPeriod.end) : 
+             new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+      },
+      symptoms: disease.symptoms || ['Monitor for disease symptoms'],
+      earlyWarningSignatures: disease.earlyWarningSignatures || {
+        ndvi_decline: 0.05,
+        temperature_range: [60, 85] as [number, number],
+        humidity_threshold: 80,
+        precipitation_pattern: 'moderate'
+      },
+      economicImpact: {
+        potentialYieldLoss: disease.economicImpact?.potentialYieldLoss || 
+                          Math.round((disease.riskScore || 50) / 5),
+        estimatedCostUSD: disease.economicImpact?.estimatedCostUSD || 
+                         Math.round((disease.riskScore || 50) * 2),
+        timeToAction: disease.economicImpact?.timeToAction || 
+                     (disease.riskScore > 70 ? 3 : disease.riskScore > 50 ? 7 : 14)
+      },
+      recommendations: this.transformRecommendations(disease.recommendations, 'disease')
+    }))
+  }
+
+  /**
+   * Transform ML model pest predictions to our format
+   */
+  private transformMLPests(mlPests: any[], context: FieldAnalysisContext): PestPrediction[] {
+    return mlPests.map((pest, index) => ({
+      pestId: pest.id || pest.pestId || `ml-pest-${index}`,
+      pestName: pest.name || pest.pestName || 'Unknown Pest',
+      commonName: pest.commonName || pest.name || 'Unknown',
+      cropTypes: pest.cropTypes || [context.cropType],
+      riskLevel: this.normalizeRiskLevel(pest.riskLevel || pest.risk),
+      riskScore: pest.riskScore || pest.score || Math.round((pest.confidence || 0.5) * 100),
+      confidence: Math.round((pest.confidence || 0.8) * 100),
+      lifecycleStage: pest.lifecycleStage || this.predictLifecycleStage(pest, context),
+      peakActivityPeriod: {
+        start: pest.peakActivityPeriod?.start ? new Date(pest.peakActivityPeriod.start) : new Date(),
+        end: pest.peakActivityPeriod?.end ? new Date(pest.peakActivityPeriod.end) : 
+             new Date(Date.now() + 21 * 24 * 60 * 60 * 1000)
+      },
+      detectionMethods: pest.detectionMethods || ['Visual scouting', 'Monitoring traps'],
+      economicImpact: {
+        potentialYieldLoss: pest.economicImpact?.potentialYieldLoss || 
+                          Math.round((pest.riskScore || 50) / 4),
+        estimatedCostUSD: pest.economicImpact?.estimatedCostUSD || 
+                         Math.round((pest.riskScore || 50) * 2.5),
+        timeToAction: pest.economicImpact?.timeToAction || 
+                     (pest.riskScore > 75 ? 2 : pest.riskScore > 50 ? 5 : 10)
+      },
+      recommendations: this.transformPestRecommendations(pest.recommendations)
+    }))
+  }
+
+  /**
+   * Helper methods for ML integration
+   */
+  private getCurrentSeason(): string {
+    const month = new Date().getMonth()
+    if (month >= 2 && month <= 4) return 'spring'
+    if (month >= 5 && month <= 7) return 'summer'
+    if (month >= 8 && month <= 10) return 'fall'
+    return 'winter'
+  }
+
+  private calculateGrowthStage(plantingDate: Date): string {
+    const daysFromPlanting = Math.floor((Date.now() - plantingDate.getTime()) / (1000 * 60 * 60 * 24))
+    
+    if (daysFromPlanting < 14) return 'emergence'
+    if (daysFromPlanting < 30) return 'vegetative_early'
+    if (daysFromPlanting < 60) return 'vegetative_late'
+    if (daysFromPlanting < 90) return 'reproductive'
+    if (daysFromPlanting < 120) return 'grain_filling'
+    return 'maturity'
+  }
+
+  private normalizeRiskLevel(level: string | number): 'very_low' | 'low' | 'moderate' | 'high' | 'severe' {
+    if (typeof level === 'number') {
+      return this.scoreToRiskLevel(level)
+    }
+    
+    const riskMap: Record<string, 'very_low' | 'low' | 'moderate' | 'high' | 'severe'> = {
+      'very_low': 'very_low',
+      'low': 'low',
+      'medium': 'moderate',
+      'moderate': 'moderate',
+      'high': 'high',
+      'severe': 'severe',
+      'critical': 'severe'
+    }
+    
+    return riskMap[level?.toLowerCase()] || 'moderate'
+  }
+
+  private transformRecommendations(recommendations: any[], type: 'disease' | 'pest'): any[] {
+    if (!Array.isArray(recommendations)) return []
+    
+    return recommendations.map(rec => ({
+      type: rec.type || 'cultural',
+      priority: rec.priority || 'preventive',
+      action: rec.action || rec.description || 'Monitor conditions',
+      timing: rec.timing || 'As needed',
+      estimatedCost: rec.estimatedCost || rec.cost || 15,
+      effectivenessRating: rec.effectivenessRating || rec.effectiveness || 70,
+      organicOptions: rec.organicOptions !== undefined ? rec.organicOptions : true,
+      resistanceRisk: rec.resistanceRisk || 'low'
+    }))
+  }
+
+  private transformPestRecommendations(recommendations: any[]): PestRecommendation[] {
+    const baseRecs = this.transformRecommendations(recommendations, 'pest')
+    
+    return baseRecs.map(rec => ({
+      ...rec,
+      targetLifecycleStage: rec.targetLifecycleStage || ['larva', 'adult']
+    }))
   }
 
   /**

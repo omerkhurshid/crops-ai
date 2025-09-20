@@ -14,19 +14,26 @@ export default async function SettingsPage() {
   }
 
   // Get full user data including preferences
-  const fullUser = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      currency: true,
-      landUnit: true,
-      temperatureUnit: true,
-      timezone: true,
-      language: true
-    }
-  })
+  let fullUser = null
+  try {
+    fullUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        currency: true,
+        landUnit: true,
+        temperatureUnit: true,
+        timezone: true,
+        language: true
+      }
+    })
+  } catch (error) {
+    console.error('Error fetching user preferences:', error)
+    // Use the basic user data as fallback
+    fullUser = user
+  }
 
   return (
     <DashboardLayout>

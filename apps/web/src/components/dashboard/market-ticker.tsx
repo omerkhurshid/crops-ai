@@ -113,7 +113,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
               ) : (
                 <TrendingDown className="h-3 w-3" />
               )}
-              {price.change > 0 ? '+' : ''}{price.change}%
+              {price.change > 0 ? '+' : ''}{price.change.toFixed(1)}%
             </span>
           </div>
         ))}
@@ -187,7 +187,7 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
           currentPrice.change > 0 ? 'text-green-600' : 'text-red-600'
         )}>
           {currentPrice.change > 0 ? '↑' : '↓'}
-          {Math.abs(currentPrice.change)}%
+          {Math.abs(currentPrice.change).toFixed(1)}%
         </span>
       </div>
       

@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { SettingsForm } from '../../components/settings/settings-form'
+import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,21 @@ export default async function SettingsPage() {
   if (!user) {
     redirect('/login')
   }
+
+  // Get full user data including preferences
+  const fullUser = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      currency: true,
+      landUnit: true,
+      temperatureUnit: true,
+      timezone: true,
+      language: true
+    }
+  })
 
   return (
     <DashboardLayout>
@@ -22,7 +38,7 @@ export default async function SettingsPage() {
           </p>
         </div>
 
-        <SettingsForm user={user} />
+        <SettingsForm user={fullUser || user} />
       </div>
     </DashboardLayout>
   )

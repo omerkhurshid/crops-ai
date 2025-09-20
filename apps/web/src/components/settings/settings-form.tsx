@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -26,6 +26,11 @@ interface SettingsFormProps {
     id: string
     name?: string | null
     email?: string | null
+    currency?: string | null
+    landUnit?: string | null
+    temperatureUnit?: string | null
+    timezone?: string | null
+    language?: string | null
   }
 }
 
@@ -38,12 +43,39 @@ export function SettingsForm({ user }: SettingsFormProps) {
     confirmPassword: ''
   })
   const [preferences, setPreferences] = useState<UserPreferences>({
-    currency: 'USD',
-    landUnit: 'hectares',
-    temperatureUnit: 'celsius',
-    timezone: 'UTC',
-    language: 'en'
+    currency: user.currency || 'USD',
+    landUnit: user.landUnit || 'hectares',
+    temperatureUnit: user.temperatureUnit || 'celsius',
+    timezone: user.timezone || 'UTC',
+    language: user.language || 'en'
   })
+
+  // Load user preferences on component mount
+  useEffect(() => {
+    const loadPreferences = async () => {
+      try {
+        const response = await fetch('/api/users/preferences')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success && data.data.preferences) {
+            setPreferences(data.data.preferences)
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load preferences:', error)
+        // Use user props as fallback
+        setPreferences({
+          currency: user.currency || 'USD',
+          landUnit: user.landUnit || 'hectares',
+          temperatureUnit: user.temperatureUnit || 'celsius',
+          timezone: user.timezone || 'UTC',
+          language: user.language || 'en'
+        })
+      }
+    }
+    
+    loadPreferences()
+  }, [user])
 
   const currencies = [
     { value: 'USD', label: 'US Dollar ($)', symbol: '$' },

@@ -18,9 +18,13 @@ import {
   ChevronRight,
   Circle,
   Scissors,
-  Eye
+  Eye,
+  RotateCcw
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
+import { CropInfo, CropFamily, CROP_DATABASE, getCropById, getRotationCompatibility, calculatePlantingWindow, generatePlantingRecommendations } from '../../lib/crop-planning/crop-knowledge'
+import { analyzeWeatherForPlanting, generateIrrigationSchedule } from '../../lib/crop-planning/weather-integration'
+import { SuccessionPlanning } from './succession-planting'
 
 interface CropPlanning {
   id: string
@@ -37,6 +41,9 @@ interface CropPlanning {
   yieldUnit: string
   status: 'planned' | 'planted' | 'growing' | 'harvesting' | 'completed'
   notes?: string
+  cropInfo?: CropInfo
+  weatherRecommendation?: any
+  rotationScore?: number
 }
 
 interface CropCalendarProps {
@@ -74,25 +81,52 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [plannings, setPlannings] = useState<CropPlanning[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedCropId, setSelectedCropId] = useState<string>('')
+  const [selectedFieldId, setSelectedFieldId] = useState<string>('')
+  const [plantingDate, setPlantingDate] = useState<string>('')
+  const [harvestDate, setHarvestDate] = useState<string>('')
+  const [quantity, setQuantity] = useState<string>('')
+  const [unit, setUnit] = useState<string>('acres')
+  const [variety, setVariety] = useState<string>('')
+  const [notes, setNotes] = useState<string>('')
+  const [weatherData, setWeatherData] = useState<any>(null)
+  const [availableFields, setAvailableFields] = useState<any[]>([])
+  const [activeTab, setActiveTab] = useState<'timeline' | 'succession'>('timeline')
 
-  // Fetch crop planning data from API
+  // Fetch crop planning data and related information from API
   useEffect(() => {
-    async function fetchPlannings() {
+    async function fetchData() {
       try {
-        const response = await fetch(`/api/crops?farmId=${farmId}&year=${currentYear}`)
-        if (response.ok) {
-          const data = await response.json()
-          // Transform API data to component format if needed
-          setPlannings(data)
+        // Fetch crop planning data
+        const cropsResponse = await fetch(`/api/crops?farmId=${farmId}&year=${currentYear}`)
+        if (cropsResponse.ok) {
+          const cropsData = await cropsResponse.json()
+          setPlannings(cropsData)
         }
+        
+        // Fetch available fields for the farm
+        const fieldsResponse = await fetch(`/api/farms?farmId=${farmId}`)
+        if (fieldsResponse.ok) {
+          const farmsData = await fieldsResponse.json()
+          const farm = Array.isArray(farmsData) ? farmsData.find(f => f.id === farmId) : farmsData
+          setAvailableFields(farm?.fields || [])
+        }
+        
+        // Fetch current weather data for recommendations
+        const weatherResponse = await fetch('/api/weather/current')
+        if (weatherResponse.ok) {
+          const weather = await weatherResponse.json()
+          setWeatherData(weather)
+        }
+        
       } catch (error) {
-        console.error('Failed to fetch crop planning data:', error)
+        console.error('Failed to fetch data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchPlannings()
+    fetchData()
   }, [farmId, currentYear])
 
   // Filter plannings by year
@@ -174,32 +208,35 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
         <div className="flex items-center gap-4">
           <h2 className="text-2xl font-semibold text-sage-800 flex items-center gap-2">
             <Calendar className="h-6 w-6 text-sage-600" />
-            Crop Timeline
+            Crop Planning
           </h2>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentYear(currentYear - 1)}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Badge variant="outline" className="px-4 py-2 bg-sage-100 text-sage-800 border-sage-300 font-semibold">
-              {currentYear} Season
-            </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentYear(currentYear + 1)}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+          {activeTab === 'timeline' && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentYear(currentYear - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Badge variant="outline" className="px-4 py-2 bg-sage-100 text-sage-800 border-sage-300 font-semibold">
+                {currentYear} Season
+              </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentYear(currentYear + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Select value={selectedCrop} onValueChange={setSelectedCrop}>
+          {activeTab === 'timeline' && (
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Select value={selectedCrop} onValueChange={setSelectedCrop}>
               <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="All Crops" />
               </SelectTrigger>
@@ -222,25 +259,58 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+            </div>
+          )}
 
           <div className="flex gap-2">
-            <Button className="bg-sage-600 hover:bg-sage-700 text-white rounded-lg flex-1 sm:flex-none">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Add Planting</span>
-              <span className="sm:hidden">Add</span>
-            </Button>
+            {activeTab === 'timeline' && (
+              <Button 
+                className="bg-sage-600 hover:bg-sage-700 text-white rounded-lg flex-1 sm:flex-none"
+                onClick={() => setShowAddForm(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Add Planting</span>
+                <span className="sm:hidden">Add</span>
+              </Button>
+            )}
 
-            <Button variant="outline" className="flex-1 sm:flex-none">
-              <Download className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Export</span>
-              <span className="sm:hidden">Export</span>
-            </Button>
+            {activeTab === 'timeline' && (
+              <Button variant="outline" className="flex-1 sm:flex-none">
+                <Download className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Export</span>
+                <span className="sm:hidden">Export</span>
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Main Calendar View */}
+      {/* Tab Navigation */}
+      <div className="flex space-x-1 bg-sage-100 p-1 rounded-lg w-fit">
+        <Button
+          variant={activeTab === 'timeline' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setActiveTab('timeline')}
+          className={activeTab === 'timeline' ? 'bg-white shadow-sm' : ''}
+        >
+          <Calendar className="h-4 w-4 mr-2" />
+          Timeline View
+        </Button>
+        <Button
+          variant={activeTab === 'succession' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setActiveTab('succession')}
+          className={activeTab === 'succession' ? 'bg-white shadow-sm' : ''}
+        >
+          <RotateCcw className="h-4 w-4 mr-2" />
+          Succession Planning
+        </Button>
+      </div>
+
+      {/* Conditional Content */}
+      {activeTab === 'timeline' ? (
+        <>
+          {/* Main Calendar View */}
       <ModernCard variant="floating">
         <ModernCardContent className="p-0">
           {/* Desktop View */}
@@ -473,6 +543,288 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
+
+      {/* Add Planting Form Modal */}
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <ModernCard variant="floating" className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <ModernCardHeader>
+              <ModernCardTitle className="text-lg">Add New Planting</ModernCardTitle>
+              <ModernCardDescription>
+                Plan a new crop for the {currentYear} season
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-sage-700 mb-1">
+                  Crop Type
+                </label>
+                <Select value={selectedCropId} onValueChange={(value) => {
+                  setSelectedCropId(value)
+                  const crop = getCropById(value)
+                  if (crop && plantingDate) {
+                    // Auto-calculate harvest date based on crop maturity
+                    const plantDate = new Date(plantingDate)
+                    const harvestDate = new Date(plantDate)
+                    harvestDate.setDate(plantDate.getDate() + crop.daysToMaturity)
+                    setHarvestDate(harvestDate.toISOString().split('T')[0])
+                  }
+                }}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a crop" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CROP_DATABASE.map(crop => (
+                      <SelectItem key={crop.id} value={crop.id}>
+                        {crop.name} ({crop.family})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-sage-700 mb-1">
+                  Variety
+                </label>
+                <Input 
+                  placeholder="e.g., Cherokee Purple, Sweet Corn"
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Field
+                  </label>
+                  <Select value={selectedFieldId} onValueChange={setSelectedFieldId}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select field" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableFields.map(field => (
+                        <SelectItem key={field.id} value={field.id}>
+                          {field.name} ({field.area} ha)
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Block/Section
+                  </label>
+                  <Input 
+                    placeholder="Optional"
+                    className="w-full"
+                    value={variety}
+                    onChange={(e) => setVariety(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Plant Date
+                  </label>
+                  <Input 
+                    type="date"
+                    className="w-full"
+                    value={plantingDate}
+                    onChange={(e) => {
+                      setPlantingDate(e.target.value)
+                      // Auto-calculate harvest date when planting date changes
+                      if (selectedCropId && e.target.value) {
+                        const crop = getCropById(selectedCropId)
+                        if (crop) {
+                          const plantDate = new Date(e.target.value)
+                          const harvestDate = new Date(plantDate)
+                          harvestDate.setDate(plantDate.getDate() + crop.daysToMaturity)
+                          setHarvestDate(harvestDate.toISOString().split('T')[0])
+                        }
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Expected Harvest
+                  </label>
+                  <Input 
+                    type="date"
+                    className="w-full"
+                    value={harvestDate}
+                    onChange={(e) => setHarvestDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Area/Quantity
+                  </label>
+                  <Input 
+                    type="number"
+                    placeholder="10"
+                    className="w-full"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                    Unit
+                  </label>
+                  <Select value={unit} onValueChange={setUnit}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hectares">Hectares</SelectItem>
+                      <SelectItem value="acres">Acres</SelectItem>
+                      <SelectItem value="sqft">Square Feet</SelectItem>
+                      <SelectItem value="plants">Plants</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-sage-700 mb-1">
+                  Notes (Optional)
+                </label>
+                <Input 
+                  placeholder="Variety, special instructions, or notes"
+                  className="w-full"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+              </div>
+              
+              {/* Weather-based recommendations */}
+              {selectedCropId && weatherData && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <h4 className="text-sm font-semibold text-blue-800 mb-2">Weather Recommendations</h4>
+                  <div className="text-xs text-blue-700">
+                    {(() => {
+                      const crop = getCropById(selectedCropId)
+                      if (!crop) return 'Select a crop to see recommendations'
+                      
+                      const recommendation = generatePlantingRecommendations(
+                        crop,
+                        { latitude: 41.8781, longitude: -87.6298 }, // Default coordinates
+                        weatherData
+                      )
+                      
+                      return (
+                        <div>
+                          <div className={`inline-flex px-2 py-1 rounded text-xs font-medium mb-2 ${
+                            recommendation.recommendation === 'plant_now' ? 'bg-green-100 text-green-800' :
+                            recommendation.recommendation === 'wait' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {recommendation.recommendation.replace('_', ' ').toUpperCase()}
+                          </div>
+                          <div className="space-y-1">
+                            {recommendation.reasons.map((reason, idx) => (
+                              <div key={idx}>• {reason}</div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })()} 
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 bg-sage-600 hover:bg-sage-700 text-white"
+                  onClick={async () => {
+                    if (!selectedCropId || !selectedFieldId || !plantingDate || !quantity) {
+                      alert('Please fill in all required fields')
+                      return
+                    }
+                    
+                    try {
+                      // Create crop planning entry
+                      const cropData = {
+                        cropId: selectedCropId,
+                        fieldId: selectedFieldId,
+                        plantingDate,
+                        harvestDate,
+                        quantity: parseFloat(quantity),
+                        unit,
+                        variety,
+                        notes,
+                        farmId
+                      }
+                      
+                      const response = await fetch('/api/crops', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(cropData)
+                      })
+                      
+                      if (response.ok) {
+                        const result = await response.json()
+                        alert(`Successfully planned ${getCropById(selectedCropId)?.name} planting in ${result.location}!`)
+                        
+                        // Refresh the planning data
+                        const cropsResponse = await fetch(`/api/crops?farmId=${farmId}&year=${currentYear}`)
+                        if (cropsResponse.ok) {
+                          const updatedPlannings = await cropsResponse.json()
+                          setPlannings(updatedPlannings)
+                        }
+                      } else {
+                        const error = await response.json()
+                        throw new Error(error.error || 'Failed to create crop plan')
+                      }
+                      
+                      // Reset form
+                      setSelectedCropId('')
+                      setSelectedFieldId('')
+                      setPlantingDate('')
+                      setHarvestDate('')
+                      setQuantity('')
+                      setVariety('')
+                      setNotes('')
+                      setShowAddForm(false)
+                      
+                    } catch (error) {
+                      console.error('Error creating crop plan:', error)
+                      alert('Error creating crop plan: ' + (error as Error).message)
+                    }
+                  }}
+                >
+                  Add Planting
+                </Button>
+              </div>
+            </ModernCardContent>
+          </ModernCard>
+        </div>
+      )}
+        </>
+      ) : (
+        /* Succession Planning View */
+        <SuccessionPlanning 
+          farmId={farmId}
+          availableFields={availableFields}
+          weatherData={weatherData}
+        />
+      )}
     </div>
   )
 }

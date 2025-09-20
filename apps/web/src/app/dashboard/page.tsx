@@ -250,6 +250,7 @@ export default async function DashboardPage() {
           <FarmerDashboard 
             farmId={farms[0]?.id || 'default'}
             farmData={farms[0]}
+            allFarms={farms}
             financialData={financialData}
             weatherAlerts={weatherAlerts}
             crops={crops}

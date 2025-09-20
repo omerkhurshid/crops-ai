@@ -17,7 +17,8 @@ import {
   Droplets,
   Leaf,
   TrendingUp,
-  Plus
+  Plus,
+  RefreshCw
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
@@ -186,8 +187,9 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       console.error('Error calling weather task model:', error)
     }
 
-    // Fallback to original logic if model is not available
-    return generateFallbackTasks(weather, cropsList)
+    // Return empty array if model is not available - show proper "no data" state
+    console.log('Weather task model not available, showing no data state instead of fallback tasks')
+    return []
   }
 
   const getSeason = (): string => {
@@ -467,8 +469,17 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         {tasks.length === 0 ? (
           <div className="text-center py-6">
             <Sun className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600">No weather-based tasks at the moment</p>
-            <p className="text-xs text-gray-500">Conditions are stable for normal operations</p>
+            <p className="text-sm text-gray-600">No weather-based tasks available</p>
+            <p className="text-xs text-gray-500">Our analytical models haven't identified any weather-related actions at this time</p>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={generateWeatherTasks}
+              className="mt-3 text-xs"
+            >
+              <RefreshCw className="h-3 w-3 mr-1" />
+              Check Again
+            </Button>
           </div>
         ) : (
           tasks.slice(0, 5).map((task) => {

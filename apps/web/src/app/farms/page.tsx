@@ -159,37 +159,6 @@ export default async function FarmsPage() {
             </ModernCardContent>
           </ModernCard>
 
-          {/* Quick Actions */}
-          <ModernCard variant="floating" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-              <ModernCardTitle className="text-sage-800">Quick Actions</ModernCardTitle>
-              <ModernCardDescription>Common farm management tasks</ModernCardDescription>
-            </ModernCardHeader>
-            <ModernCardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Link href="/weather">
-                  <div className="polished-card card-moss rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <div className="font-medium mb-2">Weather Monitoring</div>
-                    <div className="text-sm opacity-90">Check weather conditions for all farms</div>
-                  </div>
-                </Link>
-                
-                <Link href="/crop-health">
-                  <div className="polished-card card-clay rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <div className="font-medium mb-2">Satellite Analysis</div>
-                    <div className="text-sm opacity-90">View NDVI and crop health data</div>
-                  </div>
-                </Link>
-                
-                <Link href="/reports">
-                  <div className="polished-card card-wheat rounded-xl p-4 text-white hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <div className="font-medium mb-2">Yield Predictions</div>
-                    <div className="text-sm opacity-90">Generate ML-powered yield forecasts</div>
-                  </div>
-                </Link>
-              </div>
-            </ModernCardContent>
-          </ModernCard>
         </div>
       </div>
     </DashboardLayout>

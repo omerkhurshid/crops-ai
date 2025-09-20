@@ -56,19 +56,39 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           'relative bg-sage-50',
           isFullscreen ? 'h-full' : 'h-[500px]'
         )}>
-          {/* Placeholder Map */}
-          <div className="absolute inset-0 bg-gradient-to-br from-sage-100 to-earth-100">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-sage-400 mx-auto mb-4" />
-                <p className="text-sage-600 font-medium">Interactive Map View</p>
-                <p className="text-sage-500 text-sm mt-2">
-                  Farms colored by health status
-                </p>
+          {/* Map Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50">
+            {/* Placeholder for when no farms exist */}
+            {farms.length === 0 ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <MapPin className="h-12 w-12 text-sage-400 mx-auto mb-4" />
+                  <p className="text-sage-600 font-medium">No Farms to Display</p>
+                  <p className="text-sage-500 text-sm mt-2">
+                    Add your first farm to see it on the map
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Map Pattern/Grid Background for farms */}
+                <div className="absolute inset-0 opacity-10" 
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '50px 50px'
+                  }}
+                />
+                {/* Geographic indicators */}
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-sage-500 bg-white/80 px-2 py-1 rounded">
+                  Farm Locations - Health Status View
+                </div>
+              </>
+            )}
 
-            {/* Farm Markers (Mock) */}
+            {/* Farm Markers */}
             {farms.map((farm, index) => {
               const healthStatus = getHealthStatus(farm.health)
               const isSelected = farm.id === selectedFarmId
@@ -83,8 +103,13 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                     isSelected && 'scale-125 z-10'
                   )}
                   style={{
-                    left: `${20 + (index % 3) * 30}%`,
-                    top: `${30 + Math.floor(index / 3) * 25}%`
+                    // Use actual coordinates if available, otherwise distribute farms across the map
+                    left: farm.latitude && farm.longitude 
+                      ? `${Math.min(Math.max(15, ((farm.longitude + 180) / 360) * 70 + 15), 85)}%`
+                      : `${20 + (index % 4) * 20}%`,
+                    top: farm.latitude && farm.longitude
+                      ? `${Math.min(Math.max(15, ((90 - farm.latitude) / 180) * 70 + 15), 85)}%`
+                      : `${25 + Math.floor(index / 4) * 20}%`
                   }}
                 >
                   {/* Farm Marker */}

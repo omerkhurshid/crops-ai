@@ -77,6 +77,15 @@ interface FarmerDashboardProps {
     longitude?: number
     fields?: any[]
   }
+  allFarms?: Array<{
+    id: string
+    name: string
+    totalArea: number
+    ownerId: string
+    latitude?: number
+    longitude?: number
+    fields?: any[]
+  }>
   financialData?: any[]
   weatherAlerts?: any[]
   crops?: any[]
@@ -88,7 +97,7 @@ interface FarmerDashboardProps {
   }
 }
 
-export function FarmerDashboard({ farmId, farmData: passedFarmData, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
+export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDetailedView, setShowDetailedView] = useState(false)
@@ -322,12 +331,23 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, financialDat
         </div>
         
         <FarmsMap 
-          farms={[{
+          farms={allFarms && allFarms.length > 0 ? allFarms.map((farm, index) => ({
+            id: farm.id,
+            name: farm.name,
+            totalArea: farm.totalArea,
+            latitude: farm.latitude || 41.8781, // Use real farm coordinates if available
+            longitude: farm.longitude || -87.6298, // Default to US Midwest as fallback
+            health: farmData?.overallHealth || 85, // Currently using primary farm health for all - could be enhanced per farm
+            healthTrend: farmData?.healthTrend || 3,
+            stressedAreas: farmData?.stressedAreas || 15,
+            fieldsCount: farm.fields?.length || 0,
+            isPrimary: farm.id === farmId // Mark the current farm as primary
+          })) : [{
             id: String(farmId) || "farm-1",
             name: passedFarmData?.name || farmData?.farmName || "Your Farm",
             totalArea: passedFarmData?.totalArea || farmData?.totalAcres || 0,
-            latitude: passedFarmData?.latitude || 41.8781, // Use real farm coordinates if available
-            longitude: passedFarmData?.longitude || -87.6298, // Default to US Midwest as fallback
+            latitude: passedFarmData?.latitude || 41.8781,
+            longitude: passedFarmData?.longitude || -87.6298,
             health: farmData?.overallHealth || 85,
             healthTrend: farmData?.healthTrend || 3,
             stressedAreas: farmData?.stressedAreas || 15,

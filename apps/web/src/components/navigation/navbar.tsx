@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import { KeyboardShortcuts } from './keyboard-shortcuts'
 import { Menu, X, HelpCircle, Home, BarChart3, CloudRain, Activity, Brain, DollarSign, FileText } from 'lucide-react'
 import { useState } from 'react'
-import Image from 'next/image'
+import { CroppleLogo } from '../ui/cropple-logo'
 
 export function Navbar() {
   const { data: session, status } = useSession()
@@ -33,19 +33,8 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center group">
-              <div className="w-10 h-10 mr-3 group-hover:scale-105 transition-transform">
-                <Image 
-                  src="/crops-ai-logo.png" 
-                  alt="Cropple.ai Logo" 
-                  width={40} 
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-2xl font-medium text-white tracking-tight drop-shadow-sm">
-                Cropple<span className="text-green-200">.ai</span>
-              </span>
+            <Link href="/" className="group hover:scale-105 transition-transform">
+              <CroppleLogo size="md" textColor="text-white drop-shadow-sm" />
             </Link>
           </div>
 

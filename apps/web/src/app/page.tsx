@@ -10,8 +10,15 @@ import {
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
   BarChart, Users, ArrowRight, Sparkles, Zap, Target
 } from 'lucide-react'
+import { redirect } from 'next/navigation'
+import { getCurrentUser } from '../lib/auth/session'
 
-export default function Home() {
+export default async function Home() {
+  // Check if user is logged in
+  const user = await getCurrentUser()
+  if (user) {
+    redirect('/dashboard')
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
       <Navbar />

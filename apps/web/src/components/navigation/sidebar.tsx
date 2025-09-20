@@ -3,8 +3,8 @@
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
 import { useState } from 'react'
+import { CroppleLogo } from '../ui/cropple-logo'
 import { 
   Home, 
   BarChart3, 
@@ -94,19 +94,8 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
         {!collapsed && (
-          <Link href="/" className="flex items-center group">
-            <div className="w-8 h-8 mr-3 group-hover:scale-105 transition-transform">
-              <Image 
-                src="/crops-ai-logo.png" 
-                alt="Cropple.ai Logo" 
-                width={32} 
-                height={32}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="text-lg font-semibold text-white tracking-tight">
-              Cropple<span className="text-fk-primary-200">.ai</span>
-            </span>
+          <Link href="/" className="group hover:scale-105 transition-transform">
+            <CroppleLogo size="sm" textColor="text-white" />
           </Link>
         )}
         <button

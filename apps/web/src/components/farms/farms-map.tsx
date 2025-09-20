@@ -56,11 +56,11 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           'relative bg-sage-50',
           isFullscreen ? 'h-full' : 'h-[500px]'
         )}>
-          {/* Map Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-blue-50">
+          {/* Realistic Satellite Map Background */}
+          <div className="absolute inset-0">
             {/* Placeholder for when no farms exist */}
             {farms.length === 0 ? (
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-sage-400 mx-auto mb-4" />
                   <p className="text-sage-600 font-medium">No Farms to Display</p>
@@ -71,19 +71,39 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               </div>
             ) : (
               <>
-                {/* Map Pattern/Grid Background for farms */}
-                <div className="absolute inset-0 opacity-10" 
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
-                    `,
-                    backgroundSize: '50px 50px'
-                  }}
-                />
+                {/* Realistic Satellite Background */}
+                <div className="absolute inset-0">
+                  {/* Base satellite terrain */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-50 to-lime-100">
+                    
+                    {/* Agricultural field patterns */}
+                    <div className="absolute inset-0 opacity-60">
+                      {/* Field parcels simulation */}
+                      <div className="absolute top-0 left-0 w-1/3 h-1/2 bg-gradient-to-br from-green-200 to-green-300 border border-green-400/30" />
+                      <div className="absolute top-0 left-1/3 w-1/3 h-1/2 bg-gradient-to-br from-yellow-100 to-green-200 border border-green-400/30" />
+                      <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-gradient-to-br from-emerald-200 to-green-300 border border-green-400/30" />
+                      
+                      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-green-300 to-emerald-300 border border-green-400/30" />
+                      <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-lime-200 to-green-300 border border-green-400/30" />
+                      
+                      {/* Roads and infrastructure */}
+                      <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 opacity-60" />
+                      <div className="absolute top-0 bottom-0 left-1/3 w-1 bg-gray-300 opacity-60" />
+                      <div className="absolute top-0 bottom-0 right-1/3 w-1 bg-gray-300 opacity-60" />
+                      
+                      {/* Water features */}
+                      <div className="absolute bottom-4 left-4 w-20 h-12 bg-blue-200 rounded-lg opacity-70" />
+                      
+                      {/* Forested areas */}
+                      <div className="absolute top-4 right-4 w-16 h-16 bg-green-600 rounded-full opacity-40" />
+                      <div className="absolute bottom-8 right-8 w-12 h-12 bg-green-700 rounded-full opacity-40" />
+                    </div>
+                  </div>
+                </div>
+                
                 {/* Geographic indicators */}
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-sage-500 bg-white/80 px-2 py-1 rounded">
-                  Farm Locations - Health Status View
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-sage-700 bg-white/90 px-3 py-1.5 rounded-lg shadow-sm border">
+                  🌍 Regional Farm Overview - Real-time Health Monitoring
                 </div>
               </>
             )}

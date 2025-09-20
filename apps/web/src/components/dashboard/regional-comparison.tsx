@@ -83,38 +83,59 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       const currentYear = new Date().getFullYear()
       const primaryCrop = crops?.[0]?.cropType || 'CORN'
       
-      // Try to fetch real regional benchmark data first
+      // Always try to fetch real regional benchmark data first
       try {
         const realBenchmarkData = await fetchRealBenchmarkData(region, primaryCrop, farmData)
         if (realBenchmarkData && realBenchmarkData.metrics.length > 0) {
+          console.log('Using real benchmark data from API')
           setComparison(realBenchmarkData)
           setLoading(false)
           return
+        } else {
+          console.log('API returned no benchmark data, will use fallback')
         }
       } catch (error) {
-        console.log('Real benchmark data not available, using intelligent simulation:', error)
+        console.error('Error fetching real benchmark data:', error)
       }
 
-      // Fallback to intelligent simulation with realistic regional data
-      const metrics = generateRegionalMetrics(primaryCrop, farmData?.totalArea || 100)
+      // If API fails, fetch from our analytical benchmark service
+      console.log('Fetching from analytical benchmark service')
       
-      const comparisonData: RegionalComparison = {
-        region,
-        farmCount: getRegionalFarmCount(region),
-        totalArea: getRegionalTotalArea(region),
-        cropType: primaryCrop,
-        seasonYear: currentYear,
-        metrics,
-        ranking: {
-          overall: calculateRealisticRanking(metrics, region),
-          totalFarms: getRegionalFarmCount(region),
-          category: getPerformanceCategory(metrics)
-        },
-        insights: generateInsights(metrics, region),
-        benchmarkGoals: generateBenchmarkGoals(metrics)
+      try {
+        // Use our ML-powered analytical service for real benchmarks
+        const analyticalResponse = await fetch('/api/ml/benchmarks/analyze', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            farmId: farmData?.farmId || 'default',
+            region,
+            cropType: primaryCrop,
+            farmSize: farmData?.totalArea,
+            location: {
+              latitude: farmData?.latitude,
+              longitude: farmData?.longitude
+            }
+          })
+        })
+
+        if (analyticalResponse.ok) {
+          const analyticalData = await analyticalResponse.json()
+          
+          if (analyticalData.success && analyticalData.benchmarks) {
+            const transformedData = transformAnalyticalBenchmarks(analyticalData.benchmarks, region, primaryCrop)
+            setComparison(transformedData)
+            setLoading(false)
+            return
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching analytical benchmarks:', error)
       }
 
-      setComparison(comparisonData)
+      // Only if all data sources fail, show no data state
+      setComparison(null)
     } catch (error) {
       console.error('Error generating regional comparison:', error)
     } finally {
@@ -144,23 +165,27 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
     })
 
     if (response.ok) {
-      const data = await response.json()
+      const result = await response.json()
       
-      if (data.success && data.benchmarkData) {
+      // Handle the API response structure properly
+      const data = result.data || result
+      const benchmarkData = data.benchmarkData || data
+      
+      if (benchmarkData && benchmarkData.metrics && benchmarkData.metrics.length > 0) {
         return {
-          region: data.benchmarkData.region || region,
-          farmCount: data.benchmarkData.farmCount || 0,
-          totalArea: data.benchmarkData.totalArea || 0,
-          cropType: data.benchmarkData.cropType || cropType,
-          seasonYear: data.benchmarkData.year || new Date().getFullYear(),
-          metrics: transformBenchmarkMetrics(data.benchmarkData.metrics || [], farmData),
+          region: benchmarkData.region || region,
+          farmCount: benchmarkData.farmCount || 0,
+          totalArea: benchmarkData.totalArea || 0,
+          cropType: benchmarkData.cropType || cropType,
+          seasonYear: benchmarkData.year || new Date().getFullYear(),
+          metrics: transformBenchmarkMetrics(benchmarkData.metrics || [], farmData),
           ranking: {
-            overall: data.benchmarkData.ranking?.overall || 50,
-            totalFarms: data.benchmarkData.ranking?.totalFarms || 100,
-            category: data.benchmarkData.ranking?.category || 'Average'
+            overall: benchmarkData.ranking?.overall || 50,
+            totalFarms: benchmarkData.ranking?.totalFarms || 100,
+            category: benchmarkData.ranking?.category || 'Average'
           },
-          insights: data.benchmarkData.insights || [],
-          benchmarkGoals: data.benchmarkData.benchmarkGoals || []
+          insights: benchmarkData.insights || [],
+          benchmarkGoals: benchmarkData.benchmarkGoals || []
         }
       }
     }
@@ -180,6 +205,25 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       trendPercentage: metric.trendPercentage || 0,
       category: normalizeCategoryName(metric.category || 'yield')
     }))
+  }
+
+  const transformAnalyticalBenchmarks = (analyticalData: any, region: string, cropType: string): RegionalComparison => {
+    // Transform ML analytical service data to our format
+    return {
+      region,
+      farmCount: analyticalData.regionStats?.farmCount || 150,
+      totalArea: analyticalData.regionStats?.totalArea || 45000,
+      cropType,
+      seasonYear: new Date().getFullYear(),
+      metrics: analyticalData.metrics || [],
+      ranking: {
+        overall: analyticalData.ranking?.position || 75,
+        totalFarms: analyticalData.ranking?.totalFarms || 150,
+        category: analyticalData.ranking?.category || 'Average'
+      },
+      insights: analyticalData.insights || [],
+      benchmarkGoals: analyticalData.goals || []
+    }
   }
 
   const normalizeCategoryName = (category: string): 'yield' | 'financial' | 'efficiency' | 'sustainability' => {

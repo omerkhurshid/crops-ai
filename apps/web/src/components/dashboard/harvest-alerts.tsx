@@ -62,12 +62,12 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
 
         setAlerts(harvestAlerts)
       } else {
-        // Generate demo data for showcase
-        setAlerts(generateDemoAlerts())
+        // No data available - show empty state
+        setAlerts([])
       }
     } catch (error) {
       console.error('Failed to fetch harvest alerts:', error)
-      setAlerts(generateDemoAlerts())
+      setAlerts([])
     } finally {
       setLoading(false)
     }

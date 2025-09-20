@@ -17,6 +17,95 @@ import {
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
 
+const priorityConfig = {
+  urgent: {
+    color: 'bg-red-100 text-red-800 border-red-200',
+    label: 'Urgent'
+  },
+  high: {
+    color: 'bg-orange-100 text-orange-800 border-orange-200',
+    label: 'High'
+  },
+  medium: {
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    label: 'Medium'
+  },
+  low: {
+    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    label: 'Low'
+  }
+}
+
+const categoryIcons = {
+  crop: <Sprout className="h-4 w-4 text-green-600" />,
+  livestock: <Users className="h-4 w-4 text-blue-600" />,
+  equipment: <Tractor className="h-4 w-4 text-orange-600" />,
+  general: <AlertTriangle className="h-4 w-4 text-gray-600" />
+}
+
+const getDaysUntilDue = (dueDate: string) => {
+  const due = new Date(dueDate)
+  const today = new Date()
+  const diffTime = due.getTime() - today.getTime()
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Due today'
+  if (diffDays === 1) return 'Due tomorrow'
+  if (diffDays < 0) return `Overdue by ${Math.abs(diffDays)} day${Math.abs(diffDays) > 1 ? 's' : ''}`
+  return `Due in ${diffDays} day${diffDays > 1 ? 's' : ''}`
+}
+
+const formatEstimatedTime = (hours?: number) => {
+  if (!hours) return 'Unknown'
+  if (hours < 1) return `${Math.round(hours * 60)} min`
+  if (hours === 1) return '1 hour'
+  return `${hours} hours`
+}
+
+const TaskCard = ({ task }: { task: Task }) => {
+  return (
+    <div className="bg-white/50 rounded-lg border border-sage-200 p-3 hover:shadow-sm transition-all duration-200 cursor-pointer">
+      <div className="flex items-start gap-2">
+        <div className={`p-1.5 rounded ${
+          task.priority === 'urgent' ? 'bg-red-100' :
+          task.priority === 'high' ? 'bg-orange-100' :
+          'bg-blue-100'
+        }`}>
+          {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <h4 className="font-medium text-sage-900 text-sm mb-1 truncate">
+            {task.title}
+          </h4>
+          
+          <div className="flex items-center gap-2 mb-1">
+            <Badge className={`text-xs px-1.5 py-0.5 ${priorityConfig[task.priority as keyof typeof priorityConfig]?.color || ''}`}>
+              {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
+            </Badge>
+            {task.assignedToName && (
+              <span className="text-xs text-sage-500">{task.assignedToName}</span>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-3 text-xs text-sage-500">
+            {task.dueDate && (
+              <span className={
+                getDaysUntilDue(task.dueDate).includes('Overdue') ? 'text-red-600 font-medium' : ''
+              }>
+                {getDaysUntilDue(task.dueDate)}
+              </span>
+            )}
+            {task.estimatedHours && (
+              <span>~{formatEstimatedTime(task.estimatedHours)}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface Task {
   id: string
   title: string
@@ -60,47 +149,6 @@ const defaultTasks: Task[] = []
     estimatedHours: 3
   }
 ]
-
-const categoryIcons = {
-  crop: <Sprout className="h-4 w-4" />,
-  livestock: <Users className="h-4 w-4" />,
-  equipment: <Tractor className="h-4 w-4" />,
-  general: <Calendar className="h-4 w-4" />
-}
-
-const priorityConfig = {
-  urgent: {
-    color: 'bg-red-100 text-red-800 border-red-200',
-    label: 'Urgent'
-  },
-  high: {
-    color: 'bg-orange-100 text-orange-800 border-orange-200',
-    label: 'High'
-  },
-  medium: {
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    label: 'Medium'
-  },
-  low: {
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
-    label: 'Low'
-  }
-}
-
-const statusConfig = {
-  todo: {
-    color: 'bg-gray-100 text-gray-800',
-    label: 'To Do'
-  },
-  in_progress: {
-    color: 'bg-blue-100 text-blue-800',
-    label: 'In Progress'
-  },
-  done: {
-    color: 'bg-green-100 text-green-800',
-    label: 'Done'
-  }
-}
 
 export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
   const [todaysTasks, setTodaysTasks] = useState<Task[]>([])
@@ -162,70 +210,8 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
     fetchTasks()
   }, [farmId])
 
-  const getDaysUntilDue = (dueDate: string) => {
-    const due = new Date(dueDate)
-    const today = new Date()
-    const diffTime = due.getTime() - today.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    
-    if (diffDays === 0) return 'Due today'
-    if (diffDays === 1) return 'Due tomorrow'
-    if (diffDays < 0) return `Overdue by ${Math.abs(diffDays)} day${Math.abs(diffDays) > 1 ? 's' : ''}`
-    return `Due in ${diffDays} day${diffDays > 1 ? 's' : ''}`
-  }
-
-  const formatEstimatedTime = (hours?: number) => {
-    if (!hours) return 'Unknown'
-    if (hours < 1) return `${Math.round(hours * 60)} min`
-    if (hours === 1) return '1 hour'
-    return `${hours} hours`
-  }
-
-  const TaskCard = ({ task }: { task: Task }) => (
-    <div className="bg-white/50 rounded-lg border border-sage-200 p-3 hover:shadow-sm transition-all duration-200 cursor-pointer">
-      <div className="flex items-start gap-2">
-        <div className={`p-1.5 rounded ${
-          task.priority === 'urgent' ? 'bg-red-100' :
-          task.priority === 'high' ? 'bg-orange-100' :
-          'bg-blue-100'
-        }`}>
-          {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sage-900 text-sm mb-1 truncate">
-            {task.title}
-          </h4>
-          
-          <div className="flex items-center gap-2 mb-1">
-            <Badge className={`text-xs px-1.5 py-0.5 ${priorityConfig[task.priority as keyof typeof priorityConfig]?.color || ''}`}>
-              {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
-            </Badge>
-            {task.assignedToName && (
-              <span className="text-xs text-sage-500">{task.assignedToName}</span>
-            )}
-          </div>
-          
-          <div className="flex items-center gap-3 text-xs text-sage-500">
-            {task.dueDate && (
-              <span className={
-                getDaysUntilDue(task.dueDate).includes('Overdue') ? 'text-red-600 font-medium' : ''
-              }>
-                {getDaysUntilDue(task.dueDate)}
-              </span>
-            )}
-            {task.estimatedHours && (
-              <span>~{formatEstimatedTime(task.estimatedHours)}</span>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Today's Tasks */}
       <div>
         <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
           <Calendar className="h-5 w-5 text-sage-600" />
@@ -246,7 +232,6 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
         </div>
       </div>
       
-      {/* Tomorrow's Tasks */}
       <div>
         <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
           <Calendar className="h-5 w-5 text-sage-600" />
@@ -267,7 +252,6 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
         </div>
       </div>
       
-      {/* View All Tasks Button */}
       <div className="md:col-span-2 text-center mt-4">
         <Link href="/tasks">
           <Button variant="outline" className="w-full md:w-auto">

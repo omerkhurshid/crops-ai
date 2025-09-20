@@ -31,68 +31,7 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
 
   return (
     <div className="space-y-6">
-      {/* Header Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Animals</p>
-                <p className="text-2xl font-bold text-gray-900">247</p>
-              </div>
-              <Users className="h-8 w-8 text-blue-400" />
-            </div>
-            <div className="mt-2">
-              <span className="text-xs text-green-600">+12 this month</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Health Alerts</p>
-                <p className="text-2xl font-bold text-orange-900">3</p>
-              </div>
-              <AlertTriangle className="h-8 w-8 text-orange-400" />
-            </div>
-            <div className="mt-2">
-              <span className="text-xs text-orange-600">2 require attention</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Avg Health Score</p>
-                <p className="text-2xl font-bold text-green-900">8.7/10</p>
-              </div>
-              <Heart className="h-8 w-8 text-green-400" />
-            </div>
-            <div className="mt-2">
-              <span className="text-xs text-green-600">Excellent condition</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Due Vaccinations</p>
-                <p className="text-2xl font-bold text-blue-900">15</p>
-              </div>
-              <Stethoscope className="h-8 w-8 text-blue-400" />
-            </div>
-            <div className="mt-2">
-              <span className="text-xs text-blue-600">Next 30 days</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Note: Stats are now calculated from real data in the parent component */}
 
       {/* Main Content */}
       <Card>
@@ -109,11 +48,17 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
             </div>
             {showAddButtons && (
               <div className="flex gap-2">
-                <Button className="bg-sage-600 hover:bg-sage-700">
+                <Button 
+                  className="bg-sage-600 hover:bg-sage-700"
+                  onClick={() => window.location.href = '/livestock/add-animal'}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Animal
                 </Button>
-                <Button variant="outline">
+                <Button 
+                  variant="outline"
+                  onClick={() => window.location.href = '/livestock/add-event'}
+                >
                   <Stethoscope className="h-4 w-4 mr-2" />
                   Log Health Event
                 </Button>

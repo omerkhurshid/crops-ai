@@ -56,7 +56,13 @@ export async function GET(request: NextRequest) {
       orderBy: { eventDate: 'desc' }
     })
 
-    return NextResponse.json(livestockEvents)
+    // Calculate total animals from events
+    const totalAnimals = livestockEvents.reduce((sum, event) => sum + (event.animalCount || 0), 0)
+
+    return NextResponse.json({
+      totalAnimals,
+      events: livestockEvents
+    })
   } catch (error) {
     console.error('Error fetching livestock events:', error)
     return NextResponse.json(

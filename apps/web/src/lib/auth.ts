@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
             id: 'demo-1',
             email: 'demo@crops.ai',
             password: 'Demo123!',
-            name: 'Demo User',
+            name: 'Demo Farmer',
             role: UserRole.FARM_OWNER
           },
           {

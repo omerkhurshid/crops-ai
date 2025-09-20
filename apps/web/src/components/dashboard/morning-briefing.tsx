@@ -1,6 +1,8 @@
 'use client'
 
 import React from 'react'
+import { useUserPreferences } from '../../contexts/user-preferences-context'
+import { formatTemperature } from '../../lib/user-preferences'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status'
 import { 
@@ -87,6 +89,7 @@ export function MorningBriefing({
   livestockHealthStatus = 'good',
   lastSatelliteUpdate
 }: MorningBriefingProps) {
+  const { preferences } = useUserPreferences()
   const WeatherIcon = weatherIcons[weather.current.icon]
   const healthStatus = getHealthStatus(overallHealth)
   
@@ -249,7 +252,7 @@ export function MorningBriefing({
                       <WeatherIcon className="h-8 w-8 text-blue-600" />
                       <div>
                         <div className="text-2xl font-bold text-blue-800">
-                          {weather.current.temp}°F
+                          {formatTemperature(weather.current.temp, preferences)}
                         </div>
                         <div className="text-xs text-blue-600 capitalize">{weather.current.condition}</div>
                       </div>

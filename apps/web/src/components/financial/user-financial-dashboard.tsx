@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useUserPreferences } from '../../contexts/user-preferences-context'
+import { formatCurrency, formatArea } from '../../lib/user-preferences'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
@@ -69,6 +71,8 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
     start: new Date(new Date().getFullYear(), 0, 1),
     end: new Date(),
   })
+  
+  const { preferences } = useUserPreferences()
 
   const fetchUserSummary = async () => {
     try {
@@ -95,11 +99,9 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
     fetchUserSummary()
   }, [dateRange])
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount)
+  // Currency formatting now uses user preferences
+  const formatCurrencyAmount = (amount: number) => {
+    return formatCurrency(amount, preferences)
   }
 
   const formatPercentage = (percentage: number) => {
@@ -165,7 +167,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
               {formatPercentage(summary.profitChange)}
             </Badge>
           </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(summary.netProfit)}</div>
+          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.netProfit)}</div>
           <div className="text-lg font-medium mb-2">Net Profit</div>
           <div className="text-sm opacity-90 flex items-center gap-1">
             {summary.profitChange >= 0 ? (
@@ -185,10 +187,10 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
               {summary.profitMargin.toFixed(1)}% margin
             </Badge>
           </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(summary.totalIncome)}</div>
+          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.totalIncome)}</div>
           <div className="text-lg font-medium mb-2">Total Revenue</div>
           <div className="text-sm opacity-90">
-            {formatCurrency(summary.totalExpenses)} expenses
+            {formatCurrencyAmount(summary.totalExpenses)} expenses
           </div>
         </div>
 
@@ -200,10 +202,10 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
               {summary.totalFarms} farms
             </Badge>
           </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrency(summary.profitPerArea)}</div>
-          <div className="text-lg font-medium mb-2">Profit per ha</div>
+          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.profitPerArea)}</div>
+          <div className="text-lg font-medium mb-2">Profit per {preferences.landUnit === 'hectares' ? 'ha' : preferences.landUnit === 'acres' ? 'acre' : 'm²'}</div>
           <div className="text-sm opacity-90">
-            Across {summary.totalArea.toFixed(1)} hectares
+            Across {formatArea(summary.totalArea, preferences)}
           </div>
         </div>
 

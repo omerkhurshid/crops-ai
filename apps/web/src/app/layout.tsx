@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '../components/providers/auth-provider'
 import { ThemeProvider } from '../components/theme/theme-provider'
+import { UserPreferencesProvider } from '../contexts/user-preferences-context'
 import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -65,7 +66,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system">
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <UserPreferencesProvider>
+              {children}
+            </UserPreferencesProvider>
+          </AuthProvider>
           <Toaster 
             position="top-right"
             toastOptions={{

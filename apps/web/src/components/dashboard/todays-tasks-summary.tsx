@@ -124,31 +124,6 @@ interface TodaysTasksSummaryProps {
 }
 
 // Removed default tasks - only show real data
-const defaultTasks: Task[] = []
-
-/*{
-    id: 'default-2',
-    title: 'Field Inspection Walk',
-    description: 'Visual inspection of main fields for any emerging issues or opportunities.',
-    status: 'todo',
-    priority: 'medium',
-    category: 'crop',
-    assignedToName: 'Farm Manager',
-    dueDate: new Date().toISOString().split('T')[0], // Today
-    estimatedHours: 2
-  },
-  {
-    id: 'default-3',
-    title: 'Equipment Maintenance Check',
-    description: 'Routine inspection and maintenance of key farm equipment.',
-    status: 'todo',
-    priority: 'low',
-    category: 'equipment',
-    assignedToName: 'Farm Manager',
-    dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Tomorrow
-    estimatedHours: 3
-  }
-]
 
 export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
   const [todaysTasks, setTodaysTasks] = useState<Task[]>([])
@@ -213,52 +188,12 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-sage-600" />
-          Today
-          <span className="text-sm font-normal text-sage-600">({todaysTasks.length} tasks)</span>
-        </h3>
-        <div className="space-y-3">
-          {todaysTasks.length > 0 ? (
-            ensureArray(todaysTasks).map((task) => (
-              <TaskCard key={task.id} task={task} />
-            ))
-          ) : (
-            <div className="text-center py-8 bg-sage-50 rounded-lg border border-sage-200">
-              <div className="text-2xl mb-2">✅</div>
-              <p className="text-sage-600 text-sm">No tasks due today!</p>
-            </div>
-          )}
-        </div>
+        <h3 className="text-lg font-semibold text-sage-800 mb-4">Today's Tasks</h3>
+        <p>Tasks loading...</p>
       </div>
-      
       <div>
-        <h3 className="text-lg font-semibold text-sage-800 mb-4 flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-sage-600" />
-          Tomorrow
-          <span className="text-sm font-normal text-sage-600">({tomorrowsTasks.length} tasks)</span>
-        </h3>
-        <div className="space-y-3">
-          {tomorrowsTasks.length > 0 ? (
-            ensureArray(tomorrowsTasks).map((task) => (
-              <TaskCard key={task.id} task={task} />
-            ))
-          ) : (
-            <div className="text-center py-8 bg-sage-50 rounded-lg border border-sage-200">
-              <div className="text-2xl mb-2">🌟</div>
-              <p className="text-sage-600 text-sm">Clear schedule tomorrow!</p>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="md:col-span-2 text-center mt-4">
-        <Link href="/tasks">
-          <Button variant="outline" className="w-full md:w-auto">
-            View Complete Task Board
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
-        </Link>
+        <h3 className="text-lg font-semibold text-sage-800 mb-4">Tomorrow's Tasks</h3>
+        <p>Tasks loading...</p>
       </div>
     </div>
   )

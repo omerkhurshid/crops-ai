@@ -109,7 +109,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            farmId: farmData?.farmId || 'default',
+            farmId: 'default',
             region,
             cropType: primaryCrop,
             farmSize: farmData?.totalArea,

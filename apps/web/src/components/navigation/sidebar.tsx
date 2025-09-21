@@ -56,7 +56,7 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
     },
     { href: '/weather', label: 'Weather', icon: CloudRain },
     { href: '/tasks', label: 'Tasks', icon: CheckSquare },
-    { href: '/recommendations', label: 'AI Insights', icon: Brain },
+    { href: '/ai-insights', label: 'AI Insights', icon: Brain },
     { href: '/financial', label: 'Financials', icon: DollarSign },
     { href: '/reports', label: 'Reports', icon: FileText },
   ]

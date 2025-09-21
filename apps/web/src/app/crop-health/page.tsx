@@ -5,6 +5,7 @@ import { FarmerFocusedDashboard } from '../../components/crop-health/farmer-focu
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
 import { AdvancedVisualizations } from '../../components/crop-health/advanced-visualizations'
 import { NDVIMap } from '../../components/crop-health/ndvi-map'
+import { KnowledgeDrivenHealthDashboard } from '../../components/crop-health/knowledge-driven-health-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
@@ -119,6 +120,17 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
                   Farmer View
                 </a>
                 <a 
+                  href={`/crop-health?farmId=${farmId}&view=knowledge`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    viewMode === 'knowledge' 
+                      ? 'bg-sage-600 text-white' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  <Brain className="h-4 w-4 inline mr-2" />
+                  AI Insights
+                </a>
+                <a 
                   href={`/crop-health?farmId=${farmId}&view=detailed`}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     viewMode === 'detailed' 
@@ -169,6 +181,36 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
 
             {/* Farmer-Focused Dashboard */}
             <FarmerFocusedDashboard farmId={farmId} />
+          </div>
+        ) : viewMode === 'knowledge' ? (
+          <div className="space-y-8">
+            {/* Knowledge-Driven Health Dashboard */}
+            <ModernCard variant="floating">
+              <ModernCardHeader>
+                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
+                  <Brain className="h-6 w-6" />
+                  AI-Powered Crop Intelligence
+                </ModernCardTitle>
+                <ModernCardDescription>
+                  Crop-specific insights powered by our agricultural knowledge base and ML models
+                </ModernCardDescription>
+              </ModernCardHeader>
+              <ModernCardContent>
+                <KnowledgeDrivenHealthDashboard 
+                  farmId={farmId} 
+                  selectedCrops={[
+                    // Mock data - in real implementation, this would come from farm configuration
+                    { id: 'corn', name: 'Corn/Maize', category: 'Grains & Cereals', monitoringParameters: ['NDVI', 'Soil Moisture', 'Temperature', 'Nitrogen Levels', 'Pest Detection'] },
+                    { id: 'soybeans', name: 'Soybeans', category: 'Legumes & Pulses', monitoringParameters: ['NDVI', 'Soil Moisture', 'Nitrogen Levels', 'Pod Development', 'Disease Detection'] }
+                  ]}
+                  fieldData={{
+                    latitude: 41.8781,
+                    longitude: -87.6298,
+                    soilType: 'Loam'
+                  }}
+                />
+              </ModernCardContent>
+            </ModernCard>
           </div>
         ) : (
           <div className="space-y-8">

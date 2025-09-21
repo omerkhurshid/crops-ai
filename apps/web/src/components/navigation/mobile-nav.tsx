@@ -15,7 +15,8 @@ import {
   LogOut,
   User,
   Bell,
-  Search
+  Search,
+  Brain
 } from 'lucide-react'
 
 interface MobileNavProps {
@@ -51,6 +52,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
   const navItems = [
     { href: '/dashboard', icon: Home, label: 'Dashboard' },
     { href: '/farms', icon: MapPin, label: 'Farms' },
+    { href: '/ai-insights', icon: Brain, label: 'AI Insights' },
     { href: '/financial', icon: DollarSign, label: 'Financial' },
     { href: '/weather', icon: Cloud, label: 'Weather' },
     { href: '/reports', icon: TrendingUp, label: 'Reports' },

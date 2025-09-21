@@ -14,8 +14,24 @@ import {
 } from 'lucide-react'
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
+import { SmartAgricultureSelector } from './smart-agriculture-selector'
 
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
+
+interface SelectedItem {
+  id: string
+  name: string
+  category: string
+  type: 'crop' | 'livestock'
+  scientificName?: string
+  monitoringParameters: string[]
+  additionalInfo?: {
+    growingSeasonDays?: number
+    primaryHarvestSeason?: string[]
+    primaryPurpose?: string[]
+    typicalHerdSize?: string
+  }
+}
 
 interface Farm {
   name: string
@@ -24,6 +40,7 @@ interface Farm {
   totalArea?: number
   boundaries?: Array<{ lat: number; lng: number }>
   fields?: Field[]
+  selectedAgriculture?: SelectedItem[]
 }
 
 interface Field {
@@ -51,7 +68,8 @@ export function UnifiedFarmCreator() {
   const [farm, setFarm] = useState<Farm>({
     name: '',
     type: 'crops',
-    location: { lat: 0, lng: 0 }
+    location: { lat: 0, lng: 0 },
+    selectedAgriculture: []
   })
   const [locationInput, setLocationInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -68,6 +86,13 @@ export function UnifiedFarmCreator() {
   const isBasicInfoComplete = farm.name && farm.type && farm.location.lat !== 0
   const hasValidBoundaries = farm.boundaries && farm.boundaries.length >= 3
   const canCreateFields = hasValidBoundaries
+
+  const handleAgricultureSelection = (selectedItems: SelectedItem[]) => {
+    setFarm(prev => ({
+      ...prev,
+      selectedAgriculture: selectedItems
+    }))
+  }
 
   const getCurrentLocation = () => {
     setDetectingLocation(true)
@@ -350,7 +375,8 @@ export function UnifiedFarmCreator() {
           address: farm.location.address || '',
           country: 'US',
           totalArea: farm.totalArea || 0,
-          primaryProduct: farm.type
+          primaryProduct: farm.type,
+          selectedAgriculture: farm.selectedAgriculture || []
         })
       })
 
@@ -444,6 +470,26 @@ export function UnifiedFarmCreator() {
                 })}
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Smart Agriculture Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-green-600" />
+              What Are You Growing or Raising?
+            </CardTitle>
+            <CardDescription>
+              Select your crops and livestock to get personalized AI insights and monitoring
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SmartAgricultureSelector
+              selectedFarmType={farm.type}
+              onSelectionChange={handleAgricultureSelection}
+              showRecommendations={true}
+            />
           </CardContent>
         </Card>
 

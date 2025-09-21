@@ -38,121 +38,45 @@ interface MarketInsight {
   recommendation: string
 }
 
-const mockPrices: CommodityPrice[] = [
-  {
-    crop: 'Wheat',
-    currentPrice: 7.85,
-    previousPrice: 7.67,
-    change: 0.18,
-    changePercent: 2.35,
-    unit: '$/bushel',
-    exchange: 'CBOT',
-    lastUpdated: new Date().toISOString(),
-    trend: 'up',
-    weekHigh: 8.12,
-    weekLow: 7.43,
-    volume: 45200
-  },
-  {
-    crop: 'Corn',
-    currentPrice: 6.42,
-    previousPrice: 6.47,
-    change: -0.05,
-    changePercent: -0.77,
-    unit: '$/bushel',
-    exchange: 'CBOT',
-    lastUpdated: new Date().toISOString(),
-    trend: 'down',
-    weekHigh: 6.58,
-    weekLow: 6.35,
-    volume: 67800
-  },
-  {
-    crop: 'Soybeans',
-    currentPrice: 14.23,
-    previousPrice: 14.08,
-    change: 0.15,
-    changePercent: 1.07,
-    unit: '$/bushel',
-    exchange: 'CBOT',
-    lastUpdated: new Date().toISOString(),
-    trend: 'up',
-    weekHigh: 14.45,
-    weekLow: 13.92,
-    volume: 32100
-  },
-  {
-    crop: 'Cotton',
-    currentPrice: 0.7145,
-    previousPrice: 0.7089,
-    change: 0.0056,
-    changePercent: 0.79,
-    unit: '$/lb',
-    exchange: 'ICE',
-    lastUpdated: new Date().toISOString(),
-    trend: 'up',
-    weekHigh: 0.7234,
-    weekLow: 0.7045,
-    volume: 18900
-  }
-]
-
-const mockInsights: MarketInsight[] = [
-  {
-    id: '1',
-    type: 'opportunity',
-    title: 'Wheat Prices Trending Upward',
-    description: 'Strong demand from international markets pushing wheat futures higher. Consider forward contracting.',
-    impact: 'high',
-    timeframe: 'Next 30 days',
-    recommendation: 'Consider selling 40-60% of projected wheat harvest at current levels'
-  },
-  {
-    id: '2',
-    type: 'warning',
-    title: 'Corn Market Volatility',
-    description: 'Weather concerns in key growing regions creating price uncertainty. Monitor closely.',
-    impact: 'medium',
-    timeframe: 'Next 2 weeks',
-    recommendation: 'Hold existing positions, avoid new commitments until weather patterns stabilize'
-  },
-  {
-    id: '3',
-    type: 'trend',
-    title: 'Soybean Processing Demand Strong',
-    description: 'Crush margins remain favorable, supporting soybean prices through summer months.',
-    impact: 'medium',
-    timeframe: 'Next 60 days',
-    recommendation: 'Good opportunity for basis contracting with local elevators'
-  }
-]
+// Removed mock data - fetch real prices from API
 
 export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
-  const [prices, setPrices] = useState<CommodityPrice[]>(mockPrices)
-  const [insights, setInsights] = useState<MarketInsight[]>(mockInsights)
-  const [loading, setLoading] = useState(false)
+  const [prices, setPrices] = useState<CommodityPrice[]>([])
+  const [insights, setInsights] = useState<MarketInsight[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchMarketData()
+  }, [cropTypes])
+
+  const fetchMarketData = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/market/live-prices')
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.data) {
+          setPrices(data.data.prices || [])
+          setInsights(data.data.insights || [])
+        } else {
+          setPrices([])
+          setInsights([])
+        }
+      } else {
+        setPrices([])
+        setInsights([])
+      }
+    } catch (error) {
+      console.error('Failed to fetch market data:', error)
+      setPrices([])
+      setInsights([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const refreshPrices = async () => {
-    setLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      // Add small random variations to simulate live prices
-      const updatedPrices = prices.map(price => {
-        const variation = (Math.random() - 0.5) * 0.1
-        const newPrice = Math.max(0, price.currentPrice + variation)
-        const change = newPrice - price.previousPrice
-        return {
-          ...price,
-          currentPrice: newPrice,
-          change,
-          changePercent: (change / price.previousPrice) * 100,
-          trend: change > 0 ? 'up' as const : change < 0 ? 'down' as const : 'stable' as const,
-          lastUpdated: new Date().toISOString()
-        }
-      })
-      setPrices(updatedPrices)
-      setLoading(false)
-    }, 1500)
+    await fetchMarketData()
   }
 
   const getPriceColor = (changePercent: number) => {

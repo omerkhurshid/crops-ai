@@ -10,6 +10,7 @@ import { Textarea } from '../ui/textarea'
 import { Badge } from '../ui/badge'
 import { MapPin, Plus, Save, AlertCircle } from 'lucide-react'
 import { FieldFormWithMap } from './field-form-with-map'
+import { cropCategories } from '../../lib/farm-categories'
 
 interface FieldFormProps {
   farmId: string
@@ -20,10 +21,10 @@ interface FieldFormProps {
   existingFields?: Array<{ id: string; name: string; area: number }>
 }
 
-const cropTypes = [
-  'Corn', 'Soybean', 'Wheat', 'Cotton', 'Rice', 'Barley', 'Oats', 'Canola', 
-  'Sunflower', 'Potato', 'Tomato', 'Lettuce', 'Carrot', 'Onion', 'Other'
-]
+// Get all crop types from comprehensive categories
+const cropTypes = cropCategories.flatMap(category => 
+  category.items.map(item => item.name)
+).sort()
 
 const soilTypes = [
   'Clay', 'Sandy', 'Loam', 'Silt', 'Sandy Loam', 'Clay Loam', 'Silty Clay', 

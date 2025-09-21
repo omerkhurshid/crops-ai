@@ -90,70 +90,21 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
   const fetchFarmData = async () => {
     try {
       setLoading(true)
-      // This would normally call the API
-      // const response = await fetch(`/api/financial/farm-detail/${farmId}`)
-      // For now, using mock data
-      setFarmData(getMockFarmData())
+      const response = await fetch(`/api/financial/farm-detail/${farmId}`)
+      if (response.ok) {
+        const data = await response.json()
+        setFarmData(data)
+      } else {
+        setFarmData(null)
+      }
     } catch (error) {
       console.error('Error fetching farm financial data:', error)
+      setFarmData(null)
     } finally {
       setLoading(false)
     }
   }
 
-  const getMockFarmData = (): FarmFinancialData => ({
-    id: farmId,
-    name: 'Green Valley Farm',
-    totalArea: 250.5,
-    income: 485000,
-    expenses: 325000,
-    netProfit: 160000,
-    profitMargin: 33,
-    profitPerArea: 638.52,
-    transactionCount: 127,
-    transactions: [
-      {
-        id: '1',
-        type: 'INCOME',
-        category: 'CROP_SALES',
-        amount: 125000,
-        transactionDate: new Date().toISOString(),
-        notes: 'Corn harvest - 500 bushels',
-        field: { id: '1', name: 'North Field' },
-        crop: { id: '1', cropType: 'Corn' }
-      },
-      {
-        id: '2',
-        type: 'EXPENSE',
-        category: 'FERTILIZER',
-        amount: 15000,
-        transactionDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Spring fertilizer application'
-      },
-      {
-        id: '3',
-        type: 'EXPENSE',
-        category: 'SEEDS',
-        amount: 8500,
-        transactionDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: 'Hybrid corn seeds'
-      }
-    ],
-    monthlyData: [
-      { month: 'Jan', income: 12000, expenses: 28000, profit: -16000 },
-      { month: 'Feb', income: 8000, expenses: 22000, profit: -14000 },
-      { month: 'Mar', income: 15000, expenses: 35000, profit: -20000 },
-      { month: 'Apr', income: 18000, expenses: 42000, profit: -24000 },
-      { month: 'May', income: 22000, expenses: 38000, profit: -16000 },
-      { month: 'Jun', income: 85000, expenses: 25000, profit: 60000 },
-      { month: 'Jul', income: 95000, expenses: 20000, profit: 75000 },
-      { month: 'Aug', income: 120000, expenses: 22000, profit: 98000 },
-      { month: 'Sep', income: 85000, expenses: 45000, profit: 40000 },
-      { month: 'Oct', income: 15000, expenses: 28000, profit: -13000 },
-      { month: 'Nov', income: 8000, expenses: 12000, profit: -4000 },
-      { month: 'Dec', income: 2000, expenses: 8000, profit: -6000 }
-    ]
-  })
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -183,7 +134,21 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
   }
 
   if (!farmData) {
-    return null
+    return (
+      <div className="text-center py-12">
+        <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Financial Data Unavailable</h3>
+        <p className="text-gray-600 mb-4">No financial transactions found for this farm.</p>
+        <Button onClick={() => handleAddTransaction('INCOME')} className="mr-2">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Income
+        </Button>
+        <Button onClick={() => handleAddTransaction('EXPENSE')} variant="outline">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Expense
+        </Button>
+      </div>
+    )
   }
 
   const filteredTransactions = farmData.transactions.filter(t => {

@@ -8,7 +8,8 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
-import { CloudRain, MapPin, Thermometer, Settings, BarChart } from 'lucide-react'
+import { WeatherAlertsWidget } from '../../components/dashboard/weather-alerts-widget'
+import { CloudRain, MapPin, Thermometer, Settings, BarChart, AlertTriangle } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -59,9 +60,9 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
     redirect('/farms')
   }
 
-  // Use farm coordinates or default to farm center (US Midwest)
-  const latitude = farm.latitude || 41.8781
-  const longitude = farm.longitude || -87.6298
+  // Use farm coordinates or default to geographic center of US
+  const latitude = farm.latitude || 39.8283  // Geographic center of US
+  const longitude = farm.longitude || -98.5795
 
   return (
     <DashboardLayout>
@@ -116,6 +117,12 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
                         Current Weather
                       </div>
                     </TabsTrigger>
+                    <TabsTrigger value="alerts">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4" />
+                        Weather Alerts
+                      </div>
+                    </TabsTrigger>
                     <TabsTrigger value="analytics">
                       <div className="flex items-center gap-2">
                         <BarChart className="h-4 w-4" />
@@ -135,6 +142,25 @@ export default async function WeatherPage({ searchParams }: { searchParams: { fa
                     latitude={latitude} 
                     longitude={longitude} 
                   />
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="alerts" className="m-0">
+                <div className="p-6">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-sage-800 mb-2">Active Weather Alerts</h3>
+                      <p className="text-sage-600 text-sm mb-4">
+                        Real-time weather alerts and farming recommendations for {farm.name}
+                      </p>
+                    </div>
+                    <WeatherAlertsWidget 
+                      farmData={{
+                        latitude: latitude,
+                        longitude: longitude
+                      }}
+                    />
+                  </div>
                 </div>
               </TabsContent>
               

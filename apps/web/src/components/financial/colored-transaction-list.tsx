@@ -102,58 +102,12 @@ export function ColoredTransactionList({
       }
     } catch (error) {
       console.error('Error fetching transactions:', error)
-      setTransactions(getMockTransactions())
+      setTransactions([])
     } finally {
       setLoading(false)
     }
   }
 
-  const getMockTransactions = (): Transaction[] => [
-    {
-      id: '1',
-      type: 'INCOME',
-      category: 'CROP_SALES',
-      amount: 45000,
-      transactionDate: new Date().toISOString(),
-      notes: 'Corn harvest - 200 bushels',
-      field: { id: '1', name: 'North Field' },
-      crop: { id: '1', cropType: 'Corn' }
-    },
-    {
-      id: '2',
-      type: 'EXPENSE',
-      category: 'FERTILIZER',
-      amount: 3500,
-      transactionDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      notes: 'Spring fertilizer application',
-      field: { id: '1', name: 'North Field' }
-    },
-    {
-      id: '3',
-      type: 'EXPENSE',
-      category: 'SEEDS',
-      amount: 2800,
-      transactionDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      notes: 'Soybean seeds - premium variety',
-      field: { id: '2', name: 'South Field' }
-    },
-    {
-      id: '4',
-      type: 'INCOME',
-      category: 'SUBSIDIES',
-      amount: 12000,
-      transactionDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      notes: 'Federal crop insurance payment'
-    },
-    {
-      id: '5',
-      type: 'EXPENSE',
-      category: 'LABOR',
-      amount: 4200,
-      transactionDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      notes: 'Harvest crew wages - 3 days'
-    }
-  ]
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

@@ -21,7 +21,7 @@ export function Navbar() {
     { href: '/farms', label: 'Farms', icon: <BarChart3 className="h-4 w-4" /> },
     { href: '/weather', label: 'Weather', icon: <CloudRain className="h-4 w-4" /> },
     { href: '/crop-health', label: 'Crop Health', icon: <Activity className="h-4 w-4" /> },
-    { href: '/recommendations', label: 'AI Insights', icon: <Brain className="h-4 w-4" /> },
+    { href: '/recommendations', label: 'AI Recommendations', icon: <Brain className="h-4 w-4" /> },
     { href: '/financial', label: 'Financials', icon: <DollarSign className="h-4 w-4" /> },
     { href: '/reports', label: 'Reports', icon: <FileText className="h-4 w-4" /> },
     { href: '/help', label: 'Help', icon: <HelpCircle className="h-4 w-4" /> },

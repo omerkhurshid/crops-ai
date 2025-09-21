@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useUserPreferences } from '../../contexts/user-preferences-context'
-import { formatTemperature } from '../../lib/user-preferences'
+import { formatTemperature, formatCurrency } from '../../lib/user-preferences'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { TrafficLightStatus, getHealthStatus } from '../ui/traffic-light-status'
 import { 
@@ -334,7 +334,7 @@ export function MorningBriefing({
                     'text-2xl font-bold',
                     financials.netYTD >= 0 ? 'text-green-700' : 'text-red-700'
                   )}>
-                    {financials.netYTD >= 0 ? '+' : '-'}${Math.abs(financials.netYTD).toLocaleString()}
+                    {formatCurrency(financials.netYTD, preferences)}
                   </div>
                   <div className="text-xs text-sage-500 mt-1">
                     Updated {financials.lastUpdate}

@@ -63,8 +63,7 @@ export class WeatherService {
    */
   async getCurrentWeather(latitude: number, longitude: number): Promise<WeatherConditions> {
     if (!this.apiKey || this.apiKey === 'mock_development_key') {
-      console.warn('Using mock weather data - set OPENWEATHER_API_KEY for real data')
-      return this.getMockCurrentWeather()
+      throw new Error('Weather service unavailable. Please configure API key.')
     }
 
     // Validate coordinates
@@ -114,14 +113,13 @@ export class WeatherService {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
           console.error('Weather API request timed out')
+          throw new Error('Weather service timed out. Please try again.')
         } else {
           console.error('Failed to fetch current weather:', error.message)
+          throw new Error('Weather service unavailable. Please check your connection.')
         }
       }
-      
-      // Return mock data as fallback with warning
-      console.warn('Falling back to mock weather data')
-      return this.getMockCurrentWeather()
+      throw new Error('Weather service unavailable. Please try again.')
     }
   }
 
@@ -130,8 +128,7 @@ export class WeatherService {
    */
   async getWeatherForecast(latitude: number, longitude: number, days: number = 7): Promise<WeatherForecast[]> {
     if (!this.apiKey || this.apiKey === 'mock_development_key') {
-      console.warn('Using mock forecast data - set OPENWEATHER_API_KEY for real data')
-      return this.getMockForecast(days)
+      throw new Error('Weather forecast unavailable. Please configure API key.')
     }
 
     // Validate inputs
@@ -217,13 +214,13 @@ export class WeatherService {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
           console.error('Weather forecast API request timed out')
+          throw new Error('Weather forecast timed out. Please try again.')
         } else {
           console.error('Failed to fetch weather forecast:', error.message)
+          throw new Error('Weather forecast unavailable. Please check your connection.')
         }
       }
-      
-      console.warn('Falling back to mock forecast data')
-      return this.getMockForecast(days)
+      throw new Error('Weather forecast unavailable. Please try again.')
     }
   }
 
@@ -450,55 +447,4 @@ export class WeatherService {
     return Math.max(0, 100 - ((humidity - minHumidity) / range) * 100)
   }
 
-  /**
-   * Mock current weather for development
-   */
-  private getMockCurrentWeather(): WeatherConditions {
-    return {
-      date: new Date(),
-      temperature: 22,
-      humidity: 65,
-      precipitation: 0,
-      windSpeed: 12,
-      windDirection: 180,
-      pressure: 1013,
-      cloudCover: 30,
-      conditions: 'partly cloudy',
-      uvIndex: 6,
-      visibility: 10
-    }
-  }
-
-  /**
-   * Mock weather forecast for development
-   */
-  private getMockForecast(days: number): WeatherForecast[] {
-    const forecast: WeatherForecast[] = []
-    const baseDate = new Date()
-
-    for (let i = 0; i < days; i++) {
-      const date = new Date(baseDate.getTime() + (i + 1) * 24 * 60 * 60 * 1000)
-      const temp = 20 + Math.random() * 10 + Math.sin(i * 0.3) * 5
-      const humidity = 60 + Math.random() * 20
-      const windSpeed = 8 + Math.random() * 15
-      const precipitation = Math.random() < 0.3 ? Math.random() * 10 : 0
-
-      forecast.push({
-        date,
-        temperature: Math.round(temp),
-        minTemperature: Math.round(temp - 3),
-        maxTemperature: Math.round(temp + 4),
-        humidity: Math.round(humidity),
-        precipitation: Math.round(precipitation * 10) / 10,
-        precipitationProbability: precipitation > 0 ? Math.round((precipitation + 20)) : Math.round(Math.random() * 20),
-        windSpeed: Math.round(windSpeed),
-        windDirection: Math.round(Math.random() * 360),
-        pressure: 1013 + Math.round((Math.random() - 0.5) * 20),
-        cloudCover: Math.round(Math.random() * 100),
-        conditions: ['sunny', 'partly cloudy', 'overcast', 'light rain', 'cloudy'][Math.floor(Math.random() * 5)]
-      })
-    }
-
-    return forecast
-  }
 }

@@ -19,7 +19,6 @@ import { QuickActions } from './quick-actions'
 import { WeatherAlertsWidget } from './weather-alerts-widget'
 import { HarvestAlerts } from './harvest-alerts'
 import { WeatherTasksGenerator } from './weather-tasks-generator'
-import { RegionalComparison } from './regional-comparison'
 import { DiseasePestAlertsWidget } from './disease-pest-alerts-widget'
 import { 
   Leaf, 
@@ -130,8 +129,9 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
         const totalAcres = passedFarmData?.totalArea || 0
         
         // Fetch real weather data with coordinates if available
-        const lat = passedFarmData?.latitude || 41.8781
-        const lon = passedFarmData?.longitude || -87.6298
+        // Default to a central US location if no farm coordinates provided
+        const lat = passedFarmData?.latitude || 39.8283  // Geographic center of US
+        const lon = passedFarmData?.longitude || -98.5795
         const weatherResponse = await fetch(`/api/weather/current?latitude=${lat}&longitude=${lon}`)
         let currentWeather = {
           temperature: 75,
@@ -437,16 +437,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
         className="mb-8"
       />
 
-      {/* Regional Comparison */}
-      <RegionalComparison 
-        farmData={{
-          latitude: passedFarmData?.latitude,
-          longitude: passedFarmData?.longitude,
-          totalArea: passedFarmData?.totalArea
-        }}
-        crops={passedCrops}
-        className="mb-8"
-      />
 
 
 

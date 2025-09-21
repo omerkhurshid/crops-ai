@@ -55,11 +55,15 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
 
       const data = await response.json()
       
-      // Process the data into our metrics format
+      // Process the data into our metrics format - only use real data
+      if (!data.overallHealth) {
+        throw new Error('No health data available')
+      }
+      
       const processedMetrics: FarmHealthMetrics = {
-        overallHealth: data.overallHealth || 85,
-        ndviScore: data.averageNDVI || 0.75,
-        soilMoisture: data.soilMoisture || 65,
+        overallHealth: data.overallHealth,
+        ndviScore: data.averageNDVI || 0,
+        soilMoisture: data.soilMoisture || 0,
         pestRisk: data.pestRisk || 'low',
         weatherRisk: data.weatherRisk || 'low',
         irrigationNeeded: data.irrigationNeeded || false,
@@ -72,21 +76,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     } catch (err) {
       console.error('Error fetching health metrics:', err)
       setError('Unable to load health metrics')
-      
-      // Set mock data for demo purposes
-      setMetrics({
-        overallHealth: 85,
-        ndviScore: 0.75,
-        soilMoisture: 65,
-        pestRisk: 'low',
-        weatherRisk: 'medium',
-        irrigationNeeded: false,
-        lastUpdated: new Date().toISOString(),
-        trend: 'improving',
-        criticalAlerts: [
-          { type: 'weather', severity: 'warning', message: 'Heavy rain expected in 2 days' }
-        ]
-      })
+      setMetrics(null)
     } finally {
       setLoading(false)
     }
@@ -131,8 +121,24 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     )
   }
 
-  if (!metrics) {
-    return null
+  if (!metrics || error) {
+    if (compact) {
+      return (
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100">
+          <XCircle className="h-4 w-4 text-gray-500" />
+          <span className="text-sm text-gray-600">No data</span>
+        </div>
+      )
+    }
+    return (
+      <ModernCard variant="soft">
+        <ModernCardContent className="flex flex-col items-center justify-center py-8 text-center">
+          <XCircle className="h-8 w-8 text-gray-400 mb-2" />
+          <p className="text-gray-600">Health data unavailable</p>
+          <p className="text-sm text-gray-500">Add fields and satellite data to monitor health</p>
+        </ModernCardContent>
+      </ModernCard>
+    )
   }
 
   if (compact) {

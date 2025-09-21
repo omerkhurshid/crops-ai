@@ -30,7 +30,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
             const transformedPrices = data.data.prices.map((price: any) => ({
               commodity: price.name || price.symbol,
               price: price.price,
-              change: price.percentChange || (Math.random() - 0.5) * 5, // Use real change or fallback
+              change: price.percentChange || 0, // Use real change or 0
               unit: price.unit || 'bu'
             }))
             setPrices(transformedPrices)
@@ -106,11 +106,6 @@ export function MarketTicker({ className }: MarketTickerProps) {
           </div>
         ))}
         
-        {/* Add financial summary at end */}
-        <div className="flex items-center gap-2 whitespace-nowrap ml-8">
-          <span className="font-medium text-sage-800">Net YTD:</span>
-          <span className="font-bold text-green-700">+$45,230</span>
-        </div>
       </div>
     </div>
   )
@@ -131,7 +126,7 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
             const transformedPrices = data.data.prices.map((price: any) => ({
               commodity: price.name || price.symbol,
               price: price.price,
-              change: price.percentChange || (Math.random() - 0.5) * 5,
+              change: price.percentChange || 0,
               unit: price.unit || 'bu'
             }))
             setPrices(transformedPrices)
@@ -175,10 +170,6 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
         </span>
       </div>
       
-      <div className="flex items-center gap-2">
-        <span className="text-sage-600">Net:</span>
-        <span className="font-bold text-green-700">+$45.2K</span>
-      </div>
     </div>
   )
 }

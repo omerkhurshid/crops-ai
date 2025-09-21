@@ -6,6 +6,8 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, Moder
 import { InfoTooltip } from '../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../lib/tooltip-content'
 import { Badge } from '../components/ui/badge'
+import { InteractiveDemo } from '../components/landing/interactive-demo'
+import { ROICalculator } from '../components/landing/roi-calculator'
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
   BarChart, Users, ArrowRight, Sparkles, Zap, Target
@@ -34,7 +36,7 @@ export default async function Home() {
               <div className="mb-8">
                 <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
                   <Sparkles className="h-4 w-4 mr-2" />
-                  Trusted by 10,000+ Farmers Worldwide
+                  Real-time Agricultural Intelligence Platform
                 </Badge>
               </div>
               
@@ -122,6 +124,9 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Interactive Demo Section */}
+      <InteractiveDemo />
+
       {/* Testimonials Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50/50">
         <div className="max-w-7xl mx-auto">
@@ -150,15 +155,15 @@ export default async function Home() {
               </ModernCardHeader>
               <ModernCardContent>
                 <p className="text-sage-700 leading-relaxed mb-4">
-                  "I used to spend 3 hours every morning checking weather, walking fields, and planning my day. 
-                  Now Cropple.ai tells me exactly what needs attention. I saved $18,000 in prevented losses this season."
+                  "I used to spend hours every morning checking weather, walking fields, and planning my day. 
+                  Now Cropple.ai tells me exactly what needs attention. The real-time monitoring has helped me catch issues early."
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    +23% Yield
+                    Time Savings
                   </Badge>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    $18K Saved
+                    Early Detection
                   </Badge>
                 </div>
               </ModernCardContent>
@@ -179,15 +184,15 @@ export default async function Home() {
               </ModernCardHeader>
               <ModernCardContent>
                 <p className="text-sage-700 leading-relaxed mb-4">
-                  "The 'Should I harvest today?' feature saved our wheat crop. It warned us about incoming hail 
-                  48 hours early, so we harvested just in time. That one alert paid for 10 years of subscription."
+                  "The weather alerts and harvest timing recommendations have been invaluable. Being able to make 
+                  informed decisions about when to harvest based on weather forecasts has improved our operation's efficiency."
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    40% Crop Saved
+                    Weather Alerts
                   </Badge>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    10x ROI
+                    Better Timing
                   </Badge>
                 </div>
               </ModernCardContent>
@@ -208,15 +213,15 @@ export default async function Home() {
               </ModernCardHeader>
               <ModernCardContent>
                 <p className="text-sage-700 leading-relaxed mb-4">
-                  "Instead of driving to each field every morning, I get a priority list on my phone: 
-                  'Irrigate Field 7', 'Spray Field 12 between 6-10am'. Cut labor costs by $45,000 this year."
+                  "Instead of driving to each field every morning, I get a priority list on my phone with 
+                  specific actions needed for each field. The centralized dashboard has streamlined our operations significantly."
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                    -30% Water
+                    Water Efficiency
                   </Badge>
                   <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    $45K Labor Saved
+                    Streamlined Ops
                   </Badge>
                 </div>
               </ModernCardContent>
@@ -227,25 +232,28 @@ export default async function Home() {
           <ModernCard variant="floating" className="mt-16 p-8 bg-gradient-to-r from-sage-600/10 to-earth-600/10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">$2.3M</div>
-                <div className="text-sage-600">Saved by farmers in 2024</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">Live</div>
+                <div className="text-sage-600">Weather & satellite data</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">15,000+</div>
-                <div className="text-sage-600">Active fields monitored</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">Real-time</div>
+                <div className="text-sage-600">Crop health monitoring</div>
               </div>
               <div>
-                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">98%</div>
-                <div className="text-sage-600">Customer satisfaction</div>
+                <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">AI-Powered</div>
+                <div className="text-sage-600">Decision support</div>
               </div>
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">24/7</div>
-                <div className="text-sage-600">AI monitoring & alerts</div>
+                <div className="text-sage-600">Automated monitoring</div>
               </div>
             </div>
           </ModernCard>
         </div>
       </section>
+
+      {/* ROI Calculator Section */}
+      <ROICalculator />
       
       {/* Footer */}
       <footer className="bg-sage-100/50 py-16 px-4 sm:px-6 lg:px-8">

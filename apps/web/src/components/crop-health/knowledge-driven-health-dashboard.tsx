@@ -266,8 +266,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     const seasonMap = ['Winter', 'Winter', 'Spring', 'Spring', 'Spring', 'Summer', 'Summer', 'Summer', 'Fall', 'Fall', 'Fall', 'Winter']
     const currentSeason = seasonMap[month - 1]
     
-    let upcomingTasks = []
-    let criticalWindows = []
+    let upcomingTasks: string[] = []
+    let criticalWindows: string[] = []
 
     if (crop.name.toLowerCase().includes('corn')) {
       if (stage === 'vegetative') {

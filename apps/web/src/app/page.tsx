@@ -2,7 +2,6 @@ import { Navbar } from '../components/navigation/navbar'
 import Link from 'next/link'
 import { InlineFloatingButton } from '../components/ui/floating-button'
 import { ClientFloatingButton } from '../components/ui/client-floating-button'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../components/ui/modern-card'
 import { InfoTooltip } from '../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../lib/tooltip-content'
 import { Badge } from '../components/ui/badge'
@@ -26,12 +25,12 @@ export default async function Home() {
       <Navbar />
       
       {/* Hero Section with Modern Design */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Hero Card */}
-          <ModernCard variant="floating" className="text-center mb-16 p-8 md:p-16 bg-gradient-to-br from-white to-sage-50/50">
+          <div className="text-center mb-16 p-8 md:p-16 bg-white rounded-3xl shadow-xl border border-sage-100">
             
-            <ModernCardContent>
+            <div>
               {/* Top Badge */}
               <div className="mb-8">
                 <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
@@ -66,59 +65,59 @@ export default async function Home() {
                 </Link>
                 <p className="text-sage-500 text-xs sm:text-sm mt-3">No credit card required • Setup in 5 minutes</p>
               </div>
-            </ModernCardContent>
-          </ModernCard>
+            </div>
+          </div>
             
           {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             {/* Decision Support Card */}
-            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
-              <ModernCardHeader className="pb-4">
+            <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
+              <div className="pb-4">
                 <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
                   <Satellite className="h-8 w-8 text-sage-700" />
                 </div>
-                <ModernCardTitle className="text-sage-800">"Should I Spray Today?"</ModernCardTitle>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <ModernCardDescription className="text-sage-600 leading-relaxed">
+                <h3 className="text-xl font-semibold text-sage-800 mb-4">"Should I Spray Today?"</h3>
+              </div>
+              <div>
+                <p className="text-sage-600 leading-relaxed">
                   Get instant yes/no answers with weather windows, crop readiness, and application timing. 
                   Never miss the perfect spray window again.
-                </ModernCardDescription>
-              </ModernCardContent>
-            </ModernCard>
+                </p>
+              </div>
+            </div>
             
             {/* Harvest Timing Card */}
-            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
-              <ModernCardHeader className="pb-4">
+            <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
+              <div className="pb-4">
                 <div className="p-4 bg-earth-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-earth-200 transition-colors">
                   <CloudRain className="h-8 w-8 text-earth-700" />
                 </div>
-                <ModernCardTitle className="text-sage-800">"When Should I Harvest?"</ModernCardTitle>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <ModernCardDescription className="text-sage-600 leading-relaxed">
+                <h3 className="text-xl font-semibold text-sage-800 mb-4">"When Should I Harvest?"</h3>
+              </div>
+              <div>
+                <p className="text-sage-600 leading-relaxed">
                   Combine crop maturity, weather forecasts, and market prices into clear harvest timing recommendations. 
                   Maximize quality and profits.
-                </ModernCardDescription>
-              </ModernCardContent>
-            </ModernCard>
+                </p>
+              </div>
+            </div>
             
             {/* Financial Insights Card */}
-            <ModernCard variant="soft" className="text-center hover:shadow-lg transition-all duration-300 group">
-              <ModernCardHeader className="pb-4">
+            <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
+              <div className="pb-4">
                 <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
                   <TrendingUp className="h-8 w-8 text-sage-700" />
                 </div>
-                <ModernCardTitle className="text-sage-800">"Which Fields Are Making Money?"</ModernCardTitle>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <ModernCardDescription className="text-sage-600 leading-relaxed">
+                <h3 className="text-xl font-semibold text-sage-800 mb-4">"Which Fields Are Making Money?"</h3>
+              </div>
+              <div>
+                <p className="text-sage-600 leading-relaxed">
                   See profit per acre by field, track every expense with voice logging, and get market signals. 
                   Focus your efforts where they matter most.
-                </ModernCardDescription>
-              </ModernCardContent>
-            </ModernCard>
+                </p>
+              </div>
+            </div>
             
           </div>
         </div>
@@ -141,95 +140,83 @@ export default async function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonial 1 - Small Farm */}
-            <ModernCard variant="soft" className="p-8">
-              <ModernCardHeader>
-                <div className="flex items-center mb-4">
-                  <div className="bg-sage-100 p-2 rounded-full mr-3">
-                    <Users className="h-6 w-6 text-sage-700" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-sage-800">Sarah Chen</h4>
-                    <p className="text-sage-600 text-sm">120-acre Family Farm, Iowa</p>
-                  </div>
+            <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
+              <div className="flex items-center mb-4">
+                <div className="bg-sage-100 p-2 rounded-full mr-3">
+                  <Users className="h-6 w-6 text-sage-700" />
                 </div>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <p className="text-sage-700 leading-relaxed mb-4">
-                  "I used to spend hours every morning checking weather, walking fields, and planning my day. 
-                  Now Cropple.ai tells me exactly what needs attention. The real-time monitoring has helped me catch issues early."
-                </p>
-                <div className="flex items-center gap-4 text-sm">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Time Savings
-                  </Badge>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Early Detection
-                  </Badge>
+                <div>
+                  <h4 className="text-lg font-semibold text-sage-800">Sarah Chen</h4>
+                  <p className="text-sage-600 text-sm">120-acre Family Farm, Iowa</p>
                 </div>
-              </ModernCardContent>
-            </ModernCard>
+              </div>
+              <p className="text-sage-700 leading-relaxed mb-4">
+                "I used to spend hours every morning checking weather, walking fields, and planning my day. 
+                Now Cropple.ai tells me exactly what needs attention. The real-time monitoring has helped me catch issues early."
+              </p>
+              <div className="flex items-center gap-4 text-sm">
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Time Savings
+                </Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Early Detection
+                </Badge>
+              </div>
+            </div>
             
             {/* Testimonial 2 - Medium Farm */}
-            <ModernCard variant="soft" className="p-8">
-              <ModernCardHeader>
-                <div className="flex items-center mb-4">
-                  <div className="bg-earth-100 p-2 rounded-full mr-3">
-                    <Users className="h-6 w-6 text-earth-700" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-sage-800">Marcus Johnson</h4>
-                    <p className="text-sage-600 text-sm">850-acre Wheat & Soy, Kansas</p>
-                  </div>
+            <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
+              <div className="flex items-center mb-4">
+                <div className="bg-earth-100 p-2 rounded-full mr-3">
+                  <Users className="h-6 w-6 text-earth-700" />
                 </div>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <p className="text-sage-700 leading-relaxed mb-4">
-                  "The weather alerts and harvest timing recommendations have been invaluable. Being able to make 
-                  informed decisions about when to harvest based on weather forecasts has improved our operation's efficiency."
-                </p>
-                <div className="flex items-center gap-4 text-sm">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Weather Alerts
-                  </Badge>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Better Timing
-                  </Badge>
+                <div>
+                  <h4 className="text-lg font-semibold text-sage-800">Marcus Johnson</h4>
+                  <p className="text-sage-600 text-sm">850-acre Wheat & Soy, Kansas</p>
                 </div>
-              </ModernCardContent>
-            </ModernCard>
+              </div>
+              <p className="text-sage-700 leading-relaxed mb-4">
+                "The weather alerts and harvest timing recommendations have been invaluable. Being able to make 
+                informed decisions about when to harvest based on weather forecasts has improved our operation's efficiency."
+              </p>
+              <div className="flex items-center gap-4 text-sm">
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Weather Alerts
+                </Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Better Timing
+                </Badge>
+              </div>
+            </div>
             
             {/* Testimonial 3 - Large Operation */}
-            <ModernCard variant="soft" className="p-8">
-              <ModernCardHeader>
-                <div className="flex items-center mb-4">
-                  <div className="bg-sage-100 p-2 rounded-full mr-3">
-                    <Users className="h-6 w-6 text-sage-700" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-sage-800">Rodriguez Farms LLC</h4>
-                    <p className="text-sage-600 text-sm">3,200 acres, California</p>
-                  </div>
+            <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
+              <div className="flex items-center mb-4">
+                <div className="bg-sage-100 p-2 rounded-full mr-3">
+                  <Users className="h-6 w-6 text-sage-700" />
                 </div>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <p className="text-sage-700 leading-relaxed mb-4">
-                  "Instead of driving to each field every morning, I get a priority list on my phone with 
-                  specific actions needed for each field. The centralized dashboard has streamlined our operations significantly."
-                </p>
-                <div className="flex items-center gap-4 text-sm">
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                    Water Efficiency
-                  </Badge>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    Streamlined Ops
-                  </Badge>
+                <div>
+                  <h4 className="text-lg font-semibold text-sage-800">Rodriguez Farms LLC</h4>
+                  <p className="text-sage-600 text-sm">3,200 acres, California</p>
                 </div>
-              </ModernCardContent>
-            </ModernCard>
+              </div>
+              <p className="text-sage-700 leading-relaxed mb-4">
+                "Instead of driving to each field every morning, I get a priority list on my phone with 
+                specific actions needed for each field. The centralized dashboard has streamlined our operations significantly."
+              </p>
+              <div className="flex items-center gap-4 text-sm">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  Water Efficiency
+                </Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  Streamlined Ops
+                </Badge>
+              </div>
+            </div>
           </div>
           
           {/* Impact Stats */}
-          <ModernCard variant="floating" className="mt-16 p-8 bg-gradient-to-r from-sage-600/10 to-earth-600/10">
+          <div className="mt-16 p-8 bg-gradient-to-r from-sage-600/10 to-earth-600/10 rounded-3xl shadow-xl border border-sage-100">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl md:text-4xl font-bold text-sage-800 mb-2">Live</div>
@@ -248,7 +235,7 @@ export default async function Home() {
                 <div className="text-sage-600">Automated monitoring</div>
               </div>
             </div>
-          </ModernCard>
+          </div>
         </div>
       </section>
 

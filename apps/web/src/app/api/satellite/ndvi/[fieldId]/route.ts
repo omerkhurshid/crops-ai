@@ -241,8 +241,8 @@ async function getFieldInfo(fieldId: string) {
   return {
     id: fieldId,
     farm: {
-      latitude: 41.8781,  // Illinois coordinates
-      longitude: -87.6298
+      latitude: 39.8283,  // Geographic center of US (replacing Chicago coordinates)
+      longitude: -98.5795 // Geographic center of US (replacing Chicago coordinates)
     },
     boundary: null // Will be populated from PostGIS in production
   }

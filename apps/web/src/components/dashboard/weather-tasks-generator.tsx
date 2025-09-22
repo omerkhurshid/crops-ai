@@ -138,8 +138,8 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         date: new Date().toISOString(),
         season: getSeason(),
         location: {
-          latitude: farmData?.latitude || 41.8781,
-          longitude: farmData?.longitude || -87.6298
+          latitude: farmData?.latitude || 39.8283,  // Geographic center of US
+          longitude: farmData?.longitude || -98.5795
         }
       }
 

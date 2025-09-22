@@ -63,7 +63,7 @@ jest.mock('../../lib/nba/decision-engine', () => ({
         },
         explanation: 'Test explanation',
         actionSteps: ['Step 1', 'Step 2'],
-        targetField: 'field-1'
+        targetField: 'test-field-1'
       }
     ]))
   }))

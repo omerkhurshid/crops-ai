@@ -15,7 +15,7 @@ const mockFarm = {
   ownerId: 'user-1',
   fields: [
     {
-      id: 'field-1',
+      id: 'test-field-1',
       name: 'North Field',
       area: 50,
       crops: [

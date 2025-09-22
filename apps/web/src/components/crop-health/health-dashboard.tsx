@@ -99,97 +99,101 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       }
     } catch (error) {
       console.error('Failed to fetch health data:', error)
-      setFields(getMockHealthData())
+      setFields([])
       setDataStatus('error')
     } finally {
       setLoading(false)
     }
   }
 
-  const getMockHealthData = (): FieldHealth[] => [
-    {
-      fieldId: 'field-1',
-      fieldName: 'North Field',
-      cropType: 'Corn',
-      healthScore: 85,
-      stressLevel: 'low',
-      lastUpdate: new Date().toISOString(),
-      area: 45.2,
-      indices: {
-        ndvi: 0.78,
-        evi: 0.65,
-        savi: 0.72,
-        gndvi: 0.68,
-        ndwi: 0.35,
-        ndmi: 0.42,
-        lai: 4.2,
-        fvc: 0.85
+  const getMockHealthData = (): FieldHealth[] => {
+    // Generate dynamic field IDs based on farm ID and timestamp to avoid conflicts
+    const timestamp = Date.now()
+    return [
+      {
+        fieldId: `temp-${farmId}-${timestamp}-1`,
+        fieldName: 'North Field',
+        cropType: 'Corn',
+        healthScore: 85,
+        stressLevel: 'low',
+        lastUpdate: new Date().toISOString(),
+        area: 45.2,
+        indices: {
+          ndvi: 0.78,
+          evi: 0.65,
+          savi: 0.72,
+          gndvi: 0.68,
+          ndwi: 0.35,
+          ndmi: 0.42,
+          lai: 4.2,
+          fvc: 0.85
+        },
+        stressIndicators: {
+          drought: { severity: 25, confidence: 82, description: 'Slight moisture deficit in southwest section' },
+          disease: { severity: 10, confidence: 65, description: 'No significant disease pressure detected' },
+          nutrient: { severity: 15, confidence: 78, description: 'Minor nitrogen deficiency in central area' },
+          pest: { severity: 5, confidence: 90, description: 'Low pest pressure, normal for season' }
+        },
+        zones: {
+          excellent: { percentage: 45, area: 20.3 },
+          good: { percentage: 35, area: 15.8 },
+          moderate: { percentage: 15, area: 6.8 },
+          stressed: { percentage: 5, area: 2.3 }
+        },
+        recommendations: [
+          'Monitor soil moisture levels in southwest section',
+          'Consider nitrogen application in central area',
+          'Continue regular pest scouting'
+        ],
+        yieldPrediction: {
+          current: 185,
+          potential: 220,
+          confidence: 87
+        }
       },
-      stressIndicators: {
-        drought: { severity: 25, confidence: 82, description: 'Slight moisture deficit in southwest section' },
-        disease: { severity: 10, confidence: 65, description: 'No significant disease pressure detected' },
-        nutrient: { severity: 15, confidence: 78, description: 'Minor nitrogen deficiency in central area' },
-        pest: { severity: 5, confidence: 90, description: 'Low pest pressure, normal for season' }
-      },
-      zones: {
-        excellent: { percentage: 45, area: 20.3 },
-        good: { percentage: 35, area: 15.8 },
-        moderate: { percentage: 15, area: 6.8 },
-        stressed: { percentage: 5, area: 2.3 }
-      },
-      recommendations: [
-        'Monitor soil moisture levels in southwest section',
-        'Consider nitrogen application in central area',
-        'Continue regular pest scouting'
-      ],
-      yieldPrediction: {
-        current: 185,
-        potential: 220,
-        confidence: 87
+      {
+        fieldId: `temp-${farmId}-${timestamp}-2`,
+        fieldName: 'South Field',
+        cropType: 'Soybeans',
+        healthScore: 92,
+        stressLevel: 'none',
+        lastUpdate: new Date().toISOString(),
+        area: 32.7,
+        indices: {
+          ndvi: 0.82,
+          evi: 0.71,
+          savi: 0.79,
+          gndvi: 0.75,
+          ndwi: 0.45,
+          ndmi: 0.52,
+          lai: 5.1,
+          fvc: 0.92
+        },
+        stressIndicators: {
+          drought: { severity: 5, confidence: 95, description: 'Excellent moisture conditions' },
+          disease: { severity: 8, confidence: 72, description: 'Minor leaf spot detected in northwest corner' },
+          nutrient: { severity: 3, confidence: 88, description: 'Optimal nutrient levels throughout field' },
+          pest: { severity: 12, confidence: 85, description: 'Light aphid pressure, below threshold' }
+        },
+        zones: {
+          excellent: { percentage: 65, area: 21.3 },
+          good: { percentage: 30, area: 9.8 },
+          moderate: { percentage: 5, area: 1.6 },
+          stressed: { percentage: 0, area: 0 }
+        },
+        recommendations: [
+          'Maintain current management practices',
+          'Monitor aphid levels weekly',
+          'Prepare for optimal harvest timing'
+        ],
+        yieldPrediction: {
+          current: 58,
+          potential: 62,
+          confidence: 91
+        }
       }
-    },
-    {
-      fieldId: 'field-2',
-      fieldName: 'South Field',
-      cropType: 'Soybeans',
-      healthScore: 92,
-      stressLevel: 'none',
-      lastUpdate: new Date().toISOString(),
-      area: 32.7,
-      indices: {
-        ndvi: 0.82,
-        evi: 0.71,
-        savi: 0.79,
-        gndvi: 0.75,
-        ndwi: 0.45,
-        ndmi: 0.52,
-        lai: 5.1,
-        fvc: 0.92
-      },
-      stressIndicators: {
-        drought: { severity: 5, confidence: 95, description: 'Excellent moisture conditions' },
-        disease: { severity: 8, confidence: 72, description: 'Minor leaf spot detected in northwest corner' },
-        nutrient: { severity: 3, confidence: 88, description: 'Optimal nutrient levels throughout field' },
-        pest: { severity: 12, confidence: 85, description: 'Light aphid pressure, below threshold' }
-      },
-      zones: {
-        excellent: { percentage: 65, area: 21.3 },
-        good: { percentage: 30, area: 9.8 },
-        moderate: { percentage: 5, area: 1.6 },
-        stressed: { percentage: 0, area: 0 }
-      },
-      recommendations: [
-        'Maintain current management practices',
-        'Monitor aphid levels weekly',
-        'Prepare for optimal harvest timing'
-      ],
-      yieldPrediction: {
-        current: 58,
-        potential: 62,
-        confidence: 91
-      }
-    }
-  ]
+    ]
+  }
 
   const getHealthColor = (score: number) => {
     if (score >= 85) return 'text-green-600'
@@ -213,6 +217,51 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         message="Processing satellite imagery and vegetation indices for comprehensive field analysis..." 
         type="health" 
       />
+    )
+  }
+
+  // Empty state when no fields are available
+  if (!fields || fields.length === 0) {
+    return (
+      <ErrorBoundary>
+        <Card className="border-2 border-yellow-200 bg-yellow-50">
+          <CardContent className="pt-6">
+            <div className="text-center py-8">
+              <div className="p-4 rounded-full bg-yellow-100 inline-flex">
+                <Leaf className="h-8 w-8 text-yellow-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-yellow-800 mt-4">
+                No Fields Available
+              </h3>
+              <p className="text-yellow-700 mt-2 max-w-md mx-auto">
+                {dataStatus === 'error' 
+                  ? 'Unable to load field health data. Please try refreshing or contact support if the issue persists.'
+                  : 'No fields have been added to this farm yet. Add fields to start monitoring crop health.'
+                }
+              </p>
+              <div className="mt-6 space-x-3">
+                <Button
+                  onClick={fetchHealthData}
+                  variant="outline"
+                  className="border-yellow-300 text-yellow-700 hover:bg-yellow-100"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+                {dataStatus !== 'error' && (
+                  <Button
+                    onClick={() => window.location.href = '/fields'}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                  >
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Add Fields
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </ErrorBoundary>
     )
   }
 

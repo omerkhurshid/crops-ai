@@ -106,7 +106,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                   variant="outline"
                   onClick={() => handleFieldsDetected([
                     {
-                      id: 'demo-field-1',
+                      id: `temp-field-${Date.now()}-1`,
                       name: 'North Field',
                       area: 85.3,
                       boundaries: [
@@ -119,7 +119,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                       centerLng: farmLocation.lng
                     },
                     {
-                      id: 'demo-field-2',
+                      id: `temp-field-${Date.now()}-2`,
                       name: 'South Field',
                       area: 67.8,
                       boundaries: [

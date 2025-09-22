@@ -575,7 +575,7 @@ class HyperlocalWeatherService {
     // Major urban areas have heat island effect
     
     const majorCities = [
-      { lat: 41.8781, lng: -87.6298, intensity: 2.5 }, // Chicago
+      { lat: 39.8283, lng: -98.5795, intensity: 1.5 }, // Geographic center of US (replacing Chicago)
       { lat: 40.7128, lng: -74.0060, intensity: 3.0 }, // NYC
       { lat: 34.0522, lng: -118.2437, intensity: 2.8 }, // LA
       { lat: 39.7392, lng: -104.9903, intensity: 2.0 }  // Denver

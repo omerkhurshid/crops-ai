@@ -83,27 +83,12 @@ export default async function AIInsightsPage({ searchParams }: { searchParams: {
   const farmId = selectedFarm?.id || farms[0]?.id
   const farmName = selectedFarm?.name || farms[0]?.name
 
-  // Mock selected agriculture data - in real implementation, this would come from farm configuration
-  const mockSelectedAgriculture = [
-    {
-      id: 'corn',
-      name: 'Corn/Maize',
-      type: 'crop' as const,
-      category: 'Grains & Cereals',
-      monitoringParameters: ['NDVI', 'Soil Moisture', 'Temperature', 'Nitrogen Levels', 'Pest Detection']
-    },
-    {
-      id: 'soybeans',
-      name: 'Soybeans',
-      type: 'crop' as const,
-      category: 'Legumes & Pulses',
-      monitoringParameters: ['NDVI', 'Soil Moisture', 'Nitrogen Levels', 'Pod Development', 'Disease Detection']
-    }
-  ]
+  // Get selected agriculture from farm configuration
+  const selectedAgriculture = (selectedFarm as any)?.selectedCrops || (selectedFarm as any)?.selectedAgriculture || []
 
   const farmLocation = {
-    latitude: selectedFarm?.latitude || 41.8781,
-    longitude: selectedFarm?.longitude || -87.6298
+    latitude: selectedFarm?.latitude || 39.8283,  // Geographic center of US as neutral fallback
+    longitude: selectedFarm?.longitude || -98.5795
   }
 
   return (
@@ -190,7 +175,7 @@ export default async function AIInsightsPage({ searchParams }: { searchParams: {
                 <div className="p-6">
                   <MLInsightsDashboard 
                     farmId={farmId}
-                    selectedAgriculture={mockSelectedAgriculture}
+                    selectedAgriculture={selectedAgriculture}
                     farmLocation={farmLocation}
                   />
                 </div>

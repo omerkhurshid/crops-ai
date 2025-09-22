@@ -328,14 +328,14 @@ export class RealSatelliteService {
     // Mock farm fields - replace with actual database query
     return [
       {
-        id: 'field-1',
+        id: `mock-field-${Date.now()}-1`,
         name: 'North Field',
         boundaries: [[[-93.5, 42.0], [-93.4, 42.0], [-93.4, 42.1], [-93.5, 42.1], [-93.5, 42.0]]],
         cropType: 'Corn',
         acres: 45
       },
       {
-        id: 'field-2', 
+        id: `mock-field-${Date.now()}-2`, 
         name: 'South Field',
         boundaries: [[[-93.5, 41.9], [-93.4, 41.9], [-93.4, 42.0], [-93.5, 42.0], [-93.5, 41.9]]],
         cropType: 'Soybeans',

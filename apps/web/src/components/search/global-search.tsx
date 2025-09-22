@@ -49,7 +49,7 @@ const mockSearchResults: SearchResult[] = [
     title: 'Corn Field - Block A',
     description: 'Primary corn production field with high health score',
     type: 'field',
-    url: '/farms/farm-1/fields/field-1',
+    url: '/fields',
     metadata: { location: 'North Valley Farm', status: 'Healthy', value: '8.5/10' },
     icon: <Activity className="h-4 w-4" />,
     relevance: 0.85

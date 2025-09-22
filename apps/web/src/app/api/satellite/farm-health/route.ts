@@ -243,54 +243,12 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching farm health data:', error)
     
-    // Return mock data on error for demo purposes
     return NextResponse.json({
       success: false,
       hasRealData: false,
-      fields: [
-        {
-          fieldId: 'demo-field-1',
-          fieldName: 'North Field',
-          cropType: 'Corn',
-          healthScore: 85,
-          stressLevel: 'low',
-          lastUpdate: new Date().toISOString(),
-          area: 45.2,
-          indices: {
-            ndvi: 0.78,
-            evi: 0.65,
-            savi: 0.72,
-            gndvi: 0.68,
-            ndwi: 0.35,
-            ndmi: 0.42,
-            lai: 4.2,
-            fvc: 0.85
-          },
-          stressIndicators: {
-            drought: { severity: 25, confidence: 82, description: 'Slight moisture deficit in southwest section' },
-            disease: { severity: 10, confidence: 65, description: 'No significant disease pressure detected' },
-            nutrient: { severity: 15, confidence: 78, description: 'Minor nitrogen deficiency in central area' },
-            pest: { severity: 5, confidence: 90, description: 'Low pest pressure, normal for season' }
-          },
-          zones: {
-            excellent: { percentage: 45, area: 20.3 },
-            good: { percentage: 35, area: 15.8 },
-            moderate: { percentage: 15, area: 6.8 },
-            stressed: { percentage: 5, area: 2.3 }
-          },
-          recommendations: [
-            'Monitor soil moisture levels in southwest section',
-            'Consider nitrogen application in central area',
-            'Continue regular pest scouting'
-          ],
-          yieldPrediction: {
-            current: 185,
-            potential: 220,
-            confidence: 87
-          }
-        }
-      ],
-      error: 'Using demo data'
-    })
+      fields: [],
+      error: 'Failed to fetch farm health data',
+      message: 'Unable to retrieve field health information. Please try again or contact support if the issue persists.'
+    }, { status: 500 })
   }
 }

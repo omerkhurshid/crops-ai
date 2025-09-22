@@ -136,7 +136,7 @@ export function SatelliteMapViewer({
       console.log('Using mock field detection to avoid rate limits');
       const mockFields = [
         {
-          id: 'field-1',
+          id: `temp-field-${Date.now()}-1`,
           area: 45.2 + Math.random() * 20, // Add some variation
           boundaries: [
             { lat: location.lat + 0.002, lng: location.lng - 0.003 },
@@ -146,7 +146,7 @@ export function SatelliteMapViewer({
           ]
         },
         {
-          id: 'field-2',
+          id: `temp-field-${Date.now()}-2`,
           area: 32.8 + Math.random() * 15,
           boundaries: [
             { lat: location.lat - 0.001, lng: location.lng - 0.003 },

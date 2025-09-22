@@ -33,6 +33,8 @@ async function getSelectedFarm(farmId: string | null, userId: string) {
       select: { 
         id: true, 
         name: true,
+        latitude: true,
+        longitude: true,
         fields: {
           select: {
             id: true,
@@ -54,6 +56,8 @@ async function getSelectedFarm(farmId: string | null, userId: string) {
     select: { 
       id: true, 
       name: true,
+      latitude: true,
+      longitude: true,
       fields: {
         select: {
           id: true,
@@ -198,16 +202,12 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
               <ModernCardContent>
                 <KnowledgeDrivenHealthDashboard 
                   farmId={farmId} 
-                  selectedCrops={[
-                    // Mock data - in real implementation, this would come from farm configuration
-                    { id: 'corn', name: 'Corn/Maize', category: 'Grains & Cereals', monitoringParameters: ['NDVI', 'Soil Moisture', 'Temperature', 'Nitrogen Levels', 'Pest Detection'] },
-                    { id: 'soybeans', name: 'Soybeans', category: 'Legumes & Pulses', monitoringParameters: ['NDVI', 'Soil Moisture', 'Nitrogen Levels', 'Pod Development', 'Disease Detection'] }
-                  ]}
-                  fieldData={{
-                    latitude: 41.8781,
-                    longitude: -87.6298,
-                    soilType: 'Loam'
-                  }}
+                  selectedCrops={[]}
+                  fieldData={selectedFarm ? {
+                    latitude: selectedFarm.latitude || 39.8283,
+                    longitude: selectedFarm.longitude || -98.5795,
+                    soilType: 'Unknown'
+                  } : undefined}
                 />
               </ModernCardContent>
             </ModernCard>

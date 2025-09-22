@@ -90,11 +90,11 @@ interface PestDiseaseAlertsProps {
 }
 
 export default function PestDiseaseAlerts({
-  fieldId = 'demo-field-001',
-  cropType = 'corn',
-  latitude = 41.8781,
-  longitude = -87.6298,
-  plantingDate = new Date('2024-05-01'),
+  fieldId,
+  cropType,
+  latitude,
+  longitude,
+  plantingDate,
   className = ''
 }: PestDiseaseAlertsProps) {
   const [prediction, setPrediction] = useState<PestPrediction | null>(null)
@@ -111,6 +111,12 @@ export default function PestDiseaseAlerts({
     try {
       setLoading(true)
       setError(null)
+
+      // Skip if required data is missing
+      if (!fieldId || !cropType || !latitude || !longitude || !plantingDate) {
+        setLoading(false)
+        return
+      }
 
       const response = await fetch('/api/crops/pest-prediction', {
         method: 'POST',
@@ -243,7 +249,7 @@ export default function PestDiseaseAlerts({
           </CardTitle>
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <MapPin className="h-4 w-4" />
-            {fieldId} • {cropType.charAt(0).toUpperCase() + cropType.slice(1)} • 
+            {fieldId} • {cropType ? cropType.charAt(0).toUpperCase() + cropType.slice(1) : 'Unknown'} • 
             {prediction.analysisDate.toLocaleDateString()}
           </p>
         </CardHeader>

@@ -131,7 +131,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
         // Fetch real weather data with coordinates if available
         // Default to a central US location if no farm coordinates provided
         const lat = passedFarmData?.latitude || 39.8283  // Geographic center of US
-        const lon = passedFarmData?.longitude || -98.5795
+        const lon = passedFarmData?.longitude || -98.5795 // Geographic center of US
         const weatherResponse = await fetch(`/api/weather/current?latitude=${lat}&longitude=${lon}`)
         let currentWeather = {
           temperature: 75,
@@ -353,8 +353,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
               id: farm.id,
               name: farm.name,
               totalArea: farm.totalArea,
-              latitude: farm.latitude || (41.8781 + (index * 0.1)), // Spread farms geographically
-              longitude: farm.longitude || (-87.6298 + (index * 0.15)),
+              latitude: farm.latitude || (39.8283 + (index * 0.1)), // Geographic center of US, spread farms geographically
+              longitude: farm.longitude || (-98.5795 + (index * 0.15)), // Geographic center of US, spread farms geographically
               health: farmHealth,
               healthTrend: farmTrend,
               stressedAreas: farmStress,
@@ -365,8 +365,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
             id: String(farmId) || "farm-1",
             name: passedFarmData?.name || farmData?.farmName || "Your Farm",
             totalArea: passedFarmData?.totalArea || farmData?.totalAcres || 0,
-            latitude: passedFarmData?.latitude || 41.8781,
-            longitude: passedFarmData?.longitude || -87.6298,
+            latitude: passedFarmData?.latitude || 39.8283, // Geographic center of US
+            longitude: passedFarmData?.longitude || -98.5795, // Geographic center of US
             health: farmData?.overallHealth || 85,
             healthTrend: farmData?.healthTrend || 3,
             stressedAreas: farmData?.stressedAreas || 15,

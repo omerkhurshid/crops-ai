@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
+import { prisma } from '../../lib/prisma'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
 import { Navbar } from '../../components/navigation/navbar'
+import { Leaf, MapPin, Plus } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,48 +16,74 @@ export default async function FieldsPage() {
     redirect('/login')
   }
 
-  // Demo field data for testing
-  const demoFields = [
-    {
-      id: 'field-1',
-      name: 'North Field',
-      farmName: 'Greenfield Acres',
-      size: 85,
-      crop: 'Corn',
-      plantingDate: '2025-04-15',
-      expectedHarvest: '2025-09-20',
-      health: 'Excellent',
-      ndvi: 0.82,
-      soilMoisture: 65,
-      lastUpdate: '2 hours ago'
+  // Fetch user's farms and fields
+  const userFarms = await prisma.farm.findMany({
+    where: {
+      OR: [
+        { ownerId: user.id },
+        { managers: { some: { userId: user.id } } }
+      ]
     },
-    {
-      id: 'field-2',
-      name: 'South Pasture',
-      farmName: 'Greenfield Acres', 
-      size: 120,
-      crop: 'Soybeans',
-      plantingDate: '2025-05-01',
-      expectedHarvest: '2025-10-15',
-      health: 'Good',
-      ndvi: 0.75,
-      soilMoisture: 58,
-      lastUpdate: '4 hours ago'
-    },
-    {
-      id: 'field-3',
-      name: 'East Quarter',
-      farmName: 'Sunrise Farm',
-      size: 90,
-      crop: 'Wheat',
-      plantingDate: '2025-03-10',
-      expectedHarvest: '2025-08-05',
-      health: 'Fair',
-      ndvi: 0.68,
-      soilMoisture: 42,
-      lastUpdate: '1 day ago'
+    include: {
+      fields: {
+        include: {
+          crops: {
+            where: { status: { not: 'HARVESTED' } },
+            orderBy: { createdAt: 'desc' },
+            take: 1
+          },
+          satelliteData: {
+            orderBy: { captureDate: 'desc' },
+            take: 1
+          }
+        }
+      }
     }
-  ]
+  })
+
+  // Flatten all fields from all farms
+  const allFields = userFarms.flatMap(farm => 
+    farm.fields.map(field => ({
+      id: field.id,
+      name: field.name,
+      farmName: farm.name,
+      farmId: farm.id,
+      size: field.area,
+      crop: field.crops[0]?.cropType || 'Not specified',
+      plantingDate: field.crops[0]?.plantingDate?.toISOString().split('T')[0] || null,
+      expectedHarvest: field.crops[0]?.expectedHarvestDate?.toISOString().split('T')[0] || null,
+      health: getHealthStatus(field.satelliteData[0]?.ndvi),
+      ndvi: field.satelliteData[0]?.ndvi || 0,
+      soilMoisture: Math.round(Math.random() * 40 + 40), // Mock soil moisture for now
+      lastUpdate: field.satelliteData[0]?.captureDate 
+        ? getRelativeTime(field.satelliteData[0].captureDate)
+        : 'No data',
+      soilType: field.soilType || 'Unknown'
+    }))
+  )
+
+  function getHealthStatus(ndvi?: number) {
+    if (!ndvi) return 'Unknown'
+    if (ndvi >= 0.8) return 'Excellent'
+    if (ndvi >= 0.7) return 'Good'
+    if (ndvi >= 0.5) return 'Fair'
+    return 'Poor'
+  }
+
+  function getRelativeTime(date: Date) {
+    const now = new Date()
+    const diff = now.getTime() - date.getTime()
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const days = Math.floor(hours / 24)
+    
+    if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`
+    } else {
+      return 'Recently'
+    }
+  }
 
   const getHealthColor = (health: string) => {
     switch (health) {
@@ -85,59 +113,97 @@ export default async function FieldsPage() {
           </div>
 
           {/* Summary Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Total Fields</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">{demoFields.length}</div>
-              </CardContent>
-            </Card>
+          {allFields.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Total Fields</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">{allFields.length}</div>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Total Acreage</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {demoFields.reduce((total, field) => total + field.size, 0)} acres
-                </div>
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">
+                    {allFields.reduce((total, field) => total + field.size, 0).toFixed(1)} ha
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {(demoFields.reduce((total, field) => total + field.ndvi, 0) / demoFields.length).toFixed(2)}
-                </div>
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">
+                    {allFields.filter(f => f.ndvi > 0).length > 0
+                      ? (allFields.reduce((total, field) => total + field.ndvi, 0) / allFields.filter(f => f.ndvi > 0).length).toFixed(2)
+                      : 'N/A'
+                    }
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">Healthy Fields</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
-                  {demoFields.filter(field => field.health === 'Excellent' || field.health === 'Good').length}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Healthy Fields</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">
+                    {allFields.filter(field => field.health === 'Excellent' || field.health === 'Good').length}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Fields List */}
-          <div className="space-y-6">
-            {demoFields.map((field) => (
+          {allFields.length === 0 ? (
+            <Card className="border-2 border-yellow-200 bg-yellow-50">
+              <CardContent className="pt-6">
+                <div className="text-center py-12">
+                  <div className="p-4 rounded-full bg-yellow-100 inline-flex">
+                    <Leaf className="h-10 w-10 text-yellow-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-yellow-800 mt-4">
+                    No Fields Found
+                  </h3>
+                  <p className="text-yellow-700 mt-2 max-w-md mx-auto">
+                    You haven't added any fields yet. Start by creating a farm and adding fields to begin monitoring your crops.
+                  </p>
+                  <div className="mt-6 space-x-3">
+                    <Button
+                      onClick={() => window.location.href = '/farms'}
+                      variant="outline"
+                      className="border-yellow-300 text-yellow-700 hover:bg-yellow-100"
+                    >
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Manage Farms
+                    </Button>
+                    <Button
+                      className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add First Field
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-6">
+              {allFields.map((field) => (
               <Card key={field.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
                       <CardTitle className="text-lg">{field.name}</CardTitle>
-                      <CardDescription>{field.farmName} • {field.size} acres</CardDescription>
+                      <CardDescription>{field.farmName} • {field.size.toFixed(1)} ha</CardDescription>
                     </div>
                     <Badge className={getHealthColor(field.health)}>
                       {field.health}
@@ -156,11 +222,11 @@ export default async function FieldsPage() {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Planted:</span>
-                          <span>{new Date(field.plantingDate).toLocaleDateString()}</span>
+                          <span>{field.plantingDate ? new Date(field.plantingDate).toLocaleDateString() : 'Not specified'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Harvest:</span>
-                          <span>{new Date(field.expectedHarvest).toLocaleDateString()}</span>
+                          <span>{field.expectedHarvest ? new Date(field.expectedHarvest).toLocaleDateString() : 'Not specified'}</span>
                         </div>
                       </div>
                     </div>
@@ -171,7 +237,9 @@ export default async function FieldsPage() {
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">NDVI:</span>
-                          <span className="font-medium text-green-600">{field.ndvi}</span>
+                          <span className="font-medium text-green-600">
+                            {field.ndvi > 0 ? field.ndvi.toFixed(2) : 'N/A'}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Soil Moisture:</span>
@@ -216,8 +284,9 @@ export default async function FieldsPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Quick Actions */}
           <div className="mt-8">

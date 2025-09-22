@@ -708,8 +708,8 @@ export const GET = apiMiddleware.protected(
           cropType,
           plantingDate: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days ago
           location: {
-            latitude: parseFloat(searchParams.get('latitude') || '41.8781'),
-            longitude: parseFloat(searchParams.get('longitude') || '-87.6298')
+            latitude: parseFloat(searchParams.get('latitude') || '39.8283'), // Geographic center of US
+            longitude: parseFloat(searchParams.get('longitude') || '-98.5795') // Geographic center of US
           }
         },
         weather: {

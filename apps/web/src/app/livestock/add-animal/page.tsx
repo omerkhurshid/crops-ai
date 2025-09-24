@@ -36,13 +36,19 @@ export default function AddAnimalPage() {
       const response = await fetch('/api/farms')
       if (response.ok) {
         const farmData = await response.json()
-        setFarms(farmData)
-        if (farmData.length > 0) {
-          setFormData(prev => ({ ...prev, farmId: farmData[0].id }))
+        // Ensure farmData is an array
+        const farmsArray = Array.isArray(farmData) ? farmData : []
+        setFarms(farmsArray)
+        if (farmsArray.length > 0) {
+          setFormData(prev => ({ ...prev, farmId: farmsArray[0].id }))
         }
+      } else {
+        console.error('Failed to fetch farms:', response.status)
+        setFarms([]) // Set empty array on error
       }
     } catch (error) {
       console.error('Error fetching farms:', error)
+      setFarms([]) // Set empty array on error
     }
   }
 
@@ -102,11 +108,17 @@ export default function AddAnimalPage() {
                       <SelectValue placeholder="Select a farm" />
                     </SelectTrigger>
                     <SelectContent>
-                      {farms.map((farm) => (
-                        <SelectItem key={farm.id} value={farm.id}>
-                          {farm.name}
+                      {farms && farms.length > 0 ? (
+                        farms.map((farm) => (
+                          <SelectItem key={farm.id} value={farm.id}>
+                            {farm.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="" disabled>
+                          No farms available
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                 </div>

@@ -32,13 +32,19 @@ export default function AddLivestockEventPage() {
       const response = await fetch('/api/farms')
       if (response.ok) {
         const farmData = await response.json()
-        setFarms(farmData)
-        if (farmData.length > 0) {
-          setFormData(prev => ({ ...prev, farmId: farmData[0].id }))
+        // Ensure farmData is an array
+        const farmsArray = Array.isArray(farmData) ? farmData : []
+        setFarms(farmsArray)
+        if (farmsArray.length > 0) {
+          setFormData(prev => ({ ...prev, farmId: farmsArray[0].id }))
         }
+      } else {
+        console.error('Failed to fetch farms:', response.status)
+        setFarms([]) // Set empty array on error
       }
     } catch (error) {
       console.error('Error fetching farms:', error)
+      setFarms([]) // Set empty array on error
     }
   }
 
@@ -132,9 +138,13 @@ export default function AddLivestockEventPage() {
                     required
                   >
                     <option value="">Select a farm</option>
-                    {farms.map(farm => (
-                      <option key={farm.id} value={farm.id}>{farm.name}</option>
-                    ))}
+                    {farms && farms.length > 0 ? (
+                      farms.map(farm => (
+                        <option key={farm.id} value={farm.id}>{farm.name}</option>
+                      ))
+                    ) : (
+                      <option value="" disabled>No farms available</option>
+                    )}
                   </select>
                 </div>
 

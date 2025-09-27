@@ -6,6 +6,7 @@ import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Alert, AlertDescription } from '../ui/alert'
+import { Thermometer, TrendingUp, Droplets, Sprout } from 'lucide-react'
 import { AggregatedWeatherData, HourlyWeatherData } from '../../lib/weather/aggregator'
 
 interface WeatherAnalyticsProps {
@@ -155,7 +156,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
-          {aggregatedData && (
+          {aggregatedData ? (
             <>
               {/* Weather Statistics Overview */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -261,11 +262,26 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 </Card>
               )}
             </>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Thermometer className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No Weather Analytics Data
+              </h3>
+              <p className="text-gray-600 max-w-sm mx-auto mb-4">
+                Weather analytics data is not available for this location. Please try refreshing or check your location settings.
+              </p>
+              <Button onClick={fetchAnalyticsData} variant="outline">
+                Retry Loading Data
+              </Button>
+            </div>
           )}
         </TabsContent>
 
         <TabsContent value="trends" className="space-y-4">
-          {aggregatedData && (
+          {aggregatedData ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Card>
                 <CardHeader>
@@ -318,11 +334,23 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 </CardContent>
               </Card>
             </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No Trend Data Available
+              </h3>
+              <p className="text-gray-600 max-w-sm mx-auto">
+                Weather trend analysis requires historical data that is not currently available.
+              </p>
+            </div>
           )}
         </TabsContent>
 
         <TabsContent value="agriculture" className="space-y-4">
-          {aggregatedData && (
+          {aggregatedData ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <Card>
                 <CardHeader>
@@ -487,11 +515,26 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 </CardContent>
               </Card>
             </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sprout className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No Agriculture Data Available
+              </h3>
+              <p className="text-gray-600 max-w-sm mx-auto mb-4">
+                Agricultural metrics are not currently available. This may be due to insufficient weather data or location settings.
+              </p>
+              <Button onClick={fetchAnalyticsData} variant="outline">
+                Retry Loading Data
+              </Button>
+            </div>
           )}
         </TabsContent>
 
         <TabsContent value="irrigation" className="space-y-4">
-          {irrigationRec && (
+          {irrigationRec ? (
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Irrigation Recommendation</CardTitle>
@@ -529,6 +572,21 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 </div>
               </CardContent>
             </Card>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Droplets className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No Irrigation Data Available
+              </h3>
+              <p className="text-gray-600 max-w-sm mx-auto mb-4">
+                Irrigation recommendations are not currently available. This may be due to insufficient weather data or location settings.
+              </p>
+              <Button onClick={fetchAnalyticsData} variant="outline">
+                Retry Loading Data
+              </Button>
+            </div>
           )}
         </TabsContent>
       </Tabs>

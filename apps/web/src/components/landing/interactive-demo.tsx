@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { 
   CloudRain, Sun, Droplets, Thermometer, Wind, 
   AlertTriangle, CheckCircle2, Clock, TrendingUp,
-  MapPin, Zap, Satellite, DollarSign, Eye, Activity
+  MapPin, Zap, Satellite, DollarSign, Eye, Activity, ArrowRight
 } from 'lucide-react'
 
 interface FieldData {

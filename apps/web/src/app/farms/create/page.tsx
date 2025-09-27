@@ -823,23 +823,46 @@ export default function CreateFarmPage() {
                     )}
                   </div>
                 ) : (
-                  // Livestock selection (keep existing format)
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {livestockOptions.primary.map((option: any) => (
-                      <button
-                        key={option.id}
-                        onClick={() => handleProductSelection(option.id, true)}
-                        className={`p-5 rounded-xl border-2 transition-all hover:shadow-md ${
-                          farm.primaryProduct === option.id
-                            ? 'border-sage-600 bg-sage-50 shadow-soft'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
+                  // Livestock selection - converted to dropdown
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                        Select your primary livestock type
+                      </Label>
+                      <Select
+                        value={farm.primaryProduct || ''}
+                        onValueChange={(value) => handleProductSelection(value, true)}
                       >
-                        <div className="flex justify-center mb-2 text-gray-600">{option.icon}</div>
-                        <div className="text-sm font-medium">{option.name}</div>
-                        <div className="text-xs text-gray-600 mt-1">{option.typical}</div>
-                      </button>
-                    ))}
+                        <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                          <SelectValue placeholder="Choose your livestock type...">
+                            {farm.primaryProduct && livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct) && (
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center space-x-3">
+                                  <div className="text-sage-600">{livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.icon}</div>
+                                  <div className="text-left">
+                                    <div className="text-sm font-medium">{livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.name}</div>
+                                    <div className="text-xs text-gray-500">{livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.typical}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {livestockOptions.primary.map((option: any) => (
+                            <SelectItem key={option.id} value={option.id} className="py-3">
+                              <div className="flex items-center space-x-3">
+                                <div className="text-sage-600 flex-shrink-0">{option.icon}</div>
+                                <div>
+                                  <div className="text-sm font-medium">{option.name}</div>
+                                  <div className="text-xs text-gray-500">{option.typical}</div>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1097,26 +1120,66 @@ export default function CreateFarmPage() {
                     )}
                   </div>
                 ) : (
-                  // Livestock secondary selection (keep existing)
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {livestockOptions.secondary.map((option: any) => (
-                      <button
-                        key={option.id}
-                        onClick={() => handleProductSelection(option.id, false)}
-                        className={`p-4 rounded-xl border-2 transition-all hover:shadow-sm ${
-                          farm.secondaryProducts?.includes(option.id)
-                            ? 'border-sage-600 bg-sage-50'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
+                  // Livestock secondary selection - converted to dropdown
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-sage-700 mb-2 block">
+                        Select additional livestock (optional)
+                      </Label>
+                      <Select
+                        value=""
+                        onValueChange={(value) => handleProductSelection(value, false)}
                       >
-                        <div className="flex items-center space-x-2">
-                          <div className="text-gray-600">{option.icon}</div>
-                          <div className="text-left">
-                            <div className="text-sm font-medium">{option.name}</div>
-                          </div>
+                        <SelectTrigger className="w-full h-auto py-3 border-sage-200 focus:border-sage-500 focus:ring-sage-500">
+                          <SelectValue placeholder="Add more livestock types..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {livestockOptions.secondary
+                            .filter((option: any) => !farm.secondaryProducts?.includes(option.id))
+                            .map((option: any) => (
+                            <SelectItem key={option.id} value={option.id} className="py-3">
+                              <div className="flex items-center space-x-3">
+                                <div className="text-sage-600 flex-shrink-0">{option.icon}</div>
+                                <div>
+                                  <div className="text-sm font-medium">{option.name}</div>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Selected Secondary Livestock */}
+                    {farm.secondaryProducts && farm.secondaryProducts.length > 0 && (
+                      <div className="space-y-2">
+                        <Label className="text-sm text-gray-600">Selected Additional Livestock:</Label>
+                        <div className="flex flex-wrap gap-2">
+                          {farm.secondaryProducts.map(productId => {
+                            const livestock = livestockOptions.secondary.find((option: any) => option.id === productId);
+                            if (!livestock) return null;
+                            return (
+                              <div key={productId} className="flex items-center space-x-2 bg-sage-100 px-3 py-2 rounded-full border border-sage-200">
+                                {livestock.icon}
+                                <span className="text-sm font-medium">{livestock.name}</span>
+                                <button
+                                  onClick={() => {
+                                    setFarm(prev => ({
+                                      ...prev,
+                                      secondaryProducts: prev.secondaryProducts?.filter(p => p !== productId)
+                                    }));
+                                  }}
+                                  className="text-gray-500 hover:text-red-500 ml-1 text-lg"
+                                  title="Remove livestock"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            );
+                          })}
                         </div>
-                      </button>
-                    ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

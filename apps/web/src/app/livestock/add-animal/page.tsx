@@ -115,7 +115,7 @@ export default function AddAnimalPage() {
                           </SelectItem>
                         ))
                       ) : (
-                        <SelectItem value="" disabled>
+                        <SelectItem value="no-farms" disabled>
                           No farms available
                         </SelectItem>
                       )}

@@ -39,6 +39,7 @@ interface FarmsMapProps {
 export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: FarmsMapProps) {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [mapType, setMapType] = useState<'satellite' | 'terrain'>('satellite')
+  const [showNavigation, setShowNavigation] = useState(false)
 
   // Mock implementation - replace with actual map library (Mapbox/Leaflet)
   return (
@@ -71,39 +72,58 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               </div>
             ) : (
               <>
-                {/* Realistic Satellite Background */}
+                {/* Map Background - changes based on mapType */}
                 <div className="absolute inset-0">
-                  {/* Base satellite terrain */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-50 to-lime-100">
-                    
-                    {/* Agricultural field patterns */}
-                    <div className="absolute inset-0 opacity-60">
-                      {/* Field parcels simulation */}
-                      <div className="absolute top-0 left-0 w-1/3 h-1/2 bg-gradient-to-br from-green-200 to-green-300 border border-green-400/30" />
-                      <div className="absolute top-0 left-1/3 w-1/3 h-1/2 bg-gradient-to-br from-yellow-100 to-green-200 border border-green-400/30" />
-                      <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-gradient-to-br from-emerald-200 to-green-300 border border-green-400/30" />
-                      
-                      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-green-300 to-emerald-300 border border-green-400/30" />
-                      <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-lime-200 to-green-300 border border-green-400/30" />
-                      
-                      {/* Roads and infrastructure */}
-                      <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 opacity-60" />
-                      <div className="absolute top-0 bottom-0 left-1/3 w-1 bg-gray-300 opacity-60" />
-                      <div className="absolute top-0 bottom-0 right-1/3 w-1 bg-gray-300 opacity-60" />
-                      
-                      {/* Water features */}
-                      <div className="absolute bottom-4 left-4 w-20 h-12 bg-blue-200 rounded-lg opacity-70" />
-                      
-                      {/* Forested areas */}
-                      <div className="absolute top-4 right-4 w-16 h-16 bg-green-600 rounded-full opacity-40" />
-                      <div className="absolute bottom-8 right-8 w-12 h-12 bg-green-700 rounded-full opacity-40" />
+                  {mapType === 'satellite' ? (
+                    /* Satellite View */
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-50 to-lime-100">
+                      {/* Agricultural field patterns */}
+                      <div className="absolute inset-0 opacity-60">
+                        {/* Field parcels simulation */}
+                        <div className="absolute top-0 left-0 w-1/3 h-1/2 bg-gradient-to-br from-green-200 to-green-300 border border-green-400/30" />
+                        <div className="absolute top-0 left-1/3 w-1/3 h-1/2 bg-gradient-to-br from-yellow-100 to-green-200 border border-green-400/30" />
+                        <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-gradient-to-br from-emerald-200 to-green-300 border border-green-400/30" />
+                        
+                        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-green-300 to-emerald-300 border border-green-400/30" />
+                        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-lime-200 to-green-300 border border-green-400/30" />
+                        
+                        {/* Roads and infrastructure */}
+                        <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 opacity-60" />
+                        <div className="absolute top-0 bottom-0 left-1/3 w-1 bg-gray-300 opacity-60" />
+                        <div className="absolute top-0 bottom-0 right-1/3 w-1 bg-gray-300 opacity-60" />
+                        
+                        {/* Water features */}
+                        <div className="absolute bottom-4 left-4 w-20 h-12 bg-blue-200 rounded-lg opacity-70" />
+                        
+                        {/* Forested areas */}
+                        <div className="absolute top-4 right-4 w-16 h-16 bg-green-600 rounded-full opacity-40" />
+                        <div className="absolute bottom-8 right-8 w-12 h-12 bg-green-700 rounded-full opacity-40" />
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* Terrain View */
+                    <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50">
+                      {/* Topographic-style patterns */}
+                      <div className="absolute inset-0 opacity-50">
+                        {/* Elevation contours */}
+                        <div className="absolute top-1/4 left-0 right-0 h-0.5 bg-amber-300 opacity-40" />
+                        <div className="absolute top-2/4 left-0 right-0 h-0.5 bg-amber-400 opacity-40" />
+                        <div className="absolute top-3/4 left-0 right-0 h-0.5 bg-amber-500 opacity-40" />
+                        
+                        {/* Hills and valleys */}
+                        <div className="absolute top-0 left-1/4 w-1/2 h-1/3 bg-gradient-radial from-amber-200 to-transparent rounded-full opacity-60" />
+                        <div className="absolute bottom-0 right-1/4 w-1/3 h-1/2 bg-gradient-radial from-orange-200 to-transparent rounded-full opacity-60" />
+                        
+                        {/* Grid lines */}
+                        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(217,119,6,0.1)_1px,transparent_1px),linear-gradient(rgba(217,119,6,0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
                 {/* Geographic indicators */}
                 <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-sage-700 bg-white/90 px-3 py-1.5 rounded-lg shadow-sm border">
-                  🌍 Regional Farm Overview - Real-time Health Monitoring
+                  {mapType === 'satellite' ? '🛰️' : '🗺️'} Regional Farm Overview - {mapType === 'satellite' ? 'Satellite' : 'Terrain'} View
                 </div>
               </>
             )}
@@ -207,13 +227,24 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
             
             <button
               onClick={() => setMapType(mapType === 'satellite' ? 'terrain' : 'satellite')}
-              className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className={cn(
+                "p-2 rounded-lg shadow-md hover:shadow-lg transition-all",
+                mapType === 'satellite' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+              )}
+              title={`Switch to ${mapType === 'satellite' ? 'terrain' : 'satellite'} view`}
             >
-              <Layers className="h-4 w-4 text-sage-700" />
+              <Layers className="h-4 w-4" />
             </button>
 
-            <button className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <Navigation className="h-4 w-4 text-sage-700" />
+            <button 
+              onClick={() => setShowNavigation(!showNavigation)}
+              className={cn(
+                "p-2 rounded-lg shadow-md hover:shadow-lg transition-all",
+                showNavigation ? 'bg-blue-100 text-blue-700' : 'bg-white text-sage-700'
+              )}
+              title="Toggle navigation info"
+            >
+              <Navigation className="h-4 w-4" />
             </button>
           </div>
 
@@ -234,6 +265,39 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               ))}
             </div>
           </div>
+
+          {/* Navigation Info Panel */}
+          {showNavigation && (
+            <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur rounded-lg p-3 max-w-xs">
+              <h4 className="text-xs font-semibold text-sage-800 mb-2 flex items-center gap-1">
+                <Navigation className="h-3 w-3" />
+                Navigation Info
+              </h4>
+              <div className="space-y-2 text-xs text-sage-600">
+                <div className="flex justify-between">
+                  <span>View:</span>
+                  <span className="font-medium capitalize">{mapType}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Total Farms:</span>
+                  <span className="font-medium">{farms.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Total Fields:</span>
+                  <span className="font-medium">{farms.reduce((sum, farm) => sum + farm.fieldsCount, 0)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Total Area:</span>
+                  <span className="font-medium">{farms.reduce((sum, farm) => sum + farm.totalArea, 0).toFixed(1)} ha</span>
+                </div>
+                <div className="border-t pt-2 mt-2">
+                  <div className="text-xs text-sage-500">
+                    💡 Click farm markers to view details
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Selected Farm Summary */}
           {selectedFarmId && (

@@ -163,7 +163,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <Button type="button" variant="outline" onClick={() => setExpenseDialog(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">
+              <Button type="submit" className="bg-sage-600 hover:bg-sage-700 text-white">
                 Log Expense
               </Button>
             </div>
@@ -236,7 +236,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <Button type="button" variant="outline" onClick={() => setHarvestDialog(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">
+              <Button type="submit" className="bg-sage-600 hover:bg-sage-700 text-white">
                 Log Harvest
               </Button>
             </div>

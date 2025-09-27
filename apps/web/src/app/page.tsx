@@ -33,7 +33,7 @@ export default async function Home() {
             <div>
               {/* Top Badge */}
               <div className="mb-8">
-                <Badge variant="outline" className="bg-green-600 text-white border-green-500 px-6 py-3 text-sm font-medium">
+                <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
                   <Sparkles className="h-4 w-4 mr-2" />
                   Real-time Agricultural Intelligence Platform
                 </Badge>
@@ -45,13 +45,12 @@ export default async function Home() {
               </h1>
               
               {/* Tagline */}
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-sage-700 mb-6 max-w-4xl mx-auto leading-tight font-normal">
-                Your Farm Command Center. Make Smarter Decisions Daily.
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-sage-700 mb-6 max-w-4xl mx-auto leading-tight font-semibold">
+                AI Satellite Intelligence That Maximizes Every Acre
               </h2>
               
               <p className="text-lg text-sage-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Get instant answers to "Should I spray today?", "When should I harvest?", and "Which fields need attention?"
-                — all from one unified dashboard that saves you 2 hours every day.
+                Our AI analyzes real-time satellite data to detect crop stress before you can see it. Get precise field-by-field recommendations for irrigation, fertilizer, and harvest timing. Increase yields by 15-30% while reducing input costs.
               </p>
               
               {/* CTA Button */}

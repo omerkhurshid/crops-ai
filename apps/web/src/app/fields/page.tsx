@@ -107,7 +107,7 @@ export default async function FieldsPage() {
               <h1 className="text-3xl font-bold text-gray-900">Field Management</h1>
               <p className="text-gray-600">Monitor and analyze individual field performance</p>
             </div>
-            <Button className="bg-green-600 hover:bg-green-700">
+            <Button className="bg-sage-600 hover:bg-sage-700">
               + Add New Field
             </Button>
           </div>

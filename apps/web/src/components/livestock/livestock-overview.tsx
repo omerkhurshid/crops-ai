@@ -65,7 +65,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           <p className="text-sage-500 text-sm mb-4">
             Add your livestock to track health, breeding, and production
           </p>
-          <Button className="bg-amber-600 hover:bg-amber-700 text-white">
+          <Button className="bg-sage-600 hover:bg-sage-700 text-white">
             <Plus className="h-4 w-4 mr-2" />
             Add Livestock
           </Button>

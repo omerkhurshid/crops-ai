@@ -161,7 +161,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
               <div className="space-y-4">
                 <CheckCircle className="h-12 w-12 mx-auto text-green-600" />
                 <p className="text-lg font-semibold text-green-800">Analysis Complete!</p>
-                <Button onClick={() => setCurrentStep(3)} className="bg-green-600 hover:bg-green-700">
+                <Button onClick={() => setCurrentStep(3)} className="bg-sage-600 hover:bg-sage-700">
                   View Results
                 </Button>
               </div>

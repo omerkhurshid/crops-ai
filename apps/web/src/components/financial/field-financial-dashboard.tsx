@@ -155,7 +155,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               </ModernCardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => handleAddTransaction('INCOME')} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={() => handleAddTransaction('INCOME')} className="bg-sage-600 hover:bg-sage-700">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Income
               </Button>

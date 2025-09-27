@@ -196,12 +196,19 @@ export function MorningBriefing({
                   </div>
                 )}
 
-                {/* Crop Stats - Updated */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-sage-700">{plantingsCount} crops planned</span>
-                    <span className="text-sage-700">{growingCount} growing</span>
-                    <span className="text-sage-700">{readyToHarvestCount} ready to harvest</span>
+                {/* Crop Stats - Improved Layout */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="text-center p-2 bg-sage-50 rounded-lg border border-sage-100">
+                    <div className="text-lg font-bold text-sage-800">{plantingsCount}</div>
+                    <div className="text-xs text-sage-600">Planned</div>
+                  </div>
+                  <div className="text-center p-2 bg-green-50 rounded-lg border border-green-100">
+                    <div className="text-lg font-bold text-green-800">{growingCount}</div>
+                    <div className="text-xs text-green-600">Growing</div>
+                  </div>
+                  <div className="text-center p-2 bg-amber-50 rounded-lg border border-amber-100">
+                    <div className="text-lg font-bold text-amber-800">{readyToHarvestCount}</div>
+                    <div className="text-xs text-amber-600">Ready</div>
                   </div>
                 </div>
 

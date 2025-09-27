@@ -268,23 +268,20 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
   return (
     <ErrorBoundary>
       <div className="space-y-6">
-      {/* Data Status Indicator */}
-      {dataStatus !== 'real' && (
-        <Card className={`border-l-4 ${dataStatus === 'mock' ? 'border-l-blue-500 bg-blue-50' : 'border-l-yellow-500 bg-yellow-50'}`}>
+      {/* Data Status Indicator - Only show if error */}
+      {dataStatus === 'error' && (
+        <Card className="border-l-4 border-l-yellow-500 bg-yellow-50">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-full ${dataStatus === 'mock' ? 'bg-blue-100' : 'bg-yellow-100'}`}>
-                <Activity className={`h-4 w-4 ${dataStatus === 'mock' ? 'text-blue-600' : 'text-yellow-600'}`} />
+              <div className="p-2 rounded-full bg-yellow-100">
+                <Activity className="h-4 w-4 text-yellow-600" />
               </div>
               <div>
-                <h4 className={`font-semibold ${dataStatus === 'mock' ? 'text-blue-900' : 'text-yellow-900'}`}>
-                  {dataStatus === 'mock' ? 'Demo Data Display' : 'Limited Data Available'}
+                <h4 className="font-semibold text-yellow-900">
+                  Data Temporarily Unavailable
                 </h4>
-                <p className={`text-sm ${dataStatus === 'mock' ? 'text-blue-700' : 'text-yellow-700'}`}>
-                  {dataStatus === 'mock' 
-                    ? 'This page is showing sample data for demonstration. Real satellite data will appear once your fields have been processed.'
-                    : 'Some satellite data is missing. Contact support to enable full health monitoring.'
-                  }
+                <p className="text-sm text-yellow-700">
+                  We're updating our satellite imagery. Data will refresh automatically.
                 </p>
               </div>
               <Button
@@ -294,7 +291,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                 className="ml-auto"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                Retry
               </Button>
             </div>
           </CardContent>

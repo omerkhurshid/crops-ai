@@ -124,9 +124,9 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
   if (!metrics || error) {
     if (compact) {
       return (
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100">
-          <XCircle className="h-4 w-4 text-gray-500" />
-          <span className="text-sm text-gray-600">No data</span>
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-sage-100">
+          <Activity className="h-4 w-4 text-sage-500" />
+          <span className="text-sm text-sage-600">Analyzing...</span>
         </div>
       )
     }

@@ -37,63 +37,65 @@ interface BenchmarkingSectionProps {
 }
 
 export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
-  // Mock benchmarking data - in production, this would come from an API
-  const benchmarks: BenchmarkData[] = [
-    {
-      metric: 'Corn Yield',
-      yourValue: 185,
-      regionAverage: 165,
-      topQuartile: 195,
-      unit: 'bu/acre',
-      category: 'yield',
-      higherIsBetter: true
-    },
-    {
-      metric: 'Cost Per Acre',
-      yourValue: 850,
-      regionAverage: 925,
-      topQuartile: 750,
-      unit: '$/acre',
-      category: 'cost',
-      higherIsBetter: false
-    },
-    {
-      metric: 'Profit Per Acre',
-      yourValue: 400,
-      regionAverage: 285,
-      topQuartile: 475,
-      unit: '$/acre',
-      category: 'profit',
-      higherIsBetter: true
-    },
-    {
-      metric: 'Fuel Efficiency',
-      yourValue: 3.2,
-      regionAverage: 3.8,
-      topQuartile: 2.9,
-      unit: 'gal/acre',
-      category: 'efficiency',
-      higherIsBetter: false
-    },
-    {
-      metric: 'Fertilizer Cost',
-      yourValue: 245,
-      regionAverage: 285,
-      topQuartile: 215,
-      unit: '$/acre',
-      category: 'cost',
-      higherIsBetter: false
-    },
-    {
-      metric: 'Labor Hours',
-      yourValue: 2.1,
-      regionAverage: 2.4,
-      topQuartile: 1.8,
-      unit: 'hrs/acre',
-      category: 'efficiency',
-      higherIsBetter: false
+  const [benchmarks, setBenchmarks] = React.useState<BenchmarkData[]>([])
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    const fetchBenchmarkData = async () => {
+      try {
+        const response = await fetch(`/api/farms/regional-comparison?farmId=${farm.id}`)
+        if (response.ok) {
+          const data = await response.json()
+          // Transform API data to benchmark format
+          const farmBenchmarks: BenchmarkData[] = []
+          
+          if (data.yieldComparison) {
+            farmBenchmarks.push({
+              metric: 'Crop Yield',
+              yourValue: data.yieldComparison.yourValue || 0,
+              regionAverage: data.yieldComparison.regionAverage || 0,
+              topQuartile: data.yieldComparison.topQuartile || 0,
+              unit: 'bu/acre',
+              category: 'yield',
+              higherIsBetter: true
+            })
+          }
+
+          if (data.costComparison) {
+            farmBenchmarks.push({
+              metric: 'Cost Per Acre',
+              yourValue: data.costComparison.yourValue || 0,
+              regionAverage: data.costComparison.regionAverage || 0,
+              topQuartile: data.costComparison.topQuartile || 0,
+              unit: '$/acre',
+              category: 'cost',
+              higherIsBetter: false
+            })
+          }
+
+          if (data.profitComparison) {
+            farmBenchmarks.push({
+              metric: 'Profit Per Acre',
+              yourValue: data.profitComparison.yourValue || 0,
+              regionAverage: data.profitComparison.regionAverage || 0,
+              topQuartile: data.profitComparison.topQuartile || 0,
+              unit: '$/acre',
+              category: 'profit',
+              higherIsBetter: true
+            })
+          }
+
+          setBenchmarks(farmBenchmarks)
+        }
+      } catch (error) {
+        console.error('Error fetching benchmark data:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchBenchmarkData()
+  }, [farm.id])
 
   const getPerformanceStatus = (benchmark: BenchmarkData): 'excellent' | 'good' | 'warning' | 'critical' => {
     const { yourValue, regionAverage, topQuartile, higherIsBetter } = benchmark
@@ -161,6 +163,59 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       case 'efficiency': return 'text-purple-600'
       default: return 'text-sage-600'
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <ModernCard variant="floating">
+          <ModernCardHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <ModernCardTitle className="text-sage-800">How Do You Stack Up?</ModernCardTitle>
+                <p className="text-sm text-sage-600 mt-1">Loading regional comparison data...</p>
+              </div>
+            </div>
+          </ModernCardHeader>
+        </ModernCard>
+        <div className="animate-pulse space-y-4">
+          <div className="h-32 bg-gray-200 rounded-lg"></div>
+          <div className="h-64 bg-gray-200 rounded-lg"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (benchmarks.length === 0) {
+    return (
+      <ModernCard variant="floating">
+        <ModernCardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Users className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <ModernCardTitle className="text-sage-800">How Do You Stack Up?</ModernCardTitle>
+              <p className="text-sm text-sage-600 mt-1">Compare your farm to similar farms in your area</p>
+            </div>
+          </div>
+        </ModernCardHeader>
+        <ModernCardContent>
+          <div className="text-center py-8">
+            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No Benchmark Data Available
+            </h3>
+            <p className="text-gray-600 max-w-sm mx-auto">
+              Add crop yields and financial data to compare your performance with similar farms in your region.
+            </p>
+          </div>
+        </ModernCardContent>
+      </ModernCard>
+    )
   }
 
   return (

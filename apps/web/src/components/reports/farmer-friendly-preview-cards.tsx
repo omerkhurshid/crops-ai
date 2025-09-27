@@ -60,7 +60,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           <p className="text-sm text-gray-600">Add crop yields and expenses to track performance</p>
         </div>
         <Link href={`/reports/performance/${farmId}`} className="block">
-          <Button className="bg-sage-700 hover:bg-sage-800">
+          <Button variant="sage">
             <Plus className="h-4 w-4 mr-2" />
             Start Tracking
           </Button>
@@ -99,7 +99,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/reports/performance/${farmId}`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
           View Detailed Performance
         </Button>
@@ -152,7 +152,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <p className="text-sm text-gray-600">Enable weather tracking for insights</p>
         </div>
         <Link href={`/weather`} className="block">
-          <Button className="bg-sage-700 hover:bg-sage-800">
+          <Button variant="sage">
             <Plus className="h-4 w-4 mr-2" />
             Setup Weather
           </Button>
@@ -206,7 +206,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/weather`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
           View Weather Analytics
         </Button>
@@ -259,7 +259,7 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
           <p className="text-sm text-gray-600">Add fields and crops to monitor health</p>
         </div>
         <Link href={`/crop-health`} className="block">
-          <Button className="bg-sage-700 hover:bg-sage-800">
+          <Button variant="sage">
             <Plus className="h-4 w-4 mr-2" />
             Add Crops
           </Button>
@@ -315,7 +315,7 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/crop-health`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
           View Crop Health Details
         </Button>
@@ -380,7 +380,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           <p className="text-sm text-gray-600">Add transactions to track income and expenses</p>
         </div>
         <Link href={`/financial`} className="block">
-          <Button className="bg-sage-700 hover:bg-sage-800">
+          <Button variant="sage">
             <Plus className="h-4 w-4 mr-2" />
             Add Transaction
           </Button>
@@ -425,7 +425,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/reports/financial/${farmId}`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
           View Financial Details
         </Button>
@@ -481,7 +481,7 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
           <p className="text-sm text-gray-600">Add environmental tracking to monitor sustainability</p>
         </div>
         <Link href={`/reports/sustainability/${farmId}`} className="block">
-          <Button className="bg-sage-700 hover:bg-sage-800">
+          <Button variant="sage">
             <Plus className="h-4 w-4 mr-2" />
             Start Tracking
           </Button>
@@ -548,7 +548,7 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/reports/sustainability/${farmId}`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
           View Sustainability Details
         </Button>
@@ -607,7 +607,7 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
       </div>
 
       <Link href={`/reports/custom/${farmId}`} className="block">
-        <Button className="w-full bg-sage-700 hover:bg-sage-800">
+        <Button variant="sage" className="w-full">
           <ArrowRight className="h-4 w-4 mr-2" />
           Build My Report
         </Button>

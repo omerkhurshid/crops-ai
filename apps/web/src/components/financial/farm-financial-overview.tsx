@@ -182,7 +182,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
               </ModernCardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={onAddTransaction} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={onAddTransaction} variant="sage">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Transaction
               </Button>

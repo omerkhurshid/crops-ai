@@ -33,7 +33,7 @@ export default async function Home() {
             <div>
               {/* Top Badge */}
               <div className="mb-8">
-                <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
+                <Badge variant="outline" className="bg-green-600 text-white border-green-500 px-6 py-3 text-sm font-medium">
                   <Sparkles className="h-4 w-4 mr-2" />
                   Real-time Agricultural Intelligence Platform
                 </Badge>

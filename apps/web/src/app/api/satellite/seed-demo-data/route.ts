@@ -39,22 +39,10 @@ export async function POST(request: Request) {
               data: {
                 fieldId: field.id,
                 captureDate: new Date(),
-                satelliteSource: 'SENTINEL_2',
-                cloudCoverage: Math.round(Math.random() * 20), // 0-20% cloud coverage
                 ndvi: ndvi,
-                ndre: ndvi - 0.05 + Math.random() * 0.1,
-                evi: ndvi - 0.1 + Math.random() * 0.1,
-                savi: ndvi - 0.08 + Math.random() * 0.1,
-                ndwi: 0.2 + Math.random() * 0.3,
+                ndviChange: Math.random() * 0.1 - 0.05, // Small random change
                 stressLevel: ndvi > 0.8 ? 'NONE' : ndvi > 0.7 ? 'LOW' : ndvi > 0.6 ? 'MODERATE' : 'HIGH',
-                growthStage: 'VEGETATIVE',
-                anomalyDetected: ndvi < 0.7,
-                metadata: {
-                  resolution: 10, // 10m resolution for Sentinel-2
-                  processingDate: new Date().toISOString(),
-                  dataQuality: 'GOOD',
-                  algorithm: 'INITIAL_SEED_v1'
-                }
+                imageUrl: null // No direct image URL for seeded data
               }
             })
           )

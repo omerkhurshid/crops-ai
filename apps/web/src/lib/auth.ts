@@ -20,22 +20,27 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Demo mode - hardcoded users for testing without database
-        const demoUsers = [
-          {
-            id: 'demo-1',
-            email: 'demo@crops.ai',
-            password: 'Demo123!',
-            name: 'Demo Farmer',
-            role: UserRole.FARM_OWNER
-          },
-          {
-            id: 'admin-1', 
-            email: 'admin@crops.ai',
-            password: 'Admin123!',
-            name: 'Admin User',
-            role: UserRole.ADMIN
-          }
-        ]
+        // CRITICAL: Never use demo users in production environment
+        const demoUsers = process.env.NODE_ENV === 'production' 
+          ? [] // NEVER use demo users in production
+          : process.env.ENABLE_DEMO_USERS === 'true'
+            ? [
+                {
+                  id: 'demo-1',
+                  email: 'demo@crops.ai',
+                  password: process.env.DEMO_PASSWORD || 'ChangeThisPassword123!',
+                  name: 'Demo Farmer',
+                  role: UserRole.FARM_OWNER
+                },
+                {
+                  id: 'admin-1', 
+                  email: 'admin@crops.ai',
+                  password: process.env.ADMIN_DEMO_PASSWORD || 'ChangeThisPassword123!',
+                  name: 'Admin User',
+                  role: UserRole.ADMIN
+                }
+              ]
+            : []
 
         // Check demo users first
         const demoUser = demoUsers.find(user => user.email === credentials.email)

@@ -343,7 +343,7 @@ export default function CreateFarmPage() {
       if (farm.detectedFields && result.farm?.id) {
         for (let index = 0; index < farm.detectedFields.length; index++) {
           const field = farm.detectedFields[index];
-          await fetch('/api/fields', {
+          const fieldResponse = await fetch('/api/fields', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -352,9 +352,13 @@ export default function CreateFarmPage() {
               area: field.area,
               latitude: field.centerLat,
               longitude: field.centerLng,
-              boundaries: field.boundaries
+              boundary: field.boundaries // Changed from 'boundaries' to 'boundary'
             })
           })
+          
+          if (!fieldResponse.ok) {
+            console.error(`Failed to create field ${field.name}:`, await fieldResponse.text())
+          }
         }
       }
 

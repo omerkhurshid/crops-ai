@@ -375,7 +375,7 @@
   /* Card styles */
   .card-gradient {
     @apply bg-white/80 backdrop-blur-sm;
-    @apply border-4 border-white/40;
+    @apply border border-sage-200/50;
     @apply rounded-3xl p-6;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }

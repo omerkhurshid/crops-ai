@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server'
 import { Logger, PerformanceMonitor } from '@crops-ai/shared'
 import { AuthenticationError, AuthorizationError, RateLimitError } from './errors'
 import { UserRole } from '@crops-ai/shared'
+import { z } from 'zod'
+import { validateRequest } from './validation-schemas'
 
 export interface AuthenticatedRequest extends NextRequest {
   user: {
@@ -61,46 +63,45 @@ export function withErrorHandling(handler: any) {
   }
 }
 
-// Rate limiting middleware (basic implementation)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-
+// Rate limiting middleware using Upstash Redis
 export function withRateLimit(
   handler: any,
-  options: { maxRequests: number; windowMs: number } = { maxRequests: 100, windowMs: 60000 }
+  type: 'auth' | 'api' | 'write' | 'heavy' = 'api'
 ) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
-    const clientId = getClientId(request)
-    const now = Date.now()
-    const windowStart = now - options.windowMs
-    
-    // Clean up old entries
-    const entries = Array.from(rateLimitMap.entries())
-    for (const [key, value] of entries) {
-      if (value.resetTime < now) {
-        rateLimitMap.delete(key)
+    try {
+      const { rateLimitWithFallback } = await import('../rate-limit')
+      const { success, headers } = await rateLimitWithFallback(request, type)
+      
+      if (!success) {
+        throw new RateLimitError('Rate limit exceeded')
       }
-    }
-    
-    const clientData = rateLimitMap.get(clientId) || { count: 0, resetTime: now + options.windowMs }
-    
-    if (clientData.resetTime < now) {
-      // Reset window
-      clientData.count = 1
-      clientData.resetTime = now + options.windowMs
-    } else {
-      clientData.count++
-    }
-    
-    rateLimitMap.set(clientId, clientData)
-    
-    if (clientData.count > options.maxRequests) {
-      throw new RateLimitError(`Rate limit exceeded. Max ${options.maxRequests} requests per ${options.windowMs / 1000} seconds`)
-    }
-    
-    if (context) {
-      return handler(request, context)
-    } else {
-      return handler(request)
+      
+      // Execute handler and add rate limit headers
+      let response: Response
+      if (context) {
+        response = await handler(request, context)
+      } else {
+        response = await handler(request)
+      }
+      
+      // Add rate limit headers to response
+      Object.entries(headers).forEach(([key, value]) => {
+        response.headers.set(key, value)
+      })
+      
+      return response
+    } catch (error) {
+      if (error instanceof RateLimitError) {
+        throw error
+      }
+      // If rate limiting fails, log and continue (fail open)
+      console.error('Rate limiting error:', error)
+      if (context) {
+        return handler(request, context)
+      } else {
+        return handler(request)
+      }
     }
   }
 }
@@ -160,6 +161,43 @@ export function withMethods(allowedMethods: string[], handler: any) {
       return handler(request, context)
     } else {
       return handler(request)
+    }
+  }
+}
+
+// Input validation middleware
+export function withValidation<T>(schema: z.ZodSchema<T>, handler: any) {
+  return async (request: NextRequest, context?: any): Promise<Response> => {
+    try {
+      // Parse request body or query params based on method
+      let data: unknown
+      
+      if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
+        try {
+          data = await request.json()
+        } catch {
+          data = {}
+        }
+      } else {
+        // For GET requests, parse query params
+        const searchParams = request.nextUrl.searchParams
+        data = Object.fromEntries(searchParams.entries())
+      }
+      
+      // Validate the data
+      const validatedData = await validateRequest(schema, data)
+      
+      // Attach validated data to request
+      ;(request as any).validatedData = validatedData
+      
+      if (context) {
+        return handler(request, context)
+      } else {
+        return handler(request)
+      }
+    } catch (error) {
+      const { handleApiError } = await import('./errors')
+      return handleApiError(error)
     }
   }
 }
@@ -247,13 +285,25 @@ export const apiMiddleware = {
   
   // Public API with rate limiting
   public: (handler: any) =>
-    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(handler)))),
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(handler, 'api')))),
   
-  // Protected API requiring authentication
+  // Protected API requiring authentication with standard rate limits
   protected: (handler: any) =>
-    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler))))),
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'api')))),
   
-  // Admin-only API
+  // Admin-only API with relaxed rate limits
   admin: (handler: any) =>
-    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withRoles([UserRole.ADMIN], handler)))))
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withRoles([UserRole.ADMIN], handler), 'heavy')))),
+  
+  // Auth endpoints with strict rate limits
+  auth: (handler: any) =>
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(handler, 'auth')))),
+  
+  // Write operations with moderate rate limits
+  write: (handler: any) =>
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'write')))),
+  
+  // Heavy operations (ML, satellite) with permissive rate limits
+  heavy: (handler: any) =>
+    withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'heavy'))))
 }

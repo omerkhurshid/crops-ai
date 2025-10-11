@@ -72,35 +72,37 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
 
   const generateWeatherTasks = async () => {
     try {
-      // Get current weather data
-      let weather: WeatherData = {
-        temperature: 72,
-        humidity: 65,
-        windSpeed: 8,
-        precipitation: 0,
-        forecast3Day: [
-          { date: new Date().toISOString(), condition: 'sunny', temp: 75, precipitation: 0, windSpeed: 6 },
-          { date: new Date(Date.now() + 86400000).toISOString(), condition: 'partly-cloudy', temp: 73, precipitation: 10, windSpeed: 12 },
-          { date: new Date(Date.now() + 172800000).toISOString(), condition: 'rainy', temp: 68, precipitation: 85, windSpeed: 15 }
-        ]
+      // Only proceed if we have location data
+      if (!farmData?.latitude || !farmData?.longitude) {
+        setTasks([])
+        setLoading(false)
+        return
       }
 
-      if (farmData?.latitude && farmData?.longitude) {
-        try {
-          const response = await fetch('/api/weather/current')
-          if (response.ok) {
-            const data = await response.json()
-            weather = {
-              temperature: data.main?.temp || 72,
-              humidity: data.main?.humidity || 65,
-              windSpeed: data.wind?.speed * 2.237 || 8, // Convert m/s to mph
-              precipitation: data.rain?.['1h'] || 0,
-              forecast3Day: weather.forecast3Day // Use mock forecast for now
-            }
+      let weather: WeatherData | null = null
+
+      try {
+        const response = await fetch(`/api/weather/current?latitude=${farmData.latitude}&longitude=${farmData.longitude}`)
+        if (response.ok) {
+          const data = await response.json()
+          weather = {
+            temperature: data.main?.temp || data.temperature,
+            humidity: data.main?.humidity || data.humidity,
+            windSpeed: data.wind?.speed ? data.wind.speed * 2.237 : data.windSpeed, // Convert m/s to mph
+            precipitation: data.rain?.['1h'] || data.precipitation || 0,
+            forecast3Day: data.forecast3Day || []
           }
-        } catch (error) {
-          console.error('Weather fetch failed, using defaults:', error)
+        } else {
+          console.log('Weather API not available')
+          setTasks([])
+          setLoading(false)
+          return
         }
+      } catch (error) {
+        console.error('Weather fetch failed:', error)
+        setTasks([])
+        setLoading(false)
+        return
       }
 
       setWeatherData(weather)

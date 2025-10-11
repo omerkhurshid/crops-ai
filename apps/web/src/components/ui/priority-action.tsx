@@ -261,28 +261,4 @@ export function PriorityActionsList({
   )
 }
 
-// Helper function to create sample actions for testing
-export function createSampleActions(): PriorityAction[] {
-  return [
-    {
-      id: '1',
-      title: 'Check soil moisture in North Field',
-      description: 'Some areas showing signs of water stress. Check irrigation system and soil moisture levels.',
-      urgency: 'high',
-      category: 'watering',
-      timeframe: '24 hours',
-      status: 'pending',
-      confidence: 85
-    },
-    {
-      id: '2',
-      title: 'Apply nitrogen fertilizer to South Field',
-      description: 'Crops could benefit from additional nitrogen. Consider side-dress application.',
-      urgency: 'medium',
-      category: 'nutrition',
-      timeframe: '3-5 days',
-      status: 'pending',
-      confidence: 78
-    }
-  ]
-}
+// Note: createSampleActions removed - use real data only in production

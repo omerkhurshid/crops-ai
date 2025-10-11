@@ -34,7 +34,7 @@ export default async function Home() {
               {/* Top Badge */}
               <div className="mb-8">
                 <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-6 py-3 text-sm font-medium">
-                  <Sparkles className="h-4 w-4 mr-2" />
+                  <Sparkles className="h-4 w-4 mr-2" aria-hidden="true" />
                   Real-time Agricultural Intelligence Platform
                 </Badge>
               </div>
@@ -55,9 +55,9 @@ export default async function Home() {
               
               {/* CTA Button */}
               <div className="mb-8">
-                <Link href="/register">
-                  <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-6 py-3 sm:px-8 sm:py-4 text-white font-medium text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center">
-                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                <Link href="/register" aria-label="Start your free 30-day trial">
+                  <button className="bg-gradient-to-r from-sage-600 to-sage-700 hover:from-sage-700 hover:to-sage-800 px-6 py-3 sm:px-8 sm:py-4 text-white font-medium text-base sm:text-lg rounded-xl sm:rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center" aria-label="Start your free trial">
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 mr-2" aria-hidden="true" />
                     <span className="hidden sm:inline">Start Your Free 30-Day Trial</span>
                     <span className="sm:hidden">Start Free Trial</span>
                   </button>
@@ -73,8 +73,8 @@ export default async function Home() {
             {/* Decision Support Card */}
             <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
               <div className="pb-4">
-                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
-                  <Satellite className="h-8 w-8 text-sage-700" />
+                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors" aria-hidden="true">
+                  <Satellite className="h-8 w-8 text-sage-700" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-semibold text-sage-800 mb-4">"Should I Spray Today?"</h3>
               </div>
@@ -89,8 +89,8 @@ export default async function Home() {
             {/* Harvest Timing Card */}
             <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
               <div className="pb-4">
-                <div className="p-4 bg-earth-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-earth-200 transition-colors">
-                  <CloudRain className="h-8 w-8 text-earth-700" />
+                <div className="p-4 bg-earth-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-earth-200 transition-colors" aria-hidden="true">
+                  <CloudRain className="h-8 w-8 text-earth-700" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-semibold text-sage-800 mb-4">"When Should I Harvest?"</h3>
               </div>
@@ -105,8 +105,8 @@ export default async function Home() {
             {/* Financial Insights Card */}
             <div className="text-center hover:shadow-lg transition-all duration-300 group bg-white p-8 rounded-2xl border border-sage-100">
               <div className="pb-4">
-                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors">
-                  <TrendingUp className="h-8 w-8 text-sage-700" />
+                <div className="p-4 bg-sage-100 rounded-full w-fit mx-auto mb-4 group-hover:bg-sage-200 transition-colors" aria-hidden="true">
+                  <TrendingUp className="h-8 w-8 text-sage-700" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-semibold text-sage-800 mb-4">"Which Fields Are Making Money?"</h3>
               </div>
@@ -141,8 +141,8 @@ export default async function Home() {
             {/* Testimonial 1 - Small Farm */}
             <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
               <div className="flex items-center mb-4">
-                <div className="bg-sage-100 p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-sage-700" />
+                <div className="bg-sage-100 p-2 rounded-full mr-3" aria-hidden="true">
+                  <Users className="h-6 w-6 text-sage-700" aria-hidden="true" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-sage-800">Sarah Chen</h4>
@@ -166,8 +166,8 @@ export default async function Home() {
             {/* Testimonial 2 - Medium Farm */}
             <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
               <div className="flex items-center mb-4">
-                <div className="bg-earth-100 p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-earth-700" />
+                <div className="bg-earth-100 p-2 rounded-full mr-3" aria-hidden="true">
+                  <Users className="h-6 w-6 text-earth-700" aria-hidden="true" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-sage-800">Marcus Johnson</h4>
@@ -191,8 +191,8 @@ export default async function Home() {
             {/* Testimonial 3 - Large Operation */}
             <div className="p-8 bg-white rounded-2xl shadow-lg border border-sage-100">
               <div className="flex items-center mb-4">
-                <div className="bg-sage-100 p-2 rounded-full mr-3">
-                  <Users className="h-6 w-6 text-sage-700" />
+                <div className="bg-sage-100 p-2 rounded-full mr-3" aria-hidden="true">
+                  <Users className="h-6 w-6 text-sage-700" aria-hidden="true" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-sage-800">Rodriguez Farms LLC</h4>

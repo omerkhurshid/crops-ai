@@ -60,6 +60,32 @@ const nextConfig = {
     // Dangerously allow production builds to successfully complete even if type errors are present
     ignoreBuildErrors: false,
   },
+  
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true,
+    gzipSize: true,
+    swcMinify: true,
+  },
+  
+  // Bundle optimization
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Image optimization
+  images: {
+    domains: ['res.cloudinary.com', 'images.unsplash.com'],
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 86400, // 24 hours
+  },
+  
+  // Enable compression
+  compress: true,
+  
+  // Production optimizations
+  poweredByHeader: false,
+  generateEtags: true,
   async headers() {
     return [
       {

@@ -231,7 +231,8 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
     fetchFarmData()
   }, [farmId, passedFarmData, passedFinancialData, passedWeatherAlerts, passedCrops, passedLivestock])
 
-  const sampleActions = createSampleActions()
+  // Remove sample actions - use real data only
+  const realActions = farmData?.urgentTasks || []
 
   if (loading) {
     return (

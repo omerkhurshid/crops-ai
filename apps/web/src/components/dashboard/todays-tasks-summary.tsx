@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { NoTasksState, DataPendingState } from '../ui/no-data-states'
 import { 
   AlertTriangle, 
   Clock, 
@@ -13,7 +14,8 @@ import {
   Users, 
   Calendar,
   ChevronRight,
-  ArrowRight
+  ArrowRight,
+  Plus
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
 
@@ -185,16 +187,88 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
     fetchTasks()
   }, [farmId])
 
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <h3 className="text-lg font-semibold text-sage-800 mb-4">Today's Tasks</h3>
+            <DataPendingState message="Loading today's tasks..." />
+          </ModernCardContent>
+        </ModernCard>
+        <ModernCard>
+          <ModernCardContent className="p-6">
+            <h3 className="text-lg font-semibold text-sage-800 mb-4">Tomorrow's Tasks</h3>
+            <DataPendingState message="Loading tomorrow's tasks..." />
+          </ModernCardContent>
+        </ModernCard>
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <h3 className="text-lg font-semibold text-sage-800 mb-4">Today's Tasks</h3>
-        <p>Tasks loading...</p>
-      </div>
-      <div>
-        <h3 className="text-lg font-semibold text-sage-800 mb-4">Tomorrow's Tasks</h3>
-        <p>Tasks loading...</p>
-      </div>
+      {/* Today's Tasks */}
+      <ModernCard>
+        <ModernCardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-sage-800">Today's Tasks</h3>
+            <Link href="/tasks">
+              <Button variant="ghost" size="sm">
+                <Plus className="h-4 w-4 mr-1" />
+                Add Task
+              </Button>
+            </Link>
+          </div>
+          
+          {todaysTasks.length === 0 ? (
+            <NoTasksState onAddTask={() => window.location.href = '/tasks'} />
+          ) : (
+            <div className="space-y-3">
+              {todaysTasks.map((task: any) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+              {todaysTasks.length >= 5 && (
+                <div className="text-center pt-2">
+                  <Link href="/tasks">
+                    <Button variant="ghost" size="sm">
+                      View All Tasks <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </ModernCardContent>
+      </ModernCard>
+
+      {/* Tomorrow's Tasks */}
+      <ModernCard>
+        <ModernCardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-sage-800">Tomorrow's Tasks</h3>
+            <Link href="/tasks">
+              <Button variant="ghost" size="sm">
+                View All
+              </Button>
+            </Link>
+          </div>
+          
+          {tomorrowsTasks.length === 0 ? (
+            <div className="text-center py-6">
+              <Calendar className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+              <p className="text-sm text-gray-600">No tasks scheduled for tomorrow</p>
+              <p className="text-xs text-gray-500">You're all set for tomorrow!</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {tomorrowsTasks.map((task: any) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+            </div>
+          )}
+        </ModernCardContent>
+      </ModernCard>
     </div>
   )
 }

@@ -8,24 +8,24 @@ export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       {/* Animated Background with Floating Elements */}
-      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Search className="h-8 w-8 text-sage-600" />
+      <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" aria-hidden="true">
+        <Search className="h-8 w-8 text-sage-600" aria-hidden="true" />
       </div>
-      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Map className="h-8 w-8 text-sage-600" />
+      <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }} aria-hidden="true">
+        <Map className="h-8 w-8 text-sage-600" aria-hidden="true" />
       </div>
       
       <div className="max-w-2xl w-full relative z-10">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <div className="p-6 bg-gradient-to-br from-sage-100 to-earth-100 rounded-3xl relative overflow-hidden">
-              <Sprout className="h-16 w-16 text-sage-700 relative z-10" />
+              <Sprout className="h-16 w-16 text-sage-700 relative z-10" aria-hidden="true" />
               <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
             </div>
           </div>
           
           <div className="mb-6">
-            <div className="text-8xl font-light text-sage-300 mb-4">404</div>
+            <div className="text-8xl font-light text-sage-300 mb-4" aria-label="404 Error">404</div>
             <h1 className="text-4xl md:text-5xl font-light text-sage-800 mb-4 tracking-tight">
               Page Not Found
             </h1>
@@ -35,7 +35,7 @@ export default function NotFound() {
           </div>
           
           <Badge className="bg-sage-100 text-sage-700 border-sage-200 mb-8">
-            <Search className="h-4 w-4 mr-2" />
+            <Search className="h-4 w-4 mr-2" aria-hidden="true" />
             Lost in the fields?
           </Badge>
         </div>

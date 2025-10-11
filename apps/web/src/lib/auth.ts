@@ -19,37 +19,31 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Demo mode - hardcoded users for testing without database
-        // CRITICAL: Never use demo users in production environment
-        const demoUsers = process.env.NODE_ENV === 'production' 
-          ? [] // NEVER use demo users in production
-          : process.env.ENABLE_DEMO_USERS === 'true'
-            ? [
-                {
-                  id: 'demo-1',
-                  email: 'demo@crops.ai',
-                  password: process.env.DEMO_PASSWORD || 'ChangeThisPassword123!',
-                  name: 'Demo Farmer',
-                  role: UserRole.FARM_OWNER
-                },
-                {
-                  id: 'admin-1', 
-                  email: 'admin@crops.ai',
-                  password: process.env.ADMIN_DEMO_PASSWORD || 'ChangeThisPassword123!',
-                  name: 'Admin User',
-                  role: UserRole.ADMIN
-                }
-              ]
-            : []
-
-        // Check demo users first
-        const demoUser = demoUsers.find(user => user.email === credentials.email)
-        if (demoUser && demoUser.password === credentials.password) {
-          return {
-            id: demoUser.id,
-            email: demoUser.email,
-            name: demoUser.name,
-            role: demoUser.role
+        // Demo mode - only enabled in development with explicit environment variables
+        if (process.env.NODE_ENV === 'development' && process.env.ENABLE_DEMO_USERS === 'true') {
+          // Demo users must be configured via environment variables
+          const demoEmail = process.env.DEMO_USER_EMAIL
+          const demoPassword = process.env.DEMO_USER_PASSWORD
+          const adminEmail = process.env.DEMO_ADMIN_EMAIL
+          const adminPassword = process.env.DEMO_ADMIN_PASSWORD
+          
+          // Only check demo users if all required env vars are set
+          if (demoEmail && demoPassword && credentials.email === demoEmail && credentials.password === demoPassword) {
+            return {
+              id: 'demo-1',
+              email: demoEmail,
+              name: 'Demo Farmer',
+              role: UserRole.FARM_OWNER
+            }
+          }
+          
+          if (adminEmail && adminPassword && credentials.email === adminEmail && credentials.password === adminPassword) {
+            return {
+              id: 'admin-1',
+              email: adminEmail,
+              name: 'Admin User',
+              role: UserRole.ADMIN
+            }
           }
         }
 
@@ -85,7 +79,9 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+    updateAge: 60 * 60, // 1 hour
   },
   callbacks: {
     async jwt({ token, user, account }) {

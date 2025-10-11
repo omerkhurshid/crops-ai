@@ -55,21 +55,76 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
 
       const data = await response.json()
       
-      // Process the data into our metrics format - only use real data
-      if (!data.overallHealth) {
+      // Process the field data into farm-level metrics
+      if (!data.success || !data.fields || data.fields.length === 0) {
         throw new Error('No health data available')
       }
       
+      const fields = data.fields
+      
+      // Calculate farm-level metrics from field data
+      const totalFields = fields.length
+      const overallHealth = Math.round(
+        fields.reduce((sum: number, field: any) => sum + field.healthScore, 0) / totalFields
+      )
+      
+      const averageNDVI = fields.reduce((sum: number, field: any) => 
+        sum + field.indices.ndvi, 0) / totalFields
+      
+      // Calculate average soil moisture from NDWI
+      const soilMoisture = Math.round(
+        fields.reduce((sum: number, field: any) => sum + (field.indices.ndwi * 100), 0) / totalFields
+      )
+      
+      // Determine farm-level risks based on field conditions
+      const stressLevels = fields.map((field: any) => field.stressLevel)
+      const highStressFields = stressLevels.filter((level: string) => level === 'high' || level === 'severe').length
+      const moderateStressFields = stressLevels.filter((level: string) => level === 'moderate').length
+      
+      const pestRisk = highStressFields > 0 ? 'high' : 
+                      moderateStressFields > totalFields / 2 ? 'medium' : 'low'
+      
+      const weatherRisk = highStressFields > totalFields / 3 ? 'high' : 
+                         moderateStressFields > 0 ? 'medium' : 'low'
+      
+      // Check if any field needs irrigation based on low NDWI
+      const irrigationNeeded = fields.some((field: any) => field.indices.ndwi < 0.3)
+      
+      // Determine trend based on health scores
+      const trend = overallHealth >= 80 ? 'improving' : 
+                   overallHealth >= 60 ? 'stable' : 'declining'
+      
+      // Generate critical alerts
+      const criticalAlerts = []
+      if (highStressFields > 0) {
+        criticalAlerts.push({
+          type: 'pest',
+          severity: 'critical',
+          message: `${highStressFields} field${highStressFields > 1 ? 's' : ''} showing high stress levels`
+        })
+      }
+      if (irrigationNeeded) {
+        criticalAlerts.push({
+          type: 'irrigation',
+          severity: 'warning',
+          message: 'Some fields have low soil moisture - consider irrigation'
+        })
+      }
+      
+      const lastUpdated = fields.length > 0 ? 
+        new Date(Math.max(...fields.map((f: any) => new Date(f.lastUpdate).getTime()))).toISOString() :
+        new Date().toISOString()
+      
       const processedMetrics: FarmHealthMetrics = {
-        overallHealth: data.overallHealth,
-        ndviScore: data.averageNDVI || 0,
-        soilMoisture: data.soilMoisture || 0,
-        pestRisk: data.pestRisk || 'low',
-        weatherRisk: data.weatherRisk || 'low',
-        irrigationNeeded: data.irrigationNeeded || false,
-        lastUpdated: data.lastUpdated || new Date().toISOString(),
-        trend: data.trend || 'stable',
-        criticalAlerts: data.alerts || []
+        overallHealth,
+        ndviScore: averageNDVI,
+        soilMoisture,
+        pestRisk: pestRisk as 'low' | 'medium' | 'high',
+        weatherRisk: weatherRisk as 'low' | 'medium' | 'high',
+        irrigationNeeded,
+        lastUpdated,
+        trend: trend as 'improving' | 'stable' | 'declining',
+        criticalAlerts
       }
 
       setMetrics(processedMetrics)

@@ -142,34 +142,77 @@ export function MorningBriefing({
                 Farm Status
               </h3>
               <div className="space-y-3">
-                {/* Health Summary */}
+                {/* Health Summary with Visual Gauge */}
                 <div className="p-3 bg-sage-50 rounded-lg border border-sage-200">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-semibold text-sage-700">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={cn(
-                      'text-2xl font-bold',
-                      overallHealth >= 80 ? 'text-green-700' : 
-                      overallHealth >= 60 ? 'text-yellow-700' : 
-                      overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
-                    )}>
-                      {overallHealth}%
+                  
+                  {/* Circular Progress Gauge */}
+                  <div className="flex items-center gap-4 mb-2">
+                    <div className="relative w-16 h-16">
+                      <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 100 100">
+                        {/* Background circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          stroke="currentColor"
+                          strokeWidth="8"
+                          fill="transparent"
+                          className="text-gray-200"
+                        />
+                        {/* Progress circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          stroke="currentColor"
+                          strokeWidth="8"
+                          fill="transparent"
+                          strokeDasharray={`${2 * Math.PI * 40}`}
+                          strokeDashoffset={`${2 * Math.PI * 40 * (1 - overallHealth / 100)}`}
+                          className={cn(
+                            "transition-all duration-500 ease-out",
+                            overallHealth >= 80 ? 'text-green-500' : 
+                            overallHealth >= 60 ? 'text-yellow-500' : 
+                            overallHealth >= 40 ? 'text-orange-500' : 'text-red-500'
+                          )}
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {/* Center text */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className={cn(
+                          'text-lg font-bold',
+                          overallHealth >= 80 ? 'text-green-700' : 
+                          overallHealth >= 60 ? 'text-yellow-700' : 
+                          overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
+                        )}>
+                          {overallHealth}%
+                        </span>
+                      </div>
                     </div>
-                    <span className={cn(
-                      'text-xs font-medium px-2 py-1 rounded-full',
-                      overallHealth >= 80 ? 'bg-green-100 text-green-700' : 
-                      overallHealth >= 60 ? 'bg-yellow-100 text-yellow-700' : 
-                      overallHealth >= 40 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
-                    )}>
-                      {overallHealth >= 80 ? 'Excellent' : 
-                       overallHealth >= 60 ? 'Good' : 
-                       overallHealth >= 40 ? 'Average' : 'Critical'}
-                    </span>
-                  </div>
-                  <div className="text-xs text-sage-600">
-                    {getHealthExplanation(overallHealth)}
+                    
+                    <div className="flex-1">
+                      <div className={cn(
+                        'text-sm font-medium mb-1',
+                        overallHealth >= 80 ? 'text-green-700' : 
+                        overallHealth >= 60 ? 'text-yellow-700' : 
+                        overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
+                      )}>
+                        {overallHealth >= 80 ? 'Excellent' : 
+                         overallHealth >= 60 ? 'Good' : 
+                         overallHealth >= 40 ? 'Average' : 'Critical'}
+                      </div>
+                      <div className="text-xs text-sage-600">
+                        {overallHealth >= 85 ? 'Fields are performing optimally' :
+                         overallHealth >= 70 ? 'Most fields are healthy' :
+                         overallHealth >= 55 ? 'Some fields need attention' :
+                         'Multiple fields require immediate care'}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -250,38 +293,63 @@ export function MorningBriefing({
               </div>
             </div>
 
-            {/* Weather Summary - Improved */}
+            {/* Weather Summary - Visual */}
             <div className="py-6 md:py-0 md:px-6">
               <h3 className="text-sm font-semibold text-sage-700 mb-4">
                 Weather Conditions
               </h3>
               <div className="space-y-4">
-                {/* Current Weather */}
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center justify-between mb-2">
+                {/* Current Weather - Enhanced Visual */}
+                <div className="p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <WeatherIcon className="h-8 w-8 text-blue-600" />
+                      <div className="relative">
+                        <WeatherIcon className="h-10 w-10 text-blue-600" />
+                        {weather.current.icon === 'sun' && (
+                          <div className="absolute -inset-1 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
+                        )}
+                      </div>
                       <div>
-                        <div className="text-2xl font-bold text-blue-800">
+                        <div className="text-3xl font-bold text-blue-800">
                           {formatTemperature(weather.current.temp, preferences)}
                         </div>
-                        <div className="text-xs text-blue-600 capitalize">{weather.current.condition}</div>
+                        <div className="text-sm text-blue-600 capitalize font-medium">{weather.current.condition}</div>
                       </div>
                     </div>
-                    <div className="text-right text-sm">
-                      <div className="text-blue-700 font-medium">H: {weather.today.high}°</div>
-                      <div className="text-blue-700 font-medium">L: {weather.today.low}°</div>
+                    <div className="text-right">
+                      <div className="text-sm text-blue-700 font-medium">H: {weather.today.high}°</div>
+                      <div className="text-sm text-blue-700 font-medium">L: {weather.today.low}°</div>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="flex items-center gap-1">
-                      <Droplets className="h-3 w-3 text-blue-500" />
-                      <span className="text-blue-700">Precipitation: {weather.today.precipitation}%</span>
+                  {/* Visual Weather Metrics */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Precipitation Visual Bar */}
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1">
+                        <Droplets className="h-4 w-4 text-blue-500" />
+                        <span className="text-xs text-blue-700 font-medium">Rain: {weather.today.precipitation}%</span>
+                      </div>
+                      <div className="h-1.5 bg-blue-100 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                          style={{ width: `${weather.today.precipitation}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Wind className="h-3 w-3 text-blue-500" />
-                      <span className="text-blue-700">Wind: {weather.today.windSpeed} mph</span>
+                    
+                    {/* Wind Speed Visual */}
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1">
+                        <Wind className="h-4 w-4 text-blue-500" />
+                        <span className="text-xs text-blue-700 font-medium">Wind: {weather.today.windSpeed} mph</span>
+                      </div>
+                      <div className="h-1.5 bg-blue-100 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-green-500 rounded-full transition-all duration-300"
+                          style={{ width: `${Math.min(weather.today.windSpeed / 30 * 100, 100)}%` }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -326,31 +394,61 @@ export function MorningBriefing({
               </div>
             </div>
 
-            {/* Financial Snapshot */}
+            {/* Financial Snapshot - Visual */}
             <div className="pt-6 md:pt-0 md:pl-6">
               <h3 className="text-sm font-semibold text-sage-700 mb-4">
-                Financials This Year
+                Financial Performance
               </h3>
               <div className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-sage-700">Net Profit YTD</span>
+                {/* Profit Visual Card */}
+                <div className={cn(
+                  'p-4 rounded-lg border',
+                  financials.netYTD >= 0 
+                    ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200' 
+                    : 'bg-gradient-to-br from-red-50 to-rose-50 border-red-200'
+                )}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-sage-700 font-medium">Net Profit YTD</span>
                     <TrendIndicator value={financials.trend} size="sm" />
                   </div>
-                  <div className={cn(
-                    'text-2xl font-bold',
-                    financials.netYTD >= 0 ? 'text-green-700' : 'text-red-700'
-                  )}>
-                    {formatCurrency(financials.netYTD, preferences)}
+                  
+                  <div className="flex items-center gap-3">
+                    <DollarSign className={cn(
+                      'h-8 w-8',
+                      financials.netYTD >= 0 ? 'text-green-600' : 'text-red-600'
+                    )} />
+                    <div className="flex-1">
+                      <div className={cn(
+                        'text-2xl font-bold',
+                        financials.netYTD >= 0 ? 'text-green-700' : 'text-red-700'
+                      )}>
+                        {formatCurrency(financials.netYTD, preferences)}
+                      </div>
+                      <div className="text-xs text-sage-600">
+                        {financials.netYTD >= 0 ? 'Profitable year so far' : 'Working toward profitability'}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs text-sage-500 mt-1">
-                    Updated {financials.lastUpdate}
+                  
+                  {/* Progress indicator for yearly goal */}
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="text-sage-600">Yearly Progress</span>
+                      <span className="text-sage-600">{Math.round((new Date().getMonth() + 1) / 12 * 100)}%</span>
+                    </div>
+                    <div className="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-sage-500 rounded-full transition-all duration-300"
+                        style={{ width: `${(new Date().getMonth() + 1) / 12 * 100}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-sage-200">
+                <div className="pt-2">
                   <Link href="/financial">
-                    <button className="w-full text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors">
+                    <button className="w-full text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors flex items-center justify-center gap-2">
+                      <Plus className="h-4 w-4" />
                       Add Transaction
                     </button>
                   </Link>
@@ -359,21 +457,9 @@ export function MorningBriefing({
             </div>
           </div>
 
-          {/* Bottom Summary Bar */}
+          {/* Action Bar */}
           <div className="mt-6 pt-4 border-t border-sage-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sage-600">All systems operational</span>
-                </div>
-                <div className="text-sage-500">
-                  Last satellite update: {lastSatelliteUpdate ? 
-                    getTimeAgo(lastSatelliteUpdate) : 
-                    'No recent updates'
-                  }
-                </div>
-              </div>
+            <div className="flex items-center justify-end">
               <Link href="/crop-health">
                 <button className="text-sm text-sage-700 hover:text-sage-800 font-medium">
                   View detailed analytics →

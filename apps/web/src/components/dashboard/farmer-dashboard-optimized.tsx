@@ -336,9 +336,8 @@ export function FarmerDashboardOptimized({
         />
         
         <MemoizedStressLevelCard
-          level={farmData?.stressedAreas || 0}
-          trend={farmData?.stressTrend || 0}
-          lastUpdate={lastSatelliteUpdate}
+          stressPercentage={farmData?.stressedAreas || 0}
+          stressTrend={farmData?.stressTrend || 0}
         />
         
         <MemoizedFarmerMetricCard

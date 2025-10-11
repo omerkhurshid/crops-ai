@@ -8,17 +8,17 @@ import { z } from 'zod';
 
 const searchSchema = z.object({
   q: z.string().min(1).max(100),
-  limit: z.string().optional().transform(val => val ? parseInt(val) : 20),
-  type: z.string().optional()
+  limit: z.string().optional().nullable().transform(val => val ? parseInt(val) : 20),
+  type: z.string().optional().nullable()
 });
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const validation = searchSchema.safeParse({
-      q: searchParams.get('q'),
-      limit: searchParams.get('limit'),
-      type: searchParams.get('type')
+      q: searchParams.get('q') || undefined,
+      limit: searchParams.get('limit') || undefined,
+      type: searchParams.get('type') || undefined
     });
 
     if (!validation.success) {

@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { 
   CloudRain, Sun, Droplets, Thermometer, Wind, 
   AlertTriangle, CheckCircle2, Clock, TrendingUp,
-  MapPin, Zap, Satellite, DollarSign, Eye, Activity, ArrowRight
+  MapPin, Zap, Satellite, DollarSign, Eye, Activity, ArrowRight, Brain
 } from 'lucide-react'
 
 interface FieldData {
@@ -38,7 +38,7 @@ const DEMO_FIELDS: FieldData[] = [
     health: 'warning',
     acres: 38.7,
     crop: 'Soybeans',
-    alerts: ['Low nitrogen detected in SE corner', 'Possible pest activity']
+    alerts: ['Nitrogen deficiency detected - apply 40 lbs/acre', 'Aphid pressure building - scout within 48 hours']
   },
   {
     id: '3',
@@ -47,7 +47,16 @@ const DEMO_FIELDS: FieldData[] = [
     health: 'good',
     acres: 52.1,
     crop: 'Corn',
-    alerts: ['Irrigation recommended this week']
+    alerts: ['Irrigation needed within 3 days - soil moisture at 35%']
+  },
+  {
+    id: '4',
+    name: 'River Bottom',
+    ndvi: 0.71,
+    health: 'good',
+    acres: 29.8,
+    crop: 'Corn',
+    alerts: ['Optimal for harvest in 12-15 days']
   }
 ]
 
@@ -106,7 +115,7 @@ export function InteractiveDemo() {
             See How AI Satellite Intelligence Works
           </h2>
           <p className="text-lg text-sage-600 max-w-3xl mx-auto">
-            Experience live satellite monitoring, intelligent weather analysis, and precision financial tracking
+            Experience live satellite monitoring with real field boundaries, actionable AI recommendations, and precision farming insights
           </p>
         </div>
 
@@ -114,7 +123,7 @@ export function InteractiveDemo() {
           <TabsList className="grid w-full grid-cols-3 mb-8 bg-white">
             <TabsTrigger value="satellite" className="flex items-center gap-2">
               <Satellite className="h-4 w-4" />
-              Satellite Monitoring
+              Field Analysis
             </TabsTrigger>
             <TabsTrigger value="weather" className="flex items-center gap-2">
               <Sun className="h-4 w-4" />
@@ -132,52 +141,78 @@ export function InteractiveDemo() {
               <ModernCardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
                 <ModernCardTitle className="flex items-center gap-2">
                   <Eye className="h-5 w-5 text-green-600" />
-                  NDVI Field Analysis - Wilson Farm, Iowa
+                  Field Satellite Analysis - Wilson Farm, Iowa
                 </ModernCardTitle>
                 <ModernCardDescription>
-                  AI detects crop stress before it's visible to the human eye
+                  AI detects crop stress and growth issues 2-3 weeks before visible to human eye
                 </ModernCardDescription>
               </ModernCardHeader>
               
               <ModernCardContent className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Mock NDVI Map */}
+                  {/* Realistic Farm Map */}
                   <div className="relative">
-                    <div className="aspect-square bg-gradient-to-br from-green-200 to-green-400 rounded-lg border-2 border-green-300 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-300/60 to-emerald-400/60">
-                        {/* Field boundaries */}
-                        <div className="absolute top-2 left-2 right-2 h-1/3 bg-gradient-to-r from-green-400 to-green-500 rounded border border-green-600 opacity-80" />
-                        <div className="absolute top-1/3 left-2 right-1/2 bottom-2 bg-gradient-to-br from-yellow-300 to-orange-400 rounded border border-orange-500 opacity-80" />
-                        <div className="absolute top-1/3 right-2 left-1/2 bottom-2 bg-gradient-to-br from-green-400 to-green-600 rounded border border-green-600 opacity-80" />
+                    <div className="aspect-square bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg border-2 border-sage-300 relative overflow-hidden">
+                      {/* Base satellite image background */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-200/40 to-green-300/40">
                         
-                        {/* Field labels */}
-                        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white font-bold text-sm">North Field</div>
-                        <div className="absolute bottom-1/3 left-1/4 text-white font-bold text-sm">South Field</div>
-                        <div className="absolute bottom-1/3 right-1/4 text-white font-bold text-sm">East Field</div>
+                        {/* North Field - Excellent Health */}
+                        <div className="absolute top-2 left-2 right-2 h-1/3 bg-gradient-to-r from-green-400 to-green-500 rounded-lg border-2 border-green-600 opacity-90 shadow-sm">
+                          <div className="absolute top-1 right-1 bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">82% Health</div>
+                        </div>
+                        
+                        {/* South Field - Warning (Stressed) */}
+                        <div className="absolute top-1/3 left-2 right-1/2 bottom-2 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-lg border-2 border-orange-500 opacity-90 shadow-sm">
+                          <div className="absolute top-1 right-1 bg-orange-700 text-white px-2 py-1 rounded text-xs font-bold">65% Health</div>
+                        </div>
+                        
+                        {/* East Field - Good Health */}
+                        <div className="absolute top-1/3 right-2 left-1/2 bottom-1/4 bg-gradient-to-br from-green-300 to-green-500 rounded-lg border-2 border-green-600 opacity-90 shadow-sm">
+                          <div className="absolute top-1 right-1 bg-green-700 text-white px-2 py-1 rounded text-xs font-bold">78% Health</div>
+                        </div>
+                        
+                        {/* River Bottom Field - Good Health */}
+                        <div className="absolute bottom-2 right-2 left-1/2 h-1/4 bg-gradient-to-r from-green-300 to-green-400 rounded-lg border-2 border-green-500 opacity-90 shadow-sm">
+                          <div className="absolute top-1 right-1 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">71% Health</div>
+                        </div>
+                        
+                        {/* Field labels with better positioning */}
+                        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white font-bold text-sm bg-black/30 px-2 py-1 rounded">North Field</div>
+                        <div className="absolute top-1/2 left-1/4 text-white font-bold text-sm bg-black/30 px-2 py-1 rounded">South Field</div>
+                        <div className="absolute top-1/2 right-1/4 text-white font-bold text-sm bg-black/30 px-2 py-1 rounded">East Field</div>
+                        <div className="absolute bottom-6 right-1/4 text-white font-bold text-sm bg-black/30 px-2 py-1 rounded">River Bottom</div>
+                        
+                        {/* Farm details overlay */}
+                        <div className="absolute top-2 left-2 bg-white/95 rounded-lg p-2 text-xs shadow-lg">
+                          <div className="font-bold text-sage-800">Wilson Farm</div>
+                          <div className="text-sage-600">Iowa, USA</div>
+                          <div className="text-sage-600">165.8 acres total</div>
+                        </div>
                       </div>
                       
-                      {/* Legend */}
-                      <div className="absolute bottom-2 left-2 bg-white/90 rounded p-2 text-xs">
-                        <div className="font-semibold mb-1">NDVI Health</div>
+                      {/* Enhanced Legend */}
+                      <div className="absolute bottom-2 left-2 bg-white/95 rounded-lg p-3 text-xs shadow-lg">
+                        <div className="font-bold mb-2 text-sage-800">Crop Health*</div>
                         <div className="flex items-center gap-1 mb-1">
-                          <div className="w-3 h-3 bg-green-500 rounded"></div>
-                          <span>Excellent (0.8+)</span>
+                          <div className="w-3 h-3 bg-green-500 rounded border border-green-600"></div>
+                          <span className="text-sage-700">Excellent (80%+)</span>
                         </div>
                         <div className="flex items-center gap-1 mb-1">
-                          <div className="w-3 h-3 bg-yellow-500 rounded"></div>
-                          <span>Good (0.7-0.8)</span>
+                          <div className="w-3 h-3 bg-yellow-500 rounded border border-yellow-600"></div>
+                          <span className="text-sage-700">Good (70-80%)</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <div className="w-3 h-3 bg-orange-500 rounded"></div>
-                          <span>Warning (0.6-0.7)</span>
+                        <div className="flex items-center gap-1 mb-2">
+                          <div className="w-3 h-3 bg-orange-500 rounded border border-orange-600"></div>
+                          <span className="text-sage-700">Needs Attention</span>
                         </div>
+                        <div className="text-xs text-sage-500 italic">*Based on NDVI analysis</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Field Details */}
                   <div className="space-y-4">
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       {DEMO_FIELDS.map((f) => (
                         <button
                           key={f.id}
@@ -193,34 +228,73 @@ export function InteractiveDemo() {
                       ))}
                     </div>
 
-                    <div className="bg-white rounded-lg p-4 border border-sage-200">
-                      <h3 className="font-semibold text-sage-800 mb-3">{field.name} - {field.crop}</h3>
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <div className="text-sm text-gray-600">NDVI Score</div>
-                          <div className={`text-2xl font-bold ${getNdviColor(field.ndvi)}`}>{field.ndvi}</div>
+                    <div className="bg-white rounded-lg p-4 border border-sage-200 shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-sage-800">{field.name} - {field.crop}</h3>
+                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          field.health === 'excellent' ? 'bg-green-100 text-green-700' :
+                          field.health === 'good' ? 'bg-blue-100 text-blue-700' :
+                          'bg-orange-100 text-orange-700'
+                        }`}>
+                          {field.health === 'excellent' ? 'Excellent' : 
+                           field.health === 'good' ? 'Good' : 'Needs Attention'}
                         </div>
-                        <div>
-                          <div className="text-sm text-gray-600">Health Status</div>
-                          <div className="flex items-center gap-2">
-                            <div className={`w-3 h-3 rounded-full ${getHealthColor(field.health)}`}></div>
-                            <span className="font-medium capitalize">{field.health}</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-3 mb-4">
+                        <div className="text-center p-2 bg-sage-50 rounded">
+                          <div className="text-sm text-sage-600">Health Score</div>
+                          <div className={`text-lg font-bold ${getNdviColor(field.ndvi)}`}>{Math.round(field.ndvi * 100)}%</div>
+                        </div>
+                        <div className="text-center p-2 bg-sage-50 rounded">
+                          <div className="text-sm text-sage-600">Area</div>
+                          <div className="text-lg font-bold text-sage-800">{field.acres}</div>
+                          <div className="text-xs text-sage-600">acres</div>
+                        </div>
+                        <div className="text-center p-2 bg-sage-50 rounded">
+                          <div className="text-sm text-sage-600">Est. Yield</div>
+                          <div className="text-lg font-bold text-sage-800">
+                            {field.crop === 'Corn' ? Math.round(field.ndvi * 220) : Math.round(field.ndvi * 65)}
                           </div>
+                          <div className="text-xs text-sage-600">bu/acre</div>
                         </div>
                       </div>
 
-                      {field.alerts.length > 0 && (
-                        <div className="space-y-2">
-                          <h4 className="font-medium text-orange-700 flex items-center gap-1">
-                            <AlertTriangle className="h-4 w-4" />
-                            AI Alerts
+                      {field.alerts.length > 0 ? (
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-sage-800 flex items-center gap-2">
+                            <Brain className="h-4 w-4 text-blue-600" />
+                            AI Recommendations
                           </h4>
                           {field.alerts.map((alert, idx) => (
-                            <div key={idx} className="bg-orange-50 border border-orange-200 rounded p-2 text-sm text-orange-800">
-                              {alert}
+                            <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3">
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-sm font-medium text-blue-800 mb-1">Action Required</p>
+                                  <p className="text-sm text-blue-700">{alert}</p>
+                                  <div className="mt-2 flex items-center gap-1 text-xs text-blue-600">
+                                    <Clock className="h-3 w-3" />
+                                    Confidence: 94% • Updated 2 hours ago
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-sage-800 flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
+                            Status: All Good
+                          </h4>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <p className="text-sm text-green-700">No immediate actions needed. Crop health is excellent with optimal growth conditions.</p>
+                            <div className="mt-2 flex items-center gap-1 text-xs text-green-600">
+                              <CheckCircle2 className="h-3 w-3" />
+                              Next scan in 3 days
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>

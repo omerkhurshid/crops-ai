@@ -9,7 +9,7 @@ import { InteractiveDemo } from '../components/landing/interactive-demo'
 // ROI Calculator removed per requirements
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
-  BarChart, Users, ArrowRight, Sparkles, Zap, Target
+  BarChart, Users, ArrowRight, Sparkles, Zap, Target, AlertTriangle, Clock, Eye
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../lib/auth/session'

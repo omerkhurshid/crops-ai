@@ -383,8 +383,10 @@ export function FarmerDashboardOptimized({
           />
           
           <WeatherAlertsWidget 
-            alerts={ensureArray(passedWeatherAlerts)} 
-            farmName={farmData?.farmName || 'Your Farm'}
+            farmData={{
+              latitude: farmData?.latitude,
+              longitude: farmData?.longitude
+            }}
           />
         </div>
         

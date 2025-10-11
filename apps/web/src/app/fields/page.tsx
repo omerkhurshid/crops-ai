@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { prisma } from '../../lib/prisma'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
+import { ModernCard } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
 import { Navbar } from '../../components/navigation/navbar'
@@ -115,57 +115,49 @@ export default async function FieldsPage() {
           {/* Summary Stats */}
           {allFields.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Total Fields</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <div className="p-6">
+                  <h3 className="text-sm font-medium text-gray-600 mb-2">Total Fields</h3>
                   <div className="text-2xl font-bold text-green-600">{allFields.length}</div>
-                </CardContent>
-              </Card>
+                </div>
+              </ModernCard>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <div className="p-6">
+                  <h3 className="text-sm font-medium text-gray-600 mb-2">Total Area</h3>
                   <div className="text-2xl font-bold text-green-600">
                     {allFields.reduce((total, field) => total + field.size, 0).toFixed(1)} ha
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </ModernCard>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <div className="p-6">
+                  <h3 className="text-sm font-medium text-gray-600 mb-2">Avg NDVI</h3>
                   <div className="text-2xl font-bold text-green-600">
                     {allFields.filter(f => f.ndvi > 0).length > 0
                       ? (allFields.reduce((total, field) => total + field.ndvi, 0) / allFields.filter(f => f.ndvi > 0).length).toFixed(2)
                       : 'N/A'
                     }
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </ModernCard>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">Healthy Fields</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <div className="p-6">
+                  <h3 className="text-sm font-medium text-gray-600 mb-2">Healthy Fields</h3>
                   <div className="text-2xl font-bold text-green-600">
                     {allFields.filter(field => field.health === 'Excellent' || field.health === 'Good').length}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </ModernCard>
             </div>
           )}
 
           {/* Fields List */}
           {allFields.length === 0 ? (
-            <Card className="border-2 border-yellow-200 bg-yellow-50">
-              <CardContent className="pt-6">
+            <ModernCard className="border-2 border-yellow-200 bg-yellow-50">
+              <div className="p-6">
                 <div className="text-center py-12">
                   <div className="p-4 rounded-full bg-yellow-100 inline-flex">
                     <Leaf className="h-10 w-10 text-yellow-600" />
@@ -193,24 +185,22 @@ export default async function FieldsPage() {
                     </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </ModernCard>
           ) : (
             <div className="space-y-6">
               {allFields.map((field) => (
-              <Card key={field.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
+              <ModernCard key={field.id} className="hover:shadow-lg transition-shadow">
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-6">
                     <div>
-                      <CardTitle className="text-lg">{field.name}</CardTitle>
-                      <CardDescription>{field.farmName} • {field.size.toFixed(1)} ha</CardDescription>
+                      <h3 className="text-lg font-semibold">{field.name}</h3>
+                      <p className="text-gray-600">{field.farmName} • {field.size.toFixed(1)} ha</p>
                     </div>
                     <Badge className={getHealthColor(field.health)}>
                       {field.health}
                     </Badge>
                   </div>
-                </CardHeader>
-                <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Crop Info */}
                     <div>
@@ -282,20 +272,18 @@ export default async function FieldsPage() {
                       </Button>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </ModernCard>
               ))}
             </div>
           )}
 
           {/* Quick Actions */}
           <div className="mt-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>Field Analysis Tools</CardTitle>
-                <CardDescription>Advanced monitoring and analysis capabilities</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <ModernCard>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold mb-2">Field Analysis Tools</h3>
+                <p className="text-gray-600 mb-6">Advanced monitoring and analysis capabilities</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">NDVI Analysis</div>
@@ -317,8 +305,8 @@ export default async function FieldsPage() {
                     <div className="text-sm text-gray-500 mt-1">Compare field performance</div>
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </ModernCard>
           </div>
         </div>
       </main>

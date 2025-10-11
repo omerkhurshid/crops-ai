@@ -12,6 +12,8 @@ import { yieldPrediction } from './yield-prediction';
 import { dataPipeline } from './data-pipeline';
 import { historicalWeather } from '../weather/historical';
 import { stressDetector } from '../satellite/stress-detection';
+import { usdaService } from '../external/usda-service';
+import { weatherPatternAnalysis } from '../weather/pattern-analysis';
 import { Logger } from '@crops-ai/shared';
 import type {
   TrainingData,
@@ -191,6 +193,12 @@ class AgricultureRecommendationEngine {
         recommendations.push(...categoryRecs);
       }
 
+      // Add weather pattern-based recommendations if weather analysis is available
+      if (context.weatherAnalysis || context.seasonalForecast || context.climateAdaptation) {
+        const weatherRecs = await this.generateWeatherPatternRecommendations(context, request);
+        recommendations.push(...weatherRecs);
+      }
+
       // Prioritize and filter recommendations
       const prioritizedRecs = await this.prioritizeRecommendations(
         recommendations,
@@ -340,7 +348,12 @@ class AgricultureRecommendationEngine {
       weather: null,
       soil: null,
       historical: null,
-      market: null
+      market: null,
+      usda: null,
+      peerBenchmark: null,
+      weatherPatterns: null,
+      seasonalForecast: null,
+      climateAdaptation: null
     };
 
     try {
@@ -370,7 +383,65 @@ class AgricultureRecommendationEngine {
         context.fields = context.farm.fields;
       }
 
-      // Get weather context
+      // Get USDA regional recommendations
+      if (context.farm.latitude && context.farm.longitude) {
+        context.usda = await usdaService.getRegionalRecommendations(
+          context.farm.latitude,
+          context.farm.longitude
+        );
+        
+        // Get peer benchmarking data
+        if (request.cropType) {
+          context.peerBenchmark = await usdaService.getPeerBenchmarkData(
+            request.cropType,
+            context.usda.region.code,
+            context.fields.reduce((sum: number, field: any) => sum + (field.area || 0), 0)
+          );
+        }
+
+        // Get USDA market data
+        if (request.cropType) {
+          context.market = await usdaService.getMarketData(
+            request.cropType,
+            context.usda.region.code
+          );
+        }
+
+        // Get weather patterns and climate adaptation strategies from USDA
+        context.weatherPatterns = await usdaService.getWeatherPatterns(context.usda.region.code);
+        
+        // Get detailed weather pattern analysis
+        context.weatherAnalysis = await weatherPatternAnalysis.analyzeCurrentPatterns(
+          context.farm.latitude,
+          context.farm.longitude
+        );
+
+        // Get historical weather correlations for the crop
+        if (request.cropType) {
+          context.weatherCorrelations = await weatherPatternAnalysis.getHistoricalCorrelations(
+            request.cropType,
+            context.farm.latitude,
+            context.farm.longitude
+          );
+        }
+
+        // Get seasonal forecast
+        const currentSeason = this.getCurrentSeason();
+        context.seasonalForecast = await weatherPatternAnalysis.generateSeasonalForecast(
+          context.farm.latitude,
+          context.farm.longitude,
+          currentSeason
+        );
+
+        // Get climate adaptation recommendations
+        context.climateAdaptation = await weatherPatternAnalysis.getClimateAdaptation(
+          context.farm.latitude,
+          context.farm.longitude,
+          '10_year'
+        );
+      }
+
+      // Get weather context (enhanced with pattern analysis)
       context.weather = await this.getWeatherContext(context.farm.address || context.farm.region || 'default');
 
       // Get soil context
@@ -379,8 +450,10 @@ class AgricultureRecommendationEngine {
       // Get historical performance
       context.historical = await this.getHistoricalContext(request.farmId);
 
-      // Get market context
-      context.market = await this.getMarketContext(request.cropType);
+      // Fallback market context if USDA data not available
+      if (!context.market) {
+        context.market = await this.getMarketContext(request.cropType);
+      }
 
       return context;
 
@@ -438,20 +511,219 @@ class AgricultureRecommendationEngine {
     }
   }
 
+  /**
+   * Generate weather pattern-based recommendations
+   */
+  private async generateWeatherPatternRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
+    const recommendations: Recommendation[] = [];
+
+    if (!context.weatherAnalysis) return recommendations;
+
+    // Active weather pattern recommendations
+    context.weatherAnalysis.activePatterns.forEach((pattern: any) => {
+      recommendations.push({
+        id: `weather_pattern_${pattern.id}`,
+        category: 'crop_rotation',
+        title: `${pattern.pattern.replace('_', ' ').toUpperCase()} Pattern Response`,
+        description: `Active ${pattern.pattern} pattern detected with ${(pattern.confidence * 100).toFixed(0)}% confidence`,
+        action: `Implement ${pattern.pattern} adaptation strategies for ${pattern.intensity} intensity`,
+        rationale: `Weather pattern analysis shows ${pattern.pattern} conditions with ${pattern.impact.temperature > 0 ? '+' : ''}${pattern.impact.temperature}°F temperature and ${pattern.impact.precipitation > 0 ? '+' : ''}${pattern.impact.precipitation}% precipitation anomaly.`,
+        priority: pattern.intensity === 'strong' ? 'high' : 'medium',
+        confidence: pattern.confidence,
+        timing: {
+          optimal: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          earliest: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+          latest: new Date(pattern.endDate),
+          duration: Math.ceil((pattern.endDate.getTime() - Date.now()) / (24 * 60 * 60 * 1000))
+        },
+        impact: {
+          yield: pattern.cropImpacts[0]?.yieldImpact || 0,
+          cost: pattern.intensity === 'strong' ? 100 : 50,
+          revenue: (pattern.cropImpacts[0]?.yieldImpact || 0) * 10,
+          sustainability: 10,
+          riskReduction: pattern.intensity === 'strong' ? 40 : 20
+        },
+        implementation: {
+          steps: pattern.cropImpacts[0]?.mitigationStrategies.slice(0, 4) || [
+            'Monitor weather conditions closely',
+            'Adjust irrigation schedule',
+            'Review crop protection strategies'
+          ],
+          resources: [],
+          dependencies: [],
+          alternatives: context.weatherAnalysis.recommendations.alternatives || []
+        },
+        monitoring: {
+          metrics: ['weather_conditions', 'crop_stress_indicators', 'soil_moisture'],
+          checkpoints: [
+            new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+            new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          ],
+          successCriteria: ['Minimal crop stress', 'Maintained growth rate', 'No weather-related damage']
+        },
+        tags: ['weather_pattern', pattern.pattern, 'climate_response'],
+        source: 'weather_based'
+      });
+    });
+
+    // Seasonal forecast recommendations
+    if (context.seasonalForecast) {
+      recommendations.push({
+        id: `seasonal_forecast_${Date.now()}`,
+        category: 'planting',
+        title: `${context.seasonalForecast.season.toUpperCase()} ${context.seasonalForecast.year} Seasonal Adjustments`,
+        description: `${context.seasonalForecast.temperatureOutlook.trend.replace('_', ' ')} temperatures and ${context.seasonalForecast.precipitationOutlook.trend.replace('_', ' ')} precipitation expected`,
+        action: `Adjust farming operations for ${context.seasonalForecast.growingConditions.favorability}/10 growing conditions`,
+        rationale: `Seasonal forecast indicates ${context.seasonalForecast.temperatureOutlook.trend} temperature and ${context.seasonalForecast.precipitationOutlook.trend} precipitation patterns. Key risks: ${context.seasonalForecast.growingConditions.keyRisks.join(', ')}.`,
+        priority: 'medium',
+        confidence: Math.min(context.seasonalForecast.temperatureOutlook.confidence, context.seasonalForecast.precipitationOutlook.confidence),
+        timing: {
+          optimal: context.seasonalForecast.criticalDates.plantingWindow.optimal,
+          earliest: context.seasonalForecast.criticalDates.plantingWindow.extended.start,
+          latest: context.seasonalForecast.criticalDates.plantingWindow.extended.end
+        },
+        impact: {
+          yield: context.seasonalForecast.growingConditions.favorability - 5, // Center around 5
+          cost: 0,
+          revenue: (context.seasonalForecast.growingConditions.favorability - 5) * 50,
+          sustainability: 5,
+          riskReduction: 15
+        },
+        implementation: {
+          steps: context.seasonalForecast.growingConditions.recommendedAdjustments,
+          resources: [],
+          dependencies: ['seasonal_planning', 'weather_monitoring'],
+          alternatives: ['Alternative planting dates', 'Different variety selection']
+        },
+        monitoring: {
+          metrics: ['seasonal_conditions', 'forecast_accuracy', 'crop_development'],
+          checkpoints: [
+            context.seasonalForecast.criticalDates.plantingWindow.optimal,
+            context.seasonalForecast.criticalDates.harvestWindow.optimal
+          ],
+          successCriteria: ['Optimal planting timing achieved', 'Forecast conditions materialized', 'Crop development on track']
+        },
+        tags: ['seasonal_forecast', 'timing_optimization', 'weather_adaptation'],
+        source: 'weather_based'
+      });
+    }
+
+    // Historical correlation-based recommendations
+    if (context.weatherCorrelations?.length > 0) {
+      const strongCorrelation = context.weatherCorrelations.find((c: any) => Math.abs(c.correlationCoefficient) > 0.7);
+      if (strongCorrelation) {
+        recommendations.push({
+          id: `weather_correlation_${Date.now()}`,
+          category: 'planting',
+          title: `${strongCorrelation.weatherMetric} Optimization`,
+          description: `Strong correlation (r=${strongCorrelation.correlationCoefficient.toFixed(2)}) between ${strongCorrelation.weatherMetric} and crop performance`,
+          action: `Target optimal range: ${strongCorrelation.optimalRange.min}-${strongCorrelation.optimalRange.max} ${strongCorrelation.optimalRange.unit}`,
+          rationale: `Historical analysis shows ${strongCorrelation.impactDescription}. Significance level: p<${strongCorrelation.significance.toFixed(3)}.`,
+          priority: 'medium',
+          confidence: Math.abs(strongCorrelation.correlationCoefficient),
+          timing: {
+            optimal: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+            earliest: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            latest: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          },
+          impact: {
+            yield: Math.abs(strongCorrelation.correlationCoefficient) * 15,
+            cost: 25,
+            revenue: Math.abs(strongCorrelation.correlationCoefficient) * 300,
+            sustainability: 8,
+            riskReduction: Math.abs(strongCorrelation.correlationCoefficient) * 20
+          },
+          implementation: {
+            steps: [
+              `Monitor ${strongCorrelation.weatherMetric} throughout growing season`,
+              'Adjust management practices based on weather conditions',
+              'Use historical data to optimize timing decisions',
+              'Track correlation performance for continuous improvement'
+            ],
+            resources: [],
+            dependencies: ['weather_monitoring', 'historical_data_analysis'],
+            alternatives: ['Focus on other correlated metrics', 'Multi-factor approach']
+          },
+          monitoring: {
+            metrics: [strongCorrelation.weatherMetric.toLowerCase().replace(' ', '_'), 'yield_correlation', 'prediction_accuracy'],
+            checkpoints: [
+              new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+              new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)
+            ],
+            successCriteria: ['Weather metric within optimal range', 'Correlation maintained', 'Yield improvement achieved']
+          },
+          tags: ['historical_correlation', 'weather_optimization', 'data_driven'],
+          source: 'weather_based'
+        });
+      }
+    }
+
+    // Climate adaptation recommendations
+    if (context.climateAdaptation) {
+      recommendations.push({
+        id: `climate_adaptation_${Date.now()}`,
+        category: 'crop_rotation',
+        title: `Long-term Climate Adaptation Strategy`,
+        description: `Prepare for ${context.climateAdaptation.trends.temperature.change}°F temperature increase over ${context.climateAdaptation.timeHorizon.replace('_', ' ')}`,
+        action: `Implement climate resilience measures with ${context.climateAdaptation.economicImpact.benefitCostRatio.toFixed(1)}:1 benefit-cost ratio`,
+        rationale: `Climate projections show ${context.climateAdaptation.trends.temperature.change}°F warming and ${context.climateAdaptation.trends.precipitation.change}% precipitation change. Economic impact: ${context.climateAdaptation.economicImpact.yieldChange}% yield change expected.`,
+        priority: 'medium',
+        confidence: 0.75,
+        timing: {
+          optimal: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+          earliest: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          latest: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        },
+        impact: {
+          yield: -context.climateAdaptation.economicImpact.yieldChange / 2, // Mitigation impact
+          cost: context.climateAdaptation.economicImpact.adaptationCost,
+          revenue: context.climateAdaptation.economicImpact.adaptationCost * context.climateAdaptation.economicImpact.benefitCostRatio,
+          sustainability: 25,
+          riskReduction: 30
+        },
+        implementation: {
+          steps: [
+            ...context.climateAdaptation.adaptationStrategies.cropSelection.slice(0, 2),
+            ...context.climateAdaptation.adaptationStrategies.soilManagement.slice(0, 2),
+            ...context.climateAdaptation.adaptationStrategies.riskManagement.slice(0, 1)
+          ],
+          resources: [],
+          dependencies: ['long_term_planning', 'capital_investment'],
+          alternatives: context.climateAdaptation.adaptationStrategies.irrigation
+        },
+        monitoring: {
+          metrics: ['climate_resilience', 'adaptation_progress', 'economic_performance'],
+          checkpoints: [
+            new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+            new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+          ],
+          successCriteria: ['Adaptation measures implemented', 'Climate resilience improved', 'Economic targets met']
+        },
+        tags: ['climate_adaptation', 'long_term_strategy', 'resilience_building'],
+        source: 'expert_system'
+      });
+    }
+
+    return recommendations;
+  }
+
   private async generatePlantingRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
-    // Variety selection recommendation
-    if (request.cropType) {
+    // Enhanced variety selection using USDA data
+    if (request.cropType && context.usda) {
+      const plantingGuide = await usdaService.getPlantingGuide(request.cropType, context.usda.region.code);
+      const bestVariety = plantingGuide.varietyRecommendations[0];
+
       recommendations.push({
         id: `planting_variety_${Date.now()}`,
         category: 'planting',
-        title: `Optimal ${request.cropType} variety selection`,
-        description: `Select the best ${request.cropType} variety for your field conditions`,
-        action: 'Choose drought-resistant variety with high yield potential',
-        rationale: 'Based on soil conditions, climate data, and historical performance',
+        title: `USDA-Recommended ${request.cropType} variety: ${bestVariety.variety}`,
+        description: `${bestVariety.description} - Regional yield potential: ${bestVariety.yieldPotential} bu/acre`,
+        action: `Select ${bestVariety.variety} for your ${context.usda.region.name} location`,
+        rationale: `USDA Extension Service recommends this variety for ${context.usda.region.climate} climate. Disease resistance to ${bestVariety.diseaseResistance.join(', ')}. Ideal for ${bestVariety.recommendedFor.join(', ')}.`,
         priority: 'high',
-        confidence: 0.85,
+        confidence: 0.92,
         timing: {
           optimal: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           earliest: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
@@ -459,37 +731,120 @@ class AgricultureRecommendationEngine {
           duration: 3
         },
         impact: {
-          yield: 8,
-          cost: 150,
-          revenue: 800,
-          sustainability: 5,
-          riskReduction: 15
+          yield: 12, // Enhanced yield potential with USDA variety
+          cost: 180,
+          revenue: bestVariety.yieldPotential * (context.market?.currentPrice || 4.50),
+          sustainability: 8,
+          riskReduction: 25
         },
         implementation: {
           steps: [
-            'Research variety performance data',
-            'Consult with seed suppliers',
-            'Order seeds 2 weeks before planting',
-            'Prepare seed treatment if needed'
+            `Order ${bestVariety.variety} seeds from certified dealer`,
+            'Verify seed treatment requirements',
+            'Plan for disease resistance benefits',
+            'Adjust seeding rate for variety characteristics'
           ],
           resources: [{
             type: 'seed',
-            name: 'Premium variety seeds',
-            quantity: 50,
-            unit: 'kg',
-            cost: 150
+            name: bestVariety.variety,
+            quantity: Math.ceil(plantingGuide.spacingRecommendations.plantsPerAcre / 1000 * context.fields.reduce((sum: number, f: any) => sum + (f.area || 0), 0)),
+            unit: 'units',
+            cost: 180
           }],
           dependencies: ['soil_preparation'],
-          alternatives: ['Standard variety', 'Organic variety', 'GMO variety']
+          alternatives: plantingGuide.varietyRecommendations.slice(1).map(v => v.variety)
         },
         monitoring: {
-          metrics: ['germination_rate', 'plant_density', 'early_growth'],
+          metrics: ['germination_rate', 'plant_density', 'disease_pressure', 'early_growth'],
           checkpoints: [new Date(Date.now() + 40 * 24 * 60 * 60 * 1000)],
-          successCriteria: ['Germination rate > 90%', 'Uniform plant stand']
+          successCriteria: ['Germination rate > 90%', 'Uniform plant stand', 'No disease symptoms']
         },
-        tags: ['variety_selection', 'yield_optimization', 'risk_management'],
-        source: 'ml_model'
+        tags: ['usda_recommended', 'variety_selection', 'disease_resistance', 'yield_optimization'],
+        source: 'expert_system'
       });
+
+      // USDA-based planting timing recommendation
+      const plantingDate = this.parsePlantingDate(plantingGuide.plantingTiming.optimal);
+      recommendations.push({
+        id: `planting_timing_usda_${Date.now()}`,
+        category: 'planting',
+        title: 'USDA Extension Service Planting Window',
+        description: `Plant when soil temperature reaches ${plantingGuide.plantingTiming.soilTempMin}°F`,
+        action: `Target planting date: ${plantingGuide.plantingTiming.optimal} (${plantingDate.toLocaleDateString()})`,
+        rationale: `USDA Extension Service data for ${context.usda.region.name}. ${plantingGuide.plantingTiming.notes}`,
+        priority: 'high',
+        confidence: 0.95,
+        timing: {
+          optimal: plantingDate,
+          earliest: this.parsePlantingDate(plantingGuide.plantingTiming.earliest),
+          latest: this.parsePlantingDate(plantingGuide.plantingTiming.latest),
+          duration: 7
+        },
+        impact: {
+          yield: 10,
+          cost: 0,
+          revenue: 800,
+          sustainability: 5,
+          riskReduction: 30
+        },
+        implementation: {
+          steps: [
+            'Monitor soil temperature daily starting 2 weeks before optimal date',
+            'Check 7-day weather forecast for planting window',
+            'Prepare planting equipment and calibrate for seed depth',
+            'Plan field logistics for efficient planting'
+          ],
+          resources: [],
+          dependencies: ['soil_preparation', 'seed_availability'],
+          alternatives: ['Early planting with protection', 'Delayed planting with adjusted variety']
+        },
+        monitoring: {
+          metrics: ['soil_temperature', 'weather_conditions', 'emergence_rate', 'plant_uniformity'],
+          checkpoints: [this.parsePlantingDate(plantingGuide.plantingTiming.earliest), plantingDate],
+          successCriteria: [`Soil temp > ${plantingGuide.plantingTiming.soilTempMin}°F for 3 days`, 'No frost forecast', 'Field workable']
+        },
+        tags: ['usda_timing', 'soil_temperature', 'regional_adaptation'],
+        source: 'expert_system'
+      });
+
+      // Peer benchmarking recommendation
+      if (context.peerBenchmark) {
+        recommendations.push({
+          id: `peer_benchmark_${Date.now()}`,
+          category: 'planting',
+          title: 'Peer Farm Performance Comparison',
+          description: `Your farm vs. regional average: Yield ${context.peerBenchmark.yieldPercentile}th percentile`,
+          action: `Target ${context.peerBenchmark.avgYield} bu/acre (regional average) with potential for top 25%`,
+          rationale: `Based on ${context.usda.region.name} peer farm data. Top performers achieve ${Math.round(context.peerBenchmark.avgYield * 1.2)} bu/acre through ${context.peerBenchmark.bestPractices.slice(0, 2).join(' and ')}.`,
+          priority: 'medium',
+          confidence: 0.88,
+          timing: {
+            optimal: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            earliest: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            latest: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          },
+          impact: {
+            yield: Math.round((context.peerBenchmark.avgYield / 180) * 15), // Percentage improvement potential
+            cost: 50,
+            revenue: Math.round((context.peerBenchmark.avgYield * 1.15 - 180) * (context.market?.currentPrice || 4.50)),
+            sustainability: 10,
+            riskReduction: 15
+          },
+          implementation: {
+            steps: context.peerBenchmark.improvementOpportunities.slice(0, 4),
+            resources: [],
+            dependencies: [],
+            alternatives: context.peerBenchmark.bestPractices.slice(2, 4)
+          },
+          monitoring: {
+            metrics: ['yield_progress', 'cost_efficiency', 'practice_adoption'],
+            checkpoints: [new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)],
+            successCriteria: ['Above regional average yield', 'Cost per bushel below peers', 'Best practice implementation']
+          },
+          tags: ['peer_benchmarking', 'performance_improvement', 'regional_comparison'],
+          source: 'best_practices'
+        });
+      }
     }
 
     // Planting timing recommendation
@@ -598,58 +953,175 @@ class AgricultureRecommendationEngine {
   private async generateFertilizationRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
-    // Nitrogen optimization
-    recommendations.push({
-      id: `fertilization_nitrogen_${Date.now()}`,
-      category: 'fertilization',
-      title: 'Nitrogen application optimization',
-      description: 'Apply nitrogen based on soil test and crop needs',
-      action: 'Apply 120 kg/ha nitrogen in split applications',
-      rationale: 'Soil test shows medium nitrogen levels, crop requirements indicate split application benefits',
-      priority: 'high',
-      confidence: 0.85,
-      timing: {
-        optimal: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        earliest: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
-        latest: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
-        duration: 7
-      },
-      impact: {
-        yield: 12,
-        cost: 180,
-        revenue: 960,
-        sustainability: -5,
-        riskReduction: 5
-      },
-      implementation: {
-        steps: [
-          'Conduct soil test if not recent',
-          'Calculate precise application rates',
-          'Apply base fertilizer at planting',
-          'Schedule side-dress applications',
-          'Monitor crop response'
-        ],
-        resources: [{
-          type: 'fertilizer',
-          name: 'Urea (46-0-0)',
-          quantity: 260,
-          unit: 'kg',
-          cost: 180
-        }],
-        dependencies: ['soil_test_results'],
-        alternatives: ['Organic fertilizer', 'Slow-release fertilizer', 'Variable rate application']
-      },
-      monitoring: {
-        metrics: ['leaf_color', 'plant_height', 'nitrate_levels'],
-        checkpoints: [
-          new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
-          new Date(Date.now() + 42 * 24 * 60 * 60 * 1000)
-        ],
-        successCriteria: ['Optimal plant color', 'Expected growth rate', 'No nutrient deficiency symptoms']
-      },
-      tags: ['nitrogen', 'yield_optimization', 'nutrition'],
-      source: 'soil_based'
-    });
+    // Enhanced fertilization using USDA data
+    if (request.cropType && context.usda) {
+      const plantingGuide = await usdaService.getPlantingGuide(request.cropType, context.usda.region.code);
+      const fertilizerRec = plantingGuide.fertilizer;
+
+      // Pre-plant fertilizer recommendation
+      recommendations.push({
+        id: `fertilization_preplant_usda_${Date.now()}`,
+        category: 'fertilization',
+        title: 'USDA Extension Pre-Plant Fertilizer Program',
+        description: `Regional fertilizer recommendations for ${request.cropType} in ${context.usda.region.name}`,
+        action: `Apply N-P-K: ${fertilizerRec.prePlant.nitrogen}-${fertilizerRec.prePlant.phosphorus}-${fertilizerRec.prePlant.potassium} lbs/acre at planting`,
+        rationale: `USDA Extension Service recommendations based on soil tests and regional crop response data for ${context.usda.region.climate} climate zones. Optimized for ${context.usda.region.growingSeasonDays}-day growing season.`,
+        priority: 'high',
+        confidence: 0.92,
+        timing: {
+          optimal: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+          earliest: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          latest: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
+          duration: 3
+        },
+        impact: {
+          yield: 15,
+          cost: (fertilizerRec.prePlant.nitrogen * 0.6) + (fertilizerRec.prePlant.phosphorus * 0.8) + (fertilizerRec.prePlant.potassium * 0.4),
+          revenue: 1200,
+          sustainability: 5,
+          riskReduction: 20
+        },
+        implementation: {
+          steps: [
+            'Conduct recent soil test (within 6 months)',
+            'Adjust rates based on soil test results and yield goal',
+            'Apply phosphorus and potassium broadcast before planting',
+            'Apply nitrogen as starter fertilizer at planting',
+            'Calibrate application equipment for accurate rates'
+          ],
+          resources: [
+            {
+              type: 'fertilizer',
+              name: 'Nitrogen (Urea 46-0-0)',
+              quantity: fertilizerRec.prePlant.nitrogen,
+              unit: 'lbs/acre',
+              cost: fertilizerRec.prePlant.nitrogen * 0.6
+            },
+            {
+              type: 'fertilizer',
+              name: 'Phosphorus (DAP 18-46-0)',
+              quantity: fertilizerRec.prePlant.phosphorus / 0.46,
+              unit: 'lbs/acre',
+              cost: fertilizerRec.prePlant.phosphorus * 0.8
+            },
+            {
+              type: 'fertilizer',
+              name: 'Potassium (Muriate 0-0-60)',
+              quantity: fertilizerRec.prePlant.potassium / 0.6,
+              unit: 'lbs/acre',
+              cost: fertilizerRec.prePlant.potassium * 0.4
+            }
+          ],
+          dependencies: ['soil_test_results', 'field_preparation'],
+          alternatives: ['Blended fertilizer', 'Organic nutrient sources', 'Variable rate application']
+        },
+        monitoring: {
+          metrics: ['soil_nutrient_levels', 'plant_tissue_analysis', 'early_plant_vigor'],
+          checkpoints: [
+            new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
+            new Date(Date.now() + 45 * 24 * 60 * 60 * 1000)
+          ],
+          successCriteria: ['Adequate soil nutrient levels', 'Optimal plant color and vigor', 'No nutrient deficiency symptoms']
+        },
+        tags: ['usda_recommended', 'preplant_fertilizer', 'regional_optimization', 'yield_optimization'],
+        source: 'expert_system'
+      });
+
+      // Side-dress nitrogen applications
+      fertilizerRec.sideDress.forEach((sideDress, index) => {
+        recommendations.push({
+          id: `fertilization_sidedress_${index}_${Date.now()}`,
+          category: 'fertilization',
+          title: `USDA Side-dress Nitrogen Application #${index + 1}`,
+          description: `${sideDress.timing} nitrogen application for maximum uptake efficiency`,
+          action: `Apply ${sideDress.nitrogen} lbs/acre nitrogen at ${sideDress.timing}`,
+          rationale: `${sideDress.notes} Regional data shows optimal response when applied during active growth periods.`,
+          priority: 'medium',
+          confidence: 0.88,
+          timing: {
+            optimal: new Date(Date.now() + (30 + index * 21) * 24 * 60 * 60 * 1000),
+            earliest: new Date(Date.now() + (25 + index * 21) * 24 * 60 * 60 * 1000),
+            latest: new Date(Date.now() + (35 + index * 21) * 24 * 60 * 60 * 1000),
+            duration: 2
+          },
+          impact: {
+            yield: 8,
+            cost: sideDress.nitrogen * 0.6,
+            revenue: 640,
+            sustainability: 8,
+            riskReduction: 10
+          },
+          implementation: {
+            steps: [
+              `Monitor crop development for ${sideDress.timing} timing`,
+              'Test soil moisture conditions before application',
+              'Apply nitrogen when rain is forecasted within 48 hours',
+              'Consider soil incorporation if dry conditions persist'
+            ],
+            resources: [{
+              type: 'fertilizer',
+              name: 'Nitrogen (UAN 28-0-0)',
+              quantity: sideDress.nitrogen,
+              unit: 'lbs/acre',
+              cost: sideDress.nitrogen * 0.6
+            }],
+            dependencies: ['crop_stage_assessment', 'weather_conditions'],
+            alternatives: ['Foliar application', 'Fertigation', 'Slow-release nitrogen']
+          },
+          monitoring: {
+            metrics: ['plant_height', 'leaf_color', 'nitrogen_uptake'],
+            checkpoints: [new Date(Date.now() + (35 + index * 21) * 24 * 60 * 60 * 1000)],
+            successCriteria: ['Rapid plant response', 'Dark green leaf color', 'Continued growth rate']
+          },
+          tags: ['sidedress_nitrogen', 'growth_stage_specific', 'usda_timing'],
+          source: 'expert_system'
+        });
+      });
+
+      // Peer comparison fertilizer efficiency
+      if (context.peerBenchmark) {
+        recommendations.push({
+          id: `fertilizer_peer_efficiency_${Date.now()}`,
+          category: 'fertilization',
+          title: 'Fertilizer Efficiency Benchmarking',
+          description: `Your fertilizer costs vs. regional peers: ${context.peerBenchmark.costPercentile}th percentile`,
+          action: `Target $${context.peerBenchmark.avgCostPerAcre} per acre (regional average) with focus on nutrient use efficiency`,
+          rationale: `Top-performing farms in ${context.usda.region.name} achieve higher yields with optimized fertilizer programs. Key practices include precision application and soil testing.`,
+          priority: 'medium',
+          confidence: 0.85,
+          timing: {
+            optimal: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            earliest: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            latest: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+          },
+          impact: {
+            yield: 5,
+            cost: -50, // Cost savings
+            revenue: 300,
+            sustainability: 15,
+            riskReduction: 8
+          },
+          implementation: {
+            steps: [
+              'Implement precision soil sampling (2.5-acre grid)',
+              'Use variable rate application technology',
+              'Adopt 4R nutrient stewardship principles',
+              'Monitor nutrient use efficiency metrics'
+            ],
+            resources: [],
+            dependencies: ['soil_testing', 'equipment_upgrade'],
+            alternatives: ['Zone-based management', 'Split applications', 'Enhanced efficiency fertilizers']
+          },
+          monitoring: {
+            metrics: ['nutrient_use_efficiency', 'cost_per_bushel', 'environmental_impact'],
+            checkpoints: [new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)],
+            successCriteria: ['Reduced fertilizer costs', 'Maintained or improved yields', 'Better efficiency metrics']
+          },
+          tags: ['precision_agriculture', 'cost_optimization', 'sustainability'],
+          source: 'best_practices'
+        });
+      }
+    }
 
     return recommendations;
   }
@@ -875,6 +1347,28 @@ class AgricultureRecommendationEngine {
     // Load agricultural knowledge base and best practices
     // In production, this would load from database or external sources
     Logger.info('Loaded agricultural knowledge base');
+  }
+
+  private parsePlantingDate(dateString: string): Date {
+    // Parse MM-DD format to current year date
+    const [month, day] = dateString.split('-').map(n => parseInt(n));
+    const currentYear = new Date().getFullYear();
+    const date = new Date(currentYear, month - 1, day);
+    
+    // If date has passed this year, use next year
+    if (date < new Date()) {
+      date.setFullYear(currentYear + 1);
+    }
+    
+    return date;
+  }
+
+  private getCurrentSeason(): 'spring' | 'summer' | 'fall' | 'winter' {
+    const month = new Date().getMonth();
+    if (month >= 2 && month <= 4) return 'spring';
+    if (month >= 5 && month <= 7) return 'summer';
+    if (month >= 8 && month <= 10) return 'fall';
+    return 'winter';
   }
 }
 

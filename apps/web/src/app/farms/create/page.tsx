@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/card'
+import { ModernCard } from '../../../components/ui/modern-card'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -406,14 +406,13 @@ export default function CreateFarmPage() {
 
         {/* Step 1: Farm Basics */}
         {currentStep === 1 && (
-          <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="text-2xl font-light">Let&apos;s set up your farm</CardTitle>
-              <CardDescription>
+          <ModernCard className="shadow-soft">
+            <div className="p-6">
+              <h2 className="text-2xl font-light mb-2">Let&apos;s set up your farm</h2>
+              <p className="text-gray-600 mb-8">
                 We&apos;ll help you get started in just 3 quick steps. First, tell us about your farm.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8">
+              </p>
+              <div className="space-y-8">
               {/* Farm Name */}
               <div>
                 <Label htmlFor="farm-name" className="text-base font-medium text-sage-700">
@@ -617,23 +616,22 @@ export default function CreateFarmPage() {
                   <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+              </div>
+            </div>
+          </ModernCard>
         )}
 
         {/* Step 2: Product Selection */}
         {currentStep === 2 && (
-          <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="text-2xl font-light">
+          <ModernCard className="shadow-soft">
+            <div className="p-6">
+              <h2 className="text-2xl font-light mb-2">
                 {farm.type === 'crops' ? 'What are you growing?' : 'What livestock do you raise?'}
-              </CardTitle>
-              <CardDescription>
+              </h2>
+              <p className="text-gray-600 mb-8">
                 Select your primary {farm.type === 'crops' ? 'crop' : 'livestock type'} for this season. 
                 You can add more later from your dashboard.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content - Left Side */}
                 <div className="lg:col-span-2 space-y-8">
@@ -1376,20 +1374,19 @@ export default function CreateFarmPage() {
                   <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </ModernCard>
         )}
 
         {/* Step 3: Review & Create */}
         {currentStep === 3 && (
-          <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="text-2xl font-light">Ready to launch your smart farm!</CardTitle>
-              <CardDescription>
+          <ModernCard className="shadow-soft">
+            <div className="p-6">
+              <h2 className="text-2xl font-light mb-2">Ready to launch your smart farm!</h2>
+              <p className="text-gray-600 mb-8">
                 Review your setup and create your farm. You can customize everything later from your dashboard.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8">
+              </p>
+              <div className="space-y-8">
               {/* Farm Summary */}
               <div className="bg-gray-50 rounded-lg p-6 space-y-4">
                 <div className="flex items-center justify-between">
@@ -1507,8 +1504,9 @@ export default function CreateFarmPage() {
                   )}
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+              </div>
+            </div>
+          </ModernCard>
         )}
       </main>
     </DashboardLayout>

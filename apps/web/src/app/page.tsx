@@ -6,7 +6,7 @@ import { InfoTooltip } from '../components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../lib/tooltip-content'
 import { Badge } from '../components/ui/badge'
 import { InteractiveDemo } from '../components/landing/interactive-demo'
-import { ROICalculator } from '../components/landing/roi-calculator'
+// ROI Calculator removed per requirements
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
   BarChart, Users, ArrowRight, Sparkles, Zap, Target
@@ -238,8 +238,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ROI Calculator Section */}
-      <ROICalculator />
+      {/* ROI Calculator removed - focusing on core features */}
       
       {/* Footer */}
       <footer className="bg-sage-100/50 py-16 px-4 sm:px-6 lg:px-8">

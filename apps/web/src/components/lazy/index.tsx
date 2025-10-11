@@ -2,12 +2,13 @@
 
 import dynamic from 'next/dynamic'
 import { ComponentType, ReactElement } from 'react'
-import { LoadingStates } from '../ui/loading-states'
+import { Spinner } from '../ui/loading-states'
 
 // Loading component with proper styling
 const MapLoading = () => (
-  <div className="w-full h-[400px] flex items-center justify-center bg-gray-50 rounded-lg">
-    <LoadingStates type="spinner" message="Loading map..." />
+  <div className="w-full h-[400px] flex items-center justify-center bg-gray-50 rounded-lg flex-col gap-3">
+    <Spinner size="large" />
+    <span className="text-sm text-gray-600">Loading map...</span>
   </div>
 )
 

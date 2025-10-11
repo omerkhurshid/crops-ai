@@ -30,6 +30,7 @@ interface CropDetails {
   frost_tolerance: string;
   drought_tolerance: string;
   heat_tolerance: string;
+  global_production_tonnes: number;
   nutrition_data?: {
     calories_per_100g: number;
     protein_g: number;

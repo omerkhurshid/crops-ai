@@ -341,13 +341,15 @@ export function FarmerDashboardOptimized({
         />
         
         <MemoizedFarmerMetricCard
-          icon={TrendingUp}
-          label={getFarmerTerm("yield")}
-          value={`${farmData?.yieldForecast?.current || 0} ${farmData?.yieldForecast?.unit || 'tons/acre'}`}
-          subValue={`Potential: ${farmData?.yieldForecast?.potential || 0}`}
-          trend={((farmData?.yieldForecast?.current || 0) / (farmData?.yieldForecast?.potential || 1)) * 100}
-          color="green"
-          urgency={farmData?.yieldForecast?.current < farmData?.yieldForecast?.potential ? 'medium' : 'low'}
+          icon={<TrendingUp className="h-5 w-5" />}
+          title={getFarmerTerm("yield")}
+          value={`${farmData?.yieldForecast?.current || 0}`}
+          unit={farmData?.yieldForecast?.unit || 'tons/acre'}
+          subtitle={`Potential: ${farmData?.yieldForecast?.potential || 0}`}
+          trend={{
+            direction: (farmData?.yieldForecast?.current || 0) >= (farmData?.yieldForecast?.potential || 0) ? 'up' : 'down',
+            percentage: Math.abs(((farmData?.yieldForecast?.current || 0) / (farmData?.yieldForecast?.potential || 1)) * 100 - 100)
+          }}
         />
         
         <MemoizedLivestockMetricCard

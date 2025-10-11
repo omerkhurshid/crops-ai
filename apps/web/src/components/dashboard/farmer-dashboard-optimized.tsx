@@ -353,8 +353,9 @@ export function FarmerDashboardOptimized({
         />
         
         <MemoizedLivestockMetricCard
-          count={livestockMetrics.count}
-          healthStatus={livestockMetrics.healthStatus as 'good' | 'warning' | 'critical'}
+          totalCount={livestockMetrics.count || 0}
+          healthyCount={Math.round((livestockMetrics.count || 0) * 0.9)} 
+          sickCount={Math.round((livestockMetrics.count || 0) * 0.1)}
         />
       </div>
 

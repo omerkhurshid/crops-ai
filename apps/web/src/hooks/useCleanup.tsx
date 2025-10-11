@@ -30,7 +30,7 @@ export function useCleanup() {
     cleanupFunctionsRef.current.push(cleanupFunction)
   }, [])
 
-  const safeSetState = useCallback(<T>(
+  const safeSetState = useCallback(<T,>(
     setter: (value: T) => void,
     value: T
   ) => {

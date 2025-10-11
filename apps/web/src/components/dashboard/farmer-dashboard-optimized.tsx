@@ -364,8 +364,18 @@ export function FarmerDashboardOptimized({
         <div className="lg:col-span-2 space-y-6">
           <MorningBriefing 
             farmName={farmData?.farmName || 'Your Farm'}
+            totalAcres={farmData?.totalArea || 0}
+            overallHealth={farmData?.overallHealth || 0}
+            healthTrend={farmData?.healthTrend || 0}
+            stressedAreas={farmData?.stressedAreas || 0}
+            stressTrend={farmData?.stressTrend || 0}
             weather={weatherData}
-            highlights={farmData?.todayHighlights || []}
+            financials={{
+              netYTD: farmData?.financials?.netYTD || 0,
+              trend: farmData?.financials?.trend || 0,
+              lastUpdate: farmData?.financials?.lastUpdate || new Date().toISOString()
+            }}
+            urgentTasksCount={urgentTasks.length}
           />
           
           <TodaysTasksSummary 

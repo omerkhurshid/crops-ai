@@ -382,12 +382,7 @@ export function FarmerDashboardOptimized({
             farmId={farmId}
           />
           
-          <WeatherAlertsWidget 
-            farmData={{
-              latitude: farmData?.latitude,
-              longitude: farmData?.longitude
-            }}
-          />
+          <WeatherAlertsWidget />
         </div>
         
         <div className="space-y-6">

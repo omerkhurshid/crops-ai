@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
@@ -284,12 +283,13 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
           ) : (
             <div className="space-y-4">
               {fields.map((field) => (
-                <Card 
+                <ModernCard 
                   key={field.id} 
+                  variant="soft"
                   className="hover:shadow-md transition-shadow cursor-pointer border-l-4 border-l-green-500"
                   onClick={() => onFieldSelect(field.id)}
                 >
-                  <CardContent className="p-4">
+                  <ModernCardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
@@ -348,8 +348,8 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                         <ArrowRight className="h-4 w-4 text-gray-400" />
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </ModernCardContent>
+                </ModernCard>
               ))}
             </div>
           )}

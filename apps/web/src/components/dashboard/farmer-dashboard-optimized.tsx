@@ -364,7 +364,7 @@ export function FarmerDashboardOptimized({
         <div className="lg:col-span-2 space-y-6">
           <MorningBriefing 
             farmName={farmData?.farmName || 'Your Farm'}
-            totalAcres={farmData?.totalArea || 0}
+            totalAcres={farmData?.totalAcres || 0}
             overallHealth={farmData?.overallHealth || 0}
             healthTrend={farmData?.healthTrend || 0}
             stressedAreas={farmData?.stressedAreas || 0}

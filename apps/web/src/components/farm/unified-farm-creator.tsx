@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -425,15 +425,15 @@ export function UnifiedFarmCreator() {
 
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Basic Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <ModernCard variant="soft">
+          <ModernCardHeader>
+            <ModernCardTitle className="flex items-center gap-2">
               <Sprout className="h-5 w-5 text-green-600" />
               Farm Information
-            </CardTitle>
-            <CardDescription>Basic details about your farming operation</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </ModernCardTitle>
+            <ModernCardDescription>Basic details about your farming operation</ModernCardDescription>
+          </ModernCardHeader>
+          <ModernCardContent className="space-y-4">
             <div>
               <Label htmlFor="farm-name">Farm Name</Label>
               <Input
@@ -470,39 +470,39 @@ export function UnifiedFarmCreator() {
                 })}
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </ModernCardContent>
+        </ModernCard>
 
         {/* Smart Agriculture Selection */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <ModernCard variant="soft">
+          <ModernCardHeader>
+            <ModernCardTitle className="flex items-center gap-2">
               <Sprout className="h-5 w-5 text-green-600" />
               What Are You Growing or Raising?
-            </CardTitle>
-            <CardDescription>
+            </ModernCardTitle>
+            <ModernCardDescription>
               Select your crops and livestock to get personalized AI insights and monitoring
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </ModernCardDescription>
+          </ModernCardHeader>
+          <ModernCardContent>
             <SmartAgricultureSelector
               selectedFarmType={farm.type}
               onSelectionChange={handleAgricultureSelection}
               showRecommendations={true}
             />
-          </CardContent>
-        </Card>
+          </ModernCardContent>
+        </ModernCard>
 
         {/* Location */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        <ModernCard variant="soft">
+          <ModernCardHeader>
+            <ModernCardTitle className="flex items-center gap-2">
               <MapPin className="h-5 w-5 text-blue-600" />
               Farm Location
-            </CardTitle>
-            <CardDescription>Where is your farm located?</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </ModernCardTitle>
+            <ModernCardDescription>Where is your farm located?</ModernCardDescription>
+          </ModernCardHeader>
+          <ModernCardContent className="space-y-4">
             <div className="flex gap-2">
               <Input
                 placeholder="Address or coordinates (lat, lng)"
@@ -559,24 +559,24 @@ export function UnifiedFarmCreator() {
                 </Button>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </ModernCardContent>
+        </ModernCard>
 
         {/* Farm Mapping */}
-        <Card>
-          <CardHeader>
+        <ModernCard variant="soft">
+          <ModernCardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2">
+                <ModernCardTitle className="flex items-center gap-2">
                   <Satellite className="h-5 w-5 text-green-600" />
                   Farm Mapping {hasValidBoundaries && <Badge variant="secondary" className="ml-2">Boundaries Set</Badge>}
-                </CardTitle>
-                <CardDescription>
+                </ModernCardTitle>
+                <ModernCardDescription>
                   {!hasValidBoundaries 
                     ? "Draw your farm boundaries on the map" 
                     : "Farm boundaries set. Now you can add field boundaries."
                   }
-                </CardDescription>
+                </ModernCardDescription>
               </div>
               {hasValidBoundaries && (
                 <Button
@@ -590,8 +590,8 @@ export function UnifiedFarmCreator() {
                 </Button>
               )}
             </div>
-          </CardHeader>
-          <CardContent>
+          </ModernCardHeader>
+          <ModernCardContent>
             {!showMap ? (
               <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                 <div className="text-center">
@@ -724,22 +724,22 @@ export function UnifiedFarmCreator() {
                 <p className="text-gray-600">Google Maps API key required</p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </ModernCardContent>
+        </ModernCard>
 
         {/* Field Summary */}
         {hasValidBoundaries && (
-          <Card>
-            <CardHeader>
+          <ModernCard variant="soft">
+            <ModernCardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
+                  <ModernCardTitle className="flex items-center gap-2">
                     <Satellite className="h-5 w-5 text-purple-600" />
                     Fields ({farm.fields?.length || 0})
-                  </CardTitle>
-                  <CardDescription>
+                  </ModernCardTitle>
+                  <ModernCardDescription>
                     Individual field boundaries within your farm
-                  </CardDescription>
+                  </ModernCardDescription>
                 </div>
                 {farm.fields && farm.fields.length > 0 && (
                   <Button
@@ -753,8 +753,8 @@ export function UnifiedFarmCreator() {
                   </Button>
                 )}
               </div>
-            </CardHeader>
-            <CardContent>
+            </ModernCardHeader>
+            <ModernCardContent>
               {farm.fields && farm.fields.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {farm.fields.map((field, index) => (
@@ -786,13 +786,13 @@ export function UnifiedFarmCreator() {
                   <p className="text-sm">Use the polygon tool on the map above to draw field boundaries</p>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </ModernCardContent>
+          </ModernCard>
         )}
 
         {/* Create Farm Button */}
-        <Card>
-          <CardContent className="pt-6">
+        <ModernCard variant="soft">
+          <ModernCardContent className="pt-6">
             {!isBasicInfoComplete && (
               <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
@@ -827,8 +827,8 @@ export function UnifiedFarmCreator() {
                 : "Farm boundaries are optional - you can add them later for field mapping"
               }
             </p>
-          </CardContent>
-        </Card>
+          </ModernCardContent>
+        </ModernCard>
       </div>
     </div>
   )

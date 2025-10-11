@@ -399,7 +399,14 @@ export function FarmerDashboardOptimized({
           </ModernCardHeader>
           <ModernCardContent>
             <FarmsMap 
-              farms={farmsWithHealth}
+              farms={farmsWithHealth.map(farm => ({
+                ...farm,
+                health: farm.healthScore,
+                healthTrend: 0,
+                stressedAreas: farm.stressLevel,
+                latitude: farm.latitude || 0,
+                longitude: farm.longitude || 0
+              }))}
               onFarmSelect={handleFarmSelect}
               selectedFarmId={selectedFarmId}
             />

@@ -7,12 +7,13 @@ import { prisma } from '../../../../lib/prisma';
 
 export async function GET(request: NextRequest) {
   const healthCheck = {
-    status: 'healthy',
+    status: 'healthy' as 'healthy' | 'degraded',
     timestamp: new Date().toISOString(),
     services: {
-      database: 'unknown',
-      weather: 'unknown',
-      version: process.env.npm_package_version || '1.0.0'
+      database: 'unknown' as string,
+      weather: 'unknown' as string,
+      version: process.env.npm_package_version || '1.0.0',
+      dbResponseTime: 0 as number | undefined
     },
     environment: {
       nodeEnv: process.env.NODE_ENV,

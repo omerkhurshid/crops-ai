@@ -50,7 +50,7 @@ interface CropDetails {
 
 export default function CropDetailPage() {
   const params = useParams()
-  const cropId = params.id as string
+  const cropId = params?.id as string
   const [crop, setCrop] = useState<CropDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -94,8 +94,11 @@ export default function CropDetailPage() {
       }
     }
 
-    if (cropId) {
+    if (cropId && typeof cropId === 'string') {
       loadCropDetails()
+    } else if (!cropId) {
+      setError('No crop ID provided')
+      setLoading(false)
     }
   }, [cropId])
 

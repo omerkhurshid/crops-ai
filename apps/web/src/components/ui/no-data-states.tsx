@@ -13,7 +13,8 @@ import {
   Calendar,
   DollarSign,
   Cloud,
-  Sprout
+  Sprout,
+  Heart
 } from 'lucide-react'
 import { Button } from './button'
 import { ModernCard, ModernCardContent } from './modern-card'

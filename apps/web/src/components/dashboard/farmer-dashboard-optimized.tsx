@@ -331,10 +331,8 @@ export function FarmerDashboardOptimized({
       {/* Quick Overview Section */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
         <MemoizedCropHealthCard
-          score={farmData?.overallHealth || 0}
-          trend={farmData?.healthTrend || 0}
-          lastUpdate={lastSatelliteUpdate}
-          fieldName="Overall Farm"
+          healthScore={farmData?.overallHealth || 0}
+          healthTrend={farmData?.healthTrend || 0}
         />
         
         <MemoizedStressLevelCard

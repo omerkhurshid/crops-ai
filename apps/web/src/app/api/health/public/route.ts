@@ -3,7 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../lib/prisma';
+import { prisma } from '@crops-ai/database';
+import { checkDatabaseHealth, dbMonitor } from '../../../../lib/monitoring';
 
 export async function GET(request: NextRequest) {
   const healthCheck = {
@@ -23,14 +24,15 @@ export async function GET(request: NextRequest) {
     }
   };
 
-  // Test database connection
+  // Test database connection with monitoring
   try {
-    const start = Date.now();
-    await prisma.$queryRaw`SELECT 1`;
-    const responseTime = Date.now() - start;
+    const dbHealth = await checkDatabaseHealth();
+    healthCheck.services.database = dbHealth.status;
+    healthCheck.services.dbResponseTime = dbHealth.responseTime;
     
-    healthCheck.services.database = responseTime < 1000 ? 'healthy' : 'slow';
-    healthCheck.services.dbResponseTime = responseTime;
+    if (dbHealth.status !== 'healthy') {
+      healthCheck.status = 'degraded';
+    }
   } catch (error) {
     healthCheck.services.database = 'error';
     healthCheck.status = 'degraded';

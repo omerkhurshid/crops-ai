@@ -144,13 +144,13 @@
     @apply active:scale-95 transition-transform duration-150;
   }
   
-  /* Glass morphism navbar with slight green tint */
+  /* Glass morphism navbar with better visibility */
   .glass-nav {
-    background: rgba(34, 139, 34, 0.15);
+    background: rgba(34, 139, 34, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   }
   
   /* Enhanced glassmorphic hero card */

@@ -85,16 +85,16 @@ function DashboardContent({
 
       {/* Quick Stats Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="text-2xl font-bold text-sage-600">{totalFields}</div>
+        <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total fields count">
+          <div className="text-2xl font-bold text-sage-600" aria-label={`${totalFields} fields`}>{totalFields}</div>
           <div className="text-sm text-gray-600">Fields</div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="text-2xl font-bold text-green-600">{totalArea.toFixed(1)}</div>
+        <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total farm area">
+          <div className="text-2xl font-bold text-green-600" aria-label={`${totalArea.toFixed(1)} hectares`}>{totalArea.toFixed(1)}</div>
           <div className="text-sm text-gray-600">Hectares</div>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="text-2xl font-bold text-blue-600">{crops?.length || 0}</div>
+        <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total crops count">
+          <div className="text-2xl font-bold text-blue-600" aria-label={`${crops?.length || 0} crops`}>{crops?.length || 0}</div>
           <div className="text-sm text-gray-600">Crops</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4">

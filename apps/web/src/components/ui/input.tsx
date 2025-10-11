@@ -2,7 +2,11 @@ import * as React from "react"
 import { cn } from "../../lib/utils"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  'aria-label'?: string
+  'aria-describedby'?: string
+  'aria-invalid'?: boolean
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
@@ -14,6 +18,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
+        aria-label={props['aria-label'] || props.placeholder}
         {...props}
       />
     )

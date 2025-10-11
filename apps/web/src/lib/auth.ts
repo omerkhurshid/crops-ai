@@ -5,6 +5,11 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
 
+// Production safety check - prevent demo users in production
+if (process.env.NODE_ENV === 'production' && process.env.ENABLE_DEMO_USERS === 'true') {
+  throw new Error('Demo users cannot be enabled in production!');
+}
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
   providers: [

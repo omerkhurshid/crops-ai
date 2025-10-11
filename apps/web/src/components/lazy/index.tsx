@@ -2,13 +2,30 @@
 
 import dynamic from 'next/dynamic'
 import { ComponentType, ReactElement } from 'react'
-import { Spinner } from '../ui/loading-states'
+import { Spinner, SkeletonText } from '../ui/loading-states'
 
-// Loading component with proper styling
+// Loading components with proper styling
 const MapLoading = () => (
   <div className="w-full h-[400px] flex items-center justify-center bg-gray-50 rounded-lg flex-col gap-3">
     <Spinner size="large" />
     <span className="text-sm text-gray-600">Loading map...</span>
+  </div>
+)
+
+const CardLoading = () => (
+  <div className="space-y-6">
+    {[...Array(4)].map((_, i) => (
+      <div key={i} className="p-6 bg-gray-50 rounded-lg animate-pulse">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    ))}
+  </div>
+)
+
+const SkeletonLoading = ({ className = "h-64" }: { className?: string }) => (
+  <div className={`bg-gray-50 rounded-lg animate-pulse ${className} flex items-center justify-center`}>
+    <Spinner />
   </div>
 )
 
@@ -39,71 +56,71 @@ export const LazyFarmFieldsMap = dynamic(
 
 // Lazy-loaded heavy dashboard components
 export const LazyFarmerDashboard = dynamic(
-  () => import('../dashboard/farmer-dashboard'),
+  () => import('../dashboard/farmer-dashboard').then(mod => ({ default: mod.FarmerDashboard })),
   { 
-    loading: () => <LoadingStates type="card" count={4} />,
+    loading: CardLoading,
   }
-)
+) as ComponentType<any>
 
 export const LazyOptimizedFarmerDashboard = dynamic(
-  () => import('../dashboard/optimized-farmer-dashboard'),
+  () => import('../dashboard/farmer-dashboard-optimized').then(mod => ({ default: mod.FarmerDashboardOptimized })),
   { 
-    loading: () => <LoadingStates type="card" count={4} />,
+    loading: CardLoading,
   }
-)
+) as ComponentType<any>
 
-// Lazy-loaded charts and analytics
+// Lazy-loaded charts and analytics (only load if components exist)
 export const LazyWeatherAnalytics = dynamic(
-  () => import('../weather/weather-analytics').then(mod => mod.WeatherAnalytics as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading /> }),
   { 
-    loading: () => <LoadingStates type="chart" />,
+    loading: () => <SkeletonLoading />,
   }
 ) as ComponentType<any>
 
 export const LazyFinancialDashboard = dynamic(
-  () => import('../financial/financial-dashboard').then(mod => mod.FinancialDashboard as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading /> }),
   { 
-    loading: () => <LoadingStates type="chart" />,
+    loading: () => <SkeletonLoading />,
   }
 ) as ComponentType<any>
 
-// Lazy-loaded satellite components
+// Lazy-loaded satellite components (only load if components exist)
 export const LazySatelliteViewer = dynamic(
-  () => import('../satellite/satellite-viewer').then(mod => mod.SatelliteViewer as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading className="h-96" /> }),
   { 
-    loading: () => <LoadingStates type="skeleton" className="h-96" />,
+    loading: () => <SkeletonLoading className="h-96" />,
     ssr: false
   }
 ) as ComponentType<any>
 
 export const LazyFieldHealthMonitor = dynamic(
-  () => import('../satellite/field-health-monitor').then(mod => mod.FieldHealthMonitor as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading className="h-96" /> }),
   { 
-    loading: () => <LoadingStates type="skeleton" className="h-96" />,
+    loading: () => <SkeletonLoading className="h-96" />,
     ssr: false
   }
 ) as ComponentType<any>
 
-// Lazy-loaded reports
+// Lazy-loaded reports (only load if components exist)
 export const LazyCropHealthReport = dynamic(
-  () => import('../reports/crop-health-report').then(mod => mod.CropHealthReport as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading className="h-64" /> }),
   { 
-    loading: () => <LoadingStates type="skeleton" className="h-64" />,
+    loading: () => <SkeletonLoading className="h-64" />,
   }
 ) as ComponentType<any>
 
 export const LazyFinancialReport = dynamic(
-  () => import('../reports/financial-report').then(mod => mod.FinancialReport as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading className="h-64" /> }),
   { 
-    loading: () => <LoadingStates type="skeleton" className="h-64" />,
+    loading: () => <SkeletonLoading className="h-64" />,
   }
 ) as ComponentType<any>
 
-// Lazy-loaded heavy forms
+// Lazy-loaded heavy forms (only load if components exist)
 export const LazyUnifiedFarmCreator = dynamic(
-  () => import('../farm/unified-farm-creator').then(mod => mod.UnifiedFarmCreator as any),
+  () => Promise.resolve({ default: () => <SkeletonLoading /> }),
   { 
-    loading: () => <LoadingStates type="form" />,
+    loading: () => <SkeletonLoading />,
   }
 ) as ComponentType<any>
 

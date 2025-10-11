@@ -84,7 +84,7 @@ export default async function FarmsPage() {
               View and manage all your farm locations
             </p>
             
-            <Link href="/farms/create-unified">
+            <Link href="/farms/create">
               <button className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
                 <Plus className="h-5 w-5" />
                 Add New Farm

@@ -64,17 +64,21 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
       
       // Calculate farm-level metrics from field data
       const totalFields = fields.length
-      const overallHealth = Math.round(
-        fields.reduce((sum: number, field: any) => sum + field.healthScore, 0) / totalFields
-      )
       
-      const averageNDVI = fields.reduce((sum: number, field: any) => 
-        sum + field.indices.ndvi, 0) / totalFields
+      // Prevent division by zero and handle missing data
+      const overallHealth = totalFields > 0 ? Math.round(
+        fields.reduce((sum: number, field: any) => sum + (field.healthScore || 0), 0) / totalFields
+      ) : 0
+      
+      const averageNDVI = totalFields > 0 ? 
+        fields.reduce((sum: number, field: any) => 
+          sum + (field.indices?.ndvi || 0), 0) / totalFields : 0
       
       // Calculate average soil moisture from NDWI
-      const soilMoisture = Math.round(
-        fields.reduce((sum: number, field: any) => sum + (field.indices.ndwi * 100), 0) / totalFields
-      )
+      const soilMoisture = totalFields > 0 ? Math.round(
+        fields.reduce((sum: number, field: any) => 
+          sum + ((field.indices?.ndwi || 0) * 100), 0) / totalFields
+      ) : 0
       
       // Determine farm-level risks based on field conditions
       const stressLevels = fields.map((field: any) => field.stressLevel)

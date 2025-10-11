@@ -63,7 +63,7 @@ const nextConfig = {
   
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Disabled - causes critters module error in production
     gzipSize: true,
     swcMinify: true,
   },

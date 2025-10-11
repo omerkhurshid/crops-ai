@@ -380,7 +380,6 @@ export function FarmerDashboardOptimized({
           
           <TodaysTasksSummary 
             farmId={farmId}
-            urgentTasks={urgentTasks}
           />
           
           <WeatherAlertsWidget 

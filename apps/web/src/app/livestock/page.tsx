@@ -113,8 +113,8 @@ export default async function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl">
-                  <Users className="h-6 w-6 text-blue-700" />
+                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
+                  <Users className="h-6 w-6 text-sage-700" />
                 </div>
               </div>
               <ModernCardTitle>Total Livestock</ModernCardTitle>
@@ -124,8 +124,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{totalAnimals || 0}</div>
-                <div className="text-sm text-blue-600">animals registered</div>
+                <div className="text-3xl font-bold text-sage-600 mb-2">{totalAnimals || 0}</div>
+                <div className="text-sm text-sage-600">animals registered</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -133,8 +133,8 @@ export default async function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl">
-                  <Heart className="h-6 w-6 text-green-700" />
+                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
+                  <Heart className="h-6 w-6 text-sage-700" />
                 </div>
               </div>
               <ModernCardTitle>Health Score</ModernCardTitle>
@@ -144,8 +144,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-green-600 mb-2">{totalAnimals > 0 ? `${healthScore.toFixed(1)}/10` : '--'}</div>
-                <div className="text-sm text-green-600">{totalAnimals > 0 ? (healthScore >= 8 ? 'excellent condition' : healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
+                <div className="text-3xl font-bold text-sage-700 mb-2">{totalAnimals > 0 ? `${healthScore.toFixed(1)}/10` : '--'}</div>
+                <div className="text-sm text-sage-600">{totalAnimals > 0 ? (healthScore >= 8 ? 'excellent condition' : healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -153,8 +153,8 @@ export default async function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-orange-100 to-orange-50 rounded-2xl">
-                  <Stethoscope className="h-6 w-6 text-orange-700" />
+                <div className="p-3 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl">
+                  <Stethoscope className="h-6 w-6 text-earth-700" />
                 </div>
               </div>
               <ModernCardTitle>Health Alerts</ModernCardTitle>
@@ -164,8 +164,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-orange-600 mb-2">{healthAlerts || 0}</div>
-                <div className="text-sm text-orange-600">{healthAlerts === 1 ? 'requires attention' : 'require attention'}</div>
+                <div className="text-3xl font-bold text-earth-600 mb-2">{healthAlerts || 0}</div>
+                <div className="text-sm text-earth-600">{healthAlerts === 1 ? 'requires attention' : 'require attention'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -173,8 +173,8 @@ export default async function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl">
-                  <TrendingUp className="h-6 w-6 text-purple-700" />
+                <div className="p-3 bg-gradient-to-br from-sage-200 to-sage-100 rounded-2xl">
+                  <TrendingUp className="h-6 w-6 text-sage-800" />
                 </div>
               </div>
               <ModernCardTitle>Avg Daily Gain</ModernCardTitle>
@@ -184,8 +184,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-purple-600 mb-2">{avgDailyGain > 0 ? `${avgDailyGain.toFixed(1)}kg` : '--'}</div>
-                <div className="text-sm text-purple-600">daily average</div>
+                <div className="text-3xl font-bold text-sage-700 mb-2">{avgDailyGain > 0 ? `${avgDailyGain.toFixed(1)}kg` : '--'}</div>
+                <div className="text-sm text-sage-600">daily average</div>
               </div>
             </ModernCardContent>
           </ModernCard>

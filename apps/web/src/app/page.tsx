@@ -154,10 +154,10 @@ export default async function Home() {
                 Now Cropple.ai tells me exactly what needs attention. The real-time monitoring has helped me catch issues early."
               </p>
               <div className="flex items-center gap-4 text-sm">
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Time Savings
                 </Badge>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Early Detection
                 </Badge>
               </div>
@@ -179,10 +179,10 @@ export default async function Home() {
                 informed decisions about when to harvest based on weather forecasts has improved our operation's efficiency."
               </p>
               <div className="flex items-center gap-4 text-sm">
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Weather Alerts
                 </Badge>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Better Timing
                 </Badge>
               </div>
@@ -204,10 +204,10 @@ export default async function Home() {
                 specific actions needed for each field. The centralized dashboard has streamlined our operations significantly."
               </p>
               <div className="flex items-center gap-4 text-sm">
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Water Efficiency
                 </Badge>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                <Badge variant="outline" className="bg-sage-50 text-sage-700 border-sage-200">
                   Streamlined Ops
                 </Badge>
               </div>

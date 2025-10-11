@@ -144,9 +144,9 @@
     @apply active:scale-95 transition-transform duration-150;
   }
   
-  /* Glass morphism navbar with better visibility */
+  /* Glass morphism navbar with better visibility - matching sidebar color */
   .glass-nav {
-    background: rgba(34, 139, 34, 0.85);
+    background: rgba(127, 143, 115, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);

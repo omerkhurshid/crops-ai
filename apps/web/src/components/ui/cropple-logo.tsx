@@ -31,7 +31,7 @@ export function CroppleLogo({ className = '', size = 'md', showText = true, text
       
       {showText && (
         <span className={`${textSize} font-medium ${textColor} tracking-tight`}>
-          Crops<span className="font-normal">.AI</span>
+          Cropple<span className="font-normal">.ai</span>
         </span>
       )}
     </div>

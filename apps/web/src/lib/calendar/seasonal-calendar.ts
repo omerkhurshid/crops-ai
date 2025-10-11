@@ -211,6 +211,7 @@ class SeasonalCalendarService {
       duration: { days: 30, flexible: false },
       conditions: {
         weather: ['All weather conditions'],
+        soil: ['Any soil conditions'],
         crop_stage: ['Vegetative to reproductive stages']
       },
       crops: ['corn', 'soybeans', 'cotton', 'wheat'],
@@ -256,7 +257,7 @@ class SeasonalCalendarService {
       duration: { days: 7, flexible: true },
       conditions: {
         weather: ['Any conditions for shop work'],
-        equipment: ['Pre-season inspection complete']
+        soil: ['Shop work - soil independent']
       },
       crops: ['corn', 'soybeans', 'wheat', 'cotton'],
       region: ['midwest', 'southeast', 'great_plains', 'california_central'],
@@ -323,7 +324,7 @@ class SeasonalCalendarService {
       duration: { days: 15, flexible: true },
       conditions: {
         weather: ['Shop work - weather independent'],
-        equipment: ['Harvest season complete']
+        soil: ['Shop work - soil independent']
       },
       crops: ['all'],
       region: ['midwest', 'southeast', 'great_plains', 'california_central'],
@@ -344,6 +345,7 @@ class SeasonalCalendarService {
       duration: { days: 10, flexible: true },
       conditions: {
         weather: ['Office work - weather independent'],
+        soil: ['Office work - soil independent'],
         crop_stage: ['Planning phase']
       },
       crops: ['all'],
@@ -364,7 +366,8 @@ class SeasonalCalendarService {
       timing: { month: 2, weekOfMonth: 1, dayRange: { start: 1, end: 15 } },
       duration: { days: 5, flexible: true },
       conditions: {
-        weather: ['Office work - weather independent']
+        weather: ['Office work - weather independent'],
+        soil: ['Office work - soil independent']
       },
       crops: ['all'],
       region: ['midwest', 'southeast', 'great_plains', 'california_central'],
@@ -547,8 +550,8 @@ class SeasonalCalendarService {
     // Calculate resource requirements
     const totalLaborHours = activities.reduce((sum, a) => sum + (a.labor.hours_per_acre * farmSize), 0);
     const peakWorkdays = Math.ceil(totalLaborHours / 8); // 8 hours per day
-    const equipmentNeeds = [...new Set(activities.flatMap(a => a.equipment))];
-    const materialNeeds = [...new Set(activities.flatMap(a => a.materials))];
+    const equipmentNeeds = Array.from(new Set(activities.flatMap(a => a.equipment)));
+    const materialNeeds = Array.from(new Set(activities.flatMap(a => a.materials)));
     const estimatedCost = activities.reduce((sum, a) => sum + (a.cost_per_acre * farmSize), 0);
 
     return {

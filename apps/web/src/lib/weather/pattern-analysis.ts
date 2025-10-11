@@ -369,9 +369,9 @@ class WeatherPatternAnalysisService {
 
     return {
       overall: Math.min(overallRisk, 10),
-      immediate: [...new Set(immediate)],
-      seasonal: [...new Set(seasonal)],
-      annual: [...new Set(annual)]
+      immediate: Array.from(new Set(immediate)),
+      seasonal: Array.from(new Set(seasonal)),
+      annual: Array.from(new Set(annual))
     };
   }
 
@@ -399,9 +399,9 @@ class WeatherPatternAnalysisService {
     }
 
     return {
-      immediate: [...new Set(immediate)],
-      seasonal: [...new Set(seasonal)],
-      strategic: [...new Set(strategic)]
+      immediate: Array.from(new Set(immediate)),
+      seasonal: Array.from(new Set(seasonal)),
+      strategic: Array.from(new Set(strategic))
     };
   }
 

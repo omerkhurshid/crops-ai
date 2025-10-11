@@ -95,18 +95,22 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
                    overallHealth >= 60 ? 'stable' : 'declining'
       
       // Generate critical alerts
-      const criticalAlerts = []
+      const criticalAlerts: Array<{
+        type: 'pest' | 'disease' | 'weather' | 'irrigation'
+        severity: 'warning' | 'critical'
+        message: string
+      }> = []
       if (highStressFields > 0) {
         criticalAlerts.push({
-          type: 'pest',
-          severity: 'critical',
+          type: 'pest' as const,
+          severity: 'critical' as const,
           message: `${highStressFields} field${highStressFields > 1 ? 's' : ''} showing high stress levels`
         })
       }
       if (irrigationNeeded) {
         criticalAlerts.push({
-          type: 'irrigation',
-          severity: 'warning',
+          type: 'irrigation' as const,
+          severity: 'warning' as const,
           message: 'Some fields have low soil moisture - consider irrigation'
         })
       }

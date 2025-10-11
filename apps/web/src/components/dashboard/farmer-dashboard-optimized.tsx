@@ -371,9 +371,9 @@ export function FarmerDashboardOptimized({
             stressTrend={farmData?.stressTrend || 0}
             weather={weatherData}
             financials={{
-              netYTD: farmData?.financials?.netYTD || 0,
-              trend: farmData?.financials?.trend || 0,
-              lastUpdate: farmData?.financials?.lastUpdate || new Date().toISOString()
+              netYTD: 0,
+              trend: 0,
+              lastUpdate: new Date().toISOString()
             }}
             urgentTasksCount={urgentTasks.length}
           />

@@ -182,10 +182,10 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
         {/* Net Cash Flow */}
         <MetricCard
           title="Net Cash Flow"
-          value={formatCurrency(netCashFlow)}
+          value={formatCurrency(currentForecast.netCashFlow)}
           description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
           icon={<DollarSign className="h-6 w-6" />}
-          variant={isPositiveCashFlow ? 'success' : 'warning'}
+          variant={isPositiveCashFlow ? 'glass' : 'glow'}
           changeDirection={isPositiveCashFlow ? 'up' : 'down'}
           tooltip={{
             title: "Net Cash Flow",

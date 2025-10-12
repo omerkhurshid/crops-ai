@@ -66,77 +66,17 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
         const result = await response.json();
         setData(result.data);
       } else {
-        setData(getMockFinancialData());
+        throw new Error('Failed to fetch financial data');
       }
     } catch (error) {
       console.error('Error fetching financial data:', error);
-      setData(getMockFinancialData());
+      setError('Failed to load financial data');
     } finally {
       setLoading(false);
     }
   };
 
-  const getMockFinancialData = (): FinancialData => ({
-    summary: {
-      totalRevenue: 187500,
-      totalExpenses: 125300,
-      netProfit: 62200,
-      profitMargin: 33.2,
-      roi: 24.8,
-      cashFlow: 45600
-    },
-    breakdown: {
-      revenue: [
-        { category: 'Crop Sales', amount: 142500, percentage: 76.0 },
-        { category: 'Livestock', amount: 28700, percentage: 15.3 },
-        { category: 'Equipment Rental', amount: 8950, percentage: 4.8 },
-        { category: 'Insurance Payouts', amount: 7350, percentage: 3.9 }
-      ],
-      expenses: [
-        { category: 'Seeds & Plants', amount: 38400, percentage: 30.6 },
-        { category: 'Fertilizers', amount: 29800, percentage: 23.8 },
-        { category: 'Labor', amount: 21600, percentage: 17.2 },
-        { category: 'Fuel & Energy', amount: 16700, percentage: 13.3 },
-        { category: 'Equipment', amount: 12200, percentage: 9.7 },
-        { category: 'Other', amount: 6600, percentage: 5.3 }
-      ]
-    },
-    trends: {
-      monthly: [
-        { month: 'Jan', revenue: 8500, expenses: 12200, profit: -3700 },
-        { month: 'Feb', revenue: 9200, expenses: 11800, profit: -2600 },
-        { month: 'Mar', revenue: 15600, expenses: 18500, profit: -2900 },
-        { month: 'Apr', revenue: 22400, expenses: 15800, profit: 6600 },
-        { month: 'May', revenue: 18900, expenses: 12400, profit: 6500 },
-        { month: 'Jun', revenue: 35200, expenses: 14200, profit: 21000 },
-        { month: 'Jul', revenue: 42600, expenses: 16800, profit: 25800 },
-        { month: 'Aug', revenue: 35100, expenses: 23600, profit: 11500 }
-      ],
-      comparison: { current: 62200, previous: 48900, change: 27.2 }
-    },
-    profitability: {
-      byField: [
-        { field: 'North Field', area: 45.2, revenue: 89500, profit: 32100, profitPerAcre: 710 },
-        { field: 'South Field', area: 32.8, revenue: 61200, profit: 18900, profitPerAcre: 576 },
-        { field: 'East Field', area: 28.5, revenue: 36800, profit: 11200, profitPerAcre: 393 }
-      ],
-      byCrop: [
-        { crop: 'Corn', revenue: 89500, profit: 32100, margin: 35.9 },
-        { crop: 'Soybeans', revenue: 61200, profit: 18900, margin: 30.9 },
-        { crop: 'Wheat', revenue: 36800, profit: 11200, margin: 30.4 }
-      ]
-    },
-    cashFlow: {
-      operational: 58900,
-      investment: -12400,
-      financing: -8200,
-      net: 38300
-    },
-    projections: {
-      nextQuarter: { revenue: 95200, expenses: 67800, profit: 27400 },
-      yearEnd: { revenue: 245000, expenses: 168500, profit: 76500 }
-    }
-  });
+  // Mock function removed for production
 
   const generateReport = async () => {
     setGenerating(true);

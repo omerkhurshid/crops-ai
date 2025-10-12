@@ -3,11 +3,7 @@ import Link from 'next/link'
 import { Badge } from '../components/ui/badge'
 import dynamic from 'next/dynamic'
 
-// Dynamically import heavy components to improve LCP
-const InteractiveDemo = dynamic(() => import('../components/landing/interactive-demo').then(mod => ({ default: mod.InteractiveDemo })), {
-  loading: () => <div className="h-96 bg-gray-100 rounded-lg animate-pulse flex items-center justify-center"><span className="text-gray-500">Loading demo...</span></div>,
-  ssr: false
-})
+// Interactive demo removed for production
 
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
@@ -144,7 +140,7 @@ export default async function Home() {
             </p>
           </div>
           
-          <InteractiveDemo />
+          {/* Interactive demo removed for production */}
         </div>
       </section>
 

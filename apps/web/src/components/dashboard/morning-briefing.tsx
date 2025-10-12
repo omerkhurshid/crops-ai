@@ -95,7 +95,7 @@ export function MorningBriefing({
   
   const greeting = () => {
     const hour = new Date().getHours()
-    const firstName = userName && userName !== 'Demo' ? userName.split(' ')[0] : ''
+    const firstName = userName ? userName.split(' ')[0] : ''
     const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
     
     return firstName ? `${timeGreeting}, ${firstName}` : `${timeGreeting}`

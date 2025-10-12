@@ -242,7 +242,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
         </div>
       </div>
 
-      {/* Monthly Trends Chart - Placeholder */}
+      {/* Monthly Trends Chart */}
       {monthlyTrends.length > 0 && (
         <ModernCard variant="floating">
           <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">

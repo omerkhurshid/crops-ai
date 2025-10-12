@@ -5,10 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
 
-// Production safety check - prevent demo users in production
-if (process.env.NODE_ENV === 'production' && process.env.ENABLE_DEMO_USERS === 'true') {
-  throw new Error('Demo users cannot be enabled in production!');
-}
+// Demo functionality removed for production
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
@@ -24,33 +21,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Demo mode - only enabled in development with explicit environment variables
-        if (process.env.NODE_ENV === 'development' && process.env.ENABLE_DEMO_USERS === 'true') {
-          // Demo users must be configured via environment variables
-          const demoEmail = process.env.DEMO_USER_EMAIL
-          const demoPassword = process.env.DEMO_USER_PASSWORD
-          const adminEmail = process.env.DEMO_ADMIN_EMAIL
-          const adminPassword = process.env.DEMO_ADMIN_PASSWORD
-          
-          // Only check demo users if all required env vars are set
-          if (demoEmail && demoPassword && credentials.email === demoEmail && credentials.password === demoPassword) {
-            return {
-              id: 'demo-1',
-              email: demoEmail,
-              name: 'Demo Farmer',
-              role: UserRole.FARM_OWNER
-            }
-          }
-          
-          if (adminEmail && adminPassword && credentials.email === adminEmail && credentials.password === adminPassword) {
-            return {
-              id: 'admin-1',
-              email: adminEmail,
-              name: 'Admin User',
-              role: UserRole.ADMIN
-            }
-          }
-        }
+        // Demo authentication removed for production
 
         // Try database authentication
         try {

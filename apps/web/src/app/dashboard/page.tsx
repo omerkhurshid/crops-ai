@@ -106,7 +106,7 @@ function generateActionableTasks(farms: any[], weatherAlerts: any[], financialDa
     }
   })
   
-  // Field inspection tasks - remove placeholder data, will be populated by client-side components
+  // Field inspection tasks will be populated by client-side components
   
   // Financial tasks
   const recentExpenses = ensureArray(financialData).filter(t => 

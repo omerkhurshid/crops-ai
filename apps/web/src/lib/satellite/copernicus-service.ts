@@ -143,7 +143,7 @@ class CopernicusService {
     try {
       if (!this.clientId || !this.clientSecret) {
         await auditLogger.logSystem('copernicus_offline_mode', false, { reason: 'No credentials configured' }, 'warn')
-        return this.getMockSentinelScenes(bounds, startDate, endDate)
+        throw new Error('Copernicus credentials not configured')
       }
 
       const token = await this.getAccessToken()

@@ -172,7 +172,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           value={formatCurrency(currentForecast.expectedExpenses)}
           description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
           icon={<TrendingDown className="h-6 w-6" />}
-          variant="error"
+          variant="glow"
           tooltip={{
             title: "Expected Expenses",
             description: "Money you'll need to pay out for fertilizer, fuel, labor, equipment, and other costs."

@@ -102,14 +102,14 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           title="Total Income"
           value={formatCurrency(summary.totalIncome)}
           icon={<TrendingUp className="h-6 w-6" />}
-          variant="success"
+          variant="glass"
         />
         
         <MetricCard
           title="Total Expenses"
           value={formatCurrency(summary.totalExpenses)}
           icon={<TrendingDown className="h-6 w-6" />}
-          variant="error"
+          variant="glow"
         />
         
         <MetricCard

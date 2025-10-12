@@ -211,7 +211,7 @@ export function BulkActionsToolbar({
                     <InlineFloatingButton
                       icon={<CheckCircle2 className="h-4 w-4" />}
                       label="Confirm"
-                      variant="warning"
+                      variant="destructive"
                       size="sm"
                       onClick={() => executeAction(showConfirmation)}
                       disabled={isExecuting !== null}

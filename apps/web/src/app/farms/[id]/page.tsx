@@ -163,7 +163,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             value={`${farm.stats.totalArea.toFixed(1)} ha`}
             description={`${(farm.stats.totalArea * 2.47).toFixed(1)} acres`}
             icon={<Sprout className="h-6 w-6" />}
-            variant="sage"
+            variant="soft"
             tooltip={TOOLTIP_CONTENT.area}
           />
           
@@ -172,7 +172,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             value={farm.stats.fieldsCount.toString()}
             description="Monitored"
             icon={<MapPin className="h-6 w-6" />}
-            variant="forest"
+            variant="glass"
             tooltip={TOOLTIP_CONTENT.field}
           />
           
@@ -181,7 +181,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             value={`${farm.stats.healthScore}%`}
             description="NDVI-based"
             icon={<Activity className="h-6 w-6" />}
-            variant="earth"
+            variant="glow"
             tooltip={TOOLTIP_CONTENT.healthScore}
           />
           

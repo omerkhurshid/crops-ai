@@ -159,7 +159,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           value={formatCurrency(currentForecast.expectedIncome)}
           description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
           icon={<TrendingUp className="h-6 w-6" />}
-          variant="forest"
+          variant="glass"
           tooltip={{
             title: "Expected Income",
             description: `Money you expect to receive in the next ${selectedPeriod === '30_days' ? '30' : '60'} days from crop sales, insurance, etc.`

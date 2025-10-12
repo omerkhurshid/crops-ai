@@ -189,7 +189,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           value={formatCurrency(metrics.revenuePerAcre)}
           description={`Total: ${formatCurrency(metrics.totalRevenue)}`}
           icon={<TrendingUp className="h-6 w-6" />}
-          variant="earth"
+          variant="glow"
           tooltip={{
             title: "Revenue Per Acre",
             description: "Total income generated per acre before costs are subtracted."

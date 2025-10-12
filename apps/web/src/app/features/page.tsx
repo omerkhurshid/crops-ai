@@ -254,7 +254,7 @@ export default function FeaturesPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <ModernCard variant="sage" className="text-center">
+            <ModernCard variant="soft" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                   <Satellite className="h-10 w-10 text-sage-700" />
@@ -269,7 +269,7 @@ export default function FeaturesPage() {
               </ModernCardContent>
             </ModernCard>
             
-            <ModernCard variant="forest" className="text-center">
+            <ModernCard variant="glass" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                   <Brain className="h-10 w-10 text-forest-700" />
@@ -284,7 +284,7 @@ export default function FeaturesPage() {
               </ModernCardContent>
             </ModernCard>
             
-            <ModernCard variant="earth" className="text-center">
+            <ModernCard variant="glow" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
                   <Shield className="h-10 w-10 text-earth-700" />

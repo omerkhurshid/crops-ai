@@ -117,7 +117,7 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           value={formatPercentage(summary.profitMargin)}
           description="of total income"
           icon={<BarChart3 className="h-6 w-6" />}
-          variant="forest"
+          variant="glass"
         />
         
         <MetricCard
@@ -125,7 +125,7 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           value={formatCurrency(summary.profitPerAcre)}
           description={`${acreage.toFixed(0)} total acres`}
           icon={<DollarSign className="h-6 w-6" />}
-          variant="earth"
+          variant="glow"
         />
       </div>
     </div>

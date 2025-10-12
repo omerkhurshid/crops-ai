@@ -99,7 +99,7 @@ export default async function FarmsPage() {
               value={userFarms.length.toString()}
               description="Farm locations"
               icon={<Sprout className="h-6 w-6" />}
-              variant="sage"
+              variant="soft"
             />
 
             <MetricCard
@@ -107,7 +107,7 @@ export default async function FarmsPage() {
               value={`${userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha`}
               description="Hectares farmed"
               icon={<MapPin className="h-6 w-6" />}
-              variant="forest"
+              variant="glass"
             />
 
             <MetricCard
@@ -115,7 +115,7 @@ export default async function FarmsPage() {
               value={userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0).toString()}
               description="Fields created"
               icon={<Activity className="h-6 w-6" />}
-              variant="earth"
+              variant="glow"
             />
           </div>
 

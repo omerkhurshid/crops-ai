@@ -260,7 +260,7 @@ async function getFieldInfo(fieldId: string) {
         latitude: field.farm.latitude,
         longitude: field.farm.longitude
       },
-      boundary: field.boundary
+      area: field.area
     }
   } catch (error) {
     console.error('Error fetching field info:', error)

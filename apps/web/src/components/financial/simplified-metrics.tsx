@@ -162,7 +162,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           value={formatCurrency(metrics.profitPerAcre)}
           description={`Total: ${formatCurrency(metrics.totalProfit)} (${acreage.toFixed(1)} acres)`}
           icon={<DollarSign className="h-6 w-6" />}
-          variant={metrics.profitPerAcre > 0 ? 'success' : 'error'}
+          variant={metrics.profitPerAcre > 0 ? 'glass' : 'glow'}
           tooltip={{
             title: "Profit Per Acre",
             description: "This is how much money you make per acre after all costs. Higher is better!"

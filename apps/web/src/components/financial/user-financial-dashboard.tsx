@@ -167,7 +167,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           changeDirection={summary.profitChange >= 0 ? 'up' : 'down'}
           icon={<DollarSign className="h-6 w-6" />}
           description="vs. previous period"
-          variant="success"
+          variant="glass"
         />
 
         {/* Total Revenue */}
@@ -177,7 +177,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           icon={<TrendingUp className="h-6 w-6" />}
           description={`${formatCurrencyAmount(summary.totalExpenses)} expenses`}
           badge={`${summary.profitMargin.toFixed(1)}% margin`}
-          variant="info"
+          variant="floating"
         />
 
         {/* Profit per Hectare */}
@@ -187,7 +187,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           icon={<Building2 className="h-6 w-6" />}
           description={`Across ${formatArea(summary.totalArea, preferences)}`}
           badge={`${summary.totalFarms} farms`}
-          variant="warning"
+          variant="glow"
         />
 
         {/* Transactions */}
@@ -196,7 +196,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           value={summary.transactionCount.toString()}
           icon={<Activity className="h-6 w-6" />}
           description="this period"
-          variant="neutral"
+          variant="soft"
         />
       </div>
 

@@ -202,7 +202,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           value={formatCurrency(metrics.costPerAcre)}
           description={`Total: ${formatCurrency(metrics.totalCosts)}`}
           icon={<Banknote className="h-6 w-6" />}
-          variant="moss"
+          variant="soft"
           tooltip={{
             title: "Cost Per Acre",
             description: "All expenses (seeds, fertilizer, fuel, labor) divided by total acres. Lower is better."

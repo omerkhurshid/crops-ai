@@ -95,13 +95,10 @@ export function MorningBriefing({
   
   const greeting = () => {
     const hour = new Date().getHours()
-    const firstName = userName ? userName.split(' ')[0] : ''
+    const firstName = userName && userName !== 'Demo' ? userName.split(' ')[0] : ''
     const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
     
-    // Debug logging to see what's happening
-    console.log('MorningBriefing Debug:', { userName, firstName, timeGreeting })
-    
-    return firstName ? `${timeGreeting}, ${firstName}!` : `${timeGreeting}!`
+    return firstName ? `${timeGreeting}, ${firstName}` : `${timeGreeting}`
   }
 
   const getHealthExplanation = (health: number) => {
@@ -124,71 +121,74 @@ export function MorningBriefing({
     <ModernCard variant="glow" className={cn('overflow-hidden', className)}>
       <ModernCardContent className="p-0">
         {/* Header */}
-        <div className="bg-gradient-to-r from-sage-700 to-earth-700 text-white p-6 pb-4">
-          <h1 className="text-2xl font-bold mb-2">{greeting()}!</h1>
-          <div className="text-sage-100">
-            <span>{totalAcres} acres under management</span>
-            {farmName && <span className="opacity-75 ml-2">• {farmName}</span>}
+        <div className="bg-gradient-to-r from-sage-600 to-sage-700 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold mb-1">{greeting()}</h1>
+              <div className="text-sage-100 text-sm">
+                <span>{totalAcres} acres under management</span>
+                {farmName && farmName !== 'Your Farm' && <span className="opacity-75 ml-2">• {farmName}</span>}
+              </div>
+            </div>
+            <div className="text-right text-sage-100">
+              <div className="text-xs uppercase tracking-wide opacity-75">Last Updated</div>
+              <div className="text-sm">{new Date().toLocaleDateString()}</div>
+            </div>
           </div>
         </div>
 
         {/* Main Content Grid */}
         <div className="p-6 pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-sage-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
             
             {/* Farm Status */}
             <div className="pb-6 md:pb-0 md:pr-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4">
+              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
                 Farm Status
               </h3>
-              <div className="space-y-3">
-                {/* Health Summary with Visual Gauge */}
-                <div className="p-3 bg-sage-50 rounded-lg border border-sage-200">
+              <div className="space-y-4">
+                {/* Health Summary - Clean Design */}
+                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-semibold text-sage-700">Overall Health</span>
+                    <span className="text-sm font-medium text-gray-700">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
                   
-                  {/* Circular Progress Gauge */}
-                  <div className="flex items-center gap-4 mb-2">
-                    <div className="relative w-16 h-16">
-                      <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 100 100">
-                        {/* Background circle */}
+                  {/* Simplified Progress Display */}
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-14 h-14">
+                      <svg className="w-14 h-14 transform -rotate-90" viewBox="0 0 100 100">
                         <circle
                           cx="50"
                           cy="50"
                           r="40"
                           stroke="currentColor"
-                          strokeWidth="8"
+                          strokeWidth="6"
                           fill="transparent"
                           className="text-gray-200"
                         />
-                        {/* Progress circle */}
                         <circle
                           cx="50"
                           cy="50"
                           r="40"
                           stroke="currentColor"
-                          strokeWidth="8"
+                          strokeWidth="6"
                           fill="transparent"
                           strokeDasharray={`${2 * Math.PI * 40}`}
                           strokeDashoffset={`${2 * Math.PI * 40 * (1 - overallHealth / 100)}`}
                           className={cn(
-                            "transition-all duration-500 ease-out",
+                            "transition-all duration-300 ease-out",
                             overallHealth >= 80 ? 'text-green-500' : 
-                            overallHealth >= 60 ? 'text-yellow-500' : 
-                            overallHealth >= 40 ? 'text-orange-500' : 'text-red-500'
+                            overallHealth >= 60 ? 'text-amber-500' : 'text-red-500'
                           )}
                           strokeLinecap="round"
                         />
                       </svg>
-                      {/* Center text */}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className={cn(
-                          'text-lg font-bold',
+                          'text-sm font-bold',
                           overallHealth >= 80 ? 'text-green-700' : 
-                          overallHealth >= 60 ? 'text-yellow-700' : 
-                          overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
+                          overallHealth >= 60 ? 'text-amber-700' : 'text-red-700'
                         )}>
                           {overallHealth}%
                         </span>
@@ -197,20 +197,17 @@ export function MorningBriefing({
                     
                     <div className="flex-1">
                       <div className={cn(
-                        'text-sm font-medium mb-1',
+                        'text-base font-medium mb-1',
                         overallHealth >= 80 ? 'text-green-700' : 
-                        overallHealth >= 60 ? 'text-yellow-700' : 
-                        overallHealth >= 40 ? 'text-orange-700' : 'text-red-700'
+                        overallHealth >= 60 ? 'text-amber-700' : 'text-red-700'
                       )}>
                         {overallHealth >= 80 ? 'Excellent' : 
-                         overallHealth >= 60 ? 'Good' : 
-                         overallHealth >= 40 ? 'Average' : 'Critical'}
+                         overallHealth >= 60 ? 'Good' : 'Needs Attention'}
                       </div>
-                      <div className="text-xs text-sage-600">
-                        {overallHealth >= 85 ? 'Fields are performing optimally' :
-                         overallHealth >= 70 ? 'Most fields are healthy' :
-                         overallHealth >= 55 ? 'Some fields need attention' :
-                         'Multiple fields require immediate care'}
+                      <div className="text-xs text-gray-600">
+                        {overallHealth >= 80 ? 'Most fields are healthy' :
+                         overallHealth >= 60 ? 'Some areas need monitoring' :
+                         'Several fields require attention'}
                       </div>
                     </div>
                   </div>
@@ -239,19 +236,19 @@ export function MorningBriefing({
                   </div>
                 )}
 
-                {/* Crop Stats - Improved Layout */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="text-center p-2 bg-sage-50 rounded-lg border border-sage-100">
-                    <div className="text-lg font-bold text-sage-800">{plantingsCount}</div>
-                    <div className="text-xs text-sage-600">Planned</div>
+                {/* Crop Stats - Clean Professional Layout */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div className="text-xl font-bold text-gray-800">{plantingsCount}</div>
+                    <div className="text-xs text-gray-600 font-medium">Planned</div>
                   </div>
-                  <div className="text-center p-2 bg-green-50 rounded-lg border border-green-100">
-                    <div className="text-lg font-bold text-green-800">{growingCount}</div>
-                    <div className="text-xs text-green-600">Growing</div>
+                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div className="text-xl font-bold text-green-700">{growingCount}</div>
+                    <div className="text-xs text-gray-600 font-medium">Growing</div>
                   </div>
-                  <div className="text-center p-2 bg-amber-50 rounded-lg border border-amber-100">
-                    <div className="text-lg font-bold text-amber-800">{readyToHarvestCount}</div>
-                    <div className="text-xs text-amber-600">Ready</div>
+                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div className="text-xl font-bold text-amber-700">{readyToHarvestCount}</div>
+                    <div className="text-xs text-gray-600 font-medium">Ready</div>
                   </div>
                 </div>
 
@@ -293,63 +290,41 @@ export function MorningBriefing({
               </div>
             </div>
 
-            {/* Weather Summary - Visual */}
+            {/* Weather Conditions */}
             <div className="py-6 md:py-0 md:px-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4">
+              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
                 Weather Conditions
               </h3>
               <div className="space-y-4">
-                {/* Current Weather - Enhanced Visual */}
-                <div className="p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
+                {/* Current Weather - Clean Design */}
+                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <WeatherIcon className="h-10 w-10 text-blue-600" />
-                        {weather.current.icon === 'sun' && (
-                          <div className="absolute -inset-1 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
-                        )}
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <WeatherIcon className="h-8 w-8 text-blue-600" />
                       </div>
                       <div>
-                        <div className="text-3xl font-bold text-blue-800">
+                        <div className="text-2xl font-bold text-gray-800">
                           {formatTemperature(weather.current.temp, preferences)}
                         </div>
-                        <div className="text-sm text-blue-600 capitalize font-medium">{weather.current.condition}</div>
+                        <div className="text-sm text-gray-600 capitalize">{weather.current.condition}</div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm text-blue-700 font-medium">H: {weather.today.high}°</div>
-                      <div className="text-sm text-blue-700 font-medium">L: {weather.today.low}°</div>
+                      <div className="text-sm text-gray-700 font-medium">H: {weather.today.high}°</div>
+                      <div className="text-sm text-gray-700 font-medium">L: {weather.today.low}°</div>
                     </div>
                   </div>
                   
-                  {/* Visual Weather Metrics */}
+                  {/* Weather Metrics */}
                   <div className="grid grid-cols-2 gap-3">
-                    {/* Precipitation Visual Bar */}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1">
-                        <Droplets className="h-4 w-4 text-blue-500" />
-                        <span className="text-xs text-blue-700 font-medium">Rain: {weather.today.precipitation}%</span>
-                      </div>
-                      <div className="h-1.5 bg-blue-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-blue-500 rounded-full transition-all duration-300"
-                          style={{ width: `${weather.today.precipitation}%` }}
-                        ></div>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Droplets className="h-4 w-4 text-blue-500" />
+                      <span className="text-sm text-gray-700">Rain: {weather.today.precipitation}%</span>
                     </div>
-                    
-                    {/* Wind Speed Visual */}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1">
-                        <Wind className="h-4 w-4 text-blue-500" />
-                        <span className="text-xs text-blue-700 font-medium">Wind: {weather.today.windSpeed} mph</span>
-                      </div>
-                      <div className="h-1.5 bg-blue-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-green-500 rounded-full transition-all duration-300"
-                          style={{ width: `${Math.min(weather.today.windSpeed / 30 * 100, 100)}%` }}
-                        ></div>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <Wind className="h-4 w-4 text-blue-500" />
+                      <span className="text-sm text-gray-700">Wind: {weather.today.windSpeed} mph</span>
                     </div>
                   </div>
                 </div>
@@ -394,51 +369,51 @@ export function MorningBriefing({
               </div>
             </div>
 
-            {/* Financial Snapshot - Visual */}
+            {/* Financial Performance */}
             <div className="pt-6 md:pt-0 md:pl-6">
-              <h3 className="text-sm font-semibold text-sage-700 mb-4">
+              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
                 Financial Performance
               </h3>
-              <div className="space-y-3">
-                {/* Profit Visual Card */}
-                <div className={cn(
-                  'p-4 rounded-lg border',
-                  financials.netYTD >= 0 
-                    ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200' 
-                    : 'bg-gradient-to-br from-red-50 to-rose-50 border-red-200'
-                )}>
+              <div className="space-y-4">
+                {/* Net Profit - Clean Design */}
+                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-sage-700 font-medium">Net Profit YTD</span>
+                    <span className="text-sm text-gray-700 font-medium">Net Profit YTD</span>
                     <TrendIndicator value={financials.trend} size="sm" />
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <DollarSign className={cn(
-                      'h-8 w-8',
-                      financials.netYTD >= 0 ? 'text-green-600' : 'text-red-600'
-                    )} />
+                    <div className={cn(
+                      'p-2 rounded-lg',
+                      financials.netYTD >= 0 ? 'bg-green-50' : 'bg-red-50'
+                    )}>
+                      <DollarSign className={cn(
+                        'h-6 w-6',
+                        financials.netYTD >= 0 ? 'text-green-600' : 'text-red-600'
+                      )} />
+                    </div>
                     <div className="flex-1">
                       <div className={cn(
                         'text-2xl font-bold',
                         financials.netYTD >= 0 ? 'text-green-700' : 'text-red-700'
                       )}>
-                        {formatCurrency(financials.netYTD, preferences)}
+                        {financials.netYTD >= 0 ? '' : '-'}{formatCurrency(Math.abs(financials.netYTD), preferences)}
                       </div>
-                      <div className="text-xs text-sage-600">
-                        {financials.netYTD >= 0 ? 'Profitable year so far' : 'Working toward profitability'}
+                      <div className="text-xs text-gray-600">
+                        {financials.netYTD >= 0 ? 'Working toward profitability' : 'Working toward profitability'}
                       </div>
                     </div>
                   </div>
                   
-                  {/* Progress indicator for yearly goal */}
+                  {/* Yearly Progress */}
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-sage-600">Yearly Progress</span>
-                      <span className="text-sage-600">{Math.round((new Date().getMonth() + 1) / 12 * 100)}%</span>
+                      <span className="text-gray-600">Yearly Progress</span>
+                      <span className="text-gray-600">{Math.round((new Date().getMonth() + 1) / 12 * 100)}%</span>
                     </div>
-                    <div className="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-sage-500 rounded-full transition-all duration-300"
+                        className="h-full bg-gray-500 rounded-full transition-all duration-300"
                         style={{ width: `${(new Date().getMonth() + 1) / 12 * 100}%` }}
                       ></div>
                     </div>
@@ -447,7 +422,7 @@ export function MorningBriefing({
 
                 <div className="pt-2">
                   <Link href="/financial">
-                    <button className="w-full text-sm px-3 py-2 bg-sage-100 hover:bg-sage-200 rounded-lg text-sage-700 transition-colors flex items-center justify-center gap-2">
+                    <button className="w-full text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors flex items-center justify-center gap-2">
                       <Plus className="h-4 w-4" />
                       Add Transaction
                     </button>
@@ -458,10 +433,10 @@ export function MorningBriefing({
           </div>
 
           {/* Action Bar */}
-          <div className="mt-6 pt-4 border-t border-sage-200">
+          <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-end">
               <Link href="/crop-health">
-                <button className="text-sm text-sage-700 hover:text-sage-800 font-medium">
+                <button className="text-sm text-gray-700 hover:text-gray-800 font-medium">
                   View detailed analytics →
                 </button>
               </Link>

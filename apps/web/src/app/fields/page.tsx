@@ -247,16 +247,34 @@ export default async function FieldsPage() {
                     {/* Progress Bar */}
                     <div>
                       <h4 className="font-medium text-gray-900 mb-2">Growing Season</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Progress</span>
-                          <span>65%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div className="bg-green-600 h-2 rounded-full" style={{width: '65%'}}></div>
-                        </div>
-                        <div className="text-xs text-gray-500">120 days until harvest</div>
-                      </div>
+                      {field.plantingDate && field.expectedHarvest ? (
+                        (() => {
+                          const planted = new Date(field.plantingDate)
+                          const harvest = new Date(field.expectedHarvest)
+                          const today = new Date()
+                          const totalDays = Math.floor((harvest.getTime() - planted.getTime()) / (1000 * 60 * 60 * 24))
+                          const daysElapsed = Math.floor((today.getTime() - planted.getTime()) / (1000 * 60 * 60 * 24))
+                          const daysRemaining = Math.floor((harvest.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+                          const progress = Math.min(100, Math.max(0, Math.round((daysElapsed / totalDays) * 100)))
+                          
+                          return (
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Progress</span>
+                                <span>{progress}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div className="bg-green-600 h-2 rounded-full" style={{width: `${progress}%`}}></div>
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {daysRemaining > 0 ? `${daysRemaining} days until harvest` : 'Ready for harvest'}
+                              </div>
+                            </div>
+                          )
+                        })()
+                      ) : (
+                        <p className="text-sm text-gray-500">No planting schedule set</p>
+                      )}
                     </div>
 
                     {/* Actions */}

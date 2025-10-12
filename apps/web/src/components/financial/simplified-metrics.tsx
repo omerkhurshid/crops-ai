@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, MetricCard } from '../ui/modern-card'
 import { TrafficLightStatus } from '../ui/traffic-light-status'
 import { InfoTooltip } from '../ui/info-tooltip'
 import { 
@@ -157,76 +157,57 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Profit Per Acre */}
-        <div className={`polished-card ${metrics.profitPerAcre > 0 ? 'card-sage' : 'card-clay'} rounded-xl p-6 text-white`}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <DollarSign className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Profit Per Acre"
-              description="This is how much money you make per acre after all costs. Higher is better!"
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(metrics.profitPerAcre)}</div>
-          <div className="text-sm opacity-90">Profit per acre</div>
-          <div className="text-xs opacity-75 mt-2">
-            Total: {formatCurrency(metrics.totalProfit)} ({acreage.toFixed(1)} acres)
-          </div>
-        </div>
+        <MetricCard
+          title="Profit per acre"
+          value={formatCurrency(metrics.profitPerAcre)}
+          description={`Total: ${formatCurrency(metrics.totalProfit)} (${acreage.toFixed(1)} acres)`}
+          icon={<DollarSign className="h-6 w-6" />}
+          variant={metrics.profitPerAcre > 0 ? 'success' : 'error'}
+          tooltip={{
+            title: "Profit Per Acre",
+            description: "This is how much money you make per acre after all costs. Higher is better!"
+          }}
+        />
 
         {/* Break-Even Price */}
-        <div className={`polished-card ${metrics.isAboveBreakeven ? 'card-forest' : 'card-golden'} rounded-xl p-6 text-white`}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <Target className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Break-Even Price"
-              description="The minimum price you need to sell your crop to cover all costs. Current market price should be above this."
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatPrice(metrics.breakEvenPrice)}</div>
-          <div className="text-sm opacity-90">Break-even price</div>
-          <div className="text-xs opacity-75 mt-2 flex items-center gap-1">
-            Market: {formatPrice(metrics.currentMarketPrice)}
-            {metrics.isAboveBreakeven ? (
-              <CheckCircle className="h-3 w-3 text-green-200" />
-            ) : (
-              <AlertCircle className="h-3 w-3 text-red-200" />
-            )}
-          </div>
-        </div>
+        <MetricCard
+          title="Break-even price"
+          value={formatPrice(metrics.breakEvenPrice)}
+          description={`Market: ${formatPrice(metrics.currentMarketPrice)}`}
+          icon={<Target className="h-6 w-6" />}
+          variant={metrics.isAboveBreakeven ? 'forest' : 'golden'}
+          changeDirection={metrics.isAboveBreakeven ? 'up' : 'down'}
+          tooltip={{
+            title: "Break-Even Price",
+            description: "The minimum price you need to sell your crop to cover all costs. Current market price should be above this."
+          }}
+        />
 
         {/* Revenue Per Acre */}
-        <div className="polished-card card-earth rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Revenue Per Acre"
-              description="Total income generated per acre before costs are subtracted."
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(metrics.revenuePerAcre)}</div>
-          <div className="text-sm opacity-90">Revenue per acre</div>
-          <div className="text-xs opacity-75 mt-2">
-            Total: {formatCurrency(metrics.totalRevenue)}
-          </div>
-        </div>
+        <MetricCard
+          title="Revenue per acre"
+          value={formatCurrency(metrics.revenuePerAcre)}
+          description={`Total: ${formatCurrency(metrics.totalRevenue)}`}
+          icon={<TrendingUp className="h-6 w-6" />}
+          variant="earth"
+          tooltip={{
+            title: "Revenue Per Acre",
+            description: "Total income generated per acre before costs are subtracted."
+          }}
+        />
 
         {/* Cost Per Acre */}
-        <div className="polished-card card-moss rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <Banknote className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Cost Per Acre"
-              description="All expenses (seeds, fertilizer, fuel, labor) divided by total acres. Lower is better."
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(metrics.costPerAcre)}</div>
+        <MetricCard
+          title="Cost per acre"
+          value={formatCurrency(metrics.costPerAcre)}
+          description={`Total: ${formatCurrency(metrics.totalCosts)}`}
+          icon={<Banknote className="h-6 w-6" />}
+          variant="moss"
+          tooltip={{
+            title: "Cost Per Acre",
+            description: "All expenses (seeds, fertilizer, fuel, labor) divided by total acres. Lower is better."
+          }}
+        />
           <div className="text-sm opacity-90">Cost per acre</div>
           <div className="text-xs opacity-75 mt-2">
             Total: {formatCurrency(metrics.totalCosts)}

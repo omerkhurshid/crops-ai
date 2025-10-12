@@ -57,55 +57,19 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
     try {
       setLoading(true)
       
-      // Mock data - replace with real API call
-      const mockActions: FarmerAction[] = [
-        {
-          id: '1',
-          action: 'Apply nitrogen fertilizer to North Field',
-          urgency: 'today',
-          field: 'North Field',
-          impact: 'Could lose 15% yield if delayed past Thursday',
-          cost: 320,
-          savings: 2800,
-          timeRequired: '3 hours',
-          reason: 'Corn plants showing yellow leaves - nitrogen deficiency',
-          dueDate: '2024-10-13',
-          category: 'growth'
-        },
-        {
-          id: '2', 
-          action: 'Turn on irrigation system',
-          urgency: 'now',
-          field: 'South Field',
-          impact: 'Prevent $4,200 stress damage',
-          cost: 45,
-          timeRequired: '15 minutes',
-          reason: 'Soil moisture dropped to 25% - critical level',
-          category: 'water'
-        },
-        {
-          id: '3',
-          action: 'Scout for aphids in soybean rows',
-          urgency: 'this-week',
-          field: 'East Field',
-          impact: 'Early detection can save $1,800 in treatments',
-          timeRequired: '1 hour',
-          reason: 'Weather conditions favor aphid outbreak',
-          category: 'pests'
-        },
-        {
-          id: '4',
-          action: 'Sell 500 bushels of corn',
-          urgency: 'this-week',
-          impact: 'Lock in $3.20/bushel before price drops',
-          savings: 1600,
-          timeRequired: '30 minutes',
-          reason: 'Corn futures show declining trend',
-          category: 'money'
-        }
-      ]
+      const response = await fetch(`/api/insights/actions?farmId=${farmId}`)
       
-      setActions(mockActions)
+      if (!response.ok) {
+        throw new Error('Failed to fetch actions')
+      }
+      
+      const data = await response.json()
+      
+      if (data.success && data.actions) {
+        setActions(data.actions)
+      } else {
+        setActions([])
+      }
     } catch (error) {
       console.error('Error fetching farmer actions:', error)
     } finally {

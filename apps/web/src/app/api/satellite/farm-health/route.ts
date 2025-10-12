@@ -66,49 +66,9 @@ export async function GET(request: NextRequest) {
       const latestSatelliteData = field.satelliteData[0]
       const currentCrop = field.crops[0]
       
-      // If no satellite data, return mock data for this field
+      // If no satellite data, skip this field (no mock data)
       if (!latestSatelliteData) {
-        return {
-          fieldId: field.id,
-          fieldName: field.name,
-          cropType: currentCrop?.cropType || 'Unknown',
-          healthScore: 85,
-          stressLevel: 'low' as const,
-          lastUpdate: new Date().toISOString(),
-          area: field.area,
-          indices: {
-            ndvi: 0.75,
-            evi: 0.65,
-            savi: 0.70,
-            gndvi: 0.68,
-            ndwi: 0.35,
-            ndmi: 0.42,
-            lai: 4.2,
-            fvc: 0.85
-          },
-          stressIndicators: {
-            drought: { severity: 15, confidence: 80, description: 'Normal moisture levels' },
-            disease: { severity: 10, confidence: 75, description: 'No disease detected' },
-            nutrient: { severity: 12, confidence: 82, description: 'Adequate nutrient levels' },
-            pest: { severity: 8, confidence: 85, description: 'Low pest pressure' }
-          },
-          zones: {
-            excellent: { percentage: 45, area: field.area * 0.45 },
-            good: { percentage: 35, area: field.area * 0.35 },
-            moderate: { percentage: 15, area: field.area * 0.15 },
-            stressed: { percentage: 5, area: field.area * 0.05 }
-          },
-          recommendations: [
-            'Continue current management practices',
-            'Monitor field conditions weekly',
-            'Prepare for next growth stage'
-          ],
-          yieldPrediction: {
-            current: 180,
-            potential: 210,
-            confidence: 85
-          }
-        }
+        return null
       }
 
       // Mark that we have real satellite data
@@ -229,9 +189,21 @@ export async function GET(request: NextRequest) {
       }
     }))
 
+    // Filter out null values (fields without satellite data)
+    const validFieldsHealth = fieldsHealth.filter(field => field !== null)
+
+    // If no fields have satellite data, return error
+    if (validFieldsHealth.length === 0) {
+      return NextResponse.json({
+        success: false,
+        error: 'No satellite data available',
+        message: 'No satellite data is available for any fields in this farm.'
+      }, { status: 404 })
+    }
+
     return NextResponse.json({
       success: true,
-      fields: fieldsHealth,
+      fields: validFieldsHealth,
       hasRealData: hasRealSatelliteData,
       farm: {
         id: farm.id,

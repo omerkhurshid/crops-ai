@@ -1,7 +1,7 @@
 import { Navbar } from '../../components/navigation/navbar'
 import Link from 'next/link'
 import { Badge } from '../../components/ui/badge'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { 
   CloudRain, Satellite, Brain, DollarSign, Activity, MapPin, 
@@ -254,44 +254,50 @@ export default function FeaturesPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="polished-card card-sage rounded-2xl p-8 text-white text-center">
-              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
-                <Satellite className="h-10 w-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Satellite Data Sources</h3>
-              <ul className="text-white/90 text-sm space-y-2">
-                <li>ESA Copernicus Sentinel-2</li>
-                <li>Planet Labs Imagery</li>
-                <li>NASA Landsat Program</li>
-                <li>10m Resolution Updates</li>
-              </ul>
-            </div>
+            <ModernCard variant="sage" className="text-center">
+              <ModernCardContent className="p-8">
+                <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                  <Satellite className="h-10 w-10 text-sage-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-sage-800 mb-4">Satellite Data Sources</h3>
+                <ul className="text-sage-700 text-sm space-y-2">
+                  <li>ESA Copernicus Sentinel-2</li>
+                  <li>Planet Labs Imagery</li>
+                  <li>NASA Landsat Program</li>
+                  <li>10m Resolution Updates</li>
+                </ul>
+              </ModernCardContent>
+            </ModernCard>
             
-            <div className="polished-card card-forest rounded-2xl p-8 text-white text-center">
-              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
-                <Brain className="h-10 w-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">AI & Machine Learning</h3>
-              <ul className="text-white/90 text-sm space-y-2">
-                <li>TensorFlow & PyTorch</li>
-                <li>Computer Vision Models</li>
-                <li>Predictive Analytics</li>
-                <li>85%+ Accuracy Rate</li>
-              </ul>
-            </div>
+            <ModernCard variant="forest" className="text-center">
+              <ModernCardContent className="p-8">
+                <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                  <Brain className="h-10 w-10 text-forest-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-forest-800 mb-4">AI & Machine Learning</h3>
+                <ul className="text-forest-700 text-sm space-y-2">
+                  <li>TensorFlow & PyTorch</li>
+                  <li>Computer Vision Models</li>
+                  <li>Predictive Analytics</li>
+                  <li>85%+ Accuracy Rate</li>
+                </ul>
+              </ModernCardContent>
+            </ModernCard>
             
-            <div className="polished-card card-earth rounded-2xl p-8 text-white text-center">
-              <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
-                <Shield className="h-10 w-10 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">Enterprise Infrastructure</h3>
-              <ul className="text-white/90 text-sm space-y-2">
-                <li>AWS Cloud Platform</li>
-                <li>99.9% Uptime SLA</li>
-                <li>Bank-grade Security</li>
-                <li>Global CDN Network</li>
-              </ul>
-            </div>
+            <ModernCard variant="earth" className="text-center">
+              <ModernCardContent className="p-8">
+                <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
+                  <Shield className="h-10 w-10 text-earth-700" />
+                </div>
+                <h3 className="text-xl font-semibold text-earth-800 mb-4">Enterprise Infrastructure</h3>
+                <ul className="text-earth-700 text-sm space-y-2">
+                  <li>AWS Cloud Platform</li>
+                  <li>99.9% Uptime SLA</li>
+                  <li>Bank-grade Security</li>
+                  <li>Global CDN Network</li>
+                </ul>
+              </ModernCardContent>
+            </ModernCard>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { ModernCard, ModernCardContent } from '@/components/ui/modern-card'
+import { ModernCard, ModernCardContent, MetricCard } from '@/components/ui/modern-card'
 import { Badge } from '@/components/ui/badge'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '@/lib/tooltip-content'
@@ -36,48 +36,6 @@ interface SeasonSnapshotProps {
   onDateRangeChange: (range: DateRange) => void;
 }
 
-interface MetricCardProps {
-  title: string;
-  value: string;
-  subtitle?: string;
-  change?: number;
-  icon: React.ReactNode;
-  color?: 'green' | 'red' | 'blue' | 'gray';
-}
-
-function MetricCard({ title, value, subtitle, change, icon, color = 'gray' }: MetricCardProps) {
-  const colorMap = {
-    green: 'card-sage',
-    red: 'card-clay',
-    blue: 'card-forest',
-    gray: 'card-earth'
-  };
-
-  const TrendIcon = change && change > 0 ? TrendingUp : change && change < 0 ? TrendingDown : null;
-
-  return (
-    <div className={`polished-card ${colorMap[color]} rounded-2xl p-6 text-white`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-          {icon}
-        </div>
-        {change !== undefined && (
-          <div className="flex items-center space-x-1">
-            {TrendIcon && <TrendIcon className="h-4 w-4" />}
-            <span className="text-sm font-medium">
-              {change > 0 ? '+' : ''}{change.toFixed(1)}%
-            </span>
-          </div>
-        )}
-      </div>
-      <div className="text-3xl font-bold mb-2">{value}</div>
-      <div className="text-xl font-medium mb-2">{title}</div>
-      {subtitle && (
-        <div className="text-sm opacity-90">{subtitle}</div>
-      )}
-    </div>
-  );
-}
 
 export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: SeasonSnapshotProps) {
   const formatCurrency = (amount: number) => {
@@ -143,31 +101,31 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
         <MetricCard
           title="Total Income"
           value={formatCurrency(summary.totalIncome)}
-          icon={<TrendingUp className="h-5 w-5" />}
-          color="green"
+          icon={<TrendingUp className="h-6 w-6" />}
+          variant="success"
         />
         
         <MetricCard
           title="Total Expenses"
           value={formatCurrency(summary.totalExpenses)}
-          icon={<TrendingDown className="h-5 w-5" />}
-          color="red"
+          icon={<TrendingDown className="h-6 w-6" />}
+          variant="error"
         />
         
         <MetricCard
           title="Profit Margin"
           value={formatPercentage(summary.profitMargin)}
-          subtitle="of total income"
-          icon={<BarChart3 className="h-5 w-5" />}
-          color="blue"
+          description="of total income"
+          icon={<BarChart3 className="h-6 w-6" />}
+          variant="forest"
         />
         
         <MetricCard
           title="Profit per Acre"
           value={formatCurrency(summary.profitPerAcre)}
-          subtitle={`${acreage.toFixed(0)} total acres`}
-          icon={<DollarSign className="h-5 w-5" />}
-          color="gray"
+          description={`${acreage.toFixed(0)} total acres`}
+          icon={<DollarSign className="h-6 w-6" />}
+          variant="earth"
         />
       </div>
     </div>

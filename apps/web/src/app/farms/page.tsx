@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getCurrentUser } from '../../lib/auth/session'
 import { Badge } from '../../components/ui/badge'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { NoFarmsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Sprout, MapPin, BarChart, Plus, Activity } from 'lucide-react'
@@ -94,27 +94,29 @@ export default async function FarmsPage() {
         
           {/* Stats Cards - Mobile Optimized (Removed Regions) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
-            <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">{userFarms.length}</div>
-              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Farms</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Farm locations</div>
-            </div>
+            <MetricCard
+              title="Total Farms"
+              value={userFarms.length.toString()}
+              description="Farm locations"
+              icon={<Sprout className="h-6 w-6" />}
+              variant="sage"
+            />
 
-            <div className="polished-card card-forest rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
-                {userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha
-              </div>
-              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Total Area</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Hectares farmed</div>
-            </div>
+            <MetricCard
+              title="Total Area"
+              value={`${userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha`}
+              description="Hectares farmed"
+              icon={<MapPin className="h-6 w-6" />}
+              variant="forest"
+            />
 
-            <div className="polished-card card-earth rounded-xl lg:rounded-2xl p-4 sm:p-6 text-white">
-              <div className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
-                {userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0)}
-              </div>
-              <div className="text-base sm:text-xl font-medium mb-1 sm:mb-2">Active Fields</div>
-              <div className="text-xs sm:text-sm opacity-90 hidden sm:block">Fields created</div>
-            </div>
+            <MetricCard
+              title="Active Fields"
+              value={userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0).toString()}
+              description="Fields created"
+              icon={<Activity className="h-6 w-6" />}
+              variant="earth"
+            />
           </div>
 
 

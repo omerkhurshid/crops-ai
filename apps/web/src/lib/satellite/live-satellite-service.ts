@@ -257,30 +257,10 @@ class LiveSatelliteService {
         return null
       }
 
-      // Create mock NDVI data since the actual image analysis is complex
-      const mockNdviStats = {
-        mean: 0.6 + Math.random() * 0.3, // 0.6-0.9 NDVI
-        std: 0.1 + Math.random() * 0.1  // Some variation
-      }
-      
-      // Get previous data for comparison
-      const previousData = await this.getPreviousSatelliteData(field.id)
-      const ndviChange = previousData ? mockNdviStats.mean - previousData.ndvi : null
-
-      return {
-        fieldId: field.id,
-        captureDate: new Date(),
-        ndvi: mockNdviStats.mean,
-        ndviChange,
-        stressLevel: this.calculateStressLevel(mockNdviStats.mean),
-        imageUrl: 'mock://sentinel-hub/ndvi-image.tiff',
-        metadata: {
-          source: 'sentinel-hub',
-          cloudCoverage: Math.random() * 30,
-          resolution: 10,
-          bands: ['B4', 'B8'] // Red and NIR bands for NDVI
-        }
-      }
+      // Image processing would require actual NDVI calculation from the TIFF file
+      // This is not implemented - return null to indicate no data available
+      console.warn('NDVI image analysis not implemented - Sentinel Hub integration incomplete')
+      return null
 
     } catch (error) {
       console.error('Error fetching live satellite data:', error)

@@ -156,14 +156,6 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
             {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
-        
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="font-medium text-blue-900 mb-2">Demo Credentials</h4>
-          <div className="text-sm text-blue-700 space-y-1">
-            <p><strong>Demo User:</strong> demo@crops.ai / Demo123!</p>
-            <p><strong>Admin User:</strong> admin@crops.ai / Admin123!</p>
-          </div>
-        </div>
       </CardContent>
     </Card>
   )

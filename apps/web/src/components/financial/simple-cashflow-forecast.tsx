@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, MetricCard } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { InfoTooltip } from '../ui/info-tooltip'
 import { 
@@ -154,68 +154,44 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         
         {/* Expected Income */}
-        <div className="polished-card card-forest rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Expected Income"
-              description={`Money you expect to receive in the next ${selectedPeriod === '30_days' ? '30' : '60'} days from crop sales, insurance, etc.`}
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(currentForecast.expectedIncome)}</div>
-          <div className="text-sm opacity-90">Expected Income</div>
-          <div className="text-xs opacity-75 mt-2">
-            Next {selectedPeriod === '30_days' ? '30' : '60'} days
-          </div>
-        </div>
+        <MetricCard
+          title="Expected Income"
+          value={formatCurrency(currentForecast.expectedIncome)}
+          description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
+          icon={<TrendingUp className="h-6 w-6" />}
+          variant="forest"
+          tooltip={{
+            title: "Expected Income",
+            description: `Money you expect to receive in the next ${selectedPeriod === '30_days' ? '30' : '60'} days from crop sales, insurance, etc.`
+          }}
+        />
 
         {/* Expected Expenses */}
-        <div className="polished-card card-clay rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <TrendingDown className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Expected Expenses"
-              description="Money you'll need to pay out for fertilizer, fuel, labor, equipment, and other costs."
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(currentForecast.expectedExpenses)}</div>
-          <div className="text-sm opacity-90">Expected Expenses</div>
-          <div className="text-xs opacity-75 mt-2">
-            Next {selectedPeriod === '30_days' ? '30' : '60'} days
-          </div>
-        </div>
+        <MetricCard
+          title="Expected Expenses"
+          value={formatCurrency(currentForecast.expectedExpenses)}
+          description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
+          icon={<TrendingDown className="h-6 w-6" />}
+          variant="error"
+          tooltip={{
+            title: "Expected Expenses",
+            description: "Money you'll need to pay out for fertilizer, fuel, labor, equipment, and other costs."
+          }}
+        />
 
         {/* Net Cash Flow */}
-        <div className={`polished-card ${isPositiveCashFlow ? 'card-sage' : 'card-golden'} rounded-xl p-6 text-white`}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <DollarSign className="h-5 w-5" />
-            </div>
-            <InfoTooltip
-              title="Net Cash Flow"
-              description="Income minus expenses. Positive means more money coming in than going out."
-            />
-          </div>
-          <div className="text-2xl font-bold mb-1">{formatCurrency(currentForecast.netCashFlow)}</div>
-          <div className="text-sm opacity-90">Net Cash Flow</div>
-          <div className="text-xs opacity-75 mt-2 flex items-center gap-1">
-            {isPositiveCashFlow ? (
-              <>
-                <CheckCircle className="h-3 w-3" />
-                <span>Positive flow</span>
-              </>
-            ) : (
-              <>
-                <AlertCircle className="h-3 w-3" />
-                <span>Cash outflow</span>
-              </>
-            )}
-          </div>
-        </div>
+        <MetricCard
+          title="Net Cash Flow"
+          value={formatCurrency(netCashFlow)}
+          description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
+          icon={<DollarSign className="h-6 w-6" />}
+          variant={isPositiveCashFlow ? 'success' : 'warning'}
+          changeDirection={isPositiveCashFlow ? 'up' : 'down'}
+          tooltip={{
+            title: "Net Cash Flow",
+            description: "Income minus expenses. Positive means more money coming in than going out."
+          }}
+        />
       </div>
 
       {/* Balance Projection */}

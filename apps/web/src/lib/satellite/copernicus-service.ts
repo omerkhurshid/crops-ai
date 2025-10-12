@@ -205,8 +205,8 @@ class CopernicusService {
 
       console.error('Error searching Sentinel-2 scenes:', error)
       
-      // Fallback to mock data on error
-      return this.getMockSentinelScenes(bounds, startDate, endDate)
+      // Return empty array on error - no mock data
+      return []
     }
   }
 
@@ -630,53 +630,6 @@ class CopernicusService {
     return 'poor'
   }
 
-  /**
-   * Get mock Sentinel scenes for testing/fallback
-   */
-  private getMockSentinelScenes(bounds: FieldBounds, startDate: string, endDate: string): Sentinel2Scene[] {
-    const scenes: Sentinel2Scene[] = []
-    const start = new Date(startDate)
-    const end = new Date(endDate)
-    
-    // Generate a few mock scenes within the date range
-    for (let i = 0; i < 3; i++) {
-      const sceneDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
-      
-      scenes.push({
-        id: `S2_MOCK_${sceneDate.toISOString().split('T')[0]}_${Math.random().toString(36).substring(7)}`,
-        productType: 'L2A',
-        acquisitionDate: sceneDate.toISOString(),
-        cloudCover: Math.random() * 25, // 0-25% cloud cover
-        geometry: {
-          coordinates: [[[
-            [bounds.west, bounds.south],
-            [bounds.east, bounds.south], 
-            [bounds.east, bounds.north],
-            [bounds.west, bounds.north],
-            [bounds.west, bounds.south]
-          ]]]
-        } as any,
-        bands: {
-          B02: 'mock://sentinel2/B02.jp2',
-          B03: 'mock://sentinel2/B03.jp2',
-          B04: 'mock://sentinel2/B04.jp2', 
-          B08: 'mock://sentinel2/B08.jp2',
-          B11: 'mock://sentinel2/B11.jp2',
-          B12: 'mock://sentinel2/B12.jp2'
-        },
-        downloadLinks: {
-          'B02': 'mock://download/B02.tiff',
-          'B03': 'mock://download/B03.tiff',
-          'B04': 'mock://download/B04.tiff',
-          'B08': 'mock://download/B08.tiff',
-          'B11': 'mock://download/B11.tiff',
-          'B12': 'mock://download/B12.tiff'
-        }
-      })
-    }
-    
-    return scenes.sort((a, b) => new Date(b.acquisitionDate).getTime() - new Date(a.acquisitionDate).getTime())
-  }
 }
 
 // Export singleton instance

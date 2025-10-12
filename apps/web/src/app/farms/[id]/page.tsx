@@ -158,52 +158,40 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
 
         {/* Sophisticated Stats Grid - Mobile Optimized */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 lg:mb-12">
-          <div className="polished-card card-sage rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
-            <div className="flex items-center justify-between mb-4">
-              <Sprout className="h-8 w-8 text-white" />
-              <InfoTooltip {...TOOLTIP_CONTENT.area} variant="light" />
-            </div>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.totalArea.toFixed(1)} ha</div>
-            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Total Area</div>
-            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
-              {(farm.stats.totalArea * 2.47).toFixed(1)} acres
-            </div>
-          </div>
+          <MetricCard
+            title="Total Area"
+            value={`${farm.stats.totalArea.toFixed(1)} ha`}
+            description={`${(farm.stats.totalArea * 2.47).toFixed(1)} acres`}
+            icon={<Sprout className="h-6 w-6" />}
+            variant="sage"
+            tooltip={TOOLTIP_CONTENT.area}
+          />
           
-          <div className="polished-card card-forest rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
-            <div className="flex items-center justify-between mb-4">
-              <MapPin className="h-8 w-8 text-white" />
-              <InfoTooltip {...TOOLTIP_CONTENT.field} variant="light" />
-            </div>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.fieldsCount}</div>
-            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Fields</div>
-            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
-              Monitored
-            </div>
-          </div>
+          <MetricCard
+            title="Fields"
+            value={farm.stats.fieldsCount.toString()}
+            description="Monitored"
+            icon={<MapPin className="h-6 w-6" />}
+            variant="forest"
+            tooltip={TOOLTIP_CONTENT.field}
+          />
           
-          <div className="polished-card card-earth rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
-            <div className="flex items-center justify-between mb-4">
-              <Activity className="h-8 w-8 text-white" />
-              <InfoTooltip {...TOOLTIP_CONTENT.healthScore} variant="light" />
-            </div>
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 lg:mb-2">{farm.stats.healthScore}%</div>
-            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Health</div>
-            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
-              NDVI-based
-            </div>
-          </div>
+          <MetricCard
+            title="Health"
+            value={`${farm.stats.healthScore}%`}
+            description="NDVI-based"
+            icon={<Activity className="h-6 w-6" />}
+            variant="earth"
+            tooltip={TOOLTIP_CONTENT.healthScore}
+          />
           
-          <div className="polished-card card-golden rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 text-white">
-            <div className="flex items-center justify-between mb-4">
-              <Calendar className="h-8 w-8 text-white" />
-            </div>
-            <div className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 lg:mb-2">Inspection</div>
-            <div className="text-sm sm:text-base lg:text-xl font-medium mb-1 lg:mb-2">Next Task</div>
-            <div className="text-xs lg:text-sm opacity-90 hidden sm:block">
-              3 days
-            </div>
-          </div>
+          <MetricCard
+            title="Next Task"
+            value="Inspection"
+            description="3 days"
+            icon={<Calendar className="h-6 w-6" />}
+            variant="golden"
+          />
         </div>
 
         {/* Enhanced Farm Map with NDVI - Full Width */}
@@ -362,11 +350,11 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
 
           {/* Right Column - Weather & Insights, appears first on mobile */}
           <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
-            {/* Weather Widget */}
+            {/* Weather Widget - Data Not Available */}
             <ModernCard variant="glass" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-br from-sage-50/80 to-cream-50/80">
                 <div className="flex items-center gap-3">
-                  <ModernCardTitle className="text-sage-800">Current Weather</ModernCardTitle>
+                  <ModernCardTitle className="text-sage-800">Weather Data</ModernCardTitle>
                   <InfoTooltip {...TOOLTIP_CONTENT.temperature} />
                 </div>
                 <ModernCardDescription>
@@ -375,59 +363,24 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
               </ModernCardHeader>
               <ModernCardContent>
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl mr-4">
-                        <Sun className="h-8 w-8 text-yellow-600" />
-                      </div>
-                      <div>
-                        <div className="text-3xl font-light text-sage-800">
-                          22°C
-                        </div>
-                        <div className="text-sm text-sage-600 font-medium">
-                          Partly Cloudy
-                        </div>
-                      </div>
-                    </div>
+                  <div className="text-center py-8">
+                    <CloudRain className="h-12 w-12 text-sage-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                      Weather Data Unavailable
+                    </h3>
+                    <p className="text-sm text-sage-600 mb-6">
+                      Connect a weather service to view current conditions
+                    </p>
+                    <Link href={`/weather?farmId=${farm.id}`}>
+                      <InlineFloatingButton
+                        icon={<CloudRain className="h-4 w-4" />}
+                        label="Configure Weather Service"
+                        showLabel={true}
+                        variant="secondary"
+                        size="md"
+                      />
+                    </Link>
                   </div>
-                  
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div className="flex items-center p-3 bg-sage-50 rounded-xl">
-                      <Droplets className="h-4 w-4 text-blue-500 mr-3" />
-                      <div>
-                        <div className="text-lg font-semibold text-sage-800">
-                          65%
-                        </div>
-                        <div className="text-xs text-sage-600 flex items-center gap-1">
-                          Humidity
-                          <InfoTooltip {...TOOLTIP_CONTENT.humidity} size="sm" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center p-3 bg-sage-50 rounded-xl">
-                      <Wind className="h-4 w-4 text-sage-500 mr-3" />
-                      <div>
-                        <div className="text-lg font-semibold text-sage-800">
-                          12 km/h
-                        </div>
-                        <div className="text-xs text-sage-600 flex items-center gap-1">
-                          Wind Speed
-                          <InfoTooltip {...TOOLTIP_CONTENT.windSpeed} size="sm" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Link href={`/weather?farmId=${farm.id}`}>
-                    <InlineFloatingButton
-                      icon={<CloudRain className="h-4 w-4" />}
-                      label="View Detailed Forecast"
-                      showLabel={true}
-                      variant="secondary"
-                      size="md"
-                      className="w-full justify-center"
-                    />
-                  </Link>
                 </div>
               </ModernCardContent>
             </ModernCard>
@@ -444,47 +397,21 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-gradient-to-r from-sage-50 to-sage-100/50 rounded-xl border border-sage-200/30">
-                    <div className="flex items-start">
-                      <div className="p-2 bg-sage-200 rounded-lg mr-3">
-                        <TrendingUp className="h-4 w-4 text-sage-700" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-sage-800 mb-1">
-                          Optimal harvest window approaching
-                        </p>
-                        <p className="text-xs text-sage-600 leading-relaxed">
-                          Field A expected to reach optimal maturity in 12-15 days based on current growth patterns
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-gradient-to-r from-earth-50 to-earth-100/50 rounded-xl border border-earth-200/30">
-                    <div className="flex items-start">
-                      <div className="p-2 bg-earth-200 rounded-lg mr-3">
-                        <AlertTriangle className="h-4 w-4 text-earth-700" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-earth-800 mb-1">
-                          Irrigation recommended
-                        </p>
-                        <p className="text-xs text-earth-600 leading-relaxed">
-                          Soil moisture below optimal levels in Field B - consider watering within 48 hours
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
+                <div className="text-center py-8">
+                  <Brain className="h-12 w-12 text-sage-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                    AI Insights Coming Soon
+                  </h3>
+                  <p className="text-sm text-sage-600 mb-6">
+                    Connect satellite and weather data to receive AI-powered recommendations
+                  </p>
                   <Link href={`/recommendations?farmId=${farm.id}`}>
                     <InlineFloatingButton
                       icon={<Brain className="h-4 w-4" />}
-                      label="View All Recommendations"
+                      label="Configure AI Insights"
                       showLabel={true}
                       variant="secondary"
                       size="md"
-                      className="w-full justify-center"
                     />
                   </Link>
                 </div>
@@ -503,38 +430,17 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
                 </ModernCardDescription>
               </ModernCardHeader>
               <ModernCardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-white/70 rounded-lg border border-sage-100">
-                    <div>
-                      <div className="font-semibold text-sage-800">Wheat</div>
-                      <div className="text-xs text-sage-500">Chicago Board</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-lg text-sage-800">$7.85/bu</div>
-                      <div className="text-xs text-sage-600 flex items-center gap-1">
-                        +2.3%
-                        <InfoTooltip {...TOOLTIP_CONTENT.priceChange} size="sm" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-3 bg-white/70 rounded-lg border border-sage-100">
-                    <div>
-                      <div className="font-semibold text-sage-800">Corn</div>
-                      <div className="text-xs text-sage-500">Chicago Board</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-lg text-sage-800">$6.42/bu</div>
-                      <div className="text-xs text-earth-600 flex items-center gap-1">
-                        -0.8%
-                        <InfoTooltip {...TOOLTIP_CONTENT.priceChange} size="sm" />
-                      </div>
-                    </div>
-                  </div>
-
+                <div className="text-center py-8">
+                  <DollarSign className="h-12 w-12 text-sage-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                    Market Data Unavailable
+                  </h3>
+                  <p className="text-sm text-sage-600 mb-6">
+                    Connect to market data feeds to view live commodity prices
+                  </p>
                   <InlineFloatingButton
                     icon={<BarChart className="h-4 w-4" />}
-                    label="View Market Analysis"
+                    label="Configure Market Feed"
                     showLabel={true}
                     variant="ghost"
                     size="md"

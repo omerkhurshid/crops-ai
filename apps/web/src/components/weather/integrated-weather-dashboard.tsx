@@ -76,68 +76,19 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
     try {
       setLoading(true)
       
-      // Mock comprehensive weather data - replace with real API
-      const mockData: WeatherData = {
-        current: {
-          temperature: 22,
-          condition: 'Partly Cloudy',
-          humidity: 68,
-          windSpeed: 12,
-          windDirection: 'NW',
-          pressure: 1013,
-          visibility: 16,
-          uvIndex: 6,
-          dewPoint: 15
-        },
-        today: {
-          high: 28,
-          low: 18,
-          sunrise: '06:42',
-          sunset: '19:15',
-          precipitation: 20,
-          windGust: 25
-        },
-        forecast: [
-          { date: '2024-10-12', day: 'Tomorrow', high: 25, low: 16, condition: 'Sunny', precipitation: 0, icon: '☀️' },
-          { date: '2024-10-13', day: 'Sunday', high: 23, low: 14, condition: 'Cloudy', precipitation: 10, icon: '☁️' },
-          { date: '2024-10-14', day: 'Monday', high: 21, low: 12, condition: 'Rain', precipitation: 80, icon: '🌧️' },
-          { date: '2024-10-15', day: 'Tuesday', high: 24, low: 15, condition: 'Partly Cloudy', precipitation: 30, icon: '⛅' }
-        ],
-        alerts: [
-          {
-            type: 'wind',
-            severity: 'moderate',
-            message: 'Strong winds expected Sunday evening',
-            action: 'Avoid spraying after 4 PM Sunday'
-          }
-        ],
-        farmingActions: [
-          {
-            id: '1',
-            action: 'Perfect time to spray herbicide',
-            urgency: 'today',
-            reason: 'Low wind, no rain for 24 hours',
-            impact: 'Optimal application conditions',
-            timeWindow: '8 AM - 4 PM'
-          },
-          {
-            id: '2',
-            action: 'Move equipment indoors',
-            urgency: 'this-week',
-            reason: 'Heavy rain expected Monday',
-            impact: 'Prevent equipment damage'
-          },
-          {
-            id: '3',
-            action: 'Delay field work',
-            urgency: 'this-week',
-            reason: 'Soil will be too wet Monday-Tuesday',
-            impact: 'Avoid soil compaction'
-          }
-        ]
+      const response = await fetch(`/api/weather?lat=${latitude}&lng=${longitude}`)
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch weather data')
       }
       
-      setWeather(mockData)
+      const data = await response.json()
+      
+      if (data.success && data.weather) {
+        setWeather(data.weather)
+      } else {
+        setWeather(null)
+      }
     } catch (error) {
       console.error('Error fetching weather:', error)
     } finally {

@@ -112,7 +112,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
         <div className="animate-pulse space-y-4">
           <div className="h-16 bg-gray-200 rounded-lg"></div>
           <div className="h-32 bg-gray-200 rounded-lg"></div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="h-24 bg-gray-200 rounded-lg"></div>
             <div className="h-24 bg-gray-200 rounded-lg"></div>
             <div className="h-24 bg-gray-200 rounded-lg"></div>
@@ -270,7 +270,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
 
       {/* Field Financial Details Tabs */}
       <Tabs defaultValue="transactions" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
           <TabsTrigger value="transactions" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             Transactions

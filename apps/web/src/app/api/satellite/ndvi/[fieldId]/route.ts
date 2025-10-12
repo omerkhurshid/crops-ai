@@ -3,6 +3,7 @@ import { getCurrentUser } from '../../../../../lib/auth/session'
 import { liveSatelliteService } from '../../../../../lib/satellite/live-satellite-service'
 import { copernicusService } from '../../../../../lib/satellite/copernicus-service'
 import { auditLogger } from '../../../../../lib/logging/audit-logger'
+import { prisma } from '../../../../../lib/prisma'
 
 /**
  * Get real NDVI data for a specific field
@@ -236,15 +237,34 @@ export async function POST(
  * Helper function to get field information
  */
 async function getFieldInfo(fieldId: string) {
-  // This would normally use Prisma to fetch field data
-  // For now, return mock field data
-  return {
-    id: fieldId,
-    farm: {
-      latitude: 39.8283,  // Geographic center of US (replacing Chicago coordinates)
-      longitude: -98.5795 // Geographic center of US (replacing Chicago coordinates)
-    },
-    boundary: null // Will be populated from PostGIS in production
+  try {
+    const field = await prisma.field.findUnique({
+      where: { id: fieldId },
+      include: {
+        farm: {
+          select: {
+            latitude: true,
+            longitude: true
+          }
+        }
+      }
+    })
+
+    if (!field) {
+      return null
+    }
+
+    return {
+      id: field.id,
+      farm: {
+        latitude: field.farm.latitude,
+        longitude: field.farm.longitude
+      },
+      boundary: field.boundary
+    }
+  } catch (error) {
+    console.error('Error fetching field info:', error)
+    return null
   }
 }
 
@@ -268,31 +288,21 @@ function calculateFieldBounds(field: any): { north: number; south: number; east:
  * Helper function to get historical NDVI data
  */
 async function getHistoricalNDVI(fieldId: string, targetDate: string) {
-  // This would query the database for historical satellite data
-  // For now, return mock historical data showing seasonal variation
-  const mockHistorical = []
-  const baseDate = new Date(targetDate || new Date().toISOString())
-  
-  for (let i = 0; i < 12; i++) {
-    const historyDate = new Date(baseDate)
-    historyDate.setMonth(historyDate.getMonth() - i)
-    
-    const month = historyDate.getMonth()
-    let seasonalNDVI = 0.3 // Base vegetation
-    
-    // Simulate seasonal variation
-    if (month >= 4 && month <= 8) { // May-September growing season
-      seasonalNDVI = 0.65 + 0.2 * Math.sin((month - 4) * Math.PI / 4)
-    } else {
-      seasonalNDVI = 0.25 + Math.random() * 0.15
-    }
-    
-    mockHistorical.push({
-      date: historyDate.toISOString().split('T')[0],
-      ndvi: Number(seasonalNDVI.toFixed(3)),
-      stressLevel: seasonalNDVI >= 0.6 ? 'NONE' : seasonalNDVI >= 0.4 ? 'LOW' : 'MODERATE'
+  // Query the database for historical satellite data
+  try {
+    const historicalData = await prisma.satelliteData.findMany({
+      where: { fieldId },
+      orderBy: { captureDate: 'desc' },
+      take: 12
     })
+
+    return historicalData.map(data => ({
+      date: data.captureDate.toISOString().split('T')[0],
+      ndvi: data.ndvi,
+      stressLevel: data.stressLevel
+    }))
+  } catch (error) {
+    console.error('Error fetching historical NDVI data:', error)
+    return []
   }
-  
-  return mockHistorical.reverse() // Return chronological order
 }

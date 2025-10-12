@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
@@ -34,17 +34,17 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
       {/* Note: Stats are now calculated from real data in the parent component */}
 
       {/* Main Content */}
-      <Card>
-        <CardHeader>
+      <ModernCard variant="soft">
+        <ModernCardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center gap-2">
+              <ModernCardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
                 Livestock Management
-              </CardTitle>
-              <CardDescription>
+              </ModernCardTitle>
+              <ModernCardDescription>
                 Track your herds, monitor health, and manage breeding programs
-              </CardDescription>
+              </ModernCardDescription>
             </div>
             {showAddButtons && (
               <div className="flex gap-2">
@@ -65,10 +65,10 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
               </div>
             )}
           </div>
-        </CardHeader>
-        <CardContent>
+        </ModernCardHeader>
+        <ModernCardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
               <TabsTrigger value="overview">
                 <div className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
@@ -122,8 +122,8 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
               </div>
             </TabsContent>
           </Tabs>
-        </CardContent>
-      </Card>
+        </ModernCardContent>
+      </ModernCard>
     </div>
   )
 }

@@ -142,18 +142,20 @@ export default function FinancialPage() {
               </ModernCardHeader>
               
               <ModernCardContent className="p-8">
-                <div className="polished-card card-moss rounded-xl p-6 text-white mb-8">
-                  <div className="flex items-start space-x-3">
-                    <AlertCircle className="h-5 w-5 text-white/90 mt-0.5" />
-                    <div className="text-sm">
-                      <p className="font-medium mb-1">Get Started</p>
-                      <p className="opacity-90">
-                        You need to set up at least one farm to start tracking your financial data. 
-                        Create your first farm to begin managing your agricultural finances.
-                      </p>
+                <ModernCard variant="moss" className="mb-8">
+                  <ModernCardContent className="p-6">
+                    <div className="flex items-start space-x-3">
+                      <AlertCircle className="h-5 w-5 text-moss-700 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-medium mb-1 text-moss-800">Get Started</p>
+                        <p className="text-moss-700">
+                          You need to set up at least one farm to start tracking your financial data. 
+                          Create your first farm to begin managing your agricultural finances.
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </ModernCardContent>
+                </ModernCard>
                 
                 <InlineFloatingButton
                   onClick={handleCreateFarm}

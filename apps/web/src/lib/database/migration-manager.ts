@@ -156,26 +156,17 @@ class DatabaseMigrationManager {
         recommendations: 0
       }
 
-      // Create demo users
+      // Demo data seeding disabled for production
+      // Uncomment below ONLY for development environments
+      /*
       seeding.users += await this.createDemoUsers()
-      
-      // Create sample farms
       seeding.farms += await this.createSampleFarms()
-      
-      // Create fields for farms
       seeding.fields += await this.createSampleFields()
-      
-      // Create crop records
       seeding.crops += await this.createSampleCrops()
-      
-      // Generate sample weather data
       seeding.weatherData += await this.generateSampleWeatherData()
-      
-      // Generate sample satellite data
       seeding.satelliteData += await this.generateSampleSatelliteData()
-      
-      // Generate sample recommendations
       seeding.recommendations += await this.generateSampleRecommendations()
+      */
 
       await auditLogger.logSystem(
         'database_seeding_completed',

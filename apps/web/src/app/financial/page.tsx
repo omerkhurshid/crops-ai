@@ -142,7 +142,7 @@ export default function FinancialPage() {
               </ModernCardHeader>
               
               <ModernCardContent className="p-8">
-                <ModernCard variant="moss" className="mb-8">
+                <ModernCard variant="soft" className="mb-8">
                   <ModernCardContent className="p-6">
                     <div className="flex items-start space-x-3">
                       <AlertCircle className="h-5 w-5 text-moss-700 mt-0.5" />

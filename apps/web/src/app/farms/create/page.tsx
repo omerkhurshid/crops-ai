@@ -522,6 +522,14 @@ export default function CreateFarmPage() {
                         placeholder="Enter address or GPS coordinates (lat, lng)"
                         value={locationInput}
                         onChange={(e) => setLocationInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            if (locationInput.trim()) {
+                              parseLocationInput()
+                            }
+                          }
+                        }}
                         className="w-full border-sage-200 focus:border-sage-500 focus:ring-sage-500"
                       />
                     </div>

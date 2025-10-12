@@ -18,17 +18,23 @@ export const GET = apiMiddleware.protected(
     try {
       const user = request.user;
 
-      // Get user preferences from database
-      const userPreferences = await prisma.user.findUnique({
-        where: { id: user.id },
-        select: {
-          currency: true,
-          landUnit: true,
-          temperatureUnit: true,
-          timezone: true,
-          language: true
-        }
-      });
+      // Get user preferences from database with error handling
+      let userPreferences = null;
+      try {
+        userPreferences = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: {
+            currency: true,
+            landUnit: true,
+            temperatureUnit: true,
+            timezone: true,
+            language: true
+          }
+        });
+      } catch (dbError) {
+        console.warn('Database preferences query failed, using defaults:', dbError);
+        // Continue with defaults if database query fails
+      }
 
       // Return preferences with defaults
       const preferences = {

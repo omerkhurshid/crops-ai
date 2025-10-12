@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useUserPreferences } from '../../contexts/user-preferences-context'
 import { formatCurrency, formatArea } from '../../lib/user-preferences'
-import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { InlineFloatingButton } from '../ui/floating-button'
@@ -160,66 +160,44 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Profit */}
-        <div className="polished-card card-sage rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <DollarSign className="h-8 w-8 text-white" />
-            <Badge className={`${summary.profitChange >= 0 ? 'bg-green-500' : 'bg-red-500'} text-white`}>
-              {formatPercentage(summary.profitChange)}
-            </Badge>
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.netProfit)}</div>
-          <div className="text-lg font-medium mb-2">Net Profit</div>
-          <div className="text-sm opacity-90 flex items-center gap-1">
-            {summary.profitChange >= 0 ? (
-              <TrendingUp className="h-4 w-4" />
-            ) : (
-              <TrendingDown className="h-4 w-4" />
-            )}
-            vs. previous period
-          </div>
-        </div>
+        <MetricCard
+          title="Net Profit"
+          value={formatCurrencyAmount(summary.netProfit)}
+          change={formatPercentage(summary.profitChange)}
+          changeDirection={summary.profitChange >= 0 ? 'up' : 'down'}
+          icon={<DollarSign className="h-6 w-6" />}
+          description="vs. previous period"
+          variant="success"
+        />
 
         {/* Total Revenue */}
-        <div className="polished-card card-forest rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <TrendingUp className="h-8 w-8 text-white" />
-            <Badge className="bg-white/20 text-white border-white/30">
-              {summary.profitMargin.toFixed(1)}% margin
-            </Badge>
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.totalIncome)}</div>
-          <div className="text-lg font-medium mb-2">Total Revenue</div>
-          <div className="text-sm opacity-90">
-            {formatCurrencyAmount(summary.totalExpenses)} expenses
-          </div>
-        </div>
+        <MetricCard
+          title="Total Revenue"
+          value={formatCurrencyAmount(summary.totalIncome)}
+          icon={<TrendingUp className="h-6 w-6" />}
+          description={`${formatCurrencyAmount(summary.totalExpenses)} expenses`}
+          badge={`${summary.profitMargin.toFixed(1)}% margin`}
+          variant="info"
+        />
 
         {/* Profit per Hectare */}
-        <div className="polished-card card-earth rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <Building2 className="h-8 w-8 text-white" />
-            <Badge className="bg-white/20 text-white border-white/30">
-              {summary.totalFarms} farms
-            </Badge>
-          </div>
-          <div className="text-3xl font-bold mb-2">{formatCurrencyAmount(summary.profitPerArea)}</div>
-          <div className="text-lg font-medium mb-2">Profit per {preferences.landUnit === 'hectares' ? 'ha' : preferences.landUnit === 'acres' ? 'acre' : 'm²'}</div>
-          <div className="text-sm opacity-90">
-            Across {formatArea(summary.totalArea, preferences)}
-          </div>
-        </div>
+        <MetricCard
+          title={`Profit per ${preferences.landUnit === 'hectares' ? 'ha' : preferences.landUnit === 'acres' ? 'acre' : 'm²'}`}
+          value={formatCurrencyAmount(summary.profitPerArea)}
+          icon={<Building2 className="h-6 w-6" />}
+          description={`Across ${formatArea(summary.totalArea, preferences)}`}
+          badge={`${summary.totalFarms} farms`}
+          variant="warning"
+        />
 
         {/* Transactions */}
-        <div className="polished-card card-golden rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between mb-4">
-            <Activity className="h-8 w-8 text-white" />
-          </div>
-          <div className="text-3xl font-bold mb-2">{summary.transactionCount}</div>
-          <div className="text-lg font-medium mb-2">Transactions</div>
-          <div className="text-sm opacity-90">
-            This period
-          </div>
-        </div>
+        <MetricCard
+          title="Transactions"
+          value={summary.transactionCount.toString()}
+          icon={<Activity className="h-6 w-6" />}
+          description="this period"
+          variant="neutral"
+        />
       </div>
 
       {/* Main Content Grid with Transaction List on RHS */}

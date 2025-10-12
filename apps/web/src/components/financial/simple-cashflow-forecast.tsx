@@ -186,7 +186,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           description={`Next ${selectedPeriod === '30_days' ? '30' : '60'} days`}
           icon={<DollarSign className="h-6 w-6" />}
           variant={isPositiveCashFlow ? 'glass' : 'glow'}
-          changeDirection={isPositiveCashFlow ? 'up' : 'down'}
+          trend={isPositiveCashFlow ? 'up' : 'down'}
           tooltip={{
             title: "Net Cash Flow",
             description: "Income minus expenses. Positive means more money coming in than going out."

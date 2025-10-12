@@ -280,6 +280,41 @@ export default async function DashboardPage() {
     )
   } catch (error) {
     console.error('Dashboard page error:', error)
-    redirect('/login')
+    
+    // If it's an authentication error, redirect to login
+    if (error instanceof Error && (
+      error.message.includes('Unauthorized') || 
+      error.message.includes('Invalid token') ||
+      error.message.includes('No session')
+    )) {
+      redirect('/login')
+    }
+    
+    // For other errors, show an error page instead of crashing
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-red-600 mb-4">Dashboard Temporarily Unavailable</h1>
+            <p className="text-lg text-gray-600 mb-6">
+              We're experiencing technical difficulties. Please try refreshing the page.
+            </p>
+            <div className="space-x-4">
+              <Button 
+                onClick={() => window.location.reload()} 
+                className="bg-sage-600 hover:bg-sage-700"
+              >
+                Refresh Page
+              </Button>
+              <Link href="/farms">
+                <Button variant="outline">
+                  Go to Farms
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
   }
 }

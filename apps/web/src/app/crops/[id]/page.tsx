@@ -6,7 +6,7 @@
 
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card'
+import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { Badge } from '../../../components/ui/badge'
 import { Button } from '../../../components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs'
@@ -169,8 +169,8 @@ export default function CropDetailPage() {
           <TabsContent value="overview" className="space-y-6">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardContent className="p-6">
+              <ModernCard>
+                <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-5 w-5 text-sage-600" />
                     <div>
@@ -180,11 +180,11 @@ export default function CropDetailPage() {
                       </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="p-6">
+              <ModernCard>
+                <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
                     <TrendingUp className="h-5 w-5 text-sage-600" />
                     <div>
@@ -194,11 +194,11 @@ export default function CropDetailPage() {
                       </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="p-6">
+              <ModernCard>
+                <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
                     <Droplets className="h-5 w-5 text-sage-600" />
                     <div>
@@ -208,11 +208,11 @@ export default function CropDetailPage() {
                       </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="p-6">
+              <ModernCard>
+                <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
                     <Thermometer className="h-5 w-5 text-sage-600" />
                     <div>
@@ -222,17 +222,17 @@ export default function CropDetailPage() {
                       </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             </div>
 
             {/* Common Names & Climate */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Common Names</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <ModernCardHeader>
+                  <ModernCardTitle>Common Names</ModernCardTitle>
+                </ModernCardHeader>
+                <ModernCardContent>
                   <div className="flex flex-wrap gap-2">
                     {crop.common_names.map((name, index) => (
                       <Badge key={index} variant="outline">
@@ -240,14 +240,14 @@ export default function CropDetailPage() {
                       </Badge>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Climate Zones</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <ModernCardHeader>
+                  <ModernCardTitle>Climate Zones</ModernCardTitle>
+                </ModernCardHeader>
+                <ModernCardContent>
                   <div className="flex flex-wrap gap-2">
                     {crop.climate_zones.map((zone, index) => (
                       <Badge key={index} variant="secondary">
@@ -255,16 +255,16 @@ export default function CropDetailPage() {
                       </Badge>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             </div>
 
             {/* Tolerance Levels */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Environmental Tolerance</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <ModernCard>
+              <ModernCardHeader>
+                <ModernCardTitle>Environmental Tolerance</ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <p className="text-sm font-medium text-gray-600 mb-2">Frost Tolerance</p>
@@ -285,16 +285,16 @@ export default function CropDetailPage() {
                     </Badge>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
 
             {/* Nutrition Data */}
             {crop.nutrition_data && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Nutritional Information (per 100g)</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <ModernCardHeader>
+                  <ModernCardTitle>Nutritional Information (per 100g)</ModernCardTitle>
+                </ModernCardHeader>
+                <ModernCardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-sage-600">{crop.nutrition_data.calories_per_100g}</p>
@@ -313,21 +313,21 @@ export default function CropDetailPage() {
                       <p className="text-sm text-gray-600">Fiber</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             )}
           </TabsContent>
 
           <TabsContent value="growing" className="space-y-6">
             {/* Companion Plants */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+            <ModernCard>
+              <ModernCardHeader>
+                <ModernCardTitle className="flex items-center space-x-2">
                   <Leaf className="h-5 w-5" />
                   <span>Companion Plants</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
                 <div className="flex flex-wrap gap-2">
                   {crop.companion_plants.map((plant, index) => (
                     <Badge key={index} variant="outline" className="text-green-700 border-green-300">
@@ -335,16 +335,16 @@ export default function CropDetailPage() {
                     </Badge>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
 
             {/* Pest & Disease Management */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-red-600">Common Pests</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <ModernCardHeader>
+                  <ModernCardTitle className="text-red-600">Common Pests</ModernCardTitle>
+                </ModernCardHeader>
+                <ModernCardContent>
                   <div className="space-y-2">
                     {crop.pest_susceptibilities.map((pest, index) => (
                       <div key={index} className="flex items-center space-x-2">
@@ -353,14 +353,14 @@ export default function CropDetailPage() {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-orange-600">Common Diseases</CardTitle>
-                </CardHeader>
-                <CardContent>
+              <ModernCard>
+                <ModernCardHeader>
+                  <ModernCardTitle className="text-orange-600">Common Diseases</ModernCardTitle>
+                </ModernCardHeader>
+                <ModernCardContent>
                   <div className="space-y-2">
                     {crop.disease_susceptibilities.map((disease, index) => (
                       <div key={index} className="flex items-center space-x-2">
@@ -369,8 +369,8 @@ export default function CropDetailPage() {
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             </div>
           </TabsContent>
 
@@ -378,19 +378,19 @@ export default function CropDetailPage() {
             {crop.varieties && crop.varieties.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {crop.varieties.map((variety, index) => (
-                  <Card key={index}>
-                    <CardHeader>
+                  <ModernCard key={index}>
+                    <ModernCardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="flex items-center space-x-2">
+                        <ModernCardTitle className="flex items-center space-x-2">
                           <Award className="h-5 w-5 text-yellow-600" />
                           <span>{variety.variety_name}</span>
-                        </CardTitle>
+                        </ModernCardTitle>
                         <Badge variant="outline">
                           {(variety.yield_potential_kg_per_hectare / 1000).toFixed(1)} t/ha
                         </Badge>
                       </div>
-                    </CardHeader>
-                    <CardContent>
+                    </ModernCardHeader>
+                    <ModernCardContent>
                       <div className="space-y-4">
                         <div>
                           <p className="text-sm font-medium text-gray-600 mb-2">Disease Resistance</p>
@@ -407,28 +407,28 @@ export default function CropDetailPage() {
                           <span className="font-medium">{variety.maturity_days} days</span>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </ModernCardContent>
+                  </ModernCard>
                 ))}
               </div>
             ) : (
-              <Card>
-                <CardContent className="p-8 text-center">
+              <ModernCard>
+                <ModernCardContent className="p-8 text-center">
                   <p className="text-gray-600">No specific varieties available in the database yet.</p>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             )}
           </TabsContent>
 
           <TabsContent value="markets" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
+            <ModernCard>
+              <ModernCardHeader>
+                <ModernCardTitle className="flex items-center space-x-2">
                   <MapPin className="h-5 w-5" />
                   <span>Major Producing Countries</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {crop.major_producing_countries.map((country, index) => (
                     <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
@@ -437,14 +437,14 @@ export default function CropDetailPage() {
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Market Information</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <ModernCard>
+              <ModernCardHeader>
+                <ModernCardTitle>Market Information</ModernCardTitle>
+              </ModernCardHeader>
+              <ModernCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <p className="text-sm font-medium text-gray-600 mb-2">Growth Habit</p>
@@ -459,8 +459,8 @@ export default function CropDetailPage() {
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           </TabsContent>
         </Tabs>
       </div>

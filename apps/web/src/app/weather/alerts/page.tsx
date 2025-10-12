@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/card'
+import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { Button } from '../../../components/ui/button'
 import { Badge } from '../../../components/ui/badge'
 import { Navbar } from '../../../components/navigation/navbar'
@@ -207,21 +207,21 @@ export default function WeatherAlertsPage() {
           </div>
 
           {error && (
-            <Card className="mb-6 border-red-200 bg-red-50">
-              <CardContent className="pt-6">
+            <ModernCard className="mb-6 border-red-200 bg-red-50">
+              <ModernCardContent className="pt-6">
                 <div className="flex items-center space-x-2 text-red-600">
                   <AlertTriangle className="h-5 w-5" />
                   <span>Error: {error}</span>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           )}
 
           {/* Summary Statistics */}
           {summary && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card>
-                <CardContent className="pt-6">
+              <ModernCard>
+                <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-600">Total Alerts</p>
@@ -229,11 +229,11 @@ export default function WeatherAlertsPage() {
                     </div>
                     <AlertTriangle className="h-8 w-8 text-gray-400" />
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="pt-6">
+              <ModernCard>
+                <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-600">Active Alerts</p>
@@ -241,11 +241,11 @@ export default function WeatherAlertsPage() {
                     </div>
                     <TrendingUp className="h-8 w-8 text-orange-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="pt-6">
+              <ModernCard>
+                <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-600">Highest Priority</p>
@@ -253,11 +253,11 @@ export default function WeatherAlertsPage() {
                     </div>
                     <AlertTriangle className="h-8 w-8 text-red-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
 
-              <Card>
-                <CardContent className="pt-6">
+              <ModernCard>
+                <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-600">Severe/Extreme</p>
@@ -267,31 +267,31 @@ export default function WeatherAlertsPage() {
                     </div>
                     <Flame className="h-8 w-8 text-red-600" />
                   </div>
-                </CardContent>
-              </Card>
+                </ModernCardContent>
+              </ModernCard>
             </div>
           )}
 
-          {/* Alert Cards */}
+          {/* Alert ModernCards */}
           {alerts.length === 0 ? (
-            <Card>
-              <CardContent className="pt-6">
+            <ModernCard>
+              <ModernCardContent className="pt-6">
                 <div className="text-center text-gray-500 py-8">
                   <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                   <p className="text-lg font-medium">No weather alerts</p>
                   <p className="text-sm">Current conditions are normal for your area</p>
                 </div>
-              </CardContent>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           ) : (
             <div className="space-y-6">
               {alerts.map((alert) => (
-                <Card key={alert.id} className={`border-l-4 ${
+                <ModernCard key={alert.id} className={`border-l-4 ${
                   alert.severity === 'extreme' ? 'border-l-red-500' :
                   alert.severity === 'severe' ? 'border-l-orange-500' :
                   alert.severity === 'moderate' ? 'border-l-yellow-500' : 'border-l-blue-500'
                 }`}>
-                  <CardHeader>
+                  <ModernCardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
                         <div className={`p-2 rounded-full ${
@@ -302,7 +302,7 @@ export default function WeatherAlertsPage() {
                           {getAlertIcon(alert.alertType)}
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{alert.title}</CardTitle>
+                          <ModernCardTitle className="text-lg">{alert.title}</ModernCardTitle>
                           <div className="flex items-center space-x-2 mt-1">
                             <Badge className={getAlertColor(alert.severity)}>
                               {alert.severity.toUpperCase()}
@@ -329,11 +329,11 @@ export default function WeatherAlertsPage() {
                         </div>
                       </div>
                     </div>
-                    <CardDescription className="mt-2">
+                    <ModernCardDescription className="mt-2">
                       {alert.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+                    </ModernCardDescription>
+                  </ModernCardHeader>
+                  <ModernCardContent>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {/* Farm Impact */}
                       <div>
@@ -427,8 +427,8 @@ export default function WeatherAlertsPage() {
                         </ul>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
+                  </ModernCardContent>
+                </ModernCard>
               ))}
             </div>
           )}

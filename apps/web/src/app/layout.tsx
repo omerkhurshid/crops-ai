@@ -6,7 +6,11 @@ import { ThemeProvider } from '../components/theme/theme-provider'
 import { UserPreferencesProvider } from '../contexts/user-preferences-context'
 import { Toaster } from 'react-hot-toast'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true
+})
 
 export const metadata: Metadata = {
   title: 'Cropple.ai - AI-Powered Farm Management',

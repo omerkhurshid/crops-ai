@@ -5,9 +5,24 @@ import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
-import { FarmerDashboard } from '../../components/dashboard/farmer-dashboard'
-import { GlobalFAB, MobileFAB } from '../../components/ui/global-fab'
-import NBARecommendations from '../../components/dashboard/nba-recommendations'
+import dynamicImport from 'next/dynamic'
+
+// Dynamic imports for heavy dashboard components to improve LCP
+const FarmerDashboard = dynamicImport(() => import('../../components/dashboard/farmer-dashboard').then(mod => ({ default: mod.FarmerDashboard })), {
+  loading: () => <div className="h-64 bg-gray-100 rounded-lg animate-pulse"></div>
+})
+
+const GlobalFAB = dynamicImport(() => import('../../components/ui/global-fab').then(mod => ({ default: mod.GlobalFAB })), {
+  ssr: false
+})
+
+const MobileFAB = dynamicImport(() => import('../../components/ui/global-fab').then(mod => ({ default: mod.MobileFAB })), {
+  ssr: false
+})
+
+const NBARecommendations = dynamicImport(() => import('../../components/dashboard/nba-recommendations'), {
+  loading: () => <div className="h-32 bg-gray-100 rounded-lg animate-pulse"></div>
+})
 import { 
   Sprout, MapPin, AlertTriangle, TrendingUp, Clock, Plus, Brain, CloudRain, DollarSign,
   ThermometerSun, Droplets, Bell, ChevronDown, BarChart3, Activity, Zap, Cat

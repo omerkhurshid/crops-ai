@@ -277,3 +277,58 @@ export function getTermDescription(technical: string, category: 'vegetation' | '
   const term = categories[category][technical.toLowerCase()]
   return term?.description || 'Agricultural measurement'
 }
+
+// Convert technical date ranges to farmer-friendly seasons
+export function convertToFarmerDate(dateString: string): string {
+  const date = new Date(dateString)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  
+  // Farmer-friendly season mappings
+  if (month >= 3 && month <= 5) {
+    if (month === 3 && day < 15) return 'Early Spring Planting'
+    if (month === 3) return 'Spring Planting Season'
+    if (month === 4) return 'Peak Planting Time'
+    if (month === 5) return 'Late Spring Planting'
+  }
+  
+  if (month >= 6 && month <= 8) {
+    if (month === 6) return 'Early Growing Season'
+    if (month === 7) return 'Mid-Summer Growth'
+    if (month === 8) return 'Late Summer Growth'
+  }
+  
+  if (month >= 9 && month <= 11) {
+    if (month === 9) return 'Early Harvest Season'
+    if (month === 10) return 'Peak Harvest Time'
+    if (month === 11) return 'Late Harvest & Prep'
+  }
+  
+  if (month === 12 || month === 1 || month === 2) {
+    if (month === 12) return 'Winter Planning Time'
+    if (month === 1) return 'Equipment Prep Season'
+    if (month === 2) return 'Pre-Season Planning'
+  }
+  
+  return date.toLocaleDateString()
+}
+
+// Convert date ranges to farmer seasons
+export function convertDateRangeToSeason(startDate: string, endDate: string): string {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  const startMonth = start.getMonth() + 1
+  const endMonth = end.getMonth() + 1
+  
+  // Common farming seasons
+  if (startMonth >= 3 && endMonth <= 5) return 'Planting Season'
+  if (startMonth >= 6 && endMonth <= 8) return 'Growing Season'  
+  if (startMonth >= 9 && endMonth <= 11) return 'Harvest Season'
+  if (startMonth >= 12 || endMonth <= 2) return 'Off-Season'
+  
+  // Cross-season ranges
+  if (startMonth <= 5 && endMonth >= 9) return 'Full Growing Cycle'
+  if (startMonth >= 3 && endMonth >= 9) return 'Planting to Harvest'
+  
+  return `${convertToFarmerDate(startDate)} - ${convertToFarmerDate(endDate)}`
+}

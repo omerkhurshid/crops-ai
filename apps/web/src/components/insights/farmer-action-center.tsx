@@ -9,6 +9,7 @@ import {
   Droplets, Bug, Sprout, TrendingUp, ArrowRight, Target,
   Timer, MapPin, Zap
 } from 'lucide-react'
+import { InfoTooltip } from '../ui/info-tooltip'
 
 interface FarmerAction {
   id: string
@@ -137,6 +138,10 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
         <ModernCardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5 text-green-600" />
           Your Action Plan
+          <InfoTooltip 
+            title="Action Plan" 
+            description="These are specific tasks you should do to improve your farm's productivity and profits. They're based on current weather, crop health, and market conditions."
+          />
         </ModernCardTitle>
       </ModernCardHeader>
       <ModernCardContent className="space-y-6">
@@ -204,6 +209,13 @@ function ActionCard({ action }: { action: FarmerAction }) {
             </span>
           )}
         </div>
+        {/* Prominent Dollar Impact */}
+        {action.savings && (
+          <div className="text-right">
+            <div className="text-2xl font-bold text-green-600">${action.savings}</div>
+            <div className="text-xs text-green-700">potential savings</div>
+          </div>
+        )}
       </div>
 
       <h4 className="font-semibold text-sage-900 mb-2 text-base">
@@ -227,6 +239,11 @@ function ActionCard({ action }: { action: FarmerAction }) {
           <div className="flex items-center gap-1 text-green-600">
             <TrendingUp className="h-3 w-3" />
             Save ${action.savings}
+            <InfoTooltip 
+              title="Potential Savings" 
+              description="This is the money you could save or extra profit you could make by completing this action. Based on current market prices and typical results."
+              size="sm"
+            />
           </div>
         )}
       </div>

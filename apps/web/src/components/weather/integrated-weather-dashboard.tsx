@@ -9,6 +9,7 @@ import {
   AlertTriangle, Clock, Calendar, Sunrise, Sunset,
   Umbrella, RefreshCw, Target, CheckCircle2
 } from 'lucide-react'
+import { InfoTooltip } from '../ui/info-tooltip'
 
 interface WeatherAction {
   id: string
@@ -201,6 +202,10 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
           <ModernCardTitle className="flex items-center gap-2">
             {getConditionIcon(weather.current.condition)}
             Weather & Farming Conditions
+            <InfoTooltip 
+              title="Weather for Farming" 
+              description="This shows current weather conditions and what you should do on your farm based on the weather. We combine weather data with farming best practices."
+            />
           </ModernCardTitle>
           <Button onClick={fetchWeatherData} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4" />
@@ -246,10 +251,20 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
               <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
                 <Droplets className="h-4 w-4 text-blue-500" />
                 <span>{weather.current.humidity}% humidity</span>
+                <InfoTooltip 
+                  title="Humidity" 
+                  description="High humidity (above 80%) can cause disease problems. Low humidity (below 40%) can stress plants. Ideal for most crops is 50-70%."
+                  size="sm"
+                />
               </div>
               <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
                 <Wind className="h-4 w-4 text-gray-500" />
                 <span>{weather.current.windSpeed} km/h {weather.current.windDirection}</span>
+                <InfoTooltip 
+                  title="Wind Speed" 
+                  description="Wind above 15 km/h makes spraying difficult. Strong winds (25+ km/h) can damage crops and increase water loss."
+                  size="sm"
+                />
               </div>
               <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
                 <Sunrise className="h-4 w-4 text-yellow-500" />

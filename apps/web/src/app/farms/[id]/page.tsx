@@ -190,7 +190,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             value="Inspection"
             description="3 days"
             icon={<Calendar className="h-6 w-6" />}
-            variant="golden"
+            variant="glow"
           />
         </div>
 

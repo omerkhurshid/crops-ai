@@ -208,12 +208,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
             description: "All expenses (seeds, fertilizer, fuel, labor) divided by total acres. Lower is better."
           }}
         />
-          <div className="text-sm opacity-90">Cost per acre</div>
-          <div className="text-xs opacity-75 mt-2">
-            Total: {formatCurrency(metrics.totalCosts)}
-          </div>
-        </div>
-      </div>
 
       {/* Quick Insights */}
       <ModernCard variant="soft">

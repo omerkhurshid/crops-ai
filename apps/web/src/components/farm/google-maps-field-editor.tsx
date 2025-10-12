@@ -221,14 +221,7 @@ export function GoogleMapsFieldEditor({
   // Check if Google Maps API key is available
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   
-  console.log('Google Maps API Key Status:', apiKey ? 'Available' : 'Missing')
-  console.log('Google Maps API Key Length:', apiKey?.length || 0)
-  console.log('Google Maps API Key Prefix:', apiKey ? apiKey.substring(0, 10) + '...' : 'Not set')
-  
-  // Check if key is mock/invalid
-  const isMockKey = apiKey?.includes('mock') || apiKey?.includes('development') || apiKey?.includes('test')
-  
-  if (!apiKey || apiKey.length < 10 || isMockKey) {
+  if (!apiKey) {
     return (
       <Card>
         <CardHeader>
@@ -244,43 +237,7 @@ export function GoogleMapsFieldEditor({
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              {isMockKey 
-                ? "Using development Google Maps key. Some features may not work properly." 
-                : "Google Maps API key is not configured. Please configure the NEXT_PUBLIC_GOOGLE_MAPS_API_KEY environment variable to use this feature."
-              }
-              <br />
-              <br />
-              <div className="flex gap-2 mt-3">
-                <Button 
-                  onClick={() => {
-                    // Create a default field if no mapping available
-                    const defaultField = {
-                      id: `field-${Date.now()}`,
-                      name: 'Main Field',
-                      area: 100, // Default 100 acres
-                      boundaries: [
-                        { lat: farmLocation.lat + 0.001, lng: farmLocation.lng - 0.001 },
-                        { lat: farmLocation.lat + 0.001, lng: farmLocation.lng + 0.001 },
-                        { lat: farmLocation.lat - 0.001, lng: farmLocation.lng + 0.001 },
-                        { lat: farmLocation.lat - 0.001, lng: farmLocation.lng - 0.001 }
-                      ],
-                      centerLat: farmLocation.lat,
-                      centerLng: farmLocation.lng
-                    }
-                    onFieldsDetected([defaultField])
-                  }}
-                  variant="default"
-                  className="mr-2"
-                >
-                  Create Default Field (100 acres)
-                </Button>
-                <Button 
-                  onClick={() => onFieldsDetected([])}
-                  variant="outline"
-                >
-                  Skip Field Mapping
-                </Button>
-              </div>
+              Google Maps API key is not configured. Field mapping is unavailable.
             </AlertDescription>
           </Alert>
         </CardContent>

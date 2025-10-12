@@ -243,58 +243,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching farm health data:', error)
     
-    // Return mock data if real data fails
-    const mockFieldHealth = {
-      fieldId: 'mock-field-1',
-      fieldName: 'Main Field',
-      cropType: 'Corn',
-      healthScore: 85,
-      stressLevel: 'low' as const,
-      lastUpdate: new Date().toISOString(),
-      area: 100,
-      indices: {
-        ndvi: 0.75,
-        evi: 0.65,
-        savi: 0.70,
-        gndvi: 0.68,
-        ndwi: 0.35,
-        ndmi: 0.42,
-        lai: 4.2,
-        fvc: 0.85
-      },
-      stressIndicators: {
-        drought: { severity: 15, confidence: 80, description: 'Normal moisture levels' },
-        disease: { severity: 10, confidence: 75, description: 'No disease detected' },
-        nutrient: { severity: 12, confidence: 82, description: 'Adequate nutrient levels' },
-        pest: { severity: 8, confidence: 85, description: 'Low pest pressure' }
-      },
-      zones: {
-        excellent: { percentage: 45, area: 45 },
-        good: { percentage: 35, area: 35 },
-        moderate: { percentage: 15, area: 15 },
-        stressed: { percentage: 5, area: 5 }
-      },
-      recommendations: [
-        'Continue current management practices',
-        'Monitor field conditions weekly'
-      ],
-      yieldPrediction: {
-        current: 180,
-        potential: 210,
-        confidence: 85
-      }
-    }
-    
     return NextResponse.json({
-      success: true,
-      fields: [mockFieldHealth],
-      hasRealData: false,
-      farm: {
-        id: 'fallback-farm',
-        name: 'Farm',
-        totalArea: 100
-      },
-      warning: 'Using fallback data - some features may be limited'
-    })
+      success: false,
+      error: 'Failed to fetch farm health data',
+      message: 'Unable to retrieve field health information.'
+    }, { status: 500 })
   }
 }

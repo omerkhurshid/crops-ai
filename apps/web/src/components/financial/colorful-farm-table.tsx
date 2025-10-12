@@ -82,7 +82,58 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto">
+        {/* Mobile Card Layout */}
+        <div className="block md:hidden p-4 space-y-4">
+          {farms.map((farm) => (
+            <div key={farm.id} className="p-4 border border-gray-200 rounded-lg bg-white">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-gray-800">{farm.name}</h3>
+                <Badge 
+                  variant="outline" 
+                  className={cn(
+                    farm.profitMargin >= 0 ? 'text-green-700 border-green-200' : 'text-red-700 border-red-200'
+                  )}
+                >
+                  {farm.profitMargin >= 0 ? '+' : ''}{farm.profitMargin.toFixed(1)}%
+                </Badge>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                <div>
+                  <span className="text-gray-600">Area:</span>
+                  <span className="font-medium ml-1">{farm.totalArea.toFixed(1)} ha</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Revenue:</span>
+                  <span className="font-medium ml-1">${farm.income.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Expenses:</span>
+                  <span className="font-medium ml-1">${farm.expenses.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600">Net Profit:</span>
+                  <span className={cn(
+                    'font-medium ml-1',
+                    farm.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                  )}>
+                    ${farm.netProfit.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <Button 
+                onClick={() => onFarmSelect(farm.id)}
+                variant="outline" 
+                size="sm" 
+                className="w-full"
+              >
+                View Details <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table Layout */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>

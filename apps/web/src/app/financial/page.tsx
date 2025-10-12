@@ -162,7 +162,7 @@ export default function FinancialPage() {
                   showLabel={true}
                   variant="primary"
                   size="lg"
-                  className="min-w-[250px]"
+                  className="w-full sm:min-w-[250px]"
                 />
               </ModernCardContent>
             </ModernCard>

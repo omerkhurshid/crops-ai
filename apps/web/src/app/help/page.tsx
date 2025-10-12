@@ -268,7 +268,7 @@ export default async function HelpPage() {
         {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-sage-800 mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
               <ModernCard key={index} variant="soft" className="group hover:shadow-soft transition-all duration-300">
                 <ModernCardContent className="p-6">

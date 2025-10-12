@@ -380,7 +380,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
 
           {/* Zone Analysis */}
           {currentFieldData && (
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               <div className="bg-red-50 rounded-lg p-4 border border-red-200">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-red-900">Problem Areas</span>

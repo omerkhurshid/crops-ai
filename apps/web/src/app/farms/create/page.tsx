@@ -877,7 +877,7 @@ export default function CreateFarmPage() {
                     <Label className="text-base font-medium mb-3 block">
                       How many {livestockOptions.primary.find((option: any) => option.id === farm.primaryProduct)?.name.toLowerCase()} do you plan to raise?
                     </Label>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                       {[10, 25, 50, 100, 250, 500, 1000, 2500].map((count) => (
                         <button
                           key={count}

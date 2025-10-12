@@ -128,7 +128,39 @@ export default async function FarmsPage() {
             </ModernCardHeader>
             <ModernCardContent className="p-0">
               {userFarms.length > 0 ? (
-                <div className="overflow-x-auto">
+                /* Mobile-First Card Layout */
+                <div className="block md:hidden p-4 space-y-4">
+                  {userFarms.map((farm: any) => (
+                    <Link key={farm.id} href={`/farms/${farm.id}`}>
+                      <div className="p-4 border border-sage-200 rounded-lg hover:shadow-md transition-shadow bg-white">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-semibold text-sage-800">{farm.name}</h3>
+                          <Badge variant="outline" className="text-xs">
+                            {farm.fieldsCount || 0} fields
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-gray-600 mb-2">
+                          <MapPin className="h-4 w-4 inline mr-1" />
+                          {farm.location || 'Location not set'}
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">
+                            {farm.totalArea?.toFixed(1) || '0'} ha
+                          </span>
+                          <div className="flex items-center">
+                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span className="text-green-700 text-xs">Healthy</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+              
+              {userFarms.length > 0 && (
+                /* Desktop Table Layout */
+                <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-sage-50/50 border-b border-sage-200/30">
                       <tr>
@@ -149,7 +181,9 @@ export default async function FarmsPage() {
                     </tbody>
                   </table>
                 </div>
-              ) : (
+              )}
+              
+              {userFarms.length === 0 && (
                 <div className="p-8">
                   <EmptyStateCard>
                     <NoFarmsEmptyState />

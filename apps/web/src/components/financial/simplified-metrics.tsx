@@ -175,8 +175,8 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           value={formatPrice(metrics.breakEvenPrice)}
           description={`Market: ${formatPrice(metrics.currentMarketPrice)}`}
           icon={<Target className="h-6 w-6" />}
-          variant={metrics.isAboveBreakeven ? 'forest' : 'golden'}
-          changeDirection={metrics.isAboveBreakeven ? 'up' : 'down'}
+          variant={metrics.isAboveBreakeven ? 'glass' : 'glow'}
+          trend={metrics.isAboveBreakeven ? 'up' : 'down'}
           tooltip={{
             title: "Break-Even Price",
             description: "The minimum price you need to sell your crop to cover all costs. Current market price should be above this."

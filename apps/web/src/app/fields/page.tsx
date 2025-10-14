@@ -107,9 +107,23 @@ export default async function FieldsPage() {
               <h1 className="text-3xl font-bold text-gray-900">Field Management</h1>
               <p className="text-gray-600">Monitor and analyze individual field performance</p>
             </div>
-            <Button className="bg-sage-600 hover:bg-sage-700">
-              + Add New Field
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                className="bg-sage-600 hover:bg-sage-700"
+                onClick={() => window.location.href = window.location.search.includes('quick=true') ? '/farms/create?guided=true&step=fields' : '/fields/create'}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Field
+              </Button>
+              {window.location.search.includes('quick=true') && (
+                <Button 
+                  variant="outline"
+                  onClick={() => window.location.href = '/fields/quick-setup'}
+                >
+                  Quick Setup (5 min)
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Summary Stats */}

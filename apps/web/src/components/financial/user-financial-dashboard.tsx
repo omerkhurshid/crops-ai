@@ -163,8 +163,8 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
         <MetricCard
           title="Net Profit"
           value={formatCurrencyAmount(summary.netProfit)}
-          change={formatPercentage(summary.profitChange)}
-          changeDirection={summary.profitChange >= 0 ? 'up' : 'down'}
+          change={summary.profitChange}
+          trend={summary.profitChange >= 0 ? 'up' : 'down'}
           icon={<DollarSign className="h-6 w-6" />}
           description="vs. previous period"
           variant="glass"
@@ -176,7 +176,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           value={formatCurrencyAmount(summary.totalIncome)}
           icon={<TrendingUp className="h-6 w-6" />}
           description={`${formatCurrencyAmount(summary.totalExpenses)} expenses`}
-          badge={`${summary.profitMargin.toFixed(1)}% margin`}
           variant="floating"
         />
 
@@ -186,7 +185,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           value={formatCurrencyAmount(summary.profitPerArea)}
           icon={<Building2 className="h-6 w-6" />}
           description={`Across ${formatArea(summary.totalArea, preferences)}`}
-          badge={`${summary.totalFarms} farms`}
           variant="glow"
         />
 

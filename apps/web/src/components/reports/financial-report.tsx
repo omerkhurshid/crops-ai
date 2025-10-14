@@ -53,6 +53,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
   const [data, setData] = useState<FinancialData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchFinancialData();

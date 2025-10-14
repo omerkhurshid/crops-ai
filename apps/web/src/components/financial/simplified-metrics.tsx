@@ -208,6 +208,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
             description: "All expenses (seeds, fertilizer, fuel, labor) divided by total acres. Lower is better."
           }}
         />
+      </div>
 
       {/* Quick Insights */}
       <ModernCard variant="soft">

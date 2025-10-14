@@ -110,12 +110,18 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                         <div className="absolute top-2/4 left-0 right-0 h-0.5 bg-amber-400 opacity-40" />
                         <div className="absolute top-3/4 left-0 right-0 h-0.5 bg-amber-500 opacity-40" />
                         
-                        {/* Hills and valleys */}
-                        <div className="absolute top-0 left-1/4 w-1/2 h-1/3 bg-gradient-radial from-amber-200 to-transparent rounded-full opacity-60" />
-                        <div className="absolute bottom-0 right-1/4 w-1/3 h-1/2 bg-gradient-radial from-orange-200 to-transparent rounded-full opacity-60" />
+                        {/* Hills and valleys - using standard gradients */}
+                        <div className="absolute top-0 left-1/4 w-1/2 h-1/3 bg-gradient-to-br from-amber-200 to-transparent rounded-full opacity-60" />
+                        <div className="absolute bottom-0 right-1/4 w-1/3 h-1/2 bg-gradient-to-tl from-orange-200 to-transparent rounded-full opacity-60" />
                         
-                        {/* Grid lines */}
-                        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(217,119,6,0.1)_1px,transparent_1px),linear-gradient(rgba(217,119,6,0.1)_1px,transparent_1px)] bg-[size:40px_40px]" />
+                        {/* Grid lines - simplified to avoid CSS issues */}
+                        <div className="absolute inset-0 opacity-20">
+                          <div className="w-full h-full" 
+                               style={{
+                                 backgroundImage: 'linear-gradient(90deg, rgba(217,119,6,0.1) 1px, transparent 1px), linear-gradient(rgba(217,119,6,0.1) 1px, transparent 1px)',
+                                 backgroundSize: '40px 40px'
+                               }} />
+                        </div>
                       </div>
                     </div>
                   )}

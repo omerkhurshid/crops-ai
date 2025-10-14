@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '../ui/alert'
 import { 
   Sprout, MapPin, Calendar, DollarSign, Settings, 
   CheckCircle2, ArrowRight, ArrowLeft, Info, Lightbulb,
-  Target, Activity, CloudRain, BarChart3, Users, X
+  Target, Activity, CloudRain, BarChart3, Users, X, Eye
 } from 'lucide-react'
 
 interface SetupStep {
@@ -78,6 +78,29 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               You can always skip steps and return later.
             </AlertDescription>
           </Alert>
+          
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <InlineFloatingButton
+              icon={<Sprout className="h-4 w-4" />}
+              label="Set Up My Farm"
+              variant="primary"
+              size="md"
+              showLabel={true}
+              onClick={() => handleNext()}
+            />
+            <InlineFloatingButton
+              icon={<Eye className="h-4 w-4" />}
+              label="Explore with Demo Data"
+              variant="secondary"
+              size="md"
+              showLabel={true}
+              onClick={() => {
+                // Enable demo mode and redirect to dashboard
+                localStorage.setItem('demoMode', 'true')
+                if (onComplete) onComplete()
+              }}
+            />
+          </div>
         </div>
       )
     },
@@ -129,6 +152,19 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="bg-sage-50 rounded-xl p-4 mb-6">
+            <h4 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-sage-600" />
+              Quick Start Tips
+            </h4>
+            <ul className="text-sm text-sage-700 space-y-1">
+              <li>• Farm name can be simple: "Johnson Farm" or "Prairie View Ranch"</li>
+              <li>• Location helps us provide accurate weather and market data</li>
+              <li>• Area estimate is fine - you can update this later</li>
+              <li>• Popular crops: Corn, Soybeans, Wheat, Cotton, Barley</li>
+            </ul>
           </div>
 
           <div className="text-center">
@@ -191,6 +227,25 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </div>
           </div>
 
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-4 mb-6">
+            <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+              <Target className="h-4 w-4 text-blue-600" />
+              Field Mapping Options
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-white rounded-lg p-3 border">
+                <h5 className="font-medium text-gray-800 mb-1">Quick Start</h5>
+                <p className="text-sm text-gray-600">Add 1-3 fields with estimated boundaries</p>
+                <p className="text-xs text-green-600 mt-1">✓ 5 minutes • Good for beginners</p>
+              </div>
+              <div className="bg-white rounded-lg p-3 border">
+                <h5 className="font-medium text-gray-800 mb-1">Precision Mapping</h5>
+                <p className="text-sm text-gray-600">Draw exact boundaries on satellite map</p>
+                <p className="text-xs text-blue-600 mt-1">✓ 15 minutes • Maximum accuracy</p>
+              </div>
+            </div>
+          </div>
+
           <Alert>
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
@@ -199,17 +254,27 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </AlertDescription>
           </Alert>
 
-          <div className="text-center">
-            <p className="text-sm text-sage-600 mb-4">
+          <div className="text-center space-y-3">
+            <p className="text-sm text-sage-600">
               Complete farm setup first, then return to add field boundaries
             </p>
-            <InlineFloatingButton
-              icon={<CheckCircle2 className="h-4 w-4" />}
-              label="I'll Add Fields Later"
-              variant="secondary"
-              size="md"
-              showLabel={true}
-            />
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <InlineFloatingButton
+                icon={<Target className="h-4 w-4" />}
+                label="Quick Field Setup"
+                variant="primary"
+                size="sm"
+                showLabel={true}
+                onClick={() => window.location.href = '/fields?quick=true'}
+              />
+              <InlineFloatingButton
+                icon={<CheckCircle2 className="h-4 w-4" />}
+                label="I'll Add Fields Later"
+                variant="secondary"
+                size="sm"
+                showLabel={true}
+              />
+            </div>
           </div>
         </div>
       )
@@ -280,15 +345,55 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </div>
           </div>
 
-          <div className="text-center">
-            <InlineFloatingButton
-              icon={<ArrowRight className="h-4 w-4" />}
-              label="Explore Features"
-              variant="secondary"
-              size="md"
-              showLabel={true}
-              onClick={() => window.open('/features', '_blank')}
-            />
+          <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6">
+            <h4 className="font-semibold text-sage-800 mb-3 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-sage-600" />
+              Immediate Value You'll Get
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              <div className="flex items-center gap-2 text-sage-700">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                Real-time crop health monitoring
+              </div>
+              <div className="flex items-center gap-2 text-sage-700">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                7-day weather forecasts for your fields
+              </div>
+              <div className="flex items-center gap-2 text-sage-700">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                AI recommendations for optimal timing
+              </div>
+              <div className="flex items-center gap-2 text-sage-700">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                Financial tracking and profitability analysis
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center space-y-3">
+            <p className="text-sm text-sage-600">
+              Ready to explore all features and start optimizing your farm?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <InlineFloatingButton
+                icon={<ArrowRight className="h-4 w-4" />}
+                label="Go to Dashboard"
+                variant="primary"
+                size="md"
+                showLabel={true}
+                onClick={() => {
+                  if (onComplete) onComplete()
+                }}
+              />
+              <InlineFloatingButton
+                icon={<Eye className="h-4 w-4" />}
+                label="Feature Tour"
+                variant="secondary"
+                size="md"
+                showLabel={true}
+                onClick={() => window.open('/features', '_blank')}
+              />
+            </div>
           </div>
         </div>
       )

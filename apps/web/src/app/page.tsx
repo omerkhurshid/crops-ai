@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../lib/auth/session'
+import { HomePageDemos } from '../components/demos/home-page-demos'
 
 export default async function Home() {
   // Check if user is logged in
@@ -38,12 +39,12 @@ export default async function Home() {
           {/* Main Hero */}
           <div className="text-center mb-16 p-8 md:p-12 bg-white rounded-2xl shadow-xl border border-sage-100">
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-sage-800 leading-tight">
               Precision Agriculture<br />
               <span className="text-sage-600">Made Simple</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-sage-700 mb-8 max-w-4xl mx-auto leading-relaxed">
               Advanced satellite monitoring, AI-powered insights, and data-driven decisions for modern farming operations.
             </p>
             
@@ -75,7 +76,7 @@ export default async function Home() {
                 </button>
               </Link>
               <div className="text-center">
-                <p className="text-gray-600 text-sm mb-2">30-day free trial • No setup fees • Cancel anytime</p>
+                <p className="text-sage-600 text-sm mb-2">30-day free trial • No setup fees • Cancel anytime</p>
                 <div className="inline-flex items-center text-sage-600 font-medium text-sm">
                   <Shield className="h-4 w-4 mr-2" />
                   Enterprise-grade security and reliability
@@ -93,8 +94,8 @@ export default async function Home() {
               <div className="p-3 bg-sage-100 rounded-full w-fit mb-4">
                 <Satellite className="h-8 w-8 text-sage-700" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Satellite Crop Monitoring</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-xl font-semibold text-sage-800 mb-3">Satellite Crop Monitoring</h3>
+              <p className="text-sage-600 leading-relaxed">
                 Monitor vegetation health using advanced satellite imagery and NDVI analysis. 
                 Get early detection of stress, disease, and pest issues before they impact yields.
               </p>
@@ -105,8 +106,8 @@ export default async function Home() {
               <div className="p-3 bg-earth-100 rounded-full w-fit mb-4">
                 <CloudRain className="h-8 w-8 text-earth-700" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Weather Intelligence</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-xl font-semibold text-sage-800 mb-3">Weather Intelligence</h3>
+              <p className="text-sage-600 leading-relaxed">
                 Hyperlocal weather forecasting with agricultural-specific insights. 
                 Optimize spray timing, irrigation schedules, and harvest planning.
               </p>
@@ -117,8 +118,8 @@ export default async function Home() {
               <div className="p-3 bg-cream-100 rounded-full w-fit mb-4">
                 <TrendingUp className="h-8 w-8 text-golden" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Performance Analytics</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-xl font-semibold text-sage-800 mb-3">Performance Analytics</h3>
+              <p className="text-sage-600 leading-relaxed">
                 Comprehensive farm analytics with yield tracking, financial insights, 
                 and performance benchmarking to optimize your operations.
               </p>
@@ -128,43 +129,30 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Technology Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Professional Agricultural Technology
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built for modern farming operations with enterprise-grade reliability and proven agricultural science.
-            </p>
-          </div>
-          
-          {/* Interactive demo removed for production */}
-        </div>
-      </section>
+      {/* Interactive Demos Section */}
+      <HomePageDemos />
 
       {/* Trust & Security */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+          <h2 className="text-3xl font-bold text-sage-800 mb-8">
             Trusted by Professional Farmers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <Shield className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Enterprise Security</h3>
-              <p className="text-gray-600">Bank-level encryption and data protection</p>
+              <h3 className="text-lg font-semibold text-sage-800 mb-2">Enterprise Security</h3>
+              <p className="text-sage-600">Bank-level encryption and data protection</p>
             </div>
             <div className="text-center">
               <Eye className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Proven Science</h3>
-              <p className="text-gray-600">Based on established agricultural research</p>
+              <h3 className="text-lg font-semibold text-sage-800 mb-2">Proven Science</h3>
+              <p className="text-sage-600">Based on established agricultural research</p>
             </div>
             <div className="text-center">
               <Users className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Farmer Focused</h3>
-              <p className="text-gray-600">Designed by and for agricultural professionals</p>
+              <h3 className="text-lg font-semibold text-sage-800 mb-2">Farmer Focused</h3>
+              <p className="text-sage-600">Designed by and for agricultural professionals</p>
             </div>
           </div>
         </div>

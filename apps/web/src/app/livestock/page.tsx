@@ -106,6 +106,59 @@ export default async function LivestockPage() {
           <p className="text-lg text-sage-600 mb-6">
             Monitor herd health and track animal performance
           </p>
+          
+          {/* Getting Started Guide for Livestock */}
+          <div className="bg-gradient-to-r from-earth-50 to-sage-50 rounded-xl p-4 mb-6 border border-earth-200">
+            <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
+              <Users className="h-5 w-5 text-earth-600" />
+              New to Livestock Management?
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-earth-700">
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-earth-200 flex items-center justify-center text-xs font-bold text-earth-800 flex-shrink-0 mt-0.5">1</div>
+                <div>
+                  <p className="font-medium">Add Your Animals</p>
+                  <p className="text-earth-600">Register cattle, sheep, pigs, or other livestock with basic details</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-earth-200 flex items-center justify-center text-xs font-bold text-earth-800 flex-shrink-0 mt-0.5">2</div>
+                <div>
+                  <p className="font-medium">Track Health Events</p>
+                  <p className="text-earth-600">Log vaccinations, treatments, and regular health checks</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-earth-200 flex items-center justify-center text-xs font-bold text-earth-800 flex-shrink-0 mt-0.5">3</div>
+                <div>
+                  <p className="font-medium">Monitor Performance</p>
+                  <p className="text-earth-600">Track weight gains, breeding cycles, and productivity metrics</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Actions for beginners */}
+            <div className="mt-4 pt-3 border-t border-earth-200 flex flex-wrap gap-2">
+              <button
+                onClick={() => window.location.href = '/livestock/add-animal'}
+                className="bg-earth-600 hover:bg-earth-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                Add First Animal
+              </button>
+              <button
+                onClick={() => window.location.href = '/livestock/add-event'}
+                className="bg-white hover:bg-earth-50 text-earth-700 border border-earth-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                Log Health Event
+              </button>
+              <button
+                onClick={() => window.location.href = '/help/articles/livestock-basics'}
+                className="bg-white hover:bg-earth-50 text-earth-700 border border-earth-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                Learn More
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Quick Stats Overview */}

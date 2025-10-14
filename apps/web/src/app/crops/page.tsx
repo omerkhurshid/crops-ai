@@ -7,7 +7,7 @@ import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { CropCalendar } from '../../components/crops/crop-calendar'
 import { ModernCard, ModernCardContent } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
-import { Plus } from 'lucide-react'
+import { Plus, Sprout } from 'lucide-react'
 
 export default function CropsPage() {
   const { data: session, status } = useSession()
@@ -79,6 +79,37 @@ export default function CropsPage() {
           <p className="text-lg text-sage-600 mb-6">
             Plan your plantings and track crop progress throughout the season
           </p>
+          
+          {/* Getting Started Guide */}
+          <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6 border border-sage-200">
+            <h3 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-sage-600" />
+              New to Crop Planning?
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-sage-700">
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">1</div>
+                <div>
+                  <p className="font-medium">Choose Your Crops</p>
+                  <p className="text-sage-600">Select what you want to grow based on your region and soil</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">2</div>
+                <div>
+                  <p className="font-medium">Plan Timing</p>
+                  <p className="text-sage-600">Set planting and harvest dates for optimal yields</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">3</div>
+                <div>
+                  <p className="font-medium">Track Progress</p>
+                  <p className="text-sage-600">Monitor growth stages and get AI recommendations</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Main Timeline View - Full Width */}

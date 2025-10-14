@@ -8,7 +8,7 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { Badge } from '../ui/badge'
-import { MapPin, Plus, Save, AlertCircle } from 'lucide-react'
+import { MapPin, Plus, Save, AlertCircle, Lightbulb } from 'lucide-react'
 import { FieldFormWithMap } from './field-form-with-map'
 import { cropCategories } from '../../lib/farm-categories'
 
@@ -30,6 +30,31 @@ const soilTypes = [
   'Clay', 'Sandy', 'Loam', 'Silt', 'Sandy Loam', 'Clay Loam', 'Silty Clay', 
   'Silty Clay Loam', 'Sandy Clay', 'Sandy Clay Loam', 'Unknown'
 ]
+
+// Helper functions for smart suggestions
+function getPlantingWindow(cropType: string): string {
+  const windows: { [key: string]: string } = {
+    'Corn': 'April 15 - May 15',
+    'Soybeans': 'May 1 - June 1', 
+    'Wheat': 'September 15 - October 15',
+    'Cotton': 'April 20 - May 20',
+    'Rice': 'March 15 - May 15',
+    'Sorghum': 'May 15 - June 30'
+  }
+  return windows[cropType] || 'Varies by region'
+}
+
+function getExpectedYield(cropType: string): string {
+  const yields: { [key: string]: string } = {
+    'Corn': '180-200',
+    'Soybeans': '50-60',
+    'Wheat': '60-80',
+    'Cotton': '800-1000 lbs',
+    'Rice': '160-180',
+    'Sorghum': '100-120'
+  }
+  return yields[cropType] || '-- '
+}
 
 export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmTotalArea, existingFields }: FieldFormProps) {
   const router = useRouter()
@@ -232,21 +257,38 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
             </div>
           </div>
 
-          {/* AI Field Recommendations */}
+          {/* Smart Defaults and Tips */}
           <div className="space-y-4">
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                <span className="font-medium text-green-900">AI Field Analysis</span>
-                <Badge className="bg-green-100 text-green-700 border-green-300 text-xs">
-                  {formData.confidence}% Confidence
-                </Badge>
+                <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                <span className="font-medium text-blue-900">Smart Suggestions</span>
               </div>
-              <div className="space-y-2 text-sm text-green-700">
-                <div>• Field boundaries detected with high accuracy</div>
-                <div>• Soil conditions appear suitable for {formData.cropType || 'selected crop'}</div>
-                <div>• Estimated yield potential: {formData.cropType === 'Corn' ? '185' : '45'} bu/acre</div>
-                <div>• Recommended planting window: March 15 - April 30</div>
+              <div className="space-y-2 text-sm text-blue-700">
+                {formData.cropType && (
+                  <>
+                    <div>• {formData.cropType} typically requires {formData.cropType === 'Corn' ? '25-30' : '20-25'} inches of water annually</div>
+                    <div>• Best planting window for your region: {getPlantingWindow(formData.cropType)}</div>
+                    <div>• Expected yield: {getExpectedYield(formData.cropType)} bu/acre</div>
+                  </>
+                )}
+                {!formData.cropType && (
+                  <div>• Select a crop type to see personalized recommendations</div>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Start Tips */}
+            <div className="p-4 bg-sage-50 border border-sage-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <Lightbulb className="h-4 w-4 text-sage-600" />
+                <span className="font-medium text-sage-900">Quick Start Tips</span>
+              </div>
+              <div className="space-y-2 text-sm text-sage-700">
+                <div>• Field names can be simple: "North Field", "Field A", or "Back 40"</div>
+                <div>• Area estimates are fine - you can refine boundaries later with satellite mapping</div>
+                <div>• Soil type helps optimize fertilizer recommendations (optional for now)</div>
+                <div>• You'll be able to draw precise boundaries on satellite maps after creation</div>
               </div>
             </div>
 

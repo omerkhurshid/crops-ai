@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { DemoDataService } from '../../lib/demo-data'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { FarmerMetricCard, CropHealthCard, StressLevelCard } from '../ui/farmer-metric-card'
 import { LivestockMetricCard } from '../ui/livestock-metric-card'
@@ -113,16 +114,32 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
   const [selectedFarmId, setSelectedFarmId] = useState<string>()
   const { isMobile } = useScreenSize()
 
-  // Fetch real satellite data
+  // Fetch real satellite data or demo data
   useEffect(() => {
     const fetchFarmData = async () => {
       try {
-        // Import the real satellite service
-        const { RealSatelliteService } = await import('../../lib/satellite/real-data-service')
-        const satelliteService = new RealSatelliteService()
+        // Check if demo mode is enabled
+        const isDemoMode = DemoDataService.isDemoMode()
         
-        // Get real satellite data
-        const satelliteData = await satelliteService.getFarmDashboardData(farmId)
+        let satelliteData
+        if (isDemoMode) {
+          // Use demo data
+          const demoFarm = DemoDataService.getDemoFarmData()
+          satelliteData = {
+            overallHealth: 85,
+            healthTrend: 8,
+            stressedAreas: 1,
+            stressTrend: -5,
+            lastUpdate: new Date()
+          }
+        } else {
+          // Import the real satellite service
+          const { RealSatelliteService } = await import('../../lib/satellite/real-data-service')
+          const satelliteService = new RealSatelliteService()
+          
+          // Get real satellite data
+          satelliteData = await satelliteService.getFarmDashboardData(farmId)
+        }
         
         // Use passed farm data if available
         const farmName = passedFarmData?.name || "Your Farm"
@@ -212,8 +229,13 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
           stressedAreas: satelliteData.stressedAreas,
           stressTrend: satelliteData.stressTrend,
           currentWeather,
-          yieldForecast: satelliteData.yieldForecast,
-          todayHighlights: satelliteData.todayHighlights,
+          yieldForecast: satelliteData.yieldForecast || {
+            current: 0,
+            potential: 0,
+            unit: 'tons/ha',
+            cropType: 'corn'
+          },
+          todayHighlights: satelliteData.todayHighlights || [],
           urgentTasks: []
         }
 

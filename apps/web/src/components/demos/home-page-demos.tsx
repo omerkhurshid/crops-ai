@@ -65,11 +65,11 @@ const DEMO_FIELD_DATA = {
   financial: {
     estimatedYield: 185, // bushels per acre
     marketPrice: 4.25, // $ per bushel
-    totalRevenue: 31400,
-    expenses: 22800,
-    profit: 8600,
-    profitPerAcre: 53.75,
-    breakeven: 3.14
+    totalRevenue: 125800, // 185 × 160 × 4.25
+    expenses: 91200, // ~$570/acre × 160 acres (realistic for Iowa corn)
+    profit: 34600, // $125,800 - $91,200
+    profitPerAcre: 216.25, // $34,600 ÷ 160 acres
+    breakeven: 3.14 // expenses per bushel
   },
   alerts: [
     {
@@ -427,7 +427,7 @@ export function HomePageDemos() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="space-y-12">
           <EnhancedNDVIDemo />
           <WeatherDemo />
           <FinancialDemo />

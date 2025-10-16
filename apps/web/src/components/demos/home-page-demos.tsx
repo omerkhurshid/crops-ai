@@ -416,29 +416,29 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
 
 export function HomePageDemos() {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-sage-800 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-sage-800 mb-3 sm:mb-4">
             See Crops.AI in Action
           </h2>
-          <p className="text-xl text-sage-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-sage-600 max-w-3xl mx-auto px-2">
             Experience real data from an Iowa corn farm. These are actual insights generated from satellite imagery, weather data, and market intelligence.
           </p>
         </div>
         
-        <div className="space-y-12">
+        <div className="space-y-8 sm:space-y-12">
           <EnhancedNDVIDemo />
           <WeatherDemo />
           <FinancialDemo />
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="mt-6 sm:mt-8 text-center px-2">
+          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
             This data represents a real 160-acre corn field in Story County, Iowa during the 2024 growing season.
           </p>
           <Button 
-            className="bg-sage-600 hover:bg-sage-700"
+            className="bg-sage-600 hover:bg-sage-700 w-full sm:w-auto px-6 py-3"
             onClick={() => window.location.href = '/register'}
           >
             <Eye className="h-4 w-4 mr-2" />

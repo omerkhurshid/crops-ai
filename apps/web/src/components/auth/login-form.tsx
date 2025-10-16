@@ -101,17 +101,17 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Sign in to your account</CardTitle>
-        <CardDescription>
+    <Card className="w-full border-0 shadow-none">
+      <CardHeader className="px-0 pb-4">
+        <CardTitle className="text-xl sm:text-2xl">Sign in to your account</CardTitle>
+        <CardDescription className="text-sm sm:text-base">
           Enter your email and password to access your farm dashboard
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-sm font-medium">Email</Label>
             <Input
               id="email"
               type="email"
@@ -120,14 +120,15 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={isLoading}
+              className="h-12 text-base"
             />
           </div>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium">Password</Label>
               <Link 
                 href="/forgot-password" 
-                className="text-sm text-sage-600 hover:text-sage-800 underline"
+                className="text-xs sm:text-sm text-sage-600 hover:text-sage-800 underline"
               >
                 Forgot password?
               </Link>
@@ -140,19 +141,20 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={isLoading}
+              className="h-12 text-base"
             />
           </div>
           {successMessage && (
-            <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md border border-green-200">
+            <div className="text-green-600 text-xs sm:text-sm bg-green-50 p-3 rounded-md border border-green-200">
               {successMessage}
             </div>
           )}
           {error && (
-            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md border border-red-200">
+            <div className="text-red-600 text-xs sm:text-sm bg-red-50 p-3 rounded-md border border-red-200">
               {error}
             </div>
           )}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full h-12 text-base font-medium" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>

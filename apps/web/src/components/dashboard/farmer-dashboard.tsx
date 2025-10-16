@@ -261,7 +261,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
       <div className="space-y-6">
         <div className="animate-pulse space-y-6">
           <div className="h-32 bg-gray-200 rounded-2xl"></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="h-48 bg-gray-200 rounded-2xl"></div>
             <div className="h-48 bg-gray-200 rounded-2xl"></div>
             <div className="h-48 bg-gray-200 rounded-2xl"></div>
@@ -441,7 +441,7 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
       />
 
       {/* Alerts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         {/* Weather Alerts */}
         <WeatherAlertsWidget 
           farmData={{

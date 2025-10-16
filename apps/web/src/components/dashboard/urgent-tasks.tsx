@@ -91,7 +91,7 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
       </div>
 
       {/* Urgent Task Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4">
         {ensureArray(tasks).slice(0, 2).map((task) => {
           const config = categoryConfig[task.category as keyof typeof categoryConfig] || categoryConfig.health
           const Icon = config.icon

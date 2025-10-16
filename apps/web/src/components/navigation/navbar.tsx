@@ -82,13 +82,14 @@ export function Navbar() {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link href="/login">
-                  <button className="text-white hover:text-white/80 px-4 py-2 text-sm font-medium drop-shadow-md bg-black/20 hover:bg-black/30 rounded-lg transition-all duration-200">
+                  <button className="text-white hover:text-white/80 px-3 py-2 text-xs sm:text-sm font-medium drop-shadow-md bg-black/20 hover:bg-black/30 rounded-lg transition-all duration-200">
                     Sign In
                   </button>
                 </Link>
                 <Link href="/register">
-                  <button className="bg-white/30 backdrop-blur-sm border border-white/50 text-white hover:bg-white/40 hover:border-white/60 transition-all duration-200 rounded-lg px-4 py-2 text-sm font-medium drop-shadow-md">
-                    Start Farming Smarter
+                  <button className="bg-white/30 backdrop-blur-sm border border-white/50 text-white hover:bg-white/40 hover:border-white/60 transition-all duration-200 rounded-lg px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium drop-shadow-md">
+                    <span className="hidden sm:inline">Start Farming Smarter</span>
+                    <span className="sm:hidden">Sign Up</span>
                   </button>
                 </Link>
               </div>

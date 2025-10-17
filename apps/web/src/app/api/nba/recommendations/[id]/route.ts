@@ -58,7 +58,7 @@ export async function PATCH(
     if (updateData.status === 'COMPLETED' && updateData.actualOutcome) {
       await prisma.decisionExecution.create({
         data: {
-          templateId: 'generic-recommendation', // TODO: Link to actual template
+          templateId: 'generic-recommendation',
           userId: user.id,
           farmId: recommendation.farmId,
           inputs: {

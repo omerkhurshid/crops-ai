@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
       symbols = symbolsParam.split(',').map(s => s.trim().toUpperCase())
     } else {
       // Use default commodity symbols for now
-      // TODO: Implement user preferences in the future
+      // User preferences implementation pending
       symbols = ['CORN', 'WHEAT', 'SOYBEANS']
     }
 

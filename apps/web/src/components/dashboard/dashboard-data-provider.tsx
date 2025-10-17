@@ -13,6 +13,8 @@ interface DashboardData {
   recommendations: any[]
   regionalData: any | null
   harvestAlerts: any[]
+  queueStatus: any | null
+  budgetData: any | null
   loading: boolean
   error: string | null
   lastUpdated: Date | null
@@ -49,6 +51,8 @@ export function DashboardDataProvider({
     recommendations: [],
     regionalData: null,
     harvestAlerts: [],
+    queueStatus: null,
+    budgetData: null,
     loading: true,
     error: null,
     lastUpdated: null
@@ -73,11 +77,15 @@ export function DashboardDataProvider({
         promises.push(Promise.resolve(null), Promise.resolve({ alerts: [] }))
       }
 
-      // Other data
+      // Other data - enhanced with real systems
       promises.push(
         fetch(`/api/tasks?farmId=${farmId}`).then(res => res.ok ? res.json() : { tasks: [] }),
-        fetch(`/api/ml/recommendations?farmId=${farmId}&limit=4`).then(res => res.ok ? res.json() : { recommendations: [] }),
-        fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`).then(res => res.ok ? res.json() : { harvestAlerts: [] })
+        fetch(`/api/nba/recommendations?farmId=${farmId}&maxRecommendations=4`).then(res => res.ok ? res.json() : { recommendations: [] }),
+        fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`).then(res => res.ok ? res.json() : { harvestAlerts: [] }),
+        // Add queue health and system status
+        fetch(`/api/satellite/queue?action=status`).then(res => res.ok ? res.json() : null),
+        // Add budget information
+        fetch(`/api/financial/budget?farmId=${farmId}`).then(res => res.ok ? res.json() : null)
       )
 
       // Regional data (if coordinates available)
@@ -95,6 +103,8 @@ export function DashboardDataProvider({
         tasksResponse,
         recommendationsResponse,
         diseaseResponse,
+        queueStatusResponse,
+        budgetResponse,
         regionalResponse
       ] = await Promise.all(promises)
 
@@ -109,6 +119,8 @@ export function DashboardDataProvider({
         tasks: tasksResponse?.tasks || [],
         recommendations: recommendationsResponse?.recommendations || [],
         harvestAlerts: diseaseResponse?.harvestAlerts || [],
+        queueStatus: queueStatusResponse,
+        budgetData: budgetResponse,
         regionalData: regionalResponse,
         loading: false,
         lastUpdated: new Date()
@@ -182,4 +194,14 @@ export function useRecommendationsData() {
 export function useHarvestAlerts() {
   const { harvestAlerts } = useDashboardData()
   return harvestAlerts
+}
+
+export function useQueueStatus() {
+  const { queueStatus } = useDashboardData()
+  return queueStatus
+}
+
+export function useBudgetData() {
+  const { budgetData } = useDashboardData()
+  return budgetData
 }

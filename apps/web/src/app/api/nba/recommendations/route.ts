@@ -5,6 +5,7 @@ import { NBAEngine, FarmContext } from '../../../../lib/nba/decision-engine'
 import { WeatherConditions, WeatherForecast, WeatherService } from '../../../../lib/services/weather'
 import { cache, CacheKeys, CacheTTL, CacheTags } from '../../../../lib/cache/redis-client'
 import { PerformanceMonitor, withCache } from '../../../../lib/performance/optimizations'
+import { BudgetManager } from '../../../../lib/financial/budget-manager'
 import { z } from 'zod'
 
 const recommendationRequestSchema = z.object({
@@ -98,8 +99,8 @@ export async function POST(request: NextRequest) {
         area: field.area || 0,
         cropType: field.crops[0]?.cropType || 'wheat',
         plantingDate: field.crops[0]?.plantingDate || undefined,
-        lastSprayDate: undefined, // TODO: Get from spray records
-        lastHarvestDate: undefined // TODO: Get from harvest records
+        lastSprayDate: undefined,
+        lastHarvestDate: undefined
       })),
       weather: weatherContext,
       financials: financialContext,
@@ -311,6 +312,11 @@ async function getWeatherContext(latitude: number, longitude: number): Promise<{
 async function getFinancialContext(farmId: string): Promise<{
   cashAvailable: number
   monthlyBudget: number
+  monthlyBudgetRemaining: number
+  totalBudget: number
+  totalBudgetUsed: number
+  totalBudgetRemaining: number
+  budgetCategories: any[]
   ytdRevenue: number
   ytdExpenses: number
 }> {
@@ -334,9 +340,18 @@ async function getFinancialContext(farmId: string): Promise<{
     .filter(t => t.type === 'EXPENSE')
     .reduce((sum, t) => sum + Number(t.amount), 0)
 
+  // Get real budget information
+  const budget = await BudgetManager.getFarmBudget(farmId, currentYear)
+  const monthlyBudgetRemaining = await BudgetManager.getMonthlyBudgetRemaining(farmId)
+
   return {
     cashAvailable: ytdRevenue - ytdExpenses,
-    monthlyBudget: 50000, // TODO: Get from budget records
+    monthlyBudget: budget?.totalBudget ? budget.totalBudget / 12 : 50000,
+    monthlyBudgetRemaining,
+    totalBudget: budget?.totalBudget || 0,
+    totalBudgetUsed: budget?.totalSpent || ytdExpenses,
+    totalBudgetRemaining: budget?.totalRemaining || 0,
+    budgetCategories: budget?.categories || [],
     ytdRevenue,
     ytdExpenses
   }

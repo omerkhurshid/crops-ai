@@ -30,38 +30,71 @@ export async function GET(request: NextRequest) {
 
     const { q: query, limit, type } = validation.data;
 
-    // Crop database not yet implemented - return error instead of mock data
-    return NextResponse.json({
-      error: 'Crop database not available',
-      message: 'The comprehensive crop database is not yet implemented. Please contact support for assistance with crop selection.',
-      crops: [],
-      total: 0,
-      query
-    }, { status: 501 })
+    // Build search conditions
+    const whereConditions = query ? {
+      OR: [
+        { name: { contains: query, mode: 'insensitive' as const } },
+        { scientificName: { contains: query, mode: 'insensitive' as const } },
+        { description: { contains: query, mode: 'insensitive' as const } }
+      ]
+    } : {};
 
-    // TODO: Implement actual database query when crop database is ready:
-    /*
-    const crops = await prisma.crop.findMany({
-      where: {
-        OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          { scientific_name: { contains: query, mode: 'insensitive' } },
-          { common_names: { has: query } },
-          { crop_type: { contains: query, mode: 'insensitive' } }
-        ]
-      },
+    // Add type filter if specified
+    if (type) {
+      Object.assign(whereConditions, {
+        category: type.toUpperCase()
+      });
+    }
+
+    const crops = await prisma.produceType.findMany({
+      where: whereConditions,
       take: limit,
       include: {
-        varieties: true
+        varieties: {
+          take: 5 // Limit varieties per crop for performance
+        },
+        nutritionalData: true
+      },
+      orderBy: {
+        name: 'asc'
       }
     });
-    
+
+    // Format response to match expected structure
+    const formattedCrops = crops.map(crop => ({
+      id: crop.id,
+      name: crop.name,
+      scientificName: crop.scientificName,
+      category: crop.category,
+      description: crop.description,
+      daysToMaturity: crop.daysToMaturity,
+      waterRequirement: crop.waterRequirement,
+      sunRequirement: crop.sunRequirement,
+      growthHabit: crop.growthHabit,
+      companionPlants: crop.companionPlants,
+      commonPests: crop.commonPests,
+      commonDiseases: crop.commonDiseases,
+      varieties: crop.varieties.map(variety => ({
+        id: variety.id,
+        name: variety.name,
+        description: variety.description,
+        daysToMaturity: variety.daysToMaturity,
+        marketDemand: variety.marketDemand,
+        premiumVariety: variety.premiumVariety,
+        diseaseResistance: variety.diseaseResistance,
+        droughtTolerant: variety.droughtTolerant,
+        coldTolerant: variety.coldTolerant,
+        heatTolerant: variety.heatTolerant
+      })),
+      nutritionalData: crop.nutritionalData
+    }));
+
     return NextResponse.json({
-      crops,
+      crops: formattedCrops,
       total: crops.length,
-      query
+      query,
+      message: `Found ${crops.length} crops matching your search`
     });
-    */
 
   } catch (error) {
     console.error('Error searching crops:', error);

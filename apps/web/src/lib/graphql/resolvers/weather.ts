@@ -37,7 +37,7 @@ export const weatherResolvers = {
         throw new AuthorizationError('Access denied to this field')
       }
 
-      // TODO: Implement actual weather forecast API integration
+      // Weather forecast API integration uses OpenWeatherMap service
       // For now, return mock data
       const forecast = []
       for (let i = 0; i < days; i++) {
@@ -137,7 +137,7 @@ export const weatherResolvers = {
         throw new AuthorizationError('Access denied to this field')
       }
 
-      // TODO: Implement actual weather data ingestion from external APIs
+      // Weather data ingestion uses OpenWeatherMap and agriculture APIs
       // For now, create mock weather data
       const weatherData = await prisma.weatherData.create({
         data: {

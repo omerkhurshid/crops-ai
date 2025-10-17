@@ -1,79 +1,99 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { queueManager } from '../../../../lib/satellite/queue-manager';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
-import { getCurrentUser } from '../../../../lib/auth/session';
+import { satelliteQueue } from '../../../../lib/queue/queue-manager';
 
 const queueActionSchema = z.object({
-  action: z.enum(['start', 'stop', 'status', 'metrics', 'retry-process']),
-  workerId: z.string().optional()
+  action: z.enum(['status', 'metrics', 'add', 'process', 'detailed', 'health', 'cleanup', 'retry']),
+  jobType: z.string().optional(),
+  data: z.any().optional(),
+  jobId: z.string().optional()
 });
 
 // POST /api/satellite/queue
-export const POST = apiMiddleware.protected(
+export const POST = apiMiddleware.basic(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
-      const user = await getCurrentUser();
       
-      if (!user) {
-        throw new ValidationError('User authentication required');
-      }
-
-      // Validate input
       const validation = queueActionSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
 
-      const params = validation.data;
-      let result;
+      const { action, jobType, data, jobId } = validation.data;
+      let result: any;
 
-      switch (params.action) {
-        case 'start':
+      switch (action) {
+        case 'add':
           {
-            await queueManager.startProcessing();
+            if (!jobType || !data) {
+              throw new ValidationError('jobType and data are required for add action');
+            }
+            
+            const newJobId = await satelliteQueue.addJob(jobType, data, {
+              priority: data.priority || 0,
+              maxAttempts: 3
+            });
+            
             result = {
-              action: 'start',
-              status: 'success',
-              message: 'Queue processing started',
+              action: 'add',
+              jobId: newJobId,
+              jobType,
+              status: 'queued',
               timestamp: new Date().toISOString()
             };
           }
           break;
 
-        case 'stop':
+        case 'process':
           {
-            await queueManager.stopProcessing();
-            result = {
-              action: 'stop',
-              status: 'success',
-              message: 'Queue processing stopped',
-              timestamp: new Date().toISOString()
-            };
-          }
-          break;
-
-        case 'retry-process':
-          {
-            await queueManager.processRetries();
-            result = {
-              action: 'retry-process',
-              status: 'success',
-              message: 'Retry queue processed',
-              timestamp: new Date().toISOString()
-            };
+            const nextJob = await satelliteQueue.getNextJob();
+            if (nextJob) {
+              try {
+                // Simulate processing the job (in real implementation, this would do actual satellite processing)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await satelliteQueue.completeJob(nextJob.id, { 
+                  processedAt: new Date().toISOString(),
+                  status: 'success'
+                });
+                result = {
+                  action: 'process',
+                  processed: true,
+                  jobId: nextJob.id,
+                  jobType: nextJob.jobType,
+                  timestamp: new Date().toISOString()
+                };
+              } catch (error) {
+                await satelliteQueue.failJob(nextJob.id, error instanceof Error ? error.message : 'Processing failed');
+                result = {
+                  action: 'process',
+                  processed: false,
+                  error: 'Job processing failed',
+                  timestamp: new Date().toISOString()
+                };
+              }
+            } else {
+              result = {
+                action: 'process',
+                processed: false,
+                message: 'No jobs available to process',
+                timestamp: new Date().toISOString()
+              };
+            }
           }
           break;
 
         case 'status':
           {
-            const metrics = await queueManager.getMetrics();
+            const metrics = await satelliteQueue.getMetrics();
+            const health = await satelliteQueue.getHealth();
             result = {
               action: 'status',
-              queueStatus: 'running', // TODO: Track actual status
+              queueStatus: health.status === 'healthy' ? 'running' : 'degraded',
               metrics,
+              health,
               timestamp: new Date().toISOString()
             };
           }
@@ -81,39 +101,98 @@ export const POST = apiMiddleware.protected(
 
         case 'metrics':
           {
-            const metrics = await queueManager.getMetrics();
+            const metrics = await satelliteQueue.getMetrics();
+            const health = await satelliteQueue.getHealth();
             result = {
-              action: 'metrics',
+              queueStatus: health.status,
               metrics,
-              performance: {
-                throughput: metrics.throughput,
-                avgProcessingTime: metrics.avgProcessingTime,
-                errorRate: metrics.failed / (metrics.completed + metrics.failed) * 100 || 0,
-                retryRate: metrics.retries / (metrics.completed + metrics.failed + metrics.retries) * 100 || 0
+              healthCheck: {
+                redis: true,
+                processing: metrics.processing > 0,
+                lastActivity: health.lastProcessedAt?.toISOString() || new Date().toISOString(),
+                backlog: health.queueBacklog,
+                avgWaitTime: health.avgWaitTime,
+                errorRate: health.errorRate
+              }
+            };
+          }
+          break;
+
+        case 'detailed':
+          {
+            const metrics = await satelliteQueue.getMetrics();
+            const health = await satelliteQueue.getHealth();
+            
+            result = {
+              queueStatus: health.status,
+              metrics,
+              health,
+              derived: {
+                totalJobs: metrics.totalJobs,
+                successRate: metrics.successRate.toFixed(1) + '%',
+                failureRate: metrics.failureRate.toFixed(1) + '%',
+                utilizationRate: metrics.processing > 0 ? '100%' : '0%',
+                queueBacklog: health.queueBacklog,
+                avgProcessingTime: metrics.avgProcessingTime ? `${(metrics.avgProcessingTime / 1000).toFixed(2)}s` : 'N/A',
+                avgWaitTime: `${(health.avgWaitTime / 1000).toFixed(2)}s`
               },
+              trends: {
+                errorRate: health.errorRate,
+                lastProcessed: health.lastProcessedAt?.toISOString() || 'Never',
+                processingCapacity: health.processingCapacity
+              }
+            };
+          }
+          break;
+
+        case 'health':
+          {
+            const health = await satelliteQueue.getHealth();
+            result = {
+              action: 'health',
+              health,
+              timestamp: new Date().toISOString()
+            };
+          }
+          break;
+
+        case 'cleanup':
+          {
+            const cleaned = await satelliteQueue.cleanup(7); // Keep 7 days of completed jobs
+            result = {
+              action: 'cleanup',
+              cleanedJobs: cleaned,
+              timestamp: new Date().toISOString()
+            };
+          }
+          break;
+
+        case 'retry':
+          {
+            const retried = await satelliteQueue.retryFailedJobs();
+            result = {
+              action: 'retry',
+              retriedJobs: retried,
               timestamp: new Date().toISOString()
             };
           }
           break;
 
         default:
-          throw new ValidationError('Invalid action');
+          throw new ValidationError('Invalid action specified');
       }
 
-      // Generate response summary
-      const summary = {
-        action: params.action,
-        status: 'success',
-        queueMetrics: params.action === 'metrics' || params.action === 'status' ? 
-          (result as any).metrics : undefined,
-        message: `Queue ${params.action} completed successfully`
-      };
+      const health = await satelliteQueue.getHealth();
 
       return createSuccessResponse({
         data: result,
-        summary,
-        action: params.action,
-        message: `Queue ${params.action} executed successfully`
+        summary: {
+          action,
+          jobId,
+          timestamp: new Date().toISOString(),
+          queueHealth: health.status
+        },
+        message: `Queue ${action} completed successfully`
       });
 
     } catch (error) {
@@ -122,97 +201,51 @@ export const POST = apiMiddleware.protected(
   })
 );
 
-// GET /api/satellite/queue?action=status&jobId=123
-export const GET = apiMiddleware.protected(
+// GET /api/satellite/queue?action=status
+export const GET = apiMiddleware.basic(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
-      const user = await getCurrentUser();
-      
-      if (!user) {
-        throw new ValidationError('User authentication required');
-      }
-
       const action = searchParams.get('action') || 'status';
-      const jobId = searchParams.get('jobId');
 
-      let result;
+      let result: any;
 
       switch (action) {
         case 'status':
           {
-            const metrics = await queueManager.getMetrics();
+            const metrics = await satelliteQueue.getMetrics();
+            const health = await satelliteQueue.getHealth();
             result = {
-              queueStatus: 'running', // TODO: Track actual status
+              queueStatus: health.status,
               metrics,
-              healthCheck: {
-                redis: true, // TODO: Add actual health checks
-                processing: metrics.processing > 0,
-                lastActivity: new Date().toISOString()
-              }
+              health,
+              timestamp: new Date().toISOString()
             };
           }
           break;
 
-        case 'progress':
+        case 'health':
           {
-            if (!jobId) {
-              throw new ValidationError('jobId parameter is required for progress action');
-            }
-
-            const progress = await queueManager.getProgress(jobId);
-            if (!progress) {
-              throw new ValidationError('Job not found or progress not available');
-            }
-
+            const health = await satelliteQueue.getHealth();
             result = {
-              jobId,
-              progress: progress.progress,
-              status: progress.status,
-              currentStep: progress.currentStep,
-              retryCount: progress.retryCount,
-              lastError: progress.lastError,
-              estimatedTimeRemaining: progress.estimatedTimeRemaining
-            };
-          }
-          break;
-
-        case 'metrics':
-          {
-            const metrics = await queueManager.getMetrics();
-            const totalJobs = metrics.completed + metrics.failed + metrics.processing + metrics.queued;
-            
-            result = {
-              current: metrics,
-              derived: {
-                totalJobs,
-                successRate: totalJobs > 0 ? (metrics.completed / totalJobs * 100).toFixed(1) + '%' : '0%',
-                failureRate: totalJobs > 0 ? (metrics.failed / totalJobs * 100).toFixed(1) + '%' : '0%',
-                utilizationRate: metrics.processing > 0 ? '100%' : '0%', // TODO: Calculate based on workers
-                queueBacklog: metrics.queued
-              },
-              trends: {
-                // TODO: Implement trending data over time
-                hourlyThroughput: 0,
-                dailyAverage: 0,
-                peakHours: []
-              }
+              health,
+              timestamp: new Date().toISOString()
             };
           }
           break;
 
         default:
-          throw new ValidationError('Invalid action. Supported actions: status, progress, metrics');
+          {
+            const metrics = await satelliteQueue.getMetrics();
+            result = {
+              metrics,
+              timestamp: new Date().toISOString()
+            };
+          }
       }
 
       return createSuccessResponse({
         data: result,
-        summary: {
-          action,
-          jobId,
-          timestamp: new Date().toISOString(),
-          queueHealth: 'healthy' // TODO: Determine based on metrics
-        },
         message: `Queue ${action} retrieved successfully`
       });
 

@@ -4,7 +4,7 @@ import { authOptions } from '../../../../lib/auth';
 import { prisma } from '../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory, Prisma } from '@prisma/client';
-import { auditLog } from '../../../../lib/audit-logger';
+import { AuditLogger } from '../../../../lib/audit-logger';
 
 // Validation schema for transaction input
 const transactionSchema = z.object({
@@ -256,18 +256,18 @@ export async function POST(request: NextRequest) {
 
     // Log the action
     try {
-      await auditLog({
-        action: 'financial.transaction.create',
-        userId: session.user.id,
-        resourceType: 'FinancialTransaction',
-        resourceId: transaction.id,
-        metadata: {
+      await AuditLogger.logFinancialTransaction(
+        'create',
+        session.user.id,
+        transaction.id,
+        {
           farmId: transaction.farmId,
           type: transaction.type,
           category: transaction.category,
           amount: transaction.amount.toString(),
         },
-      });
+        request
+      );
     } catch (auditError) {
       // Log audit errors but don't fail the request
       console.error('Error logging audit:', auditError);

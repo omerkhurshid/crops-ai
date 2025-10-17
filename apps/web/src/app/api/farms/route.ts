@@ -120,7 +120,7 @@ export const POST = apiMiddleware.protected(
       })
 
       // Note: Farm boundary update functionality removed temporarily due to schema mismatch
-      // TODO: Re-implement boundary handling when schema is updated
+      // Boundary handling will be implemented when geographic features are added
 
       console.log('Farm created successfully:', JSON.stringify(farm, null, 2))
       return createSuccessResponse({ farm }, 201)

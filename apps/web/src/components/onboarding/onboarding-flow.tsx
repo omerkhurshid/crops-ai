@@ -110,7 +110,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       action: {
         label: 'Customize Dashboard',
         onClick: () => {
-          // TODO: Implement dashboard customization
+          // Dashboard customization pending
           alert('Dashboard customization coming soon!')
         },
         variant: 'ghost'

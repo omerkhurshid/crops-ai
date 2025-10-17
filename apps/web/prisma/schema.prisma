@@ -939,3 +939,21 @@ model SoilReading {
   @@index([fieldId, timestamp(sort: Desc)])
   @@index([timestamp, quality])
 }
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  action        String   // create, update, delete, login, etc.
+  resource      String   // farm, field, crop, etc.
+  resourceId    String?
+  oldValues     Json?
+  newValues     Json?
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+
+  @@index([userId, timestamp])
+  @@index([resource, resourceId])
+  @@index([timestamp])
+  @@map("audit_logs")
+}

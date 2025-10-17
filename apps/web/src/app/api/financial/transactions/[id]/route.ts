@@ -4,7 +4,7 @@ import { authOptions } from '../../../../../lib/auth';
 import { prisma } from '../../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory, Prisma } from '@prisma/client';
-import { auditLog } from '../../../../../lib/audit-logger';
+import { AuditLogger } from '../../../../../lib/audit-logger';
 
 // Validation schema for transaction update
 const updateTransactionSchema = z.object({
@@ -123,16 +123,16 @@ export async function PUT(
     });
 
     // Log the action
-    await auditLog({
-      action: 'financial.transaction.update',
-      userId: session.user.id,
-      resourceType: 'FinancialTransaction',
-      resourceId: updatedTransaction.id,
-      metadata: {
+    await AuditLogger.logFinancialTransaction(
+      'update',
+      session.user.id,
+      updatedTransaction.id,
+      {
         farmId: updatedTransaction.farmId,
         changes: validatedData,
       },
-    });
+      request
+    );
 
     return NextResponse.json(updatedTransaction);
   } catch (error) {
@@ -204,18 +204,18 @@ export async function DELETE(
     });
 
     // Log the action
-    await auditLog({
-      action: 'financial.transaction.delete',
-      userId: session.user.id,
-      resourceType: 'FinancialTransaction',
-      resourceId: params.id,
-      metadata: {
+    await AuditLogger.logFinancialTransaction(
+      'delete',
+      session.user.id,
+      params.id,
+      {
         farmId: existingTransaction.farmId,
         type: existingTransaction.type,
         category: existingTransaction.category,
         amount: existingTransaction.amount.toString(),
       },
-    });
+      request
+    );
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

@@ -105,6 +105,7 @@ model Farm {
   owner    User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   fields   Field[]
   managers FarmManager[]
+  budgets  FinancialBudget[]
 
   @@map("farms")
 }
@@ -473,4 +474,180 @@ model PlantingCalendar {
   updatedAt       DateTime    @updatedAt
   
   @@map("planting_calendars")
+}
+
+// ==================== BUDGET MANAGEMENT SYSTEM ====================
+
+model FinancialBudget {
+  id                  String              @id @default(cuid())
+  farmId              String
+  year                Int
+  totalBudget         Float
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  // Relations
+  farm                Farm                @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  categories          FinancialBudgetCategory[]
+  allocations         FinancialBudgetAllocation[]
+
+  @@unique([farmId, year])
+  @@map("financial_budgets")
+}
+
+model FinancialBudgetCategory {
+  id              String      @id @default(cuid())
+  financialBudgetId    String
+  name            String
+  category        String      // EXPENSE, INCOME
+  subcategory     String?     // INPUTS, OPERATIONS, LABOR, etc.
+  allocatedAmount Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  financialBudget      FinancialBudget  @relation(fields: [financialBudgetId], references: [id], onDelete: Cascade)
+
+  @@map("budget_categories")
+}
+
+model FinancialBudgetAllocation {
+  id              String      @id @default(cuid())
+  financialBudgetId    String
+  month           Int         // 1-12
+  budgetedAmount  Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  financialBudget      FinancialBudget  @relation(fields: [financialBudgetId], references: [id], onDelete: Cascade)
+
+  @@unique([financialBudgetId, month])
+  @@map("monthly_budget_allocations")
+}
+
+// ==================== QUEUE MANAGEMENT SYSTEM ====================
+
+model QueueJob {
+  id          String    @id @default(cuid())
+  queueName   String
+  jobType     String
+  status      String    // pending, processing, completed, failed
+  priority    Int       @default(0)
+  data        Json?
+  result      Json?
+  error       String?
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  startedAt   DateTime?
+  completedAt DateTime?
+  failedAt    DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([queueName, status])
+  @@index([createdAt])
+  @@map("queue_jobs")
+}
+
+model QueueMetrics {
+  id            String   @id @default(cuid())
+  queueName     String
+  date          DateTime @default(now())
+  totalJobs     Int      @default(0)
+  completedJobs Int      @default(0)
+  failedJobs    Int      @default(0)
+  pendingJobs   Int      @default(0)
+  processingJobs Int     @default(0)
+  avgProcessingTime Float? // in milliseconds
+  createdAt     DateTime @default(now())
+
+  @@unique([queueName, date])
+  @@map("queue_metrics")
+}
+
+// ==================== HEALTH CHECK SYSTEM ====================
+
+model ServiceHealth {
+  id            String   @id @default(cuid())
+  serviceName   String   @unique
+  status        String   // healthy, unhealthy, degraded
+  lastCheckAt   DateTime @default(now())
+  responseTime  Float?   // in milliseconds
+  errorMessage  String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("service_health")
+}
+
+model HealthCheckLog {
+  id            String   @id @default(cuid())
+  serviceName   String
+  status        String
+  responseTime  Float?
+  errorMessage  String?
+  checkedAt     DateTime @default(now())
+
+  @@index([serviceName, checkedAt])
+  @@map("health_check_logs")
+}
+
+// ==================== TEMPLATE MANAGEMENT SYSTEM ====================
+
+model RecommendationTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  category        String   // planting, irrigation, fertilization, etc.
+  description     String?
+  templateData    Json     // Template structure and logic
+  isActive        Boolean  @default(true)
+  version         String   @default("1.0")
+  createdById     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  executions      DecisionExecution[]
+
+  @@map("recommendation_templates")
+}
+
+model DecisionExecution {
+  id            String   @id @default(cuid())
+  templateId    String
+  userId        String
+  farmId        String
+  inputs        Json     // Input parameters
+  outputs       Json     // Generated recommendations
+  actualOutcome Json?    // Real-world results
+  effectiveness Float?   // 0-1 score
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  template      RecommendationTemplate @relation(fields: [templateId], references: [id])
+
+  @@map("decision_executions")
+}
+
+// ==================== AUDIT LOGGING SYSTEM ====================
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  action        String   // create, update, delete, login, etc.
+  resource      String   // farm, field, crop, etc.
+  resourceId    String?
+  oldValues     Json?
+  newValues     Json?
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+
+  @@index([userId, timestamp])
+  @@index([resource, resourceId])
+  @@index([timestamp])
+  @@map("audit_logs")
 }

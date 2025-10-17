@@ -4,7 +4,7 @@ import { authOptions } from '../../../../lib/auth';
 import { prisma } from '../../../../lib/prisma';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
-import { auditLog } from '../../../../lib/audit-logger';
+import { AuditLogger } from '../../../../lib/audit-logger';
 
 const forecastQuerySchema = z.object({
   farmId: z.string().cuid(),
@@ -281,16 +281,18 @@ export async function POST(request: NextRequest) {
       });
 
       // Log the action
-      await auditLog({
-        action: 'financial.forecast.generate',
+      await AuditLogger.logEvent({
         userId: session.user.id,
-        resourceType: 'FinancialForecast',
+        action: 'financial_forecast_generate',
+        resource: 'financial_forecast',
         resourceId: validatedData.farmId,
-        metadata: {
+        newValues: {
           scenario,
           forecastCount: forecasts.length,
           options: validatedData.options,
         },
+        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown'
       });
 
       // Fetch and return the created forecasts

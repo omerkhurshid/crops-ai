@@ -39,7 +39,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
       
       if (response.ok) {
         setExpenseDialog(false)
-        // TODO: Refresh dashboard data or show success message
+        // Dashboard refresh functionality pending
         window.location.reload()
       }
     } catch (error) {

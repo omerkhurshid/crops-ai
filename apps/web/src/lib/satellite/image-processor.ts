@@ -34,6 +34,9 @@ const safeRedis = {
     return redis ? redis.zpopmin(key, count) : null;
   }
 };
+
+// Check if Redis is available
+const isRedisAvailable = () => !!redis;
 import type { VegetationIndices, VegetationHealthReport } from './ndvi-analysis';
 
 export interface ProcessingOptions {
@@ -401,16 +404,16 @@ class SatelliteImageProcessor {
   // Helper methods
   private async enqueueJob(job: ProcessingJob): Promise<void> {
     const score = this.calculatePriorityScore(job);
-    await redis.zadd(this.QUEUE_KEY, { score, member: job.id });
+    await safeRedis.zadd(this.QUEUE_KEY, { score, member: job.id });
   }
 
   private async dequeueJob(): Promise<string | null> {
-    const result = await redis.zpopmin(this.QUEUE_KEY, 1);
+    const result = await safeRedis.zpopmin(this.QUEUE_KEY, 1);
     return (result as any)?.length > 0 ? (result as any)[0].member : null;
   }
 
   private async updateJob(job: ProcessingJob): Promise<void> {
-    await redis.set(
+    await safeRedis.set(
       `${this.JOB_PREFIX}${job.id}`,
       JSON.stringify(job),
       { ex: 86400 }

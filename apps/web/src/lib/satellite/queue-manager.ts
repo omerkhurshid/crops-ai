@@ -9,6 +9,40 @@ import { redis } from '../redis';
 // Logger replaced with console for local development;
 import { ProcessingJob } from './types';
 
+// Safe Redis wrapper that handles null cases
+const safeRedis = {
+  async set(key: string, value: any, options?: any): Promise<any> {
+    return redis ? redis.set(key, value, options) : null;
+  },
+  async get(key: string): Promise<any> {
+    return redis ? redis.get(key) : null;
+  },
+  async zadd(key: string, member: any): Promise<any> {
+    return redis ? redis.zadd(key, member) : null;
+  },
+  async zpopmax(key: string, count: number): Promise<any> {
+    return redis ? redis.zpopmax(key, count) : [];
+  },
+  async sadd(key: string, member: string): Promise<any> {
+    return redis ? redis.sadd(key, member) : null;
+  },
+  async srem(key: string, member: string): Promise<any> {
+    return redis ? redis.srem(key, member) : null;
+  },
+  async zrem(key: string, member: string): Promise<any> {
+    return redis ? redis.zrem(key, member) : null;
+  },
+  async zrange(key: string, start: number, stop: number, options?: any): Promise<any> {
+    return redis ? redis.zrange(key, start, stop, options) : [];
+  },
+  async zcard(key: string): Promise<number> {
+    return redis ? redis.zcard(key) : 0;
+  },
+  async scard(key: string): Promise<number> {
+    return redis ? redis.scard(key) : 0;
+  }
+};
+
 export interface QueueConfig {
   name: string;
   maxRetries: number;
@@ -80,11 +114,11 @@ export class SatelliteQueueManager {
   async enqueue(job: ProcessingJob): Promise<void> {
     try {
       // Store job data
-      await redis.set(`${this.JOB_PREFIX}${job.id}`, job, { ex: 86400 }); // 24 hours TTL
+      await safeRedis.set(`${this.JOB_PREFIX}${job.id}`, job, { ex: 86400 }); // 24 hours TTL
       
       // Add to priority queue
       const priority = this.calculatePriority(job);
-      await redis.zadd(this.QUEUE_KEY, { score: priority, member: job.id });
+      await safeRedis.zadd(this.QUEUE_KEY, { score: priority, member: job.id });
       
       // Initialize progress tracking
       const progress: JobProgress = {
@@ -93,7 +127,7 @@ export class SatelliteQueueManager {
         progress: 0,
         retryCount: 0
       };
-      await redis.set(`${this.PROGRESS_PREFIX}${job.id}`, progress, { ex: 86400 });
+      await safeRedis.set(`${this.PROGRESS_PREFIX}${job.id}`, progress, { ex: 86400 });
       
       // Update metrics
       await this.updateMetrics('queued', 1);
@@ -135,13 +169,13 @@ export class SatelliteQueueManager {
   async dequeue(): Promise<ProcessingJob | null> {
     try {
       // Get highest priority job
-      const result = await redis.zpopmax(this.QUEUE_KEY, 1);
+      const result = await safeRedis.zpopmax(this.QUEUE_KEY, 1);
       if (!result || (result as any).length === 0) {
         return null;
       }
       
       const jobId = (result as any)[0].member;
-      const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
+      const jobData = await safeRedis.get(`${this.JOB_PREFIX}${jobId}`);
       
       if (!jobData) {
 
@@ -151,7 +185,7 @@ export class SatelliteQueueManager {
       const job = jobData as ProcessingJob;
       
       // Move to processing set
-      await redis.sadd(this.PROCESSING_KEY, jobId);
+      await safeRedis.sadd(this.PROCESSING_KEY, jobId);
       await this.updateMetrics('queued', -1);
       await this.updateMetrics('processing', 1);
       
@@ -168,13 +202,13 @@ export class SatelliteQueueManager {
   async completeJob(jobId: string, results?: any): Promise<void> {
     try {
       // Remove from processing set
-      await redis.srem(this.PROCESSING_KEY, jobId);
+      await safeRedis.srem(this.PROCESSING_KEY, jobId);
       
       // Add to completed set
-      await redis.sadd(this.COMPLETED_KEY, jobId);
+      await safeRedis.sadd(this.COMPLETED_KEY, jobId);
       
       // Update job with results
-      const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
+      const jobData = await safeRedis.get(`${this.JOB_PREFIX}${jobId}`);
       if (jobData) {
         const job = jobData as ProcessingJob;
         job.status = 'completed';
@@ -182,7 +216,7 @@ export class SatelliteQueueManager {
         job.results = results;
         job.processingTime = Date.now() - new Date(job.createdAt).getTime();
         
-        await redis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
+        await safeRedis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
       }
       
       // Update progress
@@ -192,7 +226,7 @@ export class SatelliteQueueManager {
         progress: 100,
         retryCount: 0
       };
-      await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
+      await safeRedis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
       
       // Update metrics
       await this.updateMetrics('processing', -1);
@@ -211,7 +245,7 @@ export class SatelliteQueueManager {
    */
   async failJob(jobId: string, error: Error): Promise<void> {
     try {
-      const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
+      const jobData = await safeRedis.get(`${this.JOB_PREFIX}${jobId}`);
       if (!jobData) {
 
         return;
@@ -221,7 +255,7 @@ export class SatelliteQueueManager {
       const currentRetries = job.retryCount || 0;
       
       // Remove from processing set
-      await redis.srem(this.PROCESSING_KEY, jobId);
+      await safeRedis.srem(this.PROCESSING_KEY, jobId);
       
       if (currentRetries < this.config.maxRetries) {
         // Retry the job
@@ -229,11 +263,11 @@ export class SatelliteQueueManager {
         job.status = 'queued';
         job.error = error.message;
         
-        await redis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
+        await safeRedis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
         
         // Add to retry queue with delay
         const retryTime = Date.now() + (this.config.retryDelay * Math.pow(2, currentRetries));
-        await redis.zadd(this.RETRY_KEY, { score: retryTime, member: jobId });
+        await safeRedis.zadd(this.RETRY_KEY, { score: retryTime, member: jobId });
         
         // Update progress
         const progress: JobProgress = {
@@ -243,7 +277,7 @@ export class SatelliteQueueManager {
           retryCount: currentRetries + 1,
           lastError: error.message
         };
-        await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
+        await safeRedis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
         
         await this.updateMetrics('retries', 1);
         
@@ -253,8 +287,8 @@ export class SatelliteQueueManager {
         job.error = error.message;
         job.failedAt = new Date();
         
-        await redis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
-        await redis.sadd(this.FAILED_KEY, jobId);
+        await safeRedis.set(`${this.JOB_PREFIX}${jobId}`, job, { ex: 86400 });
+        await safeRedis.sadd(this.FAILED_KEY, jobId);
         
         // Update progress
         const progress: JobProgress = {
@@ -264,7 +298,7 @@ export class SatelliteQueueManager {
           retryCount: currentRetries,
           lastError: error.message
         };
-        await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
+        await safeRedis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
         
         await this.updateMetrics('failed', 1);
         
@@ -289,12 +323,12 @@ export class SatelliteQueueManager {
    */
   async updateProgress(jobId: string, progress: number, currentStep?: string): Promise<void> {
     try {
-      const existingProgress = await redis.get(`${this.PROGRESS_PREFIX}${jobId}`) as JobProgress;
+      const existingProgress = await safeRedis.get(`${this.PROGRESS_PREFIX}${jobId}`) as JobProgress;
       if (existingProgress) {
         existingProgress.progress = Math.max(0, Math.min(100, progress));
         existingProgress.currentStep = currentStep;
         
-        await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, existingProgress, { ex: 86400 });
+        await safeRedis.set(`${this.PROGRESS_PREFIX}${jobId}`, existingProgress, { ex: 86400 });
       }
     } catch (error) {
       console.error(`Failed to update progress for job ${jobId}`, error);
@@ -306,7 +340,7 @@ export class SatelliteQueueManager {
    */
   async getProgress(jobId: string): Promise<JobProgress | null> {
     try {
-      return await redis.get(`${this.PROGRESS_PREFIX}${jobId}`) as JobProgress;
+      return await safeRedis.get(`${this.PROGRESS_PREFIX}${jobId}`) as JobProgress;
     } catch (error) {
       console.error(`Failed to get progress for job ${jobId}`, error);
       return null;
@@ -319,11 +353,11 @@ export class SatelliteQueueManager {
   async getMetrics(): Promise<QueueMetrics> {
     try {
       const [queued, processing, completed, failed, retries] = await Promise.all([
-        redis.zcard(this.QUEUE_KEY),
-        redis.scard(this.PROCESSING_KEY),
-        redis.scard(this.COMPLETED_KEY),
-        redis.scard(this.FAILED_KEY),
-        redis.get(`${this.METRICS_KEY}:retries`) || 0
+        safeRedis.zcard(this.QUEUE_KEY),
+        safeRedis.scard(this.PROCESSING_KEY),
+        safeRedis.scard(this.COMPLETED_KEY),
+        safeRedis.scard(this.FAILED_KEY),
+        safeRedis.get(`${this.METRICS_KEY}:retries`) || 0
       ]);
       
       return {
@@ -355,7 +389,7 @@ export class SatelliteQueueManager {
   async processRetries(): Promise<void> {
     try {
       const now = Date.now();
-      const readyJobs = await redis.zrange(this.RETRY_KEY, 0, now, { byScore: true });
+      const readyJobs = await safeRedis.zrange(this.RETRY_KEY, 0, now, { byScore: true });
       
       if (!readyJobs || (readyJobs as any).length === 0) {
         return;
@@ -363,13 +397,13 @@ export class SatelliteQueueManager {
       
       for (const jobId of readyJobs as string[]) {
         // Move from retry queue back to main queue
-        await redis.zrem(this.RETRY_KEY, jobId);
+        await safeRedis.zrem(this.RETRY_KEY, jobId);
         
-        const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
+        const jobData = await safeRedis.get(`${this.JOB_PREFIX}${jobId}`);
         if (jobData) {
           const job = jobData as ProcessingJob;
           const priority = this.calculatePriority(job);
-          await redis.zadd(this.QUEUE_KEY, { score: priority, member: jobId });
+          await safeRedis.zadd(this.QUEUE_KEY, { score: priority, member: jobId });
           
           // Update progress
           const progress: JobProgress = {
@@ -378,7 +412,7 @@ export class SatelliteQueueManager {
             progress: 0,
             retryCount: job.retryCount || 0
           };
-          await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
+          await safeRedis.set(`${this.PROGRESS_PREFIX}${jobId}`, progress, { ex: 86400 });
           
           await this.updateMetrics('queued', 1);
         }
@@ -420,8 +454,8 @@ export class SatelliteQueueManager {
   private async updateMetrics(metric: string, delta: number): Promise<void> {
     try {
       const key = `${this.METRICS_KEY}:${metric}`;
-      const current = await redis.get(key) as number || 0;
-      await redis.set(key, current + delta, { ex: 86400 });
+      const current = await safeRedis.get(key) as number || 0;
+      await safeRedis.set(key, current + delta, { ex: 86400 });
     } catch (error) {
       console.error(`Failed to update metric ${metric}`, error);
     }

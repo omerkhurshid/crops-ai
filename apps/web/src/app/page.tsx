@@ -12,6 +12,7 @@ import {
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../lib/auth/session'
 import { HomePageDemos } from '../components/demos/home-page-demos'
+import { ProfitCalculator } from '../components/home/profit-calculator'
 
 export default async function Home() {
   // Check if user is logged in
@@ -49,32 +50,7 @@ export default async function Home() {
             </p>
             
             {/* Profit Calculator Widget */}
-            <div className="bg-gradient-to-r from-green-50 to-sage-50 p-6 rounded-xl border border-green-200 mb-6 max-w-2xl mx-auto">
-              <h3 className="text-lg font-semibold text-sage-800 mb-3">Your Potential Additional Profit:</h3>
-              <div className="flex items-center justify-center gap-4 mb-3">
-                <input 
-                  type="number" 
-                  placeholder="Farm size (acres)" 
-                  className="px-4 py-2 border border-sage-300 rounded-lg w-40 text-center"
-                  id="farm-size"
-                  onChange={() => {
-                    const acres = parseInt((document.getElementById('farm-size') as HTMLInputElement)?.value || '0')
-                    if (acres > 0) {
-                      const minProfit = Math.round(acres * 150 * 0.15)
-                      const maxProfit = Math.round(acres * 150 * 0.20)
-                      document.getElementById('profit-estimate')!.textContent = `$${minProfit.toLocaleString()} - $${maxProfit.toLocaleString()}`
-                    } else {
-                      document.getElementById('profit-estimate')!.textContent = '$12,000 - $18,000'
-                    }
-                  }}
-                />
-                <span className="text-sage-600">acres</span>
-              </div>
-              <div className="text-2xl font-bold text-green-600 mb-2">
-                <span id="profit-estimate">$12,000 - $18,000</span>
-              </div>
-              <p className="text-sm text-sage-600">Based on average 15-20% yield improvement</p>
-            </div>
+            <ProfitCalculator />
             
             {/* Outcome-Focused Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">

@@ -5,7 +5,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { serviceWorkerManager } from '../lib/service-worker/sw-register'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 interface ServiceWorkerState {
   isSupported: boolean
@@ -44,7 +44,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
         const registered = await serviceWorkerManager.register()
         setState(prev => ({ ...prev, isRegistered: registered }))
       } catch (error) {
-        Logger.error('Service worker registration failed', error)
+        console.error('Service worker registration failed', error)
       }
     }
 
@@ -61,7 +61,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
         isOffline: false,
         networkInfo: serviceWorkerManager.getNetworkInfo()
       }))
-      Logger.info('Connection restored')
+      console.log('Connection restored')
     }
 
     const handleOffline = () => {
@@ -70,7 +70,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
         isOffline: true,
         networkInfo: serviceWorkerManager.getNetworkInfo()
       }))
-      Logger.info('Connection lost - offline mode enabled')
+      console.log('Connection lost - offline mode enabled')
     }
 
     window.addEventListener('online', handleOnline)
@@ -95,10 +95,10 @@ export function useServiceWorker(): UseServiceWorkerReturn {
 
       // Show user notification
       if (type === 'update-available') {
-        Logger.info('Service worker update available')
+        console.log('Service worker update available')
         // You can show a toast or modal here
       } else if (type === 'offline-ready') {
-        Logger.info('App ready for offline use')
+        console.log('App ready for offline use')
         // You can show a toast notification here
       }
     }
@@ -130,7 +130,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
       setState(prev => ({ ...prev, isRegistered: registered }))
       return registered
     } catch (error) {
-      Logger.error('Service worker registration failed', error)
+      console.error('Service worker registration failed', error)
       return false
     }
   }, [])
@@ -140,7 +140,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
       await serviceWorkerManager.skipWaiting()
       setState(prev => ({ ...prev, updateAvailable: false }))
     } catch (error) {
-      Logger.error('Skip waiting failed', error)
+      console.error('Skip waiting failed', error)
     }
   }, [])
 
@@ -148,7 +148,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
     try {
       return await serviceWorkerManager.requestNotificationPermission()
     } catch (error) {
-      Logger.error('Notification permission request failed', error)
+      console.error('Notification permission request failed', error)
       return false
     }
   }, [])
@@ -157,7 +157,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
     try {
       await serviceWorkerManager.queueForSync(data)
     } catch (error) {
-      Logger.error('Failed to queue data for sync', error)
+      console.error('Failed to queue data for sync', error)
     }
   }, [])
 

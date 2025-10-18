@@ -104,9 +104,9 @@ export async function POST(request: NextRequest) {
     const instance = await TemplateManager.createInstance(
       templateId,
       farmId,
-      user.id,
+      fieldId,
       variables,
-      fieldId
+      user.id
     )
 
     return NextResponse.json({

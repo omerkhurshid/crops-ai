@@ -7,7 +7,8 @@
 
 import { sentinelHub } from './sentinel-hub';
 import { ndviAnalysis } from './ndvi-analysis';
-import { queueManager } from './queue-manager';
+import { QueueManager } from '../queue/queue-manager';
+const queueManager = new QueueManager('satellite-processing');
 import { prisma } from '../prisma';
 import { redis } from '../redis';
 import { uploadToCloudinary } from '../cloudinary';

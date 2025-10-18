@@ -5,7 +5,7 @@
  */
 
 import { prisma } from '../prisma'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 export interface SoilProfile {
   fieldId: string
@@ -143,7 +143,7 @@ class SoilDataService {
       })
 
       if (!field || !field.farm.latitude || !field.farm.longitude) {
-        Logger.warn(`Field ${fieldId} not found or missing coordinates`)
+        console.warn(`Field ${fieldId} not found or missing coordinates`)
         return null
       }
 
@@ -168,7 +168,7 @@ class SoilDataService {
       return await this.buildEstimatedProfile(fieldId, location)
 
     } catch (error) {
-      Logger.error(`Error getting soil data for field ${fieldId}:`, error)
+      console.error(`Error getting soil data for field ${fieldId}:`, error)
       return null
     }
   }
@@ -210,7 +210,7 @@ class SoilDataService {
         quality: reading.quality as 'high' | 'medium' | 'low'
       }))
     } catch (error) {
-      Logger.error(`Error getting sensor data for field ${fieldId}:`, error)
+      console.error(`Error getting sensor data for field ${fieldId}:`, error)
       return []
     }
   }
@@ -222,7 +222,7 @@ class SoilDataService {
     try {
       // Check if USDA API access is configured
       if (!process.env.USDA_WSS_API_KEY) {
-        Logger.info('USDA Web Soil Survey API not configured, skipping SSURGO data')
+        console.log('USDA Web Soil Survey API not configured, skipping SSURGO data')
         return null
       }
 
@@ -251,14 +251,14 @@ class SoilDataService {
       })
 
       if (!response.ok) {
-        Logger.warn(`USDA SSURGO query failed: ${response.status}`)
+        console.warn(`USDA SSURGO query failed: ${response.status}`)
         return null
       }
 
       const data = await response.json()
       
       if (!data.Table || data.Table.length === 0) {
-        Logger.info(`No SSURGO data found for coordinates ${latitude}, ${longitude}`)
+        console.log(`No SSURGO data found for coordinates ${latitude}, ${longitude}`)
         return null
       }
 
@@ -359,7 +359,7 @@ class SoilDataService {
         }))
       }
     } catch (error) {
-      Logger.error('Error fetching SSURGO data:', error)
+      console.error('Error fetching SSURGO data:', error)
       return null
     }
   }
@@ -645,7 +645,7 @@ class SoilDataService {
         }
       })
     } catch (error) {
-      Logger.error('Error storing soil sensor reading:', error)
+      console.error('Error storing soil sensor reading:', error)
       throw error
     }
   }

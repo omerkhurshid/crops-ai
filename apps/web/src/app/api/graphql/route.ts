@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server'
 import { typeDefs } from '../../../lib/graphql/schema'
 import { resolvers } from '../../../lib/graphql/resolvers'
 import { createContext, GraphQLContext } from '../../../lib/graphql/context'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 // Create Apollo Server instance
 const server = new ApolloServer<GraphQLContext>({
@@ -14,7 +14,7 @@ const server = new ApolloServer<GraphQLContext>({
   includeStacktraceInErrorResponses: process.env.NODE_ENV !== 'production',
   formatError: (err) => {
     // Log the error for monitoring
-    Logger.error('GraphQL Error', {
+    console.error('GraphQL Error', {
       message: err.message,
       path: err.path,
       extensions: err.extensions

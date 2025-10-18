@@ -42,11 +42,9 @@ const customJestConfig = {
   coverageDirectory: '<rootDir>/coverage',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-    '^@crops-ai/shared$': '<rootDir>/../../packages/shared/src',
-    '^@crops-ai/database$': '<rootDir>/../../packages/database/src',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$|@crops-ai))',
+    'node_modules/(?!(.*\\.mjs$))',
   ],
 }
 

@@ -3,7 +3,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@crops-ai/database';
+import { prisma } from '../../../../lib/prisma';
 import { checkDatabaseHealth, dbMonitor } from '../../../../lib/monitoring';
 
 export async function GET(request: NextRequest) {

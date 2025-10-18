@@ -469,8 +469,8 @@ export function useFieldMode() {
   const enableFieldMode = () => {
     setIsFieldMode(true)
     // Lock screen orientation to portrait if supported
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock('portrait').catch(() => {
+    if (screen.orientation && 'lock' in screen.orientation) {
+      (screen.orientation as any).lock('portrait').catch(() => {
         // Orientation lock not supported, continue silently
       })
     }

@@ -1,4 +1,4 @@
-import { Logger as SharedLogger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 export interface LogContext {
   requestId?: string
@@ -62,19 +62,19 @@ export class AppLogger {
 
   debug(message: string, context?: LogContext) {
     const entry = this.createLogEntry('debug', message, context)
-    SharedLogger.debug(entry.message, entry.context)
+    console.log(entry.message, entry.context)
     this.sendToExternalServices(entry)
   }
 
   info(message: string, context?: LogContext) {
     const entry = this.createLogEntry('info', message, context)
-    SharedLogger.info(entry.message, entry.context)
+    console.log(entry.message, entry.context)
     this.sendToExternalServices(entry)
   }
 
   warn(message: string, context?: LogContext) {
     const entry = this.createLogEntry('warn', message, context)
-    SharedLogger.warn(entry.message, entry.context)
+    console.warn(entry.message, entry.context)
     this.sendToExternalServices(entry)
   }
 
@@ -89,7 +89,7 @@ export class AppLogger {
     }
     
     const entry = this.createLogEntry('error', message, errorContext)
-    SharedLogger.error(entry.message, entry.context)
+    console.error(entry.message, entry.context)
     this.sendToExternalServices(entry)
   }
 

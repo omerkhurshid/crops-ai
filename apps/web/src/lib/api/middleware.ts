@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
-import { Logger, PerformanceMonitor } from '@crops-ai/shared'
+// Logger and PerformanceMonitor replaced with console for local development
 import { AuthenticationError, AuthorizationError, RateLimitError } from './errors'
-import { UserRole } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 import { z } from 'zod'
 import { validateRequest } from './validation-schemas'
 import { getConfig } from '../config/environment'
@@ -19,7 +19,7 @@ export interface AuthenticatedRequest extends NextRequest {
 export function withRequestId(handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     const requestId = generateRequestId()
-    Logger.setContext({ requestId })
+    // Logger.setContext({ requestId }) - removed for local development
     
     try {
       if (context) {
@@ -28,7 +28,7 @@ export function withRequestId(handler: any) {
         return await handler(request, requestId)
       }
     } finally {
-      Logger.clearContext()
+      // Logger.clearContext() - removed for local development
     }
   }
 }
@@ -37,14 +37,24 @@ export function withRequestId(handler: any) {
 export function withPerformanceMonitoring(handler: any, metricName?: string) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     const metric = metricName || `${request.method} ${request.nextUrl.pathname}`
+    const startTime = Date.now()
     
-    return PerformanceMonitor.measureAsync(metric, async () => {
-      if (context) {
-        return handler(request, context)
-      } else {
-        return handler(request)
-      }
-    })
+    try {
+      const result = await (async () => {
+        if (context) {
+          return handler(request, context)
+        } else {
+          return handler(request)
+        }
+      })()
+      const duration = Date.now() - startTime
+      console.log(`Performance: ${metric} took ${duration}ms`)
+      return result
+    } catch (error) {
+      const duration = Date.now() - startTime
+      console.error(`Performance: ${metric} failed after ${duration}ms`, error)
+      throw error
+    }
   }
 }
 
@@ -97,7 +107,7 @@ export function withRateLimit(
         throw error
       }
       // If rate limiting fails, log and continue (fail open)
-      Logger.error('Rate limiting error', error)
+      console.error('Rate limiting error', error)
       if (context) {
         return handler(request, context)
       } else {
@@ -268,7 +278,7 @@ async function authenticateRequest(request: NextRequest): Promise<{
       role: decoded.role as UserRole
     }
   } catch (error) {
-    Logger.error('Authentication error in middleware', error)
+    console.error('Authentication error in middleware', error)
     return null
   }
 }

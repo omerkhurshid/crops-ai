@@ -110,11 +110,6 @@ export class QueueManager {
     return 0
   }
 
-  async enqueue(job: any): Promise<string> {
-    console.log('Mock job enqueued:', { job })
-    return 'mock-job-' + Date.now()
-  }
-
   private async updateDailyMetrics(): Promise<void> {
     // Mock implementation
   }

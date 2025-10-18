@@ -16,12 +16,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Task name is required' }, { status: 400 })
     }
 
-    // Create a quick task record
+    // Create a quick task record - use first farm if available
+    const userFarm = await prisma.farm.findFirst({
+      where: { ownerId: user.id },
+      select: { id: true }
+    })
+    
     const task = await prisma.task.create({
       data: {
         title: taskName,
         description: `Quick task completed from field mode${location ? ` at ${location}` : ''}`,
         userId: user.id,
+        farmId: userFarm?.id || 'default', // Use first farm or default
         status: status || 'completed',
         priority: 'medium',
         dueDate: new Date(),

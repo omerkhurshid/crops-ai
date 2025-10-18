@@ -3,7 +3,7 @@
  * Handles offline capabilities and background sync for Crops.AI
  */
 
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 import { getConfig } from '../config/environment'
 
 export class ServiceWorkerManager {
@@ -27,7 +27,7 @@ export class ServiceWorkerManager {
    */
   async register(): Promise<boolean> {
     if (!this.isSupported) {
-      Logger.warn('Service Worker not supported in this browser')
+      console.warn('Service Worker not supported in this browser')
       return false
     }
 
@@ -37,7 +37,7 @@ export class ServiceWorkerManager {
         updateViaCache: 'imports'
       })
 
-      Logger.info('Service Worker registered successfully', {
+      console.log('Service Worker registered successfully', {
         scope: this.registration.scope,
         updateViaCache: this.registration.updateViaCache
       })
@@ -54,7 +54,7 @@ export class ServiceWorkerManager {
 
       return true
     } catch (error) {
-      Logger.error('Service Worker registration failed', error)
+      console.error('Service Worker registration failed', error)
       return false
     }
   }
@@ -127,7 +127,7 @@ export class ServiceWorkerManager {
    */
   async requestNotificationPermission(): Promise<boolean> {
     if (!('Notification' in window)) {
-      Logger.warn('Push notifications not supported')
+      console.warn('Push notifications not supported')
       return false
     }
 
@@ -136,7 +136,7 @@ export class ServiceWorkerManager {
     }
 
     if (Notification.permission === 'denied') {
-      Logger.warn('Push notifications denied by user')
+      console.warn('Push notifications denied by user')
       return false
     }
 
@@ -145,13 +145,13 @@ export class ServiceWorkerManager {
       const granted = permission === 'granted'
       
       if (granted) {
-        Logger.info('Push notifications permission granted')
+        console.log('Push notifications permission granted')
         await this.subscribeToPush()
       }
       
       return granted
     } catch (error) {
-      Logger.error('Failed to request notification permission', error)
+      console.error('Failed to request notification permission', error)
       return false
     }
   }
@@ -167,7 +167,7 @@ export class ServiceWorkerManager {
         userVisibleOnly: true,
         applicationServerKey: this.urlBase64ToUint8Array(
           getConfig().NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
-        )
+        ) as BufferSource
       })
 
       // Send subscription to server
@@ -179,9 +179,9 @@ export class ServiceWorkerManager {
         body: JSON.stringify(subscription)
       })
 
-      Logger.info('Push subscription successful')
+      console.log('Push subscription successful')
     } catch (error) {
-      Logger.error('Push subscription failed', error)
+      console.error('Push subscription failed', error)
     }
   }
 
@@ -241,11 +241,13 @@ export class ServiceWorkerManager {
       await this.storeForSync(data)
       
       // Register for background sync
-      await this.registration.sync.register('background-sync')
+      if ('sync' in this.registration) {
+        await (this.registration as any).sync.register('background-sync')
+      }
       
-      Logger.info('Data queued for background sync', { id: data.id })
+      console.log('Data queued for background sync', { id: data.id })
     } catch (error) {
-      Logger.error('Failed to queue data for sync', error)
+      console.error('Failed to queue data for sync', error)
     }
   }
 

@@ -4,7 +4,7 @@
  * to predict disease and pest outbreaks with actionable recommendations
  */
 
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 import { prisma } from '../prisma'
 
 export interface DiseasePrediction {
@@ -138,24 +138,24 @@ class DiseasePestPredictionService {
     monitoringRecommendations: string[]
   }> {
     try {
-      Logger.info(`Analyzing disease/pest risks for field ${context.fieldId}`)
+      console.log(`Analyzing disease/pest risks for field ${context.fieldId}`)
 
       // Try ML model prediction first
       try {
         const mlResult = await this.getMLModelPredictions(context)
         if (mlResult && (mlResult.diseases.length > 0 || mlResult.pests.length > 0)) {
-          Logger.info(`Using ML model predictions for field ${context.fieldId}`)
+          console.log(`Using ML model predictions for field ${context.fieldId}`)
           return mlResult
         }
       } catch (error) {
-        Logger.warn(`ML model prediction failed for field ${context.fieldId}, using rule-based fallback:`, error)
+        console.warn(`ML model prediction failed for field ${context.fieldId}, using rule-based fallback:`, error)
       }
 
       // Fallback to rule-based analysis
       return this.getRuleBasedPredictions(context)
 
     } catch (error) {
-      Logger.error(`Error analyzing field risks for ${context.fieldId}:`, error)
+      console.error(`Error analyzing field risks for ${context.fieldId}:`, error)
       return {
         diseases: [],
         pests: [],
@@ -478,7 +478,7 @@ class DiseasePestPredictionService {
       }
 
     } catch (error) {
-      Logger.error(`Error analyzing farm risks for ${farmId}:`, error)
+      console.error(`Error analyzing farm risks for ${farmId}:`, error)
       throw error
     }
   }
@@ -1076,7 +1076,7 @@ class DiseasePestPredictionService {
         historicalOutbreaks: []
       }
     } catch (error) {
-      Logger.error(`Error building context for field ${field.id}:`, error)
+      console.error(`Error building context for field ${field.id}:`, error)
       return null
     }
   }

@@ -3,7 +3,7 @@ import { prisma } from '../../../lib/prisma'
 import { createSuccessResponse } from '../../../lib/api/errors'
 import { validateRequestBody, validateQueryParams, createFarmSchema, paginationSchema } from '../../../lib/api/validation'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 // GET /api/farms - List farms with pagination
 export const GET = apiMiddleware.protected(
@@ -59,7 +59,7 @@ export const GET = apiMiddleware.protected(
         }
       })
     } catch (error) {
-      Logger.error('Get farms error', error, { userId: request.user.id })
+      console.error('Get farms error', error, { userId: request.user.id })
       throw error
     }
   })
@@ -104,14 +104,14 @@ export const POST = apiMiddleware.protected(
       // Note: Farm boundary update functionality removed temporarily due to schema mismatch
       // Boundary handling will be implemented when geographic features are added
 
-      Logger.info('Farm created successfully', { 
+      console.log('Farm created successfully', { 
         farmId: farm.id, 
         farmName: farm.name,
         userId: request.user.id 
       })
       return createSuccessResponse({ farm }, 201)
     } catch (error) {
-      Logger.error('Farm creation error', error, { userId: request.user.id })
+      console.error('Farm creation error', error, { userId: request.user.id })
       throw error // Re-throw to let middleware handle it
     }
   })

@@ -5,7 +5,7 @@ import { getCurrentUser } from '../../../../lib/auth/session';
 import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),
@@ -60,7 +60,7 @@ export const POST = apiMiddleware.basic(
       });
 
     } catch (error) {
-      Logger.error('Change password error', error);
+      console.error('Change password error', error);
       return handleApiError(error);
     }
   })

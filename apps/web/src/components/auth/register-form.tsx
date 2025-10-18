@@ -7,7 +7,7 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { UserRole } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 import { Sprout, Users, TreePine, Info } from 'lucide-react'
 
 interface RegisterFormProps {

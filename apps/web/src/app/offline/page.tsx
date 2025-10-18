@@ -17,8 +17,8 @@ export default function OfflinePage() {
       try {
         // Try to sync any pending data
         const registration = await navigator.serviceWorker.ready
-        if ('sync' in registration) {
-          await registration.sync.register('background-sync')
+        if ('sync' in registration && registration.sync) {
+          await (registration.sync as any).register('background-sync')
         }
       } catch (error) {
         console.error('Failed to trigger background sync:', error)

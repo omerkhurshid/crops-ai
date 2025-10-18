@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 export class ApiError extends Error {
   constructor(
@@ -66,7 +66,7 @@ interface ErrorResponse {
 
 export function handleApiError(error: unknown, requestId?: string): NextResponse<ErrorResponse> {
   // Log the error
-  Logger.error('API Error', error instanceof Error ? error : new Error(String(error)), {
+  console.error('API Error', error instanceof Error ? error : new Error(String(error)), {
     requestId
   })
 

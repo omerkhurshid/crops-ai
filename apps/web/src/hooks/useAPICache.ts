@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { apiCache, CachePresets, generateCacheKey, type CacheOptions } from '../lib/cache/api-cache'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 interface UseAPICacheOptions<T> extends CacheOptions {
   enabled?: boolean
@@ -75,7 +75,7 @@ export function useAPICache<T>(
         // Retry logic
         if (retryOnError && retryCountRef.current < retryCount) {
           retryCountRef.current += 1
-          Logger.warn('Retrying API call', { 
+          console.warn('Retrying API call', { 
             key, 
             attempt: retryCountRef.current, 
             maxRetries: retryCount 

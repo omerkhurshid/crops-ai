@@ -51,7 +51,6 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@crops-ai/shared", "@crops-ai/ui"],
   eslint: {
     // Allow production builds to complete even if there are ESLint warnings
     ignoreDuringBuilds: true,

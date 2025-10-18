@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '../../../../lib/auth/session'
 import { prisma } from '../../../../lib/prisma'
 import { diseasePestPredictionService } from '../../../../lib/crop-health/disease-pest-prediction'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 /**
  * Disease and Pest Analysis API
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    Logger.error('Error in disease/pest analysis:', error)
+    console.error('Error in disease/pest analysis:', error)
     
     return NextResponse.json({
       success: false,
@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
 
     // Store the observation in the database
     // Note: This would require adding a new model to the schema for pest/disease observations
-    Logger.info(`Disease/pest observation recorded for field ${fieldId}`, {
+    console.log(`Disease/pest observation recorded for field ${fieldId}`, {
       type: observationType,
       severity,
       user: user.id
@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    Logger.error('Error recording disease/pest observation:', error)
+    console.error('Error recording disease/pest observation:', error)
     
     return NextResponse.json({
       success: false,
@@ -257,7 +257,7 @@ async function getCurrentWeather(latitude?: number, longitude?: number) {
       }
     }
   } catch (error) {
-    Logger.warn('Failed to fetch current weather, using defaults:', error)
+    console.warn('Failed to fetch current weather, using defaults:', error)
   }
 
   return {
@@ -277,7 +277,7 @@ async function getWeatherForecast(latitude?: number, longitude?: number) {
     // Get weather forecast - in production would use real forecast API
     return generateMockForecast()
   } catch (error) {
-    Logger.warn('Failed to fetch weather forecast, using mock data:', error)
+    console.warn('Failed to fetch weather forecast, using mock data:', error)
     return generateMockForecast()
   }
 }
@@ -305,7 +305,7 @@ async function getSatelliteData(fieldId: string) {
       }
     }
   } catch (error) {
-    Logger.warn(`Failed to fetch satellite data for field ${fieldId}, using defaults:`, error)
+    console.warn(`Failed to fetch satellite data for field ${fieldId}, using defaults:`, error)
   }
 
   return {
@@ -338,7 +338,7 @@ async function getSoilConditions(fieldId: string) {
       }
     }
   } catch (error) {
-    Logger.warn(`Failed to fetch soil conditions for field ${fieldId}, using defaults:`, error)
+    console.warn(`Failed to fetch soil conditions for field ${fieldId}, using defaults:`, error)
   }
 
   return {
@@ -354,7 +354,7 @@ async function getHistoricalOutbreaks(fieldId: string) {
     // This would require additional database models for pest/disease history
     return []
   } catch (error) {
-    Logger.warn(`Failed to fetch historical outbreaks for field ${fieldId}:`, error)
+    console.warn(`Failed to fetch historical outbreaks for field ${fieldId}:`, error)
     return []
   }
 }

@@ -3,7 +3,7 @@
  * Validates and exposes environment variables safely
  */
 
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 interface EnvironmentConfig {
   // App Configuration
@@ -129,7 +129,7 @@ class EnvironmentValidator {
 
     if (errors.length > 0) {
       const errorMessage = `Environment validation failed:\n${errors.join('\n')}`
-      Logger.error('Environment validation failed', new Error(errorMessage))
+      console.error('Environment validation failed', new Error(errorMessage))
       throw new Error(errorMessage)
     }
 
@@ -174,7 +174,7 @@ class EnvironmentValidator {
       NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
     }
 
-    Logger.info('Environment configuration validated successfully', {
+    console.log('Environment configuration validated successfully', {
       nodeEnv: this._config.NODE_ENV,
       hasRequiredVars: true,
       optionalVarsCount: Object.values(this._config).filter(v => v === undefined).length

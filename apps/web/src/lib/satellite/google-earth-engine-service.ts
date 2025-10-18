@@ -5,7 +5,7 @@
  * More complex but infinitely scalable
  */
 
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 import { getConfig } from '../config/environment'
 
 export interface GEEConfig {
@@ -145,7 +145,7 @@ export class GoogleEarthEngineService {
       }
       
     } catch (error) {
-      Logger.error('GEE analysis failed', error)
+      console.error('GEE analysis failed', error)
       throw new Error(`Satellite analysis failed: ${error}`)
     }
   }
@@ -284,7 +284,7 @@ export class GoogleEarthEngineService {
       return await response.json()
       
     } catch (error) {
-      Logger.error('GEE script execution failed', error)
+      console.error('GEE script execution failed', error)
       throw error
     }
   }

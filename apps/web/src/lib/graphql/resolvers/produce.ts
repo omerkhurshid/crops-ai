@@ -1,4 +1,4 @@
-import { prisma } from '@crops-ai/database'
+import { prisma } from '../../prisma'
 
 export const produceResolvers = {
   Query: {

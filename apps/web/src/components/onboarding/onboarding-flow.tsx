@@ -77,7 +77,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       },
       estimatedTime: '10 minutes',
       benefits: [
-        'Track each field's health',
+        'Track each field health',
         'Get tips for each field',
         'Spot crop problems early'
       ]

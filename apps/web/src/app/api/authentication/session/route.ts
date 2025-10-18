@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { decode } from 'next-auth/jwt'
-import { UserRole } from '@crops-ai/shared'
-import { Logger } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
+// Logger replaced with console for local development
 import { getConfig } from '../../../../lib/config/environment'
 
 export async function GET(request: NextRequest) {
@@ -45,12 +45,12 @@ export async function GET(request: NextRequest) {
       
       return Response.json(session)
     } catch (err) {
-      Logger.error('Token decode failed', err, { endpoint: 'session' })
+      console.error('Token decode failed', err, { endpoint: 'session' })
       // Invalid token - return empty session
       return Response.json({})
     }
   } catch (error) {
-    Logger.error('Session endpoint error', error)
+    console.error('Session endpoint error', error)
     return Response.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

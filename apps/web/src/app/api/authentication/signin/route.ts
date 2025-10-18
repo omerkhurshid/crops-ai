@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { encode } from 'next-auth/jwt'
-import { UserRole, Logger } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { rateLimitWithFallback } from '../../../../lib/rate-limit'
 import { getConfig } from '../../../../lib/config/environment'
@@ -79,12 +79,12 @@ export async function POST(request: NextRequest) {
       return response
 
     } catch (dbError) {
-      Logger.error('Database authentication error', dbError)
+      console.error('Database authentication error', dbError)
       return Response.json({ error: 'Authentication failed' }, { status: 500 })
     }
 
   } catch (error) {
-    Logger.error('Signin endpoint error', error)
+    console.error('Signin endpoint error', error)
     return Response.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

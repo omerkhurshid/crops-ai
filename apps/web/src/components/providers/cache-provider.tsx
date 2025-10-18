@@ -7,7 +7,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { apiCache } from '../../lib/cache/api-cache'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 interface CacheContextValue {
   isReady: boolean
@@ -34,15 +34,15 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
     // Initialize cache system
     const initializeCache = async () => {
       try {
-        Logger.info('Initializing API cache system')
+        console.log('Initializing API cache system')
         
         // Set up cache event listeners if needed
         // You could add cache hit/miss metrics here
         
         setIsReady(true)
-        Logger.info('API cache system ready')
+        console.log('API cache system ready')
       } catch (error) {
-        Logger.error('Failed to initialize cache system', error)
+        console.error('Failed to initialize cache system', error)
         setIsReady(true) // Still mark as ready to not block the app
       }
     }
@@ -65,7 +65,7 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
     // Clear cache on app visibility change (when user returns from background)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        Logger.debug('App became visible, checking for stale cache entries')
+        console.log('App became visible, checking for stale cache entries')
         // Could implement smart cache invalidation here
       }
     }
@@ -77,13 +77,13 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
   const clearCache = () => {
     apiCache.clear()
     setCacheStats(apiCache.getStats())
-    Logger.info('Cache manually cleared')
+    console.log('Cache manually cleared')
   }
 
   const invalidatePattern = (pattern: string) => {
     const count = apiCache.invalidatePattern(pattern)
     setCacheStats(apiCache.getStats())
-    Logger.info('Cache pattern invalidated', { pattern, count })
+    console.log('Cache pattern invalidated', { pattern, count })
     return count
   }
 

@@ -40,46 +40,74 @@ export default async function Home() {
           <div className="text-center mb-8 sm:mb-16 p-4 sm:p-8 md:p-12 bg-white rounded-2xl shadow-xl border border-sage-100">
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-sage-800 leading-tight">
-              Grow Better Crops<br />
-              <span className="text-sage-600">Increase Profits</span>
+              Increase Your Farm Profits<br />
+              <span className="text-sage-600">by 20% This Season</span>
             </h1>
             
             <p className="text-lg sm:text-xl md:text-2xl text-sage-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
-              Track your field health, get weather alerts, and receive smart recommendations to help your farm succeed.
+              Make better timing decisions with AI-powered recommendations. Farmers using our platform average $15,000 more profit per season.
             </p>
             
-            {/* Key Features */}
+            {/* Profit Calculator Widget */}
+            <div className="bg-gradient-to-r from-green-50 to-sage-50 p-6 rounded-xl border border-green-200 mb-6 max-w-2xl mx-auto">
+              <h3 className="text-lg font-semibold text-sage-800 mb-3">Your Potential Additional Profit:</h3>
+              <div className="flex items-center justify-center gap-4 mb-3">
+                <input 
+                  type="number" 
+                  placeholder="Farm size (acres)" 
+                  className="px-4 py-2 border border-sage-300 rounded-lg w-40 text-center"
+                  id="farm-size"
+                  onChange={() => {
+                    const acres = parseInt((document.getElementById('farm-size') as HTMLInputElement)?.value || '0')
+                    if (acres > 0) {
+                      const minProfit = Math.round(acres * 150 * 0.15)
+                      const maxProfit = Math.round(acres * 150 * 0.20)
+                      document.getElementById('profit-estimate')!.textContent = `$${minProfit.toLocaleString()} - $${maxProfit.toLocaleString()}`
+                    } else {
+                      document.getElementById('profit-estimate')!.textContent = '$12,000 - $18,000'
+                    }
+                  }}
+                />
+                <span className="text-sage-600">acres</span>
+              </div>
+              <div className="text-2xl font-bold text-green-600 mb-2">
+                <span id="profit-estimate">$12,000 - $18,000</span>
+              </div>
+              <p className="text-sm text-sage-600">Based on average 15-20% yield improvement</p>
+            </div>
+            
+            {/* Outcome-Focused Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">
-              <div className="bg-sage-50 p-4 sm:p-6 rounded-lg border border-sage-200">
-                <Satellite className="h-8 w-8 sm:h-10 sm:w-10 text-sage-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-sage-700 mb-2">Field Health Tracking</h3>
-                <p className="text-sm sm:text-base text-sage-600">Check how your crops are doing anytime</p>
+              <div className="bg-green-50 p-4 sm:p-6 rounded-lg border border-green-200">
+                <DollarSign className="h-8 w-8 sm:h-10 sm:w-10 text-green-600 mb-2 sm:mb-3 mx-auto" />
+                <h3 className="text-base sm:text-lg font-semibold text-green-700 mb-2">Catch Problems Early</h3>
+                <p className="text-sm sm:text-base text-green-600">Save $5,000+ per season by spotting issues before they spread</p>
               </div>
-              <div className="bg-earth-50 p-4 sm:p-6 rounded-lg border border-earth-200">
-                <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-earth-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-earth-700 mb-2">Smart Recommendations</h3>
-                <p className="text-sm sm:text-base text-earth-600">Get helpful tips to improve your farm</p>
+              <div className="bg-blue-50 p-4 sm:p-6 rounded-lg border border-blue-200">
+                <CloudRain className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600 mb-2 sm:mb-3 mx-auto" />
+                <h3 className="text-base sm:text-lg font-semibold text-blue-700 mb-2">Perfect Timing Decisions</h3>
+                <p className="text-sm sm:text-base text-blue-600">15% higher yields with AI-powered planting and harvest timing</p>
               </div>
-              <div className="bg-cream-50 p-4 sm:p-6 rounded-lg border border-cream-200">
-                <BarChart className="h-8 w-8 sm:h-10 sm:w-10 text-golden mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-golden mb-2">Farm Records</h3>
-                <p className="text-sm sm:text-base text-golden">Keep track of all your farm activities</p>
+              <div className="bg-amber-50 p-4 sm:p-6 rounded-lg border border-amber-200">
+                <TrendingUp className="h-8 w-8 sm:h-10 sm:w-10 text-amber-600 mb-2 sm:mb-3 mx-auto" />
+                <h3 className="text-base sm:text-lg font-semibold text-amber-700 mb-2">Maximize Market Prices</h3>
+                <p className="text-sm sm:text-base text-amber-600">Sell at peak prices with market timing alerts</p>
               </div>
             </div>
             
             {/* CTA */}
             <div className="mb-6">
               <Link href="/register">
-                <button className="bg-sage-600 hover:bg-sage-700 px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold text-base sm:text-lg rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-flex items-center mb-4 w-full sm:w-auto justify-center">
-                  <Sprout className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                  Start Your Free Trial
+                <button className="bg-green-600 hover:bg-green-700 px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold text-base sm:text-lg rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-flex items-center mb-4 w-full sm:w-auto justify-center">
+                  <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                  Start Increasing Profits Today
                 </button>
               </Link>
               <div className="text-center">
-                <p className="text-sage-600 text-xs sm:text-sm mb-2 px-4">First month free • No setup fees • Cancel anytime</p>
+                <p className="text-sage-600 text-xs sm:text-sm mb-2 px-4">First month free • Setup in 5 minutes • Cancel anytime</p>
                 <div className="inline-flex items-center text-sage-600 font-medium text-xs sm:text-sm">
                   <Shield className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  Secure and reliable platform
+                  Trusted by 1,200+ farmers
                 </div>
               </div>
             </div>

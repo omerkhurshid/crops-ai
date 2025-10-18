@@ -3,7 +3,7 @@
  * Provides intelligent caching for API responses to improve performance
  */
 
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 interface CacheEntry<T = any> {
   data: T
@@ -12,7 +12,7 @@ interface CacheEntry<T = any> {
   key: string
 }
 
-interface CacheOptions {
+export interface CacheOptions {
   ttl?: number // Time to live in milliseconds
   maxSize?: number // Maximum number of entries
   staleWhileRevalidate?: boolean // Return stale data while fetching fresh
@@ -53,17 +53,17 @@ export class APICache {
     
     // Return fresh data if available
     if (cached && (now - cached.timestamp) < cached.ttl) {
-      Logger.debug('Cache hit', { key, age: now - cached.timestamp })
+      console.log('Cache hit', { key, age: now - cached.timestamp })
       return cached.data
     }
 
     // Handle stale-while-revalidate
     if (cached && staleWhileRevalidate) {
-      Logger.debug('Serving stale data while revalidating', { key })
+      console.log('Serving stale data while revalidating', { key })
       
       // Start background refresh (don't await)
       this.refreshInBackground(key, fetcher, ttl).catch(error => {
-        Logger.error('Background refresh failed', { key, error })
+        console.error('Background refresh failed', { key, error })
       })
       
       return cached.data
@@ -71,7 +71,7 @@ export class APICache {
 
     // Deduplicate concurrent requests
     if (this.pendingRequests.has(key)) {
-      Logger.debug('Deduplicating concurrent request', { key })
+      console.log('Deduplicating concurrent request', { key })
       return this.pendingRequests.get(key)!
     }
 
@@ -88,7 +88,7 @@ export class APICache {
       
       // Return stale data as fallback if available
       if (cached) {
-        Logger.warn('Fetch failed, serving stale data', { key, error })
+        console.warn('Fetch failed, serving stale data', { key, error })
         return cached.data
       }
       
@@ -109,7 +109,7 @@ export class APICache {
       key
     })
     
-    Logger.debug('Cache set', { key, ttl })
+    console.log('Cache set', { key, ttl })
   }
 
   /**
@@ -118,7 +118,7 @@ export class APICache {
   invalidate(key: string): boolean {
     const deleted = this.cache.delete(key)
     if (deleted) {
-      Logger.debug('Cache invalidated', { key })
+      console.log('Cache invalidated', { key })
     }
     return deleted
   }
@@ -130,14 +130,14 @@ export class APICache {
     let count = 0
     const regex = new RegExp(pattern)
     
-    for (const key of this.cache.keys()) {
+    Array.from(this.cache.keys()).forEach(key => {
       if (regex.test(key)) {
         this.cache.delete(key)
         count++
       }
-    }
+    })
     
-    Logger.debug('Cache pattern invalidated', { pattern, count })
+    console.log('Cache pattern invalidated', { pattern, count })
     return count
   }
 
@@ -147,7 +147,7 @@ export class APICache {
   clear(): void {
     const size = this.cache.size
     this.cache.clear()
-    Logger.info('Cache cleared', { entriesRemoved: size })
+    console.log('Cache cleared', { entriesRemoved: size })
   }
 
   /**
@@ -177,9 +177,9 @@ export class APICache {
   ): Promise<void> {
     try {
       await this.fetchAndCache(key, fetcher, ttl)
-      Logger.debug('Data prefetched', { key })
+      console.log('Data prefetched', { key })
     } catch (error) {
-      Logger.warn('Prefetch failed', { key, error })
+      console.warn('Prefetch failed', { key, error })
     }
   }
 
@@ -188,7 +188,7 @@ export class APICache {
     fetcher: () => Promise<T>, 
     ttl: number
   ): Promise<T> {
-    Logger.debug('Fetching fresh data', { key })
+    console.log('Fetching fresh data', { key })
     
     const startTime = Date.now()
     const data = await fetcher()
@@ -196,7 +196,7 @@ export class APICache {
     
     this.set(key, data, ttl)
     
-    Logger.debug('Data fetched and cached', { 
+    console.log('Data fetched and cached', { 
       key, 
       fetchTime,
       dataSize: JSON.stringify(data).length 
@@ -214,7 +214,7 @@ export class APICache {
       await this.fetchAndCache(key, fetcher, ttl)
     } catch (error) {
       // Background refresh failures are logged but don't throw
-      Logger.error('Background refresh failed', { key, error })
+      console.error('Background refresh failed', { key, error })
     }
   }
 
@@ -222,15 +222,15 @@ export class APICache {
     const now = Date.now()
     let cleared = 0
     
-    for (const [key, entry] of this.cache.entries()) {
+    Array.from(this.cache.entries()).forEach(([key, entry]) => {
       if (now - entry.timestamp > entry.ttl) {
         this.cache.delete(key)
         cleared++
       }
-    }
+    })
     
     if (cleared > 0) {
-      Logger.debug('Expired entries cleared', { count: cleared })
+      console.log('Expired entries cleared', { count: cleared })
     }
   }
 
@@ -240,7 +240,7 @@ export class APICache {
       const oldestKey = this.cache.keys().next().value
       if (oldestKey) {
         this.cache.delete(oldestKey)
-        Logger.debug('Evicted oldest cache entry', { key: oldestKey })
+        console.log('Evicted oldest cache entry', { key: oldestKey })
       }
     }
   }

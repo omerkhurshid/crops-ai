@@ -9,7 +9,7 @@
  * - Fertilizer recommendations by region
  */
 
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import { redis } from '../redis';
 
 export interface USDARegion {
@@ -172,7 +172,7 @@ class USDAService {
       return recommendations;
 
     } catch (error) {
-      Logger.error('Failed to get USDA regional recommendations', error);
+      console.error('Failed to get USDA regional recommendations', error);
       throw error;
     }
   }
@@ -191,7 +191,7 @@ class USDAService {
       return guide;
 
     } catch (error) {
-      Logger.error(`Failed to get planting guide for ${crop} in ${region}`, error);
+      console.error(`Failed to get planting guide for ${crop} in ${region}`, error);
       throw error;
     }
   }
@@ -220,7 +220,7 @@ class USDAService {
       return marketData;
 
     } catch (error) {
-      Logger.error(`Failed to get market data for ${crop}`, error);
+      console.error(`Failed to get market data for ${crop}`, error);
       throw error;
     }
   }
@@ -239,7 +239,7 @@ class USDAService {
       return patterns;
 
     } catch (error) {
-      Logger.error(`Failed to get weather patterns for ${region}`, error);
+      console.error(`Failed to get weather patterns for ${region}`, error);
       throw error;
     }
   }
@@ -278,7 +278,7 @@ class USDAService {
       return benchmarkData;
 
     } catch (error) {
-      Logger.error(`Failed to get peer benchmark data for ${crop}`, error);
+      console.error(`Failed to get peer benchmark data for ${crop}`, error);
       throw error;
     }
   }
@@ -558,7 +558,7 @@ class USDAService {
     try {
       return await redis.get(key);
     } catch (error) {
-      Logger.warn(`Failed to get cached data for key: ${key}`, error);
+      console.warn(`Failed to get cached data for key: ${key}`, error);
       return null;
     }
   }
@@ -567,7 +567,7 @@ class USDAService {
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-      Logger.warn(`Failed to cache data for key: ${key}`, error);
+      console.warn(`Failed to cache data for key: ${key}`, error);
     }
   }
 }

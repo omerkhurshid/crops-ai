@@ -4,7 +4,7 @@
  */
 
 import { prisma } from '../prisma'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 export interface FieldBoundary {
   fieldId: string
@@ -56,7 +56,7 @@ export async function updateFieldBoundary(fieldId: string, coordinates: Geograph
     
     return true
   } catch (error) {
-    Logger.error('Error updating field boundary', error, { fieldId })
+    console.error('Error updating field boundary', error, { fieldId })
     throw error
   }
 }
@@ -78,7 +78,7 @@ export async function getFieldBoundaryGeoJSON(fieldId: string) {
     
     return JSON.parse(result[0].boundary_json)
   } catch (error) {
-    Logger.error('Error fetching field boundary', error, { fieldId })
+    console.error('Error fetching field boundary', error, { fieldId })
     throw error
   }
 }
@@ -103,7 +103,7 @@ export async function calculateFieldArea(coordinates: GeographicPoint[]): Promis
     const areaHectares = result[0].area_sqm / 10000
     return Math.round(areaHectares * 100) / 100 // Round to 2 decimal places
   } catch (error) {
-    Logger.error('Error calculating field area', error)
+    console.error('Error calculating field area', error)
     throw error
   }
 }
@@ -138,7 +138,7 @@ export async function getFieldsInRegion(
       boundary: field.boundary_json ? JSON.parse(field.boundary_json) : null
     }))
   } catch (error) {
-    Logger.error('Error finding fields in region', error, { centerLat, centerLng, radiusKm })
+    console.error('Error finding fields in region', error, { centerLat, centerLng, radiusKm })
     throw error
   }
 }
@@ -238,7 +238,7 @@ export async function createSampleFieldBoundaries() {
     }
     
   } catch (error) {
-    Logger.error('Error creating sample field boundaries', error)
+    console.error('Error creating sample field boundaries', error)
     throw error
   }
 }

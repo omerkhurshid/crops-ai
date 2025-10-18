@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth/next'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest } from 'next/server'
 import { authOptions } from '../auth'
-import { UserRole } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 import { AuthenticationError, AuthorizationError } from '../api/errors'
 
 export interface SessionUser {

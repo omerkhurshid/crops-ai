@@ -5,7 +5,32 @@
  * using caching, queuing, and smart data management.
  */
 
-import { CacheService } from '@crops-ai/shared'
+// CacheService replaced with simple Map-based cache for local development
+class SimpleCacheService {
+  private cache = new Map<string, { data: any; expiry: number }>()
+
+  async get<T>(key: string): Promise<T | null> {
+    const entry = this.cache.get(key)
+    if (!entry || Date.now() > entry.expiry) {
+      this.cache.delete(key)
+      return null
+    }
+    return entry.data
+  }
+
+  async set<T>(key: string, data: T, ttlSeconds: number): Promise<void> {
+    this.cache.set(key, {
+      data,
+      expiry: Date.now() + (ttlSeconds * 1000)
+    })
+  }
+
+  async delete(key: string): Promise<void> {
+    this.cache.delete(key)
+  }
+}
+
+const CacheService = new SimpleCacheService()
 import { prisma } from '../prisma'
 
 interface AlphaVantageConfig {

@@ -9,7 +9,7 @@
  * - Equipment and resource planning
  */
 
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import { redis } from '../redis';
 import { usdaService } from '../external/usda-service';
 import { weatherPatternAnalysis } from '../weather/pattern-analysis';
@@ -437,7 +437,7 @@ class SeasonalCalendarService {
       return calendar;
 
     } catch (error) {
-      Logger.error('Failed to generate seasonal calendar', error);
+      console.error('Failed to generate seasonal calendar', error);
       throw error;
     }
   }
@@ -470,7 +470,7 @@ class SeasonalCalendarService {
       return monthlyPlan;
 
     } catch (error) {
-      Logger.error(`Failed to get monthly activities for month ${month}`, error);
+      console.error(`Failed to get monthly activities for month ${month}`, error);
       throw error;
     }
   }
@@ -530,7 +530,7 @@ class SeasonalCalendarService {
       };
 
     } catch (error) {
-      Logger.error(`Failed to get optimal timing for activity ${activityId}`, error);
+      console.error(`Failed to get optimal timing for activity ${activityId}`, error);
       throw error;
     }
   }
@@ -719,7 +719,7 @@ class SeasonalCalendarService {
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-      Logger.warn(`Failed to cache data for key: ${key}`, error);
+      console.warn(`Failed to cache data for key: ${key}`, error);
     }
   }
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUser } from '../../../../../lib/auth/session'
 import { prisma } from '../../../../../lib/prisma'
 import { rateLimitWithFallback } from '../../../../../lib/rate-limit'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 
 export async function GET(
   request: NextRequest,
@@ -98,7 +98,7 @@ export async function GET(
 
     return NextResponse.json(fieldsWithNDVI)
   } catch (error) {
-    Logger.error('Error fetching fields with NDVI', error, { farmId, userId: user?.id })
+    console.error('Error fetching fields with NDVI', error, { farmId, userId: user?.id })
     return NextResponse.json(
       { error: 'Failed to fetch field data' },
       { status: 500 }

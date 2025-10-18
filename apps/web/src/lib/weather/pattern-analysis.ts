@@ -9,7 +9,7 @@
  * - Optimal timing recommendations based on weather patterns
  */
 
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import { redis } from '../redis';
 import { prisma } from '../prisma';
 
@@ -173,7 +173,7 @@ class WeatherPatternAnalysisService {
       return analysis;
 
     } catch (error) {
-      Logger.error('Failed to analyze weather patterns', error);
+      console.error('Failed to analyze weather patterns', error);
       throw error;
     }
   }
@@ -197,7 +197,7 @@ class WeatherPatternAnalysisService {
       return correlations;
 
     } catch (error) {
-      Logger.error('Failed to get historical correlations', error);
+      console.error('Failed to get historical correlations', error);
       throw error;
     }
   }
@@ -222,7 +222,7 @@ class WeatherPatternAnalysisService {
       return forecast;
 
     } catch (error) {
-      Logger.error('Failed to generate seasonal forecast', error);
+      console.error('Failed to generate seasonal forecast', error);
       throw error;
     }
   }
@@ -245,7 +245,7 @@ class WeatherPatternAnalysisService {
       return adaptation;
 
     } catch (error) {
-      Logger.error('Failed to get climate adaptation', error);
+      console.error('Failed to get climate adaptation', error);
       throw error;
     }
   }
@@ -286,7 +286,7 @@ class WeatherPatternAnalysisService {
       return timing;
 
     } catch (error) {
-      Logger.error('Failed to get optimal timing', error);
+      console.error('Failed to get optimal timing', error);
       throw error;
     }
   }
@@ -766,7 +766,7 @@ class WeatherPatternAnalysisService {
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-      Logger.warn(`Failed to cache data for key: ${key}`, error);
+      console.warn(`Failed to cache data for key: ${key}`, error);
     }
   }
 }

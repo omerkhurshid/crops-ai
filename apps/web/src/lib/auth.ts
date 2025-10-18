@@ -1,8 +1,21 @@
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { prisma } from '@crops-ai/database'
+import { prisma } from './prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { UserRole, Logger } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
+
+// Simple logger implementation
+const Logger = {
+  error: (message: string, error?: any) => {
+    console.error(message, error)
+  },
+  info: (message: string, data?: any) => {
+    console.log(message, data)
+  },
+  warn: (message: string, data?: any) => {
+    console.warn(message, data)
+  }
+}
 import bcrypt from 'bcryptjs'
 import { getConfig } from './config/environment'
 

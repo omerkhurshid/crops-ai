@@ -14,7 +14,7 @@ import { historicalWeather } from '../weather/historical';
 import { stressDetector } from '../satellite/stress-detection';
 import { usdaService } from '../external/usda-service';
 import { weatherPatternAnalysis } from '../weather/pattern-analysis';
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import type {
   TrainingData,
   YieldPrediction,
@@ -163,7 +163,7 @@ class AgricultureRecommendationEngine {
     const startTime = Date.now();
 
     try {
-      Logger.info(`Generating recommendations for farm ${request.farmId}`, {
+      console.log(`Generating recommendations for farm ${request.farmId}`, {
         fieldId: request.fieldId,
         categories: request.categories,
         priority: request.priority,
@@ -174,7 +174,7 @@ class AgricultureRecommendationEngine {
       const cacheKey = this.generateCacheKey(request);
       const cached = await this.getCachedPlan(cacheKey);
       if (cached) {
-        Logger.info(`Returning cached recommendation plan for farm ${request.farmId}`);
+        console.log(`Returning cached recommendation plan for farm ${request.farmId}`);
         return cached;
       }
 
@@ -230,7 +230,7 @@ class AgricultureRecommendationEngine {
       // Cache the plan
       await this.cachePlan(cacheKey, plan);
 
-      Logger.info(`Recommendation plan generated successfully for farm ${request.farmId}`, {
+      console.log(`Recommendation plan generated successfully for farm ${request.farmId}`, {
         recommendationCount: plan.recommendations.length,
         totalCost: summary.totalCost,
         expectedROI: summary.expectedROI,
@@ -240,7 +240,7 @@ class AgricultureRecommendationEngine {
       return plan;
 
     } catch (error) {
-      Logger.error(`Failed to generate recommendations for farm ${request.farmId}`, error);
+      console.error(`Failed to generate recommendations for farm ${request.farmId}`, error);
       throw error;
     }
   }
@@ -278,7 +278,7 @@ class AgricultureRecommendationEngine {
       return recommendations;
 
     } catch (error) {
-      Logger.error(`Failed to get planting recommendations for field ${fieldId}`, error);
+      console.error(`Failed to get planting recommendations for field ${fieldId}`, error);
       throw error;
     }
   }
@@ -295,14 +295,14 @@ class AgricultureRecommendationEngine {
       // Update recommendation effectiveness scores
       await this.updateRecommendationScores(feedback);
 
-      Logger.info(`Recorded feedback for recommendation ${feedback.recommendationId}`, {
+      console.log(`Recorded feedback for recommendation ${feedback.recommendationId}`, {
         implemented: feedback.implemented,
         effectiveness: feedback.effectiveness,
         userId: feedback.userId
       });
 
     } catch (error) {
-      Logger.error(`Failed to record feedback for recommendation ${feedback.recommendationId}`, error);
+      console.error(`Failed to record feedback for recommendation ${feedback.recommendationId}`, error);
       throw error;
     }
   }
@@ -334,7 +334,7 @@ class AgricultureRecommendationEngine {
       };
 
     } catch (error) {
-      Logger.error(`Failed to get recommendation analytics for farm ${farmId}`, error);
+      console.error(`Failed to get recommendation analytics for farm ${farmId}`, error);
       throw error;
     }
   }
@@ -458,7 +458,7 @@ class AgricultureRecommendationEngine {
       return context;
 
     } catch (error) {
-      Logger.error('Failed to gather context for recommendations', error);
+      console.error('Failed to gather context for recommendations', error);
       throw error;
     }
   }
@@ -1208,7 +1208,7 @@ class AgricultureRecommendationEngine {
         source: 'expert_system'
       };
     } catch (error) {
-      Logger.error(`Failed to recommend variety for ${cropType}`, error);
+      console.error(`Failed to recommend variety for ${cropType}`, error);
       return null;
     }
   }
@@ -1327,7 +1327,7 @@ class AgricultureRecommendationEngine {
       };
 
     } catch (error) {
-      Logger.error(`Failed to get comprehensive crop variety for ${cropType}`, error);
+      console.error(`Failed to get comprehensive crop variety for ${cropType}`, error);
       return null;
     }
   }
@@ -1357,7 +1357,7 @@ class AgricultureRecommendationEngine {
         new Date()
       );
     } catch (error) {
-      Logger.warn('Failed to get weather context', error);
+      console.warn('Failed to get weather context', error);
       return null;
     }
   }
@@ -1504,7 +1504,7 @@ class AgricultureRecommendationEngine {
     try {
       await redis.set(cacheKey, plan, { ex: this.PLAN_TTL });
     } catch (error) {
-      Logger.warn('Failed to cache recommendation plan', error);
+      console.warn('Failed to cache recommendation plan', error);
     }
   }
 
@@ -1516,7 +1516,7 @@ class AgricultureRecommendationEngine {
   private async loadKnowledgeBase(): Promise<void> {
     // Load agricultural knowledge base and best practices
     // In production, this would load from database or external sources
-    Logger.info('Loaded agricultural knowledge base');
+    console.log('Loaded agricultural knowledge base');
   }
 
   private parsePlantingDate(dateString: string): Date {

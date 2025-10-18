@@ -11,7 +11,7 @@ import { prisma } from '../prisma';
 import { historicalWeather } from '../weather/historical';
 import { sentinelHub } from '../satellite/sentinel-hub';
 import { ndviAnalysis } from '../satellite/ndvi-analysis';
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import type {
   TrainingData,
   WeatherFeatures,
@@ -90,7 +90,7 @@ class AgricultureDataPipeline {
     const startTime = Date.now();
     
     try {
-      Logger.info('Starting ML data pipeline execution', {
+      console.log('Starting ML data pipeline execution', {
         timeRange: config.timeRange,
         sources: config.sources
       });
@@ -134,7 +134,7 @@ class AgricultureDataPipeline {
         }
       };
 
-      Logger.info('ML data pipeline completed successfully', {
+      console.log('ML data pipeline completed successfully', {
         totalTime: Date.now() - startTime,
         recordsProcessed: result.statistics.validRecords,
         qualityScore: quality.score
@@ -143,7 +143,7 @@ class AgricultureDataPipeline {
       return result;
 
     } catch (error) {
-      Logger.error('ML data pipeline failed', error);
+      console.error('ML data pipeline failed', error);
       throw error;
     }
   }
@@ -231,7 +231,7 @@ class AgricultureDataPipeline {
             return data;
 
           } catch (error) {
-            Logger.warn(`Failed to extract data for field ${field.id}`, error);
+            console.warn(`Failed to extract data for field ${field.id}`, error);
             return null;
           }
         });
@@ -247,7 +247,7 @@ class AgricultureDataPipeline {
       return extractedData;
 
     } catch (error) {
-      Logger.error('Data extraction failed', error);
+      console.error('Data extraction failed', error);
       throw error;
     }
   }
@@ -314,7 +314,7 @@ class AgricultureDataPipeline {
       };
 
     } catch (error) {
-      Logger.warn(`Failed to extract weather features for field ${fieldId}`, error);
+      console.warn(`Failed to extract weather features for field ${fieldId}`, error);
       // Return default values
       return {
         avgTemperature: 20,
@@ -381,7 +381,7 @@ class AgricultureDataPipeline {
       };
 
     } catch (error) {
-      Logger.warn(`Failed to extract satellite features for field ${fieldId}`, error);
+      console.warn(`Failed to extract satellite features for field ${fieldId}`, error);
       // Return default values
       return {
         avgNDVI: 0.7,
@@ -426,7 +426,7 @@ class AgricultureDataPipeline {
           ? recentReadings.reduce((sum, r) => sum + r.temperature, 0) / recentReadings.length
           : 20 // Default soil temperature
         
-        Logger.info(`Using real soil data for field ${fieldId}`, {
+        console.log(`Using real soil data for field ${fieldId}`, {
           source: soilProfile.metadata.source,
           confidence: soilProfile.metadata.confidence,
           sensorReadings: recentReadings.length
@@ -447,11 +447,11 @@ class AgricultureDataPipeline {
         }
       }
     } catch (error) {
-      Logger.warn(`Failed to get real soil data for field ${fieldId}, using fallback:`, error)
+      console.warn(`Failed to get real soil data for field ${fieldId}, using fallback:`, error)
     }
     
     // Fallback to estimated data based on regional characteristics
-    Logger.info(`Using fallback soil data for field ${fieldId}`)
+    console.log(`Using fallback soil data for field ${fieldId}`)
     return {
       ph: 6.5 + Math.random() * 1.0, // 6.5-7.5
       organicMatter: 2.5 + Math.random() * 2.0, // 2.5-4.5%
@@ -771,7 +771,7 @@ class AgricultureDataPipeline {
         timestamp: new Date()
       }, { ex: 86400 }); // 24 hours
     } catch (error) {
-      Logger.warn('Failed to cache processed data', error);
+      console.warn('Failed to cache processed data', error);
     }
   }
 }

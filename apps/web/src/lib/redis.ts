@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis';
 import { getConfig } from './config/environment';
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 
 // Get validated configuration
 const config = getConfig();
@@ -28,7 +28,7 @@ export class RedisManager {
       
       return await redis.set(key, JSON.stringify(value));
     } catch (error) {
-      Logger.error('Redis SET error', error, { key });
+      console.error('Redis SET error', error, { key });
       return null;
     }
   }
@@ -41,7 +41,7 @@ export class RedisManager {
       const value = await redis.get(key);
       return value ? JSON.parse(value as string) : null;
     } catch (error) {
-      Logger.error('Redis GET error', error, { key });
+      console.error('Redis GET error', error, { key });
       return null;
     }
   }
@@ -53,7 +53,7 @@ export class RedisManager {
     try {
       return await redis.del(key);
     } catch (error) {
-      Logger.error('Redis DEL error', error, { key });
+      console.error('Redis DEL error', error, { key });
       return 0;
     }
   }
@@ -66,7 +66,7 @@ export class RedisManager {
       const result = await redis.exists(key);
       return result === 1;
     } catch (error) {
-      Logger.error('Redis EXISTS error', error, { key });
+      console.error('Redis EXISTS error', error, { key });
       return false;
     }
   }
@@ -79,7 +79,7 @@ export class RedisManager {
       const result = await redis.expire(key, seconds);
       return result === 1;
     } catch (error) {
-      Logger.error('Redis EXPIRE error', error, { key, seconds });
+      console.error('Redis EXPIRE error', error, { key, seconds });
       return false;
     }
   }
@@ -91,7 +91,7 @@ export class RedisManager {
     try {
       return await redis.incr(key);
     } catch (error) {
-      Logger.error('Redis INCR error', error, { key });
+      console.error('Redis INCR error', error, { key });
       return 0;
     }
   }

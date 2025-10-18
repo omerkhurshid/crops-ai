@@ -1,7 +1,13 @@
 import { prisma } from '../../prisma'
 import { GraphQLContext } from '../context'
 import { AuthenticationError, AuthorizationError, NotFoundError } from '../../api/errors'
-import { StressLevel } from '@crops-ai/shared'
+// StressLevel enum defined locally for development
+enum StressLevel {
+  LOW = 'LOW',
+  MODERATE = 'MODERATE',
+  HIGH = 'HIGH',
+  SEVERE = 'SEVERE'
+}
 import { copernicusService } from '../../satellite/copernicus-service'
 
 export const satelliteResolvers = {

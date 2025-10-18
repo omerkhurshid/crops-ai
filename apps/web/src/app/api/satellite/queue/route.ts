@@ -2,7 +2,8 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
-import { satelliteQueue } from '../../../../lib/queue/queue-manager';
+import { QueueManager } from '../../../../lib/queue/queue-manager';
+const satelliteQueue = new QueueManager('satellite-processing');
 
 const queueActionSchema = z.object({
   action: z.enum(['status', 'metrics', 'add', 'process', 'detailed', 'health', 'cleanup', 'retry']),

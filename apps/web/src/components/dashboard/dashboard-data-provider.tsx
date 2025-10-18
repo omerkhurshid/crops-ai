@@ -1,14 +1,13 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
-import { Logger } from '@crops-ai/shared'
+// Logger replaced with console for local development
 import { DashboardData, DashboardDataContextType, CropData } from '../../types/dashboard'
 import { 
   useCachedFarmData, 
   useCachedWeatherData, 
   useCachedCropData, 
   useCachedTaskData,
-  useCachedSatelliteData,
   usePrefetchFarmData
 } from '../../hooks/useAPICache'
 
@@ -35,7 +34,6 @@ export function DashboardDataProvider({
   const weatherData = useCachedWeatherData(farmId)
   const cropData = useCachedCropData(farmId)
   const taskData = useCachedTaskData(farmId)
-  const satelliteData = useCachedSatelliteData(farmId)
   const { prefetchAll } = usePrefetchFarmData(farmId)
 
   const [additionalData, setAdditionalData] = useState({
@@ -48,24 +46,22 @@ export function DashboardDataProvider({
 
   // Aggregate all data from cached sources
   const data = useMemo((): DashboardData => {
-    const loading = weatherData.loading || cropData.loading || taskData.loading || satelliteData.loading
-    const error = weatherData.error || cropData.error || taskData.error || satelliteData.error
+    const loading = weatherData.loading || cropData.loading || taskData.loading
+    const error = weatherData.error || cropData.error || taskData.error
     
     return {
       weather: weatherData.data,
       crops: cropData.data || initialCrops,
       tasks: taskData.data || [],
-      satellite: satelliteData.data,
       ...additionalData,
       loading,
-      error,
+      error: error?.message || null,
       lastUpdated: loading ? null : new Date()
     }
   }, [
     weatherData.data, weatherData.loading, weatherData.error,
     cropData.data, cropData.loading, cropData.error,
     taskData.data, taskData.loading, taskData.error,
-    satelliteData.data, satelliteData.loading, satelliteData.error,
     additionalData,
     initialCrops
   ])
@@ -78,8 +74,7 @@ export function DashboardDataProvider({
       await Promise.allSettled([
         weatherData.refetch(),
         cropData.refetch(), 
-        taskData.refetch(),
-        satelliteData.refetch()
+        taskData.refetch()
       ])
 
       // Fetch additional non-cached data in parallel
@@ -117,9 +112,9 @@ export function DashboardDataProvider({
       })
 
     } catch (error) {
-      Logger.error('Dashboard data fetch error', error, { farmId })
+      console.error('Dashboard data fetch error', error, { farmId })
     }
-  }, [farmId, farmData?.latitude, farmData?.longitude, weatherData, cropData, taskData, satelliteData])
+  }, [farmId, farmData?.latitude, farmData?.longitude, weatherData, cropData, taskData])
 
   const updateData = useCallback(<K extends keyof DashboardData>(key: K, newData: DashboardData[K]) => {
     // For cached data, invalidate cache and refetch
@@ -132,9 +127,6 @@ export function DashboardDataProvider({
     } else if (key === 'tasks') {
       taskData.invalidate()
       taskData.refetch()
-    } else if (key === 'satellite') {
-      satelliteData.invalidate()
-      satelliteData.refetch()
     } else {
       // For additional data, update state directly
       setAdditionalData(prev => ({
@@ -142,7 +134,7 @@ export function DashboardDataProvider({
         [key]: newData
       }))
     }
-  }, [weatherData, cropData, taskData, satelliteData])
+  }, [weatherData, cropData, taskData])
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({

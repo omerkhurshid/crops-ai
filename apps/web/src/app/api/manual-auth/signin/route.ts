@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authOptions } from '@/lib/auth'
-import { UserRole, Logger } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       })
 
     } catch (dbError) {
-      Logger.error('Database authentication error', dbError)
+      console.error('Database authentication error', dbError)
       return NextResponse.json(
         { error: 'Authentication failed' },
         { status: 500 }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    Logger.error('Manual auth error', error)
+    console.error('Manual auth error', error)
     return NextResponse.json(
       { error: 'An unexpected error occurred' },
       { status: 500 }

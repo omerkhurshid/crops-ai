@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { hash } from 'bcryptjs'
-import { prisma } from '@crops-ai/database'
-import { UserRole } from '@crops-ai/shared'
+import { prisma } from '../../../../lib/prisma'
+import { UserRole } from '@prisma/client'
 import { sendVerificationEmail } from '../../../../lib/auth/email-verification'
 import { rateLimitWithFallback } from '../../../../lib/rate-limit'
 

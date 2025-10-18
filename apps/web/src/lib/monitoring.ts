@@ -1,4 +1,4 @@
-import { prisma } from '@crops-ai/database'
+import { prisma } from './prisma'
 import * as Sentry from '@sentry/nextjs'
 
 export interface DatabasePerformanceMetrics {

@@ -6,7 +6,7 @@
  */
 
 import { redis } from '../redis';
-import { Logger } from '@crops-ai/shared';
+// Logger replaced with console for local development;
 import { ProcessingJob } from './types';
 
 export interface QueueConfig {
@@ -98,14 +98,14 @@ export class SatelliteQueueManager {
       // Update metrics
       await this.updateMetrics('queued', 1);
       
-      Logger.info(`Job ${job.id} enqueued with priority ${priority}`, {
+      console.log(`Job ${job.id} enqueued with priority ${priority}`, {
         jobId: job.id,
         type: job.type,
         priority
       });
       
     } catch (error) {
-      Logger.error('Failed to enqueue job', error, { jobId: job.id });
+      console.error('Failed to enqueue job', error, { jobId: job.id });
       throw error;
     }
   }
@@ -121,7 +121,7 @@ export class SatelliteQueueManager {
       worker.start();
     }
     
-    Logger.info(`Started ${this.config.concurrency} workers for satellite processing`);
+    console.log(`Started ${this.config.concurrency} workers for satellite processing`);
   }
 
   /**
@@ -134,7 +134,7 @@ export class SatelliteQueueManager {
       this.workers.delete(workerId);
     }
     
-    Logger.info('Stopped all satellite processing workers');
+    console.log('Stopped all satellite processing workers');
   }
 
   /**
@@ -152,7 +152,7 @@ export class SatelliteQueueManager {
       const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
       
       if (!jobData) {
-        Logger.warn(`Job data not found for ${jobId}`);
+        console.warn(`Job data not found for ${jobId}`);
         return null;
       }
       
@@ -165,7 +165,7 @@ export class SatelliteQueueManager {
       
       return job;
     } catch (error) {
-      Logger.error('Failed to dequeue job', error);
+      console.error('Failed to dequeue job', error);
       return null;
     }
   }
@@ -208,10 +208,10 @@ export class SatelliteQueueManager {
       
       this.activeJobs.delete(jobId);
       
-      Logger.info(`Job ${jobId} completed successfully`);
+      console.log(`Job ${jobId} completed successfully`);
       
     } catch (error) {
-      Logger.error(`Failed to complete job ${jobId}`, error);
+      console.error(`Failed to complete job ${jobId}`, error);
       throw error;
     }
   }
@@ -223,7 +223,7 @@ export class SatelliteQueueManager {
     try {
       const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
       if (!jobData) {
-        Logger.warn(`Job data not found for failed job ${jobId}`);
+        console.warn(`Job data not found for failed job ${jobId}`);
         return;
       }
       
@@ -257,7 +257,7 @@ export class SatelliteQueueManager {
         
         await this.updateMetrics('retries', 1);
         
-        Logger.warn(`Job ${jobId} failed, scheduled for retry ${currentRetries + 1}/${this.config.maxRetries}`, {
+        console.warn(`Job ${jobId} failed, scheduled for retry ${currentRetries + 1}/${this.config.maxRetries}`, {
           jobId,
           error: error.message,
           retryCount: currentRetries + 1
@@ -284,7 +284,7 @@ export class SatelliteQueueManager {
         
         await this.updateMetrics('failed', 1);
         
-        Logger.error(`Job ${jobId} permanently failed after ${currentRetries} retries`, {
+        console.error(`Job ${jobId} permanently failed after ${currentRetries} retries`, {
           jobId,
           error: error.message,
           retryCount: currentRetries
@@ -295,7 +295,7 @@ export class SatelliteQueueManager {
       this.activeJobs.delete(jobId);
       
     } catch (err) {
-      Logger.error(`Failed to handle job failure for ${jobId}`, err);
+      console.error(`Failed to handle job failure for ${jobId}`, err);
       throw err;
     }
   }
@@ -313,7 +313,7 @@ export class SatelliteQueueManager {
         await redis.set(`${this.PROGRESS_PREFIX}${jobId}`, existingProgress, { ex: 86400 });
       }
     } catch (error) {
-      Logger.error(`Failed to update progress for job ${jobId}`, error);
+      console.error(`Failed to update progress for job ${jobId}`, error);
     }
   }
 
@@ -324,7 +324,7 @@ export class SatelliteQueueManager {
     try {
       return await redis.get(`${this.PROGRESS_PREFIX}${jobId}`) as JobProgress;
     } catch (error) {
-      Logger.error(`Failed to get progress for job ${jobId}`, error);
+      console.error(`Failed to get progress for job ${jobId}`, error);
       return null;
     }
   }
@@ -352,7 +352,7 @@ export class SatelliteQueueManager {
         throughput: 0 // TODO: Calculate jobs per minute
       };
     } catch (error) {
-      Logger.error('Failed to get queue metrics', error);
+      console.error('Failed to get queue metrics', error);
       return {
         queued: 0,
         processing: 0,
@@ -401,11 +401,11 @@ export class SatelliteQueueManager {
       }
       
       if ((readyJobs as any).length > 0) {
-        Logger.info(`Moved ${(readyJobs as any).length} jobs from retry queue back to main queue`);
+        console.log(`Moved ${(readyJobs as any).length} jobs from retry queue back to main queue`);
       }
       
     } catch (error) {
-      Logger.error('Failed to process retry queue', error);
+      console.error('Failed to process retry queue', error);
     }
   }
 
@@ -439,7 +439,7 @@ export class SatelliteQueueManager {
       const current = await redis.get(key) as number || 0;
       await redis.set(key, current + delta, { ex: 86400 });
     } catch (error) {
-      Logger.error(`Failed to update metric ${metric}`, error);
+      console.error(`Failed to update metric ${metric}`, error);
     }
   }
 }
@@ -461,7 +461,7 @@ class Worker {
   async start(): Promise<void> {
     this.running = true;
     this.processJobs();
-    Logger.info(`Worker ${this.id} started`);
+    console.log(`Worker ${this.id} started`);
   }
 
   async stop(): Promise<void> {
@@ -469,11 +469,11 @@ class Worker {
     
     // Wait for current job to complete or timeout
     if (this.currentJob) {
-      Logger.info(`Worker ${this.id} waiting for current job ${this.currentJob.id} to complete`);
+      console.log(`Worker ${this.id} waiting for current job ${this.currentJob.id} to complete`);
       // In a real implementation, you'd implement graceful shutdown
     }
     
-    Logger.info(`Worker ${this.id} stopped`);
+    console.log(`Worker ${this.id} stopped`);
   }
 
   private async processJobs(): Promise<void> {
@@ -492,7 +492,7 @@ class Worker {
         this.currentJob = null;
         
       } catch (error) {
-        Logger.error(`Worker ${this.id} error`, error);
+        console.error(`Worker ${this.id} error`, error);
         if (this.currentJob) {
           await this.manager.failJob(this.currentJob.id, error as Error);
         }
@@ -508,7 +508,7 @@ class Worker {
     const startTime = Date.now();
     
     try {
-      Logger.info(`Worker ${this.id} processing job ${job.id}`, {
+      console.log(`Worker ${this.id} processing job ${job.id}`, {
         workerId: this.id,
         jobId: job.id,
         jobType: job.type
@@ -547,10 +547,10 @@ class Worker {
       
       await this.manager.completeJob(job.id, results);
       
-      Logger.info(`Worker ${this.id} completed job ${job.id} in ${Date.now() - startTime}ms`);
+      console.log(`Worker ${this.id} completed job ${job.id} in ${Date.now() - startTime}ms`);
       
     } catch (error) {
-      Logger.error(`Worker ${this.id} failed to process job ${job.id}`, error);
+      console.error(`Worker ${this.id} failed to process job ${job.id}`, error);
       await this.manager.failJob(job.id, error as Error);
     }
   }

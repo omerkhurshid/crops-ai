@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
-import { UserRole } from '@crops-ai/shared'
+import { UserRole } from '@prisma/client'
 
 export interface GraphQLContext {
   user?: {

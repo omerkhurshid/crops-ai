@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     if (isPublic !== undefined) filters.isPublic = isPublic
     if (tags) filters.tags = tags.split(',').map(tag => tag.trim())
 
-    const templates = await TemplateManager.getTemplates(user.id, filters)
+    const templates = await TemplateManager.getTemplates(filters)
 
     return NextResponse.json({
       success: true,

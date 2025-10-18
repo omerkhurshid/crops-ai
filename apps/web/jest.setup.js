@@ -94,8 +94,8 @@ jest.mock('@supabase/supabase-js', () => ({
   })),
 }))
 
-// Mock Prisma
-jest.mock('@crops-ai/database', () => ({
+// Mock local Prisma
+jest.mock('./src/lib/prisma', () => ({
   prisma: {
     $queryRaw: jest.fn().mockResolvedValue([{ result: 1 }]),
     user: {
@@ -122,39 +122,12 @@ jest.mock('@crops-ai/database', () => ({
   },
 }))
 
-// Mock shared services
-jest.mock('@crops-ai/shared', () => ({
-  Logger: {
-    info: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn(),
-    debug: jest.fn(),
-    setContext: jest.fn(),
-    clearContext: jest.fn(),
-  },
-  redis: {
-    get: jest.fn().mockResolvedValue('ok'),
-    set: jest.fn().mockResolvedValue(true),
-    del: jest.fn().mockResolvedValue(true),
-    ping: jest.fn().mockResolvedValue('PONG'),
-  },
-  CacheService: {
-    get: jest.fn().mockResolvedValue('ok'),
-    set: jest.fn().mockResolvedValue(true),
-    del: jest.fn().mockResolvedValue(true),
-    ping: jest.fn().mockResolvedValue('PONG'),
-  },
-  PerformanceMonitor: {
-    measureAsync: jest.fn().mockImplementation(async (name, fn) => {
-      return await fn()
-    }),
-    measure: jest.fn().mockImplementation((name, fn) => {
-      return fn()
-    }),
-  },
+// Mock @prisma/client for UserRole enum
+jest.mock('@prisma/client', () => ({
   UserRole: {
-    USER: 'USER',
+    FARM_OWNER: 'FARM_OWNER',
+    FARM_MANAGER: 'FARM_MANAGER',
     ADMIN: 'ADMIN',
-    PREMIUM: 'PREMIUM',
   },
+  PrismaClient: jest.fn(),
 }))

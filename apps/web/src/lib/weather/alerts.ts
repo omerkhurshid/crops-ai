@@ -130,7 +130,7 @@ class WeatherAlertService {
           return modelAlerts.sort((a, b) => b.priority - a.priority);
         }
       } catch (error) {
-        console.log('ML model alert generation not available, using rule-based fallback:', error);
+
       }
 
       // Fallback to rule-based alert generation

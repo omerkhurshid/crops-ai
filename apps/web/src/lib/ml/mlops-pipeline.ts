@@ -166,7 +166,7 @@ class MLOpsPipeline {
       // Create model directory (server-side only)
       if (typeof window === 'undefined') {
         // Server-side model storage would be handled here
-        console.log(`Model ${modelId} registered (server-side storage disabled in browser)`)
+
       }
 
       await auditLogger.logML(
@@ -568,7 +568,7 @@ class MLOpsPipeline {
   private async saveModelMetadata(metadata: ModelMetadata): Promise<void> {
     // Server-side only operation
     if (typeof window === 'undefined') {
-      console.log(`Saving metadata for model ${metadata.id} (server-side storage disabled in browser)`)
+
     }
   }
 
@@ -643,7 +643,7 @@ class MLOpsPipeline {
     
     // In production, serialize and save the actual model (server-side only)
     if (typeof window === 'undefined') {
-      console.log(`Saving model artifact for ${modelId} version ${version} (server-side storage disabled in browser)`)
+
     }
     
     return {
@@ -683,12 +683,12 @@ class MLOpsPipeline {
 
   private async deployToEndpoint(model: any, endpointUrl: string, config: DeploymentConfig): Promise<void> {
     // In production, deploy to cloud services like AWS SageMaker, GCP AI Platform, etc.
-    console.log(`Deploying model ${config.modelId} to ${endpointUrl}`)
+
   }
 
   private async updateModelStatus(modelId: string, version: string, status: ModelMetadata['status']): Promise<void> {
     // Update model metadata with new status
-    console.log(`Updated model ${modelId} version ${version} status to ${status}`)
+
   }
 
   private async registerDeployment(
@@ -698,7 +698,7 @@ class MLOpsPipeline {
     endpointUrl: string
   ): Promise<void> {
     // Register deployment in database
-    console.log(`Registered deployment: ${modelId} v${version} to ${environment} at ${endpointUrl}`)
+
   }
 
   private async getActiveModel(modelId: string, version?: string): Promise<any> {

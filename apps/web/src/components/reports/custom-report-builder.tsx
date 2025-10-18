@@ -224,7 +224,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Preview data:', data);
+
       }
     } catch (error) {
       console.error('Error previewing report:', error);

@@ -250,7 +250,7 @@ export async function POST(request: NextRequest) {
       if (budgetError.code === 'P2021' || budgetError.code === 'P2010') {
         // Financial budget table does not exist - skipping budget update
       } else {
-        console.error('Error updating budget:', budgetError);
+
       }
     }
 
@@ -270,7 +270,7 @@ export async function POST(request: NextRequest) {
       );
     } catch (auditError) {
       // Log audit errors but don't fail the request
-      console.error('Error logging audit:', auditError);
+
     }
 
     return NextResponse.json(transaction, { status: 201 });

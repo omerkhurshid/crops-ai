@@ -153,7 +153,6 @@ export function DashboardDataProvider({
     return () => clearInterval(interval)
   }, [fetchAllData])
 
-
   return (
     <DashboardDataContext.Provider value={contextValue}>
       {children}

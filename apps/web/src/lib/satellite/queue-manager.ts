@@ -98,13 +98,7 @@ export class SatelliteQueueManager {
       // Update metrics
       await this.updateMetrics('queued', 1);
       
-      console.log(`Job ${job.id} enqueued with priority ${priority}`, {
-        jobId: job.id,
-        type: job.type,
-        priority
-      });
-      
-    } catch (error) {
+      } catch (error) {
       console.error('Failed to enqueue job', error, { jobId: job.id });
       throw error;
     }
@@ -120,8 +114,7 @@ export class SatelliteQueueManager {
       this.workers.set(workerId, worker);
       worker.start();
     }
-    
-    console.log(`Started ${this.config.concurrency} workers for satellite processing`);
+
   }
 
   /**
@@ -133,8 +126,7 @@ export class SatelliteQueueManager {
       await worker.stop();
       this.workers.delete(workerId);
     }
-    
-    console.log('Stopped all satellite processing workers');
+
   }
 
   /**
@@ -152,7 +144,7 @@ export class SatelliteQueueManager {
       const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
       
       if (!jobData) {
-        console.warn(`Job data not found for ${jobId}`);
+
         return null;
       }
       
@@ -207,9 +199,7 @@ export class SatelliteQueueManager {
       await this.updateMetrics('completed', 1);
       
       this.activeJobs.delete(jobId);
-      
-      console.log(`Job ${jobId} completed successfully`);
-      
+
     } catch (error) {
       console.error(`Failed to complete job ${jobId}`, error);
       throw error;
@@ -223,7 +213,7 @@ export class SatelliteQueueManager {
     try {
       const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
       if (!jobData) {
-        console.warn(`Job data not found for failed job ${jobId}`);
+
         return;
       }
       
@@ -257,13 +247,7 @@ export class SatelliteQueueManager {
         
         await this.updateMetrics('retries', 1);
         
-        console.warn(`Job ${jobId} failed, scheduled for retry ${currentRetries + 1}/${this.config.maxRetries}`, {
-          jobId,
-          error: error.message,
-          retryCount: currentRetries + 1
-        });
-        
-      } else {
+        } else {
         // Max retries exceeded, mark as permanently failed
         job.status = 'failed';
         job.error = error.message;
@@ -295,7 +279,7 @@ export class SatelliteQueueManager {
       this.activeJobs.delete(jobId);
       
     } catch (err) {
-      console.error(`Failed to handle job failure for ${jobId}`, err);
+
       throw err;
     }
   }
@@ -401,7 +385,7 @@ export class SatelliteQueueManager {
       }
       
       if ((readyJobs as any).length > 0) {
-        console.log(`Moved ${(readyJobs as any).length} jobs from retry queue back to main queue`);
+
       }
       
     } catch (error) {
@@ -461,7 +445,7 @@ class Worker {
   async start(): Promise<void> {
     this.running = true;
     this.processJobs();
-    console.log(`Worker ${this.id} started`);
+
   }
 
   async stop(): Promise<void> {
@@ -469,11 +453,10 @@ class Worker {
     
     // Wait for current job to complete or timeout
     if (this.currentJob) {
-      console.log(`Worker ${this.id} waiting for current job ${this.currentJob.id} to complete`);
+
       // In a real implementation, you'd implement graceful shutdown
     }
-    
-    console.log(`Worker ${this.id} stopped`);
+
   }
 
   private async processJobs(): Promise<void> {
@@ -508,12 +491,6 @@ class Worker {
     const startTime = Date.now();
     
     try {
-      console.log(`Worker ${this.id} processing job ${job.id}`, {
-        workerId: this.id,
-        jobId: job.id,
-        jobType: job.type
-      });
-      
       // Update progress
       await this.manager.updateProgress(job.id, 10, 'Starting image processing');
       
@@ -546,9 +523,7 @@ class Worker {
       };
       
       await this.manager.completeJob(job.id, results);
-      
-      console.log(`Worker ${this.id} completed job ${job.id} in ${Date.now() - startTime}ms`);
-      
+
     } catch (error) {
       console.error(`Worker ${this.id} failed to process job ${job.id}`, error);
       await this.manager.failJob(job.id, error as Error);

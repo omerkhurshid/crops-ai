@@ -129,7 +129,7 @@ export function OnboardingTooltips({
     const targetEl = document.querySelector(step.target) as HTMLElement
     
     if (!targetEl) {
-      console.warn(`Target element not found: ${step.target}`)
+
       // Skip to next step
       setCurrentStep(stepIndex + 1)
       return

@@ -179,12 +179,6 @@ export async function POST(request: NextRequest) {
 
     // Store the observation in the database
     // Note: This would require adding a new model to the schema for pest/disease observations
-    console.log(`Disease/pest observation recorded for field ${fieldId}`, {
-      type: observationType,
-      severity,
-      user: user.id
-    })
-
     // Re-analyze field risks with new observation
     const currentCrop = await prisma.crop.findFirst({
       where: { 
@@ -257,7 +251,7 @@ async function getCurrentWeather(latitude?: number, longitude?: number) {
       }
     }
   } catch (error) {
-    console.warn('Failed to fetch current weather, using defaults:', error)
+
   }
 
   return {
@@ -277,7 +271,7 @@ async function getWeatherForecast(latitude?: number, longitude?: number) {
     // Get weather forecast - in production would use real forecast API
     return generateMockForecast()
   } catch (error) {
-    console.warn('Failed to fetch weather forecast, using mock data:', error)
+
     return generateMockForecast()
   }
 }
@@ -305,7 +299,7 @@ async function getSatelliteData(fieldId: string) {
       }
     }
   } catch (error) {
-    console.warn(`Failed to fetch satellite data for field ${fieldId}, using defaults:`, error)
+
   }
 
   return {
@@ -338,7 +332,7 @@ async function getSoilConditions(fieldId: string) {
       }
     }
   } catch (error) {
-    console.warn(`Failed to fetch soil conditions for field ${fieldId}, using defaults:`, error)
+
   }
 
   return {
@@ -354,7 +348,7 @@ async function getHistoricalOutbreaks(fieldId: string) {
     // This would require additional database models for pest/disease history
     return []
   } catch (error) {
-    console.warn(`Failed to fetch historical outbreaks for field ${fieldId}:`, error)
+
     return []
   }
 }

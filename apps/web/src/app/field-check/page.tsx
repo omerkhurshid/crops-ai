@@ -269,7 +269,7 @@ export default function FieldCheckPage() {
                 className="h-16 flex-col gap-2 hover:bg-gray-50"
                 onClick={() => {
                   // Log activity to database
-                  console.log(`Logged: ${action.label}`)
+
                 }}
               >
                 <action.icon className={`h-6 w-6 text-white rounded-full p-1 ${action.color}`} />

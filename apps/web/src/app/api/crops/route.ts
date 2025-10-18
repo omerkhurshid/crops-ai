@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         ]
       })
     } catch (dbError: any) {
-      console.warn('Failed to query crops, returning empty array:', dbError.message)
+
       // Return empty array if table doesn't exist yet
       crops = []
     }

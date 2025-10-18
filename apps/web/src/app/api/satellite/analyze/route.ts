@@ -56,8 +56,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Field not found' }, { status: 404 })
     }
 
-    console.log('Analyzing field:', fieldId, 'from', startDate, 'to', endDate)
-    
     // Use real satellite service to get latest data
     const satelliteData = await liveSatelliteService.getLatestFieldData(fieldId)
     

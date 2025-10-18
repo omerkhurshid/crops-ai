@@ -766,7 +766,7 @@ class WeatherPatternAnalysisService {
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-      console.warn(`Failed to cache data for key: ${key}`, error);
+
     }
   }
 }

@@ -60,22 +60,15 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   // Fetch satellite image when center changes
   useEffect(() => {
     const fetchSatelliteImage = async () => {
-      console.log('Satellite fetch check:', {
-        mapCenter,
-        mapLoaded,
-        coordinates: { centerLat: coordinates.centerLat, centerLng: coordinates.centerLng },
-        shouldFetch: mapCenter.lat && mapCenter.lng && mapLoaded && !(coordinates.centerLat === '' && coordinates.centerLng === '')
-      })
-      
       // Only fetch if we have valid coordinates and map is loaded
       if (!mapCenter.lat || !mapCenter.lng || !mapLoaded) {
-        console.log('Skipping satellite fetch: invalid coordinates or map not loaded')
+
         return
       }
       
       // Skip if coordinates haven't been explicitly set by user
       if (coordinates.centerLat === '' && coordinates.centerLng === '') {
-        console.log('Skipping satellite fetch: coordinates not set by user')
+
         return
       }
       
@@ -121,10 +114,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
 
         if (response.ok) {
           const result = await response.json()
-          console.log('Satellite API response structure:', {
-            success: result.success,
-            hasData: !!result.data,
-            dataKeys: result.data ? Object.keys(result.data) : [],
+          : [],
             message: result.message,
             summary: result.summary
           })
@@ -135,17 +125,16 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           if (data) {
             // Check for different response formats
             if (data.imageUrl) {
-              console.log('Using imageUrl:', data.imageUrl.substring(0, 50) + '...')
+
               setSatelliteImage(data.imageUrl)
             } else if (data.imageData) {
-              console.log('Using base64 imageData, length:', data.imageData.length)
+
               setSatelliteImage(data.imageData)
             } else {
-              console.warn('No image data found. Available data fields:', Object.keys(data))
-              console.log('Full data object:', data)
+
             }
           } else {
-            console.error('No data in API response:', result)
+
           }
         } else {
           const errorText = await response.text()
@@ -164,17 +153,16 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   const updateMapCenter = () => {
     const lat = parseFloat(coordinates.centerLat)
     const lng = parseFloat(coordinates.centerLng)
-    console.log('Updating map center:', { lat, lng, isValidLat: !isNaN(lat), isValidLng: !isNaN(lng) })
-    
+
     if (!isNaN(lat) && !isNaN(lng)) {
       setMapCenter({ lat, lng })
       // Clear existing points when changing location
       setPoints([])
       setDetectedFields([])
       setSelectedField(null)
-      console.log('Map center updated successfully')
+
     } else {
-      console.error('Invalid coordinates:', { centerLat: coordinates.centerLat, centerLng: coordinates.centerLng })
+
       alert('Please enter valid numeric coordinates')
     }
   }

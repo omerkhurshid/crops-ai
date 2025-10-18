@@ -150,7 +150,7 @@ export function useNBARecommendations(farmId?: string) {
             }
           }
         } catch (dateError) {
-          console.warn('Error processing recommendation dates:', rec.id, dateError)
+
           return {
             ...rec,
             createdAt: new Date(),

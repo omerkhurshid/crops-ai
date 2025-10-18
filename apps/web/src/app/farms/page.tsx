@@ -119,7 +119,6 @@ export default async function FarmsPage() {
             />
           </div>
 
-
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">

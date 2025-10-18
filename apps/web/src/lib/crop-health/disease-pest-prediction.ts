@@ -138,17 +138,16 @@ class DiseasePestPredictionService {
     monitoringRecommendations: string[]
   }> {
     try {
-      console.log(`Analyzing disease/pest risks for field ${context.fieldId}`)
 
       // Try ML model prediction first
       try {
         const mlResult = await this.getMLModelPredictions(context)
         if (mlResult && (mlResult.diseases.length > 0 || mlResult.pests.length > 0)) {
-          console.log(`Using ML model predictions for field ${context.fieldId}`)
+
           return mlResult
         }
       } catch (error) {
-        console.warn(`ML model prediction failed for field ${context.fieldId}, using rule-based fallback:`, error)
+
       }
 
       // Fallback to rule-based analysis

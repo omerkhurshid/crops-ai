@@ -62,19 +62,19 @@ export class AppLogger {
 
   debug(message: string, context?: LogContext) {
     const entry = this.createLogEntry('debug', message, context)
-    console.log(entry.message, entry.context)
+
     this.sendToExternalServices(entry)
   }
 
   info(message: string, context?: LogContext) {
     const entry = this.createLogEntry('info', message, context)
-    console.log(entry.message, entry.context)
+
     this.sendToExternalServices(entry)
   }
 
   warn(message: string, context?: LogContext) {
     const entry = this.createLogEntry('warn', message, context)
-    console.warn(entry.message, entry.context)
+
     this.sendToExternalServices(entry)
   }
 
@@ -89,7 +89,7 @@ export class AppLogger {
     }
     
     const entry = this.createLogEntry('error', message, errorContext)
-    console.error(entry.message, entry.context)
+
     this.sendToExternalServices(entry)
   }
 

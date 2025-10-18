@@ -558,7 +558,7 @@ class USDAService {
     try {
       return await redis.get(key);
     } catch (error) {
-      console.warn(`Failed to get cached data for key: ${key}`, error);
+
       return null;
     }
   }
@@ -567,7 +567,7 @@ class USDAService {
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-      console.warn(`Failed to cache data for key: ${key}`, error);
+
     }
   }
 }

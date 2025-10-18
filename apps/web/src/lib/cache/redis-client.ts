@@ -31,7 +31,7 @@ class RedisCache {
     const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
 
     if (!redisUrl || !redisToken || redisUrl === 'https://example.upstash.io' || redisToken === 'example_token') {
-      console.warn('Redis not configured - using in-memory cache fallback')
+
       return
     }
 
@@ -41,7 +41,7 @@ class RedisCache {
         token: redisToken,
       })
       this.isConnected = true
-      console.log('Redis cache initialized successfully')
+
     } catch (error) {
       console.error('Failed to initialize Redis:', error)
       this.isConnected = false

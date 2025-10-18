@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
-  BarChart, Users, ArrowRight, Target, Eye
+  BarChart, Users, ArrowRight, Target, Eye, DollarSign
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../lib/auth/session'

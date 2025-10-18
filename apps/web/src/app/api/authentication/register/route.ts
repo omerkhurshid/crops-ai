@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    console.log('🔍 Register endpoint called')
+
     const { name, email, password, role, userType } = await request.json()
 
     // Validation
@@ -73,14 +73,12 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log('✅ User created successfully:', { id: user.id, email: user.email })
-
     // Send verification email
     try {
       await sendVerificationEmail(user.id, user.email, user.name)
-      console.log('📧 Verification email sent to:', user.email)
+
     } catch (emailError) {
-      console.error('Failed to send verification email:', emailError)
+
       // Don't fail registration if email fails
     }
 

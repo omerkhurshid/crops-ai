@@ -87,20 +87,19 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       try {
         const realBenchmarkData = await fetchRealBenchmarkData(region, primaryCrop, farmData)
         if (realBenchmarkData && realBenchmarkData.metrics.length > 0) {
-          console.log('Using real benchmark data from API')
+
           setComparison(realBenchmarkData)
           setLoading(false)
           return
         } else {
-          console.log('API returned no benchmark data, will use fallback')
+
         }
       } catch (error) {
         console.error('Error fetching real benchmark data:', error)
       }
 
       // If API fails, fetch from our analytical benchmark service
-      console.log('Fetching from analytical benchmark service')
-      
+
       try {
         // Use our ML-powered analytical service for real benchmarks
         const analyticalResponse = await fetch('/api/ml/benchmarks/analyze', {
@@ -262,13 +261,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       return 'Regional Average'
     }
   }
-
-
-
-
-
-
-
 
   const getCategoryIcon = (category: string) => {
     const icons = {

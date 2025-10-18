@@ -34,13 +34,12 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
     // Initialize cache system
     const initializeCache = async () => {
       try {
-        console.log('Initializing API cache system')
-        
+
         // Set up cache event listeners if needed
         // You could add cache hit/miss metrics here
         
         setIsReady(true)
-        console.log('API cache system ready')
+
       } catch (error) {
         console.error('Failed to initialize cache system', error)
         setIsReady(true) // Still mark as ready to not block the app
@@ -65,7 +64,7 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
     // Clear cache on app visibility change (when user returns from background)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        console.log('App became visible, checking for stale cache entries')
+
         // Could implement smart cache invalidation here
       }
     }
@@ -77,13 +76,13 @@ export function CacheProvider({ children, enableDebugLogging = false }: CachePro
   const clearCache = () => {
     apiCache.clear()
     setCacheStats(apiCache.getStats())
-    console.log('Cache manually cleared')
+
   }
 
   const invalidatePattern = (pattern: string) => {
     const count = apiCache.invalidatePattern(pattern)
     setCacheStats(apiCache.getStats())
-    console.log('Cache pattern invalidated', { pattern, count })
+
     return count
   }
 

@@ -362,7 +362,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
         lastSatelliteUpdate={lastSatelliteUpdate || undefined}
       />
 
-
       {/* Farms Overview Map */}
       <div>
         <div className="flex items-center justify-between mb-6">
@@ -483,10 +482,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
         farmId={farmId}
         className="mb-8"
       />
-
-
-
-
 
       {/* Detailed View (Progressive Disclosure) */}
       {showDetailedView && (

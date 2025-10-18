@@ -36,7 +36,6 @@ interface SeasonSnapshotProps {
   onDateRangeChange: (range: DateRange) => void;
 }
 
-
 export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: SeasonSnapshotProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

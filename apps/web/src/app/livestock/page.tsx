@@ -24,7 +24,7 @@ export default async function LivestockPage() {
       select: { id: true, name: true }
     })
   } catch (error: any) {
-    console.warn('Failed to fetch user farms:', error.message)
+
   }
 
   // If no farms, redirect to farm creation
@@ -49,7 +49,7 @@ export default async function LivestockPage() {
       orderBy: { eventDate: 'desc' }
     })
   } catch (error: any) {
-    console.warn('Failed to fetch livestock events, using empty array:', error.message)
+
     livestockEvents = []
   }
 
@@ -97,8 +97,7 @@ export default async function LivestockPage() {
         label="Add Animal"
         variant="primary"
       />
-      
-      
+
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}

@@ -136,12 +136,12 @@ class AlphaVantageService {
     this.updateRateLimitCounters()
     
     if (this.callsThisMinute >= this.config.rateLimit.perMinute) {
-      console.log('Rate limit: Max calls per minute reached')
+
       return false
     }
     
     if (this.callsToday >= this.config.rateLimit.perDay) {
-      console.log('Rate limit: Daily limit reached')
+
       return false
     }
     

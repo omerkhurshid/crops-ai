@@ -71,7 +71,7 @@ class RegionalBenchmarkService {
       }
 
     } catch (error) {
-      console.log('External benchmark data sources not available, using intelligent regional analysis:', error);
+
     }
 
     // Intelligent fallback using regional agricultural statistics
@@ -96,7 +96,7 @@ class RegionalBenchmarkService {
       // For demonstration, simulate API unavailability
       return null;
     } catch (error) {
-      console.log('USDA NASS API not available:', error);
+
       return null;
     }
   }
@@ -109,7 +109,7 @@ class RegionalBenchmarkService {
       
       return null;
     } catch (error) {
-      console.log('Extension service data not available:', error);
+
       return null;
     }
   }

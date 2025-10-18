@@ -261,12 +261,11 @@ export function GoogleMapsFieldEditor({
         </div>
       }
       onLoad={() => {
-        console.log('Google Maps script loaded successfully')
-        console.log('Google object available:', typeof window.google !== 'undefined')
+
       }}
       onError={(error) => {
         console.error('Google Maps script failed to load:', error)
-        console.error('API Key being used:', apiKey ? apiKey.substring(0, 10) + '...' : 'Missing')
+
       }}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -376,7 +375,7 @@ export function GoogleMapsFieldEditor({
                   <Button
                     onClick={() => {
                       // Trigger satellite analysis for all defined fields
-                      console.log('Starting satellite analysis for fields:', fields)
+
                       // This will be connected to the field analysis pipeline
                     }}
                     size="sm"

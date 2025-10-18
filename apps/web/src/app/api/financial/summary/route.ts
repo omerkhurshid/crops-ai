@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty data
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, returning empty financial data');
+
         totalIncome = { _sum: { amount: null } };
         totalExpenses = { _sum: { amount: null } };
         transactionCount = 0;
@@ -128,7 +128,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty arrays
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, using empty data for categories and trends');
+
         incomeByCategory = [];
         expensesByCategory = [];
         transactions = [];
@@ -176,7 +176,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist (P2021 or P2010), try fields only
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, fetching fields without financial data');
+
         try {
           fieldProfitability = await prisma.$queryRaw`
             SELECT 
@@ -193,7 +193,7 @@ export async function GET(request: NextRequest) {
         } catch (fieldsError: any) {
           // If fields table doesn't exist either, return empty array
           if (fieldsError.code === 'P2021' || fieldsError.code === 'P2010') {
-            console.log('Fields table does not exist either, using empty field profitability');
+
             fieldProfitability = [];
           } else {
             throw fieldsError;
@@ -233,7 +233,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist, use zero values
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, using zero for previous period comparison');
+
         previousIncome = 0;
         profitChange = 0;
       } else {

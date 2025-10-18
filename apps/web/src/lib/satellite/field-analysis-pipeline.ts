@@ -530,7 +530,7 @@ class FieldAnalysisPipeline {
       `
     } catch (error) {
       // If table doesn't exist, log warning but don't fail
-      console.warn('Could not save analysis results to database:', error)
+
     }
   }
 
@@ -563,8 +563,7 @@ class FieldAnalysisPipeline {
       }
 
       // Log farm summary for monitoring
-      console.log('Farm Analysis Summary:', farmSummary)
-      
+
       return farmSummary
     } catch (error) {
       console.error('Error generating farm summary:', error)

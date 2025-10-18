@@ -334,7 +334,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className }: FieldMod
       color: 'bg-yellow-500 hover:bg-yellow-600',
       action: () => {
         // TODO: Implement expense logging
-        console.log('Expense logging')
+
       }
     },
     {
@@ -344,7 +344,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className }: FieldMod
       color: 'bg-orange-500 hover:bg-orange-600',
       action: () => {
         // TODO: Implement weather check
-        console.log('Weather check')
+
       }
     },
     {
@@ -354,7 +354,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className }: FieldMod
       color: 'bg-purple-500 hover:bg-purple-600',
       action: () => {
         // TODO: Implement time tracking
-        console.log('Time tracking')
+
       }
     }
   ]

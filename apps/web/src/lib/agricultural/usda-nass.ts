@@ -96,7 +96,7 @@ class USDANassService {
     }
 
     if (!this.config.apiKey) {
-      console.warn('USDA NASS API key not configured. Using fallback statistical data.')
+
     }
   }
 
@@ -125,7 +125,7 @@ class USDANassService {
       }
 
       if (!this.isConfigured()) {
-        return this.getMockYieldData(commodity, state, county, yearRange)
+        throw new Error('USDA NASS API not configured. Historical yield data unavailable.')
       }
 
       const currentYear = new Date().getFullYear()
@@ -152,8 +152,7 @@ class USDANassService {
       })
 
       if (!response.ok) {
-        console.warn(`USDA NASS API error: ${response.statusText}`)
-        return this.getMockYieldData(commodity, state, county, yearRange)
+        throw new Error(`USDA NASS API error (${response.status}): Unable to fetch yield data`)
       }
 
       const data = await response.json()
@@ -167,8 +166,10 @@ class USDANassService {
       return yieldData
 
     } catch (error) {
-      console.error('Error fetching USDA yield data:', error)
-      return this.getMockYieldData(commodity, state, county, yearRange)
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch USDA yield data: ${error.message}`)
+      }
+      throw new Error('USDA yield data service unavailable')
     }
   }
 
@@ -186,7 +187,7 @@ class USDANassService {
       }
 
       if (!this.isConfigured()) {
-        return this.getMockRegionalComparison(commodity, targetYear)
+        throw new Error('USDA NASS API not configured. Regional comparison data unavailable.')
       }
 
       // Get yield data for all states
@@ -207,7 +208,7 @@ class USDANassService {
       })
 
       if (!response.ok) {
-        return this.getMockRegionalComparison(commodity, targetYear)
+        throw new Error(`USDA NASS API error (${response.status}): Unable to fetch regional comparison data`)
       }
 
       const data = await response.json()
@@ -221,8 +222,10 @@ class USDANassService {
       return comparison
 
     } catch (error) {
-      console.error('Error fetching regional comparison:', error)
-      return this.getMockRegionalComparison(commodity, year || new Date().getFullYear() - 1)
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch regional comparison: ${error.message}`)
+      }
+      throw new Error('USDA regional comparison service unavailable')
     }
   }
 
@@ -239,7 +242,7 @@ class USDANassService {
       const regionalData = await this.getRegionalComparison(commodity)
       
       if (!yieldData || !regionalData) {
-        return this.getMockBenchmarks(commodity, state, county)
+        throw new Error('Insufficient data to calculate crop benchmarks. USDA data required.')
       }
 
       // Calculate benchmarks from historical data
@@ -273,8 +276,10 @@ class USDANassService {
       }
 
     } catch (error) {
-      console.error('Error calculating crop benchmarks:', error)
-      return this.getMockBenchmarks(commodity, state, county)
+      if (error instanceof Error) {
+        throw new Error(`Failed to calculate crop benchmarks: ${error.message}`)
+      }
+      throw new Error('Crop benchmarks service unavailable')
     }
   }
 
@@ -379,110 +384,7 @@ class USDANassService {
     }
   }
 
-  /**
-   * Generate mock yield data for fallback
-   */
-  private getMockYieldData(commodity: string, state: string, county?: string, yearRange: number = 10): YieldData {
-    const baseYield = this.getBaseYield(commodity)
-    const currentYear = new Date().getFullYear()
-    const years = []
 
-    for (let i = yearRange; i >= 1; i--) {
-      const year = currentYear - i
-      const trend = 0.02 // 2% annual improvement
-      const noise = (Math.random() - 0.5) * 0.1 // ±5% random variation
-      const yieldValue = baseYield * (1 + trend * (yearRange - i)) * (1 + noise)
-      
-      years.push({
-        year,
-        yield: Math.round(yieldValue * 10) / 10,
-        plantedAcres: Math.floor(Math.random() * 50000) + 10000,
-        harvestedAcres: Math.floor(Math.random() * 45000) + 9500,
-        production: Math.floor(yieldValue * 30000)
-      })
-    }
-
-    return {
-      commodity,
-      state,
-      county,
-      years,
-      trend: {
-        direction: 'increasing',
-        rate: 2.1,
-        confidence: 0.75
-      }
-    }
-  }
-
-  /**
-   * Generate mock regional comparison
-   */
-  private getMockRegionalComparison(commodity: string, year: number): RegionalComparison {
-    const states = ['IOWA', 'ILLINOIS', 'NEBRASKA', 'MINNESOTA', 'INDIANA', 'OHIO', 'KANSAS', 'MISSOURI', 'SOUTH DAKOTA', 'WISCONSIN']
-    const baseYield = this.getBaseYield(commodity)
-    const nationalAverage = baseYield
-
-    const stateAverages = states.map((state, index) => {
-      const variation = (Math.random() - 0.5) * 0.4 // ±20% variation
-      const yieldValue = baseYield * (1 + variation)
-      
-      return {
-        state,
-        yield: Math.round(yieldValue * 10) / 10,
-        percentOfNational: Math.round((yieldValue / nationalAverage) * 100),
-        rank: index + 1
-      }
-    }).sort((a, b) => b.yield - a.yield)
-
-    // Reassign ranks after sorting
-    stateAverages.forEach((state, index) => {
-      state.rank = index + 1
-    })
-
-    const topProducers = stateAverages.slice(0, 5).map((state, index) => ({
-      state: state.state,
-      production: Math.floor(Math.random() * 500000000) + 100000000,
-      marketShare: Math.round((20 - index * 3) * 100) / 100
-    }))
-
-    return {
-      commodity,
-      year,
-      nationalAverage: Math.round(nationalAverage * 10) / 10,
-      stateAverages,
-      topProducers
-    }
-  }
-
-  /**
-   * Generate mock benchmarks
-   */
-  private getMockBenchmarks(commodity: string, state: string, county?: string): CropBenchmarks {
-    const baseYield = this.getBaseYield(commodity)
-    
-    return {
-      commodity,
-      region: { state, county },
-      benchmarks: {
-        yield: {
-          average: baseYield,
-          topQuartile: Math.round(baseYield * 1.25 * 10) / 10,
-          topDecile: Math.round(baseYield * 1.45 * 10) / 10,
-          unit: this.getYieldUnit(commodity)
-        },
-        efficiency: {
-          averageInputCost: this.estimateInputCost(commodity, baseYield),
-          topQuartileInputCost: this.estimateInputCost(commodity, baseYield * 1.25),
-          profitPerAcre: this.estimateProfitability(commodity, baseYield * 1.25)
-        },
-        timing: {
-          optimalPlantingWindow: this.getOptimalPlantingWindow(commodity, state),
-          averageHarvestDate: this.getAverageHarvestDate(commodity, state)
-        }
-      }
-    }
-  }
 
   // Helper methods for calculations
   private getBaseYield(commodity: string): number {

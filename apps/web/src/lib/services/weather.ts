@@ -112,7 +112,7 @@ export class WeatherService {
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          console.error('Weather API request timed out')
+
           throw new Error('Weather service timed out. Please try again.')
         } else {
           console.error('Failed to fetch current weather:', error.message)
@@ -213,7 +213,7 @@ export class WeatherService {
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          console.error('Weather forecast API request timed out')
+
           throw new Error('Weather forecast timed out. Please try again.')
         } else {
           console.error('Failed to fetch weather forecast:', error.message)

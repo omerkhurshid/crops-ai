@@ -163,18 +163,11 @@ class AgricultureRecommendationEngine {
     const startTime = Date.now();
 
     try {
-      console.log(`Generating recommendations for farm ${request.farmId}`, {
-        fieldId: request.fieldId,
-        categories: request.categories,
-        priority: request.priority,
-        timeHorizon: request.timeHorizon
-      });
-
       // Check cache first
       const cacheKey = this.generateCacheKey(request);
       const cached = await this.getCachedPlan(cacheKey);
       if (cached) {
-        console.log(`Returning cached recommendation plan for farm ${request.farmId}`);
+
         return cached;
       }
 
@@ -229,13 +222,6 @@ class AgricultureRecommendationEngine {
 
       // Cache the plan
       await this.cachePlan(cacheKey, plan);
-
-      console.log(`Recommendation plan generated successfully for farm ${request.farmId}`, {
-        recommendationCount: plan.recommendations.length,
-        totalCost: summary.totalCost,
-        expectedROI: summary.expectedROI,
-        processingTime: Date.now() - startTime
-      });
 
       return plan;
 
@@ -295,13 +281,7 @@ class AgricultureRecommendationEngine {
       // Update recommendation effectiveness scores
       await this.updateRecommendationScores(feedback);
 
-      console.log(`Recorded feedback for recommendation ${feedback.recommendationId}`, {
-        implemented: feedback.implemented,
-        effectiveness: feedback.effectiveness,
-        userId: feedback.userId
-      });
-
-    } catch (error) {
+      } catch (error) {
       console.error(`Failed to record feedback for recommendation ${feedback.recommendationId}`, error);
       throw error;
     }
@@ -1357,7 +1337,7 @@ class AgricultureRecommendationEngine {
         new Date()
       );
     } catch (error) {
-      console.warn('Failed to get weather context', error);
+
       return null;
     }
   }
@@ -1504,7 +1484,7 @@ class AgricultureRecommendationEngine {
     try {
       await redis.set(cacheKey, plan, { ex: this.PLAN_TTL });
     } catch (error) {
-      console.warn('Failed to cache recommendation plan', error);
+
     }
   }
 
@@ -1516,7 +1496,7 @@ class AgricultureRecommendationEngine {
   private async loadKnowledgeBase(): Promise<void> {
     // Load agricultural knowledge base and best practices
     // In production, this would load from database or external sources
-    console.log('Loaded agricultural knowledge base');
+
   }
 
   private parsePlantingDate(dateString: string): Date {

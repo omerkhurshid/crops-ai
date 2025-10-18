@@ -108,12 +108,9 @@ export const GET = apiMiddleware.protected(
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: any) => {
     try {
-      console.log('🔍 Field creation API called')
-      console.log('🧑 User from request:', request.user)
-      
+
       const body = await request.json()
-      console.log('📝 Request body:', body)
-      
+
       const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary, color } = body
 
       // Basic validation
@@ -128,7 +125,7 @@ export const POST = apiMiddleware.protected(
       }
 
       // Verify farm ownership
-      console.log('🔍 Looking for farm:', farmId, 'owned by:', request.user.id)
+
       const farm = await prisma.farm.findFirst({
         where: {
           id: farmId,
@@ -137,15 +134,12 @@ export const POST = apiMiddleware.protected(
       })
 
       if (!farm) {
-        console.log('❌ Farm not found or access denied')
+
         throw new ValidationError('Farm not found or access denied')
       }
 
-      console.log('✅ Farm found:', farm.name)
-
       // Create new field
-      console.log('🌱 Creating field with data:', { farmId, name, area: parseFloat(area), soilType })
-      
+
       // Create field using Prisma, omitting the boundary field
       const fieldData: any = {
         farmId,
@@ -182,15 +176,13 @@ export const POST = apiMiddleware.protected(
             SET boundary = ST_GeogFromText(${wktPolygon})
             WHERE id = ${field.id}
           `;
-          console.log('✅ Field boundary updated successfully');
+
         } catch (boundaryError) {
-          console.warn('Failed to update field boundary:', boundaryError);
+
           // Continue without boundary - field was created successfully
         }
       }
 
-      console.log('✅ Field created successfully:', field?.id)
-      
       if (!field) {
         throw new Error('Failed to create field');
       }
@@ -213,7 +205,7 @@ export const POST = apiMiddleware.protected(
             }
           })
         } catch (cropError) {
-          console.warn('Failed to create crop, but field was created:', cropError)
+
           // Field creation succeeded, so we don't throw here
         }
       }

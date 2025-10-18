@@ -58,7 +58,7 @@ export class QueueManager {
     } = {}
   ): Promise<string> {
     const jobId = 'mock-job-' + Date.now()
-    console.log('Mock job created:', { jobId, jobType, data, options })
+
     return jobId
   }
 
@@ -67,12 +67,12 @@ export class QueueManager {
   }
 
   async completeJob(jobId: string, result?: any): Promise<boolean> {
-    console.log('Mock job completed:', { jobId, result })
+
     return true
   }
 
   async failJob(jobId: string, error: string): Promise<boolean> {
-    console.log('Mock job failed:', { jobId, error })
+
     return true
   }
 
@@ -101,12 +101,12 @@ export class QueueManager {
   }
 
   async cleanup(daysToKeep: number = 7): Promise<number> {
-    console.log('Mock cleanup called:', { daysToKeep })
+
     return 0
   }
 
   async retryFailedJobs(maxAge?: Date): Promise<number> {
-    console.log('Mock retry failed jobs called:', { maxAge })
+
     return 0
   }
 

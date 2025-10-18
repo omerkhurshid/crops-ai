@@ -83,7 +83,7 @@ export const GET = apiMiddleware.protected(
       } catch (error: any) {
         // Handle missing financial transactions table
         if (error.code === 'P2021' || error.code === 'P2010') {
-          console.log('Financial transactions table does not exist, returning empty financial data');
+
           totalIncome = { _sum: { amount: null } };
           totalExpenses = { _sum: { amount: null } };
           transactionCount = 0;

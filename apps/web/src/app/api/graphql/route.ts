@@ -36,16 +36,10 @@ const server = new ApolloServer<GraphQLContext>({
       async requestDidStart() {
         return {
           async didResolveOperation(requestContext: any) {
-            Logger.info('GraphQL Operation', {
-              operationName: requestContext.request.operationName,
-              query: requestContext.request.query
-            })
+            // GraphQL operation logging removed for production
           },
           async willSendResponse(requestContext: any) {
-            Logger.info('GraphQL Response', {
-              operationName: requestContext.request.operationName,
-              errors: requestContext.response.errors?.length || 0
-            })
+            // GraphQL response logging removed for production
           }
         }
       }

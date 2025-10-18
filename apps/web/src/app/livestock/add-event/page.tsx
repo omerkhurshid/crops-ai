@@ -39,7 +39,7 @@ export default function AddLivestockEventPage() {
           setFormData(prev => ({ ...prev, farmId: farmsArray[0].id }))
         }
       } else {
-        console.error('Failed to fetch farms:', response.status)
+
         setFarms([]) // Set empty array on error
       }
     } catch (error) {

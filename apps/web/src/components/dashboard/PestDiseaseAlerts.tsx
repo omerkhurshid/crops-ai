@@ -143,7 +143,7 @@ export default function PestDiseaseAlerts({
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred')
-      console.error('Error fetching pest predictions:', err)
+
     } finally {
       setLoading(false)
     }

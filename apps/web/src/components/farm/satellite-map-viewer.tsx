@@ -133,7 +133,7 @@ export function SatelliteMapViewer({
       const bbox = calculateBoundingBox(location.lat, location.lng, zoom);
       
       // Skip API call and use mock data directly to avoid rate limiting
-      console.log('Using mock field detection to avoid rate limits');
+
       const mockFields = [
         {
           id: `temp-field-${Date.now()}-1`,

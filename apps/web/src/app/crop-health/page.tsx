@@ -159,7 +159,6 @@ export default async function CropHealthPage({ searchParams }: { searchParams: {
           </div>
         </div>
 
-
         {/* Health Dashboard with Modern Wrapper */}
         {showEmptyState ? (
           <EmptyStateCard className="max-w-3xl mx-auto">

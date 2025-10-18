@@ -174,12 +174,6 @@ class EnvironmentValidator {
       NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
     }
 
-    console.log('Environment configuration validated successfully', {
-      nodeEnv: this._config.NODE_ENV,
-      hasRequiredVars: true,
-      optionalVarsCount: Object.values(this._config).filter(v => v === undefined).length
-    })
-
     return this._config
   }
 

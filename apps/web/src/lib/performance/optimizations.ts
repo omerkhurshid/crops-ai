@@ -161,7 +161,7 @@ export class PerformanceMonitor {
   static endTimer(label: string): number {
     const startTime = this.timers.get(label)
     if (!startTime) {
-      console.warn(`Timer '${label}' was not started`)
+
       return 0
     }
 
@@ -210,7 +210,7 @@ export class ResourcePreloader {
       const result = await fetcher()
       await cache.set(key, result, { ttl: options.ttl || CacheTTL.FARM_DATA })
     } catch (error) {
-      console.warn(`Preload failed for ${key}:`, error)
+
       this.preloadCache.delete(key)
     }
   }

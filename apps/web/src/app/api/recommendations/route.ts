@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
           take: limit ? parseInt(limit) : undefined
         })
       } catch (dbError: any) {
-        console.warn('Failed to query recommendations, returning empty array:', dbError.message)
+
         existingRecommendations = []
       }
 

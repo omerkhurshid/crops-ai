@@ -206,9 +206,9 @@ class DatabaseMigrationManager {
       if (!result[0].enabled) {
         // Enable PostGIS extension
         await prisma.$executeRaw`CREATE EXTENSION IF NOT EXISTS postgis`
-        console.log('PostGIS extension enabled successfully')
+
       } else {
-        console.log('PostGIS extension already enabled')
+
       }
 
     } catch (error) {
@@ -273,10 +273,10 @@ class DatabaseMigrationManager {
     for (const indexSQL of indexes) {
       try {
         await prisma.$executeRawUnsafe(indexSQL)
-        console.log('Created index:', indexSQL.split('IF NOT EXISTS')[1]?.split('ON')[0]?.trim())
+
       } catch (error) {
         // Index might already exist, log but don't fail
-        console.warn('Index creation warning:', error)
+
       }
     }
   }
@@ -366,7 +366,6 @@ class DatabaseMigrationManager {
     try {
       // Update table statistics for query optimization
       await prisma.$executeRaw`ANALYZE`
-      console.log('Database statistics updated')
 
     } catch (error) {
       console.error('Error updating database statistics:', error)
@@ -409,7 +408,7 @@ class DatabaseMigrationManager {
         })
         created++
       } catch (error) {
-        console.warn(`Demo user ${userData.email} might already exist`)
+
       }
     }
 
@@ -465,7 +464,7 @@ class DatabaseMigrationManager {
           created++
         }
       } catch (error) {
-        console.warn(`Sample farm ${farmData.name} creation failed:`, error)
+
       }
     }
 
@@ -506,7 +505,7 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-          console.warn(`Sample field creation failed:`, error)
+
         }
       }
     }
@@ -546,7 +545,7 @@ class DatabaseMigrationManager {
           created++
         }
       } catch (error) {
-        console.warn('Sample crop creation failed:', error)
+
       }
     }
 
@@ -593,7 +592,7 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-          console.warn('Sample weather data creation failed:', error)
+
         }
       }
     }
@@ -640,7 +639,7 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-          console.warn('Sample satellite data creation failed:', error)
+
         }
       }
     }
@@ -694,7 +693,7 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-          console.warn('Sample recommendation creation failed:', error)
+
         }
       }
     }

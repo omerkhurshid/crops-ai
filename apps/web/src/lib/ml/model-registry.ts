@@ -402,7 +402,7 @@ class ModelRegistry {
    */
   private registerPrebuiltModel(model: RegisteredModel): void {
     this.models.set(model.id, model)
-    console.log(`Registered model: ${model.name} (${model.id})`)
+
   }
 
   /**

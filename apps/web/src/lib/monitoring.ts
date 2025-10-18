@@ -40,7 +40,7 @@ class DatabaseMonitor {
 
       // Log slow queries
       if (duration > this.slowQueryThreshold) {
-        console.warn(`Slow query detected: ${queryName} took ${duration}ms`)
+
         Sentry.addBreadcrumb({
           message: `Slow database query: ${queryName}`,
           level: 'warning',

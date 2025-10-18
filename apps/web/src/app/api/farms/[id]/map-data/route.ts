@@ -60,7 +60,7 @@ export const GET = apiMiddleware.protected(
           }
         }
       } catch (error) {
-        console.warn('Failed to parse farm boundary:', error)
+
       }
 
       // Process fields with boundaries
@@ -86,7 +86,7 @@ export const GET = apiMiddleware.protected(
               }
             }
           } catch (error) {
-            console.warn(`Failed to parse boundary for field ${field.id}:`, error)
+
           }
 
           return {

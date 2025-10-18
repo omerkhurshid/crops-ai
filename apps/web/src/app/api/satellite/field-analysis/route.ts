@@ -17,12 +17,11 @@ export async function POST(request: NextRequest) {
 
     if (farmId) {
       // Analyze all fields for a farm
-      console.log(`Starting field analysis for farm: ${farmId}`)
+
       results = await fieldAnalysisPipeline.analyzeFarmFields(farmId, analysisDate)
     } else if (fieldIds && Array.isArray(fieldIds)) {
       // Analyze specific fields
-      console.log(`Starting field analysis for fields: ${fieldIds.join(', ')}`)
-      
+
       // For individual fields, we need to get field data from database first
       const { prisma } = await import('../../../../lib/prisma')
       
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
         })
 
         if (!field) {
-          console.warn(`Field ${fieldId} not found, skipping`)
+
           continue
         }
 

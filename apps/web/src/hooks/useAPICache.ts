@@ -75,12 +75,6 @@ export function useAPICache<T>(
         // Retry logic
         if (retryOnError && retryCountRef.current < retryCount) {
           retryCountRef.current += 1
-          console.warn('Retrying API call', { 
-            key, 
-            attempt: retryCountRef.current, 
-            maxRetries: retryCount 
-          })
-          
           setTimeout(() => {
             if (mountedRef.current) {
               fetchData()

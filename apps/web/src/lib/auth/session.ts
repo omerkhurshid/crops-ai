@@ -19,10 +19,9 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   try {
     // Try NextAuth first (for when it's working)
     const session = await getServerSession(authOptions)
-    console.log('🔍 Server session in getCurrentUser:', session)
-    
+
     if (session?.user) {
-      console.log('✅ Found user in server session:', session.user)
+
       return {
         id: session.user.id,
         email: session.user.email,
@@ -54,7 +53,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
         role: sessionData.role as UserRole
       }
     } catch (cookieError) {
-      console.error('Error parsing session cookie:', cookieError)
+
       return null
     }
   } catch (error) {
@@ -226,30 +225,13 @@ export class SessionDebug {
 
     try {
       const session = await getServerSession(authOptions)
-      console.log('Current session:', {
-        user: session?.user ? {
-          id: session.user.id,
-          email: session.user.email,
-          name: session.user.name,
-          role: session.user.role
-        } : null,
-        expires: session?.expires
-      })
-    } catch (error) {
-      console.log('Session debug error:', error)
+      } catch (error) {
+
     }
   }
 
   static logUserPermissions(user: SessionUser) {
     if (process.env.NODE_ENV !== 'development') return
-
-    console.log('User permissions:', {
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role
-      },
-      permissions: getUserPermissions(user)
-    })
+    // User permissions logged in development only
   }
 }

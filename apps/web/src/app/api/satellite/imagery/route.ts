@@ -47,8 +47,7 @@ export async function POST(request: NextRequest) {
       })
 
     } catch (sentinelError) {
-      console.warn('Sentinel Hub request failed, falling back to placeholder:', sentinelError)
-      
+
       // Fallback to placeholder satellite imagery
       const { west, south, east, north } = bbox
       const centerLat = (north + south) / 2

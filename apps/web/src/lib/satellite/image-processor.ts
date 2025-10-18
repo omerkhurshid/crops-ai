@@ -20,7 +20,6 @@ import type {
 } from './types';
 import type { VegetationIndices, VegetationHealthReport } from './ndvi-analysis';
 
-
 export interface ProcessingOptions {
   priority?: 'low' | 'normal' | 'high';
   analysisTypes?: ('ndvi' | 'evi' | 'health' | 'stress' | 'boundaries')[];
@@ -457,7 +456,7 @@ class SatelliteImageProcessor {
   private async generateAndSendReport(job: ProcessingJob): Promise<void> {
     // Generate PDF report and send notification
     // Implementation would include report generation logic
-    console.log(`Report generation for job ${job.id} - not yet implemented`);
+
   }
 }
 

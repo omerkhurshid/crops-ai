@@ -160,8 +160,7 @@ export async function rateLimitWithFallback(
     return await rateLimit(request, type)
   } catch (error) {
     // Fallback to in-memory rate limiter
-    console.warn('Redis rate limiter failed, using in-memory fallback:', error)
-    
+
     const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'anonymous'
     const limiter = fallbackLimiters[type]
     const result = await limiter.limit(ip)

@@ -100,7 +100,7 @@ class SentinelHubService {
     };
     
     if (!this.config.clientId || !this.config.clientSecret) {
-      console.warn('Sentinel Hub credentials not configured. Using fallback mock data.');
+
     }
   }
 

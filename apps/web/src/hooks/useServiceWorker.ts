@@ -61,7 +61,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
         isOffline: false,
         networkInfo: serviceWorkerManager.getNetworkInfo()
       }))
-      console.log('Connection restored')
+
     }
 
     const handleOffline = () => {
@@ -70,7 +70,7 @@ export function useServiceWorker(): UseServiceWorkerReturn {
         isOffline: true,
         networkInfo: serviceWorkerManager.getNetworkInfo()
       }))
-      console.log('Connection lost - offline mode enabled')
+
     }
 
     window.addEventListener('online', handleOnline)
@@ -95,10 +95,10 @@ export function useServiceWorker(): UseServiceWorkerReturn {
 
       // Show user notification
       if (type === 'update-available') {
-        console.log('Service worker update available')
+
         // You can show a toast or modal here
       } else if (type === 'offline-ready') {
-        console.log('App ready for offline use')
+
         // You can show a toast notification here
       }
     }

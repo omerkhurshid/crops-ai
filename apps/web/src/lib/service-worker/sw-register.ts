@@ -27,7 +27,7 @@ export class ServiceWorkerManager {
    */
   async register(): Promise<boolean> {
     if (!this.isSupported) {
-      console.warn('Service Worker not supported in this browser')
+
       return false
     }
 
@@ -35,11 +35,6 @@ export class ServiceWorkerManager {
       this.registration = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'imports'
-      })
-
-      console.log('Service Worker registered successfully', {
-        scope: this.registration.scope,
-        updateViaCache: this.registration.updateViaCache
       })
 
       // Listen for updates
@@ -127,7 +122,7 @@ export class ServiceWorkerManager {
    */
   async requestNotificationPermission(): Promise<boolean> {
     if (!('Notification' in window)) {
-      console.warn('Push notifications not supported')
+
       return false
     }
 
@@ -136,7 +131,7 @@ export class ServiceWorkerManager {
     }
 
     if (Notification.permission === 'denied') {
-      console.warn('Push notifications denied by user')
+
       return false
     }
 
@@ -145,7 +140,7 @@ export class ServiceWorkerManager {
       const granted = permission === 'granted'
       
       if (granted) {
-        console.log('Push notifications permission granted')
+
         await this.subscribeToPush()
       }
       
@@ -179,7 +174,6 @@ export class ServiceWorkerManager {
         body: JSON.stringify(subscription)
       })
 
-      console.log('Push subscription successful')
     } catch (error) {
       console.error('Push subscription failed', error)
     }
@@ -244,8 +238,7 @@ export class ServiceWorkerManager {
       if ('sync' in this.registration) {
         await (this.registration as any).sync.register('background-sync')
       }
-      
-      console.log('Data queued for background sync', { id: data.id })
+
     } catch (error) {
       console.error('Failed to queue data for sync', error)
     }

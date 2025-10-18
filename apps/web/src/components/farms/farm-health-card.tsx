@@ -137,7 +137,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
 
       setMetrics(processedMetrics)
     } catch (err) {
-      console.error('Error fetching health metrics:', err)
+
       setError('Unable to load health metrics')
       setMetrics(null)
     } finally {

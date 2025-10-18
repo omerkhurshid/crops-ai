@@ -170,9 +170,7 @@ class AlertManager {
     try {
       // This would integrate with your email service (Resend, SendGrid, etc.)
       // For now, just log that an email would be sent
-      console.log(`Email alert would be sent to: ${this.config.emailRecipients?.join(', ')}`)
-      console.log(`Subject: [${alert.type.toUpperCase()}] ${alert.title}`)
-      console.log(`Body: ${alert.message}`)
+
     } catch (error) {
       console.error('Failed to send email alert:', error)
     }

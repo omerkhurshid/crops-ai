@@ -116,7 +116,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
   };
 
   const exportData = () => {
-    console.log('Exporting visualization data...');
+
   };
 
   if (loading) {

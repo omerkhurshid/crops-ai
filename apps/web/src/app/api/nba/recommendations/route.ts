@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
             }
           })
         } catch (error) {
-          console.warn('Failed to save recommendation:', error)
+
           return rec
         }
       })

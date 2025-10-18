@@ -9,8 +9,7 @@ import { livestockSeedData } from './livestock-seed-data'
 const prisma = new PrismaClient()
 
 export async function seedLivestockDatabase() {
-  console.log('🐄 Seeding comprehensive livestock database...')
-  
+
   try {
     // Since we don't have a comprehensive livestock schema like crops,
     // we'll create seed data for the existing livestock event system
@@ -26,20 +25,12 @@ export async function seedLivestockDatabase() {
       totalBreeds += livestock.varieties.length
     }
 
-    console.log(`📊 Processing ${livestockSeedData.length} livestock types with ${totalBreeds} breeds`)
-    
     // For now, log the comprehensive data that would be inserted
     // This demonstrates the full livestock information available
     for (const livestock of livestockSeedData) {
-      console.log(`✅ ${livestock.name} (${livestock.scientificName})`)
-      console.log(`   - Category: ${livestock.category}`)
-      console.log(`   - Primary Purpose: ${livestock.primaryPurpose.join(', ')}`)
-      console.log(`   - Typical Herd Size: ${livestock.typicalHerdSize}`)
-      console.log(`   - Market Demand: ${livestock.marketDemand}`)
-      console.log(`   - Varieties: ${livestock.varieties.length}`)
-      
+
       for (const variety of livestock.varieties) {
-        console.log(`     • ${variety.name}: ${variety.description}`)
+
       }
     }
 
@@ -77,9 +68,6 @@ export async function seedLivestockDatabase() {
       varieties: livestock.varieties
     }))
 
-    console.log(`🎉 Successfully processed ${livestockSeedData.length} livestock types`)
-    console.log(`📝 Available livestock categories: ${Array.from(livestockTypes).join(', ')}`)
-    
     // Store reference data in a way that can be accessed by the application
     // This could be saved to a JSON file or used to populate a reference table
     
@@ -103,8 +91,7 @@ export async function seedLivestockDatabase() {
 if (require.main === module) {
   seedLivestockDatabase()
     .then((result) => {
-      console.log('✅ Livestock database processing completed')
-      console.log(`📊 Summary: ${result.livestockTypes} types, ${result.totalBreeds} breeds`)
+
       process.exit(0)
     })
     .catch((error) => {

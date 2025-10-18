@@ -71,7 +71,7 @@ class CMEPricingService {
     }
 
     if (!this.config.apiKey) {
-      console.warn('CME API key not configured. Using fallback pricing data.')
+
     }
   }
 
@@ -106,7 +106,7 @@ class CMEPricingService {
       })
 
       if (!response.ok) {
-        console.warn(`CME API error for ${symbol}: ${response.statusText}`)
+
         return this.getMockPrice(symbol)
       }
 

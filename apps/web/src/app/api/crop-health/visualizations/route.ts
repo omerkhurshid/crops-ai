@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
         }
       })
     } catch (dbError: any) {
-      console.warn('Database query failed, falling back to basic farm data:', dbError.message)
+
       // Fall back to basic farm query without satellite data
       farm = await prisma.farm.findUnique({
         where: { id: farmId },
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
       const farmAnalysis = await diseasePestPredictionService.analyzeFarmRisks(farmId)
       diseasePestData = farmAnalysis
     } catch (error) {
-      console.warn('Disease/pest analysis not available:', error)
+
     }
 
     if (!hasRealData) {

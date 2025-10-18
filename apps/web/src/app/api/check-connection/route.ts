@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  console.log('Checking environment and connection settings...')
-  
+
   const databaseUrl = process.env.DATABASE_URL || 'NOT SET'
   const directUrl = process.env.DIRECT_URL || 'NOT SET'
   
@@ -27,7 +26,7 @@ export async function GET(request: NextRequest) {
       }
     }
   } catch (e) {
-    console.error('Error parsing DATABASE_URL:', e)
+
   }
   
   // Try different connection approaches

@@ -201,27 +201,12 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
     stressedAreas: 0
   })
 
-  // Mock data generation
-  const generateMockData = (days: number, baseValue: number, variation: number): ChartDataPoint[] => {
-    const data: ChartDataPoint[] = []
-    let currentValue = baseValue
-    
-    for (let i = 0; i < days; i++) {
-      const date = new Date()
-      date.setDate(date.getDate() - (days - i))
-      
-      // Add some realistic variation
-      currentValue += (Math.random() - 0.5) * variation
-      currentValue = Math.max(0, currentValue)
-      
-      data.push({
-        date: date.toISOString(),
-        value: currentValue
-      })
-    }
-    
-    return data
-  }
+  // Chart data state
+  const [ndviData, setNdviData] = useState<ChartDataPoint[]>([])
+  const [temperatureData, setTemperatureData] = useState<ChartDataPoint[]>([])
+  const [humidityData, setHumidityData] = useState<ChartDataPoint[]>([])
+  const [precipitationData, setPrecipitationData] = useState<ChartDataPoint[]>([])
+  const [loading, setLoading] = useState(true)
 
   const getDaysFromRange = (range: string) => {
     switch (range) {
@@ -233,13 +218,40 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
     }
   }
 
-  const days = getDaysFromRange(selectedRange)
-  
-  // Generate mock data for different metrics
-  const ndviData = generateMockData(days, 0.7, 0.1)
-  const temperatureData = generateMockData(days, 22, 8)
-  const humidityData = generateMockData(days, 65, 20)
-  const precipitationData = generateMockData(days, 2, 5)
+  // Fetch chart data from APIs
+  useEffect(() => {
+    const fetchChartData = async () => {
+      if (!farmId) return
+      
+      setLoading(true)
+      try {
+        const days = getDaysFromRange(selectedRange)
+        
+        // Fetch NDVI data from satellite API
+        const ndviRes = await fetch(`/api/satellite/ndvi/${farmId}?range=${selectedRange}`)
+        if (ndviRes.ok) {
+          const ndviResponseData = await ndviRes.json()
+          setNdviData(ndviResponseData.timeSeries || [])
+        }
+        
+        // Fetch weather data 
+        const weatherRes = await fetch(`/api/weather/historical?farmId=${farmId}&days=${days}`)
+        if (weatherRes.ok) {
+          const weatherResponseData = await weatherRes.json()
+          setTemperatureData(weatherResponseData.temperature || [])
+          setHumidityData(weatherResponseData.humidity || [])
+          setPrecipitationData(weatherResponseData.precipitation || [])
+        }
+      } catch (error) {
+        console.error('Failed to fetch chart data:', error)
+        // Don't fall back to mock data - show empty charts or error state
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchChartData()
+  }, [farmId, selectedRange])
 
   // Fetch real farm metrics
   useEffect(() => {

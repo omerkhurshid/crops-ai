@@ -34,7 +34,7 @@ export class TemplateManager {
     userId: string,
     template: Omit<Template, 'id' | 'metadata'>
   ): Promise<Template> {
-    console.log('Mock template created:', { userId, template })
+
     return {
       id: 'mock-template-' + Date.now(),
       ...template,
@@ -43,12 +43,12 @@ export class TemplateManager {
   }
 
   static async getTemplates(filters?: any): Promise<Template[]> {
-    console.log('Mock get templates:', { filters })
+
     return []
   }
 
   static async getTemplate(templateId: string, userId: string): Promise<Template | null> {
-    console.log('Mock get template:', { templateId, userId })
+
     return null
   }
 
@@ -59,7 +59,7 @@ export class TemplateManager {
     variables: any,
     userId: string
   ): Promise<TemplateInstance> {
-    console.log('Mock instance created:', { templateId, farmId, fieldId, variables, userId })
+
     return {
       id: 'mock-instance-' + Date.now(),
       templateId,
@@ -94,7 +94,7 @@ export class TemplateManager {
     userId: string,
     status?: string
   ): Promise<TemplateInstance[]> {
-    console.log('Mock get farm instances:', { farmId, userId, status })
+
     return []
   }
 

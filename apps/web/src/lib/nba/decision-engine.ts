@@ -43,7 +43,6 @@ export interface FarmContext {
   }
 }
 
-
 export interface Decision {
   id: string
   type: 'SPRAY' | 'HARVEST' | 'IRRIGATE' | 'PLANT' | 'FERTILIZE' | 'LIVESTOCK_HEALTH' | 'MARKET_SELL' | 'EQUIPMENT_MAINTAIN'
@@ -543,8 +542,7 @@ export class NBAEngine {
     
     return { urgency, roi, feasibility, total }
   }
-  
-  
+
   /**
    * Get expected days to maturity for crop type
    */

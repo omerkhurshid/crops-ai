@@ -14,8 +14,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(`Starting comprehensive precision agriculture analysis for farm: ${farmId}`)
-    
     // Step 1: Run satellite field analysis
     const analysisResults = farmId 
       ? await fieldAnalysisPipeline.analyzeFarmFields(farmId)

@@ -89,7 +89,7 @@ export default function CropDetailPage() {
         }
       } catch (err) {
         setError('Failed to load crop details')
-        console.error('Error loading crop details:', err)
+
       } finally {
         setLoading(false)
       }

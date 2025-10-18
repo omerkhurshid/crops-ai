@@ -86,7 +86,7 @@ class PlanetLabsService {
     }
 
     if (!this.config.apiKey) {
-      console.warn('Planet Labs API key not configured. High-resolution imagery will be unavailable.')
+
     }
   }
 
@@ -102,7 +102,7 @@ class PlanetLabsService {
    */
   async searchImages(request: PlanetImageRequest): Promise<PlanetImageItem[]> {
     if (!this.isConfigured()) {
-      console.log('Planet Labs not configured, returning empty results')
+
       return []
     }
 
@@ -178,7 +178,7 @@ class PlanetLabsService {
       })
 
       if (images.length === 0) {
-        console.log('No recent Planet Labs images found for field')
+
         return null
       }
 
@@ -322,7 +322,7 @@ class PlanetLabsService {
       const latestImage = await this.getLatestImage(fieldGeometry)
       
       if (!latestImage) {
-        console.log(`No Planet Labs imagery available for field ${fieldId}`)
+
         return null
       }
 

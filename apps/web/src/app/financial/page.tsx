@@ -47,15 +47,14 @@ export default function FinancialPage() {
   const fetchFarms = async () => {
     try {
       const response = await fetch('/api/farms');
-      console.log('Farms API response status:', response.status);
-      
+
       if (!response.ok) {
-        console.error('Failed to fetch farms:', response.status, response.statusText);
+
         const errorText = await response.text();
         console.error('Error response:', errorText);
       } else {
         const data = await response.json();
-        console.log('Farms data received:', data);
+
         setFarms(data.farms || []);
         
         // Auto-select first farm if only one exists

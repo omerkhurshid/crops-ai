@@ -143,7 +143,7 @@ class SoilDataService {
       })
 
       if (!field || !field.farm.latitude || !field.farm.longitude) {
-        console.warn(`Field ${fieldId} not found or missing coordinates`)
+
         return null
       }
 
@@ -222,7 +222,7 @@ class SoilDataService {
     try {
       // Check if USDA API access is configured
       if (!process.env.USDA_WSS_API_KEY) {
-        console.log('USDA Web Soil Survey API not configured, skipping SSURGO data')
+
         return null
       }
 
@@ -251,14 +251,14 @@ class SoilDataService {
       })
 
       if (!response.ok) {
-        console.warn(`USDA SSURGO query failed: ${response.status}`)
+
         return null
       }
 
       const data = await response.json()
       
       if (!data.Table || data.Table.length === 0) {
-        console.log(`No SSURGO data found for coordinates ${latitude}, ${longitude}`)
+
         return null
       }
 

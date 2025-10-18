@@ -207,7 +207,7 @@ export class RealSatelliteService {
               }
             }
           } catch (error) {
-            console.log(`ML prediction failed for field ${field.id}, using satellite data`)
+
           }
           return null
         })
@@ -241,7 +241,7 @@ export class RealSatelliteService {
         }
       }
     } catch (error) {
-      console.log('ML yield prediction service unavailable, using satellite data:', error)
+
     }
 
     // Fallback to satellite-based yield calculation

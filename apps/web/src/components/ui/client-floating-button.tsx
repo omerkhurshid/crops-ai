@@ -23,7 +23,7 @@ export function ClientFloatingButton({ icon, label, variant = 'primary', onClick
       } else if (label.includes('Crop')) {
         window.location.href = '/crops?action=add-planting'
       } else {
-        console.log(`${label} clicked - configure action needed`)
+
       }
     }
   }

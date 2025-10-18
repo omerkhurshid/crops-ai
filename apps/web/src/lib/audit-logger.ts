@@ -35,7 +35,7 @@ export class AuditLogger {
     } catch (error) {
       console.error('Failed to write audit log to database:', error);
       // Fallback to console logging
-      console.log('AUDIT (FALLBACK):', JSON.stringify(entry, null, 2));
+
     }
   }
 

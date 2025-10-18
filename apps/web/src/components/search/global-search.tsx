@@ -32,79 +32,34 @@ interface GlobalSearchProps {
   className?: string
 }
 
-// Mock search data - in real app this would come from an API
-const mockSearchResults: SearchResult[] = [
-  {
-    id: 'farm-1',
-    title: 'North Valley Farm',
-    description: '150 hectares of mixed crop production with 8 active fields',
-    type: 'farm',
-    url: '/farms/farm-1',
-    metadata: { location: 'Iowa, USA', status: 'Active' },
-    icon: <MapPin className="h-4 w-4" />,
-    relevance: 0.9
-  },
-  {
-    id: 'field-corn-1',
-    title: 'Corn Field - Block A',
-    description: 'Primary corn production field with high health score',
-    type: 'field',
-    url: '/fields',
-    metadata: { location: 'North Valley Farm', status: 'Healthy', value: '8.5/10' },
-    icon: <Activity className="h-4 w-4" />,
-    relevance: 0.85
-  },
-  {
-    id: 'health-alert-1',
-    title: 'Crop Health Alert - Drought Stress',
-    description: 'Moderate drought stress detected in southeastern sections',
-    type: 'health',
-    url: '/crop-health?alert=drought-1',
-    metadata: { date: '2 hours ago', status: 'Active' },
-    icon: <Activity className="h-4 w-4" />,
-    relevance: 0.95
-  },
-  {
-    id: 'weather-forecast',
-    title: 'Weekly Weather Forecast',
-    description: 'Hyperlocal 7-day forecast with precipitation alerts',
-    type: 'weather',
-    url: '/weather',
-    metadata: { location: 'North Valley Farm', date: 'Updated 1h ago' },
-    icon: <CloudRain className="h-4 w-4" />,
-    relevance: 0.7
-  },
-  {
-    id: 'financial-report',
-    title: 'Q3 Financial Summary',
-    description: 'Quarterly expense tracking and profitability analysis',
-    type: 'financial',
-    url: '/financial/reports/q3-2024',
-    metadata: { date: 'September 2024', value: '$45,230' },
-    icon: <DollarSign className="h-4 w-4" />,
-    relevance: 0.6
-  },
-  {
-    id: 'help-ndvi',
-    title: 'Understanding NDVI & Vegetation Indices',
-    description: 'Learn what NDVI, EVI, and other vegetation indices tell you about your crops',
-    type: 'help',
-    url: '/help/articles/ndvi-understanding',
-    metadata: { date: '12 min read' },
-    icon: <FileText className="h-4 w-4" />,
-    relevance: 0.8
-  },
-  {
-    id: 'recommendation-irrigation',
-    title: 'Irrigation Timing Recommendation',
-    description: 'AI suggests optimal irrigation schedule based on weather and soil conditions',
-    type: 'recommendation',
-    url: '/recommendations?type=irrigation',
-    metadata: { date: '6 hours ago', status: 'High Priority' },
-    icon: <Target className="h-4 w-4" />,
-    relevance: 0.9
+// Search state
+const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+const [isSearching, setIsSearching] = useState(false)
+
+// Perform search API call
+const performSearch = async (query: string, filter: string): Promise<SearchResult[]> => {
+  if (!query.trim()) return []
+  
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      filter: filter !== 'all' ? filter : '',
+      limit: '10'
+    })
+    
+    const response = await fetch(`/api/search?${params}`)
+    if (!response.ok) {
+      throw new Error('Search service unavailable')
+    }
+    
+    const data = await response.json()
+    return data.results || []
+  } catch (error) {
+    console.error('Search failed:', error)
+    // Return empty results instead of mock data
+    return []
   }
-]
+}
 
 const searchFilters = [
   { id: 'all', label: 'All', icon: <Search className="h-3 w-3" /> },
@@ -139,10 +94,23 @@ export function GlobalSearch({
       return
     }
 
+    setIsSearching(true)
+    
+    try {
+      const results = await performSearch(query, selectedFilter)
+      setSearchResults(results)
+    } catch (error) {
+      console.error('Search error:', error)
+      setSearchResults([])
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  // Legacy filter logic (can be removed once search API handles all filtering)
+  const legacyFilter = (results: SearchResult[], query: string) => {
     const searchTerms = query.toLowerCase().split(' ')
-    let filteredResults = mockSearchResults.filter(result => {
-      if (selectedFilter !== 'all' && result.type !== selectedFilter) return false
-      
+    return results.filter(result => {
       const searchableText = [
         result.title,
         result.description,

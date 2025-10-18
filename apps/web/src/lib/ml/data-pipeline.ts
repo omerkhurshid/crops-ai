@@ -90,11 +90,6 @@ class AgricultureDataPipeline {
     const startTime = Date.now();
     
     try {
-      console.log('Starting ML data pipeline execution', {
-        timeRange: config.timeRange,
-        sources: config.sources
-      });
-
       // Stage 1: Extract data from multiple sources
       const extractedData = await this.extractData(config);
       const extractionTime = Date.now() - startTime;
@@ -133,12 +128,6 @@ class AgricultureDataPipeline {
           features: this.getFeatureList(transformedData[0] || {} as TrainingData)
         }
       };
-
-      console.log('ML data pipeline completed successfully', {
-        totalTime: Date.now() - startTime,
-        recordsProcessed: result.statistics.validRecords,
-        qualityScore: quality.score
-      });
 
       return result;
 
@@ -231,7 +220,7 @@ class AgricultureDataPipeline {
             return data;
 
           } catch (error) {
-            console.warn(`Failed to extract data for field ${field.id}`, error);
+
             return null;
           }
         });
@@ -314,7 +303,7 @@ class AgricultureDataPipeline {
       };
 
     } catch (error) {
-      console.warn(`Failed to extract weather features for field ${fieldId}`, error);
+
       // Return default values
       return {
         avgTemperature: 20,
@@ -381,7 +370,7 @@ class AgricultureDataPipeline {
       };
 
     } catch (error) {
-      console.warn(`Failed to extract satellite features for field ${fieldId}`, error);
+
       // Return default values
       return {
         avgNDVI: 0.7,
@@ -426,12 +415,6 @@ class AgricultureDataPipeline {
           ? recentReadings.reduce((sum, r) => sum + r.temperature, 0) / recentReadings.length
           : 20 // Default soil temperature
         
-        console.log(`Using real soil data for field ${fieldId}`, {
-          source: soilProfile.metadata.source,
-          confidence: soilProfile.metadata.confidence,
-          sensorReadings: recentReadings.length
-        })
-        
         return {
           ph: topLayer.ph,
           organicMatter: topLayer.organic_matter,
@@ -447,11 +430,11 @@ class AgricultureDataPipeline {
         }
       }
     } catch (error) {
-      console.warn(`Failed to get real soil data for field ${fieldId}, using fallback:`, error)
+
     }
     
     // Fallback to estimated data based on regional characteristics
-    console.log(`Using fallback soil data for field ${fieldId}`)
+
     return {
       ph: 6.5 + Math.random() * 1.0, // 6.5-7.5
       organicMatter: 2.5 + Math.random() * 2.0, // 2.5-4.5%
@@ -771,7 +754,7 @@ class AgricultureDataPipeline {
         timestamp: new Date()
       }, { ex: 86400 }); // 24 hours
     } catch (error) {
-      console.warn('Failed to cache processed data', error);
+
     }
   }
 }

@@ -48,7 +48,7 @@ export function withPerformanceMonitoring(handler: any, metricName?: string) {
         }
       })()
       const duration = Date.now() - startTime
-      console.log(`Performance: ${metric} took ${duration}ms`)
+
       return result
     } catch (error) {
       const duration = Date.now() - startTime

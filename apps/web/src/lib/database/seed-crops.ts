@@ -9,15 +9,14 @@ import { cropSeedData } from './crop-seed-data'
 const prisma = new PrismaClient()
 
 export async function seedCropsDatabase() {
-  console.log('🌱 Seeding comprehensive crop database...')
-  
+
   try {
     // Clear existing data (in development only)
     if (process.env.NODE_ENV === 'development') {
       await prisma.nutritionalData.deleteMany()
       await prisma.produceVariety.deleteMany()
       await prisma.produceType.deleteMany()
-      console.log('🧹 Cleared existing crop data')
+
     }
 
     let totalCrops = 0
@@ -55,7 +54,6 @@ export async function seedCropsDatabase() {
       })
 
       totalCrops++
-      console.log(`✅ Created crop: ${crop.name}`)
 
       // Create varieties for this crop
       for (const variety of crop.varieties) {
@@ -102,17 +100,10 @@ export async function seedCropsDatabase() {
       }
     }
 
-    console.log(`🎉 Successfully seeded ${totalCrops} crops with ${totalVarieties} varieties`)
-    
     // Verify the data
     const cropCount = await prisma.produceType.count()
     const varietyCount = await prisma.produceVariety.count()
     const nutritionCount = await prisma.nutritionalData.count()
-    
-    console.log(`📊 Database contains:`)
-    console.log(`   - ${cropCount} crop types`)
-    console.log(`   - ${varietyCount} varieties`)
-    console.log(`   - ${nutritionCount} nutritional profiles`)
 
     return {
       success: true,
@@ -133,7 +124,7 @@ export async function seedCropsDatabase() {
 if (require.main === module) {
   seedCropsDatabase()
     .then(() => {
-      console.log('✅ Crop database seeding completed')
+
       process.exit(0)
     })
     .catch((error) => {

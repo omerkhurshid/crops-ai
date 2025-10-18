@@ -12,7 +12,7 @@ export interface EmailOptions {
 export async function sendEmail({ to, subject, html, text }: EmailOptions) {
   try {
     if (!resend) {
-      console.warn('Resend not configured. Email not sent.')
+
       return { success: false, error: 'Email service not configured' }
     }
 
@@ -23,8 +23,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
       html,
       text: text || subject, // Fallback plain text
     })
-    
-    console.log('Email sent successfully:', data)
+
     return { success: true, data }
   } catch (error) {
     console.error('Failed to send email:', error)

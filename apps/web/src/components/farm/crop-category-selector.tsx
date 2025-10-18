@@ -48,7 +48,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
           setLoading(false)
         })
         .catch(err => {
-          console.error('Failed to fetch comprehensive crops:', err)
+
           setLoading(false)
         })
     } else if (!useComprehensiveDB) {

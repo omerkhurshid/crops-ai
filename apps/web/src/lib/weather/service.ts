@@ -108,14 +108,14 @@ class WeatherService {
   constructor() {
     this.API_KEY = process.env.OPENWEATHER_API_KEY || '';
     if (!this.API_KEY) {
-      console.warn('OpenWeatherMap API key not found. Weather features will be limited.');
+
     }
   }
 
   async getCurrentWeather(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     try {
       if (!this.API_KEY) {
-        console.warn('OpenWeatherMap API key not configured, returning mock data');
+
         return this.getMockCurrentWeather(latitude, longitude);
       }
 
@@ -123,7 +123,7 @@ class WeatherService {
       const response = await fetch(url);
 
       if (!response.ok) {
-        console.warn(`Weather API error: ${response.statusText}, falling back to mock data`);
+
         return this.getMockCurrentWeather(latitude, longitude);
       }
 
@@ -172,7 +172,7 @@ class WeatherService {
   ): Promise<WeatherForecast[]> {
     try {
       if (!this.API_KEY) {
-        console.warn('OpenWeatherMap API key not configured, returning mock forecast');
+
         return this.getMockForecast(latitude, longitude, days);
       }
 
@@ -180,7 +180,7 @@ class WeatherService {
       const response = await fetch(url);
 
       if (!response.ok) {
-        console.warn(`Forecast API error: ${response.statusText}, falling back to mock data`);
+
         return this.getMockForecast(latitude, longitude, days);
       }
 

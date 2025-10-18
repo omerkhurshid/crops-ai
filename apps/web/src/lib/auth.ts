@@ -10,10 +10,10 @@ const Logger = {
     console.error(message, error)
   },
   info: (message: string, data?: any) => {
-    console.log(message, data)
+
   },
   warn: (message: string, data?: any) => {
-    console.warn(message, data)
+
   }
 }
 import bcrypt from 'bcryptjs'

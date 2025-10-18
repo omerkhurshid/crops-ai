@@ -52,7 +52,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
         maxRecommendations: 8
       })
     } catch (err) {
-      console.error('Failed to generate recommendations:', err)
+
     } finally {
       setIsGenerating(false)
     }
@@ -63,7 +63,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       handleGenerateRecommendations()
     }
   }, [farmId, recommendations.length, loading, handleGenerateRecommendations])
-
 
   const getRecommendationIcon = (type: NBARecommendation['type']) => {
     const iconProps = { className: "h-5 w-5" }
@@ -115,7 +114,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
     try {
       await acceptRecommendation(id, 'Accepted via dashboard')
     } catch (err) {
-      console.error('Failed to accept recommendation:', err)
+
     }
   }, [acceptRecommendation])
 
@@ -123,7 +122,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
     try {
       await rejectRecommendation(id, reason || 'Rejected via dashboard')
     } catch (err) {
-      console.error('Failed to reject recommendation:', err)
+
     }
   }, [rejectRecommendation])
 
@@ -131,7 +130,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
     try {
       await dismissRecommendation(id)
     } catch (err) {
-      console.error('Failed to dismiss recommendation:', err)
+
     }
   }, [dismissRecommendation])
 

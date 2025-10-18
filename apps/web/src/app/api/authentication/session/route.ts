@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       
       return Response.json(session)
     } catch (err) {
-      console.error('Token decode failed', err, { endpoint: 'session' })
+
       // Invalid token - return empty session
       return Response.json({})
     }

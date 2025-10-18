@@ -12,7 +12,6 @@ export interface BoundingBox {
   south: number;
 }
 
-
 export interface SatelliteAnalysisResult {
   id: string;
   fieldId: string;

@@ -106,16 +106,11 @@ class YieldPredictionService {
     const startTime = Date.now();
 
     try {
-      console.log(`Predicting yield for field ${request.fieldId}`, {
-        cropType: request.cropType,
-        modelVersion: request.modelVersion
-      });
-
       // Get or create cache key
       const cacheKey = this.generateCacheKey(request, options);
       const cached = await this.getCachedPrediction(cacheKey);
       if (cached) {
-        console.log(`Returning cached prediction for field ${request.fieldId}`);
+
         return cached;
       }
 
@@ -158,12 +153,6 @@ class YieldPredictionService {
       // Cache prediction
       await this.cachePrediction(cacheKey, prediction);
 
-      console.log(`Yield prediction completed for field ${request.fieldId}`, {
-        predictedYield: prediction.predictedYield,
-        confidence: prediction.confidence,
-        processingTime: Date.now() - startTime
-      });
-
       return prediction;
 
     } catch (error) {
@@ -179,7 +168,6 @@ class YieldPredictionService {
     const startTime = Date.now();
 
     try {
-      console.log(`Starting batch yield prediction for ${request.fieldIds.length} fields`);
 
       const predictions: YieldPrediction[] = [];
       const batchSize = 10; // Process in batches to avoid overload
@@ -195,7 +183,7 @@ class YieldPredictionService {
             });
 
             if (!field) {
-              console.warn(`Skipping field ${fieldId} - field not found`);
+
               return null;
             }
 
@@ -209,7 +197,7 @@ class YieldPredictionService {
             return await this.predictYield(predictionRequest, request.options);
 
           } catch (error) {
-            console.warn(`Failed to predict yield for field ${fieldId}`, error);
+
             return null;
           }
         });
@@ -221,12 +209,6 @@ class YieldPredictionService {
 
         predictions.push(...validPredictions);
       }
-
-      console.log(`Batch yield prediction completed`, {
-        totalFields: request.fieldIds.length,
-        successfulPredictions: predictions.length,
-        processingTime: Date.now() - startTime
-      });
 
       return predictions;
 
@@ -243,11 +225,6 @@ class YieldPredictionService {
     const startTime = Date.now();
 
     try {
-      console.log('Starting yield model training', {
-        dataSource: request.dataSource,
-        validationSplit: request.validationSplit
-      });
-
       // Get training data
       let trainingData: TrainingData[];
       if (request.dataSource === 'pipeline') {
@@ -328,14 +305,6 @@ class YieldPredictionService {
       await this.saveModel(model);
       this.models.set(model.id, model);
 
-      console.log('Model training completed successfully', {
-        modelId: model.id,
-        performance: performance.metrics,
-        trainingTime: Date.now() - startTime,
-        trainingSize: X_train.length,
-        validationSize: X_val.length
-      });
-
       return model;
 
     } catch (error) {
@@ -400,11 +369,6 @@ class YieldPredictionService {
       // Update model performance
       model.performance = performance;
       await this.saveModel(model);
-
-      console.log(`Model evaluation completed for ${modelId}`, {
-        metrics: performance.metrics,
-        samples: evaluationData.length
-      });
 
       return performance;
 
@@ -806,7 +770,7 @@ class YieldPredictionService {
     try {
       return await redis.get(cacheKey) as YieldPrediction;
     } catch (error) {
-      console.warn('Failed to get cached prediction', error);
+
       return null;
     }
   }
@@ -815,7 +779,7 @@ class YieldPredictionService {
     try {
       await redis.set(cacheKey, prediction, { ex: this.PREDICTION_TTL });
     } catch (error) {
-      console.warn('Failed to cache prediction', error);
+
     }
   }
 
@@ -876,7 +840,7 @@ class YieldPredictionService {
     try {
       await redis.set(`${this.MODEL_PREFIX}${model.id}`, model, { ex: 30 * 24 * 60 * 60 }); // 30 days
     } catch (error) {
-      console.warn(`Failed to save model ${model.id}`, error);
+
     }
   }
 
@@ -886,10 +850,7 @@ class YieldPredictionService {
     this.models.set(defaultModel.id, defaultModel);
 
     // In production, would load models from storage
-    console.log('Loaded pretrained models', {
-      count: this.models.size
-    });
-  }
+    }
 }
 
 export const yieldPrediction = new YieldPredictionService();

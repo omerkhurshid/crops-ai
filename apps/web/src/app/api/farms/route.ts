@@ -104,11 +104,6 @@ export const POST = apiMiddleware.protected(
       // Note: Farm boundary update functionality removed temporarily due to schema mismatch
       // Boundary handling will be implemented when geographic features are added
 
-      console.log('Farm created successfully', { 
-        farmId: farm.id, 
-        farmName: farm.name,
-        userId: request.user.id 
-      })
       return createSuccessResponse({ farm }, 201)
     } catch (error) {
       console.error('Farm creation error', error, { userId: request.user.id })

@@ -179,7 +179,7 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({ error: 'Invalid report type' }, { status: 400 })
       }
     } catch (dbError: any) {
-      console.warn('Some database queries failed, returning partial data:', dbError.message)
+
       // Return empty report data if database queries fail
       reportData = {
         message: 'Report data unavailable - some database tables may not exist yet',

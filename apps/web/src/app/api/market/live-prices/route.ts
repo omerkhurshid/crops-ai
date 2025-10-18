@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
         })
       }
     } catch (cacheError) {
-      console.error('Error caching market prices:', cacheError)
+
       // Don't fail the request if caching fails - prices may already exist for today
     }
 

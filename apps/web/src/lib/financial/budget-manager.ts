@@ -219,7 +219,7 @@ export class BudgetManager {
   ): Promise<boolean> {
     try {
         // TODO: Implement budget category updates when BudgetCategory model is added
-      console.log('Budget category update requested - not implemented yet', { farmId, categoryId, newAmount })
+
       return true
     } catch (error) {
       console.error('Error updating budget:', error)

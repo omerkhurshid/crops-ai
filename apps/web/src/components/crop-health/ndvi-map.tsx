@@ -115,7 +115,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
           }
         }
       } catch (healthError) {
-        console.error('Failed to fetch plant health data:', healthError)
+
       }
       
       // No real data available

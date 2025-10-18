@@ -250,7 +250,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       const data = await response.json()
       
       if (data.success) {
-        console.log('Comprehensive analysis complete:', data)
+
         setLastUpdated(data.timestamp)
         // Refresh data after analysis
         await loadFarmData()
@@ -748,7 +748,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           <WorkflowDemo 
             farmLocation={farmLocation}
             onComplete={(fields) => {
-              console.log('Workflow completed with fields:', fields)
+
             }}
           />
         </TabsContent>

@@ -38,7 +38,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
 
         if (response.ok) {
           const data = await response.json()
-          console.log('Analysis complete:', data)
+
           setAnalysisComplete(true)
           setCurrentStep(3)
         }

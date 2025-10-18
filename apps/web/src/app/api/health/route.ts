@@ -4,11 +4,11 @@ import { prisma } from '../../../lib/prisma'
 const CacheService = {
   async set(key: string, value: any, ttl: number): Promise<void> {
     // Simple fallback - in production you'd use Redis or similar
-    console.log(`Cache set: ${key} = ${value} (TTL: ${ttl}s)`)
+
   },
   async get(key: string): Promise<any> {
     // Simple fallback - in production you'd use Redis or similar
-    console.log(`Cache get: ${key}`)
+
     return 'ok' // Return a default value
   }
 }

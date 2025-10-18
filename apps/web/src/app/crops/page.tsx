@@ -38,7 +38,7 @@ export default function CropsPage() {
           }
         }
       } catch (error) {
-        console.warn('Could not fetch farm data, using fallback ID')
+
       } finally {
         setIsLoading(false)
       }
@@ -70,8 +70,7 @@ export default function CropsPage() {
         label="Add Crop Plan"
         variant="primary"
       />
-      
-      
+
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}

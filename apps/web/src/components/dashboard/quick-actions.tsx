@@ -71,7 +71,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
         setExpenseForm({ amount: 0, category: 'fuel', description: '' })
         setTimeout(() => setSuccess(null), 3000)
       } else {
-        console.error('Failed to create expense')
+
       }
     } catch (error) {
       console.error('Error creating expense:', error)
@@ -109,7 +109,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
         })
         setTimeout(() => setSuccess(null), 3000)
       } else {
-        console.error('Failed to create harvest record')
+
       }
     } catch (error) {
       console.error('Error creating harvest record:', error)

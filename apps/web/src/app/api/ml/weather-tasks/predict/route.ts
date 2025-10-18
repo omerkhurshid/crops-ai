@@ -68,7 +68,7 @@ class WeatherTaskPredictor {
         };
       }
     } catch (error) {
-      console.log('ML model not available, using intelligent fallback:', error);
+
     }
 
     // Intelligent fallback with weather-based logic

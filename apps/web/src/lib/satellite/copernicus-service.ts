@@ -84,7 +84,7 @@ class CopernicusService {
     this.clientSecret = config.COPERNICUS_CLIENT_SECRET || ''
     
     if (!this.clientId || !this.clientSecret) {
-      console.warn('Copernicus credentials not configured - using offline mode')
+
     }
   }
 
@@ -186,7 +186,7 @@ class CopernicusService {
           const scene = await this.parseProductToScene(product)
           scenes.push(scene)
         } catch (error) {
-          console.warn('Failed to parse Copernicus product:', error)
+
         }
       }
 
@@ -317,8 +317,7 @@ class CopernicusService {
       return indices
 
     } catch (error) {
-      console.warn('Error calculating spectral indices:', error)
-      
+
       // Fallback calculation using NDVI calculator with default values
       const fallbackBands = {
         red: 0.15,

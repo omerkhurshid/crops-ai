@@ -40,7 +40,7 @@ class AnalyticalBenchmarkService {
         return this.transformMLPrediction(modelResponse.prediction, params);
       }
     } catch (error) {
-      console.log('ML model not available, using analytical engine:', error);
+
     }
 
     // Use analytical engine with real agricultural data

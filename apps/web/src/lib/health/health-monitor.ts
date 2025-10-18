@@ -140,7 +140,7 @@ export class HealthMonitor {
   private async storeHealthCheck(serviceName: string, result: HealthCheckResult): Promise<void> {
     try {
       // TODO: Implement health check storage when ServiceHealth model is added
-      console.log('Health check result for', serviceName, result)
+
     } catch (error) {
       console.error('Error storing health check:', error)
     }

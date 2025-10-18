@@ -46,11 +46,11 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   };
 
   const downloadReport = (reportId: string) => {
-    console.log('Downloading report:', reportId);
+
   };
 
   const viewReport = (reportId: string) => {
-    console.log('Viewing report:', reportId);
+
   };
 
   const getStatusColor = (status: string) => {

@@ -316,7 +316,7 @@ class CropAlertSystem {
   async acknowledgeAlert(alertId: string, userId: string): Promise<void> {
     try {
       // In production, update database
-      console.log(`Alert ${alertId} acknowledged by user ${userId}`)
+
     } catch (error) {
       console.error('Error acknowledging alert:', error)
       throw error
@@ -329,7 +329,7 @@ class CropAlertSystem {
   async resolveAlert(alertId: string, userId: string, resolution: string): Promise<void> {
     try {
       // In production, update database
-      console.log(`Alert ${alertId} resolved by user ${userId}: ${resolution}`)
+
     } catch (error) {
       console.error('Error resolving alert:', error)
       throw error
@@ -374,7 +374,7 @@ class CropAlertSystem {
     try {
       // In production, save to database
       for (const alert of alerts) {
-        console.log(`Saving alert: ${alert.title}`)
+
       }
     } catch (error) {
       console.error('Error saving alerts:', error)
@@ -388,8 +388,7 @@ class CropAlertSystem {
     try {
       for (const alert of criticalAlerts) {
         // In production, send email/SMS/push notifications
-        console.log(`CRITICAL ALERT: ${alert.title} - ${alert.message}`)
-        
+
         // Simulate notification sending
         await this.sendEmail(alert)
         await this.sendSMS(alert)
@@ -402,17 +401,17 @@ class CropAlertSystem {
 
   private async sendEmail(alert: CropAlert): Promise<void> {
     // Email notification implementation
-    console.log(`📧 Email sent: ${alert.title}`)
+
   }
 
   private async sendSMS(alert: CropAlert): Promise<void> {
     // SMS notification implementation
-    console.log(`📱 SMS sent: ${alert.title}`)
+
   }
 
   private async sendPushNotification(alert: CropAlert): Promise<void> {
     // Push notification implementation
-    console.log(`🔔 Push notification sent: ${alert.title}`)
+
   }
 }
 

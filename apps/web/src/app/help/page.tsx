@@ -249,8 +249,7 @@ export default async function HelpPage() {
 
   return (
     <DashboardLayout>
-      
-      
+
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header - Consistent with other pages */}
         <div className="mb-8">

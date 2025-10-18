@@ -114,10 +114,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
 
         if (response.ok) {
           const result = await response.json()
-          : [],
-            message: result.message,
-            summary: result.summary
-          })
           
           // Handle both wrapped and direct API responses
           const data = result.data || result; // result.data if wrapped, result if direct response

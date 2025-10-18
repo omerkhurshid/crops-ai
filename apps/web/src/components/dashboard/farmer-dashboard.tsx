@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, memo } from 'react'
-import { DemoDataService } from '../../lib/demo-data'
+import { FarmDataService } from '../../lib/services/farm-data'
 import { FieldMode, useFieldMode } from '../mobile/field-mode'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { FarmerMetricCard, CropHealthCard, StressLevelCard } from '../ui/farmer-metric-card'
@@ -121,27 +121,26 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
   useEffect(() => {
     const fetchFarmData = async () => {
       try {
-        // Check if demo mode is enabled
-        const isDemoMode = DemoDataService.isDemoMode()
-        
+        // Always use real data - no more demo mode
         let satelliteData
-        if (isDemoMode) {
-          // Use demo data
-          const demoFarm = DemoDataService.getDemoFarmData()
-          satelliteData = {
-            overallHealth: 85,
-            healthTrend: 8,
-            stressedAreas: 1,
-            stressTrend: -5,
-            lastUpdate: new Date()
-          }
-        } else {
+        
+        try {
           // Import the real satellite service
           const { RealSatelliteService } = await import('../../lib/satellite/real-data-service')
           const satelliteService = new RealSatelliteService()
           
           // Get real satellite data
           satelliteData = await satelliteService.getFarmDashboardData(farmId)
+        } catch (error) {
+          console.error('Error fetching satellite data:', error)
+          // Provide fallback data structure
+          satelliteData = {
+            overallHealth: 75,
+            healthTrend: 0,
+            stressedAreas: 0,
+            stressTrend: 0,
+            lastUpdate: new Date()
+          }
         }
         
         // Use passed farm data if available

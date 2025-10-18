@@ -100,6 +100,12 @@ model User {
   verificationTokens    VerificationToken[]
   harvestRecords        HarvestRecord[]
   livestockEvents       LivestockEvent[]
+  animals               Animal[]
+  animalHealthRecords   AnimalHealthRecord[]
+  breedingRecords       BreedingRecord[]
+  weightRecords         WeightRecord[]
+  feedRecords           FeedRecord[]
+  pastures              Pasture[]
   tasks                 Task[]
   decisionRecommendations DecisionRecommendation[]
   decisionExecutions    DecisionExecution[]
@@ -135,6 +141,12 @@ model Farm {
   financialForecasts    FinancialForecast[]
   harvestRecords        HarvestRecord[]
   livestockEvents       LivestockEvent[]
+  animals               Animal[]
+  animalHealthRecords   AnimalHealthRecord[]
+  breedingRecords       BreedingRecord[]
+  weightRecords         WeightRecord[]
+  feedRecords           FeedRecord[]
+  pastures              Pasture[]
   tasks                 Task[]
   decisionRecommendations DecisionRecommendation[]
   decisionExecutions    DecisionExecution[]
@@ -635,6 +647,230 @@ model LivestockEvent {
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@map("livestock_events")
+}
+
+model Animal {
+  id                String    @id @default(cuid())
+  farmId            String
+  userId            String
+  
+  // Basic Info
+  tagNumber         String    // Ear tag or ID number
+  name              String?   // Optional name
+  species           String    // cattle, sheep, goat, pig, chicken, etc.
+  breed             String?
+  gender            String    // male, female
+  
+  // Birth & Parentage
+  birthDate         DateTime?
+  birthWeight       Float?    // in pounds/kg
+  motherId          String?   // Reference to mother animal
+  fatherId          String?   // Reference to father animal
+  
+  // Physical Characteristics
+  color             String?
+  markings          String?   // Physical markings/descriptions
+  currentWeight     Float?    // Current weight
+  
+  // Status
+  status            String    @default("active") // active, sold, deceased, transferred
+  location          String?   // Current pasture/location
+  
+  // Financial
+  purchasePrice     Float?
+  purchaseDate      DateTime?
+  currentValue      Float?    // Estimated current value
+  
+  // Metadata
+  notes             String?   @db.Text
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  farm              Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mother            Animal?   @relation("MotherRelation", fields: [motherId], references: [id])
+  father            Animal?   @relation("FatherRelation", fields: [fatherId], references: [id])
+  motherOffspring   Animal[]  @relation("MotherRelation")
+  fatherOffspring   Animal[]  @relation("FatherRelation")
+  
+  // Health & Events
+  healthRecords     AnimalHealthRecord[]
+  breedingRecords   BreedingRecord[]
+  mateBreedings     BreedingRecord[] @relation("BreedingMate")
+  weightRecords     WeightRecord[]
+  feedRecords       FeedRecord[]
+  
+  @@unique([farmId, tagNumber])
+  @@map("animals")
+}
+
+model AnimalHealthRecord {
+  id            String    @id @default(cuid())
+  animalId      String
+  farmId        String
+  userId        String
+  
+  recordType    String    // vaccination, treatment, health_check, illness, injury
+  description   String    
+  
+  // Medical Details
+  veterinarian  String?   // Vet name
+  medication    String?   // Medication given
+  dosage        String?   // Medication dosage
+  
+  // Vaccination specific
+  vaccineType   String?
+  nextDueDate   DateTime?
+  
+  // Cost
+  cost          Float?
+  
+  recordDate    DateTime  @default(now())
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  animal        Animal    @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  farm          Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("animal_health_records")
+}
+
+model BreedingRecord {
+  id              String    @id @default(cuid())
+  animalId        String    // Mother animal ID
+  farmId          String
+  userId          String
+  
+  breedingType    String    // natural, artificial_insemination
+  mateId          String?   // Father animal ID (if on farm)
+  mateName        String?   // External mate name/ID
+  
+  breedingDate    DateTime
+  expectedDueDate DateTime?
+  actualBirthDate DateTime?
+  
+  // Results
+  pregnancyStatus String?   // confirmed, failed, unknown
+  numberOfOffspring Int?
+  offspringIds    String[]  // Array of offspring animal IDs
+  
+  // Complications
+  complications   String?   @db.Text
+  veterinaryAssistance Boolean @default(false)
+  
+  cost            Float?    // Breeding costs
+  notes           String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  animal          Animal    @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  mate            Animal?   @relation("BreedingMate", fields: [mateId], references: [id])
+  farm            Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("breeding_records")
+}
+
+model WeightRecord {
+  id          String    @id @default(cuid())
+  animalId    String
+  farmId      String
+  userId      String
+  
+  weight      Float     // Weight in pounds/kg
+  weighDate   DateTime  @default(now())
+  notes       String?
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  animal      Animal    @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  farm        Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("weight_records")
+}
+
+model FeedRecord {
+  id            String    @id @default(cuid())
+  animalId      String?   // Individual animal (optional)
+  farmId        String
+  userId        String
+  
+  feedType      String    // hay, grain, supplement, pasture
+  feedName      String    // Specific feed name/brand
+  quantity      Float     // Quantity fed
+  unit          String    // lbs, kg, bales, etc.
+  
+  costPerUnit   Float?
+  totalCost     Float?
+  
+  feedDate      DateTime  @default(now())
+  notes         String?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  animal        Animal?   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  farm          Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("feed_records")
+}
+
+model Pasture {
+  id            String    @id @default(cuid())
+  farmId        String
+  userId        String
+  
+  name          String
+  size          Float     // Size in acres
+  grassType     String?   // Type of grass/forage
+  fencing       String?   // Fence type/condition
+  waterSource   String?   // Water availability
+  
+  // Rotation Management
+  currentAnimals String[] // Array of animal IDs currently in pasture
+  maxCapacity   Int?      // Maximum animals
+  lastRotated   DateTime?
+  nextRotation  DateTime?
+  
+  restPeriod    Int?      // Rest period in days
+  grazingPeriod Int?      // Grazing period in days
+  
+  condition     String    @default("good") // excellent, good, fair, poor
+  notes         String?   @db.Text
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  farm          Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("pastures")
+}
+
+model LivestockMarketPrice {
+  id            String    @id @default(cuid())
+  
+  species       String    // cattle, sheep, goat, pig
+  category      String    // feeder, slaughter, breeding
+  weightRange   String    // 500-600, 600-700, etc.
+  
+  pricePerPound Float     // Current market price per pound
+  location      String    // Market location
+  marketDate    DateTime  // Date of pricing
+  
+  trend         String?   // up, down, stable
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([species, category, weightRange, location, marketDate])
+  @@map("livestock_market_prices")
 }
 
 model Task {

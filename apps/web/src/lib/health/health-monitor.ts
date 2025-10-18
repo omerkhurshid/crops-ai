@@ -115,16 +115,15 @@ export class HealthMonitor {
     try {
       const serviceHealthRecords = await prisma.serviceHealth.findMany({
         orderBy: {
-          lastChecked: 'desc'
+          lastCheckAt: 'desc'
         }
       })
       
       return serviceHealthRecords.map(record => ({
         serviceName: record.serviceName,
         status: record.status as 'healthy' | 'degraded' | 'unhealthy',
-        lastChecked: record.lastChecked,
-        responseTime: record.responseTime,
-        uptime: record.uptime,
+        lastCheckAt: record.lastCheckAt,
+        responseTime: record.responseTime ?? undefined,
         metadata: record.metadata as Record<string, any>
       }))
     } catch (error) {
@@ -149,9 +148,8 @@ export class HealthMonitor {
       return {
         serviceName: record.serviceName,
         status: record.status as 'healthy' | 'degraded' | 'unhealthy',
-        lastChecked: record.lastChecked,
-        responseTime: record.responseTime,
-        uptime: record.uptime,
+        lastCheckAt: record.lastCheckAt,
+        responseTime: record.responseTime ?? undefined,
         metadata: record.metadata as Record<string, any>
       }
     } catch (error) {
@@ -171,18 +169,16 @@ export class HealthMonitor {
           serviceName
         },
         update: {
-          status: result.status,
-          lastChecked: new Date(),
+          status: result.healthy ? 'healthy' : 'unhealthy',
+          lastCheckAt: new Date(),
           responseTime: result.responseTime,
-          uptime: result.uptime || null,
           metadata: result.metadata || {}
         },
         create: {
           serviceName,
-          status: result.status,
-          lastChecked: new Date(),
+          status: result.healthy ? 'healthy' : 'unhealthy',
+          lastCheckAt: new Date(),
           responseTime: result.responseTime,
-          uptime: result.uptime || null,
           metadata: result.metadata || {}
         }
       })
@@ -191,11 +187,9 @@ export class HealthMonitor {
       await prisma.healthCheckLog.create({
         data: {
           serviceName,
-          status: result.status,
+          status: result.healthy ? 'healthy' : 'unhealthy',
           responseTime: result.responseTime,
-          uptime: result.uptime || null,
           errorMessage: result.error,
-          metadata: result.metadata || {},
           checkedAt: new Date()
         }
       })
@@ -228,9 +222,7 @@ export class HealthMonitor {
         serviceName: log.serviceName,
         status: log.status,
         responseTime: log.responseTime,
-        uptime: log.uptime,
         errorMessage: log.errorMessage,
-        metadata: log.metadata,
         checkedAt: log.checkedAt
       }))
     } catch (error) {

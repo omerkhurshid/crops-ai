@@ -24,7 +24,8 @@ import {
   ChevronRight,
   Settings,
   LogOut,
-  User
+  User,
+  TrendingUp
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -36,7 +37,7 @@ export function Sidebar({ collapsed: propCollapsed = false, onClose }: SidebarPr
   const { data: session } = useSession()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(propCollapsed)
-  const [expandedSections, setExpandedSections] = useState<string[]>(['farms'])
+  const [expandedSections, setExpandedSections] = useState<string[]>(['farms', 'livestock'])
 
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' })
@@ -53,7 +54,20 @@ export function Sidebar({ collapsed: propCollapsed = false, onClose }: SidebarPr
       children: [
         { href: '/crops', label: 'Crop Planning', icon: Sprout },
         { href: '/crop-health', label: 'Crop Health', icon: Activity },
-        { href: '/livestock', label: 'Livestock', icon: Users },
+        { 
+          href: '/livestock', 
+          label: 'Livestock', 
+          icon: Users,
+          id: 'livestock',
+          children: [
+            { href: '/livestock/animals', label: 'Animal Registry', icon: Users },
+            { href: '/livestock/breeding', label: 'Breeding Management', icon: Users },
+            { href: '/livestock/feed', label: 'Feed Management', icon: Activity },
+            { href: '/livestock/weight', label: 'Weight Tracking', icon: TrendingUp },
+            { href: '/livestock/financials', label: 'Financial Tracking', icon: DollarSign },
+            { href: '/livestock/market', label: 'Market Analysis', icon: BarChart3 },
+          ]
+        },
       ]
     },
     { href: '/weather', label: 'Weather', icon: CloudRain },

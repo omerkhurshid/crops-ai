@@ -2,13 +2,12 @@ import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@crops-ai/database'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { UserRole } from '@crops-ai/shared'
+import { UserRole, Logger } from '@crops-ai/shared'
 import bcrypt from 'bcryptjs'
+import { getConfig } from './config/environment'
 
-// Production environment validation
-if (process.env.NODE_ENV === 'production' && process.env.ENABLE_DEMO_USERS === 'true') {
-  throw new Error('Demo users cannot be enabled in production!')
-}
+// Get validated configuration (includes production validation)
+const config = getConfig()
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
@@ -50,7 +49,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role as UserRole
           }
         } catch (error) {
-          console.error('Database authentication error:', error)
+          Logger.error('Database authentication error', error)
           // If database fails, only demo users work
           return null
         }
@@ -87,8 +86,8 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
     error: '/login?error=true'
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development'
+  secret: config.NEXTAUTH_SECRET,
+  debug: config.NODE_ENV === 'development'
 }
 
 // Types for extending NextAuth

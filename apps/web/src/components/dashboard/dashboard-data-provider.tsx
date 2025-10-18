@@ -1,29 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-
-interface DashboardData {
-  weather: {
-    current: any
-    alerts: any[]
-    forecast: any[]
-  } | null
-  crops: any[]
-  tasks: any[]
-  recommendations: any[]
-  regionalData: any | null
-  harvestAlerts: any[]
-  queueStatus: any | null
-  budgetData: any | null
-  loading: boolean
-  error: string | null
-  lastUpdated: Date | null
-}
-
-interface DashboardDataContextType extends DashboardData {
-  refetch: () => Promise<void>
-  updateData: (key: keyof DashboardData, data: any) => void
-}
+import { Logger } from '@crops-ai/shared'
+import { DashboardData, DashboardDataContextType, CropData } from '../../types/dashboard'
 
 const DashboardDataContext = createContext<DashboardDataContextType | null>(null)
 
@@ -35,7 +14,7 @@ interface DashboardDataProviderProps {
     longitude?: number
     totalArea?: number
   }
-  crops?: any[]
+  crops?: CropData[]
 }
 
 export function DashboardDataProvider({ 
@@ -127,7 +106,7 @@ export function DashboardDataProvider({
       }))
 
     } catch (error) {
-      console.error('Dashboard data fetch error:', error)
+      Logger.error('Dashboard data fetch error', error, { farmId })
       setData(prev => ({
         ...prev,
         loading: false,

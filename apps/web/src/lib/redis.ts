@@ -1,9 +1,14 @@
 import { Redis } from '@upstash/redis';
+import { getConfig } from './config/environment';
+import { Logger } from '@crops-ai/shared';
 
-// Create Redis instance with environment variables
+// Get validated configuration
+const config = getConfig();
+
+// Create Redis instance with validated environment variables
 export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || ''
+  url: config.UPSTASH_REDIS_REST_URL,
+  token: config.UPSTASH_REDIS_REST_TOKEN
 });
 
 // Utility functions for common Redis operations
@@ -13,11 +18,6 @@ export class RedisManager {
    */
   static async set(key: string, value: any, options?: { ex?: number; nx?: boolean }): Promise<string | null> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        console.warn('[Upstash Redis] Redis client was initialized without url or token. Failed to execute command.');
-        return null;
-      }
-      
       // Handle Redis SET options properly
       if (options) {
         const setOptions: any = {};
@@ -28,7 +28,7 @@ export class RedisManager {
       
       return await redis.set(key, JSON.stringify(value));
     } catch (error) {
-      console.error('Redis SET error:', error);
+      Logger.error('Redis SET error', error, { key });
       return null;
     }
   }
@@ -38,15 +38,10 @@ export class RedisManager {
    */
   static async get(key: string): Promise<any> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        console.warn('[Upstash Redis] Redis client was initialized without url or token. Failed to execute command.');
-        return null;
-      }
-      
       const value = await redis.get(key);
       return value ? JSON.parse(value as string) : null;
     } catch (error) {
-      console.error('Redis GET error:', error);
+      Logger.error('Redis GET error', error, { key });
       return null;
     }
   }
@@ -56,13 +51,9 @@ export class RedisManager {
    */
   static async del(key: string): Promise<number> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        return 0;
-      }
-      
       return await redis.del(key);
     } catch (error) {
-      console.error('Redis DEL error:', error);
+      Logger.error('Redis DEL error', error, { key });
       return 0;
     }
   }
@@ -72,14 +63,10 @@ export class RedisManager {
    */
   static async exists(key: string): Promise<boolean> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        return false;
-      }
-      
       const result = await redis.exists(key);
       return result === 1;
     } catch (error) {
-      console.error('Redis EXISTS error:', error);
+      Logger.error('Redis EXISTS error', error, { key });
       return false;
     }
   }
@@ -89,14 +76,10 @@ export class RedisManager {
    */
   static async expire(key: string, seconds: number): Promise<boolean> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        return false;
-      }
-      
       const result = await redis.expire(key, seconds);
       return result === 1;
     } catch (error) {
-      console.error('Redis EXPIRE error:', error);
+      Logger.error('Redis EXPIRE error', error, { key, seconds });
       return false;
     }
   }
@@ -106,13 +89,9 @@ export class RedisManager {
    */
   static async incr(key: string): Promise<number> {
     try {
-      if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-        return 0;
-      }
-      
       return await redis.incr(key);
     } catch (error) {
-      console.error('Redis INCR error:', error);
+      Logger.error('Redis INCR error', error, { key });
       return 0;
     }
   }

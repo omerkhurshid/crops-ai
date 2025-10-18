@@ -286,9 +286,6 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
   const healthStatus = getHealthStatus(farmData.overallHealth)
   const stressStatus = getStressStatus(farmData.stressedAreas)
 
-  // Debug logging - moved outside JSX
-  console.log('FarmerDashboard Debug - User object:', user)
-
   return (
     <div className="space-y-6">
       {/* Morning Briefing - Unified Dashboard */}

@@ -3,14 +3,12 @@ import { prisma } from '../../../lib/prisma'
 import { createSuccessResponse } from '../../../lib/api/errors'
 import { validateRequestBody, validateQueryParams, createFarmSchema, paginationSchema } from '../../../lib/api/validation'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
+import { Logger } from '@crops-ai/shared'
 
 // GET /api/farms - List farms with pagination
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
     try {
-      console.log('=== GET FARMS START ===')
-      console.log('User:', request.user)
-      
       const { searchParams } = new URL(request.url)
       const pagination = validateQueryParams(
         paginationSchema,
@@ -26,8 +24,6 @@ export const GET = apiMiddleware.protected(
       const where = request.user.role === 'ADMIN' ? {} : {
         ownerId: request.user.id
       }
-      
-      console.log('Query where clause:', JSON.stringify(where, null, 2))
 
       const [farms, total] = await Promise.all([
         prisma.farm.findMany({
@@ -52,8 +48,6 @@ export const GET = apiMiddleware.protected(
         }),
         prisma.farm.count({ where })
       ])
-      
-      console.log(`Found ${farms.length} farms, total: ${total}`)
 
       return createSuccessResponse({
         farms,
@@ -65,8 +59,7 @@ export const GET = apiMiddleware.protected(
         }
       })
     } catch (error) {
-      console.error('=== GET FARMS ERROR ===')
-      console.error('Error:', error)
+      Logger.error('Get farms error', error, { userId: request.user.id })
       throw error
     }
   })
@@ -76,18 +69,8 @@ export const GET = apiMiddleware.protected(
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: AuthenticatedRequest) => {
     try {
-      console.log('=== FARM CREATION START ===')
-      console.log('User:', {
-        id: request.user.id,
-        email: request.user.email,
-        role: request.user.role
-      })
-
       const body = await request.json()
-      console.log('Request body:', JSON.stringify(body, null, 2))
-      
       const farmData = validateRequestBody(createFarmSchema, body)
-      console.log('Validated farm data:', JSON.stringify(farmData, null, 2))
 
       // Extract and prepare data - only keep fields that exist in database schema
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
@@ -104,7 +87,6 @@ export const POST = apiMiddleware.protected(
         totalArea: dbFarmData.totalArea,
         location: dbFarmData.address || `${dbFarmData.name} Farm` // Add location field with fallback
       }
-      console.log('Final data for database:', JSON.stringify(finalData, null, 2))
       
       const farm = await prisma.farm.create({
         data: finalData,
@@ -122,15 +104,14 @@ export const POST = apiMiddleware.protected(
       // Note: Farm boundary update functionality removed temporarily due to schema mismatch
       // Boundary handling will be implemented when geographic features are added
 
-      console.log('Farm created successfully:', JSON.stringify(farm, null, 2))
+      Logger.info('Farm created successfully', { 
+        farmId: farm.id, 
+        farmName: farm.name,
+        userId: request.user.id 
+      })
       return createSuccessResponse({ farm }, 201)
     } catch (error) {
-      console.error('=== FARM CREATION ERROR ===')
-      console.error('Error:', error)
-      if (error instanceof Error) {
-        console.error('Error message:', error.message)
-        console.error('Error stack:', error.stack)
-      }
+      Logger.error('Farm creation error', error, { userId: request.user.id })
       throw error // Re-throw to let middleware handle it
     }
   })

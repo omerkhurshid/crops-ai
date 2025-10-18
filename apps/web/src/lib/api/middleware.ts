@@ -4,6 +4,7 @@ import { AuthenticationError, AuthorizationError, RateLimitError } from './error
 import { UserRole } from '@crops-ai/shared'
 import { z } from 'zod'
 import { validateRequest } from './validation-schemas'
+import { getConfig } from '../config/environment'
 
 export interface AuthenticatedRequest extends NextRequest {
   user: {
@@ -96,7 +97,7 @@ export function withRateLimit(
         throw error
       }
       // If rate limiting fails, log and continue (fail open)
-      console.error('Rate limiting error:', error)
+      Logger.error('Rate limiting error', error)
       if (context) {
         return handler(request, context)
       } else {
@@ -236,18 +237,16 @@ async function authenticateRequest(request: NextRequest): Promise<{
   role: UserRole
 } | null> {
   try {
-    console.log('🔍 Authenticating request in middleware')
+    const config = getConfig()
     
     // Get the session token from cookies (same logic as our session endpoint)
-    const cookieName = process.env.NODE_ENV === 'production' 
+    const cookieName = config.NODE_ENV === 'production' 
       ? '__Secure-next-auth.session-token'
       : 'next-auth.session-token'
     
     const token = request.cookies.get(cookieName)?.value
-    console.log('🎫 Token found in middleware:', !!token)
     
     if (!token) {
-      console.log('❌ No token found in middleware')
       return null
     }
     
@@ -255,15 +254,12 @@ async function authenticateRequest(request: NextRequest): Promise<{
     const { decode } = await import('next-auth/jwt')
     const decoded = await decode({
       token,
-      secret: process.env.NEXTAUTH_SECRET!
+      secret: config.NEXTAUTH_SECRET
     })
     
     if (!decoded) {
-      console.log('❌ Token decode failed in middleware')
       return null
     }
-    
-    console.log('✅ User authenticated in middleware:', { id: decoded.id, email: decoded.email })
     
     return {
       id: decoded.id as string,
@@ -272,7 +268,7 @@ async function authenticateRequest(request: NextRequest): Promise<{
       role: decoded.role as UserRole
     }
   } catch (error) {
-    console.error('❌ Authentication error in middleware:', error)
+    Logger.error('Authentication error in middleware', error)
     return null
   }
 }

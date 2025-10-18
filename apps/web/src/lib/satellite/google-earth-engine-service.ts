@@ -5,6 +5,8 @@
  * More complex but infinitely scalable
  */
 
+import { Logger } from '@crops-ai/shared'
+
 export interface GEEConfig {
   serviceAccountEmail: string
   privateKey: string
@@ -105,34 +107,34 @@ export class GoogleEarthEngineService {
       // 4. Generate farmer-friendly recommendations
       const recommendations = this.generateFarmerRecommendations(analysis, request)
       
+      // Validate that we have real satellite data
+      if (!analysis.satelliteData || !analysis.healthAssessment) {
+        throw new Error('Google Earth Engine analysis failed: No satellite data returned. Check GEE API configuration and field coordinates.')
+      }
+
+      // Validate essential NDVI data 
+      if (!analysis.satelliteData.ndvi || analysis.satelliteData.ndvi.mean === 0) {
+        throw new Error('Invalid NDVI data received from Google Earth Engine. Field may be outside satellite coverage area.')
+      }
+
       return {
         fieldId: request.fieldId || 'unknown',
         analysisDate: new Date(),
-        satelliteData: analysis.satelliteData || {
-          ndvi: { mean: 0.5, median: 0.5, min: 0.2, max: 0.8, std: 0.1, percentile25: 0.4, percentile75: 0.6 },
-          evi: { mean: 0.3, median: 0.3, min: 0.1, max: 0.5, std: 0.05 },
-          savi: { mean: 0.4, std: 0.08 },
-          ndwi: { mean: 0.1, std: 0.03 }
-        },
-        healthAssessment: analysis.healthAssessment || {
-          score: 75,
-          category: 'good',
-          stressLevel: 'low',
-          confidence: 0.8
-        },
+        satelliteData: analysis.satelliteData,
+        healthAssessment: analysis.healthAssessment,
         trends: {
-          ndviChange: 0.02,
-          seasonalTrend: 'stable',
-          historicalPercentile: 50
+          ndviChange: analysis.trends?.ndviChange || 0,
+          seasonalTrend: analysis.trends?.seasonalTrend || 'stable',
+          historicalPercentile: analysis.trends?.historicalPercentile || 50
         },
-        imageMetadata: {
+        imageMetadata: analysis.imageMetadata || {
           acquisitionDate: new Date(),
           satellite: 'Sentinel-2' as 'Sentinel-2' | 'Landsat-8' | 'Landsat-9',
-          cloudCoverage: 15,
-          pixelCount: 1000,
+          cloudCoverage: 100, // High cloud coverage indicates no valid data
+          pixelCount: 0,
           resolution: 10
         },
-        imageUrls: {
+        imageUrls: analysis.imageUrls || {
           trueColor: '',
           falseColor: '',
           ndvi: '',
@@ -142,7 +144,7 @@ export class GoogleEarthEngineService {
       }
       
     } catch (error) {
-      console.error('GEE analysis failed:', error)
+      Logger.error('GEE analysis failed', error)
       throw new Error(`Satellite analysis failed: ${error}`)
     }
   }
@@ -281,7 +283,7 @@ export class GoogleEarthEngineService {
       return await response.json()
       
     } catch (error) {
-      console.error('GEE script execution failed:', error)
+      Logger.error('GEE script execution failed', error)
       throw error
     }
   }

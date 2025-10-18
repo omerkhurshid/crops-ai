@@ -4,6 +4,7 @@
  */
 
 import { prisma } from '../prisma'
+import { Logger } from '@crops-ai/shared'
 
 export interface FieldBoundary {
   fieldId: string
@@ -53,10 +54,9 @@ export async function updateFieldBoundary(fieldId: string, coordinates: Geograph
       WHERE id = ${fieldId}
     `
     
-    console.log(`Field boundary updated for field ${fieldId}`)
     return true
   } catch (error) {
-    console.error('Error updating field boundary:', error)
+    Logger.error('Error updating field boundary', error, { fieldId })
     throw error
   }
 }
@@ -78,7 +78,7 @@ export async function getFieldBoundaryGeoJSON(fieldId: string) {
     
     return JSON.parse(result[0].boundary_json)
   } catch (error) {
-    console.error('Error fetching field boundary:', error)
+    Logger.error('Error fetching field boundary', error, { fieldId })
     throw error
   }
 }
@@ -103,7 +103,7 @@ export async function calculateFieldArea(coordinates: GeographicPoint[]): Promis
     const areaHectares = result[0].area_sqm / 10000
     return Math.round(areaHectares * 100) / 100 // Round to 2 decimal places
   } catch (error) {
-    console.error('Error calculating field area:', error)
+    Logger.error('Error calculating field area', error)
     throw error
   }
 }
@@ -138,7 +138,7 @@ export async function getFieldsInRegion(
       boundary: field.boundary_json ? JSON.parse(field.boundary_json) : null
     }))
   } catch (error) {
-    console.error('Error finding fields in region:', error)
+    Logger.error('Error finding fields in region', error, { centerLat, centerLng, radiusKm })
     throw error
   }
 }
@@ -235,12 +235,10 @@ export async function createSampleFieldBoundaries() {
         data: { area: calculatedArea }
       })
       
-      console.log(`Created sample boundary for field ${field.name}`)
     }
     
-    console.log(`Created sample boundaries for ${fieldsWithoutBoundaries.length} fields`)
   } catch (error) {
-    console.error('Error creating sample field boundaries:', error)
+    Logger.error('Error creating sample field boundaries', error)
     throw error
   }
 }

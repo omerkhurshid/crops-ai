@@ -113,8 +113,20 @@ export class HealthMonitor {
    */
   async getHealthStatus(): Promise<ServiceHealth[]> {
     try {
-      // TODO: Implement health status lookup when ServiceHealth model is added
-      return []
+      const serviceHealthRecords = await prisma.serviceHealth.findMany({
+        orderBy: {
+          lastChecked: 'desc'
+        }
+      })
+      
+      return serviceHealthRecords.map(record => ({
+        serviceName: record.serviceName,
+        status: record.status as 'healthy' | 'degraded' | 'unhealthy',
+        lastChecked: record.lastChecked,
+        responseTime: record.responseTime,
+        uptime: record.uptime,
+        metadata: record.metadata as Record<string, any>
+      }))
     } catch (error) {
       console.error('Error getting health status:', error)
       return []
@@ -126,8 +138,22 @@ export class HealthMonitor {
    */
   async getServiceHealth(serviceName: string): Promise<ServiceHealth | null> {
     try {
-      // TODO: Implement service health lookup when ServiceHealth model is added
-      return null
+      const record = await prisma.serviceHealth.findUnique({
+        where: {
+          serviceName
+        }
+      })
+      
+      if (!record) return null
+      
+      return {
+        serviceName: record.serviceName,
+        status: record.status as 'healthy' | 'degraded' | 'unhealthy',
+        lastChecked: record.lastChecked,
+        responseTime: record.responseTime,
+        uptime: record.uptime,
+        metadata: record.metadata as Record<string, any>
+      }
     } catch (error) {
       console.error('Error getting service health:', error)
       return null
@@ -139,8 +165,40 @@ export class HealthMonitor {
    */
   private async storeHealthCheck(serviceName: string, result: HealthCheckResult): Promise<void> {
     try {
-      // TODO: Implement health check storage when ServiceHealth model is added
-
+      // Update service health status
+      await prisma.serviceHealth.upsert({
+        where: {
+          serviceName
+        },
+        update: {
+          status: result.status,
+          lastChecked: new Date(),
+          responseTime: result.responseTime,
+          uptime: result.uptime || null,
+          metadata: result.metadata || {}
+        },
+        create: {
+          serviceName,
+          status: result.status,
+          lastChecked: new Date(),
+          responseTime: result.responseTime,
+          uptime: result.uptime || null,
+          metadata: result.metadata || {}
+        }
+      })
+      
+      // Log the health check
+      await prisma.healthCheckLog.create({
+        data: {
+          serviceName,
+          status: result.status,
+          responseTime: result.responseTime,
+          uptime: result.uptime || null,
+          errorMessage: result.error,
+          metadata: result.metadata || {},
+          checkedAt: new Date()
+        }
+      })
     } catch (error) {
       console.error('Error storing health check:', error)
     }
@@ -151,8 +209,30 @@ export class HealthMonitor {
    */
   async getHealthHistory(serviceName: string, hours: number = 24): Promise<any[]> {
     try {
-      // TODO: Implement health history lookup when HealthCheckLog model is added
-      return []
+      const since = new Date(Date.now() - (hours * 60 * 60 * 1000))
+      
+      const logs = await prisma.healthCheckLog.findMany({
+        where: {
+          serviceName,
+          checkedAt: {
+            gte: since
+          }
+        },
+        orderBy: {
+          checkedAt: 'desc'
+        },
+        take: 100 // Limit to last 100 checks
+      })
+      
+      return logs.map(log => ({
+        serviceName: log.serviceName,
+        status: log.status,
+        responseTime: log.responseTime,
+        uptime: log.uptime,
+        errorMessage: log.errorMessage,
+        metadata: log.metadata,
+        checkedAt: log.checkedAt
+      }))
     } catch (error) {
       console.error('Error getting health history:', error)
       return []
@@ -281,10 +361,42 @@ class WeatherAPIHealthChecker extends HealthChecker {
 class SatelliteServiceHealthChecker extends HealthChecker {
   async check(): Promise<{ healthy: boolean; error?: string; metadata?: any }> {
     try {
-      // TODO: Implement satellite queue health check when QueueJob model is added
+      // Check satellite processing queue health
+      const since = new Date(Date.now() - (24 * 60 * 60 * 1000)) // Last 24 hours
+      
+      const [totalJobs, failedJobs, pendingJobs] = await Promise.all([
+        prisma.queueJob.count({
+          where: {
+            queueName: 'satellite',
+            createdAt: { gte: since }
+          }
+        }),
+        prisma.queueJob.count({
+          where: {
+            queueName: 'satellite',
+            status: 'failed',
+            createdAt: { gte: since }
+          }
+        }),
+        prisma.queueJob.count({
+          where: {
+            queueName: 'satellite',
+            status: 'pending'
+          }
+        })
+      ])
+      
+      const failureRate = totalJobs > 0 ? (failedJobs / totalJobs) * 100 : 0
+      const healthy = failureRate < 10 && pendingJobs < 100 // Less than 10% failure rate and under 100 pending jobs
+      
       return { 
-        healthy: true, 
-        metadata: { recentJobs: 0, failedJobs: 0, failureRate: 0 } 
+        healthy, 
+        metadata: { 
+          recentJobs: totalJobs, 
+          failedJobs, 
+          pendingJobs, 
+          failureRate: Math.round(failureRate * 100) / 100 
+        } 
       }
     } catch (error) {
       return {
@@ -301,14 +413,34 @@ class SatelliteServiceHealthChecker extends HealthChecker {
 class QueueHealthChecker extends HealthChecker {
   async check(): Promise<{ healthy: boolean; error?: string; metadata?: any }> {
     try {
-      // TODO: Implement queue health check when QueueJob model is added
+      // Check general queue health across all queues
+      const [totalJobs, pendingJobs, processingJobs, stuckJobs] = await Promise.all([
+        prisma.queueJob.count(),
+        prisma.queueJob.count({
+          where: { status: 'pending' }
+        }),
+        prisma.queueJob.count({
+          where: { status: 'processing' }
+        }),
+        prisma.queueJob.count({
+          where: {
+            status: 'processing',
+            startedAt: {
+              lt: new Date(Date.now() - (30 * 60 * 1000)) // Processing for more than 30 minutes
+            }
+          }
+        })
+      ])
+      
+      const healthy = pendingJobs < 1000 && stuckJobs === 0 // Less than 1000 pending jobs and no stuck jobs
+      
       return {
-        healthy: true,
+        healthy,
         metadata: {
-          totalJobs: 0,
-          pendingJobs: 0,
-          processingJobs: 0,
-          stuckJobs: 0
+          totalJobs,
+          pendingJobs,
+          processingJobs,
+          stuckJobs
         }
       }
     } catch (error) {

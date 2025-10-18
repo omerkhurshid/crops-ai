@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../../lib/auth/session'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { LivestockDashboard } from '../../components/livestock/livestock-dashboard'
+import { LivestockQuickActions } from '../../components/livestock/livestock-quick-actions'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Users, Plus, Stethoscope, Heart, Activity, TrendingUp } from 'lucide-react'
@@ -137,26 +138,7 @@ export default async function LivestockPage() {
             </div>
             
             {/* Quick Actions for beginners */}
-            <div className="mt-4 pt-3 border-t border-earth-200 flex flex-wrap gap-2">
-              <button
-                onClick={() => window.location.href = '/livestock/add-animal'}
-                className="bg-earth-600 hover:bg-earth-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-              >
-                Add First Animal
-              </button>
-              <button
-                onClick={() => window.location.href = '/livestock/add-event'}
-                className="bg-white hover:bg-earth-50 text-earth-700 border border-earth-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-              >
-                Log Health Event
-              </button>
-              <button
-                onClick={() => window.location.href = '/help/articles/livestock-basics'}
-                className="bg-white hover:bg-earth-50 text-earth-700 border border-earth-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-              >
-                Learn More
-              </button>
-            </div>
+            <LivestockQuickActions />
           </div>
         </div>
 

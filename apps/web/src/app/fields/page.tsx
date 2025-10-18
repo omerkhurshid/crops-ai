@@ -5,6 +5,8 @@ import { ModernCard } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
 import { Navbar } from '../../components/navigation/navbar'
+import { FieldsQuickActions, FieldsNavigateButton } from '../../components/fields/fields-quick-actions'
+import { FieldsHeaderActions } from '../../components/fields/fields-header-actions'
 import { Leaf, MapPin, Plus } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -107,23 +109,7 @@ export default async function FieldsPage() {
               <h1 className="text-3xl font-bold text-gray-900">Field Management</h1>
               <p className="text-gray-600">Monitor and analyze individual field performance</p>
             </div>
-            <div className="flex gap-2">
-              <Button 
-                className="bg-sage-600 hover:bg-sage-700"
-                onClick={() => window.location.href = window.location.search.includes('quick=true') ? '/farms/create?guided=true&step=fields' : '/fields/create'}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add New Field
-              </Button>
-              {window.location.search.includes('quick=true') && (
-                <Button 
-                  variant="outline"
-                  onClick={() => window.location.href = '/fields/quick-setup'}
-                >
-                  Quick Setup (5 min)
-                </Button>
-              )}
-            </div>
+            <FieldsHeaderActions />
           </div>
 
           {/* Summary Stats */}
@@ -183,14 +169,7 @@ export default async function FieldsPage() {
                     You haven't added any fields yet. Start by creating a farm and adding fields to begin monitoring your crops.
                   </p>
                   <div className="mt-6 space-x-3">
-                    <Button
-                      onClick={() => window.location.href = '/farms'}
-                      variant="outline"
-                      className="border-yellow-300 text-yellow-700 hover:bg-yellow-100"
-                    >
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Manage Farms
-                    </Button>
+                    <FieldsNavigateButton />
                     <Button
                       className="bg-yellow-600 hover:bg-yellow-700 text-white"
                     >

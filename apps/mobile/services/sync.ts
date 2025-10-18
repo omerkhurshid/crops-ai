@@ -8,7 +8,24 @@ export interface SyncStatus {
   lastSync?: string;
   pendingUploads: number;
   pendingDownloads: number;
-  errors: string[];
+  errors: SyncError[];
+}
+
+export interface SyncError {
+  id: string;
+  type: 'NETWORK_ERROR' | 'VALIDATION_ERROR' | 'SERVER_ERROR' | 'STORAGE_ERROR';
+  message: string;
+  timestamp: Date;
+  details?: any;
+}
+
+interface DownloadQueueItem {
+  id: string;
+  type: 'farm' | 'field' | 'crop' | 'photo';
+  resourceId: string;
+  priority: number;
+  retryCount: number;
+  lastAttempt?: Date;
 }
 
 export interface SyncQueueItem {
@@ -28,6 +45,8 @@ class SyncService {
   private syncInterval: NodeJS.Timeout | null = null;
   private readonly SYNC_INTERVAL_MS = 30000; // 30 seconds
   private readonly MAX_RETRY_ATTEMPTS = 3;
+  private downloadQueue: DownloadQueueItem[] = [];
+  private syncErrors: SyncError[] = [];
 
   constructor() {
     this.setupNetworkListener();
@@ -63,8 +82,8 @@ class SyncService {
       isSyncing: this.isSyncing,
       lastSync: await this.getLastSyncTime(),
       pendingUploads: syncQueue.length,
-      pendingDownloads: 0, // TODO: Implement download queue
-      errors: [], // TODO: Implement error tracking
+      pendingDownloads: this.downloadQueue.length,
+      errors: this.syncErrors
     };
   }
 
@@ -338,7 +357,7 @@ class SyncService {
   // Force sync specific items
   async forceSyncFarm(farmId: string): Promise<boolean> {
     try {
-      const farms = await databaseService.getFarms('current_user_id'); // TODO: Get actual user ID
+      const farms = await databaseService.getFarms(await this.getCurrentUserId());
       const farm = farms.find(f => f.id === farmId);
       
       if (farm && farm.needsSync) {
@@ -364,12 +383,22 @@ class SyncService {
   }
 
   private async getLastSyncTime(): Promise<string | undefined> {
-    // TODO: Implement with AsyncStorage or database
-    return undefined;
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      return await AsyncStorage.getItem('lastSyncTime') || undefined;
+    } catch (error) {
+      this.addSyncError('STORAGE_ERROR', 'Failed to retrieve sync time', error);
+      return undefined;
+    }
   }
 
   private async setLastSyncTime(time: string): Promise<void> {
-    // TODO: Implement with AsyncStorage or database
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      await AsyncStorage.setItem('lastSyncTime', time);
+    } catch (error) {
+      this.addSyncError('STORAGE_ERROR', 'Failed to save sync time', error);
+    }
   }
 
   // Cleanup and destroy
@@ -387,13 +416,26 @@ class SyncService {
     pendingRecords: number;
     erroredRecords: number;
   }> {
-    // TODO: Implement statistics calculation
-    return {
-      totalRecords: 0,
-      syncedRecords: 0,
-      pendingRecords: 0,
-      erroredRecords: 0,
-    };
+    try {
+      const syncQueue = await databaseService.getSyncQueue();
+      const totalRecords = await databaseService.getTotalRecordsCount();
+      const syncedRecords = totalRecords - syncQueue.length;
+      
+      return {
+        totalRecords,
+        syncedRecords,
+        pendingRecords: syncQueue.length,
+        erroredRecords: this.syncErrors.length,
+      };
+    } catch (error) {
+      this.addSyncError('STORAGE_ERROR', 'Failed to calculate sync statistics', error);
+      return {
+        totalRecords: 0,
+        syncedRecords: 0,
+        pendingRecords: 0,
+        erroredRecords: this.syncErrors.length,
+      };
+    }
   }
 
   // Manual conflict resolution
@@ -408,6 +450,109 @@ class SyncService {
         return { ...localData, ...serverData };
       default:
         return serverData;
+    }
+  }
+
+  // Error tracking methods
+  private addSyncError(type: SyncError['type'], message: string, details?: any): void {
+    const error: SyncError = {
+      id: `${Date.now()}-${Math.random()}`,
+      type,
+      message,
+      timestamp: new Date(),
+      details
+    };
+    
+    this.syncErrors.push(error);
+    
+    // Keep only last 50 errors to prevent memory bloat
+    if (this.syncErrors.length > 50) {
+      this.syncErrors = this.syncErrors.slice(-50);
+    }
+  }
+
+  clearSyncErrors(): void {
+    this.syncErrors = [];
+  }
+
+  // Download queue management
+  addToDownloadQueue(type: DownloadQueueItem['type'], resourceId: string, priority: number = 1): void {
+    const existingItem = this.downloadQueue.find(item => item.resourceId === resourceId && item.type === type);
+    
+    if (!existingItem) {
+      this.downloadQueue.push({
+        id: `${Date.now()}-${Math.random()}`,
+        type,
+        resourceId,
+        priority,
+        retryCount: 0
+      });
+      
+      // Sort by priority (higher number = higher priority)
+      this.downloadQueue.sort((a, b) => b.priority - a.priority);
+    }
+  }
+
+  private async processDownloadQueue(): Promise<void> {
+    while (this.downloadQueue.length > 0 && this.isOnline) {
+      const item = this.downloadQueue.shift();
+      if (!item) break;
+
+      try {
+        await this.downloadResource(item);
+      } catch (error) {
+        item.retryCount++;
+        item.lastAttempt = new Date();
+        
+        if (item.retryCount < this.MAX_RETRY_ATTEMPTS) {
+          // Re-add to queue for retry
+          this.downloadQueue.push(item);
+        } else {
+          this.addSyncError('NETWORK_ERROR', `Failed to download ${item.type} ${item.resourceId}`, error);
+        }
+      }
+    }
+  }
+
+  private async downloadResource(item: DownloadQueueItem): Promise<void> {
+    const endpoint = this.getApiEndpoint(item.type + 's'); // Convert to plural
+    const response = await fetch(`${this.API_BASE_URL}${endpoint}/${item.resourceId}`, {
+      headers: {
+        'Authorization': `Bearer ${await authService.getToken()}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    // Store downloaded data locally
+    switch (item.type) {
+      case 'farm':
+        await databaseService.updateFarm(data);
+        break;
+      case 'field':
+        await databaseService.updateField(data);
+        break;
+      case 'crop':
+        await databaseService.updateCrop(data);
+        break;
+      case 'photo':
+        await databaseService.updatePhoto(data);
+        break;
+    }
+  }
+
+  private async getCurrentUserId(): Promise<string> {
+    try {
+      const user = await authService.getCurrentUser();
+      return user?.id || 'anonymous';
+    } catch (error) {
+      this.addSyncError('VALIDATION_ERROR', 'Failed to get current user ID', error);
+      return 'anonymous';
     }
   }
 }

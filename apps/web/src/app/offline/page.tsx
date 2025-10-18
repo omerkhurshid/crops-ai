@@ -2,6 +2,7 @@
  * Offline Page
  * Displayed when the user is offline and the requested page is not cached
  */
+'use client'
 
 import { Wifi, WifiOff, RefreshCw } from 'lucide-react'
 import { Button } from '../../components/ui/button'

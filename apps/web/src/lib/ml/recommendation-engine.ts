@@ -275,8 +275,10 @@ class AgricultureRecommendationEngine {
   async recordFeedback(feedback: RecommendationFeedback): Promise<void> {
     try {
       // Store feedback for model improvement
-      const feedbackKey = `feedback_${feedback.recommendationId}_${feedback.userId}`;
-      await redis.set(feedbackKey, feedback, { ex: this.FEEDBACK_TTL });
+      if (redis) {
+        const feedbackKey = `feedback_${feedback.recommendationId}_${feedback.userId}`;
+        await redis.set(feedbackKey, feedback, { ex: this.FEEDBACK_TTL });
+      }
 
       // Update recommendation effectiveness scores
       await this.updateRecommendationScores(feedback);
@@ -1473,6 +1475,10 @@ class AgricultureRecommendationEngine {
   }
 
   private async getCachedPlan(cacheKey: string): Promise<RecommendationPlan | null> {
+    if (!redis) {
+      return null;
+    }
+    
     try {
       return await redis.get(cacheKey) as RecommendationPlan;
     } catch (error) {
@@ -1481,10 +1487,14 @@ class AgricultureRecommendationEngine {
   }
 
   private async cachePlan(cacheKey: string, plan: RecommendationPlan): Promise<void> {
+    if (!redis) {
+      return;
+    }
+    
     try {
       await redis.set(cacheKey, plan, { ex: this.PLAN_TTL });
     } catch (error) {
-
+      // Cache miss is not critical
     }
   }
 

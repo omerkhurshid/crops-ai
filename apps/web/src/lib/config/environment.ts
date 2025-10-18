@@ -16,9 +16,9 @@ interface EnvironmentConfig {
   // Database
   DATABASE_URL: string
   
-  // Redis
-  UPSTASH_REDIS_REST_URL: string
-  UPSTASH_REDIS_REST_TOKEN: string
+  // Redis (Optional)
+  UPSTASH_REDIS_REST_URL?: string
+  UPSTASH_REDIS_REST_TOKEN?: string
   
   // External APIs
   OPENWEATHER_API_KEY: string
@@ -91,12 +91,17 @@ class EnvironmentValidator {
       NODE_ENV: process.env.NODE_ENV,
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
       DATABASE_URL: process.env.DATABASE_URL,
-      UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-      UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
       OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
       NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     }
+
+    // Optional Redis variables (check if both are provided and not placeholders)
+    const redisUrl = process.env.UPSTASH_REDIS_REST_URL
+    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
+    const isValidRedisUrl = redisUrl && !redisUrl.startsWith('YOUR_') && redisUrl.startsWith('https://')
+    const isValidRedisToken = redisToken && !redisToken.startsWith('YOUR_')
+    const hasRedis = isValidRedisUrl && isValidRedisToken
 
     // Check required variables
     for (const [key, value] of Object.entries(requiredVars)) {
@@ -115,9 +120,14 @@ class EnvironmentValidator {
       errors.push('NEXTAUTH_SECRET must be at least 32 characters long')
     }
 
-    // Validate Redis URL format
-    if (requiredVars.UPSTASH_REDIS_REST_URL && !requiredVars.UPSTASH_REDIS_REST_URL.startsWith('https://')) {
+    // Validate Redis URL format if provided (ignore placeholder values)
+    if (redisUrl && !redisUrl.startsWith('YOUR_') && !redisUrl.startsWith('https://')) {
       errors.push('UPSTASH_REDIS_REST_URL must be a valid HTTPS URL')
+    }
+
+    // If one Redis var is provided, both must be provided (ignore placeholders)
+    if ((isValidRedisUrl && !isValidRedisToken) || (!isValidRedisUrl && isValidRedisToken)) {
+      errors.push('Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be provided together')
     }
 
     // Production-specific validations
@@ -139,8 +149,8 @@ class EnvironmentValidator {
       NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
       NEXTAUTH_SECRET: requiredVars.NEXTAUTH_SECRET!,
       DATABASE_URL: requiredVars.DATABASE_URL!,
-      UPSTASH_REDIS_REST_URL: requiredVars.UPSTASH_REDIS_REST_URL!,
-      UPSTASH_REDIS_REST_TOKEN: requiredVars.UPSTASH_REDIS_REST_TOKEN!,
+      UPSTASH_REDIS_REST_URL: isValidRedisUrl ? redisUrl : undefined,
+      UPSTASH_REDIS_REST_TOKEN: isValidRedisToken ? redisToken : undefined,
       OPENWEATHER_API_KEY: requiredVars.OPENWEATHER_API_KEY!,
       GOOGLE_MAPS_API_KEY: requiredVars.GOOGLE_MAPS_API_KEY!,
       NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: requiredVars.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,

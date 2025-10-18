@@ -4,6 +4,7 @@ import { getCurrentUser } from '../../lib/auth/session'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
+import { RefreshButton } from '../../components/ui/refresh-button'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import dynamicImport from 'next/dynamic'
 
@@ -300,12 +301,9 @@ export default async function DashboardPage() {
               We're experiencing technical difficulties. Please try refreshing the page.
             </p>
             <div className="space-x-4">
-              <Button 
-                onClick={() => window.location.reload()} 
-                className="bg-sage-600 hover:bg-sage-700"
-              >
+              <RefreshButton className="bg-sage-600 hover:bg-sage-700">
                 Refresh Page
-              </Button>
+              </RefreshButton>
               <Link href="/farms">
                 <Button variant="outline">
                   Go to Farms

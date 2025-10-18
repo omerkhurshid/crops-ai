@@ -767,19 +767,26 @@ class YieldPredictionService {
   }
 
   private async getCachedPrediction(cacheKey: string): Promise<YieldPrediction | null> {
+    if (!redis) {
+      return null;
+    }
+    
     try {
       return await redis.get(cacheKey) as YieldPrediction;
     } catch (error) {
-
       return null;
     }
   }
 
   private async cachePrediction(cacheKey: string, prediction: YieldPrediction): Promise<void> {
+    if (!redis) {
+      return;
+    }
+    
     try {
       await redis.set(cacheKey, prediction, { ex: this.PREDICTION_TTL });
     } catch (error) {
-
+      // Cache miss is not critical
     }
   }
 
@@ -837,10 +844,14 @@ class YieldPredictionService {
   }
 
   private async saveModel(model: YieldModel): Promise<void> {
+    if (!redis) {
+      return;
+    }
+    
     try {
       await redis.set(`${this.MODEL_PREFIX}${model.id}`, model, { ex: 30 * 24 * 60 * 60 }); // 30 days
     } catch (error) {
-
+      // Model saving failure is not critical
     }
   }
 

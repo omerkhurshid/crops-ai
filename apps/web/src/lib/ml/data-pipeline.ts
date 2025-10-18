@@ -746,6 +746,10 @@ class AgricultureDataPipeline {
   }
 
   private async cacheProcessedData(trainingData: TrainingData[], validationData: TrainingData[]): Promise<void> {
+    if (!redis) {
+      return;
+    }
+    
     try {
       const cacheKey = `${this.CACHE_PREFIX}processed_${Date.now()}`;
       await redis.set(cacheKey, {
@@ -754,7 +758,7 @@ class AgricultureDataPipeline {
         timestamp: new Date()
       }, { ex: 86400 }); // 24 hours
     } catch (error) {
-
+      // Cache miss is not critical
     }
   }
 }

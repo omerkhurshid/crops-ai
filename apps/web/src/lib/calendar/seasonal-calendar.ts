@@ -708,6 +708,10 @@ class SeasonalCalendarService {
   }
 
   private async getCached(key: string): Promise<any> {
+    if (!redis) {
+      return null;
+    }
+    
     try {
       return await redis.get(key);
     } catch (error) {
@@ -716,10 +720,14 @@ class SeasonalCalendarService {
   }
 
   private async setCached(key: string, data: any, ttl: number = this.CACHE_TTL): Promise<void> {
+    if (!redis) {
+      return;
+    }
+    
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
-
+      // Cache miss is not critical
     }
   }
 }

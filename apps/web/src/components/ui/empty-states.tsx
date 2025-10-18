@@ -1,3 +1,5 @@
+'use client'
+
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from './modern-card'
 import { InlineFloatingButton } from './floating-button'
 import Link from 'next/link'

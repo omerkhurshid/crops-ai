@@ -18,6 +18,22 @@ import type {
   ProcessingJob,
   ProcessedImage
 } from './types';
+
+// Helper function to safely use redis
+const safeRedis = {
+  async get(key: string) {
+    return redis ? redis.get(key) : null;
+  },
+  async set(key: string, value: any, options?: any) {
+    return redis ? redis.set(key, value, options) : null;
+  },
+  async zadd(key: string, member: any) {
+    return redis ? redis.zadd(key, member) : null;
+  },
+  async zpopmin(key: string, count: number) {
+    return redis ? redis.zpopmin(key, count) : null;
+  }
+};
 import type { VegetationIndices, VegetationHealthReport } from './ndvi-analysis';
 
 export interface ProcessingOptions {
@@ -125,7 +141,7 @@ class SatelliteImageProcessor {
    */
   async getJobStatus(jobId: string): Promise<ProcessingJob | null> {
     try {
-      const jobData = await redis.get(`${this.JOB_PREFIX}${jobId}`);
+      const jobData = await safeRedis.get(`${this.JOB_PREFIX}${jobId}`);
       if (!jobData) return null;
       
       return jobData as ProcessingJob;

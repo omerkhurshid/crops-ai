@@ -5,11 +5,13 @@ import { getConfig } from './config/environment';
 // Get validated configuration
 const config = getConfig();
 
-// Create Redis instance with validated environment variables
-export const redis = new Redis({
-  url: config.UPSTASH_REDIS_REST_URL,
-  token: config.UPSTASH_REDIS_REST_TOKEN
-});
+// Create Redis instance with validated environment variables (if available)
+export const redis = config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN 
+  ? new Redis({
+      url: config.UPSTASH_REDIS_REST_URL,
+      token: config.UPSTASH_REDIS_REST_TOKEN
+    })
+  : null;
 
 // Utility functions for common Redis operations
 export class RedisManager {
@@ -17,6 +19,11 @@ export class RedisManager {
    * Set a key-value pair with optional expiration
    */
   static async set(key: string, value: any, options?: { ex?: number; nx?: boolean }): Promise<string | null> {
+    if (!redis) {
+      console.warn('Redis not available, skipping SET operation');
+      return null;
+    }
+    
     try {
       // Handle Redis SET options properly
       if (options) {
@@ -37,6 +44,10 @@ export class RedisManager {
    * Get a value by key
    */
   static async get(key: string): Promise<any> {
+    if (!redis) {
+      return null;
+    }
+    
     try {
       const value = await redis.get(key);
       return value ? JSON.parse(value as string) : null;
@@ -50,6 +61,10 @@ export class RedisManager {
    * Delete a key
    */
   static async del(key: string): Promise<number> {
+    if (!redis) {
+      return 0;
+    }
+    
     try {
       return await redis.del(key);
     } catch (error) {
@@ -62,6 +77,10 @@ export class RedisManager {
    * Check if key exists
    */
   static async exists(key: string): Promise<boolean> {
+    if (!redis) {
+      return false;
+    }
+    
     try {
       const result = await redis.exists(key);
       return result === 1;
@@ -75,6 +94,10 @@ export class RedisManager {
    * Set expiration on a key
    */
   static async expire(key: string, seconds: number): Promise<boolean> {
+    if (!redis) {
+      return false;
+    }
+    
     try {
       const result = await redis.expire(key, seconds);
       return result === 1;
@@ -88,6 +111,10 @@ export class RedisManager {
    * Increment a numeric value
    */
   static async incr(key: string): Promise<number> {
+    if (!redis) {
+      return 0;
+    }
+    
     try {
       return await redis.incr(key);
     } catch (error) {

@@ -2,58 +2,110 @@ import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 import { NextRequest } from 'next/server'
 
+// Check if Redis is available and properly configured
+const isRedisAvailable = () => {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  return url && token && !url.startsWith('YOUR_') && url.startsWith('https://')
+}
+
+// Create Redis instance only if properly configured
+const createRedis = () => {
+  if (!isRedisAvailable()) {
+    return null
+  }
+  try {
+    return Redis.fromEnv()
+  } catch (error) {
+    console.warn('Failed to create Redis client:', error)
+    return null
+  }
+}
+
+const redis = createRedis()
+
 // Create a new ratelimiter that allows 30 requests per 60 seconds
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
+const ratelimit = redis ? new Ratelimit({
+  redis,
   limiter: Ratelimit.slidingWindow(30, '60 s'),
   analytics: true,
   prefix: '@upstash/ratelimit',
-})
+}) : null
 
 // Rate limit configurations for different endpoints
 const rateLimitConfigs = {
   // Authentication endpoints - stricter limits
-  auth: new Ratelimit({
-    redis: Redis.fromEnv(),
+  auth: redis ? new Ratelimit({
+    redis,
     limiter: Ratelimit.slidingWindow(5, '15 m'), // 5 attempts per 15 minutes
     analytics: true,
     prefix: 'auth',
-  }),
+  }) : null,
   
   // API endpoints - standard limits
-  api: new Ratelimit({
-    redis: Redis.fromEnv(),
+  api: redis ? new Ratelimit({
+    redis,
     limiter: Ratelimit.slidingWindow(150, '1 m'), // 150 requests per minute
     analytics: true,
     prefix: 'api',
-  }),
+  }) : null,
   
   // Write operations - moderate limits
-  write: new Ratelimit({
-    redis: Redis.fromEnv(),
+  write: redis ? new Ratelimit({
+    redis,
     limiter: Ratelimit.slidingWindow(60, '1 m'), // 60 writes per minute
     analytics: true,
     prefix: 'write',
-  }),
+  }) : null,
   
   // Heavy operations (satellite, ML) - more permissive limits
-  heavy: new Ratelimit({
-    redis: Redis.fromEnv(),
+  heavy: redis ? new Ratelimit({
+    redis,
     limiter: Ratelimit.slidingWindow(50, '1 m'), // 50 requests per minute
     analytics: true,
     prefix: 'heavy',
-  }),
+  }) : null,
 }
 
 export async function rateLimit(
   request: NextRequest,
   type: 'auth' | 'api' | 'write' | 'heavy' = 'api'
 ) {
+  // If Redis is not available, allow all requests
+  if (!redis) {
+    return {
+      success: true,
+      limit: 1000,
+      reset: Date.now() + 60000,
+      remaining: 999,
+      headers: {
+        'X-RateLimit-Limit': '1000',
+        'X-RateLimit-Remaining': '999',
+        'X-RateLimit-Reset': new Date(Date.now() + 60000).toISOString(),
+      },
+    }
+  }
+
   // Get the IP address from the request
   const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'anonymous'
   
   // Use the appropriate rate limiter based on type
   const limiter = rateLimitConfigs[type] || rateLimitConfigs.api
+  
+  if (!limiter) {
+    // Fallback if specific limiter is not available
+    return {
+      success: true,
+      limit: 1000,
+      reset: Date.now() + 60000,
+      remaining: 999,
+      headers: {
+        'X-RateLimit-Limit': '1000',
+        'X-RateLimit-Remaining': '999',
+        'X-RateLimit-Reset': new Date(Date.now() + 60000).toISOString(),
+      },
+    }
+  }
   
   // Check the rate limit
   const { success, limit, reset, remaining } = await limiter.limit(ip)

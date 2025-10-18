@@ -3,6 +3,8 @@
  * with the existing Cropple.ai dashboard
  */
 
+import { prisma } from '@/lib/prisma'
+
 interface FieldData {
   id: string
   name: string
@@ -74,9 +76,9 @@ export class RealSatelliteService {
 
       return {
         overallHealth: Math.round(overallHealth),
-        healthTrend: 2, // Mock trend - would calculate from historical data
+        healthTrend: await this.calculateHealthTrend(farmId, analyses),
         stressedAreas: Math.round(stressedAreas * 10) / 10,
-        stressTrend: -1, // Mock trend
+        stressTrend: await this.calculateStressTrend(farmId, analyses),
         yieldForecast,
         todayHighlights: highlights,
         satelliteDataAvailable: true,
@@ -325,23 +327,108 @@ export class RealSatelliteService {
   }
 
   private async getFarmFields(farmId: string): Promise<FieldData[]> {
-    // Mock farm fields - replace with actual database query
-    return [
-      {
-        id: `mock-field-${Date.now()}-1`,
-        name: 'North Field',
-        boundaries: [[[-93.5, 42.0], [-93.4, 42.0], [-93.4, 42.1], [-93.5, 42.1], [-93.5, 42.0]]],
-        cropType: 'Corn',
-        acres: 45
-      },
-      {
-        id: `mock-field-${Date.now()}-2`, 
-        name: 'South Field',
-        boundaries: [[[-93.5, 41.9], [-93.4, 41.9], [-93.4, 42.0], [-93.5, 42.0], [-93.5, 41.9]]],
-        cropType: 'Soybeans',
-        acres: 33
+    try {
+      const farm = await prisma.farm.findUnique({
+        where: { id: farmId },
+        include: {
+          fields: {
+            include: {
+              crops: {
+                orderBy: { plantingDate: 'desc' },
+                take: 1 // Get most recent crop for each field
+              }
+            }
+          }
+        }
+      })
+
+      if (!farm) {
+        throw new Error(`Farm with ID ${farmId} not found`)
       }
-    ]
+
+      return farm.fields.map(field => ({
+        id: field.id,
+        name: field.name,
+        boundaries: [], // TODO: Implement boundary parsing once PostGIS geography is properly configured
+        cropType: field.crops[0]?.cropType || field.cropType || 'Unknown',
+        acres: field.area * 2.47 // Convert hectares to acres
+      }))
+    } catch (error) {
+      console.error('Error fetching farm fields:', error)
+      throw new Error('Failed to fetch farm fields from database')
+    }
+  }
+
+  private parseBoundaryGeography(boundary: any): number[][][] {
+    // Parse PostGIS geography data - implementation depends on your boundary format
+    // For now, return empty array if boundary cannot be parsed
+    try {
+      if (typeof boundary === 'string') {
+        // Handle string-based geography data
+        return JSON.parse(boundary)
+      }
+      return boundary || []
+    } catch {
+      return []
+    }
+  }
+
+  private async calculateHealthTrend(farmId: string, currentAnalyses: any[]): Promise<number> {
+    try {
+      // Get historical health data from satellite records
+      const historicalData = await prisma.satelliteData.findMany({
+        where: {
+          field: {
+            farmId: farmId
+          },
+          captureDate: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
+          }
+        },
+        orderBy: { captureDate: 'desc' },
+        select: { ndvi: true, captureDate: true }
+      })
+
+      if (historicalData.length < 2) return 0
+
+      const currentAvg = currentAnalyses.reduce((sum, analysis) => sum + (analysis.ndvi || 0), 0) / currentAnalyses.length
+      const historicalAvg = historicalData.reduce((sum, record) => sum + (record.ndvi || 0), 0) / historicalData.length
+      
+      const trend = currentAvg - historicalAvg
+      return Math.round(trend * 100) // Convert to percentage change
+    } catch (error) {
+      console.error('Error calculating health trend:', error)
+      return 0
+    }
+  }
+
+  private async calculateStressTrend(farmId: string, currentAnalyses: any[]): Promise<number> {
+    try {
+      // Calculate stress trend based on historical stress indicators
+      const historicalAlerts = await prisma.weatherAlert.findMany({
+        where: {
+          farmId: farmId,
+          triggeredAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+          }
+        },
+        select: { severity: true, triggeredAt: true }
+      })
+
+      // Simple trend calculation - fewer alerts = negative trend (improving)
+      const recentAlerts = historicalAlerts.filter(alert => 
+        alert.triggeredAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      ).length
+
+      const olderAlerts = historicalAlerts.filter(alert => 
+        alert.triggeredAt <= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      ).length
+
+      return recentAlerts - olderAlerts // Positive = more stress, negative = improving
+    } catch (error) {
+      console.error('Error calculating stress trend:', error)
+      return 0
+    }
   }
 
   private getAnalysisStartDate(): string {

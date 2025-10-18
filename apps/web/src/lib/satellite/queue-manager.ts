@@ -511,7 +511,7 @@ class Worker {
       const results = {
         analysisId: `analysis-${Date.now()}`,
         fieldId: job.fieldId,
-        imageUrl: `https://example.com/processed/${job.id}.jpg`,
+        imageUrl: process.env.NEXT_PUBLIC_STORAGE_URL ? `${process.env.NEXT_PUBLIC_STORAGE_URL}/processed/${job.id}.jpg` : null,
         ndvi: 0.75,
         healthScore: 85,
         stressLevel: 'low',

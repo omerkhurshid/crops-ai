@@ -1,11 +1,18 @@
 // Demo data service for new user exploration
 export class DemoDataService {
   static isDemoMode(): boolean {
+    // Demo mode disabled in production
+    if (process.env.NODE_ENV === 'production') return false
     if (typeof window === 'undefined') return false
     return localStorage.getItem('demoMode') === 'true'
   }
 
   static enableDemoMode(): void {
+    // Demo mode disabled in production
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('Demo mode cannot be enabled in production')
+      return
+    }
     if (typeof window !== 'undefined') {
       localStorage.setItem('demoMode', 'true')
     }

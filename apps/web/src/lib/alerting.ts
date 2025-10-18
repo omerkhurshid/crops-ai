@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs'
+import { getConfig } from './config/environment'
 
 export interface AlertConfig {
   webhookUrl?: string
@@ -229,10 +230,10 @@ export const alertManager = new AlertManager()
 
 // Initialize with environment variables
 alertManager.configure({
-  webhookUrl: process.env.ALERT_WEBHOOK_URL,
-  slackChannel: process.env.SLACK_CHANNEL,
-  emailRecipients: process.env.ALERT_EMAIL_RECIPIENTS?.split(','),
-  discordWebhook: process.env.DISCORD_WEBHOOK_URL
+  webhookUrl: getConfig().ALERT_WEBHOOK_URL,
+  slackChannel: getConfig().SLACK_CHANNEL,
+  emailRecipients: getConfig().ALERT_EMAIL_RECIPIENTS?.split(','),
+  discordWebhook: getConfig().DISCORD_WEBHOOK_URL
 })
 
 // Convenience functions

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { getConfig } from '../../lib/config/environment'
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -219,7 +220,8 @@ export function GoogleMapsFieldEditor({
   const totalArea = fields.reduce((sum, field) => sum + field.area, 0)
 
   // Check if Google Maps API key is available
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  const config = getConfig()
+  const apiKey = config.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   
   if (!apiKey) {
     return (

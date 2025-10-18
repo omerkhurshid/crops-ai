@@ -1,8 +1,16 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import { Logger } from '@crops-ai/shared'
 import { DashboardData, DashboardDataContextType, CropData } from '../../types/dashboard'
+import { 
+  useCachedFarmData, 
+  useCachedWeatherData, 
+  useCachedCropData, 
+  useCachedTaskData,
+  useCachedSatelliteData,
+  usePrefetchFarmData
+} from '../../hooks/useAPICache'
 
 const DashboardDataContext = createContext<DashboardDataContextType | null>(null)
 
@@ -23,105 +31,125 @@ export function DashboardDataProvider({
   farmData, 
   crops: initialCrops = [] 
 }: DashboardDataProviderProps) {
-  const [data, setData] = useState<DashboardData>({
-    weather: null,
-    crops: initialCrops,
-    tasks: [],
+  // Use cached data hooks
+  const weatherData = useCachedWeatherData(farmId)
+  const cropData = useCachedCropData(farmId)
+  const taskData = useCachedTaskData(farmId)
+  const satelliteData = useCachedSatelliteData(farmId)
+  const { prefetchAll } = usePrefetchFarmData(farmId)
+
+  const [additionalData, setAdditionalData] = useState({
     recommendations: [],
     regionalData: null,
     harvestAlerts: [],
     queueStatus: null,
-    budgetData: null,
-    loading: true,
-    error: null,
-    lastUpdated: null
+    budgetData: null
   })
+
+  // Aggregate all data from cached sources
+  const data = useMemo((): DashboardData => {
+    const loading = weatherData.loading || cropData.loading || taskData.loading || satelliteData.loading
+    const error = weatherData.error || cropData.error || taskData.error || satelliteData.error
+    
+    return {
+      weather: weatherData.data,
+      crops: cropData.data || initialCrops,
+      tasks: taskData.data || [],
+      satellite: satelliteData.data,
+      ...additionalData,
+      loading,
+      error,
+      lastUpdated: loading ? null : new Date()
+    }
+  }, [
+    weatherData.data, weatherData.loading, weatherData.error,
+    cropData.data, cropData.loading, cropData.error,
+    taskData.data, taskData.loading, taskData.error,
+    satelliteData.data, satelliteData.loading, satelliteData.error,
+    additionalData,
+    initialCrops
+  ])
 
   const fetchAllData = useCallback(async () => {
     if (!farmId) return
 
-    setData(prev => ({ ...prev, loading: true, error: null }))
-
     try {
-      // Batch all API calls to run in parallel
-      const promises = []
+      // Refetch all cached data
+      await Promise.allSettled([
+        weatherData.refetch(),
+        cropData.refetch(), 
+        taskData.refetch(),
+        satelliteData.refetch()
+      ])
 
-      // Weather data (if coordinates available)
-      if (farmData?.latitude && farmData?.longitude) {
-        promises.push(
-          fetch('/api/weather/current').then(res => res.ok ? res.json() : null),
-          fetch(`/api/weather/alerts?latitude=${farmData.latitude}&longitude=${farmData.longitude}`).then(res => res.ok ? res.json() : { alerts: [] })
-        )
-      } else {
-        promises.push(Promise.resolve(null), Promise.resolve({ alerts: [] }))
-      }
-
-      // Other data - enhanced with real systems
-      promises.push(
-        fetch(`/api/tasks?farmId=${farmId}`).then(res => res.ok ? res.json() : { tasks: [] }),
+      // Fetch additional non-cached data in parallel
+      const additionalPromises = [
         fetch(`/api/nba/recommendations?farmId=${farmId}&maxRecommendations=4`).then(res => res.ok ? res.json() : { recommendations: [] }),
         fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`).then(res => res.ok ? res.json() : { harvestAlerts: [] }),
-        // Add queue health and system status
         fetch(`/api/satellite/queue?action=status`).then(res => res.ok ? res.json() : null),
-        // Add budget information
         fetch(`/api/financial/budget?farmId=${farmId}`).then(res => res.ok ? res.json() : null)
-      )
+      ]
 
       // Regional data (if coordinates available)
       if (farmData?.latitude && farmData?.longitude) {
-        promises.push(
+        additionalPromises.push(
           fetch(`/api/farms/regional-comparison?latitude=${farmData.latitude}&longitude=${farmData.longitude}`).then(res => res.ok ? res.json() : null)
         )
       } else {
-        promises.push(Promise.resolve(null))
+        additionalPromises.push(Promise.resolve(null))
       }
 
       const [
-        currentWeather,
-        weatherAlertsResponse,
-        tasksResponse,
         recommendationsResponse,
         diseaseResponse,
         queueStatusResponse,
         budgetResponse,
         regionalResponse
-      ] = await Promise.all(promises)
+      ] = await Promise.all(additionalPromises)
 
-      // Update state with all data at once
-      setData(prev => ({
-        ...prev,
-        weather: {
-          current: currentWeather,
-          alerts: weatherAlertsResponse?.alerts || [],
-          forecast: currentWeather?.forecast || []
-        },
-        tasks: tasksResponse?.tasks || [],
+      // Update additional data state
+      setAdditionalData({
         recommendations: recommendationsResponse?.recommendations || [],
         harvestAlerts: diseaseResponse?.harvestAlerts || [],
         queueStatus: queueStatusResponse,
         budgetData: budgetResponse,
-        regionalData: regionalResponse,
-        loading: false,
-        lastUpdated: new Date()
-      }))
+        regionalData: regionalResponse
+      })
 
     } catch (error) {
       Logger.error('Dashboard data fetch error', error, { farmId })
-      setData(prev => ({
+    }
+  }, [farmId, farmData?.latitude, farmData?.longitude, weatherData, cropData, taskData, satelliteData])
+
+  const updateData = useCallback(<K extends keyof DashboardData>(key: K, newData: DashboardData[K]) => {
+    // For cached data, invalidate cache and refetch
+    if (key === 'weather') {
+      weatherData.invalidate()
+      weatherData.refetch()
+    } else if (key === 'crops') {
+      cropData.invalidate()  
+      cropData.refetch()
+    } else if (key === 'tasks') {
+      taskData.invalidate()
+      taskData.refetch()
+    } else if (key === 'satellite') {
+      satelliteData.invalidate()
+      satelliteData.refetch()
+    } else {
+      // For additional data, update state directly
+      setAdditionalData(prev => ({
         ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load dashboard data'
+        [key]: newData
       }))
     }
-  }, [farmId, farmData?.latitude, farmData?.longitude])
+  }, [weatherData, cropData, taskData, satelliteData])
 
-  const updateData = useCallback((key: keyof DashboardData, newData: any) => {
-    setData(prev => ({
-      ...prev,
-      [key]: newData,
-      lastUpdated: new Date()
-    }))
-  }, [])
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    ...data,
+    refetch: fetchAllData,
+    updateData
+  }), [data, fetchAllData, updateData])
 
   useEffect(() => {
     fetchAllData()
@@ -133,11 +161,6 @@ export function DashboardDataProvider({
     return () => clearInterval(interval)
   }, [fetchAllData])
 
-  const contextValue: DashboardDataContextType = {
-    ...data,
-    refetch: fetchAllData,
-    updateData
-  }
 
   return (
     <DashboardDataContext.Provider value={contextValue}>

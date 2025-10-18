@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { DemoDataService } from '../../lib/demo-data'
+import { FieldMode, useFieldMode } from '../mobile/field-mode'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { FarmerMetricCard, CropHealthCard, StressLevelCard } from '../ui/farmer-metric-card'
 import { LivestockMetricCard } from '../ui/livestock-metric-card'
@@ -32,7 +33,8 @@ import {
   ChevronRight,
   RefreshCw,
   Heart,
-  MapPin
+  MapPin,
+  Smartphone
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
 
@@ -97,10 +99,11 @@ interface FarmerDashboardProps {
   }
 }
 
-export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
+export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDetailedView, setShowDetailedView] = useState(false)
+  const { isFieldMode, enableFieldMode, disableFieldMode } = useFieldMode()
   const [weatherData, setWeatherData] = useState<any>(null)
   const [lastSatelliteUpdate, setLastSatelliteUpdate] = useState<Date | null>(null)
   const [plantingsCount, setPlantingsCount] = useState(0)
@@ -256,6 +259,11 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
   // Remove sample actions - use real data only
   const realActions = farmData?.urgentTasks || []
 
+  // Show Field Mode if enabled
+  if (isFieldMode) {
+    return <FieldMode onExit={disableFieldMode} />
+  }
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -288,6 +296,25 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
 
   return (
     <div className="space-y-6">
+      {/* Field Mode Button - Prominent for mobile users */}
+      {isMobile && (
+        <div className="bg-green-600 text-white p-4 rounded-2xl shadow-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-1">Going to the field?</h3>
+              <p className="text-green-100 text-sm">Switch to Field Mode for easier mobile use</p>
+            </div>
+            <button
+              onClick={enableFieldMode}
+              className="bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors flex items-center gap-2 min-h-[48px]"
+            >
+              <Smartphone className="h-5 w-5" />
+              Field Mode
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Morning Briefing - Unified Dashboard */}
       <MorningBriefing 
         farmName={farmData.farmName}
@@ -484,4 +511,4 @@ export function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, fi
       )}
     </div>
   )
-}
+})

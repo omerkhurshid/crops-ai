@@ -67,7 +67,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      console.log('Attempting sign in with:', { email, hasPassword: !!password })
+      // Attempt authentication with provided credentials
       
       // Use our custom authentication endpoint
       const response = await fetch('/api/authentication/signin', {
@@ -82,18 +82,15 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
       })
 
       const result = await response.json()
-      console.log('Sign in result:', result)
 
       if (response.ok && result.success) {
-        console.log('Sign in successful, redirecting to:', callbackUrl)
         // Force a page refresh to ensure session is loaded properly
         window.location.href = callbackUrl
       } else {
-        console.error('Sign in error:', result.error)
         setError(result.error || 'Invalid email or password')
       }
     } catch (err) {
-      console.error('Sign in exception:', err)
+      // Handle authentication error silently
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)

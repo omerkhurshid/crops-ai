@@ -7,6 +7,7 @@
 
 import { auditLogger } from '../logging/audit-logger'
 import { ndviCalculator, VegetationIndices } from './ndvi-calculator'
+import { getConfig } from '../config/environment'
 
 export interface Sentinel2Scene {
   id: string
@@ -78,8 +79,9 @@ class CopernicusService {
   private readonly clientSecret: string
   
   constructor() {
-    this.clientId = process.env.COPERNICUS_CLIENT_ID || ''
-    this.clientSecret = process.env.COPERNICUS_CLIENT_SECRET || ''
+    const config = getConfig()
+    this.clientId = config.COPERNICUS_CLIENT_ID || ''
+    this.clientSecret = config.COPERNICUS_CLIENT_SECRET || ''
     
     if (!this.clientId || !this.clientSecret) {
       console.warn('Copernicus credentials not configured - using offline mode')

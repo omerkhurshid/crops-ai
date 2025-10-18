@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { CroppleLogo } from '../ui/cropple-logo'
+import { ThemeToggle } from '../theme/theme-toggle'
 import { 
   Home, 
   BarChart3, 
@@ -28,9 +29,10 @@ import {
 
 interface SidebarProps {
   collapsed?: boolean
+  onClose?: () => void
 }
 
-export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
+export function Sidebar({ collapsed: propCollapsed = false, onClose }: SidebarProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(propCollapsed)
@@ -244,15 +246,16 @@ export function Sidebar({ collapsed: propCollapsed = false }: SidebarProps) {
               </div>
             </div>
           )}
-          <button
-            onClick={handleSignOut}
-            className={`p-2 rounded-control text-white/70 hover:text-white hover:bg-fk-danger/20 transition-colors duration-micro ${
-              collapsed ? 'mx-auto' : ''
-            }`}
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
+          <div className={`flex items-center gap-2 ${collapsed ? 'justify-center' : ''}`}>
+            <ThemeToggle variant="compact" showLabel={false} className="text-white/70 hover:text-white" />
+            <button
+              onClick={handleSignOut}
+              className="p-2 rounded-control text-white/70 hover:text-white hover:bg-fk-danger/20 transition-colors duration-micro"
+              title="Sign Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

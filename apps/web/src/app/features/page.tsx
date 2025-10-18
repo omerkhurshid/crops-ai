@@ -14,40 +14,40 @@ export default function FeaturesPage() {
   const coreFeatures = [
     {
       icon: <CloudRain className="h-8 w-8" />,
-      title: "Weather Intelligence",
-      description: "Hyperlocal weather forecasting with field-specific predictions and extreme event alerts",
-      features: ["Real-time weather data", "48-hour precision forecasts", "Historical trend analysis", "Frost & storm warnings"]
+      title: "Weather Forecasts",
+      description: "Accurate weather updates for your farm with alerts for bad weather",
+      features: ["Current weather updates", "2-day detailed forecasts", "Weather history trends", "Frost & storm alerts"]
     },
     {
       icon: <Satellite className="h-8 w-8" />,
-      title: "Satellite Monitoring",
-      description: "Advanced crop health analysis using multi-spectral satellite imagery and vegetation indices",
-      features: ["Weekly NDVI updates", "Stress detection", "Growth stage tracking", "Historical comparisons"]
+      title: "Field Health Tracking",
+      description: "Check how healthy your crops are and spot problems early",
+      features: ["Weekly health updates", "Problem spotting", "Growth tracking", "Compare with past years"]
     },
     {
       icon: <Brain className="h-8 w-8" />,
-      title: "AI Recommendations",
-      description: "Machine learning-powered insights for optimal farming decisions and yield optimization",
-      features: ["Planting recommendations", "Irrigation scheduling", "Pest predictions", "Harvest timing"]
+      title: "Smart Recommendations",
+      description: "Get helpful tips and suggestions to improve your farming",
+      features: ["When to plant advice", "Watering schedules", "Pest warnings", "Best harvest times"]
     },
     {
       icon: <DollarSign className="h-8 w-8" />,
-      title: "Financial Management",
-      description: "Comprehensive P&L tracking with AI-powered forecasting and profitability analysis",
-      features: ["Income & expense tracking", "Profit per acre analysis", "Budget planning", "Financial forecasting"]
+      title: "Money Management",
+      description: "Track your farm income and expenses to see how much profit you're making",
+      features: ["Track income & expenses", "Profit per acre reports", "Budget planning", "Money forecasts"]
     }
   ]
 
   const advancedFeatures = [
     {
       icon: <Activity className="h-6 w-6" />,
-      title: "Real-time Crop Health Monitoring",
-      description: "Continuous vegetation health tracking with multiple indices (NDVI, EVI, SAVI, LAI)"
+      title: "Crop Health Tracking",
+      description: "Check how healthy your crops are anytime"
     },
     {
       icon: <MapPin className="h-6 w-6" />,
-      title: "Precision Field Mapping",
-      description: "GPS-accurate field boundaries with automated area calculations"
+      title: "Field Mapping",
+      description: "Draw your field boundaries and calculate field sizes automatically"
     },
     {
       icon: <BarChart3 className="h-6 w-6" />,

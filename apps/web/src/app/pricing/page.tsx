@@ -12,74 +12,64 @@ import {
 export default function PricingPage() {
   const plans = [
     {
-      name: "Starter",
+      name: "Basic",
       icon: <Sprout className="h-6 w-6" />,
-      price: 29,
+      price: 5,
       period: "per month",
-      description: "Perfect for small farms getting started with precision agriculture",
+      description: "Perfect for small family farms and beginners",
       features: [
-        "Up to 100 acres monitoring",
-        "Weekly satellite updates",
-        "Basic weather forecasting",
+        "Up to 500 acres monitoring",
+        "Weekly field health checks",
+        "Weather alerts and forecasts", 
         "Mobile app access",
-        "Email support",
-        "3 months data history"
+        "Basic recommendations",
+        "Email support"
       ],
       limitations: [
-        "Limited to 2 farms",
-        "Basic AI recommendations",
-        "No financial forecasting",
-        "No team collaboration"
+        "Limited to 1 farm",
+        "Basic reporting only"
       ],
       popular: false,
       cta: "Start Free Trial",
       color: "sage"
     },
     {
-      name: "Professional",
+      name: "Farm Pro",
       icon: <Activity className="h-6 w-6" />,
-      price: 99,
+      price: 10,
       period: "per month",
-      description: "Advanced features for growing operations and professional farmers",
+      description: "Everything you need to run a profitable farm operation",
       features: [
-        "Up to 1,000 acres monitoring",
-        "Daily satellite updates",
-        "Hyperlocal weather predictions",
-        "Advanced AI recommendations",
-        "Financial P&L tracking",
-        "Multi-currency support",
-        "12 months data history",
-        "Priority support",
-        "Team collaboration (5 users)",
-        "Custom alerts & notifications"
+        "Unlimited acres monitoring",
+        "Daily field health updates",
+        "Advanced weather predictions",
+        "Smart farming recommendations",
+        "Financial tracking & budgets",
+        "Task management & planning",
+        "Historical data & trends",
+        "Priority email support",
+        "Multiple farm management",
+        "Pest & disease alerts"
       ],
-      limitations: [
-        "Limited to 10 farms",
-        "Standard API access"
-      ],
+      limitations: [],
       popular: true,
       cta: "Most Popular",
       color: "forest"
     },
     {
-      name: "Enterprise",
+      name: "Custom",
       icon: <Building2 className="h-6 w-6" />,
-      price: 299,
-      period: "per month",
-      description: "Complete solution for large operations and agricultural enterprises",
+      price: "Contact us",
+      period: "",
+      description: "For large operations with special requirements",
       features: [
-        "Unlimited acres & farms",
-        "Real-time satellite monitoring",
-        "Advanced ML analytics",
-        "Financial forecasting & budgets",
+        "Everything in Farm Pro",
         "Custom integrations",
-        "API access & webhooks",
-        "Unlimited data history",
-        "White-label options",
-        "Unlimited team members",
-        "Dedicated account manager",
-        "24/7 phone support",
-        "Custom training sessions"
+        "Dedicated support specialist",
+        "Phone support",
+        "Advanced analytics",
+        "Team collaboration tools",
+        "Custom reporting"
       ],
       limitations: [],
       popular: false,
@@ -113,8 +103,8 @@ export default function PricingPage() {
 
   const faq = [
     {
-      question: "How accurate is the satellite monitoring?",
-      answer: "Our satellite monitoring uses enterprise-grade imagery from ESA Copernicus and Planet Labs with 10m resolution. NDVI and vegetation health metrics maintain 90%+ accuracy compared to ground truth measurements."
+      question: "How accurate is the field monitoring?",
+      answer: "We use professional satellite images to check your field health. Our system gives accurate information about how your crops are doing, helping you spot problems early."
     },
     {
       question: "Can I switch plans at any time?",
@@ -122,7 +112,7 @@ export default function PricingPage() {
     },
     {
       question: "Is there a free trial?",
-      answer: "All plans include a 14-day free trial with full access to features. No credit card required to start your trial."
+      answer: "Yes! Your first month is completely free with full access to all features. After that, it's just $5-10/month depending on your needs. No credit card required to start."
     },
     {
       question: "What currencies do you support?",
@@ -133,8 +123,8 @@ export default function PricingPage() {
       answer: "Yes, we offer custom pricing for operations over 10,000 acres or organizations managing multiple farms. Contact our sales team for details."
     },
     {
-      question: "How often is satellite data updated?",
-      answer: "Starter plan receives weekly updates, Professional gets daily updates, and Enterprise has access to real-time monitoring with multiple satellite sources."
+      question: "How often do you check my fields?",
+      answer: "Basic plan checks your fields weekly, Farm Pro checks daily. You'll get regular updates on how your crops are doing."
     }
   ]
 
@@ -172,7 +162,7 @@ export default function PricingPage() {
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="flex items-center gap-2 text-sage-600">
               <Check className="h-5 w-5 text-sage-500" />
-              <span>14-day free trial</span>
+              <span>First month free</span>
             </div>
             <div className="flex items-center gap-2 text-sage-600">
               <Check className="h-5 w-5 text-sage-500" />
@@ -221,9 +211,9 @@ export default function PricingPage() {
                 <div className="mb-4">
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-sage-800">
-                      ${plan.name === 'Enterprise' ? 'Custom' : plan.price}
+                      {typeof plan.price === 'string' ? plan.price : `$${plan.price}`}
                     </span>
-                    {plan.name !== 'Enterprise' && (
+                    {typeof plan.price === 'number' && (
                       <span className="text-sage-600">/{plan.period}</span>
                     )}
                   </div>
@@ -257,7 +247,7 @@ export default function PricingPage() {
                 </div>
                 
                 <div className="pt-6">
-                  {plan.name === 'Enterprise' ? (
+                  {plan.name === 'Custom' ? (
                     <InlineFloatingButton
                       icon={<Users className="h-4 w-4" />}
                       label="Contact Sales"
@@ -269,7 +259,7 @@ export default function PricingPage() {
                     <Link href="/register">
                       <InlineFloatingButton
                         icon={<ArrowRight className="h-4 w-4" />}
-                        label={plan.popular ? "Start Free Trial" : "Get Started"}
+                        label="Start Free Month"
                         showLabel={true}
                         variant={plan.popular ? "primary" : "secondary"}
                         className="w-full"
@@ -411,7 +401,7 @@ export default function PricingPage() {
               <Link href="/register">
                 <InlineFloatingButton
                   icon={<ArrowRight className="h-5 w-5" />}
-                  label="Start 14-Day Free Trial"
+                  label="Start Free Month"
                   showLabel={true}
                   variant="primary"
                   size="lg"

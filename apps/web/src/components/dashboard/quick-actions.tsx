@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { Button } from '../ui/button'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { 
@@ -33,7 +33,7 @@ interface QuickHarvest {
   qualityNotes?: string
 }
 
-export function QuickActions({ farmId, className }: QuickActionsProps) {
+export const QuickActions = memo(function QuickActions({ farmId, className }: QuickActionsProps) {
   const [expenseForm, setExpenseForm] = useState<QuickExpense>({
     amount: 0,
     category: 'fuel',
@@ -125,7 +125,7 @@ export function QuickActions({ farmId, className }: QuickActionsProps) {
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-green-600" />
-            Quick Expense Entry
+            Record Farm Expense
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent className="space-y-4">
@@ -213,7 +213,7 @@ export function QuickActions({ farmId, className }: QuickActionsProps) {
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
             <Wheat className="h-5 w-5 text-orange-600" />
-            Quick Harvest Record
+            Record Harvest
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent className="space-y-4">
@@ -314,4 +314,4 @@ export function QuickActions({ farmId, className }: QuickActionsProps) {
       </ModernCard>
     </div>
   )
-}
+})

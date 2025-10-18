@@ -42,13 +42,13 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
     return (
       <button
         onClick={() => setTheme(actualTheme === 'light' ? 'dark' : 'light')}
-        className={`p-2 rounded-lg hover:bg-sage-100 dark:hover:bg-sage-800 transition-colors ${className}`}
+        className={`p-2 rounded-lg hover:bg-fk-background dark:hover:bg-fk-background-muted transition-colors ${className}`}
         title={`Switch to ${actualTheme === 'light' ? 'dark' : 'light'} mode`}
       >
         {actualTheme === 'light' ? (
-          <Moon className="h-4 w-4 text-sage-600 dark:text-sage-400" />
+          <Moon className="h-4 w-4 text-fk-text-muted" />
         ) : (
-          <Sun className="h-4 w-4 text-sage-600 dark:text-sage-400" />
+          <Sun className="h-4 w-4 text-fk-text-muted" />
         )}
       </button>
     )
@@ -91,7 +91,7 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
             <ModernCard variant="floating" className="w-64 shadow-lg border">
               <ModernCardContent className="p-4">
                 <div className="space-y-2">
-                  <h3 className="font-medium text-sage-800 dark:text-sage-200 mb-3">
+                  <h3 className="font-medium text-fk-text mb-3">
                     Choose Theme
                   </h3>
                   {themes.map((themeOption) => (
@@ -103,22 +103,22 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
                       }}
                       className={`w-full text-left p-3 rounded-lg transition-all flex items-center gap-3 ${
                         theme === themeOption.key
-                          ? 'bg-sage-100 dark:bg-sage-800 border-sage-300 dark:border-sage-600'
-                          : 'hover:bg-sage-50 dark:hover:bg-sage-800/50'
+                          ? 'bg-fk-background border-fk-border'
+                          : 'hover:bg-fk-background/50'
                       }`}
                     >
                       <div className={`${
                         theme === themeOption.key 
-                          ? 'text-sage-600 dark:text-sage-400' 
-                          : 'text-sage-500 dark:text-sage-400'
+                          ? 'text-fk-primary' 
+                          : 'text-fk-text-muted'
                       }`}>
                         {themeOption.icon}
                       </div>
                       <div className="flex-1">
                         <div className={`font-medium text-sm ${
                           theme === themeOption.key 
-                            ? 'text-sage-800 dark:text-sage-200' 
-                            : 'text-sage-700 dark:text-sage-300'
+                            ? 'text-fk-text' 
+                            : 'text-fk-text-muted'
                         }`}>
                           {themeOption.name}
                           {themeOption.key === 'system' && (
@@ -127,19 +127,19 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
                             </Badge>
                           )}
                         </div>
-                        <div className="text-xs text-sage-500 dark:text-sage-500 mt-0.5">
+                        <div className="text-xs text-fk-text-muted mt-0.5">
                           {themeOption.description}
                         </div>
                       </div>
                       {theme === themeOption.key && (
-                        <Check className="h-4 w-4 text-sage-600 dark:text-sage-400" />
+                        <Check className="h-4 w-4 text-fk-primary" />
                       )}
                     </button>
                   ))}
                 </div>
                 
-                <div className="mt-4 pt-4 border-t border-sage-200 dark:border-sage-700">
-                  <div className="text-xs text-sage-500 dark:text-sage-500">
+                <div className="mt-4 pt-4 border-t border-fk-border">
+                  <div className="text-xs text-fk-text-muted">
                     Current: <span className="font-medium capitalize">{actualTheme}</span> mode
                   </div>
                 </div>

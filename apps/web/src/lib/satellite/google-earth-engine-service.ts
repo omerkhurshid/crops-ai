@@ -6,6 +6,7 @@
  */
 
 import { Logger } from '@crops-ai/shared'
+import { getConfig } from '../config/environment'
 
 export interface GEEConfig {
   serviceAccountEmail: string
@@ -452,11 +453,12 @@ export async function analyzeCroppleField(
   boundaries: number[][][],
   plantingDate?: Date
 ): Promise<GEEAnalysisResult> {
+  const config = getConfig()
   
   const geeService = new GoogleEarthEngineService({
-    serviceAccountEmail: process.env.GEE_SERVICE_ACCOUNT_EMAIL!,
-    privateKey: process.env.GEE_PRIVATE_KEY!,
-    projectId: process.env.GEE_PROJECT_ID!
+    serviceAccountEmail: config.GEE_SERVICE_ACCOUNT_EMAIL!,
+    privateKey: config.GEE_PRIVATE_KEY!,
+    projectId: config.GEE_PROJECT_ID!
   })
 
   const endDate = new Date()

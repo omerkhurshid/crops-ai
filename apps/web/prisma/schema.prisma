@@ -103,6 +103,8 @@ model User {
   tasks                 Task[]
   decisionRecommendations DecisionRecommendation[]
   decisionExecutions    DecisionExecution[]
+  fieldPhotos           FieldPhoto[]
+  fieldIssues           FieldIssue[]
 
   @@map("users")
 }
@@ -183,6 +185,8 @@ model Field {
   weatherComprehensive  WeatherComprehensive[]
   analyticsPredictions  AnalyticsPrediction[]
   soilReadings          SoilReading[]
+  fieldPhotos           FieldPhoto[]
+  fieldIssues           FieldIssue[]
 
   @@map("fields")
 }
@@ -938,6 +942,46 @@ model SoilReading {
   @@map("soil_readings")
   @@index([fieldId, timestamp(sort: Desc)])
   @@index([timestamp, quality])
+}
+
+model FieldPhoto {
+  id          String    @id @default(cuid())
+  userId      String    
+  fieldId     String?   
+  fileName    String    @db.VarChar(255)
+  filePath    String    @db.VarChar(500)
+  location    String?   @db.VarChar(100)
+  timestamp   DateTime  @default(now())
+  metadata    Json?     // Store original filename, size, type, etc.
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  field       Field?    @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  
+  @@map("field_photos")
+  @@index([userId, timestamp(sort: Desc)])
+  @@index([fieldId, timestamp(sort: Desc)])
+}
+
+model FieldIssue {
+  id          String    @id @default(cuid())
+  userId      String    
+  fieldId     String?   
+  issue       String    @db.VarChar(500)
+  location    String?   @db.VarChar(100)
+  timestamp   DateTime  @default(now())
+  status      String    @default("open") @db.VarChar(20) // open, resolved, closed
+  priority    String    @default("medium") @db.VarChar(10) // low, medium, high, critical
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  field       Field?    @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  
+  @@map("field_issues")
+  @@index([userId, status, timestamp(sort: Desc)])
+  @@index([fieldId, status])
 }
 
 model AuditLog {

@@ -52,7 +52,7 @@ export default async function OnboardingPage() {
             Welcome to Crops.AI
           </h1>
           <p className="text-xl text-sage-600 font-light max-w-2xl mx-auto leading-relaxed">
-            Let&apos;s get your agricultural management system set up with personalized guidance
+            Let&apos;s set up your farm with step-by-step guidance
           </p>
         </div>
 

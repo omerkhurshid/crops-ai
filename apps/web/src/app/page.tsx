@@ -31,8 +31,8 @@ export default async function Home() {
           {/* Professional Header */}
           <div className="text-center mb-8">
             <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-4 py-2 text-sm font-medium">
-              <Satellite className="h-4 w-4 mr-2" />
-              Advanced Agricultural Intelligence Platform
+              <Sprout className="h-4 w-4 mr-2" />
+              Smart Farming Made Simple
             </Badge>
           </div>
 
@@ -40,30 +40,30 @@ export default async function Home() {
           <div className="text-center mb-8 sm:mb-16 p-4 sm:p-8 md:p-12 bg-white rounded-2xl shadow-xl border border-sage-100">
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-sage-800 leading-tight">
-              Precision Agriculture<br />
-              <span className="text-sage-600">Made Simple</span>
+              Grow Better Crops<br />
+              <span className="text-sage-600">Increase Profits</span>
             </h1>
             
             <p className="text-lg sm:text-xl md:text-2xl text-sage-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
-              Advanced satellite monitoring, AI-powered insights, and data-driven decisions for modern farming operations.
+              Track your field health, get weather alerts, and receive smart recommendations to help your farm succeed.
             </p>
             
             {/* Key Features */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">
               <div className="bg-sage-50 p-4 sm:p-6 rounded-lg border border-sage-200">
                 <Satellite className="h-8 w-8 sm:h-10 sm:w-10 text-sage-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-sage-700 mb-2">Satellite Monitoring</h3>
-                <p className="text-sm sm:text-base text-sage-600">Real-time crop health tracking with NDVI analysis</p>
+                <h3 className="text-base sm:text-lg font-semibold text-sage-700 mb-2">Field Health Tracking</h3>
+                <p className="text-sm sm:text-base text-sage-600">Check how your crops are doing anytime</p>
               </div>
               <div className="bg-earth-50 p-4 sm:p-6 rounded-lg border border-earth-200">
                 <Brain className="h-8 w-8 sm:h-10 sm:w-10 text-earth-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-earth-700 mb-2">AI Analytics</h3>
-                <p className="text-sm sm:text-base text-earth-600">Smart recommendations and predictive insights</p>
+                <h3 className="text-base sm:text-lg font-semibold text-earth-700 mb-2">Smart Recommendations</h3>
+                <p className="text-sm sm:text-base text-earth-600">Get helpful tips to improve your farm</p>
               </div>
               <div className="bg-cream-50 p-4 sm:p-6 rounded-lg border border-cream-200">
                 <BarChart className="h-8 w-8 sm:h-10 sm:w-10 text-golden mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-golden mb-2">Data Management</h3>
-                <p className="text-sm sm:text-base text-golden">Comprehensive farm records and analytics</p>
+                <h3 className="text-base sm:text-lg font-semibold text-golden mb-2">Farm Records</h3>
+                <p className="text-sm sm:text-base text-golden">Keep track of all your farm activities</p>
               </div>
             </div>
             
@@ -76,10 +76,10 @@ export default async function Home() {
                 </button>
               </Link>
               <div className="text-center">
-                <p className="text-sage-600 text-xs sm:text-sm mb-2 px-4">30-day free trial • No setup fees • Cancel anytime</p>
+                <p className="text-sage-600 text-xs sm:text-sm mb-2 px-4">First month free • No setup fees • Cancel anytime</p>
                 <div className="inline-flex items-center text-sage-600 font-medium text-xs sm:text-sm">
                   <Shield className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  Enterprise-grade security and reliability
+                  Secure and reliable platform
                 </div>
               </div>
             </div>
@@ -94,10 +94,10 @@ export default async function Home() {
               <div className="p-2 sm:p-3 bg-sage-100 rounded-full w-fit mb-3 sm:mb-4">
                 <Satellite className="h-6 w-6 sm:h-8 sm:w-8 text-sage-700" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Satellite Crop Monitoring</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Field Health Monitoring</h3>
               <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                Monitor vegetation health using advanced satellite imagery and NDVI analysis. 
-                Get early detection of stress, disease, and pest issues before they impact yields.
+                Check your crops' health and spot problems early. 
+                Spot problems with your crops before they hurt your harvest.
               </p>
             </div>
             
@@ -106,10 +106,10 @@ export default async function Home() {
               <div className="p-2 sm:p-3 bg-earth-100 rounded-full w-fit mb-3 sm:mb-4">
                 <CloudRain className="h-6 w-6 sm:h-8 sm:w-8 text-earth-700" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Weather Intelligence</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Weather Forecasts</h3>
               <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                Hyperlocal weather forecasting with agricultural-specific insights. 
-                Optimize spray timing, irrigation schedules, and harvest planning.
+                Get accurate weather forecasts for your farm. 
+                Know the best times to spray, water, and harvest.
               </p>
             </div>
             
@@ -118,10 +118,10 @@ export default async function Home() {
               <div className="p-2 sm:p-3 bg-cream-100 rounded-full w-fit mb-3 sm:mb-4">
                 <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-golden" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Performance Analytics</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Track Your Progress</h3>
               <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                Comprehensive farm analytics with yield tracking, financial insights, 
-                and performance benchmarking to optimize your operations.
+                See how your farm is doing with harvest tracking, profit reports, 
+                and tips to improve your results.
               </p>
             </div>
             
@@ -141,12 +141,12 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <Shield className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">Enterprise Security</h3>
-              <p className="text-sage-600">Bank-level encryption and data protection</p>
+              <h3 className="text-lg font-semibold text-sage-800 mb-2">Secure & Private</h3>
+              <p className="text-sage-600">Your farm data is protected and private</p>
             </div>
             <div className="text-center">
               <Eye className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">Proven Science</h3>
+              <h3 className="text-lg font-semibold text-sage-800 mb-2">Proven Results</h3>
               <p className="text-sage-600">Based on established agricultural research</p>
             </div>
             <div className="text-center">

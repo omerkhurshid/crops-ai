@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist, return empty data
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, returning empty transaction data');
+        // Financial transactions table does not exist - returning empty transaction data
         transactions = [];
         total = 0;
         summary = { _sum: { amount: null }, _count: 0 };
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
         createdById: session.user.id,
       };
 
-      console.log('Creating transaction with data:', JSON.stringify(transactionData, null, 2));
+      // Creating financial transaction with validated data
 
       transaction = await prisma.financialTransaction.create({
         data: transactionData,
@@ -248,7 +248,7 @@ export async function POST(request: NextRequest) {
     } catch (budgetError: any) {
       // If financial_budget table doesn't exist, just log and continue
       if (budgetError.code === 'P2021' || budgetError.code === 'P2010') {
-        console.log('Financial budget table does not exist, skipping budget update');
+        // Financial budget table does not exist - skipping budget update
       } else {
         console.error('Error updating budget:', budgetError);
       }

@@ -91,7 +91,7 @@ class DiseasePestPredictor {
         };
       }
     } catch (error) {
-      console.log('ML model not available, using intelligent disease/pest analysis:', error);
+      // ML model not available - using intelligent disease/pest analysis fallback
     }
 
     // Intelligent fallback with sophisticated crop health analysis

@@ -18,30 +18,30 @@ const helpSections = [
   {
     id: 'getting-started',
     title: 'Getting Started',
-    description: 'Essential guides to set up and use your Crops.AI platform',
+    description: 'Simple guides to set up and use Crops.AI for your farm',
     icon: <Sprout className="h-6 w-6" />,
     articles: [
       {
-        title: 'Account Setup & First Login',
-        description: 'Complete guide to setting up your Crops.AI account and first-time login',
+        title: 'Setting Up Your Account',
+        description: 'How to create your account and log in for the first time',
         readTime: '5 min read',
         tags: ['Setup', 'Account']
       },
       {
-        title: 'Creating Your First Farm',
-        description: 'Step-by-step instructions for adding your first farm and setting up basic information',
+        title: 'Adding Your Farm',
+        description: 'Simple steps to add your farm and basic information',
         readTime: '8 min read',
         tags: ['Farm Setup', 'Beginner']
       },
       {
-        title: 'Adding Field Boundaries',
-        description: 'How to define precise field boundaries for accurate satellite monitoring',
+        title: 'Mapping Your Fields',
+        description: 'How to draw your field boundaries so we can track each field',
         readTime: '10 min read',
         tags: ['Fields', 'Mapping']
       },
       {
-        title: 'Understanding the Dashboard',
-        description: 'Navigate your main dashboard and understand key metrics and insights',
+        title: 'Using Your Dashboard',
+        description: 'How to use your main dashboard and understand what everything means',
         readTime: '6 min read',
         tags: ['Dashboard', 'Overview']
       }
@@ -49,8 +49,8 @@ const helpSections = [
   },
   {
     id: 'crop-health',
-    title: 'Crop Health Monitoring',
-    description: 'Learn to monitor and analyze your crop health with satellite data',
+    title: 'Checking Crop Health',
+    description: 'Learn how to see if your crops are healthy and spot problems early',
     icon: <Activity className="h-6 w-6" />,
     articles: [
       {
@@ -81,19 +81,19 @@ const helpSections = [
   },
   {
     id: 'weather',
-    title: 'Weather Intelligence',
-    description: 'Master weather forecasting and agricultural weather insights',
+    title: 'Weather Forecasts',
+    description: 'Get accurate weather forecasts and alerts for your farm',
     icon: <CloudRain className="h-6 w-6" />,
     articles: [
       {
-        title: 'Hyperlocal Weather Forecasts',
-        description: 'Access field-specific weather forecasts with agricultural insights',
+        title: 'Weather for Your Farm',
+        description: 'Get weather forecasts specific to your farm location',
         readTime: '7 min read',
         tags: ['Weather', 'Forecasts']
       },
       {
-        title: 'Agricultural Weather Alerts',
-        description: 'Set up alerts for frost, precipitation, wind, and other agricultural conditions',
+        title: 'Weather Alerts',
+        description: 'Get alerts for frost, rain, wind, and other weather that affects farming',
         readTime: '9 min read',
         tags: ['Alerts', 'Weather']
       },

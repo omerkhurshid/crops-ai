@@ -102,7 +102,7 @@ class WeatherAlertPredictor {
         };
       }
     } catch (error) {
-      console.log('ML model not available, using intelligent alert generation:', error);
+      // ML model not available - using intelligent alert generation fallback
     }
 
     // Intelligent fallback with sophisticated weather analysis

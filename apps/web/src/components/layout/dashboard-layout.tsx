@@ -1,8 +1,10 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 import { Sidebar } from '../navigation/sidebar'
 import { Navbar } from '../navigation/navbar'
+import { MobileNavbar } from '../navigation/mobile-navbar'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -10,6 +12,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data: session } = useSession()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // For unauthenticated users, show full-width layout with navbar
   if (!session) {
@@ -21,43 +24,44 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     )
   }
 
-  // For authenticated users, show sidebar + content layout
+  // For authenticated users, show responsive sidebar + content layout
   return (
     <div className="bg-canvas min-h-screen">
-      <Sidebar />
-      
-      {/* Main Content Area - responsive margin for FieldKit sidebar width */}
-      <div style={{ marginLeft: '256px' }} className="min-h-screen lg:block hidden">
-        {/* Page Content */}
-        <main className="relative">
-          {children}
-        </main>
+      {/* Desktop Sidebar - Hidden on mobile */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+        <Sidebar />
       </div>
-      
-      {/* Mobile layout */}
-      <div className="lg:hidden min-h-screen">
-        {/* Top Header for mobile */}
-        <header className="bg-surface/80 backdrop-blur-sm sticky top-0 z-30 border-b border-fk-border">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-fk-text-muted">
-                {new Date().toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </div>
-              <div className="text-sm text-fk-text font-semibold">
-                Welcome back, {session.user?.name || 'Farmer'}!
-              </div>
-            </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 z-40 bg-gray-900/80 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+          {/* Mobile Sidebar */}
+          <div className="fixed inset-y-0 left-0 z-50 w-64 lg:hidden">
+            <Sidebar onClose={() => setSidebarOpen(false)} />
           </div>
-        </header>
-        
+        </>
+      )}
+
+      {/* Main Content Area */}
+      <div className="lg:pl-64">
+        {/* Mobile Top Navigation */}
+        <div className="sticky top-0 z-40 lg:hidden">
+          <MobileNavbar 
+            onMenuClick={() => setSidebarOpen(true)}
+            user={session.user}
+          />
+        </div>
+
         {/* Page Content */}
         <main className="relative">
-          {children}
+          <div className="px-4 py-6 sm:px-6 lg:px-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>

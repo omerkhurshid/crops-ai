@@ -8,6 +8,7 @@ import { NDVIAnalysisService } from './ndvi-analysis'
 import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
 import { prisma } from '../prisma'
+import { getConfig } from '../config/environment'
 
 export interface LiveSatelliteConfig {
   preferLiveData: boolean
@@ -132,7 +133,7 @@ class LiveSatelliteService {
       const ndviCalculation = await copernicusService.getLatestFieldNDVI(field.id, bounds)
       
       if (!ndviCalculation) {
-        console.log('No Copernicus NDVI data available for field:', field.id)
+        // No Copernicus NDVI data available for this field
         return null
       }
 
@@ -168,7 +169,7 @@ class LiveSatelliteService {
   private async fetchPlanetLabsData(field: any): Promise<SatelliteDataPoint | null> {
     try {
       if (!planetLabsService.isConfigured()) {
-        console.log('Planet Labs not configured, skipping high-resolution data fetch')
+        // Planet Labs not configured - skipping high-resolution data fetch
         return null
       }
 
@@ -227,8 +228,9 @@ class LiveSatelliteService {
   private async fetchLiveSatelliteData(field: any): Promise<SatelliteDataPoint | null> {
     try {
       // Check if Sentinel Hub is configured
-      if (!process.env.SENTINEL_HUB_CLIENT_ID || !process.env.SENTINEL_HUB_CLIENT_SECRET) {
-        console.log('Sentinel Hub not configured, skipping live data fetch')
+      const config = getConfig()
+      if (!config.SENTINEL_HUB_CLIENT_ID || !config.SENTINEL_HUB_CLIENT_SECRET) {
+        // Sentinel Hub not configured - skipping live data fetch
         return null
       }
 
@@ -259,7 +261,7 @@ class LiveSatelliteService {
 
       // Image processing would require actual NDVI calculation from the TIFF file
       // This is not implemented - return null to indicate no data available
-      console.warn('NDVI image analysis not implemented - Sentinel Hub integration incomplete')
+      // NDVI image analysis not implemented - Sentinel Hub integration incomplete
       return null
 
     } catch (error) {

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -52,7 +52,7 @@ interface WeatherAlertsWidgetProps {
   className?: string
 }
 
-export function WeatherAlertsWidget({ farmData, className }: WeatherAlertsWidgetProps) {
+export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData, className }: WeatherAlertsWidgetProps) {
   const [alerts, setAlerts] = useState<WeatherAlert[]>([])
   const [loading, setLoading] = useState(true)
   const [showAll, setShowAll] = useState(false)
@@ -325,4 +325,4 @@ export function WeatherAlertsWidget({ farmData, className }: WeatherAlertsWidget
       </ModernCardContent>
     </ModernCard>
   )
-}
+})

@@ -47,7 +47,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
     {
       id: 'create-farm',
       title: 'Create Your First Farm',
-      description: 'Set up your agricultural operation with location, size, and basic information',
+      description: 'Add your farm with location, size, and basic information',
       icon: <Sprout className="h-6 w-6" />,
       status: (userStats?.totalFarms || 0) > 0 ? 'completed' : 'in_progress',
       action: {
@@ -57,15 +57,15 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       },
       estimatedTime: '5 minutes',
       benefits: [
-        'Enable satellite monitoring',
+        'Track your field health',
         'Get weather alerts for your location',
-        'Access regional crop insights'
+        'Access local farming insights'
       ]
     },
     {
       id: 'add-fields',
-      title: 'Define Your Fields',
-      description: 'Map your field boundaries to enable precision satellite monitoring and AI analysis',
+      title: 'Map Your Fields',
+      description: 'Draw your field boundaries to track each field individually',
       icon: <MapPin className="h-6 w-6" />,
       status: (userStats?.totalFields || 0) > 0 ? 'completed' : 
                (userStats?.totalFarms || 0) > 0 ? 'in_progress' : 'pending',
@@ -77,15 +77,15 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       },
       estimatedTime: '10 minutes',
       benefits: [
-        'Satellite health monitoring',
-        'Field-specific recommendations',
-        'Crop stress detection'
+        'Track each field's health',
+        'Get tips for each field',
+        'Spot crop problems early'
       ]
     },
     {
       id: 'explore-features',
-      title: 'Explore Core Features',
-      description: 'Discover weather intelligence, crop health monitoring, and AI recommendations',
+      title: 'Explore Key Features',
+      description: 'Discover weather forecasts, crop health tracking, and smart recommendations',
       icon: <Brain className="h-6 w-6" />,
       status: userStats?.hasWeatherData || userStats?.hasRecommendations ? 'completed' : 
                (userStats?.totalFields || 0) > 0 ? 'in_progress' : 'pending',
@@ -96,9 +96,9 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       },
       estimatedTime: '15 minutes',
       benefits: [
-        'Weather forecasting',
-        'Crop health analytics',
-        'AI-powered insights'
+        'Weather forecasts',
+        'Crop health tracking',
+        'Smart farming tips'
       ]
     },
     {
@@ -157,7 +157,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
                 Welcome to Crops.AI!
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
-                Let&apos;s get your farm management system set up in just a few steps
+                Let&apos;s set up your farm in just a few simple steps
               </ModernCardDescription>
             </div>
             <div className="text-right">
@@ -278,8 +278,8 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
             <div className="flex-1">
               <h3 className="font-semibold text-sage-800 mb-2">Need Help Getting Started?</h3>
               <p className="text-sage-600 text-sm mb-4 leading-relaxed">
-                Our team is here to help you make the most of Crops.AI. Access our knowledge base, 
-                watch tutorial videos, or contact support directly.
+                Our team is here to help you get the most from your farm. Check our help guides, 
+                watch tutorial videos, or contact support.
               </p>
               <div className="flex flex-wrap gap-2">
                 <Link href="/help">

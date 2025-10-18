@@ -102,17 +102,17 @@ export function MorningBriefing({
   }
 
   const getHealthExplanation = (health: number) => {
-    if (health >= 85) return 'Excellent (85%+ is considered excellent)'
-    if (health >= 70) return 'Good (70-84% is considered good)'  
-    if (health >= 55) return 'Average (55-69% is considered average)'
-    return 'Needs Attention (below 55% needs immediate attention)'
+    if (health >= 85) return 'Excellent (your crops are thriving)'
+    if (health >= 70) return 'Good (crops are healthy)'  
+    if (health >= 55) return 'Fair (some areas could improve)'
+    return 'Needs Attention (crops need immediate care)'
   }
 
   const getLivestockHealthExplanation = (status: 'good' | 'warning' | 'critical') => {
     switch (status) {
-      case 'good': return 'Good (95%+ healthy animals)'
-      case 'warning': return 'Warning (85-94% healthy animals)'
-      case 'critical': return 'Critical (below 85% healthy animals)'
+      case 'good': return 'Good (most animals are healthy)'
+      case 'warning': return 'Warning (some animals need attention)'
+      case 'critical': return 'Critical (many animals need care)'
       default: return 'Good'
     }
   }
@@ -205,9 +205,9 @@ export function MorningBriefing({
                          overallHealth >= 60 ? 'Good' : 'Needs Attention'}
                       </div>
                       <div className="text-xs text-gray-600">
-                        {overallHealth >= 80 ? 'Most fields are healthy' :
-                         overallHealth >= 60 ? 'Some areas need monitoring' :
-                         'Several fields require attention'}
+                        {overallHealth >= 80 ? 'Most fields look great' :
+                         overallHealth >= 60 ? 'Some areas need watching' :
+                         'Several fields need attention'}
                       </div>
                     </div>
                   </div>
@@ -400,7 +400,7 @@ export function MorningBriefing({
                         {financials.netYTD >= 0 ? '' : '-'}{formatCurrency(Math.abs(financials.netYTD), preferences)}
                       </div>
                       <div className="text-xs text-gray-600">
-                        {financials.netYTD >= 0 ? 'Working toward profitability' : 'Working toward profitability'}
+                        {financials.netYTD >= 0 ? 'Profit so far this year' : 'Loss so far this year'}
                       </div>
                     </div>
                   </div>

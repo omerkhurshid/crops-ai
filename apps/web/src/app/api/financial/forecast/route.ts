@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
       // If financial_forecast table doesn't exist, return empty forecasts
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial forecast table does not exist, returning empty forecasts');
+        // Financial forecast table not available, return empty forecasts
         forecasts = [];
       } else {
         throw error;
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
       // If financial_transactions table doesn't exist, use empty data
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial transactions table does not exist, using empty historical data for forecast');
+        // Financial transactions table not available, use empty historical data
         historicalData = [];
       } else {
         throw error;
@@ -308,7 +308,7 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
       // If financial_forecast table doesn't exist, return mock forecasts
       if (error.code === 'P2021' || error.code === 'P2010') {
-        console.log('Financial forecast table does not exist, returning mock forecast data');
+        // Financial forecast table not available, returning mock data
         newForecasts = forecasts.map((f, index) => ({
           ...f,
           id: `mock-forecast-${index}`,

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '../components/providers/auth-provider'
 import { ThemeProvider } from '../components/theme/theme-provider'
+import { CacheProvider } from '../components/providers/cache-provider'
 import { UserPreferencesProvider } from '../contexts/user-preferences-context'
 import { Toaster } from 'react-hot-toast'
 
@@ -13,9 +14,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Cropple.ai - AI-Powered Farm Management',
-  description: 'Optimize agricultural productivity with intelligent decision-support, real-time monitoring, and predictive analytics.',
-  keywords: 'agriculture, farming, AI, precision agriculture, crop monitoring, farm management',
+  title: 'Crops.AI - Smart Farm Management',
+  description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
+  keywords: 'agriculture, farming, smart farming, crop health, field monitoring, farm management',
   authors: [{ name: 'Cropple.ai Team' }],
   viewport: 'width=device-width, initial-scale=1',
   icons: {
@@ -27,25 +28,25 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico'
   },
   openGraph: {
-    title: 'Cropple.ai - AI-Powered Farm Management',
-    description: 'Transform your agricultural operations with intelligent decision-support, real-time monitoring, and predictive analytics.',
-    url: 'https://cropple.ai',
-    siteName: 'Cropple.ai',
+    title: 'Crops.AI - Smart Farm Management',
+    description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
+    url: 'https://crops.ai',
+    siteName: 'Crops.AI',
     type: 'website',
     images: [
       {
         url: '/crops-ai-logo.png',
         width: 400,
         height: 400,
-        alt: 'Cropple.ai - Satellite and agricultural field logo'
+        alt: 'Crops.AI - Smart farming logo'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@croppleai',
-    title: 'Cropple.ai - AI-Powered Farm Management',
-    description: 'Transform your agricultural operations with intelligent decision-support, real-time monitoring, and predictive analytics.',
+    site: '@cropsai',
+    title: 'Crops.AI - Smart Farm Management',
+    description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
     images: ['/crops-ai-logo.png']
   },
   robots: {
@@ -70,11 +71,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system">
-          <AuthProvider>
-            <UserPreferencesProvider>
-              {children}
-            </UserPreferencesProvider>
-          </AuthProvider>
+          <CacheProvider>
+            <AuthProvider>
+              <UserPreferencesProvider>
+                {children}
+              </UserPreferencesProvider>
+            </AuthProvider>
+          </CacheProvider>
           <Toaster 
             position="top-right"
             toastOptions={{

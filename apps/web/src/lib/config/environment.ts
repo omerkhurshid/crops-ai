@@ -24,10 +24,27 @@ interface EnvironmentConfig {
   OPENWEATHER_API_KEY: string
   GOOGLE_MAPS_API_KEY: string
   
+  // Public Configuration
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
+  
   // Optional APIs
   ALPHA_VANTAGE_API_KEY?: string
   CME_API_KEY?: string
   RESEND_API_KEY?: string
+  
+  // Satellite Services (Optional)
+  SENTINEL_HUB_CLIENT_ID?: string
+  SENTINEL_HUB_CLIENT_SECRET?: string
+  PLANET_LABS_API_KEY?: string
+  COPERNICUS_CLIENT_ID?: string
+  COPERNICUS_CLIENT_SECRET?: string
+  COPERNICUS_USERNAME?: string
+  COPERNICUS_PASSWORD?: string
+  
+  // Google Earth Engine (Optional)
+  GEE_SERVICE_ACCOUNT_EMAIL?: string
+  GEE_PRIVATE_KEY?: string
+  GEE_PROJECT_ID?: string
   
   // Alerting
   ALERT_WEBHOOK_URL?: string
@@ -40,6 +57,9 @@ interface EnvironmentConfig {
   
   // Demo Configuration
   ENABLE_DEMO_USERS?: string
+  
+  // Additional Public Configuration
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY?: string
 }
 
 class EnvironmentValidator {
@@ -74,7 +94,8 @@ class EnvironmentValidator {
       UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
       UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
       OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY,
-      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     }
 
     // Check required variables
@@ -122,17 +143,35 @@ class EnvironmentValidator {
       UPSTASH_REDIS_REST_TOKEN: requiredVars.UPSTASH_REDIS_REST_TOKEN!,
       OPENWEATHER_API_KEY: requiredVars.OPENWEATHER_API_KEY!,
       GOOGLE_MAPS_API_KEY: requiredVars.GOOGLE_MAPS_API_KEY!,
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: requiredVars.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
       
       // Optional variables
       ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY,
       CME_API_KEY: process.env.CME_API_KEY,
       RESEND_API_KEY: process.env.RESEND_API_KEY,
+      
+      // Satellite Services
+      SENTINEL_HUB_CLIENT_ID: process.env.SENTINEL_HUB_CLIENT_ID,
+      SENTINEL_HUB_CLIENT_SECRET: process.env.SENTINEL_HUB_CLIENT_SECRET,
+      PLANET_LABS_API_KEY: process.env.PLANET_LABS_API_KEY,
+      COPERNICUS_CLIENT_ID: process.env.COPERNICUS_CLIENT_ID,
+      COPERNICUS_CLIENT_SECRET: process.env.COPERNICUS_CLIENT_SECRET,
+      COPERNICUS_USERNAME: process.env.COPERNICUS_USERNAME,
+      COPERNICUS_PASSWORD: process.env.COPERNICUS_PASSWORD,
+      
+      // Google Earth Engine
+      GEE_SERVICE_ACCOUNT_EMAIL: process.env.GEE_SERVICE_ACCOUNT_EMAIL,
+      GEE_PRIVATE_KEY: process.env.GEE_PRIVATE_KEY,
+      GEE_PROJECT_ID: process.env.GEE_PROJECT_ID,
+      
+      // Alerting
       ALERT_WEBHOOK_URL: process.env.ALERT_WEBHOOK_URL,
       SLACK_CHANNEL: process.env.SLACK_CHANNEL,
       ALERT_EMAIL_RECIPIENTS: process.env.ALERT_EMAIL_RECIPIENTS,
       DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
       EMAIL_FROM: process.env.EMAIL_FROM,
-      ENABLE_DEMO_USERS: process.env.ENABLE_DEMO_USERS
+      ENABLE_DEMO_USERS: process.env.ENABLE_DEMO_USERS,
+      NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
     }
 
     Logger.info('Environment configuration validated successfully', {

@@ -45,39 +45,41 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
 
-        // FieldKit Design System Colors
-        canvas: '#FAFAF7',
-        surface: '#F6F3EA', 
+        // FieldKit Design System Colors (CSS variables for dark mode support)
+        canvas: 'var(--canvas)',
+        surface: 'var(--fk-color-surface)', 
         sidebar: {
-          DEFAULT: '#7F8F73',
-          600: '#6E7E63',
-          300: '#98A78C',
+          DEFAULT: 'var(--fk-color-sidebar)',
+          600: 'var(--fk-color-sidebar-600)',
+          300: 'var(--fk-color-sidebar-300)',
         },
-        fk: {
-          primary: {
-            DEFAULT: '#2E7D32',
-            600: '#1E6A25',
-            200: '#E2F2E4',
-          },
-          accent: {
-            wheat: '#E6B422',
-            sky: '#3D8BF2',
-          },
-          earth: '#8D6E63',
-          text: {
-            DEFAULT: '#213127',
-            muted: '#6B7767',
-          },
-          border: '#E4E1D7',
-          success: '#2E7D32',
-          info: '#1976D2',
-          warning: '#C77700',
-          danger: '#C62828',
-          stress: '#E65100',
-          up: '#1B8A3A',
-          down: '#C62828',
-          neutral: '#8D6E63',
+        'fk-primary': {
+          DEFAULT: 'var(--fk-color-primary)',
+          600: 'var(--fk-color-primary-600)',
+          200: 'var(--fk-color-primary-200)',
         },
+        'fk-accent': {
+          wheat: 'var(--fk-color-accent-wheat)',
+          sky: 'var(--fk-color-accent-sky)',
+        },
+        'fk-earth': 'var(--fk-color-earth)',
+        'fk-text': {
+          DEFAULT: 'var(--fk-color-text)',
+          muted: 'var(--fk-color-text-muted)',
+        },
+        'fk-border': 'var(--fk-color-border)',
+        'fk-background': {
+          DEFAULT: 'var(--fk-color-background)',
+          muted: 'var(--fk-color-background-muted)',
+        },
+        'fk-success': 'var(--fk-color-success)',
+        'fk-info': 'var(--fk-color-info)',
+        'fk-warning': 'var(--fk-color-warning)',
+        'fk-danger': 'var(--fk-color-danger)',
+        'fk-stress': 'var(--fk-color-stress)',
+        'fk-up': 'var(--fk-color-up)',
+        'fk-down': 'var(--fk-color-down)',
+        'fk-neutral': 'var(--fk-color-neutral)',
 
         // Keep existing colors for backward compatibility
         'crops-green': {

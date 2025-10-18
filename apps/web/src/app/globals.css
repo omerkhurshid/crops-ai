@@ -20,6 +20,8 @@
     --fk-color-text: #213127;
     --fk-color-text-muted: #6B7767;
     --fk-color-border: #E4E1D7;
+    --fk-color-background: #F6F3EA;
+    --fk-color-background-muted: #E4E1D7;
     --fk-color-success: #2E7D32;
     --fk-color-info: #1976D2;
     --fk-color-warning: #C77700;
@@ -56,6 +58,9 @@
     --ring: #2E7D32;
     --radius: 16px;
     
+    /* Canvas background for light mode */
+    --canvas: #FAFAF7;
+    
     /* Legacy gradient colors for compatibility */
     --gradient-start: #7F8F73;
     --gradient-end: #6E7E63;
@@ -64,25 +69,56 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 142 76% 36%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 142 76% 36%;
+    /* FieldKit Dark Mode Variables */
+    --fk-color-white: #1A1F1A;
+    --fk-color-offwhite: #1E231E;
+    --fk-color-surface: #232A23;
+    --fk-color-sidebar: #2A352A;
+    --fk-color-sidebar-600: #1F2D1F;
+    --fk-color-sidebar-300: #3A453A;
+    --fk-color-primary: #4CAF50;
+    --fk-color-primary-600: #388E3C;
+    --fk-color-primary-200: #2E3F2E;
+    --fk-color-accent-wheat: #FFC107;
+    --fk-color-accent-sky: #64B5F6;
+    --fk-color-earth: #A1887F;
+    --fk-color-text: #E8F5E8;
+    --fk-color-text-muted: #A5B3A5;
+    --fk-color-border: #3A453A;
+    --fk-color-background: #1E231E;
+    --fk-color-background-muted: #232A23;
+    --fk-color-success: #4CAF50;
+    --fk-color-info: #2196F3;
+    --fk-color-warning: #FF9800;
+    --fk-color-danger: #F44336;
+    --fk-color-stress: #FF5722;
+    --fk-color-up: #66BB6A;
+    --fk-color-down: #EF5350;
+    --fk-color-neutral: #A1887F;
+    
+    /* Shadcn/UI compatibility for dark mode */
+    --background: #1A1F1A;
+    --foreground: #E8F5E8;
+    --card: #232A23;
+    --card-foreground: #E8F5E8;
+    --popover: #232A23;
+    --popover-foreground: #E8F5E8;
+    --primary: #4CAF50;
+    --primary-foreground: #1A1F1A;
+    --secondary: #3A453A;
+    --secondary-foreground: #E8F5E8;
+    --muted: #232A23;
+    --muted-foreground: #A5B3A5;
+    --accent: #FFC107;
+    --accent-foreground: #1A1F1A;
+    --destructive: #F44336;
+    --destructive-foreground: #E8F5E8;
+    --border: #3A453A;
+    --input: #2A352A;
+    --ring: #4CAF50;
+    
+    /* Canvas background for dark mode */
+    --canvas: #1A1F1A;
   }
   
   * {

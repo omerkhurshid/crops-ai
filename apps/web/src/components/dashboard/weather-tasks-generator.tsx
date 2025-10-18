@@ -93,7 +93,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
             forecast3Day: data.forecast3Day || []
           }
         } else {
-          console.log('Weather API not available')
+          // Weather API not available - returning empty task list
           setTasks([])
           setLoading(false)
           return
@@ -183,14 +183,14 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
           })
         }
       } else {
-        console.log('Weather task model API not available, using fallback logic')
+        // Weather task model API not available - using fallback logic
       }
     } catch (error) {
       console.error('Error calling weather task model:', error)
     }
 
     // Return empty array if model is not available - show proper "no data" state
-    console.log('Weather task model not available, showing no data state instead of fallback tasks')
+    // Weather task model not available - showing no data state instead of fallback tasks
     return []
   }
 

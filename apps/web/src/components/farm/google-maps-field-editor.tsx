@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { getConfig } from '../../lib/config/environment'
+// Removed getConfig import - using process.env directly for client-side access
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -219,9 +219,8 @@ export function GoogleMapsFieldEditor({
   // Calculate total area
   const totalArea = fields.reduce((sum, field) => sum + field.area, 0)
 
-  // Check if Google Maps API key is available
-  const config = getConfig()
-  const apiKey = config.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  // Check if Google Maps API key is available (use public env var directly in client)
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   
   if (!apiKey) {
     return (

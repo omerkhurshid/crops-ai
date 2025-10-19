@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
@@ -199,6 +199,24 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 export function LoginForm({ callbackUrl }: LoginFormProps) {
   console.log('🚀 LoginForm component rendering at top level!')
   
-  // Render the form immediately without hydration checks
-  return <LoginFormContent callbackUrl={callbackUrl} />
+  // Wrap in Suspense to handle useSearchParams for SSR
+  return (
+    <Suspense fallback={
+      <Card className="w-full border-0 shadow-none">
+        <CardHeader className="px-0 pb-4">
+          <CardTitle className="text-xl sm:text-2xl">Sign in to your account</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
+            Enter your email and password to access your farm dashboard
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-0">
+          <div className="text-center py-8 text-gray-500">
+            Loading...
+          </div>
+        </CardContent>
+      </Card>
+    }>
+      <LoginFormContent callbackUrl={callbackUrl} />
+    </Suspense>
+  )
 }

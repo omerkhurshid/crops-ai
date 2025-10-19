@@ -169,27 +169,36 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 }
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
-  return (
-    <Suspense fallback={
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Sign in to your account</CardTitle>
-          <CardDescription>
-            Loading...
+  // Force client-side mounting to fix hydration issues
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    console.log('🚀 LoginForm mounting in useEffect')
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    // Show loading state during hydration
+    return (
+      <Card className="w-full border-0 shadow-none">
+        <CardHeader className="px-0 pb-4">
+          <CardTitle className="text-xl sm:text-2xl">Sign in to your account</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
+            Loading form...
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0">
           <div className="animate-pulse space-y-4">
             <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-12 bg-gray-200 rounded"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-12 bg-gray-200 rounded"></div>
+            <div className="h-12 bg-gray-200 rounded"></div>
           </div>
         </CardContent>
       </Card>
-    }>
-      <LoginFormContent callbackUrl={callbackUrl} />
-    </Suspense>
-  )
+    )
+  }
+
+  return <LoginFormContent callbackUrl={callbackUrl} />
 }

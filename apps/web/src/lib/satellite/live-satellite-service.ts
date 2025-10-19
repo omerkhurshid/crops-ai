@@ -8,7 +8,6 @@ import { NDVIAnalysisService } from './ndvi-analysis'
 import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
 import { prisma } from '../prisma'
-import { getConfig } from '../config/environment'
 
 export interface LiveSatelliteConfig {
   preferLiveData: boolean
@@ -227,8 +226,18 @@ class LiveSatelliteService {
    */
   private async fetchLiveSatelliteData(field: any): Promise<SatelliteDataPoint | null> {
     try {
-      // Check if Sentinel Hub is configured
-      const config = getConfig()
+      // Initialize config only on server-side to prevent client-side environment validation
+      let config: any = null;
+      if (typeof window === 'undefined') {
+        const { getConfig } = require('../config/environment');
+        config = getConfig();
+      }
+      
+      if (!config) {
+        // Not server-side or config unavailable - skipping live data fetch
+        return null;
+      }
+      
       if (!config.SENTINEL_HUB_CLIENT_ID || !config.SENTINEL_HUB_CLIENT_SECRET) {
         // Sentinel Hub not configured - skipping live data fetch
         return null

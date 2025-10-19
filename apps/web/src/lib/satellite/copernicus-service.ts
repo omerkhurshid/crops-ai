@@ -7,7 +7,6 @@
 
 import { auditLogger } from '../logging/audit-logger'
 import { ndviCalculator, VegetationIndices } from './ndvi-calculator'
-import { getConfig } from '../config/environment'
 
 export interface Sentinel2Scene {
   id: string
@@ -79,9 +78,15 @@ class CopernicusService {
   private readonly clientSecret: string
   
   constructor() {
-    const config = getConfig()
-    this.clientId = config.COPERNICUS_CLIENT_ID || ''
-    this.clientSecret = config.COPERNICUS_CLIENT_SECRET || ''
+    // Initialize config only on server-side to prevent client-side environment validation
+    let config: any = null;
+    if (typeof window === 'undefined') {
+      const { getConfig } = require('../config/environment');
+      config = getConfig();
+    }
+    
+    this.clientId = config?.COPERNICUS_CLIENT_ID || ''
+    this.clientSecret = config?.COPERNICUS_CLIENT_SECRET || ''
     
     if (!this.clientId || !this.clientSecret) {
 

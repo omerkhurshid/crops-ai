@@ -6,7 +6,6 @@
  */
 
 // Logger replaced with console for local development
-import { getConfig } from '../config/environment'
 
 export interface GEEConfig {
   serviceAccountEmail: string
@@ -453,7 +452,16 @@ export async function analyzeCroppleField(
   boundaries: number[][][],
   plantingDate?: Date
 ): Promise<GEEAnalysisResult> {
-  const config = getConfig()
+  // Initialize config only on server-side to prevent client-side environment validation
+  let config: any = null;
+  if (typeof window === 'undefined') {
+    const { getConfig } = require('../config/environment');
+    config = getConfig();
+  }
+  
+  if (!config) {
+    throw new Error('Google Earth Engine service can only be used server-side');
+  }
   
   const geeService = new GoogleEarthEngineService({
     serviceAccountEmail: config.GEE_SERVICE_ACCOUNT_EMAIL!,

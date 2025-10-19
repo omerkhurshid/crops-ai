@@ -5,7 +5,6 @@ import { encode } from 'next-auth/jwt'
 import { UserRole } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { rateLimitWithFallback } from '../../../../lib/rate-limit'
-import { getConfig } from '../../../../lib/config/environment'
 
 export async function POST(request: NextRequest) {
   // Apply rate limiting for auth endpoints
@@ -23,7 +22,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const config = getConfig()
+    // Initialize config only on server-side to prevent client-side environment validation
+    let config: any = null;
+    if (typeof window === 'undefined') {
+      const { getConfig } = require('../../../../lib/config/environment');
+      config = getConfig();
+    }
+    
+    if (!config) {
+      return Response.json({ error: 'Configuration unavailable' }, { status: 500 })
+    }
+    
     const { email, password } = await request.json()
     
     if (!email || !password) {

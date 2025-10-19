@@ -1,17 +1,24 @@
 import { Redis } from '@upstash/redis';
-import { getConfig } from './config/environment';
 // Logger replaced with console for local development;
 
-// Get validated configuration
-const config = getConfig();
+// Create Redis instance with environment variables (safe for client-side)
+// Only initialize on server-side where environment variables are available
+let redis: Redis | null = null;
 
-// Create Redis instance with validated environment variables (if available)
-export const redis = config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN 
-  ? new Redis({
-      url: config.UPSTASH_REDIS_REST_URL,
-      token: config.UPSTASH_REDIS_REST_TOKEN
-    })
-  : null;
+if (typeof window === 'undefined') {
+  // Server-side only - import getConfig here to avoid client-side execution
+  const { getConfig } = require('./config/environment');
+  const config = getConfig();
+  
+  redis = config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN 
+    ? new Redis({
+        url: config.UPSTASH_REDIS_REST_URL,
+        token: config.UPSTASH_REDIS_REST_TOKEN
+      })
+    : null;
+}
+
+export { redis };
 
 // Utility functions for common Redis operations
 export class RedisManager {

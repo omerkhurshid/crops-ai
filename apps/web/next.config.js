@@ -102,13 +102,14 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      // Only rewrite specific custom auth endpoints, not NextAuth ones
       {
-        source: '/api/auth/signin',
-        destination: '/api/authentication/signin',
+        source: '/api/authentication/signin',
+        destination: '/api/manual-auth/signin',
       },
       {
-        source: '/api/auth/register',
-        destination: '/api/authentication/register',
+        source: '/api/authentication/register', 
+        destination: '/api/auth/register',
       },
     ]
   },

@@ -22,6 +22,11 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // Debug: Test if React is hydrated properly
+  React.useEffect(() => {
+    console.log('🚀 LoginForm React component mounted and hydrated')
+  }, [])
+
   useEffect(() => {
     // Check for registration success
     const registered = searchParams?.get('registered')
@@ -64,12 +69,13 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted!', email, password) // Simple test log
+    console.log('🔥 FORM SUBMIT TRIGGERED!', { email, password: password ? '***' : 'empty' })
+    
     setIsLoading(true)
     setError('')
 
     try {
-      console.log('Starting login attempt for:', email)
+      console.log('📧 Starting NextAuth signIn for:', email)
       // Use NextAuth signIn function
       const result = await signIn('credentials', {
         email,

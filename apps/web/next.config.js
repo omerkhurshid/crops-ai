@@ -103,8 +103,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/auth/:path*',
-        destination: '/api/authentication/:path*',
+        source: '/api/auth/signin',
+        destination: '/api/authentication/signin',
+      },
+      {
+        source: '/api/auth/register',
+        destination: '/api/authentication/register',
       },
     ]
   },

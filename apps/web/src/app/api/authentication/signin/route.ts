@@ -25,8 +25,13 @@ export async function POST(request: NextRequest) {
     // Initialize config only on server-side to prevent client-side environment validation
     let config: any = null;
     if (typeof window === 'undefined') {
-      const { getConfig } = require('../../../../lib/config/environment');
-      config = getConfig();
+      try {
+        const { getConfig } = require('../../../../lib/config/environment');
+        config = getConfig();
+      } catch (error) {
+        console.error('Failed to load environment config:', error);
+        return Response.json({ error: 'Configuration error' }, { status: 500 })
+      }
     }
     
     if (!config) {

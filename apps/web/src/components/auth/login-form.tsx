@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -67,30 +68,22 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      // Attempt authentication with provided credentials
-      
-      // Use our custom authentication endpoint
-      const response = await fetch('/api/authentication/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      // Use NextAuth signIn function
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
 
-      const result = await response.json()
-
-      if (response.ok && result.success) {
-        // Force a page refresh to ensure session is loaded properly
+      if (result?.error) {
+        setError('Invalid email or password')
+      } else if (result?.ok) {
+        // Redirect to callback URL on successful login
         window.location.href = callbackUrl
       } else {
-        setError(result.error || 'Invalid email or password')
+        setError('An error occurred. Please try again.')
       }
     } catch (err) {
-      // Handle authentication error silently
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
@@ -151,7 +144,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
               {error}
             </div>
           )}
-          <Button type="submit" className="w-full h-12 text-base font-medium" disabled={isLoading}>
+          <Button type="submit" className="w-full h-12 text-base font-medium bg-earth-600 hover:bg-earth-700 text-white" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>

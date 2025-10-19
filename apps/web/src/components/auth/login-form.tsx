@@ -68,6 +68,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
+      console.log('Starting login attempt for:', email)
       // Use NextAuth signIn function
       const result = await signIn('credentials', {
         email,
@@ -76,12 +77,17 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
         callbackUrl: '/dashboard'
       })
 
+      console.log('Login result:', result)
+
       if (result?.error) {
+        console.log('Login failed with error:', result.error)
         setError('Invalid email or password')
       } else if (result?.ok) {
+        console.log('Login successful, redirecting to dashboard')
         // Successful login - NextAuth will handle redirect
         window.location.href = '/dashboard'
       } else {
+        console.log('Unexpected login result:', result)
         setError('An error occurred. Please try again.')
       }
     } catch (err) {

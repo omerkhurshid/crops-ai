@@ -36,42 +36,40 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('Missing credentials')
           return null
         }
 
-        // Demo authentication removed for production
-
         // Try database authentication
         try {
-          console.log('Attempting database authentication for:', credentials.email)
           // Find user by email
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           })
 
-          if (!user || !user.passwordHash) {
-            console.log('User not found or no password hash')
+          if (!user) {
+            return null
+          }
+
+          // If user exists but no password hash, they might need to set a password
+          if (!user.passwordHash) {
             return null
           }
 
           // Verify password
           const isValidPassword = await bcrypt.compare(credentials.password, user.passwordHash)
           if (!isValidPassword) {
-            console.log('Invalid password for user:', credentials.email)
             return null
           }
 
-          console.log('Authentication successful for:', credentials.email)
+          // Return user object for NextAuth
           return {
             id: user.id,
             email: user.email,
-            name: user.name,
+            name: user.name || '',
             role: user.role as UserRole
           }
         } catch (error) {
-          Logger.error('Database authentication error', error)
-          // If database fails, only demo users work
+          console.error('Database authentication error:', error)
           return null
         }
       }

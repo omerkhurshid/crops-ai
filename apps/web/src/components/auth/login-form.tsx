@@ -24,6 +24,12 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // Add immediate console log to check if component loads at all
+  console.log('🎯 LoginFormContent component rendering...', {
+    isClient,
+    timestamp: new Date().toISOString()
+  })
+
   // Ensure client-side hydration
   useEffect(() => {
     console.log('🚀 LoginForm React component mounted and hydrated')

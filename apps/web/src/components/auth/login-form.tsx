@@ -109,12 +109,11 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 
     try {
       console.log('📧 Starting NextAuth signIn for:', email)
-      // Use NextAuth signIn function
+      // Use NextAuth signIn function with explicit redirect handling
       const result = await signIn('credentials', {
         email,
         password,
-        redirect: false,
-        callbackUrl: '/dashboard'
+        redirect: false, // Handle redirects manually
       })
 
       console.log('🔐 NextAuth Login Result:', result)
@@ -122,14 +121,27 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
       if (result?.error) {
         console.error('❌ Login failed with error:', result.error)
         console.log('🔍 Full error details:', result)
-        setError(`Authentication failed: ${result.error} (Debug: ${JSON.stringify(result)})`)
+        
+        // Handle specific NextAuth errors
+        switch (result.error) {
+          case 'CredentialsSignin':
+            setError('Invalid email or password. Please check your credentials and try again.')
+            break
+          case 'Configuration':
+            setError('Authentication system error. Please contact support.')
+            break
+          default:
+            setError(`Authentication failed: ${result.error}`)
+        }
       } else if (result?.ok) {
         console.log('✅ Login successful, redirecting to dashboard')
-        // Successful login - NextAuth will handle redirect
+        // Successful login - redirect to dashboard
         window.location.href = '/dashboard'
+      } else if (result === null) {
+        setError('Authentication failed. Please check your credentials.')
       } else {
         console.log('⚠️ Unexpected login result:', result)
-        setError(`Unexpected result: ${JSON.stringify(result)}`)
+        setError(`System error. Please try again. (Debug: ${JSON.stringify(result)})`)
       }
     } catch (err) {
       setError('An error occurred. Please try again.')

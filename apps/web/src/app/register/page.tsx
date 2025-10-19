@@ -12,16 +12,6 @@ export default function RegisterPage() {
           <div className="text-center">
             <h1 className="text-4xl font-bold text-sage-800 mb-4">Increase Your Profits</h1>
             <p className="text-sage-600 text-lg">Join 1,200+ farmers earning $15K+ more per season</p>
-            
-            {/* Social proof */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6 mb-6">
-              <div className="text-sm text-green-700 font-medium mb-1">
-                ✅ Free for first month
-              </div>
-              <div className="text-sm text-green-600">
-                Setup takes 5 minutes • Cancel anytime • No contracts
-              </div>
-            </div>
           </div>
           
           <div className="bg-white rounded-2xl shadow-soft p-8">

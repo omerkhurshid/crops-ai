@@ -215,95 +215,28 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
           </div>
 
           {/* User Type Selection */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Label>Primary Interest</Label>
+              <Label htmlFor="userType">Primary Interest</Label>
               <div className="text-xs text-gray-500 flex items-center gap-1">
                 <Info className="h-3 w-3" />
                 <span>This helps us share relevant features and updates</span>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'CROPS' ? '' : 'CROPS' }))}
-                disabled={isLoading}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
-                  formData.userType === 'CROPS' 
-                    ? 'border-sage-500 bg-sage-50 text-sage-900' 
-                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
-                } ${isLoading ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center gap-3">
-                  <Sprout className={`h-6 w-6 ${formData.userType === 'CROPS' ? 'text-sage-600' : 'text-sage-400'}`} />
-                  <div>
-                    <div className="font-medium">Crops</div>
-                    <div className="text-xs opacity-80">Grains, vegetables, fruits</div>
-                  </div>
-                </div>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'LIVESTOCK' ? '' : 'LIVESTOCK' }))}
-                disabled={isLoading}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
-                  formData.userType === 'LIVESTOCK' 
-                    ? 'border-earth-500 bg-earth-50 text-earth-900' 
-                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
-                } ${isLoading ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center gap-3">
-                  <Users className={`h-6 w-6 ${formData.userType === 'LIVESTOCK' ? 'text-earth-600' : 'text-sage-400'}`} />
-                  <div>
-                    <div className="font-medium">Livestock</div>
-                    <div className="text-xs opacity-80">Cattle, sheep, poultry</div>
-                  </div>
-                </div>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'ORCHARD' ? '' : 'ORCHARD' }))}
-                disabled={isLoading}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
-                  formData.userType === 'ORCHARD' 
-                    ? 'border-green-500 bg-green-50 text-green-900' 
-                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
-                } ${isLoading ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center gap-3">
-                  <TreePine className={`h-6 w-6 ${formData.userType === 'ORCHARD' ? 'text-green-600' : 'text-sage-400'}`} />
-                  <div>
-                    <div className="font-medium">Orchard</div>
-                    <div className="text-xs opacity-80">Tree fruits, nuts</div>
-                  </div>
-                </div>
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, userType: prev.userType === 'MIXED' ? '' : 'MIXED' }))}
-                disabled={isLoading}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
-                  formData.userType === 'MIXED' 
-                    ? 'border-cream-500 bg-cream-50 text-cream-900' 
-                    : 'border-sage-200 hover:border-sage-300 bg-white text-sage-700'
-                } ${isLoading ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center ${
-                    formData.userType === 'MIXED' ? 'border-cream-600 text-cream-600' : 'border-sage-400 text-sage-400'
-                  }`}>
-                    <span className="text-xs font-bold">ALL</span>
-                  </div>
-                  <div>
-                    <div className="font-medium">Mixed</div>
-                    <div className="text-xs opacity-80">Multiple interests</div>
-                  </div>
-                </div>
-              </button>
-            </div>
+            <select
+              id="userType"
+              name="userType"
+              value={formData.userType}
+              onChange={handleChange}
+              className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              disabled={isLoading}
+            >
+              <option value="">Select your primary interest (optional)</option>
+              <option value="CROPS">Crops - Grains, vegetables, fruits</option>
+              <option value="LIVESTOCK">Livestock - Cattle, sheep, poultry</option>
+              <option value="ORCHARD">Orchard - Tree fruits, nuts</option>
+              <option value="MIXED">Mixed - Multiple interests</option>
+            </select>
             <p className="text-xs text-gray-500 italic">
               Optional: Skip this to explore all features
             </p>
@@ -318,6 +251,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               onChange={handleChange}
               className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               disabled={isLoading}
+              required
             >
               <option value={UserRole.FARM_OWNER}>Farm Owner</option>
               <option value={UserRole.FARM_MANAGER}>Farm Manager</option>
@@ -436,7 +370,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             </div>
           )}
           
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" variant="sage" className="w-full" disabled={isLoading}>
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>
         </form>

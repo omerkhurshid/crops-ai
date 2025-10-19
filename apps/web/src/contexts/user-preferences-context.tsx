@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { UserPreferences, DEFAULT_PREFERENCES } from '../lib/user-preferences'
 
 interface UserPreferencesContextType {
@@ -13,10 +14,17 @@ interface UserPreferencesContextType {
 const UserPreferencesContext = createContext<UserPreferencesContextType | undefined>(undefined)
 
 export function UserPreferencesProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession()
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES)
   const [loading, setLoading] = useState(true)
 
   const fetchPreferences = async () => {
+    // Only fetch preferences if user is authenticated
+    if (!session) {
+      setLoading(false)
+      return
+    }
+    
     try {
       const response = await fetch('/api/users/preferences')
       if (response.ok) {
@@ -58,8 +66,11 @@ export function UserPreferencesProvider({ children }: { children: React.ReactNod
   }
 
   useEffect(() => {
-    fetchPreferences()
-  }, [])
+    // Only fetch preferences when authentication status is determined
+    if (status !== 'loading') {
+      fetchPreferences()
+    }
+  }, [status, session])
 
   return (
     <UserPreferencesContext.Provider value={{

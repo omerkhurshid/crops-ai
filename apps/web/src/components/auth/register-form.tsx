@@ -232,7 +232,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 className="flex h-10 w-full rounded-md border-2 border-sage-200 hover:border-sage-300 focus-visible:border-sage-400 bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-200 appearance-none"
                 disabled={isLoading}
               >
-                <option value="">Select your primary interest (optional)</option>
+                <option value="">Select your primary interest</option>
                 <option value="CROPS">Crops - Grains, vegetables, fruits</option>
                 <option value="LIVESTOCK">Livestock - Cattle, sheep, poultry</option>
                 <option value="ORCHARD">Orchard - Tree fruits, nuts</option>
@@ -244,9 +244,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 italic">
-              Optional: Skip this to explore all features
-            </p>
           </div>
 
           <div className="space-y-2">

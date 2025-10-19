@@ -19,24 +19,36 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const [isClient, setIsClient] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // Add immediate console log to check if component loads at all
+  // Immediate console logs to track component lifecycle
   console.log('🎯 LoginFormContent component rendering...', {
-    isClient,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    isServer: typeof window === 'undefined',
+    location: typeof window !== 'undefined' ? window.location.href : 'server-side'
   })
 
-  // Ensure client-side hydration
+  // Test React hydration with DOM manipulation
   useEffect(() => {
-    console.log('🚀 LoginForm React component mounted and hydrated')
-    console.log('🔍 Client environment check:', {
-      isClient: typeof window !== 'undefined',
-      location: typeof window !== 'undefined' ? window.location.href : 'server'
+    console.log('🚀 LoginForm React component mounted and hydrated successfully!')
+    console.log('🔍 Client environment confirmed:', {
+      location: window.location.href,
+      userAgent: navigator.userAgent.substring(0, 50)
     })
-    setIsClient(true)
+    
+    // Add a visible indicator that React is working
+    const indicator = document.createElement('div')
+    indicator.id = 'react-hydration-test'
+    indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:green;color:white;padding:4px 8px;border-radius:4px;z-index:9999;font-size:12px;'
+    indicator.textContent = '✅ React Hydrated'
+    document.body.appendChild(indicator)
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      const el = document.getElementById('react-hydration-test')
+      if (el) el.remove()
+    }, 3000)
   }, [])
 
   useEffect(() => {
@@ -174,9 +186,9 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
           <Button 
             type="submit" 
             className="w-full h-12 text-base font-medium bg-earth-600 hover:bg-earth-700 text-white" 
-            disabled={isLoading || !isClient}
+            disabled={isLoading}
           >
-            {!isClient ? 'Loading...' : isLoading ? 'Signing in...' : 'Sign in'}
+            {isLoading ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
       </CardContent>
@@ -185,33 +197,8 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 }
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
-  // Simple client-side mounting check
-  const [hasMounted, setHasMounted] = useState(false)
-
-  useEffect(() => {
-    console.log('🚀 LoginForm component mounted!')
-    setHasMounted(true)
-  }, [])
-
-  if (!hasMounted) {
-    // Show static form during hydration
-    return (
-      <Card className="w-full border-0 shadow-none">
-        <CardHeader className="px-0 pb-4">
-          <CardTitle className="text-xl sm:text-2xl">Sign in to your account</CardTitle>
-          <CardDescription className="text-sm sm:text-base">
-            Enter your email and password to access your farm dashboard
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-0">
-          <div className="text-center py-8 text-gray-500">
-            Loading...
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  // Render interactive form after hydration
+  console.log('🚀 LoginForm component rendering at top level!')
+  
+  // Render the form immediately without hydration checks
   return <LoginFormContent callbackUrl={callbackUrl} />
 }

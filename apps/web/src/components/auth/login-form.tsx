@@ -27,6 +27,10 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   // Ensure client-side hydration
   useEffect(() => {
     console.log('🚀 LoginForm React component mounted and hydrated')
+    console.log('🔍 Client environment check:', {
+      isClient: typeof window !== 'undefined',
+      location: typeof window !== 'undefined' ? window.location.href : 'server'
+    })
     setIsClient(true)
   }, [])
 

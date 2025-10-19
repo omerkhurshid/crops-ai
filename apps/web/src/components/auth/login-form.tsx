@@ -78,17 +78,18 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
         callbackUrl: '/dashboard'
       })
 
-      console.log('Login result:', result)
+      console.log('🔐 NextAuth Login Result:', result)
 
       if (result?.error) {
-        console.log('Login failed with error:', result.error)
-        setError('Invalid email or password')
+        console.error('❌ Login failed with error:', result.error)
+        console.log('🔍 Full error details:', result)
+        setError(`Authentication failed: ${result.error}`)
       } else if (result?.ok) {
-        console.log('Login successful, redirecting to dashboard')
+        console.log('✅ Login successful, redirecting to dashboard')
         // Successful login - NextAuth will handle redirect
         window.location.href = '/dashboard'
       } else {
-        console.log('Unexpected login result:', result)
+        console.log('⚠️ Unexpected login result:', result)
         setError('An error occurred. Please try again.')
       }
     } catch (err) {

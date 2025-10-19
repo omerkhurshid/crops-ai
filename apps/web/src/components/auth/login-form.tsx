@@ -78,8 +78,9 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
       if (result?.error) {
         setError('Invalid email or password')
       } else if (result?.ok) {
-        // Redirect to callback URL on successful login
-        window.location.href = callbackUrl
+        // Redirect to dashboard on successful login, avoid login page loop
+        const redirectUrl = callbackUrl === '/login' ? '/dashboard' : callbackUrl
+        window.location.href = redirectUrl
       } else {
         setError('An error occurred. Please try again.')
       }

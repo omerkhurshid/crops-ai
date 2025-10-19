@@ -64,6 +64,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Form submitted!', email, password) // Simple test log
     setIsLoading(true)
     setError('')
 

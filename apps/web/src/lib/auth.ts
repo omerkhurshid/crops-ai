@@ -1,32 +1,12 @@
 import { NextAuthOptions } from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from './prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@prisma/client'
-
-// Simple logger implementation
-const Logger = {
-  error: (message: string, error?: any) => {
-    console.error(message, error)
-  },
-  info: (message: string, data?: any) => {
-
-  },
-  warn: (message: string, data?: any) => {
-
-  }
-}
 import bcrypt from 'bcryptjs'
 
-// Initialize config only on server-side to prevent client-side environment validation
-let config: any = null;
-if (typeof window === 'undefined') {
-  const { getConfig } = require('./config/environment');
-  config = getConfig();
-}
-
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility
+  // Using JWT strategy for better performance and simpler setup
+  // Remove adapter to use JWT sessions instead of database sessions
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -36,40 +16,47 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log('NextAuth: Missing email or password')
           return null
         }
 
-        // Try database authentication
         try {
+          console.log('NextAuth: Attempting authentication for:', credentials.email)
+          
           // Find user by email
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           })
 
           if (!user) {
+            console.log('NextAuth: User not found:', credentials.email)
             return null
           }
 
-          // If user exists but no password hash, they might need to set a password
+          // Check if user has a password hash
           if (!user.passwordHash) {
+            console.log('NextAuth: User has no password hash:', credentials.email)
             return null
           }
 
           // Verify password
           const isValidPassword = await bcrypt.compare(credentials.password, user.passwordHash)
           if (!isValidPassword) {
+            console.log('NextAuth: Invalid password for user:', credentials.email)
             return null
           }
 
-          // Return user object for NextAuth
+          console.log('NextAuth: Authentication successful for:', credentials.email)
+          
+          // Return user object for NextAuth JWT
           return {
             id: user.id,
             email: user.email,
-            name: user.name || '',
+            name: user.name || user.email,
             role: user.role as UserRole
           }
         } catch (error) {
-          console.error('Database authentication error:', error)
+          console.error('NextAuth: Database authentication error:', error)
           return null
         }
       }
@@ -104,8 +91,8 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login'
   },
-  secret: config?.NEXTAUTH_SECRET || process.env.NEXTAUTH_SECRET,
-  debug: config?.NODE_ENV === 'development'
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development'
 }
 
 // Types for extending NextAuth

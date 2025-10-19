@@ -102,8 +102,8 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login',
     error: '/login?error=true'
   },
-  secret: config.NEXTAUTH_SECRET,
-  debug: config.NODE_ENV === 'development'
+  secret: config?.NEXTAUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  debug: config?.NODE_ENV === 'development'
 }
 
 // Types for extending NextAuth

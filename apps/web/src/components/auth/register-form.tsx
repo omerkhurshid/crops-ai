@@ -223,20 +223,27 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <span>This helps us share relevant features and updates</span>
               </div>
             </div>
-            <select
-              id="userType"
-              name="userType"
-              value={formData.userType}
-              onChange={handleChange}
-              className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              disabled={isLoading}
-            >
-              <option value="">Select your primary interest (optional)</option>
-              <option value="CROPS">Crops - Grains, vegetables, fruits</option>
-              <option value="LIVESTOCK">Livestock - Cattle, sheep, poultry</option>
-              <option value="ORCHARD">Orchard - Tree fruits, nuts</option>
-              <option value="MIXED">Mixed - Multiple interests</option>
-            </select>
+            <div className="relative">
+              <select
+                id="userType"
+                name="userType"
+                value={formData.userType}
+                onChange={handleChange}
+                className="flex h-10 w-full rounded-md border-2 border-sage-200 hover:border-sage-300 focus-visible:border-sage-400 bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-200 appearance-none"
+                disabled={isLoading}
+              >
+                <option value="">Select your primary interest (optional)</option>
+                <option value="CROPS">Crops - Grains, vegetables, fruits</option>
+                <option value="LIVESTOCK">Livestock - Cattle, sheep, poultry</option>
+                <option value="ORCHARD">Orchard - Tree fruits, nuts</option>
+                <option value="MIXED">Mixed - Multiple interests</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg className="h-4 w-4 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
             <p className="text-xs text-gray-500 italic">
               Optional: Skip this to explore all features
             </p>
@@ -244,19 +251,26 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
 
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              disabled={isLoading}
-              required
-            >
-              <option value={UserRole.FARM_OWNER}>Farm Owner</option>
-              <option value={UserRole.FARM_MANAGER}>Farm Manager</option>
-              <option value={UserRole.AGRONOMIST}>Agronomist</option>
-            </select>
+            <div className="relative">
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="flex h-10 w-full rounded-md border-2 border-sage-200 hover:border-sage-300 focus-visible:border-sage-400 bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-200 appearance-none"
+                disabled={isLoading}
+                required
+              >
+                <option value={UserRole.FARM_OWNER}>Farm Owner</option>
+                <option value={UserRole.FARM_MANAGER}>Farm Manager</option>
+                <option value={UserRole.AGRONOMIST}>Agronomist</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg className="h-4 w-4 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
           
           <div className="space-y-2">
@@ -377,10 +391,10 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
         
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
+            <span className="w-full border-t border-sage-200" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-white px-2 text-sage-600">Or continue with</span>
           </div>
         </div>
 

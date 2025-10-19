@@ -17,10 +17,13 @@ const Logger = {
   }
 }
 import bcrypt from 'bcryptjs'
-import { getConfig } from './config/environment'
 
-// Get validated configuration (includes production validation)
-const config = getConfig()
+// Initialize config only on server-side to prevent client-side environment validation
+let config: any = null;
+if (typeof window === 'undefined') {
+  const { getConfig } = require('./config/environment');
+  config = getConfig();
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any, // Type assertion to handle version compatibility

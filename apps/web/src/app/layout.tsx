@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '../components/providers/auth-provider'
@@ -13,12 +13,16 @@ const inter = Inter({
   preload: true
 })
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export const metadata: Metadata = {
   title: 'Crops.AI - Smart Farm Management',
   description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
   keywords: 'agriculture, farming, smart farming, crop health, field monitoring, farm management',
   authors: [{ name: 'Cropple.ai Team' }],
-  viewport: 'width=device-width, initial-scale=1',
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },

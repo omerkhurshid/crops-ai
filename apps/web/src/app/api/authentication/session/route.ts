@@ -2,11 +2,19 @@ import { NextRequest } from 'next/server'
 import { decode } from 'next-auth/jwt'
 import { UserRole } from '@prisma/client'
 // Logger replaced with console for local development
-import { getConfig } from '../../../../lib/config/environment'
 
 export async function GET(request: NextRequest) {
   try {
-    const config = getConfig()
+    // Initialize config only on server-side to prevent client-side environment validation
+    let config: any = null;
+    if (typeof window === 'undefined') {
+      const { getConfig } = require('../../../../lib/config/environment');
+      config = getConfig();
+    }
+    
+    if (!config) {
+      return Response.json({})
+    }
     
     // Get the session token from cookies (check both production and development names)
     const cookieName = config.NODE_ENV === 'production' 

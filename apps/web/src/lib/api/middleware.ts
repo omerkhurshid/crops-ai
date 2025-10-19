@@ -247,7 +247,15 @@ async function authenticateRequest(request: NextRequest): Promise<{
   role: UserRole
 } | null> {
   try {
-    const config = getConfig()
+    // Initialize config only on server-side to prevent client-side environment validation
+    let config: any = null;
+    if (typeof window === 'undefined') {
+      config = getConfig();
+    }
+    
+    if (!config) {
+      return null;
+    }
     
     // Get the session token from cookies (same logic as our session endpoint)
     const cookieName = config.NODE_ENV === 'production' 

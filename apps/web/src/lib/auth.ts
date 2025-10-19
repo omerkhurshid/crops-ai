@@ -4,6 +4,19 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
+// Authentication logger following codebase patterns
+const AuthLogger = {
+  info: (message: string, data?: any) => {
+    console.log(`[AUTH] ${message}`, data || '')
+  },
+  error: (message: string, error?: any) => {
+    console.error(`[AUTH] ${message}`, error || '')
+  },
+  warn: (message: string, data?: any) => {
+    console.warn(`[AUTH] ${message}`, data || '')
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   // Using JWT strategy for better performance and simpler setup
   // Remove adapter to use JWT sessions instead of database sessions
@@ -16,12 +29,12 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('NextAuth: Missing email or password')
+          AuthLogger.warn('Authentication attempt with missing credentials')
           return null
         }
 
         try {
-          console.log('NextAuth: Attempting authentication for:', credentials.email)
+          AuthLogger.info('Authentication attempt started', { email: credentials.email })
           
           // Find user by email
           const user = await prisma.user.findUnique({
@@ -29,24 +42,34 @@ export const authOptions: NextAuthOptions = {
           })
 
           if (!user) {
-            console.log('NextAuth: User not found:', credentials.email)
+            AuthLogger.warn('Authentication failed - user not found', { email: credentials.email })
             return null
           }
 
           // Check if user has a password hash
           if (!user.passwordHash) {
-            console.log('NextAuth: User has no password hash:', credentials.email)
+            AuthLogger.warn('Authentication failed - user has no password hash', { 
+              email: credentials.email,
+              userId: user.id 
+            })
             return null
           }
 
           // Verify password
           const isValidPassword = await bcrypt.compare(credentials.password, user.passwordHash)
           if (!isValidPassword) {
-            console.log('NextAuth: Invalid password for user:', credentials.email)
+            AuthLogger.warn('Authentication failed - invalid password', { 
+              email: credentials.email,
+              userId: user.id 
+            })
             return null
           }
 
-          console.log('NextAuth: Authentication successful for:', credentials.email)
+          AuthLogger.info('Authentication successful', { 
+            email: credentials.email,
+            userId: user.id,
+            role: user.role 
+          })
           
           // Return user object for NextAuth JWT
           return {
@@ -56,7 +79,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role as UserRole
           }
         } catch (error) {
-          console.error('NextAuth: Database authentication error:', error)
+          AuthLogger.error('Database authentication error', error)
           return null
         }
       }
@@ -92,7 +115,22 @@ export const authOptions: NextAuthOptions = {
     signIn: '/login'
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development'
+  debug: process.env.NODE_ENV === 'development',
+  
+  // Enhanced logging for consistency with codebase patterns
+  logger: {
+    error: (code, metadata) => {
+      AuthLogger.error(`NextAuth Error [${code}]`, metadata)
+    },
+    warn: (code) => {
+      AuthLogger.warn(`NextAuth Warning [${code}]`)
+    },
+    debug: (code, metadata) => {
+      if (process.env.NODE_ENV === 'development') {
+        AuthLogger.info(`NextAuth Debug [${code}]`, metadata)
+      }
+    }
+  }
 }
 
 // Types for extending NextAuth

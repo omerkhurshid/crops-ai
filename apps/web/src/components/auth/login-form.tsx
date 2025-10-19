@@ -73,14 +73,14 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
         email,
         password,
         redirect: false,
+        callbackUrl: '/dashboard'
       })
 
       if (result?.error) {
         setError('Invalid email or password')
       } else if (result?.ok) {
-        // Redirect to dashboard on successful login, avoid login page loop
-        const redirectUrl = callbackUrl === '/login' ? '/dashboard' : callbackUrl
-        window.location.href = redirectUrl
+        // Successful login - NextAuth will handle redirect
+        window.location.href = '/dashboard'
       } else {
         setError('An error occurred. Please try again.')
       }

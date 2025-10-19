@@ -104,8 +104,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: '/login',
-    error: '/login?error=true'
+    signIn: '/login'
   },
   secret: config?.NEXTAUTH_SECRET || process.env.NEXTAUTH_SECRET,
   debug: config?.NODE_ENV === 'development'

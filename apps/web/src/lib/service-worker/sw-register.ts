@@ -4,7 +4,7 @@
  */
 
 // Logger replaced with console for local development
-import { getConfig } from '../config/environment'
+// Removed getConfig import - using process.env directly for client-side access
 
 export class ServiceWorkerManager {
   private static instance: ServiceWorkerManager
@@ -161,7 +161,7 @@ export class ServiceWorkerManager {
       const subscription = await this.registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: this.urlBase64ToUint8Array(
-          getConfig().NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
+          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
         ) as BufferSource
       })
 

@@ -107,12 +107,25 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account, profile }) {
+      AuthLogger.info('SignIn callback triggered', { 
+        hasUser: !!user, 
+        provider: account?.provider,
+        userId: user?.id 
+      })
+      
       // Only allow credentials provider for now
-      return account?.provider === 'credentials'
+      if (account?.provider === 'credentials') {
+        AuthLogger.info('Credentials provider signin approved', { userId: user?.id })
+        return true
+      }
+      
+      AuthLogger.warn('SignIn denied - unsupported provider', { provider: account?.provider })
+      return false
     }
   },
   pages: {
-    signIn: '/login'
+    signIn: '/login',
+    error: '/login' // Redirect auth errors back to login page
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development',

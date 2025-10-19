@@ -85,8 +85,17 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
         case 'verification-failed':
           setError('Email verification failed. Please try again.')
           break
+        case 'CredentialsSignin':
+          setError('Invalid email or password. Please check your credentials and try again.')
+          break
+        case 'Configuration':
+          setError('Authentication configuration error. Please contact support.')
+          break
+        case 'AccessDenied':
+          setError('Access denied. Please contact support if this continues.')
+          break
         default:
-          setError('An error occurred.')
+          setError(`Authentication error: ${errorParam}`)
       }
     }
   }, [searchParams])

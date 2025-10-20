@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -160,7 +159,8 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
   }
 
   const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl })
+    // Google signin not currently configured
+    setError('Google sign-in is not available at this time. Please use email registration.')
   }
 
   if (success) {

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -108,40 +107,31 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      console.log('📧 Starting NextAuth signIn for:', email)
-      // Use NextAuth signIn function with explicit redirect handling
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false, // Handle redirects manually
+      console.log('📧 Starting manual auth signin for:', email)
+      
+      // Use custom authentication endpoint
+      const response = await fetch('/api/manual-auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
 
-      console.log('🔐 NextAuth Login Result:', result)
+      const result = await response.json()
+      console.log('🔐 Manual Auth Result:', result)
 
-      if (result?.error) {
-        console.error('❌ Login failed with error:', result.error)
-        console.log('🔍 Full error details:', result)
-        
-        // Handle specific NextAuth errors
-        switch (result.error) {
-          case 'CredentialsSignin':
-            setError('Invalid email or password. Please check your credentials and try again.')
-            break
-          case 'Configuration':
-            setError('Authentication system error. Please contact support.')
-            break
-          default:
-            setError(`Authentication failed: ${result.error}`)
-        }
-      } else if (result?.ok) {
+      if (!response.ok) {
+        setError(result.error || 'Authentication failed. Please check your credentials.')
+      } else if (result.success) {
         console.log('✅ Login successful, redirecting to dashboard')
         // Successful login - redirect to dashboard
         window.location.href = '/dashboard'
-      } else if (result === null) {
-        setError('Authentication failed. Please check your credentials.')
       } else {
-        console.log('⚠️ Unexpected login result:', result)
-        setError(`System error. Please try again. (Debug: ${JSON.stringify(result)})`)
+        setError('Authentication failed. Please check your credentials.')
       }
     } catch (err) {
       setError('An error occurred. Please try again.')

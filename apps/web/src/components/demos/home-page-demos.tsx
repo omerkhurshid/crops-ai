@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
-import { EnhancedNDVIDemo } from './enhanced-ndvi-demo'
+import { RealGoogleMapsNDVI } from './real-google-maps-ndvi'
 import { 
   Satellite, 
   TrendingUp, 
@@ -428,7 +428,7 @@ export function HomePageDemos() {
         </div>
         
         <div className="space-y-8 sm:space-y-12">
-          <EnhancedNDVIDemo />
+          <RealGoogleMapsNDVI />
           <WeatherDemo />
           <FinancialDemo />
         </div>

@@ -116,7 +116,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
                 {user?.name || 'User'}
               </p>
               <p className="text-xs text-gray-500">
-                {user?.email || 'user@example.com'}
+                {user?.email || 'user@crops-ai.com'}
               </p>
             </div>
           </div>

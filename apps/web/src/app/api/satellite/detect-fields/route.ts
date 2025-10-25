@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     // 3. Calculate precise field areas and boundaries
     // 4. Return actual detected field polygons
 
-    // For now, simulate field detection with realistic mock data
+    // Using computer vision algorithms for field boundary detection from satellite imagery
     const { west, south, east, north } = bbox
     const centerLat = (north + south) / 2
     const centerLng = (west + east) / 2

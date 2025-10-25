@@ -343,7 +343,7 @@ export const satelliteResolvers = {
             captureDate: new Date(),
             ndvi,
             stressLevel: stressLevel as StressLevel,
-            imageUrl: `https://example.com/satellite/${fieldId}/${Date.now()}.jpg`
+            imageUrl: `https://crops-ai.com/satellite/${fieldId}/${Date.now()}.jpg`
           }
         })
       }

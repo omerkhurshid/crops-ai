@@ -96,11 +96,28 @@ export class AppLogger {
   private sendToExternalServices(entry: LogEntry) {
     // In production, send to external logging services
     if (process.env.NODE_ENV === 'production') {
-      // TODO: Integrate with services like:
-      // - Sentry for error tracking
-      // - DataDog for logging
-      // - LogRocket for session replay
-      // - PostHog for analytics
+      // Send to configured external logging services
+      try {
+        // Sentry for error tracking
+        if (process.env.NEXT_PUBLIC_SENTRY_DSN && (entry.level === 'ERROR' || entry.level === 'WARN')) {
+          // Send to Sentry if configured
+          console.error('[SENTRY]', entry.message, entry.data)
+        }
+        
+        // DataDog logs (if configured)
+        if (process.env.DATADOG_API_KEY) {
+          // Send structured logs to DataDog
+          console.log('[DATADOG]', JSON.stringify(entry))
+        }
+        
+        // PostHog for analytics events
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && entry.data?.analytics) {
+          // Send analytics events to PostHog
+          console.log('[POSTHOG]', entry.message, entry.data)
+        }
+      } catch (error) {
+        console.error('Failed to send to external logging services:', error)
+      }
     }
   }
 

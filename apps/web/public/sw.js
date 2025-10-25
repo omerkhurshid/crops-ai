@@ -278,12 +278,45 @@ self.addEventListener('notificationclick', (event) => {
   }
 })
 
-// Placeholder functions for IndexedDB operations
+// IndexedDB operations for background sync
+async function openSyncDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('CropsAISyncDB', 1);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('backgroundSync')) {
+        const store = db.createObjectStore('backgroundSync', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('timestamp', 'timestamp', { unique: false });
+        store.createIndex('tag', 'tag', { unique: false });
+      }
+    };
+  });
+}
 async function getPendingData() {
-  // TODO: Implement IndexedDB operations for pending data
-  return []
+  try {
+    const db = await openSyncDB();
+    const transaction = db.transaction(['backgroundSync'], 'readonly');
+    const store = transaction.objectStore('backgroundSync');
+    const request = store.getAll();
+    
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  } catch (error) {
+    console.error('Failed to get pending data:', error);
+    return [];
+  }
 }
 
 async function removePendingData(id) {
-  // TODO: Implement IndexedDB operations to remove pending data
+  // Remove successfully synced data from IndexedDB
+  const db = await openSyncDB();
+  const transaction = db.transaction(['backgroundSync'], 'readwrite');
+  const store = transaction.objectStore('backgroundSync');
+  await store.delete(event.data.id);
 }

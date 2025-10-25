@@ -57,7 +57,7 @@ export class RealSatelliteService {
     lastSatelliteUpdate: Date | null
   }> {
     try {
-      // Get farm fields (mock data for now - replace with actual database query)
+      // Get farm fields from database
       const fields = await this.getFarmFields(farmId)
       
       // Get satellite analysis for each field
@@ -87,8 +87,8 @@ export class RealSatelliteService {
     } catch (error) {
       console.error('Error fetching real satellite data:', error)
       
-      // Fallback to mock data if satellite service fails
-      return this.getFallbackData()
+      // Return unavailable state if satellite service fails
+      throw new Error('Satellite data service unavailable')
     }
   }
 
@@ -437,25 +437,18 @@ export class RealSatelliteService {
     return date.toISOString().split('T')[0]
   }
 
-  private getFallbackData() {
-    return {
-      overallHealth: 82,
-      healthTrend: 3,
-      stressedAreas: 8.5,
-      stressTrend: -2,
-      yieldForecast: {
-        current: 185,
-        potential: 220,
-        unit: 'bu/acre',
-        cropType: 'Corn'
-      },
-      todayHighlights: [
-        'Using simulated data - satellite service unavailable',
-        'North field showing good growth patterns',
-        'Weather conditions favorable for next 7 days'
-      ],
-      satelliteDataAvailable: false,
-      lastSatelliteUpdate: null
-    }
+  private extractLatestSatelliteDate(analyses: SatelliteAnalysis[]): Date | null {
+    let latestDate: Date | null = null;
+    
+    analyses.forEach(analysis => {
+      if (analysis?.satelliteData?.date) {
+        const date = new Date(analysis.satelliteData.date);
+        if (!latestDate || date > latestDate) {
+          latestDate = date;
+        }
+      }
+    });
+    
+    return latestDate;
   }
 }

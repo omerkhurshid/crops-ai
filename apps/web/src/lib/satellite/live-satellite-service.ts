@@ -11,7 +11,6 @@ import { prisma } from '../prisma'
 
 export interface LiveSatelliteConfig {
   preferLiveData: boolean
-  fallbackToMock: boolean
   cacheResults: boolean
   maxRetries: number
 }
@@ -24,7 +23,7 @@ export interface SatelliteDataPoint {
   stressLevel: 'NONE' | 'LOW' | 'MODERATE' | 'HIGH' | 'SEVERE'
   imageUrl: string | null
   metadata: {
-    source: 'sentinel-hub' | 'mock' | 'planet-labs'
+    source: 'sentinel-hub' | 'planet-labs' | 'copernicus'
     cloudCoverage?: number
     resolution?: number
     bands?: string[]
@@ -44,7 +43,6 @@ class LiveSatelliteService {
     
     this.config = {
       preferLiveData: true,
-      fallbackToMock: true,
       cacheResults: true,
       maxRetries: 3,
       ...config
@@ -98,23 +96,16 @@ class LiveSatelliteService {
         return this.formatCachedData(cachedData)
       }
 
-      // Fallback to mock data if configured
-      if (this.config.fallbackToMock) {
-        return await this.generateMockData(field)
-      }
+      // No fallback data available - satellite service unavailable
+      console.warn(`No satellite data available for field ${fieldId}`);
 
       return null
 
     } catch (error) {
       console.error('Error getting satellite data:', error)
       
-      // Last resort fallback
-      if (this.config.fallbackToMock) {
-        const field = await this.getFieldWithBoundary(fieldId)
-        if (field) {
-          return await this.generateMockData(field)
-        }
-      }
+      // No fallback available - satellite service error
+      console.warn(`Satellite service error for field ${fieldId}: ${error.message}`);
       
       return null
     }
@@ -280,32 +271,29 @@ class LiveSatelliteService {
   }
 
   /**
-   * Generate realistic mock data for fallback
+   * Get previous satellite data for trend analysis
    */
-  private async generateMockData(field: any): Promise<SatelliteDataPoint> {
-    // Get previous data to maintain realistic progression
-    const previousData = await this.getPreviousSatelliteData(field.id)
-    
-    // Generate realistic NDVI based on season and previous values
-    const baseNDVI = previousData?.ndvi || this.getSeasonalBaseNDVI()
-    const variation = (Math.random() - 0.5) * 0.1 // ±5% variation
-    const ndvi = Math.max(0, Math.min(1, baseNDVI + variation))
-    
-    const ndviChange = previousData ? ndvi - previousData.ndvi : null
-    
-    return {
-      fieldId: field.id,
-      captureDate: new Date(),
-      ndvi,
-      ndviChange,
-      stressLevel: this.calculateStressLevel(ndvi),
-      imageUrl: null,
-      metadata: {
-        source: 'mock',
-        cloudCoverage: Math.random() * 20, // 0-20% cloud coverage
-        resolution: 10, // 10m resolution like Sentinel-2
-        bands: ['B4', 'B8']
-      }
+  private async getPreviousSatelliteData(fieldId: string): Promise<SatelliteDataPoint | null> {
+    try {
+      const previousData = await prisma.satelliteData.findFirst({
+        where: { fieldId },
+        orderBy: { captureDate: 'desc' }
+      });
+      
+      if (!previousData) return null;
+      
+      return {
+        fieldId: previousData.fieldId,
+        captureDate: previousData.captureDate,
+        ndvi: previousData.ndvi,
+        ndviChange: previousData.ndviChange,
+        stressLevel: previousData.stressLevel as any,
+        imageUrl: previousData.imageUrl,
+        metadata: previousData.metadata as any
+      };
+    } catch (error) {
+      console.error('Error fetching previous satellite data:', error);
+      return null;
     }
   }
 
@@ -321,17 +309,11 @@ class LiveSatelliteService {
   }
 
   /**
-   * Get seasonal base NDVI for realistic mock data
+   * Check if cached data is too old to be useful
    */
-  private getSeasonalBaseNDVI(): number {
-    const month = new Date().getMonth()
-    
-    // Northern hemisphere growing season
-    if (month >= 3 && month <= 8) { // April to September
-      return 0.65 + Math.sin((month - 3) * Math.PI / 6) * 0.15 // Peak in July
-    } else {
-      return 0.3 + Math.random() * 0.2 // Winter/dormant season
-    }
+  private isDataStale(data: any): boolean {
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    return new Date(data.captureDate) < oneDayAgo;
   }
 
   /**
@@ -384,7 +366,7 @@ class LiveSatelliteService {
       stressLevel: cached.stressLevel,
       imageUrl: cached.imageUrl,
       metadata: {
-        source: 'mock', // Assume cached data was mock
+        source: 'copernicus', // Cached satellite data
         cloudCoverage: undefined,
         resolution: 10
       }

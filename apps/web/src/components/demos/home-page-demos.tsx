@@ -25,9 +25,9 @@ import {
 // Real demo data based on actual Iowa corn farming
 const DEMO_FIELD_DATA = {
   location: {
-    name: "Pioneer Farm - Field 7",
-    coordinates: { lat: 41.5868, lng: -93.6250 }, // Iowa coordinates
-    address: "Story County, Iowa",
+    name: "Nebraska Corn Field - Central Plains",
+    coordinates: { lat: 41.305150, lng: -98.161795 }, // Nebraska coordinates
+    address: "Central Nebraska",
     acres: 160,
     crop: "Corn"
   },
@@ -97,9 +97,9 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
 
   const getNDVIColor = (value: number) => {
     if (value < 0.3) return 'text-red-600 bg-red-50'
-    if (value < 0.5) return 'text-orange-600 bg-orange-50'
-    if (value < 0.7) return 'text-yellow-600 bg-yellow-50'
-    return 'text-green-600 bg-green-50'
+    if (value < 0.5) return 'text-fk-warning bg-fk-warning/10'
+    if (value < 0.7) return 'text-fk-accent-wheat bg-fk-accent-wheat/10'
+    return 'text-fk-success bg-fk-success/10'
   }
 
   const getNDVIStatus = (value: number) => {
@@ -114,20 +114,20 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Satellite className="h-5 w-5 text-green-600" />
+            <Satellite className="h-5 w-5 text-fk-success" />
             <ModernCardTitle className="text-lg">Live Satellite Monitoring</ModernCardTitle>
           </div>
-          <Badge className="bg-green-100 text-green-800">Real Field Data</Badge>
+          <Badge className="bg-fk-success/10 text-fk-success">Real Field Data</Badge>
         </div>
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Field Info */}
-        <div className="bg-sage-50 p-3 rounded-lg">
+        <div className="bg-fk-background-muted p-3 rounded-lg">
           <div className="flex items-center gap-2 mb-1">
-            <MapPin className="h-4 w-4 text-sage-600" />
-            <span className="font-medium text-sage-800">{DEMO_FIELD_DATA.location.name}</span>
+            <MapPin className="h-4 w-4 text-fk-text-muted" />
+            <span className="font-medium text-fk-text">{DEMO_FIELD_DATA.location.name}</span>
           </div>
-          <div className="text-sm text-sage-600">
+          <div className="text-sm text-fk-text-muted">
             {DEMO_FIELD_DATA.location.address} • {DEMO_FIELD_DATA.location.acres} acres • {DEMO_FIELD_DATA.location.crop}
           </div>
         </div>
@@ -135,42 +135,42 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
         {/* Current NDVI */}
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">{DEMO_FIELD_DATA.ndvi.current}</div>
-            <div className="text-sm text-gray-600">Current NDVI</div>
+            <div className="text-2xl font-bold text-fk-success">{DEMO_FIELD_DATA.ndvi.current}</div>
+            <div className="text-sm text-fk-text-muted">Current NDVI</div>
             <Badge className={getNDVIColor(DEMO_FIELD_DATA.ndvi.current)}>
               {getNDVIStatus(DEMO_FIELD_DATA.ndvi.current)}
             </Badge>
           </div>
           <div className="text-center">
-            <div className="flex items-center justify-center gap-1 text-green-600">
+            <div className="flex items-center justify-center gap-1 text-fk-success">
               <TrendingUp className="h-4 w-4" />
               <span className="text-lg font-semibold">+{(DEMO_FIELD_DATA.ndvi.trend * 100).toFixed(1)}%</span>
             </div>
-            <div className="text-sm text-gray-600">7-day trend</div>
+            <div className="text-sm text-fk-text-muted">7-day trend</div>
           </div>
         </div>
 
         {/* NDVI Timeline */}
         <div className="space-y-2">
-          <h4 className="font-medium text-gray-800">Growing Season Progress</h4>
+          <h4 className="font-medium text-fk-text">Growing Season Progress</h4>
           <div className="space-y-1">
             {data.map((point, index) => (
               <div 
                 key={index}
                 className={`flex items-center justify-between p-2 rounded cursor-pointer transition-colors ${
-                  selectedPoint === index ? 'bg-green-100 border border-green-300' : 'hover:bg-gray-50'
+                  selectedPoint === index ? 'bg-fk-success/10 border border-fk-success/30' : 'hover:bg-fk-background-muted'
                 }`}
                 onClick={() => setSelectedPoint(index)}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-3 h-3 rounded-full ${
-                    point.value > 0.7 ? 'bg-green-500' : 
-                    point.value > 0.5 ? 'bg-yellow-500' : 'bg-orange-500'
+                    point.value > 0.7 ? 'bg-fk-success' : 
+                    point.value > 0.5 ? 'bg-fk-accent-wheat' : 'bg-fk-warning'
                   }`} />
                   <span className="text-sm font-medium">{point.stage}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">{point.date.slice(5)}</span>
+                  <span className="text-sm text-fk-text-muted">{point.date.slice(5)}</span>
                   <Badge className={`text-xs ${getNDVIColor(point.value)}`}>
                     {point.value.toFixed(2)}
                   </Badge>
@@ -181,7 +181,7 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
         </div>
 
         <div className="pt-2 border-t">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <Eye className="h-3 w-3" />
             <span>Updated daily via Sentinel-2 satellite</span>
           </div>
@@ -197,7 +197,41 @@ interface WeatherDemoProps {
 
 export function WeatherDemo({ className = '' }: WeatherDemoProps) {
   const [activeDay, setActiveDay] = useState(0)
-  const weather = DEMO_FIELD_DATA.weather
+  const [weatherData, setWeatherData] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [apiStatus, setApiStatus] = useState<'live' | 'fallback'>('fallback')
+  
+  // Use real coordinates for Iowa corn field
+  const { lat, lng } = DEMO_FIELD_DATA.location.coordinates
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch(`/api/weather/current?latitude=${lat}&longitude=${lng}`)
+        const result = await response.json()
+        
+        if (result.success && result.data) {
+          setWeatherData(result.data)
+          setApiStatus(result.apiStatus || 'fallback')
+        } else {
+          // Fallback to demo data
+          setWeatherData(DEMO_FIELD_DATA.weather)
+          setApiStatus('fallback')
+        }
+      } catch (error) {
+        console.warn('Failed to fetch real weather data, using demo data:', error)
+        setWeatherData(DEMO_FIELD_DATA.weather)
+        setApiStatus('fallback')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchWeatherData()
+  }, [lat, lng])
+
+  const weather = weatherData || DEMO_FIELD_DATA.weather
 
   const getConditionIcon = (condition: string) => {
     if (condition.includes('Rain')) return '🌧️'
@@ -210,43 +244,49 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Thermometer className="h-5 w-5 text-blue-600" />
+            <Thermometer className="h-5 w-5 text-fk-accent-sky" />
             <ModernCardTitle className="text-lg">Hyperlocal Weather</ModernCardTitle>
           </div>
-          <Badge className="bg-blue-100 text-blue-800">Farm-Specific</Badge>
+          <Badge className={apiStatus === 'live' ? 'bg-fk-success/10 text-fk-success' : 'bg-fk-accent-sky/10 text-fk-accent-sky'}>
+            {apiStatus === 'live' ? 'Live Data' : 'Demo Data'}
+          </Badge>
         </div>
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Current Conditions */}
-        <div className="bg-blue-50 p-4 rounded-lg">
+        <div className="bg-fk-accent-sky/10 p-4 rounded-lg">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <Thermometer className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-              <div className="text-xl font-bold text-blue-800">{weather.temperature}°F</div>
-              <div className="text-xs text-blue-600">Temperature</div>
+              <Thermometer className="h-6 w-6 text-fk-accent-sky mx-auto mb-1" />
+              <div className="text-xl font-bold text-fk-text">
+                {apiStatus === 'live' ? `${Math.round(weather.temperature)}°C` : `${weather.temperature}°F`}
+              </div>
+              <div className="text-xs text-fk-accent-sky">Temperature</div>
             </div>
             <div>
-              <Droplets className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-              <div className="text-xl font-bold text-blue-800">{weather.humidity}%</div>
-              <div className="text-xs text-blue-600">Humidity</div>
+              <Droplets className="h-6 w-6 text-fk-accent-sky mx-auto mb-1" />
+              <div className="text-xl font-bold text-fk-text">{weather.humidity}%</div>
+              <div className="text-xs text-fk-accent-sky">Humidity</div>
             </div>
             <div>
-              <Wind className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-              <div className="text-xl font-bold text-blue-800">{weather.windSpeed} mph</div>
-              <div className="text-xs text-blue-600">Wind</div>
+              <Wind className="h-6 w-6 text-fk-accent-sky mx-auto mb-1" />
+              <div className="text-xl font-bold text-fk-text">
+                {apiStatus === 'live' ? `${Math.round(weather.windSpeed * 2.237)} mph` : `${weather.windSpeed} mph`}
+              </div>
+              <div className="text-xs text-fk-accent-sky">Wind</div>
             </div>
           </div>
         </div>
 
         {/* 5-Day Forecast */}
         <div className="space-y-2">
-          <h4 className="font-medium text-gray-800">Agricultural Forecast</h4>
+          <h4 className="font-medium text-fk-text">Agricultural Forecast</h4>
           <div className="space-y-1">
-            {weather.forecast.map((day, index) => (
+            {weather.forecast?.map((day: any, index: number) => (
               <div 
                 key={index}
                 className={`flex items-center justify-between p-2 rounded cursor-pointer transition-colors ${
-                  activeDay === index ? 'bg-blue-100 border border-blue-300' : 'hover:bg-gray-50'
+                  activeDay === index ? 'bg-fk-accent-sky/10 border border-fk-accent-sky/30' : 'hover:bg-fk-background-muted'
                 }`}
                 onClick={() => setActiveDay(index)}
               >
@@ -254,12 +294,12 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
                   <span className="text-lg">{getConditionIcon(day.condition)}</span>
                   <div>
                     <div className="font-medium text-sm">{day.day}</div>
-                    <div className="text-xs text-gray-600">{day.condition}</div>
+                    <div className="text-xs text-fk-text-muted">{day.condition}</div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-medium">{day.high}°/{day.low}°</div>
-                  <div className="text-xs text-blue-600">{day.precipitation}% rain</div>
+                  <div className="text-xs text-fk-accent-sky">{day.precipitation}% rain</div>
                 </div>
               </div>
             ))}
@@ -267,9 +307,9 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
         </div>
 
         {/* Agricultural Insights */}
-        <div className="bg-green-50 p-3 rounded-lg">
-          <h5 className="font-medium text-green-800 mb-2">Farm Recommendations</h5>
-          <div className="space-y-1 text-sm text-green-700">
+        <div className="bg-fk-success/10 p-3 rounded-lg">
+          <h5 className="font-medium text-fk-success mb-2">Farm Recommendations</h5>
+          <div className="space-y-1 text-sm text-fk-success">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-3 w-3" />
               <span>Ideal conditions for harvest operations</span>
@@ -286,9 +326,11 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
         </div>
 
         <div className="pt-2 border-t">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <Zap className="h-3 w-3" />
-            <span>Updated hourly • Field-specific forecasting</span>
+            <span>
+              {apiStatus === 'live' ? 'Live OpenWeather data • Updated hourly' : 'Demo data • Field-specific forecasting'}
+            </span>
           </div>
         </div>
       </ModernCardContent>
@@ -309,102 +351,84 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-green-600" />
+            <DollarSign className="h-5 w-5 text-fk-success" />
             <ModernCardTitle className="text-lg">Financial Intelligence</ModernCardTitle>
           </div>
-          <Badge className="bg-green-100 text-green-800">Real-Time</Badge>
+          <Badge className="bg-fk-success/10 text-fk-success">Real-Time</Badge>
         </div>
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Field Financial Summary */}
-        <div className="bg-green-50 p-4 rounded-lg">
+        <div className="bg-fk-success/10 p-4 rounded-lg">
           <div className="text-center mb-3">
-            <div className="text-2xl font-bold text-green-800">
+            <div className="text-2xl font-bold text-fk-success">
               ${financial.profit.toLocaleString()}
             </div>
-            <div className="text-sm text-green-600">Projected Net Profit</div>
-            <div className="text-xs text-gray-600">
+            <div className="text-sm text-fk-success">Projected Net Profit</div>
+            <div className="text-xs text-fk-text-muted">
               ${financial.profitPerAcre}/acre • {DEMO_FIELD_DATA.location.acres} acres
             </div>
           </div>
           
           <div className="grid grid-cols-3 gap-3 text-center">
             <div>
-              <div className="text-lg font-semibold text-gray-800">
+              <div className="text-lg font-semibold text-fk-text">
                 ${financial.estimatedYield}
               </div>
-              <div className="text-xs text-gray-600">Est. Yield (bu/ac)</div>
+              <div className="text-xs text-fk-text-muted">Est. Yield (bu/ac)</div>
             </div>
             <div>
-              <div className="text-lg font-semibold text-gray-800">
+              <div className="text-lg font-semibold text-fk-text">
                 ${financial.marketPrice}
               </div>
-              <div className="text-xs text-gray-600">Current Price/bu</div>
+              <div className="text-xs text-fk-text-muted">Current Price/bu</div>
             </div>
             <div>
-              <div className="text-lg font-semibold text-gray-800">
+              <div className="text-lg font-semibold text-fk-text">
                 ${financial.breakeven}
               </div>
-              <div className="text-xs text-gray-600">Breakeven/bu</div>
+              <div className="text-xs text-fk-text-muted">Breakeven/bu</div>
             </div>
           </div>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-            <div className="text-xl font-bold text-blue-800">
+          <div className="text-center p-3 bg-fk-accent-sky/10 rounded-lg">
+            <TrendingUp className="h-6 w-6 text-fk-accent-sky mx-auto mb-1" />
+            <div className="text-xl font-bold text-fk-text">
               ${financial.totalRevenue.toLocaleString()}
             </div>
-            <div className="text-xs text-blue-600">Total Revenue</div>
+            <div className="text-xs text-fk-accent-sky">Total Revenue</div>
           </div>
-          <div className="text-center p-3 bg-orange-50 rounded-lg">
-            <BarChart3 className="h-6 w-6 text-orange-600 mx-auto mb-1" />
-            <div className="text-xl font-bold text-orange-800">
+          <div className="text-center p-3 bg-fk-warning/10 rounded-lg">
+            <BarChart3 className="h-6 w-6 text-fk-warning mx-auto mb-1" />
+            <div className="text-xl font-bold text-fk-text">
               ${financial.expenses.toLocaleString()}
             </div>
-            <div className="text-xs text-orange-600">Total Expenses</div>
+            <div className="text-xs text-fk-warning">Total Expenses</div>
           </div>
         </div>
 
         {/* Market Alerts */}
         <div className="space-y-2">
-          <h4 className="font-medium text-gray-800">Smart Alerts</h4>
+          <h4 className="font-medium text-fk-text">Smart Alerts</h4>
           <div className="space-y-2">
             {DEMO_FIELD_DATA.alerts.map((alert, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
-                <alert.icon className="h-4 w-4 text-yellow-600 mt-0.5" />
+              <div key={index} className="flex items-start gap-3 p-3 bg-fk-accent-wheat/10 rounded-lg">
+                <alert.icon className="h-4 w-4 text-fk-accent-wheat mt-0.5" />
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-yellow-800">{alert.message}</div>
-                  <div className="text-xs text-yellow-600 capitalize">{alert.urgency} priority</div>
+                  <div className="text-sm font-medium text-fk-accent-wheat">{alert.message}</div>
+                  <div className="text-xs text-fk-accent-wheat capitalize">{alert.urgency} priority</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ROI Calculator */}
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <h5 className="font-medium text-gray-800 mb-2">Investment Impact</h5>
-          <div className="text-sm text-gray-600 space-y-1">
-            <div className="flex justify-between">
-              <span>If yield increases 5%:</span>
-              <span className="font-medium text-green-600">+$1,570</span>
-            </div>
-            <div className="flex justify-between">
-              <span>If price increases $0.25:</span>
-              <span className="font-medium text-green-600">+$7,400</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Precision ag ROI:</span>
-              <span className="font-medium text-green-600">320%</span>
-            </div>
-          </div>
-        </div>
 
         <div className="pt-2 border-t">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <DollarSign className="h-3 w-3" />
             <span>Live market data • Field-specific calculations</span>
           </div>
@@ -415,30 +439,38 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
 }
 
 export function HomePageDemos() {
+  const demos = [
+    { component: <RealGoogleMapsNDVI />, background: 'bg-white' },
+    { component: <WeatherDemo />, background: 'bg-fk-background' },
+    { component: <FinancialDemo />, background: 'bg-white' }
+  ]
+
   return (
-    <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-8 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-sage-800 mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-fk-text mb-3 sm:mb-4">
             See Crops.AI in Action
           </h2>
-          <p className="text-lg sm:text-xl text-sage-600 max-w-3xl mx-auto px-2">
+          <p className="text-lg sm:text-xl text-fk-text-muted max-w-3xl mx-auto px-2">
             Experience real data from an Iowa corn farm. These are actual insights generated from satellite imagery, weather data, and market intelligence.
           </p>
         </div>
         
         <div className="space-y-8 sm:space-y-12">
-          <RealGoogleMapsNDVI />
-          <WeatherDemo />
-          <FinancialDemo />
+          {demos.map((demo, index) => (
+            <div key={index} className={`py-8 px-4 rounded-2xl ${demo.background}`}>
+              {demo.component}
+            </div>
+          ))}
         </div>
 
         <div className="mt-6 sm:mt-8 text-center px-2">
-          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+          <p className="text-xs sm:text-sm text-fk-text-muted mb-3 sm:mb-4">
             This data represents a real 160-acre corn field in Story County, Iowa during the 2024 growing season.
           </p>
           <Button 
-            className="bg-sage-600 hover:bg-sage-700 w-full sm:w-auto px-6 py-3"
+            className="bg-fk-primary hover:bg-fk-primary-600 w-full sm:w-auto px-6 py-3"
             onClick={() => window.location.href = '/register'}
           >
             <Eye className="h-4 w-4 mr-2" />

@@ -20,7 +20,7 @@ class APITester {
     console.log('🗺️  Testing Google Maps API...');
     
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    if (!apiKey || apiKey.includes('your_') || apiKey === 'AIzaSyB7BR2V1kunq0fPSHN6Zhvg_oQTnvW7Lq0') {
+    if (!apiKey || apiKey.includes('your_') || apiKey === 'AIzaSyB7BR2V1kunq0fPSHN6Zhvg_oQTnvW7Lq0' || apiKey === 'REVOKED_KEY_NEEDS_REPLACEMENT') {
       this.addResult('Google Maps', '❌ FAIL', 'API key missing or placeholder');
       return;
     }

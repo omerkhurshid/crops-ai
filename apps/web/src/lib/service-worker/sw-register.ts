@@ -245,14 +245,54 @@ export class ServiceWorkerManager {
   }
 
   /**
-   * Store data for background sync (placeholder for IndexedDB implementation)
+   * Store data for background sync using IndexedDB
    */
   private async storeForSync(data: any): Promise<void> {
-    // TODO: Implement IndexedDB storage
-    // For now, store in localStorage as fallback
-    const pendingData = JSON.parse(localStorage.getItem('pendingSync') || '[]')
-    pendingData.push(data)
-    localStorage.setItem('pendingSync', JSON.stringify(pendingData))
+    try {
+      const db = await this.openIndexedDB();
+      const transaction = db.transaction(['pendingSync'], 'readwrite');
+      const store = transaction.objectStore('pendingSync');
+      
+      const syncItem = {
+        id: Date.now() + Math.random(), // Unique ID
+        data,
+        timestamp: new Date().toISOString(),
+        retryCount: 0
+      };
+      
+      await store.add(syncItem);
+      console.log('Data stored for background sync:', syncItem.id);
+    } catch (error) {
+      console.error('Failed to store data for sync:', error);
+      // Fallback to localStorage only if IndexedDB fails
+      try {
+        const pendingData = JSON.parse(localStorage.getItem('pendingSync') || '[]');
+        pendingData.push({ data, timestamp: new Date().toISOString() });
+        localStorage.setItem('pendingSync', JSON.stringify(pendingData));
+      } catch (localStorageError) {
+        console.error('Fallback localStorage also failed:', localStorageError);
+      }
+    }
+  }
+
+  /**
+   * Initialize IndexedDB for background sync storage
+   */
+  private async openIndexedDB(): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('CropsAISyncDB', 1);
+      
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+      
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        if (!db.objectStoreNames.contains('pendingSync')) {
+          const store = db.createObjectStore('pendingSync', { keyPath: 'id' });
+          store.createIndex('timestamp', 'timestamp', { unique: false });
+        }
+      };
+    });
   }
 }
 

@@ -30,30 +30,33 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       }
     }
 
-    // Fallback to our simple session cookie
+    // Fallback to our JWT auth token
     const { cookies } = await import('next/headers')
-    const sessionCookie = cookies().get('session')
+    const authToken = cookies().get('crops-auth-token')
     
-    if (!sessionCookie) {
+    if (!authToken) {
       return null
     }
 
     try {
-      const sessionData = JSON.parse(Buffer.from(sessionCookie.value, 'base64').toString())
+      const jwt = await import('jsonwebtoken')
+      const secret = process.env.NEXTAUTH_SECRET
       
-      // Check if session is expired
-      if (Date.now() > sessionData.exp) {
+      if (!secret) {
+        console.error('[SESSION] NEXTAUTH_SECRET not configured')
         return null
       }
-
+      
+      const decoded = jwt.verify(authToken.value, secret) as any
+      
       return {
-        id: sessionData.id,
-        email: sessionData.email,
-        name: sessionData.name,
-        role: sessionData.role as UserRole
+        id: decoded.id,
+        email: decoded.email,
+        name: decoded.name,
+        role: decoded.role as UserRole
       }
     } catch (cookieError) {
-
+      console.error('[SESSION] JWT validation error:', cookieError)
       return null
     }
   } catch (error) {
@@ -67,20 +70,43 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
  */
 export async function getUserFromRequest(req: NextRequest): Promise<SessionUser | null> {
   try {
+    // Try NextAuth token first
     const token = await getToken({
       req,
       secret: process.env.NEXTAUTH_SECRET
     })
 
-    if (!token || !token.email) {
+    if (token && token.email) {
+      return {
+        id: token.id as string,
+        email: token.email,
+        name: token.name || 'Unknown User',
+        role: token.role as UserRole
+      }
+    }
+
+    // Fallback to our JWT auth token
+    const authToken = req.cookies.get('crops-auth-token')?.value
+    
+    if (!authToken) {
       return null
     }
 
+    const jwt = await import('jsonwebtoken')
+    const secret = process.env.NEXTAUTH_SECRET
+    
+    if (!secret) {
+      console.error('[SESSION] NEXTAUTH_SECRET not configured')
+      return null
+    }
+    
+    const decoded = jwt.verify(authToken, secret) as any
+    
     return {
-      id: token.id as string,
-      email: token.email,
-      name: token.name || 'Unknown User',
-      role: token.role as UserRole
+      id: decoded.id,
+      email: decoded.email,
+      name: decoded.name,
+      role: decoded.role as UserRole
     }
   } catch (error) {
     console.error('Error getting user from request:', error)

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -121,34 +122,33 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
 
       setSuccess(true)
       
-      // Auto-login after successful registration using custom signin endpoint
+      // Auto-login after successful registration using NextAuth
       setTimeout(async () => {
         try {
-          const signinResponse = await fetch('/api/authentication/signin', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: formData.email,
-              password: formData.password,
-            }),
+          console.log('🔄 Attempting auto-login after registration...')
+          
+          const result = await signIn('credentials', {
+            email: formData.email,
+            password: formData.password,
+            redirect: false,
           })
 
-          const signinResult = await signinResponse.json()
+          console.log('🔐 NextAuth auto-login result:', result)
 
-          if (signinResponse.ok && signinResult.success) {
+          if (result?.ok && !result?.error) {
+            console.log('✅ Auto-login successful, redirecting to dashboard')
             // Force page refresh to ensure session is loaded
             window.location.href = callbackUrl
           } else {
+            console.warn('⚠️ Auto-login failed, redirecting to login page', result?.error)
             // Auto-login failed, redirect to login page
             router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
           }
         } catch (error) {
-          console.error('Auto-login error:', error)
+          console.error('❌ Auto-login error:', error)
           router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
         }
-      }, 500)
+      }, 1000)
       
     } catch (err) {
       console.error('Registration error:', err)
@@ -381,7 +381,11 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             </div>
           )}
           
-          <Button type="submit" variant="sage" className="w-full" disabled={isLoading}>
+          <Button 
+            type="submit" 
+            className="w-full bg-sage-600 hover:bg-sage-700 text-white font-medium" 
+            disabled={isLoading}
+          >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>
         </form>

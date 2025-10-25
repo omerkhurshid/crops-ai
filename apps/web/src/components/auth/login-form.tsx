@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -107,33 +108,34 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     setError('')
 
     try {
-      console.log('📧 Starting manual auth signin for:', email)
+      console.log('📧 Starting NextAuth signin for:', email)
       
-      // Use custom authentication endpoint
-      const response = await fetch('/api/manual-auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      // Use NextAuth signIn function
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
       })
 
-      const result = await response.json()
-      console.log('🔐 Manual Auth Result:', result)
+      console.log('🔐 NextAuth Result:', result)
 
-      if (!response.ok) {
-        setError(result.error || 'Authentication failed. Please check your credentials.')
-      } else if (result.success) {
+      if (result?.error) {
+        setError(result.error === 'CredentialsSignin' ? 'Invalid email or password. Please check your credentials.' : result.error)
+      } else if (result?.ok) {
         console.log('✅ Login successful, redirecting to dashboard')
-        // Successful login - redirect to dashboard
-        window.location.href = '/dashboard'
+        // Clear any existing errors
+        setError('')
+        setSuccessMessage('Login successful! Redirecting...')
+        
+        // Small delay to show success message then redirect
+        setTimeout(() => {
+          window.location.href = callbackUrl
+        }, 1000)
       } else {
-        setError('Authentication failed. Please check your credentials.')
+        setError('Authentication failed. Please try again.')
       }
     } catch (err) {
+      console.error('Login error:', err)
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)

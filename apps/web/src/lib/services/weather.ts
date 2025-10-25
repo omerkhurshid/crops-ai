@@ -62,8 +62,8 @@ export class WeatherService {
    * Get current weather conditions for a location
    */
   async getCurrentWeather(latitude: number, longitude: number): Promise<WeatherConditions> {
-    if (!this.apiKey || this.apiKey === 'mock_development_key') {
-      throw new Error('Weather service unavailable. Please configure API key.')
+    if (!this.apiKey || this.apiKey === 'mock_development_key' || this.apiKey === 'your-openweather-api-key') {
+      throw new Error('Weather service unavailable. Please configure OpenWeather API key.')
     }
 
     // Validate coordinates
@@ -127,8 +127,8 @@ export class WeatherService {
    * Get 7-day weather forecast for a location
    */
   async getWeatherForecast(latitude: number, longitude: number, days: number = 7): Promise<WeatherForecast[]> {
-    if (!this.apiKey || this.apiKey === 'mock_development_key') {
-      throw new Error('Weather forecast unavailable. Please configure API key.')
+    if (!this.apiKey || this.apiKey === 'mock_development_key' || this.apiKey === 'your-openweather-api-key') {
+      throw new Error('Weather forecast unavailable. Please configure OpenWeather API key.')
     }
 
     // Validate inputs

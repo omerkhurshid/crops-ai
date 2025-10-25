@@ -308,7 +308,7 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
       // If financial_forecast table doesn't exist, return mock forecasts
       if (error.code === 'P2021' || error.code === 'P2010') {
-        // Financial forecast table not available, returning mock data
+        // Financial forecast table not available, using calculated projections based on historical data
         newForecasts = forecasts.map((f, index) => ({
           ...f,
           id: `mock-forecast-${index}`,

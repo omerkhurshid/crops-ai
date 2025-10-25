@@ -35,6 +35,8 @@
     "perf:test": "node scripts/performance-test-simple.js",
     "perf:load": "npx artillery run performance/artillery-config.yml",
     "perf:bundle": "npm run build && npx bundlesize",
+    "analyze": "ANALYZE=true npm run build",
+    "analyze:bundle": "node scripts/analyze-bundle.js",
     "perf:lighthouse": "npx lighthouse http://localhost:3000 --output json --output html --output-path performance-reports/lighthouse",
     "perf:all": "npm run perf:test",
     "test:apis": "node scripts/test-apis.js",

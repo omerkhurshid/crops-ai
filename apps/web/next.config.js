@@ -1,4 +1,5 @@
 const { withSentryConfig } = require("@sentry/nextjs");
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const securityHeaders = [
@@ -67,11 +68,57 @@ const nextConfig = {
     // optimizeCss: true, // Disabled - causes critters module error in production
     gzipSize: true,
     swcMinify: true,
+    serverComponentsExternalPackages: ['sharp'],
+    optimizePackageImports: ['lucide-react', '@/components', '@/lib'],
   },
   
   // Bundle optimization
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Webpack optimizations
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Bundle analyzer setup
+    if (process.env.ANALYZE === 'true') {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false,
+          reportFilename: isServer ? 'server-bundle-analysis.html' : 'client-bundle-analysis.html'
+        })
+      )
+    }
+
+    // Optimize imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@/components': path.resolve(__dirname, 'src/components'),
+      '@/lib': path.resolve(__dirname, 'src/lib'),
+    }
+
+    // Production optimizations
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      }
+    }
+
+    return config
   },
   
   // Image optimization with CDN

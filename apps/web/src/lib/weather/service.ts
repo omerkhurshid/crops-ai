@@ -107,24 +107,24 @@ class WeatherService {
 
   constructor() {
     this.API_KEY = process.env.OPENWEATHER_API_KEY || '';
-    if (!this.API_KEY) {
-
+    if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
+      console.warn('OpenWeather API key not configured. Weather data will be unavailable.');
     }
   }
 
   async getCurrentWeather(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     try {
-      if (!this.API_KEY) {
-
-        return this.getMockCurrentWeather(latitude, longitude);
+      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
+        console.warn(`Weather API unavailable - OpenWeather API key not configured for ${latitude}, ${longitude}`);
+        throw new Error('Weather service unavailable. Please configure OpenWeather API key.');
       }
 
       const url = `${this.BASE_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`;
       const response = await fetch(url);
 
       if (!response.ok) {
-
-        return this.getMockCurrentWeather(latitude, longitude);
+        console.error(`Weather API error ${response.status}: ${response.statusText}`);
+        throw new Error(`Weather API error: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -161,7 +161,7 @@ class WeatherService {
       return currentWeather;
     } catch (error) {
       console.error('Error fetching current weather:', error);
-      return this.getMockCurrentWeather(latitude, longitude);
+      return null;
     }
   }
 
@@ -171,17 +171,17 @@ class WeatherService {
     days: number = 7
   ): Promise<WeatherForecast[]> {
     try {
-      if (!this.API_KEY) {
-
-        return this.getMockForecast(latitude, longitude, days);
+      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
+        console.warn(`Weather forecast API unavailable - OpenWeather API key not configured for ${latitude}, ${longitude}`);
+        throw new Error('Weather forecast service unavailable. Please configure OpenWeather API key.');
       }
 
       const url = `${this.ONECALL_URL}?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric&exclude=minutely,hourly`;
       const response = await fetch(url);
 
       if (!response.ok) {
-
-        return this.getMockForecast(latitude, longitude, days);
+        console.error(`Weather forecast API error ${response.status}: ${response.statusText}`);
+        throw new Error(`Weather forecast API error: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -217,7 +217,7 @@ class WeatherService {
       return forecasts;
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
-      return this.getMockForecast(latitude, longitude, days);
+      return [];
     }
   }
 
@@ -469,85 +469,47 @@ class WeatherService {
     return forecast;
   }
 
-  // Mock data methods for when API is unavailable
-  private getMockCurrentWeather(latitude: number, longitude: number): CurrentWeather {
-    return {
-      id: `mock_current_${latitude}_${longitude}_${Date.now()}`,
-      location: {
-        latitude,
-        longitude,
-        name: 'Sample Location',
-        country: 'US'
-      },
-      temperature: 22,
-      feelsLike: 24,
-      humidity: 65,
-      pressure: 1013,
-      visibility: 10000,
-      uvIndex: 6,
-      windSpeed: 3.5,
-      windDirection: 180,
-      windGust: 5.2,
-      cloudCover: 40,
-      precipitation: {
-        rain1h: 0,
-        rain3h: 0,
-        snow1h: 0,
-        snow3h: 0
-      },
-      conditions: [{
-        id: 801,
-        main: 'Clouds',
-        description: 'Few clouds',
-        icon: '02d'
-      }],
-      timestamp: new Date().toISOString(),
-      sunrise: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      sunset: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString()
-    };
+  // Helper methods for weather analysis
+
+  private categorizeAlert(event: string): WeatherAlert['alertType'] {
+    const eventLower = event.toLowerCase();
+    if (eventLower.includes('frost') || eventLower.includes('freeze')) return 'frost';
+    if (eventLower.includes('storm') || eventLower.includes('thunder')) return 'storm';
+    if (eventLower.includes('drought') || eventLower.includes('dry')) return 'drought';
+    if (eventLower.includes('heat') || eventLower.includes('hot')) return 'heat';
+    if (eventLower.includes('wind') || eventLower.includes('gust')) return 'wind';
+    if (eventLower.includes('hail')) return 'hail';
+    if (eventLower.includes('flood') || eventLower.includes('rain')) return 'flood';
+    return 'storm';
   }
 
-  private getMockForecast(latitude: number, longitude: number, days: number): WeatherForecast[] {
-    const forecasts: WeatherForecast[] = [];
+  private mapSeverity(tags: string[]): WeatherAlert['severity'] {
+    if (!tags || tags.length === 0) return 'moderate';
+    const tagsStr = tags.join(' ').toLowerCase();
+    if (tagsStr.includes('extreme')) return 'extreme';
+    if (tagsStr.includes('severe')) return 'severe';
+    if (tagsStr.includes('minor')) return 'minor';
+    return 'moderate';
+  }
+
+  private generateRecommendations(event: string): string[] {
+    const eventLower = event.toLowerCase();
+    const recommendations: string[] = [];
     
-    for (let i = 0; i < Math.min(days, 7); i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i + 1);
-      
-      forecasts.push({
-        id: `mock_forecast_${latitude}_${longitude}_${i}`,
-        location: {
-          latitude,
-          longitude,
-          name: 'Sample Location'
-        },
-        date: date.toISOString().split('T')[0],
-        temperature: {
-          min: 18 + Math.random() * 5,
-          max: 25 + Math.random() * 8,
-          morning: 20 + Math.random() * 3,
-          day: 26 + Math.random() * 4,
-          evening: 22 + Math.random() * 3,
-          night: 18 + Math.random() * 2
-        },
-        humidity: 60 + Math.random() * 20,
-        pressure: 1010 + Math.random() * 10,
-        windSpeed: 2 + Math.random() * 4,
-        windDirection: Math.random() * 360,
-        cloudCover: Math.random() * 100,
-        precipitationProbability: Math.random() * 60,
-        precipitationAmount: Math.random() < 0.3 ? Math.random() * 5 : 0,
-        conditions: [{
-          id: 800 + Math.floor(Math.random() * 4),
-          main: ['Clear', 'Clouds', 'Rain', 'Sun'][Math.floor(Math.random() * 4)],
-          description: ['Clear sky', 'Scattered clouds', 'Light rain', 'Sunny'][Math.floor(Math.random() * 4)],
-          icon: ['01d', '02d', '10d', '01d'][Math.floor(Math.random() * 4)]
-        }],
-        uvIndex: 3 + Math.random() * 5
-      });
+    if (eventLower.includes('frost')) {
+      recommendations.push('Protect sensitive crops with covers or row tunnels');
+      recommendations.push('Delay planting until frost risk passes');
+    }
+    if (eventLower.includes('storm') || eventLower.includes('wind')) {
+      recommendations.push('Secure equipment and structures');
+      recommendations.push('Delay pesticide applications');
+    }
+    if (eventLower.includes('heat')) {
+      recommendations.push('Increase irrigation frequency');
+      recommendations.push('Provide shade for livestock');
     }
     
-    return forecasts;
+    return recommendations.length > 0 ? recommendations : ['Monitor conditions closely'];
   }
 }
 

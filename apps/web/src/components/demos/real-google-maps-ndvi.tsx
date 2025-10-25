@@ -18,11 +18,11 @@ import {
   RefreshCw
 } from 'lucide-react'
 
-// Real coordinates for a corn field in Story County, Iowa
+// Real coordinates for a corn field in Central Nebraska
 const DEMO_FIELD_LOCATION = {
-  center: { lat: 41.5868, lng: -93.6250 },
-  name: "Pioneer Demo Farm - Field 7",
-  address: "Story County, Iowa",
+  center: { lat: 41.305150, lng: -98.161795 },
+  name: "Nebraska Corn Field - Central Plains",
+  address: "Central Nebraska",
   acres: 160,
   crop: "Corn (Pioneer P1366AM)"
 }
@@ -47,13 +47,13 @@ const mapOptions = {
   gestureHandling: 'cooperative'
 }
 
-// Field boundary coordinates (approximate rectangular field)
+// Field boundary coordinates (approximate rectangular field) - Central Nebraska
 const fieldBoundary = [
-  { lat: 41.5878, lng: -93.6270 }, // Northwest corner
-  { lat: 41.5878, lng: -93.6230 }, // Northeast corner  
-  { lat: 41.5858, lng: -93.6230 }, // Southeast corner
-  { lat: 41.5858, lng: -93.6270 }, // Southwest corner
-  { lat: 41.5878, lng: -93.6270 }  // Close polygon
+  { lat: 41.3061, lng: -98.1635 }, // Northwest corner
+  { lat: 41.3061, lng: -98.1600 }, // Northeast corner  
+  { lat: 41.3041, lng: -98.1600 }, // Southeast corner
+  { lat: 41.3041, lng: -98.1635 }, // Southwest corner
+  { lat: 41.3061, lng: -98.1635 }  // Close polygon
 ]
 
 interface RealGoogleMapsNDVIProps {
@@ -68,39 +68,201 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
   const [selectedDate, setSelectedDate] = useState('2024-08-01')
   const [fieldPolygon, setFieldPolygon] = useState<google.maps.Polygon | null>(null)
   const [showInfo, setShowInfo] = useState(true)
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null)
+  const [cacheStatus, setCacheStatus] = useState<'cached' | 'live' | 'refreshing'>('cached')
 
-  // Load NDVI data for the field
-  const loadNDVIData = useCallback(async (date: string) => {
-    setIsLoading(true)
-    try {
-      const response = await fetch('/api/satellite/ndvi', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          coordinates: fieldBoundary,
-          date: date,
-          resolution: 10 // 10m resolution for Sentinel-2
-        }),
-      })
-
-      const data = await response.json()
-      setNdviData(data)
-    } catch (error) {
-      console.error('Failed to load NDVI data:', error)
-      // Fallback to demo data if API fails
-      setNdviData({
+  // Enhanced NDVI data with realistic stats for Nebraska corn field
+  const getNDVIDataForDate = useCallback((date: string) => {
+    const seasonalData: { [key: string]: any } = {
+      '2024-05-15': { // Early season
+        averageNDVI: 0.35,
+        maxNDVI: 0.48,
+        minNDVI: 0.22,
+        uniformity: 78,
+        stage: 'V4 - Four Leaf',
+        yieldProjection: 165,
+        healthStatus: 'Good',
+        recommendations: ['Monitor emergence uniformity', 'Consider side-dress nitrogen']
+      },
+      '2024-06-01': { // Early vegetative
+        averageNDVI: 0.52,
+        maxNDVI: 0.65,
+        minNDVI: 0.41,
+        uniformity: 82,
+        stage: 'V8 - Eight Leaf',
+        yieldProjection: 172,
+        healthStatus: 'Very Good',
+        recommendations: ['Apply herbicide if needed', 'Scout for insect pressure']
+      },
+      '2024-06-15': { // Mid vegetative
+        averageNDVI: 0.68,
+        maxNDVI: 0.78,
+        minNDVI: 0.58,
+        uniformity: 85,
+        stage: 'V12 - Twelve Leaf',
+        yieldProjection: 178,
+        healthStatus: 'Excellent',
+        recommendations: ['Continue nutrient monitoring', 'Prepare for tasseling']
+      },
+      '2024-07-01': { // Pre-tassel
         averageNDVI: 0.82,
+        maxNDVI: 0.91,
+        minNDVI: 0.73,
+        uniformity: 88,
+        stage: 'VT - Tasseling',
+        yieldProjection: 185,
+        healthStatus: 'Excellent',
+        recommendations: ['Monitor pollination', 'Ensure adequate moisture']
+      },
+      '2024-07-15': { // Peak growth
+        averageNDVI: 0.89,
         maxNDVI: 0.95,
-        minNDVI: 0.65,
-        date: date,
-        imageUrl: null // Will show field boundary instead
-      })
-    } finally {
-      setIsLoading(false)
+        minNDVI: 0.81,
+        uniformity: 91,
+        stage: 'R1 - Silking',
+        yieldProjection: 192,
+        healthStatus: 'Outstanding',
+        recommendations: ['Critical irrigation period', 'Monitor heat stress']
+      },
+      '2024-08-01': { // Grain fill
+        averageNDVI: 0.85,
+        maxNDVI: 0.93,
+        minNDVI: 0.76,
+        uniformity: 89,
+        stage: 'R3 - Milk Stage',
+        yieldProjection: 189,
+        healthStatus: 'Excellent',
+        recommendations: ['Continue irrigation', 'Scout for late season pests']
+      },
+      '2024-08-15': { // Mid grain fill
+        averageNDVI: 0.78,
+        maxNDVI: 0.87,
+        minNDVI: 0.69,
+        uniformity: 86,
+        stage: 'R4 - Dough Stage',
+        yieldProjection: 186,
+        healthStatus: 'Very Good',
+        recommendations: ['Monitor moisture stress', 'Plan harvest timing']
+      },
+      '2024-09-01': { // Late grain fill
+        averageNDVI: 0.68,
+        maxNDVI: 0.78,
+        minNDVI: 0.58,
+        uniformity: 83,
+        stage: 'R5 - Dent Stage',
+        yieldProjection: 182,
+        healthStatus: 'Good',
+        recommendations: ['Monitor grain moisture', 'Prepare harvest equipment']
+      },
+      '2024-09-15': { // Maturity
+        averageNDVI: 0.54,
+        maxNDVI: 0.64,
+        minNDVI: 0.44,
+        uniformity: 80,
+        stage: 'R6 - Physiological Maturity',
+        yieldProjection: 180,
+        healthStatus: 'Mature',
+        recommendations: ['Wait for proper moisture', 'Schedule harvest']
+      },
+      '2024-10-01': { // Harvest ready
+        averageNDVI: 0.38,
+        maxNDVI: 0.48,
+        minNDVI: 0.28,
+        uniformity: 75,
+        stage: 'Harvest Ready',
+        yieldProjection: 178,
+        healthStatus: 'Ready to Harvest',
+        recommendations: ['Harvest at 20-22% moisture', 'Monitor weather conditions']
+      }
     }
+    
+    return seasonalData[date] || seasonalData['2024-08-01']
   }, [])
+
+  // Load NDVI data with caching simulation
+  const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
+    setIsLoading(true)
+    setCacheStatus('refreshing')
+    
+    // Simulate cache check
+    const cacheKey = `ndvi-${date}-${DEMO_FIELD_LOCATION.center.lat}-${DEMO_FIELD_LOCATION.center.lng}`
+    const cachedData = localStorage.getItem(cacheKey)
+    const cacheTime = localStorage.getItem(`${cacheKey}-time`)
+    
+    // Use cache if less than 4 hours old and not forcing refresh
+    if (!forceRefresh && cachedData && cacheTime) {
+      const age = Date.now() - parseInt(cacheTime)
+      if (age < 4 * 60 * 60 * 1000) { // 4 hours
+        setTimeout(() => {
+          setNdviData(JSON.parse(cachedData))
+          setLastUpdate(new Date(parseInt(cacheTime)))
+          setCacheStatus('cached')
+          setIsLoading(false)
+        }, 800) // Simulate short loading for UX
+        return
+      }
+    }
+    
+    // Simulate API call delay for realism
+    setTimeout(async () => {
+      try {
+        // Try to fetch from actual API first
+        const response = await fetch('/api/satellite/field-ndvi', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            coordinates: fieldBoundary,
+            date: date,
+            resolution: 10
+          }),
+        })
+
+        let data
+        if (response.ok) {
+          const apiData = await response.json()
+          data = {
+            ...getNDVIDataForDate(date),
+            ...apiData.data,
+            source: 'live'
+          }
+          setCacheStatus('live')
+        } else {
+          throw new Error('API unavailable')
+        }
+        
+        // Cache the result
+        const now = Date.now()
+        localStorage.setItem(cacheKey, JSON.stringify(data))
+        localStorage.setItem(`${cacheKey}-time`, now.toString())
+        setLastUpdate(new Date(now))
+        
+        setNdviData(data)
+      } catch (error) {
+        console.log('Using enhanced demo data for NDVI analysis')
+        
+        // Use enhanced realistic data
+        const data = {
+          ...getNDVIDataForDate(date),
+          date: date,
+          source: 'demo',
+          location: DEMO_FIELD_LOCATION.address
+        }
+        
+        // Cache the demo data too
+        const now = Date.now()
+        localStorage.setItem(cacheKey, JSON.stringify(data))
+        localStorage.setItem(`${cacheKey}-time`, now.toString())
+        setLastUpdate(new Date(now))
+        setCacheStatus('cached')
+        
+        setNdviData(data)
+      } finally {
+        setIsLoading(false)
+      }
+    }, 1200) // Realistic API delay
+  }, [getNDVIDataForDate])
 
   // Initialize map and field boundary
   const onMapLoad = useCallback((map: google.maps.Map) => {
@@ -150,7 +312,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
   }, [selectedDate, map, loadNDVIData])
 
   const refreshNDVIData = () => {
-    loadNDVIData(selectedDate)
+    loadNDVIData(selectedDate, true) // Force refresh
   }
 
   const availableDates = [
@@ -175,7 +337,14 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             <ModernCardTitle className="text-lg">Live Satellite NDVI Analysis</ModernCardTitle>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-green-100 text-green-800">Real Field Data</Badge>
+            <Badge className={
+              cacheStatus === 'live' ? 'bg-green-100 text-green-800' :
+              cacheStatus === 'cached' ? 'bg-blue-100 text-blue-800' :
+              'bg-yellow-100 text-yellow-800'
+            }>
+              {cacheStatus === 'live' ? 'Live Data' :
+               cacheStatus === 'cached' ? 'Cached Data' : 'Updating...'}
+            </Badge>
             <Button
               variant="outline"
               size="sm"
@@ -282,50 +451,84 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           </LoadScript>
         </div>
 
-        {/* NDVI Analysis Results */}
+        {/* Enhanced NDVI Analysis Results */}
         {ndviData && (
-          <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
-                {(ndviData.averageNDVI || 0.82).toFixed(2)}
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  {ndviData.averageNDVI.toFixed(2)}
+                </div>
+                <div className="text-xs text-gray-600">Avg NDVI</div>
               </div>
-              <div className="text-xs text-gray-600">Avg NDVI</div>
+              <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">
+                  {ndviData.maxNDVI.toFixed(2)}
+                </div>
+                <div className="text-xs text-gray-600">Max NDVI</div>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">
+                  {ndviData.uniformity}%
+                </div>
+                <div className="text-xs text-gray-600">Uniformity</div>
+              </div>
             </div>
-            <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
-                {(ndviData.maxNDVI || 0.95).toFixed(2)}
+            
+            {/* Crop Stage and Yield Projection */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
+                <div className="text-sm font-medium text-orange-800">{ndviData.stage}</div>
+                <div className="text-xs text-gray-600 mt-1">Growth Stage</div>
               </div>
-              <div className="text-xs text-gray-600">Max NDVI</div>
-            </div>
-            <div className="text-center p-3 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg">
-              <div className="text-2xl font-bold text-yellow-600">
-                {((ndviData.maxNDVI || 0.95) - (ndviData.minNDVI || 0.65)).toFixed(2)}
+              <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg">
+                <div className="text-lg font-bold text-emerald-600">{ndviData.yieldProjection} bu/ac</div>
+                <div className="text-xs text-gray-600">Yield Projection</div>
               </div>
-              <div className="text-xs text-gray-600">Uniformity</div>
             </div>
           </div>
         )}
 
-        {/* Real-time Insights */}
-        <div className="bg-green-50 p-3 rounded-lg">
-          <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Satellite Analysis
-          </h5>
-          <div className="space-y-1 text-sm text-green-700">
-            <div>• Field health: {ndviData?.averageNDVI > 0.8 ? 'Excellent' : ndviData?.averageNDVI > 0.6 ? 'Good' : 'Needs attention'}</div>
-            <div>• Estimated yield: {Math.round(185 + (ndviData?.averageNDVI - 0.8) * 50)} bu/acre</div>
-            <div>• Uniformity score: {Math.round((1 - ((ndviData?.maxNDVI || 0.95) - (ndviData?.minNDVI || 0.65))) * 100)}%</div>
-            <div>• Next satellite pass: {isLoading ? 'Updating...' : '2 days'}</div>
+        {/* Enhanced Real-time Insights */}
+        {ndviData && (
+          <div className="bg-green-50 p-3 rounded-lg">
+            <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              AI-Powered Insights
+            </h5>
+            <div className="space-y-1 text-sm text-green-700">
+              <div>• Field health: <span className="font-medium">{ndviData.healthStatus}</span></div>
+              <div>• Growth stage: <span className="font-medium">{ndviData.stage}</span></div>
+              <div>• Yield projection: <span className="font-medium">{ndviData.yieldProjection} bu/acre</span></div>
+              <div>• Field uniformity: <span className="font-medium">{ndviData.uniformity}%</span></div>
+              {ndviData.recommendations && ndviData.recommendations.length > 0 && (
+                <div className="mt-2 pt-2 border-t border-green-200">
+                  <div className="font-medium text-green-800 mb-1">Recommendations:</div>
+                  {ndviData.recommendations.map((rec: string, idx: number) => (
+                    <div key={idx} className="text-xs">• {rec}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {/* Cache and Update Info */}
+        <div className="bg-gray-50 p-3 rounded-lg">
+          <div className="flex items-center justify-between text-xs text-gray-600">
+            <div className="flex items-center gap-2">
+              <Eye className="h-3 w-3" />
+              <span>Sentinel-2 • 10m resolution • {ndviData?.source === 'live' ? 'Live API' : 'Enhanced Demo'}</span>
+            </div>
+            {lastUpdate && (
+              <div className="text-right">
+                <div>Updated: {lastUpdate.toLocaleTimeString()}</div>
+                <div className="text-xs">Cache: {Math.round((Date.now() - lastUpdate.getTime()) / 60000)}min ago</div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="pt-2 border-t">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <Eye className="h-3 w-3" />
-            <span>Live data from ESA Copernicus Sentinel-2 • 10m resolution</span>
-          </div>
-        </div>
       </ModernCardContent>
     </ModernCard>
   )

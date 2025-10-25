@@ -10,7 +10,7 @@
 ## 🔑 Required API Keys & Services
 
 ### 1. Google Maps API Setup
-**Current Status**: ⚠️ Key exists but needs verification
+**Current Status**: 🚨 REVOKED - Previous key was compromised
 
 **Steps:**
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
@@ -20,13 +20,14 @@
    - Places API  
    - Geocoding API
    - Static Maps API (for satellite overlays)
-4. Create API key and add to `.env`:
+4. **CRITICAL**: Delete/revoke old key `AIzaSyB7BR2V1kunq0fPSHN6Zhvg_oQTnvW7Lq0` if it exists
+5. Create NEW API key and add to `.env`:
    ```bash
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_actual_key_here
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_new_secure_key_here
    ```
-5. Set API restrictions:
+6. **SECURITY**: Set API restrictions immediately:
    - HTTP referrers: `https://cropple.ai/*`, `http://localhost:3000/*`
-   - APIs: Maps JavaScript API, Places API, Geocoding API
+   - APIs: Maps JavaScript API, Places API, Geocoding API ONLY
 
 **Cost**: ~$200/month for 100k map loads
 

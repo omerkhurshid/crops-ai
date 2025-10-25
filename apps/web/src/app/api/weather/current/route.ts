@@ -31,6 +31,9 @@ export const GET = apiMiddleware.basic(
 
       return createSuccessResponse({
         weather,
+        apiStatus: process.env.OPENWEATHER_API_KEY && 
+                   process.env.OPENWEATHER_API_KEY !== 'mock_development_key' && 
+                   process.env.OPENWEATHER_API_KEY !== 'your-openweather-api-key' ? 'live' : 'unavailable',
         message: 'Current weather data retrieved successfully'
       });
 

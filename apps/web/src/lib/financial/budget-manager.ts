@@ -46,15 +46,20 @@ export class BudgetManager {
     const currentYear = year || new Date().getFullYear()
     
     try {
-      // TODO: Implement budget lookup when FinancialBudget model is added
-      // For now, create a mock budget structure
-      let budget = {
-        id: 'mock-budget-' + farmId,
-        farmId,
-        year: currentYear,
-        plannedAmount: 0,
-        actualAmount: 0
-      }
+      // Look up budget from database
+      let budget = await prisma.financialBudget.findFirst({
+        where: {
+          farmId,
+          year: currentYear
+        },
+        include: {
+          categories: {
+            include: {
+              transactions: true
+            }
+          }
+        }
+      })
 
       // If no budget exists, create a default one
       if (!budget) {
@@ -141,14 +146,25 @@ export class BudgetManager {
       { category: 'OTHER', plannedAmount: totalBudget * 0.10 }
     ]
 
-    // TODO: Implement budget creation when FinancialBudget model is added
-    const budget = {
-      id: 'mock-budget-' + farmId + '-' + year,
-      farmId,
-      year,
-      plannedAmount: totalBudget,
-      actualAmount: 0
-    }
+    // Create budget in database
+    const budget = await prisma.financialBudget.create({
+      data: {
+        farmId,
+        year,
+        totalBudgeted: totalBudget,
+        totalActual: 0,
+        categories: {
+          create: budgetEntries.map(entry => ({
+            name: entry.category,
+            budgetedAmount: entry.plannedAmount,
+            actualAmount: 0
+          }))
+        }
+      },
+      include: {
+        categories: true
+      }
+    })
 
     return budget
   }
@@ -177,10 +193,11 @@ export class BudgetManager {
   ): Promise<MonthlyBudget[]> {
     const monthlyBudgets: MonthlyBudget[] = []
     
-    // TODO: Implement budget lookup when FinancialBudget model is added
-    const budget = {
-      plannedAmount: 0
-    }
+    // Get the budget for this farm and year
+    const budget = await prisma.financialBudget.findFirst({
+      where: { farmId, year },
+      include: { categories: true }
+    })
 
     for (let month = 1; month <= 12; month++) {
       // Use simple monthly division for now
@@ -218,7 +235,31 @@ export class BudgetManager {
     newAmount: number
   ): Promise<boolean> {
     try {
-        // TODO: Implement budget category updates when BudgetCategory model is added
+      // Update budget category amount
+      const updatedCategory = await prisma.budgetCategory.update({
+        where: {
+          id: categoryId
+        },
+        data: {
+          budgetedAmount: newAmount
+        }
+      })
+
+      // Recalculate total budget
+      const allCategories = await prisma.budgetCategory.findMany({
+        where: {
+          budget: {
+            farmId: updatedCategory.budgetId
+          }
+        }
+      })
+
+      const newTotal = allCategories.reduce((sum, cat) => sum + cat.budgetedAmount, 0)
+      
+      await prisma.financialBudget.update({
+        where: { id: updatedCategory.budgetId },
+        data: { totalBudgeted: newTotal }
+      })
 
       return true
     } catch (error) {

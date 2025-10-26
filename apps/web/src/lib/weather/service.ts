@@ -469,48 +469,6 @@ class WeatherService {
     return forecast;
   }
 
-  // Helper methods for weather analysis
-
-  private categorizeAlert(event: string): WeatherAlert['alertType'] {
-    const eventLower = event.toLowerCase();
-    if (eventLower.includes('frost') || eventLower.includes('freeze')) return 'frost';
-    if (eventLower.includes('storm') || eventLower.includes('thunder')) return 'storm';
-    if (eventLower.includes('drought') || eventLower.includes('dry')) return 'drought';
-    if (eventLower.includes('heat') || eventLower.includes('hot')) return 'heat';
-    if (eventLower.includes('wind') || eventLower.includes('gust')) return 'wind';
-    if (eventLower.includes('hail')) return 'hail';
-    if (eventLower.includes('flood') || eventLower.includes('rain')) return 'flood';
-    return 'storm';
-  }
-
-  private mapSeverity(tags: string[]): WeatherAlert['severity'] {
-    if (!tags || tags.length === 0) return 'moderate';
-    const tagsStr = tags.join(' ').toLowerCase();
-    if (tagsStr.includes('extreme')) return 'extreme';
-    if (tagsStr.includes('severe')) return 'severe';
-    if (tagsStr.includes('minor')) return 'minor';
-    return 'moderate';
-  }
-
-  private generateRecommendations(event: string): string[] {
-    const eventLower = event.toLowerCase();
-    const recommendations: string[] = [];
-    
-    if (eventLower.includes('frost')) {
-      recommendations.push('Protect sensitive crops with covers or row tunnels');
-      recommendations.push('Delay planting until frost risk passes');
-    }
-    if (eventLower.includes('storm') || eventLower.includes('wind')) {
-      recommendations.push('Secure equipment and structures');
-      recommendations.push('Delay pesticide applications');
-    }
-    if (eventLower.includes('heat')) {
-      recommendations.push('Increase irrigation frequency');
-      recommendations.push('Provide shade for livestock');
-    }
-    
-    return recommendations.length > 0 ? recommendations : ['Monitor conditions closely'];
-  }
 }
 
 export const weatherService = new WeatherService();

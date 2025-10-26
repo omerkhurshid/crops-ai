@@ -437,18 +437,4 @@ export class RealSatelliteService {
     return date.toISOString().split('T')[0]
   }
 
-  private extractLatestSatelliteDate(analyses: SatelliteAnalysis[]): Date | null {
-    let latestDate: Date | null = null;
-    
-    analyses.forEach(analysis => {
-      if (analysis?.satelliteData?.date) {
-        const date = new Date(analysis.satelliteData.date);
-        if (!latestDate || date > latestDate) {
-          latestDate = date;
-        }
-      }
-    });
-    
-    return latestDate;
-  }
 }

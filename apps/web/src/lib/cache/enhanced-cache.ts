@@ -119,7 +119,7 @@ class EnhancedCache {
   clearByTags(tags: string[]): number {
     let cleared = 0
     
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [key, entry] of Array.from(this.cache.entries())) {
       if (entry.tags && entry.tags.some(tag => tags.includes(tag))) {
         this.cache.delete(key)
         cleared++
@@ -144,7 +144,7 @@ class EnhancedCache {
     let expired = 0
     let total = this.cache.size
 
-    for (const entry of this.cache.values()) {
+    for (const entry of Array.from(this.cache.values())) {
       if (now - entry.timestamp > entry.ttl) {
         expired++
       }
@@ -300,7 +300,7 @@ class EnhancedCache {
   private evictOldest(): void {
     let oldest: { key: string; timestamp: number } | null = null
     
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [key, entry] of Array.from(this.cache.entries())) {
       if (!oldest || entry.timestamp < oldest.timestamp) {
         oldest = { key, timestamp: entry.timestamp }
       }
@@ -321,7 +321,7 @@ class EnhancedCache {
     const now = Date.now()
     const expiredKeys: string[] = []
     
-    for (const [key, entry] of this.cache.entries()) {
+    for (const [key, entry] of Array.from(this.cache.entries())) {
       if (now - entry.timestamp > entry.ttl) {
         expiredKeys.push(key)
       }
@@ -333,7 +333,7 @@ class EnhancedCache {
   private getMemoryUsage(): string {
     // Rough estimation of memory usage
     let size = 0
-    for (const entry of this.cache.values()) {
+    for (const entry of Array.from(this.cache.values())) {
       size += JSON.stringify(entry).length
     }
     return this.formatBytes(size)

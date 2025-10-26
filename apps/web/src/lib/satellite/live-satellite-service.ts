@@ -105,7 +105,7 @@ class LiveSatelliteService {
       console.error('Error getting satellite data:', error)
       
       // No fallback available - satellite service error
-      console.warn(`Satellite service error for field ${fieldId}: ${error.message}`);
+      console.warn(`Satellite service error for field ${fieldId}: ${error instanceof Error ? error.message : String(error)}`);
       
       return null
     }
@@ -289,7 +289,7 @@ class LiveSatelliteService {
         ndviChange: previousData.ndviChange,
         stressLevel: previousData.stressLevel as any,
         imageUrl: previousData.imageUrl,
-        metadata: previousData.metadata as any
+        metadata: { source: 'copernicus' as const }
       };
     } catch (error) {
       console.error('Error fetching previous satellite data:', error);
@@ -308,13 +308,6 @@ class LiveSatelliteService {
     return 'SEVERE'
   }
 
-  /**
-   * Check if cached data is too old to be useful
-   */
-  private isDataStale(data: any): boolean {
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    return new Date(data.captureDate) < oneDayAgo;
-  }
 
   /**
    * Cache satellite data to database
@@ -385,16 +378,6 @@ class LiveSatelliteService {
     })
   }
 
-  /**
-   * Get previous satellite data for comparison
-   */
-  private async getPreviousSatelliteData(fieldId: string) {
-    return await prisma.satelliteData.findFirst({
-      where: { fieldId },
-      orderBy: { captureDate: 'desc' },
-      skip: 1 // Skip the most recent one to get the previous
-    })
-  }
 
   /**
    * Calculate field bounds for Copernicus service

@@ -83,7 +83,9 @@ class InMemoryRateLimit {
   // Clean up expired entries periodically
   cleanup() {
     const now = Date.now()
-    for (const [key, value] of this.requests.entries()) {
+    // Convert Map entries to array to avoid iterator issues
+    const entries = Array.from(this.requests.entries())
+    for (const [key, value] of entries) {
       if (value.resetTime <= now) {
         this.requests.delete(key)
       }

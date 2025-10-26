@@ -99,9 +99,9 @@ export class AppLogger {
       // Send to configured external logging services
       try {
         // Sentry for error tracking
-        if (process.env.NEXT_PUBLIC_SENTRY_DSN && (entry.level === 'ERROR' || entry.level === 'WARN')) {
+        if (process.env.NEXT_PUBLIC_SENTRY_DSN && (entry.level === 'error' || entry.level === 'warn')) {
           // Send to Sentry if configured
-          console.error('[SENTRY]', entry.message, entry.data)
+          console.error('[SENTRY]', entry.message, entry.context)
         }
         
         // DataDog logs (if configured)
@@ -111,9 +111,9 @@ export class AppLogger {
         }
         
         // PostHog for analytics events
-        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && entry.data?.analytics) {
+        if (process.env.NEXT_PUBLIC_POSTHOG_KEY && entry.context?.analytics) {
           // Send analytics events to PostHog
-          console.log('[POSTHOG]', entry.message, entry.data)
+          console.log('[POSTHOG]', entry.message, entry.context)
         }
       } catch (error) {
         console.error('Failed to send to external logging services:', error)

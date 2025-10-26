@@ -2,12 +2,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-export interface APIError extends Error {
+export class APIError extends Error {
   statusCode?: number
   code?: string
+  constructor(message: string, statusCode?: number, code?: string) {
+    super(message)
+    this.statusCode = statusCode
+    this.code = code
+    this.name = 'APIError'
+  }
 }
 
-export class ValidationError extends Error implements APIError {
+export class ValidationError extends APIError {
   statusCode = 400
   code = 'VALIDATION_ERROR'
   constructor(message: string, public details?: any) {
@@ -16,7 +22,7 @@ export class ValidationError extends Error implements APIError {
   }
 }
 
-export class AuthenticationError extends Error implements APIError {
+export class AuthenticationError extends APIError {
   statusCode = 401
   code = 'AUTHENTICATION_ERROR'
   constructor(message: string = 'Authentication required') {
@@ -25,7 +31,7 @@ export class AuthenticationError extends Error implements APIError {
   }
 }
 
-export class AuthorizationError extends Error implements APIError {
+export class AuthorizationError extends APIError {
   statusCode = 403
   code = 'AUTHORIZATION_ERROR'
   constructor(message: string = 'Access denied') {

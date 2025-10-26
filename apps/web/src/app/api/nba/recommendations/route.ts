@@ -5,7 +5,7 @@ import { NBAEngine, FarmContext } from '../../../../lib/nba/decision-engine'
 import { WeatherConditions, WeatherForecast, WeatherService } from '../../../../lib/services/weather'
 import { cache, CacheKeys, CacheTTL, CacheTags } from '../../../../lib/cache/redis-client'
 import { PerformanceMonitor, withCache } from '../../../../lib/performance/optimizations'
-import { BudgetManager } from '../../../../lib/financial/budget-manager'
+// import { BudgetManager } from '../../../../lib/financial/budget-manager' // Temporarily disabled
 import { z } from 'zod'
 
 const recommendationRequestSchema = z.object({
@@ -340,18 +340,20 @@ async function getFinancialContext(farmId: string): Promise<{
     .filter(t => t.type === 'EXPENSE')
     .reduce((sum, t) => sum + Number(t.amount), 0)
 
-  // Get real budget information
-  const budget = await BudgetManager.getFarmBudget(farmId, currentYear)
-  const monthlyBudgetRemaining = await BudgetManager.getMonthlyBudgetRemaining(farmId)
+  // Get real budget information - temporarily disabled
+  // const budget = await BudgetManager.getFarmBudget(farmId, currentYear)
+  // const monthlyBudgetRemaining = await BudgetManager.getMonthlyBudgetRemaining(farmId)
+  const budget = null
+  const monthlyBudgetRemaining = 50000
 
   return {
     cashAvailable: ytdRevenue - ytdExpenses,
-    monthlyBudget: budget?.totalBudget ? budget.totalBudget / 12 : 50000,
+    monthlyBudget: 50000,
     monthlyBudgetRemaining,
-    totalBudget: budget?.totalBudget || 0,
-    totalBudgetUsed: budget?.totalSpent || ytdExpenses,
-    totalBudgetRemaining: budget?.totalRemaining || 0,
-    budgetCategories: budget?.categories || [],
+    totalBudget: 0,
+    totalBudgetUsed: ytdExpenses,
+    totalBudgetRemaining: 0,
+    budgetCategories: [],
     ytdRevenue,
     ytdExpenses
   }

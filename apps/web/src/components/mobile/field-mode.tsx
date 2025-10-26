@@ -19,6 +19,12 @@ import {
 interface FieldModeProps {
   onExit: () => void
   className?: string
+  field?: {
+    farmId: string
+    name: string
+    latitude: number
+    longitude: number
+  }
 }
 
 interface QuickAction {
@@ -29,9 +35,11 @@ interface QuickAction {
   action: () => void
 }
 
-export const FieldMode = memo(function FieldMode({ onExit, className }: FieldModeProps) {
+export const FieldMode = memo(function FieldMode({ onExit, className, field }: FieldModeProps) {
   const [currentLocation, setCurrentLocation] = useState<string>('Getting location...')
   const [isCapturing, setIsCapturing] = useState(false)
+  const [expenseAmount, setExpenseAmount] = useState(0)
+  const [weatherData, setWeatherData] = useState<any>(null)
 
   // Get GPS location for field identification
   React.useEffect(() => {
@@ -341,11 +349,11 @@ export const FieldMode = memo(function FieldMode({ onExit, className }: FieldMod
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              farmId: field.farmId,
+              farmId: field?.farmId || 'unknown',
               amount: expenseAmount,
               type: 'EXPENSE',
               category: 'FIELD_OPERATIONS',
-              description: `Field operation expense for ${field.name}`,
+              description: `Field operation expense for ${field?.name || 'unknown field'}`,
               transactionDate: new Date()
             })
           })
@@ -364,7 +372,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className }: FieldMod
       action: async () => {
         // Weather check implementation
         try {
-          const weatherResponse = await fetch(`/api/weather/current?latitude=${field.latitude}&longitude=${field.longitude}`)
+          const weatherResponse = await fetch(`/api/weather/current?latitude=${field?.latitude || 0}&longitude=${field?.longitude || 0}`)
           const weather = await weatherResponse.json()
           if (weather.success) {
             setWeatherData(weather.data)

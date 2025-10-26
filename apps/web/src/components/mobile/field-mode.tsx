@@ -40,6 +40,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
   const [isCapturing, setIsCapturing] = useState(false)
   const [expenseAmount, setExpenseAmount] = useState(0)
   const [weatherData, setWeatherData] = useState<any>(null)
+  const [taskId, setTaskId] = useState<string | null>(null)
 
   // Get GPS location for field identification
   React.useEffect(() => {

@@ -7,11 +7,28 @@ export async function GET(request: NextRequest) {
     // Test if we can create a NextAuth handler and call it directly
     const handler = NextAuth(authOptions)
     
-    // Try to simulate a providers request
-    const testUrl = new URL('/api/auth/providers', request.url)
-    const testRequest = new Request(testUrl.toString(), { method: 'GET' })
+    // Try to simulate a providers request with proper URL structure
+    const url = new URL(request.url)
+    const testUrl = new URL('/api/auth/providers', url.origin)
+    
+    // Create a proper Request object that NextAuth expects
+    const testRequest = new Request(testUrl.toString(), { 
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'host': url.host,
+        'user-agent': request.headers.get('user-agent') || 'test',
+      }
+    })
+
+    // Add NextAuth-specific properties
+    Object.defineProperty(testRequest, 'nextUrl', {
+      value: testUrl,
+      writable: false,
+    })
     
     console.log('🧪 Testing NextAuth handler with providers request...')
+    console.log('🔍 Test URL:', testUrl.toString())
     
     try {
       const response = await handler(testRequest, {
@@ -23,6 +40,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         message: 'NextAuth handler test successful',
+        testUrl: testUrl.toString(),
         handlerResponse: {
           status: response.status,
           statusText: response.statusText,
@@ -35,6 +53,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: false,
         message: 'NextAuth handler test failed',
+        testUrl: testUrl.toString(),
         error: handlerError instanceof Error ? handlerError.message : String(handlerError),
         stack: handlerError instanceof Error ? handlerError.stack : undefined,
         timestamp: new Date().toISOString()

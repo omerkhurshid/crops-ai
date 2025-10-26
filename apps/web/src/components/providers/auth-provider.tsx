@@ -8,5 +8,15 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  return <SessionProvider>{children}</SessionProvider>
+  console.log('🔧 AuthProvider initializing with basePath: /api/auth')
+  
+  return (
+    <SessionProvider 
+      basePath="/api/auth"
+      refetchInterval={0}
+      refetchOnWindowFocus={false}
+    >
+      {children}
+    </SessionProvider>
+  )
 }

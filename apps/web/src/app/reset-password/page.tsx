@@ -37,7 +37,7 @@ function ResetPasswordContent() {
 
   const validateToken = async (resetToken: string) => {
     try {
-      const response = await fetch('/api/auth/validate-reset-token', {
+      const response = await fetch('/api/user-auth/validate-reset-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: resetToken })
@@ -72,7 +72,7 @@ function ResetPasswordContent() {
     setError('')
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch('/api/user-auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

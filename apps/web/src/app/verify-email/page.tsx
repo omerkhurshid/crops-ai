@@ -26,7 +26,7 @@ function VerifyEmailContent() {
 
   async function verifyEmail(token: string) {
     try {
-      const res = await fetch('/api/auth/verify-email', {
+      const res = await fetch('/api/user-auth/verify-email', {
         method: 'POST',
         body: JSON.stringify({ token }),
         headers: { 'Content-Type': 'application/json' }

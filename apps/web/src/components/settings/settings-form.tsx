@@ -139,7 +139,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
 
     setLoading(true)
     try {
-      const response = await fetch('/api/auth/change-password', {
+      const response = await fetch('/api/user-auth/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

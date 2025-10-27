@@ -67,4 +67,12 @@ async function NextAuthHandler(
   }
 }
 
-export { NextAuthHandler as GET, NextAuthHandler as POST }
+export { 
+  NextAuthHandler as GET, 
+  NextAuthHandler as POST,
+  NextAuthHandler as PUT,
+  NextAuthHandler as DELETE,
+  NextAuthHandler as PATCH,
+  NextAuthHandler as HEAD,
+  NextAuthHandler as OPTIONS
+}

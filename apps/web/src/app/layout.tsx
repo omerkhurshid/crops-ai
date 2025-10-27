@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Crops.AI - Smart Farm Management',
     description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
-    url: 'https://crops.ai',
+    url: 'https://cropple.ai',
     siteName: 'Crops.AI',
     type: 'website',
     images: [

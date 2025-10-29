@@ -8,11 +8,11 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  console.log('🔧 AuthProvider initializing with basePath: /api/auth')
+  console.log('🔧 AuthProvider initializing with basePath: /api/nextauth-alt')
   
   return (
     <SessionProvider 
-      basePath="/api/auth"
+      basePath="/api/nextauth-alt"
       refetchInterval={0}
       refetchOnWindowFocus={false}
     >

@@ -38,14 +38,16 @@ export default async function SettingsPage() {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Account Settings</h1>
-          <p className="text-lg text-sage-600">
+        <div className="mb-10">
+          <h1 className="text-4xl font-light text-sage-800 mb-3">Account Settings</h1>
+          <p className="text-lg text-sage-600 leading-relaxed">
             Manage your account preferences and system settings
           </p>
         </div>
 
-        <SettingsForm user={fullUser || user} />
+        <div className="bg-white rounded-lg shadow-sm border border-sage-200">
+          <SettingsForm user={fullUser || user} />
+        </div>
       </div>
     </DashboardLayout>
   )

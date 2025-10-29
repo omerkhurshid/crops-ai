@@ -156,7 +156,7 @@ const nextConfig = {
       },
       {
         source: '/api/authentication/register', 
-        destination: '/api/auth/register',
+        destination: '/api/user-auth/register',
       },
     ]
   },

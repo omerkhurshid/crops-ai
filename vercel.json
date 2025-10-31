@@ -4,7 +4,6 @@
   "outputDirectory": "apps/web/.next",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["iad1", "sfo1", "lhr1"],
   "functions": {
     "apps/web/src/app/api/**/*.ts": {
       "runtime": "nodejs18.x"

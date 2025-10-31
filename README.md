@@ -1,6 +1,8 @@
-# Crops.AI
+# Cropple.ai - Smart Agriculture Platform
 
 AI-powered land and crop management platform designed to optimize agricultural productivity through intelligent decision-support, real-time monitoring, and predictive analytics.
+
+**Latest Deployment**: Production-ready with NextAuth authentication and dynamic API routing.
 
 ## Overview
 

@@ -4,7 +4,30 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "DATABASE_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "UPSTASH_REDIS_REST_URL",
+        "UPSTASH_REDIS_REST_TOKEN",
+        "CLOUDINARY_CLOUD_NAME",
+        "CLOUDINARY_API_KEY",
+        "CLOUDINARY_API_SECRET",
+        "OPENWEATHER_API_KEY",
+        "SENTINEL_HUB_CLIENT_ID",
+        "SENTINEL_HUB_CLIENT_SECRET",
+        "NODE_ENV",
+        "WEATHERAPI_KEY",
+        "ALPHA_VANTAGE_API_KEY",
+        "RESEND_API_KEY",
+        "EMAIL_FROM",
+        "GEE_SERVICE_ACCOUNT_EMAIL",
+        "GEE_PRIVATE_KEY",
+        "GEE_PROJECT_ID",
+        "EXT_PUBLIC_APP_VERSION",
+        "GOOGLE_MAPS_API_KEY"
+      ]
     },
     "dev": {
       "cache": false,

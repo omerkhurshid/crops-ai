@@ -8,10 +8,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/prisma'
 import bcrypt from 'bcryptjs'
-import { supabase } from '../../../../lib/supabase'
+import { supabase, isSupabaseConfigured } from '../../../../lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: 'Supabase authentication not configured' },
+        { status: 503 }
+      )
+    }
+
     const { email, password } = await request.json()
 
     if (!email || !password) {
@@ -46,7 +54,7 @@ export async function POST(request: NextRequest) {
       // User is valid but needs migration to Supabase
       try {
         // Create user in Supabase Auth
-        const { data: supabaseUser, error: supabaseError } = await supabase.auth.admin.createUser({
+        const { data: supabaseUser, error: supabaseError } = await supabase!.auth.admin.createUser({
           email: user.email,
           password: password,
           email_confirm: true,

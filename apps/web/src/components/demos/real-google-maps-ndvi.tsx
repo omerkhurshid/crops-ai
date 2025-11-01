@@ -399,17 +399,36 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
 
         {/* Google Maps with NDVI Overlay */}
         <div className="relative">
-          <LoadScript 
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}
-            loadingElement={
-              <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-2"></div>
-                  <div className="text-sm text-gray-600">Loading Google Maps...</div>
+          {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+            <LoadScript 
+              googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+              loadingElement={
+                <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-2"></div>
+                    <div className="text-sm text-gray-600">Loading Google Maps...</div>
+                  </div>
+                </div>
+              }
+            >
+          ) : (
+            <div className="h-96 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300">
+              <div className="text-center p-6">
+                <Satellite className="h-12 w-12 text-green-600 mx-auto mb-3" />
+                <div className="text-lg font-semibold text-green-800 mb-2">NDVI Satellite Analysis</div>
+                <div className="text-sm text-green-700 mb-4">
+                  Interactive satellite mapping available with Google Maps API
+                </div>
+                <div className="bg-green-50 p-3 rounded-lg text-xs text-green-600 border border-green-200">
+                  <div className="font-semibold mb-1">Current Analysis:</div>
+                  <div>• Field: {DEMO_FIELD_LOCATION.name}</div>
+                  <div>• NDVI: {(ndviData?.averageNDVI || 0.82).toFixed(2)} (Excellent)</div>
+                  <div>• Yield Projection: {ndviData?.yieldProjection || 185} bu/acre</div>
                 </div>
               </div>
-            }
-          >
+            </div>
+          )}
+          {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               zoom={mapOptions.zoom}
@@ -448,7 +467,8 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </InfoWindow>
               )}
             </GoogleMap>
-          </LoadScript>
+            </LoadScript>
+          )}
         </div>
 
         {/* Enhanced NDVI Analysis Results */}

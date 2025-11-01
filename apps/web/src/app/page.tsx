@@ -12,7 +12,6 @@ import {
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '../lib/auth/session'
 import { HomePageDemos } from '../components/demos/home-page-demos'
-import { ProfitCalculator } from '../components/home/profit-calculator'
 
 export default async function Home() {
   // Check if user is logged in
@@ -48,9 +47,6 @@ export default async function Home() {
             <p className="text-lg sm:text-xl md:text-2xl text-sage-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
               Make better timing decisions with AI-powered recommendations. Farmers using our platform average $15,000 more profit per season.
             </p>
-            
-            {/* Profit Calculator Widget */}
-            <ProfitCalculator />
             
             {/* Outcome-Focused Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">

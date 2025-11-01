@@ -72,7 +72,7 @@ export const unifiedAuth = {
       return {
         ok: result?.ok,
         error: result?.error || undefined,
-        url: result?.url
+        url: result?.url || undefined
       }
     }
   },

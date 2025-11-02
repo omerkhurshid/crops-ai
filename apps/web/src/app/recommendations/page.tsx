@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { RecommendationsDashboard } from '../../components/ai/recommendations-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
@@ -18,7 +18,7 @@ interface Farm {
   name: string
 }
 
-export default function RecommendationsPage() {
+function RecommendationsPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -218,5 +218,20 @@ export default function RecommendationsPage() {
         )}
       </main>
     </DashboardLayout>
+  )
+}
+
+export default function RecommendationsPage() {
+  return (
+    <Suspense fallback={
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600"></div>
+          <p className="ml-4 text-sage-600">Loading recommendations...</p>
+        </div>
+      </DashboardLayout>
+    }>
+      <RecommendationsPageContent />
+    </Suspense>
   )
 }

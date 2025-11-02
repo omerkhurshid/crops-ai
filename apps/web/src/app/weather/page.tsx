@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
@@ -25,7 +25,7 @@ interface FarmListItem {
   name: string
 }
 
-export default function WeatherPage() {
+function WeatherPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -272,5 +272,38 @@ export default function WeatherPage() {
         </div>
       </main>
     </DashboardLayout>
+  )
+}
+
+export default function WeatherPage() {
+  return (
+    <Suspense fallback={
+      <DashboardLayout>
+        <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse space-y-6">
+            <div className="space-y-2">
+              <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8">
+                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+              </div>
+              <div className="lg:col-span-4">
+                <div className="h-16 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-6">
+              <div className="space-y-4">
+                <div className="h-12 bg-gray-200 rounded"></div>
+                <div className="h-64 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </DashboardLayout>
+    }>
+      <WeatherPageContent />
+    </Suspense>
   )
 }

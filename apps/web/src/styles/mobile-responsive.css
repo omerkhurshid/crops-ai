@@ -6,10 +6,10 @@
 /* Mobile-first breakpoints */
 @media (max-width: 640px) {
   /* Typography scaling */
-  .text-4xl { font-size: 2rem !important; }
-  .text-3xl { font-size: 1.5rem !important; }
-  .text-2xl { font-size: 1.25rem !important; }
-  .text-xl { font-size: 1.125rem !important; }
+  .text-4xl { font-size: 1.875rem !important; }
+  .text-3xl { font-size: 1.25rem !important; }
+  .text-2xl { font-size: 1.125rem !important; }
+  .text-xl { font-size: 1rem !important; }
 
   /* Container adjustments */
   .container {

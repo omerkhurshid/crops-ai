@@ -1,5 +1,8 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { 
@@ -15,13 +18,34 @@ import { BenchmarkingSection } from '../../components/reports/benchmarking-secti
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { BarChart, FileText, TrendingUp, DollarSign, Leaf, Plus, CloudRain, TreePine } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+export default function ReportsPage() {
+  const router = useRouter()
+  const { data: session, status } = useSession()
+  const [isLoading, setIsLoading] = useState(true)
 
-export default async function ReportsPage() {
-  const user = await getAuthenticatedUser()
+  useEffect(() => {
+    if (status === 'loading') return
 
-  if (!user) {
-    redirect('/login')
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+
+    setIsLoading(false)
+  }, [status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-sage-600">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!session?.user) {
+    return null
   }
 
   return (
@@ -56,7 +80,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <FarmPerformancePreview farmId={user.id} />
+              <FarmPerformancePreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -73,7 +97,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <WeatherImpactPreview farmId={user.id} />
+              <WeatherImpactPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -90,7 +114,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <CropHealthPreview farmId={user.id} />
+              <CropHealthPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -107,7 +131,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <FinancialSummaryPreview farmId={user.id} />
+              <FinancialSummaryPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -124,7 +148,7 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <SustainabilityPreview farmId={user.id} />
+              <SustainabilityPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
 
@@ -141,14 +165,14 @@ export default async function ReportsPage() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent>
-              <CustomReportPreview farmId={user.id} />
+              <CustomReportPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
         </div>
 
         {/* Benchmarking Section */}
         <div className="mb-8">
-          <BenchmarkingSection farm={{ id: user.id, name: 'Your Farm', totalArea: 100, region: 'Midwest' }} />
+          <BenchmarkingSection farm={{ id: session.user.id, name: 'Your Farm', totalArea: 100, region: 'Midwest' }} />
         </div>
 
         <ModernCard variant="soft">
@@ -157,7 +181,7 @@ export default async function ReportsPage() {
             <ModernCardDescription>Reports you've looked at before</ModernCardDescription>
           </ModernCardHeader>
           <ModernCardContent>
-            <RecentReports farmId={user.id} />
+            <RecentReports farmId={session.user.id} />
           </ModernCardContent>
         </ModernCard>
       </div>

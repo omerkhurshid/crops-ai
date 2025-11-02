@@ -1,125 +1,142 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { BreedingManagement } from '../../../components/livestock/breeding-management'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { Plus, Heart, Calendar, Users, TrendingUp } from 'lucide-react'
-import { prisma } from '../../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
 
-export default async function BreedingPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Get user's farms
-  let userFarms: any[] = []
-  try {
-    userFarms = await prisma.farm.findMany({
-      where: { ownerId: user.id },
-      select: { id: true, name: true }
-    })
-  } catch (error: any) {
-    console.error('Error fetching farms:', error)
-  }
-
-  // If no farms, redirect to farm creation
-  if (userFarms.length === 0) {
-    redirect('/farms/create?from=breeding')
-  }
-
-  // Get breeding records for the user
-  let breedingRecords: any[] = []
-  let stats = { 
+export default function BreedingPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [breedingRecords, setBreedingRecords] = useState<any[]>([])
+  const [breedingAnimals, setBreedingAnimals] = useState<any[]>([])
+  const [stats, setStats] = useState({ 
     total: 0, 
     activePregnancies: 0, 
     upcomingBirths: 0, 
     successRate: 0 
-  }
-  
-  try {
-    breedingRecords = await prisma.breedingRecord.findMany({
-      where: { 
-        animal: { userId: user.id }
-      },
-      include: {
-        animal: {
-          select: { 
-            id: true, 
-            tagNumber: true, 
-            name: true, 
-            species: true,
-            farm: { select: { name: true } }
+  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch farms
+        const farmsResponse = await fetch('/api/farms')
+        if (farmsResponse.ok) {
+          const farms = await farmsResponse.json()
+          setUserFarms(farms)
+
+          // If no farms, redirect to farm creation
+          if (farms.length === 0) {
+            router.push('/farms/create?from=breeding')
+            return
           }
-        },
-        mate: {
-          select: { 
-            id: true, 
-            tagNumber: true, 
-            name: true 
+
+          // Fetch breeding records
+          const breedingResponse = await fetch('/api/livestock/breeding')
+          if (breedingResponse.ok) {
+            const records = await breedingResponse.json()
+            setBreedingRecords(records)
+
+            // Calculate stats on client side
+            const calculatedStats = {
+              total: records.length,
+              activePregnancies: records.filter((record: any) => 
+                record.status === 'pregnant' || record.status === 'breeding'
+              ).length,
+              upcomingBirths: 0, // Will calculate below
+              successRate: 0 // Will calculate below
+            }
+
+            // Upcoming births in next 30 days
+            const thirtyDaysFromNow = new Date()
+            thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30)
+            calculatedStats.upcomingBirths = records.filter((record: any) => 
+              record.expectedDueDate && 
+              new Date(record.expectedDueDate) <= thirtyDaysFromNow &&
+              new Date(record.expectedDueDate) >= new Date() &&
+              !record.actualBirthDate
+            ).length
+
+            // Success rate calculation
+            const completedBreedings = records.filter((record: any) => 
+              record.status === 'completed' || record.actualBirthDate
+            )
+            const successfulBreedings = records.filter((record: any) => 
+              record.actualBirthDate && (record.numberOfOffspring || 0) > 0
+            )
+            calculatedStats.successRate = completedBreedings.length > 0 
+              ? (successfulBreedings.length / completedBreedings.length) * 100 
+              : 0
+
+            setStats(calculatedStats)
+          }
+
+          // Fetch animals for breeding
+          const animalsResponse = await fetch('/api/livestock/animals')
+          if (animalsResponse.ok) {
+            const animals = await animalsResponse.json()
+            const activeAnimals = animals.filter((animal: any) => animal.status === 'active')
+            setBreedingAnimals(activeAnimals)
           }
         }
-      },
-      orderBy: { breedingDate: 'desc' }
-    })
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-    // Calculate stats
-    stats.total = breedingRecords.length
-    stats.activePregnancies = breedingRecords.filter(record => 
-      record.status === 'pregnant' || record.status === 'breeding'
-    ).length
-    
-    // Upcoming births in next 30 days
-    const thirtyDaysFromNow = new Date()
-    thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30)
-    stats.upcomingBirths = breedingRecords.filter(record => 
-      record.expectedDueDate && 
-      new Date(record.expectedDueDate) <= thirtyDaysFromNow &&
-      new Date(record.expectedDueDate) >= new Date() &&
-      !record.actualBirthDate
-    ).length
+    fetchData()
+  }, [session, status, router])
 
-    // Success rate (births vs breeding attempts)
-    const completedBreedings = breedingRecords.filter(record => 
-      record.status === 'completed' || record.actualBirthDate
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading breeding data...</p>
+        </div>
+      </DashboardLayout>
     )
-    const successfulBreedings = breedingRecords.filter(record => 
-      record.actualBirthDate && (record.numberOfOffspring || 0) > 0
-    )
-    stats.successRate = completedBreedings.length > 0 
-      ? (successfulBreedings.length / completedBreedings.length) * 100 
-      : 0
-  } catch (error: any) {
-    console.error('Error fetching breeding records:', error)
   }
 
-  // Get eligible animals for breeding
-  let breedingAnimals: any[] = []
-  try {
-    breedingAnimals = await prisma.animal.findMany({
-      where: { 
-        userId: user.id,
-        status: 'active'
-      },
-      select: {
-        id: true,
-        tagNumber: true,
-        name: true,
-        species: true,
-        gender: true,
-        birthDate: true,
-        farm: {
-          select: { name: true }
-        }
-      },
-      orderBy: { tagNumber: 'asc' }
-    })
-  } catch (error: any) {
-    console.error('Error fetching animals:', error)
+  if (!session) {
+    return null
+  }
+
+  // If no farms, show empty state (this is also handled in useEffect)
+  if (userFarms.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
+            <p className="text-gray-600 mb-6">You need to create a farm before managing breeding records.</p>
+            <button 
+              onClick={() => router.push('/farms/create?from=breeding')}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              Create Farm
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (

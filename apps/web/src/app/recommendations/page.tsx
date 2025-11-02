@@ -1,5 +1,8 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { RecommendationsDashboard } from '../../components/ai/recommendations-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
@@ -7,59 +10,111 @@ import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { NoRecommendationsEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
 import { Badge } from '../../components/ui/badge'
-import { prisma } from '../../lib/prisma'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { Brain, Zap, Target, Settings, Activity, TrendingUp } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-
-async function getUserFarms(userId: string) {
-  const farms = await prisma.farm.findMany({
-    where: { ownerId: userId },
-    select: { id: true, name: true },
-    orderBy: { name: 'asc' }
-  })
-  return farms
+interface Farm {
+  id: string
+  name: string
 }
 
-async function getSelectedFarm(farmId: string | null, userId: string) {
-  if (!farmId) {
-    // Get the user's first farm as default
-    const defaultFarm = await prisma.farm.findFirst({
-      where: { ownerId: userId },
-      select: { id: true, name: true }
-    })
-    return defaultFarm
+export default function RecommendationsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [farms, setFarms] = useState<Farm[]>([])
+  const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const farmIdFromParams = searchParams?.get('farmId')
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    async function fetchFarmsData() {
+      try {
+        setIsLoading(true)
+        
+        // Fetch all farms
+        const farmsResponse = await fetch('/api/farms')
+        if (!farmsResponse.ok) {
+          throw new Error('Failed to fetch farms')
+        }
+        
+        const farmsData = await farmsResponse.json()
+        const userFarms = farmsData.farms || []
+        setFarms(userFarms)
+
+        // Determine selected farm
+        let selected: Farm | null = null
+        
+        if (farmIdFromParams && userFarms.length > 0) {
+          // Try to find the specific farm from URL parameter
+          selected = userFarms.find((farm: Farm) => farm.id === farmIdFromParams) || null
+        }
+        
+        // If no specific farm selected or not found, use first farm as default
+        if (!selected && userFarms.length > 0) {
+          selected = userFarms[0]
+        }
+        
+        setSelectedFarm(selected)
+      } catch (error) {
+        console.error('Error fetching farms data:', error)
+        setError('Failed to load farms data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFarmsData()
+  }, [session, status, router, farmIdFromParams])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600"></div>
+          <p className="ml-4 text-sage-600">Loading recommendations...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  // Get specific farm
-  const farm = await prisma.farm.findFirst({
-    where: { 
-      id: farmId,
-      ownerId: userId 
-    },
-    select: { id: true, name: true }
-  })
-  
-  return farm
-}
-
-export default async function RecommendationsPage({ searchParams }: { searchParams: { farmId?: string } }) {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
+  if (!session) {
+    return null
   }
 
-  const farms = await getUserFarms(user.id)
-  const selectedFarm = await getSelectedFarm(searchParams.farmId || null, user.id)
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="bg-sage-600 hover:bg-sage-700 text-white px-4 py-2 rounded-lg"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   // If no farms exist, show empty state instead of redirect
   const showEmptyState = farms.length === 0
 
   // If no farm selected or invalid farm, use first farm
-  const farmId = selectedFarm?.id || farms[0].id
-  const farmName = selectedFarm?.name || farms[0].name
+  const farmId = selectedFarm?.id || farms[0]?.id
+  const farmName = selectedFarm?.name || farms[0]?.name
 
   return (
     <DashboardLayout>

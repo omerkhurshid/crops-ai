@@ -1,45 +1,70 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/navigation/navbar'
 import { GuidedFarmSetup } from '../../components/onboarding/guided-farm-setup'
-import { prisma } from '../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
+export default function OnboardingPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [stats, setStats] = useState({
+    totalFarms: 0,
+    totalFields: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
-async function getUserStats(userId: string) {
-  try {
-    const [farmCount, fieldCount] = await Promise.all([
-      prisma.farm.count({
-        where: { ownerId: userId }
-      }),
-      prisma.field.count({
-        where: { 
-          farm: { ownerId: userId }
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    const fetchUserStats = async () => {
+      try {
+        // Fetch farms and fields data
+        const [farmsResponse, fieldsResponse] = await Promise.all([
+          fetch('/api/farms'),
+          fetch('/api/fields')
+        ])
+
+        if (farmsResponse.ok && fieldsResponse.ok) {
+          const farms = await farmsResponse.json()
+          const fields = await fieldsResponse.json()
+          
+          setStats({
+            totalFarms: farms.length,
+            totalFields: fields.length
+          })
         }
-      })
-    ])
-
-    return {
-      totalFarms: farmCount,
-      totalFields: fieldCount
+      } catch (error) {
+        console.error('Error fetching user stats:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  } catch (error) {
-    console.error('Error fetching user stats:', error)
-    return {
-      totalFarms: 0,
-      totalFields: 0
-    }
+
+    fetchUserStats()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="minimal-page">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
   }
-}
 
-export default async function OnboardingPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
+  if (!session) {
+    return null
   }
-
-  const stats = await getUserStats(user.id)
 
   return (
     <div className="minimal-page">
@@ -67,10 +92,10 @@ export default async function OnboardingPage() {
 
         <GuidedFarmSetup 
           onComplete={() => {
-            window.location.href = '/dashboard'
+            router.push('/dashboard')
           }}
           onSkip={() => {
-            window.location.href = '/dashboard'
+            router.push('/dashboard')
           }}
         />
       </main>

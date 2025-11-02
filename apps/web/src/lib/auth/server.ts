@@ -7,19 +7,16 @@
 
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest } from 'next/server'
-import { getConfig } from '../config/environment'
 
 // Server-side Supabase client for authentication
 function createSupabaseServerClient(request: NextRequest) {
-  const config = getConfig()
-  
-  if (!config.NEXT_PUBLIC_SUPABASE_URL || !config.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return null
   }
 
   return createServerClient(
-    config.NEXT_PUBLIC_SUPABASE_URL,
-    config.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {

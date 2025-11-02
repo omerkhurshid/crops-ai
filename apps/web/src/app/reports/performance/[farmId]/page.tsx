@@ -1,22 +1,43 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../../lib/auth/server'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { useSession } from '../../../../lib/auth-unified'
 import { Navbar } from '../../../../components/navigation/navbar'
 import { FarmPerformanceReport } from '../../../../components/reports/farm-performance-report'
 import { Button } from '../../../../components/ui/button'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+export default function FarmPerformanceReportPage() {
+  const params = useParams()
+  const router = useRouter()
+  const { data: session, status } = useSession()
+  const [isLoading, setIsLoading] = useState(true)
 
-export default async function FarmPerformanceReportPage({ 
-  params 
-}: { 
-  params: { farmId: string } 
-}) {
-  const user = await getAuthenticatedUser()
+  const farmId = params?.farmId as string
 
-  if (!user) {
-    redirect('/login')
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (status === 'unauthenticated') {
+      router.push('/login')
+      return
+    }
+
+    setIsLoading(false)
+  }, [status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 to-cream-50 flex items-center justify-center">
+        <div className="text-sage-600">Loading...</div>
+      </div>
+    )
+  }
+
+  if (!session?.user) {
+    return null
   }
 
   return (
@@ -42,7 +63,7 @@ export default async function FarmPerformanceReportPage({
           </div>
         </div>
 
-        <FarmPerformanceReport farmId={params.farmId} />
+        <FarmPerformanceReport farmId={farmId} />
       </main>
     </div>
   )

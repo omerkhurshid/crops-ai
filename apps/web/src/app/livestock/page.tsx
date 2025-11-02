@@ -1,94 +1,148 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { LivestockDashboard } from '../../components/livestock/livestock-dashboard'
 import { LivestockQuickActions } from '../../components/livestock/livestock-quick-actions'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Users, Plus, Stethoscope, Heart, Activity, TrendingUp } from 'lucide-react'
-import { prisma } from '../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
 
-export default async function LivestockPage() {
-  const user = await getAuthenticatedUser()
+export default function LivestockPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [livestockEvents, setLivestockEvents] = useState<any[]>([])
+  const [stats, setStats] = useState({
+    totalAnimals: 0,
+    healthScore: 0,
+    healthAlerts: 0,
+    avgDailyGain: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (!user) {
-    redirect('/login')
-  }
+  useEffect(() => {
+    if (status === 'loading') return
 
-  // First, get user's farms
-  let userFarms: any[] = []
-  try {
-    userFarms = await prisma.farm.findMany({
-      where: { ownerId: user.id },
-      select: { id: true, name: true }
-    })
-  } catch (error: any) {
+    if (!session) {
+      router.push('/login')
+      return
+    }
 
-  }
+    const fetchData = async () => {
+      try {
+        // Fetch farms
+        const farmsResponse = await fetch('/api/farms')
+        if (farmsResponse.ok) {
+          const farms = await farmsResponse.json()
+          setUserFarms(farms)
 
-  // If no farms, redirect to farm creation
-  if (userFarms.length === 0) {
-    redirect('/farms/create?from=livestock')
-  }
+          // If no farms, redirect to farm creation
+          if (farms.length === 0) {
+            router.push('/farms/create?from=livestock')
+            return
+          }
 
-  // Get real livestock data from database
-  let livestockEvents: any[] = []
-  try {
-    livestockEvents = await prisma.livestockEvent.findMany({
-      where: {
-        userId: user.id
-      },
-      include: {
-        farm: {
-          select: {
-            name: true
+          // Fetch livestock events
+          const eventsResponse = await fetch('/api/livestock/events')
+          if (eventsResponse.ok) {
+            const events = await eventsResponse.json()
+            setLivestockEvents(events)
+            calculateStats(events)
           }
         }
-      },
-      orderBy: { eventDate: 'desc' }
-    })
-  } catch (error: any) {
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-    livestockEvents = []
+    fetchData()
+  }, [session, status, router])
+
+  const calculateStats = (events: any[]) => {
+    // Calculate real statistics from livestockEvent data
+    const totalAnimals = events.reduce((sum, event) => sum + (event.animalCount || 0), 0)
+    const healthEvents = events.filter(event => 
+      event.eventType?.toLowerCase().includes('health') || 
+      event.eventType?.toLowerCase().includes('vaccination') ||
+      event.eventType?.toLowerCase().includes('treatment')
+    )
+    const healthAlerts = healthEvents.filter(event => 
+      event.notes?.toLowerCase().includes('alert') || 
+      event.notes?.toLowerCase().includes('sick') ||
+      event.notes?.toLowerCase().includes('urgent')
+    ).length
+    
+    // Calculate health score based on recent events
+    const recentHealthEvents = healthEvents.filter(event => {
+      const eventDate = new Date(event.eventDate)
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      return eventDate >= thirtyDaysAgo
+    })
+    
+    const healthScore = totalAnimals > 0 ? 
+      Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 0
+    
+    // Calculate average daily gain from weight/growth related events
+    const weightEvents = events.filter(event => 
+      event.eventType?.toLowerCase().includes('weight') ||
+      event.eventType?.toLowerCase().includes('growth') ||
+      event.eventType?.toLowerCase().includes('gain')
+    )
+    const avgDailyGain = weightEvents.length > 0 ? 
+      weightEvents.reduce((sum, event) => {
+        const weight = parseFloat(event.notes?.match(/(\d+\.?\d*)/)?.[1] || '0')
+        return sum + (isNaN(weight) ? 0 : weight)
+      }, 0) / weightEvents.length : 0
+
+    setStats({
+      totalAnimals,
+      healthScore,
+      healthAlerts,
+      avgDailyGain
+    })
   }
 
-  // Calculate real statistics from livestockEvent data
-  const totalAnimals = livestockEvents.reduce((sum, event) => sum + (event.animalCount || 0), 0)
-  const healthEvents = livestockEvents.filter(event => 
-    event.eventType?.toLowerCase().includes('health') || 
-    event.eventType?.toLowerCase().includes('vaccination') ||
-    event.eventType?.toLowerCase().includes('treatment')
-  )
-  const healthAlerts = healthEvents.filter(event => 
-    event.notes?.toLowerCase().includes('alert') || 
-    event.notes?.toLowerCase().includes('sick') ||
-    event.notes?.toLowerCase().includes('urgent')
-  ).length
-  
-  // Calculate health score based on recent events
-  const recentHealthEvents = healthEvents.filter(event => {
-    const eventDate = new Date(event.eventDate)
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-    return eventDate >= thirtyDaysAgo
-  })
-  
-  const healthScore = totalAnimals > 0 ? 
-    Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 0
-  
-  // Calculate average daily gain from weight/growth related events
-  const weightEvents = livestockEvents.filter(event => 
-    event.eventType?.toLowerCase().includes('weight') ||
-    event.eventType?.toLowerCase().includes('growth') ||
-    event.eventType?.toLowerCase().includes('gain')
-  )
-  const avgDailyGain = weightEvents.length > 0 ? 
-    weightEvents.reduce((sum, event) => {
-      const weight = parseFloat(event.notes?.match(/(\d+\.?\d*)/)?.[1] || '0')
-      return sum + (isNaN(weight) ? 0 : weight)
-    }, 0) / weightEvents.length : 0
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading livestock data...</p>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
+
+  // If no farms, show empty state (this is also handled in useEffect)
+  if (userFarms.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
+            <p className="text-gray-600 mb-6">You need to create a farm before managing livestock.</p>
+            <button 
+              onClick={() => router.push('/farms/create?from=livestock')}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              Create Farm
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   return (
     <DashboardLayout>
@@ -158,7 +212,7 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-600 mb-2">{totalAnimals || 0}</div>
+                <div className="text-3xl font-bold text-sage-600 mb-2">{stats.totalAnimals || 0}</div>
                 <div className="text-sm text-sage-600">animals registered</div>
               </div>
             </ModernCardContent>
@@ -178,8 +232,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-700 mb-2">{totalAnimals > 0 ? `${healthScore.toFixed(1)}/10` : '--'}</div>
-                <div className="text-sm text-sage-600">{totalAnimals > 0 ? (healthScore >= 8 ? 'excellent condition' : healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
+                <div className="text-3xl font-bold text-sage-700 mb-2">{stats.totalAnimals > 0 ? `${stats.healthScore.toFixed(1)}/10` : '--'}</div>
+                <div className="text-sm text-sage-600">{stats.totalAnimals > 0 ? (stats.healthScore >= 8 ? 'excellent condition' : stats.healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -198,8 +252,8 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-earth-600 mb-2">{healthAlerts || 0}</div>
-                <div className="text-sm text-earth-600">{healthAlerts === 1 ? 'requires attention' : 'require attention'}</div>
+                <div className="text-3xl font-bold text-earth-600 mb-2">{stats.healthAlerts || 0}</div>
+                <div className="text-sm text-earth-600">{stats.healthAlerts === 1 ? 'requires attention' : 'require attention'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -218,7 +272,7 @@ export default async function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-700 mb-2">{avgDailyGain > 0 ? `${avgDailyGain.toFixed(1)}kg` : '--'}</div>
+                <div className="text-3xl font-bold text-sage-700 mb-2">{stats.avgDailyGain > 0 ? `${stats.avgDailyGain.toFixed(1)}kg` : '--'}</div>
                 <div className="text-sm text-sage-600">daily average</div>
               </div>
             </ModernCardContent>

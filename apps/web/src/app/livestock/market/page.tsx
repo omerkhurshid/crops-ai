@@ -1,64 +1,111 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { MarketAnalysis } from '../../../components/livestock/market-analysis'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { TrendingUp, DollarSign, Calendar, Target, AlertTriangle } from 'lucide-react'
-import { prisma } from '../../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
 
-export default async function LivestockMarketPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Get user's farms
-  let userFarms: any[] = []
-  try {
-    userFarms = await prisma.farm.findMany({
-      where: { ownerId: user.id },
-      select: { id: true, name: true }
-    })
-  } catch (error: any) {
-    console.error('Error fetching farms:', error)
-  }
-
-  // If no farms, redirect to farm creation
-  if (userFarms.length === 0) {
-    redirect('/farms/create?from=market')
-  }
-
-  // Get animals ready for market analysis
-  let animals: any[] = []
-  let marketData = {
+export default function LivestockMarketPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [marketData, setMarketData] = useState({
     readyForSale: 0,
     optimalWeight: 0,
     totalValue: 0,
     avgDaysToMarket: 0,
     marketOpportunities: [] as any[]
-  }
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
-  try {
-    animals = await prisma.animal.findMany({
-      where: { 
-        userId: user.id,
-        status: 'active'
-      },
-      include: {
-        farm: { select: { name: true } },
-        weightRecords: {
-          orderBy: { weighDate: 'desc' },
-          take: 5
-        },
-        feedRecords: {
-          orderBy: { feedDate: 'desc' },
-          take: 10
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch farms
+        const farmsResponse = await fetch('/api/farms')
+        if (farmsResponse.ok) {
+          const farms = await farmsResponse.json()
+          setUserFarms(farms)
+
+          // If no farms, redirect to farm creation
+          if (farms.length === 0) {
+            router.push('/farms/create?from=market')
+            return
+          }
+
+          // Fetch animals and related records
+          const [animalsResponse, weightResponse, feedResponse] = await Promise.all([
+            fetch('/api/livestock/animals'),
+            fetch('/api/livestock/weight'),
+            fetch('/api/livestock/feed')
+          ])
+
+          if (animalsResponse.ok && weightResponse.ok && feedResponse.ok) {
+            const animals = await animalsResponse.json()
+            const weightRecords = await weightResponse.json()
+            const feedRecords = await feedResponse.json()
+
+            // Group records by animal ID
+            const animalWeightMap = weightRecords.reduce((acc: any, record: any) => {
+              if (!acc[record.animalId]) acc[record.animalId] = []
+              acc[record.animalId].push(record)
+              return acc
+            }, {})
+
+            const animalFeedMap = feedRecords.reduce((acc: any, record: any) => {
+              if (!acc[record.animalId]) acc[record.animalId] = []
+              acc[record.animalId].push(record)
+              return acc
+            }, {})
+
+            // Sort and limit records per animal
+            Object.keys(animalWeightMap).forEach(animalId => {
+              animalWeightMap[animalId] = animalWeightMap[animalId]
+                .sort((a: any, b: any) => new Date(b.weighDate).getTime() - new Date(a.weighDate).getTime())
+                .slice(0, 5)
+            })
+
+            Object.keys(animalFeedMap).forEach(animalId => {
+              animalFeedMap[animalId] = animalFeedMap[animalId]
+                .sort((a: any, b: any) => new Date(b.feedDate).getTime() - new Date(a.feedDate).getTime())
+                .slice(0, 10)
+            })
+
+            // Filter for active animals and enrich with records
+            const activeAnimals = animals
+              .filter((animal: any) => animal.status === 'active')
+              .map((animal: any) => ({
+                ...animal,
+                weightRecords: animalWeightMap[animal.id] || [],
+                feedRecords: animalFeedMap[animal.id] || []
+              }))
+
+            // Perform market analysis calculations
+            calculateMarketData(activeAnimals)
+          }
         }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsLoading(false)
       }
-    })
+    }
+
+    fetchData()
+  }, [session, status, router])
+
+  const calculateMarketData = (animals: any[]) => {
 
     // Market weight targets by species
     const marketWeightTargets: { [key: string]: { min: number, max: number, optimal: number } } = {
@@ -70,7 +117,7 @@ export default async function LivestockMarketPage() {
     }
 
     // Analyze each animal for market readiness
-    marketData.marketOpportunities = animals.map(animal => {
+    const marketOpportunities = animals.map(animal => {
       const target = marketWeightTargets[animal.species] || { min: 0, max: 0, optimal: 0 }
       const currentWeight = animal.currentWeight || 0
       
@@ -134,27 +181,63 @@ export default async function LivestockMarketPage() {
     })
 
     // Calculate summary stats
-    marketData.readyForSale = marketData.marketOpportunities.filter(
-      animal => animal.readinessStatus === 'ready'
-    ).length
+    const newMarketData = {
+      readyForSale: marketOpportunities.filter(
+        animal => animal.readinessStatus === 'ready'
+      ).length,
+      optimalWeight: marketOpportunities.filter(
+        animal => animal.currentWeight >= animal.marketTarget.optimal
+      ).length,
+      totalValue: marketOpportunities.reduce(
+        (sum, animal) => sum + animal.projectedValue, 0
+      ),
+      avgDaysToMarket: 0,
+      marketOpportunities: marketOpportunities
+    }
 
-    marketData.optimalWeight = marketData.marketOpportunities.filter(
-      animal => animal.currentWeight >= animal.marketTarget.optimal
-    ).length
-
-    marketData.totalValue = marketData.marketOpportunities.reduce(
-      (sum, animal) => sum + animal.projectedValue, 0
-    )
-
-    const readyAnimals = marketData.marketOpportunities.filter(
+    const readyAnimals = marketOpportunities.filter(
       animal => animal.readinessStatus === 'approaching'
     )
-    marketData.avgDaysToMarket = readyAnimals.length > 0 
+    newMarketData.avgDaysToMarket = readyAnimals.length > 0 
       ? readyAnimals.reduce((sum, animal) => sum + animal.daysToOptimal, 0) / readyAnimals.length
       : 0
 
-  } catch (error: any) {
-    console.error('Error fetching market data:', error)
+    setMarketData(newMarketData)
+  }
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading market analysis...</p>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
+
+  // If no farms, show empty state (this is also handled in useEffect)
+  if (userFarms.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
+            <p className="text-gray-600 mb-6">You need to create a farm before viewing market analysis.</p>
+            <button 
+              onClick={() => router.push('/farms/create?from=market')}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              Create Farm
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (

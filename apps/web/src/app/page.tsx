@@ -1,7 +1,10 @@
+'use client'
+
 import { Navbar } from '../components/navigation/navbar'
 import Link from 'next/link'
 import { Badge } from '../components/ui/badge'
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 
 // Interactive demo removed for production
 
@@ -9,16 +12,20 @@ import {
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
   BarChart, Users, ArrowRight, Target, Eye, DollarSign
 } from 'lucide-react'
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../lib/auth/server'
+import { useRouter } from 'next/navigation'
+import { useSession } from '../lib/auth-unified'
 import { HomePageDemos } from '../components/demos/home-page-demos'
 
-export default async function Home() {
-  // Check if user is logged in
-  const user = await getAuthenticatedUser()
-  if (user) {
-    redirect('/dashboard')
-  }
+export default function Home() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check if user is logged in and redirect to dashboard
+    if (status !== 'loading' && session) {
+      router.push('/dashboard')
+    }
+  }, [session, status, router])
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">

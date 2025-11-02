@@ -1,63 +1,158 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
-import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { WeatherAlertsWidget } from '../../components/dashboard/weather-alerts-widget'
 import { CloudRain, MapPin, Thermometer, Settings, BarChart, AlertTriangle } from 'lucide-react'
-import { prisma } from '../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
+interface Farm {
+  id: string
+  name: string
+  latitude: number | null
+  longitude: number | null
+}
 
-async function getFarmLocation(farmId: string | null, userId: string) {
-  if (!farmId) {
-    // Get the user's first farm as default
-    const defaultFarm = await prisma.farm.findFirst({
-      where: { ownerId: userId },
-      select: { id: true, name: true, latitude: true, longitude: true }
-    })
-    return defaultFarm
-  }
+interface FarmListItem {
+  id: string
+  name: string
+}
 
-  // Get specific farm
-  const farm = await prisma.farm.findFirst({
-    where: { 
-      id: farmId,
-      ownerId: userId 
-    },
-    select: { id: true, name: true, latitude: true, longitude: true }
-  })
+export default function WeatherPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const farmId = searchParams?.get('farmId')
   
-  return farm
-}
+  const [farm, setFarm] = useState<Farm | null>(null)
+  const [allFarms, setAllFarms] = useState<FarmListItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-async function getAllUserFarms(userId: string) {
-  const farms = await prisma.farm.findMany({
-    where: { ownerId: userId },
-    select: { id: true, name: true },
-    orderBy: { name: 'asc' }
-  })
-  return farms
-}
+  useEffect(() => {
+    if (status === 'loading') return
 
-export default async function WeatherPage({ searchParams }: { searchParams: { farmId?: string } }) {
-  const user = await getAuthenticatedUser()
+    if (!session) {
+      router.push('/login')
+      return
+    }
 
-  if (!user) {
-    redirect('/login')
+    async function fetchFarmData() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        // Fetch all user farms
+        const farmsResponse = await fetch('/api/farms')
+        if (!farmsResponse.ok) {
+          throw new Error('Failed to fetch farms')
+        }
+
+        const farmsData = await farmsResponse.json()
+        const userFarms = farmsData.farms || []
+        setAllFarms(userFarms.map((f: any) => ({ id: f.id, name: f.name })))
+
+        // Determine which farm to load
+        let targetFarmId = farmId
+        if (!targetFarmId && userFarms.length > 0) {
+          targetFarmId = userFarms[0].id
+        }
+
+        if (!targetFarmId) {
+          // No farms available, redirect to farms page
+          router.push('/farms')
+          return
+        }
+
+        // Fetch specific farm details
+        const farmResponse = await fetch(`/api/farms/${targetFarmId}`)
+        if (!farmResponse.ok) {
+          throw new Error('Failed to fetch farm details')
+        }
+
+        const farmData = await farmResponse.json()
+        const selectedFarm = farmData
+
+        if (!selectedFarm) {
+          router.push('/farms')
+          return
+        }
+
+        setFarm({
+          id: selectedFarm.id,
+          name: selectedFarm.name,
+          latitude: selectedFarm.latitude,
+          longitude: selectedFarm.longitude
+        })
+
+      } catch (error) {
+        console.error('Error fetching farm data:', error)
+        setError('Failed to load farm data')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFarmData()
+  }, [session, status, router, farmId])
+
+  if (status === 'loading' || loading) {
+    return (
+      <DashboardLayout>
+        <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="animate-pulse space-y-6">
+            <div className="space-y-2">
+              <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8">
+                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+              </div>
+              <div className="lg:col-span-4">
+                <div className="h-16 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-6">
+              <div className="space-y-4">
+                <div className="h-12 bg-gray-200 rounded"></div>
+                <div className="h-64 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </DashboardLayout>
+    )
   }
 
-  const farm = await getFarmLocation(searchParams.farmId || null, user.id)
-  const allFarms = await getAllUserFarms(user.id)
+  if (!session) {
+    return null
+  }
 
-  // If no farm found, redirect to farms page
+  if (error) {
+    return (
+      <DashboardLayout>
+        <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <ModernCard variant="floating">
+            <ModernCardContent className="p-6 text-center">
+              <div className="text-red-600 mb-2">Error</div>
+              <div className="text-sage-600">{error}</div>
+            </ModernCardContent>
+          </ModernCard>
+        </main>
+      </DashboardLayout>
+    )
+  }
+
   if (!farm) {
-    redirect('/farms')
+    return null
   }
 
   // Use farm coordinates or default to geographic center of US

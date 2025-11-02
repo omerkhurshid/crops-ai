@@ -104,7 +104,7 @@ export default function AddAnimalPage() {
             <AddAnimalForm 
               farms={userFarms} 
               parentAnimals={parentAnimals}
-              userId={user.id}
+              userId={session?.user?.id || ''}
             />
           </ModernCardContent>
         </ModernCard>

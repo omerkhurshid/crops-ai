@@ -1,38 +1,19 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { LivestockFinancials } from '../../../components/livestock/livestock-financials'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { DollarSign, TrendingUp, TrendingDown, Calculator, PieChart } from 'lucide-react'
-import { prisma } from '../../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
 
-export default async function LivestockFinancialsPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Get user's farms
-  let userFarms: any[] = []
-  try {
-    userFarms = await prisma.farm.findMany({
-      where: { ownerId: user.id },
-      select: { id: true, name: true }
-    })
-  } catch (error: any) {
-    console.error('Error fetching farms:', error)
-  }
-
-  // If no farms, redirect to farm creation
-  if (userFarms.length === 0) {
-    redirect('/farms/create?from=financials')
-  }
-
-  // Get comprehensive financial data
-  let financialData = {
+export default function LivestockFinancialsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [financialData, setFinancialData] = useState({
     totalInvestment: 0,
     totalValue: 0,
     profitLoss: 0,
@@ -47,87 +28,202 @@ export default async function LivestockFinancialsPage() {
       health: 0,
       breeding: 0
     }
+  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch farms
+        const farmsResponse = await fetch('/api/farms')
+        if (farmsResponse.ok) {
+          const farms = await farmsResponse.json()
+          setUserFarms(farms)
+
+          // If no farms, redirect to farm creation
+          if (farms.length === 0) {
+            router.push('/farms/create?from=financials')
+            return
+          }
+
+          // Fetch comprehensive financial data
+          const [animalsResponse, healthResponse, feedResponse, breedingResponse] = await Promise.all([
+            fetch('/api/livestock/animals'),
+            fetch('/api/livestock/health'),
+            fetch('/api/livestock/feed'),
+            fetch('/api/livestock/breeding')
+          ])
+
+          if (animalsResponse.ok && healthResponse.ok && feedResponse.ok && breedingResponse.ok) {
+            const animals = await animalsResponse.json()
+            const healthRecords = await healthResponse.json()
+            const feedRecords = await feedResponse.json()
+            const breedingRecords = await breedingResponse.json()
+
+            // Group records by animal ID
+            const animalHealthMap = healthRecords.reduce((acc: any, record: any) => {
+              if (!acc[record.animalId]) acc[record.animalId] = []
+              acc[record.animalId].push(record)
+              return acc
+            }, {})
+
+            const animalFeedMap = feedRecords.reduce((acc: any, record: any) => {
+              if (!acc[record.animalId]) acc[record.animalId] = []
+              acc[record.animalId].push(record)
+              return acc
+            }, {})
+
+            const animalBreedingMap = breedingRecords.reduce((acc: any, record: any) => {
+              if (!acc[record.animalId]) acc[record.animalId] = []
+              acc[record.animalId].push(record)
+              return acc
+            }, {})
+
+            // Combine all data and calculate financials
+            const enrichedAnimals = animals.map((animal: any) => ({
+              ...animal,
+              healthRecords: animalHealthMap[animal.id] || [],
+              feedRecords: animalFeedMap[animal.id] || [],
+              breedingRecords: animalBreedingMap[animal.id] || []
+            }))
+
+            // Calculate financial metrics
+            const newFinancialData = {
+              totalInvestment: 0,
+              totalValue: 0,
+              profitLoss: 0,
+              feedCosts30Days: 0,
+              healthCosts30Days: 0,
+              breedingCosts30Days: 0,
+              revenueOpportunities: 0,
+              animals: [],
+              costBreakdown: {
+                purchase: 0,
+                feed: 0,
+                health: 0,
+                breeding: 0
+              }
+            }
+
+            const thirtyDaysAgo = new Date()
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+            // Calculate total investment and current value
+            newFinancialData.totalInvestment = enrichedAnimals.reduce((sum: number, animal: any) => {
+              const purchasePrice = animal.purchasePrice || 0
+              const healthCosts = animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+              const feedCosts = animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
+              const breedingCosts = animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+              
+              return sum + purchasePrice + healthCosts + feedCosts + breedingCosts
+            }, 0)
+
+            newFinancialData.totalValue = enrichedAnimals.reduce((sum: number, animal: any) => sum + (animal.currentValue || animal.purchasePrice || 0), 0)
+            newFinancialData.profitLoss = newFinancialData.totalValue - newFinancialData.totalInvestment
+
+            // Calculate 30-day costs
+            newFinancialData.feedCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.feedRecords
+                .filter((record: any) => new Date(record.feedDate) >= thirtyDaysAgo)
+                .reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
+            }, 0)
+
+            newFinancialData.healthCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.healthRecords
+                .filter((record: any) => new Date(record.recordDate) >= thirtyDaysAgo)
+                .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+            }, 0)
+
+            newFinancialData.breedingCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.breedingRecords
+                .filter((record: any) => new Date(record.breedingDate) >= thirtyDaysAgo)
+                .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+            }, 0)
+
+            // Cost breakdown
+            newFinancialData.costBreakdown.purchase = enrichedAnimals.reduce((sum: number, animal: any) => sum + (animal.purchasePrice || 0), 0)
+            newFinancialData.costBreakdown.feed = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
+            }, 0)
+            newFinancialData.costBreakdown.health = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+            }, 0)
+            newFinancialData.costBreakdown.breeding = enrichedAnimals.reduce((sum: number, animal: any) => {
+              return sum + animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+            }, 0)
+
+            // Calculate revenue opportunities
+            newFinancialData.revenueOpportunities = enrichedAnimals
+              .filter((animal: any) => animal.status === 'active')
+              .reduce((sum: number, animal: any) => sum + (animal.currentValue || 0), 0)
+
+            newFinancialData.animals = enrichedAnimals.map((animal: any) => ({
+              ...animal,
+              totalCosts: (animal.purchasePrice || 0) + 
+                animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) +
+                animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0) +
+                animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0),
+              profitLoss: (animal.currentValue || animal.purchasePrice || 0) - (
+                (animal.purchasePrice || 0) + 
+                animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) +
+                animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0) +
+                animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
+              )
+            }))
+
+            setFinancialData(newFinancialData)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching financial data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading financial data...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  try {
-    // Get all animals with financial data
-    const animals = await prisma.animal.findMany({
-      where: { userId: user.id },
-      include: {
-        farm: { select: { name: true } },
-        healthRecords: true,
-        feedRecords: true,
-        breedingRecords: true
-      }
-    })
+  if (!session) {
+    return null
+  }
 
-    // Calculate total investment and current value
-    financialData.totalInvestment = animals.reduce((sum, animal) => {
-      const purchasePrice = animal.purchasePrice || 0
-      const healthCosts = animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-      const feedCosts = animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
-      const breedingCosts = animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-      
-      return sum + purchasePrice + healthCosts + feedCosts + breedingCosts
-    }, 0)
-
-    financialData.totalValue = animals.reduce((sum, animal) => sum + (animal.currentValue || animal.purchasePrice || 0), 0)
-    financialData.profitLoss = financialData.totalValue - financialData.totalInvestment
-
-    // Calculate 30-day costs
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-
-    financialData.feedCosts30Days = animals.reduce((sum, animal) => {
-      return sum + animal.feedRecords
-        .filter((record: any) => new Date(record.feedDate) >= thirtyDaysAgo)
-        .reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
-    }, 0)
-
-    financialData.healthCosts30Days = animals.reduce((sum, animal) => {
-      return sum + animal.healthRecords
-        .filter((record: any) => new Date(record.recordDate) >= thirtyDaysAgo)
-        .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-    }, 0)
-
-    financialData.breedingCosts30Days = animals.reduce((sum, animal) => {
-      return sum + animal.breedingRecords
-        .filter((record: any) => new Date(record.breedingDate) >= thirtyDaysAgo)
-        .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-    }, 0)
-
-    // Cost breakdown
-    financialData.costBreakdown.purchase = animals.reduce((sum, animal) => sum + (animal.purchasePrice || 0), 0)
-    financialData.costBreakdown.feed = animals.reduce((sum, animal) => {
-      return sum + animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
-    }, 0)
-    financialData.costBreakdown.health = animals.reduce((sum, animal) => {
-      return sum + animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-    }, 0)
-    financialData.costBreakdown.breeding = animals.reduce((sum, animal) => {
-      return sum + animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-    }, 0)
-
-    // Calculate revenue opportunities (animals ready for sale, breeding, etc.)
-    financialData.revenueOpportunities = animals
-      .filter(animal => animal.status === 'active')
-      .reduce((sum, animal) => sum + (animal.currentValue || 0), 0)
-
-    financialData.animals = animals.map(animal => ({
-      ...animal,
-      totalCosts: (animal.purchasePrice || 0) + 
-        animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) +
-        animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0) +
-        animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0),
-      profitLoss: (animal.currentValue || animal.purchasePrice || 0) - (
-        (animal.purchasePrice || 0) + 
-        animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) +
-        animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0) +
-        animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-      )
-    }))
-  } catch (error: any) {
-    console.error('Error fetching financial data:', error)
+  // If no farms, show empty state (this is also handled in useEffect)
+  if (userFarms.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
+            <p className="text-gray-600 mb-6">You need to create a farm before viewing financial data.</p>
+            <button 
+              onClick={() => router.push('/farms/create?from=financials')}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              Create Farm
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   return (

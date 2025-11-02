@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../../lib/auth/server'
+'use client'
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { Badge } from '../../../../components/ui/badge'
@@ -9,14 +8,8 @@ import {
   Calendar, Zap, Info, CheckCircle, Lightbulb
 } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
 
-export default async function SatelliteImageryGuidePage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
+export default function SatelliteImageryGuidePage() {
 
   return (
     <DashboardLayout>

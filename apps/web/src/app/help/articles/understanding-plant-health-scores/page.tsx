@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { getAuthenticatedUser } from "../../../../lib/auth/server";
+'use client'
 import { DashboardLayout } from "../../../../components/layout/dashboard-layout";
 import {
   ModernCard,
@@ -22,14 +21,8 @@ import {
   Lightbulb,
 } from "lucide-react";
 
-export const dynamic = "force-dynamic";
 
-export default async function UnderstandingPlantHealthScoresPage() {
-  const user = await getAuthenticatedUser();
-
-  if (!user) {
-    redirect("/login");
-  }
+export default function UnderstandingPlantHealthScoresPage() {
 
   return (
     <DashboardLayout>

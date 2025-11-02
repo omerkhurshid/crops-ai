@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../../lib/auth/server'
+'use client'
+
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { Badge } from '../../../../components/ui/badge'
@@ -9,14 +9,7 @@ import {
   Eye, TrendingUp, CheckCircle, Clock, Lightbulb, Target
 } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-
-export default async function DiseasePestRiskAssessmentPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
+export default function DiseasePestRiskAssessmentPage() {
 
   return (
     <DashboardLayout>

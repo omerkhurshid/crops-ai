@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Badge } from '../../components/ui/badge'
@@ -12,7 +11,6 @@ import {
   ChevronRight, Search, Phone, Clock
 } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
 
 const helpSections = [
   {
@@ -240,12 +238,7 @@ const quickActions = [
   }
 ]
 
-export default async function HelpPage() {
-  const user = await getAuthenticatedUser()
-
-  if (!user) {
-    redirect('/login')
-  }
+export default function HelpPage() {
 
   return (
     <DashboardLayout>

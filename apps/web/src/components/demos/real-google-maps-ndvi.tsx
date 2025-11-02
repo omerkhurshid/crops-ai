@@ -411,6 +411,45 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
               }
             >
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                zoom={mapOptions.zoom}
+                center={mapOptions.center}
+                options={mapOptions}
+                onLoad={onMapLoad}
+              >
+                {/* Field Info Window */}
+                {showInfo && ndviData && (
+                  <InfoWindow
+                    position={DEMO_FIELD_LOCATION.center}
+                    onCloseClick={() => setShowInfo(false)}
+                  >
+                    <div className="p-2 max-w-xs">
+                      <h3 className="font-medium text-gray-800 mb-2">Field Analysis</h3>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span>Average NDVI:</span>
+                          <span className="font-medium text-green-600">
+                            {(ndviData.averageNDVI || 0.82).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Max NDVI:</span>
+                          <span className="font-medium">{(ndviData.maxNDVI || 0.95).toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Min NDVI:</span>
+                          <span className="font-medium">{(ndviData.minNDVI || 0.65).toFixed(2)}</span>
+                        </div>
+                        <div className="text-xs text-gray-600 mt-2">
+                          Data from Sentinel-2 satellite
+                        </div>
+                      </div>
+                    </div>
+                  </InfoWindow>
+                )}
+              </GoogleMap>
+            </LoadScript>
           ) : (
             <div className="h-96 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300">
               <div className="text-center p-6">
@@ -427,47 +466,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
               </div>
             </div>
-          )}
-          {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              zoom={mapOptions.zoom}
-              center={mapOptions.center}
-              options={mapOptions}
-              onLoad={onMapLoad}
-            >
-              {/* Field Info Window */}
-              {showInfo && ndviData && (
-                <InfoWindow
-                  position={DEMO_FIELD_LOCATION.center}
-                  onCloseClick={() => setShowInfo(false)}
-                >
-                  <div className="p-2 max-w-xs">
-                    <h3 className="font-medium text-gray-800 mb-2">Field Analysis</h3>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span>Average NDVI:</span>
-                        <span className="font-medium text-green-600">
-                          {(ndviData.averageNDVI || 0.82).toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Max NDVI:</span>
-                        <span className="font-medium">{(ndviData.maxNDVI || 0.95).toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Min NDVI:</span>
-                        <span className="font-medium">{(ndviData.minNDVI || 0.65).toFixed(2)}</span>
-                      </div>
-                      <div className="text-xs text-gray-600 mt-2">
-                        Data from Sentinel-2 satellite
-                      </div>
-                    </div>
-                  </div>
-                </InfoWindow>
-              )}
-            </GoogleMap>
-            </LoadScript>
           )}
         </div>
 

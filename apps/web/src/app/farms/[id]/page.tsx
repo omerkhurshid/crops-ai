@@ -1,6 +1,9 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getAuthenticatedUser } from '../../../lib/auth/server'
+import { useSession } from '../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { Badge } from '../../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../../components/ui/modern-card'
 import { InfoTooltip } from '../../../components/ui/info-tooltip'
@@ -75,17 +78,53 @@ async function getFarmDetails(farmId: string, userId: string) {
   }
 }
 
-export default async function FarmDetailsPage({ params }: { params: { id: string } }) {
-  const user = await getAuthenticatedUser()
-  
-  if (!user) {
-    redirect('/login')
+export default function FarmDetailsPage({ params }: { params: { id: string } }) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farm, setFarm] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    async function fetchFarm() {
+      try {
+        const response = await fetch(`/api/farms/${params.id}`)
+        if (response.ok) {
+          const farmData = await response.json()
+          setFarm(farmData)
+        } else if (response.status === 404) {
+          router.push('/farms')
+        }
+      } catch (error) {
+        console.error('Error fetching farm:', error)
+        router.push('/farms')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFarm()
+  }, [session, status, router, params.id])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading farm details...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  const farm = await getFarmDetails(params.id, user.id)
-
-  if (!farm) {
-    redirect('/farms')
+  if (!session || !farm) {
+    return null
   }
 
   return (
@@ -230,7 +269,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
               <ModernCardContent>
                 {(farm.fields || []).length > 0 ? (
                   <div className="space-y-4">
-                    {(farm.fields || []).map((field, index) => (
+                    {(farm.fields || []).map((field: any, index: number) => (
                       <ModernCard key={field.id} variant="soft" className="hover:variant-floating transition-all duration-300 cursor-pointer group">
                         <ModernCardContent className="p-5">
                           <div className="flex justify-between items-start">
@@ -325,7 +364,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             {/* Satellite Imagery */}
             {(farm.fields || []).length > 0 && (
               <div className="space-y-6">
-                {(farm.fields || []).map((field) => (
+                {(farm.fields || []).map((field: any) => (
                   <SatelliteViewer
                     key={field.id}
                     fieldId={field.id}
@@ -338,7 +377,7 @@ export default async function FarmDetailsPage({ params }: { params: { id: string
             {/* Market Intelligence */}
             <div className="mt-8">
               <MarketDashboard 
-                cropTypes={(farm.fields || []).map(f => f.crops?.[0]?.cropType).filter(Boolean)}
+                cropTypes={(farm.fields || []).map((f: any) => f.crops?.[0]?.cropType).filter(Boolean)}
               />
             </div>
 

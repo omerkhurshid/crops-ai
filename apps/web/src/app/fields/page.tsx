@@ -1,5 +1,7 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { prisma } from '../../lib/prisma'
 import { ModernCard } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
@@ -11,11 +13,33 @@ import { Leaf, MapPin, Plus } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
-export default async function FieldsPage() {
-  const user = await getAuthenticatedUser()
+export default function FieldsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (!user) {
-    redirect('/login')
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    setIsLoading(false)
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+        <p className="ml-4 text-gray-600">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return null
   }
 
   // Fetch user's farms and fields

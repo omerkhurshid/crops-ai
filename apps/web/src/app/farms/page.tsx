@@ -1,6 +1,9 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
@@ -63,14 +66,51 @@ async function getUserFarms(userId: string) {
   }
 }
 
-export default async function FarmsPage() {
-  const user = await getAuthenticatedUser()
+export default function FarmsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (!user) {
-    redirect('/login')
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    async function fetchFarms() {
+      try {
+        const response = await fetch('/api/farms')
+        if (response.ok) {
+          const farmsData = await response.json()
+          setUserFarms(farmsData)
+        }
+      } catch (error) {
+        console.error('Error fetching farms:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFarms()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading farms...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  const userFarms = await getUserFarms(user.id)
+  if (!session) {
+    return null
+  }
 
   return (
     <DashboardLayout>

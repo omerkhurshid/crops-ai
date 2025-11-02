@@ -1,49 +1,60 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getAuthenticatedUser } from '../../../../../lib/auth/server'
+import { useSession } from '../../../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../../../../components/navigation/navbar'
 import { FieldForm } from '../../../../../components/farm/field-form'
-import { prisma } from '../../../../../lib/prisma'
 import { ArrowLeft } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+export default function CreateFieldPage({ params }: { params: { id: string } }) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farm, setFarm] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-async function getFarm(farmId: string, userId: string) {
-  const farm = await prisma.farm.findFirst({
-    where: { 
-      id: farmId,
-      ownerId: userId
-    },
-    select: {
-      id: true,
-      name: true,
-      latitude: true,
-      longitude: true,
-      totalArea: true,
-      fields: {
-        select: {
-          id: true,
-          name: true,
-          area: true
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    async function fetchFarm() {
+      try {
+        const response = await fetch(`/api/farms/${params.id}`)
+        if (response.ok) {
+          const farmData = await response.json()
+          setFarm(farmData)
+        } else if (response.status === 404) {
+          router.push('/farms')
         }
+      } catch (error) {
+        console.error('Error fetching farm:', error)
+        router.push('/farms')
+      } finally {
+        setIsLoading(false)
       }
     }
-  })
-  
-  return farm
-}
 
-export default async function CreateFieldPage({ params }: { params: { id: string } }) {
-  const user = await getAuthenticatedUser()
-  
-  if (!user) {
-    redirect('/login')
+    fetchFarm()
+  }, [session, status, router, params.id])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="minimal-page">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading farm data...</p>
+        </div>
+      </div>
+    )
   }
 
-  const farm = await getFarm(params.id, user.id)
-
-  if (!farm) {
-    redirect('/farms')
+  if (!session || !farm) {
+    return null
   }
 
   return (

@@ -1,5 +1,8 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+'use client'
+
+import { useSession } from '../../lib/auth-unified'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { FarmerFocusedDashboard } from '../../components/crop-health/farmer-focused-dashboard'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
@@ -9,245 +12,183 @@ import { KnowledgeDrivenHealthDashboard } from '../../components/crop-health/kno
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
-import { NoHealthDataEmptyState, EmptyStateCard } from '../../components/ui/empty-states'
+import { NoHealthDataEmptyState, EmptyState } from '../../components/ui/empty-states'
 import { FarmSelector } from '../../components/weather/farm-selector'
-import { prisma } from '../../lib/prisma'
 import { Leaf, Satellite, Brain, Activity, Settings, Zap, BarChart3, Eye, TrendingUp } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-
-async function getUserFarms(userId: string) {
-  const farms = await prisma.farm.findMany({
-    where: { ownerId: userId },
-    select: { id: true, name: true },
-    orderBy: { name: 'asc' }
-  })
-  return farms
+interface Farm {
+  id: string
+  name: string
+  latitude?: number
+  longitude?: number
+  fields?: Array<{
+    id: string
+    name: string
+    area: number
+  }>
 }
 
-async function getSelectedFarm(farmId: string | null, userId: string) {
-  if (!farmId) {
-    // Get the user's first farm as default with fields
-    const defaultFarm = await prisma.farm.findFirst({
-      where: { ownerId: userId },
-      select: { 
-        id: true, 
-        name: true,
-        latitude: true,
-        longitude: true,
-        fields: {
-          select: {
-            id: true,
-            name: true,
-            area: true
-          }
-        }
-      }
-    })
-    return defaultFarm
-  }
+export default function CropHealthPage({ searchParams }: { searchParams: { farmId?: string; view?: string } }) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farms, setFarms] = useState<Farm[]>([])
+  const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Get specific farm with fields
-  const farm = await prisma.farm.findFirst({
-    where: { 
-      id: farmId,
-      ownerId: userId 
-    },
-    select: { 
-      id: true, 
-      name: true,
-      latitude: true,
-      longitude: true,
-      fields: {
-        select: {
-          id: true,
-          name: true,
-          area: true
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    // Fetch farms data
+    const fetchData = async () => {
+      try {
+        const farmsResponse = await fetch('/api/farms')
+        let farmsData: Farm[] = []
+        
+        if (farmsResponse.ok) {
+          farmsData = await farmsResponse.json()
+          setFarms(farmsData)
         }
+
+        if (farmsData.length === 0) {
+          router.push('/farms/create-unified')
+          return
+        }
+
+        // Select farm
+        const targetFarmId = searchParams.farmId || farmsData[0]?.id
+        const farm = farmsData.find(f => f.id === targetFarmId) || farmsData[0]
+        setSelectedFarm(farm)
+
+      } catch (error) {
+        console.error('Error fetching farms data:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
-  })
-  
-  return farm
-}
 
-export default async function CropHealthPage({ searchParams }: { searchParams: { farmId?: string; view?: string } }) {
-  const user = await getAuthenticatedUser()
+    fetchData()
+  }, [session, status, router, searchParams])
 
-  if (!user) {
-    redirect('/login')
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading crop health data...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  const farms = await getUserFarms(user.id)
-  const selectedFarm = await getSelectedFarm(searchParams.farmId || null, user.id)
-  const viewMode = searchParams.view || 'farmer' // 'farmer' or 'detailed'
+  if (!session) {
+    return null
+  }
 
-  // If no farms exist, show empty state instead of redirect
-  const showEmptyState = farms.length === 0
-
-  // If no farm selected or invalid farm, use first farm
-  const farmId = selectedFarm?.id || farms[0]?.id
-  const farmName = selectedFarm?.name || farms[0]?.name
-  const fields = selectedFarm?.fields || []
+  const view = searchParams.view || 'farmer-focused'
 
   return (
     <DashboardLayout>
-      
-      {/* Floating Action Button */}
       <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
         label="Health Settings"
-        variant="primary"
+        variant="secondary"
       />
-      
-      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+
+      <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <div className="mb-8">
-          {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Crop Health Monitoring</h1>
-          <p className="text-lg text-sage-600 mb-6">
-            Monitor crop health and vegetation status for {farmName}
-          </p>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-6">
-              {/* View Toggle */}
-              <div className="flex items-center gap-2">
-                <a 
-                  href={`/crop-health?farmId=${farmId}&view=farmer`}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    viewMode === 'farmer' 
-                      ? 'bg-sage-600 text-white' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <Eye className="h-4 w-4 inline mr-2" />
-                  Farmer View
-                </a>
-                <a 
-                  href={`/crop-health?farmId=${farmId}&view=knowledge`}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    viewMode === 'knowledge' 
-                      ? 'bg-sage-600 text-white' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <Brain className="h-4 w-4 inline mr-2" />
-                  AI Insights
-                </a>
-                <a 
-                  href={`/crop-health?farmId=${farmId}&view=detailed`}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    viewMode === 'detailed' 
-                      ? 'bg-sage-600 text-white' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  <BarChart3 className="h-4 w-4 inline mr-2" />
-                  Technical View
-                </a>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-4xl font-light text-sage-800 mb-2 flex items-center gap-3">
+                <Leaf className="h-10 w-10 text-green-600" />
+                Crop Health Analytics
+              </h1>
+              <p className="text-lg text-sage-600">
+                Monitor crop health, detect diseases early, and optimize field management
+              </p>
+            </div>
+
+            {farms.length > 0 && (
+              <div className="w-64">
+                <FarmSelector 
+                  farms={farms}
+                  currentFarmId={selectedFarm?.id || ''}
+                />
               </div>
-            </div>
-            <div className="lg:col-span-6">
-              {farms.length > 1 && (
-                <ModernCard variant="glass">
-                  <ModernCardContent className="p-4">
-                    <FarmSelector farms={farms} currentFarmId={farmId} />
-                  </ModernCardContent>
-                </ModernCard>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Health Dashboard with Modern Wrapper */}
-        {showEmptyState ? (
-          <EmptyStateCard className="max-w-3xl mx-auto">
-            <NoHealthDataEmptyState />
-          </EmptyStateCard>
-        ) : viewMode === 'farmer' ? (
-          <div className="space-y-8">
-            {/* NDVI Map - Killer Feature (Simplified for Farmers) */}
-            <ModernCard variant="floating">
-              <ModernCardHeader>
-                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
-                  <Satellite className="h-6 w-6" />
-                  Satellite Field View
-                </ModernCardTitle>
-                <ModernCardDescription>
-                  See the health of your crops from space - green areas are healthy, red areas need attention
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <NDVIMap farmId={farmId} fields={fields} />
-              </ModernCardContent>
-            </ModernCard>
-
-            {/* Farmer-Focused Dashboard */}
-            <FarmerFocusedDashboard farmId={farmId} />
+        {/* View Toggle */}
+        <div className="mb-8">
+          <div className="flex space-x-4">
+            <button
+              onClick={() => {
+                const url = new URL(window.location.href)
+                url.searchParams.set('view', 'farmer-focused')
+                window.history.pushState({}, '', url.toString())
+                window.location.reload()
+              }}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                view === 'farmer-focused'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+              }`}
+            >
+              <Eye className="h-4 w-4 inline mr-2" />
+              Farmer View
+            </button>
+            <button
+              onClick={() => {
+                const url = new URL(window.location.href)
+                url.searchParams.set('view', 'advanced')
+                window.history.pushState({}, '', url.toString())
+                window.location.reload()
+              }}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                view === 'advanced'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+              }`}
+            >
+              <BarChart3 className="h-4 w-4 inline mr-2" />
+              Advanced Analytics
+            </button>
           </div>
-        ) : viewMode === 'knowledge' ? (
+        </div>
+
+        {/* Main Content */}
+        {selectedFarm ? (
           <div className="space-y-8">
-            {/* Knowledge-Driven Health Dashboard */}
-            <ModernCard variant="floating">
-              <ModernCardHeader>
-                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
-                  <Brain className="h-6 w-6" />
-                  AI-Powered Crop Intelligence
-                </ModernCardTitle>
-                <ModernCardDescription>
-                  Crop-specific insights powered by our agricultural knowledge base and ML models
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <KnowledgeDrivenHealthDashboard 
-                  farmId={farmId} 
-                  selectedCrops={[]}
-                  fieldData={selectedFarm ? {
-                    latitude: selectedFarm.latitude || 39.8283,
-                    longitude: selectedFarm.longitude || -98.5795,
-                    soilType: 'Unknown'
-                  } : undefined}
-                />
-              </ModernCardContent>
-            </ModernCard>
+            {view === 'farmer-focused' && (
+              <FarmerFocusedDashboard farmId={selectedFarm.id} />
+            )}
+            
+            {view === 'advanced' && (
+              <>
+                <HealthDashboard farmId={selectedFarm.id} />
+                <AdvancedVisualizations farmId={selectedFarm.id} />
+              </>
+            )}
+
+            {view === 'satellite' && selectedFarm.latitude && selectedFarm.longitude && (
+              <NDVIMap 
+                farmId={selectedFarm.id}
+                fields={selectedFarm.fields}
+              />
+            )}
           </div>
         ) : (
-          <div className="space-y-8">
-            {/* NDVI Map - Technical Version */}
-            <ModernCard variant="floating">
-              <ModernCardHeader>
-                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
-                  <Satellite className="h-6 w-6" />
-                  Field NDVI Map - Technical Analysis
-                </ModernCardTitle>
-                <ModernCardDescription>
-                  Visual satellite analysis showing vegetation health across your fields with detailed indices
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <NDVIMap farmId={farmId} fields={fields} />
-              </ModernCardContent>
-            </ModernCard>
-
-            {/* Technical Health Dashboard */}
-            <HealthDashboard farmId={farmId} />
-
-            {/* Advanced Visualizations */}
-            <ModernCard variant="floating">
-              <ModernCardHeader>
-                <ModernCardTitle className="text-sage-800 flex items-center gap-3">
-                  <BarChart3 className="h-6 w-6" />
-                  Advanced Health Analytics
-                </ModernCardTitle>
-                <ModernCardDescription>
-                  Detailed charts and analysis of crop health trends
-                </ModernCardDescription>
-              </ModernCardHeader>
-              <ModernCardContent>
-                <AdvancedVisualizations farmId={farmId} />
-              </ModernCardContent>
-            </ModernCard>
-          </div>
+          <EmptyState 
+            title="No Farm Selected"
+            description="Please select a farm to view crop health analytics."
+            icon={<Leaf className="h-12 w-12" />}
+          />
         )}
       </main>
     </DashboardLayout>

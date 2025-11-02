@@ -1,6 +1,9 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getAuthenticatedUser } from '../../lib/auth/server'
+import { useSession } from '../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
@@ -161,57 +164,77 @@ function generateMarketInsights(marketPrices: any[]) {
   })
 }
 
-export default async function DashboardPage() {
-  try {
-    const user = await getAuthenticatedUser()
+export default function DashboardPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farms, setFarms] = useState<any[]>([])
+  const [weatherAlerts, setWeatherAlerts] = useState<any[]>([])
+  const [financialData, setFinancialData] = useState<any[]>([])
+  const [marketPrices, setMarketPrices] = useState<any[]>([])
+  const [crops, setCrops] = useState<any[]>([])
+  const [livestock, setLivestock] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-    if (!user) {
-      redirect('/login')
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
     }
 
-    const { farms, weatherAlerts, financialData, marketPrices } = await getFarmData(user.id)
-    
-    // Get crops and livestock data
-    const [crops, livestock] = await Promise.all([
-      prisma.crop.findMany({
-        where: { 
-          field: {
-            farm: {
-              ownerId: user.id
-            }
-          }
-        },
-        include: {
-          field: true
-        },
-        orderBy: { plantingDate: 'desc' }
-      }).catch(() => []),
-      
-      prisma.livestockEvent.findMany({
-        where: { userId: user.id },
-        orderBy: { createdAt: 'desc' }
-      }).catch(() => [])
-    ])
-    
-    // Calculate key metrics
-    const totalFarms = farms.length
-    const totalArea = ensureArray(farms).reduce((sum, farm) => sum + (farm.totalArea || 0), 0)
-    const totalFields = ensureArray(farms).reduce((sum, farm) => sum + (farm.fields?.length || 0), 0)
-    
-    // Calculate financials
-    const currentYear = new Date().getFullYear()
-    const yearlyFinancials = ensureArray(financialData).filter(t => 
-      new Date(t.transactionDate).getFullYear() === currentYear
+    async function fetchData() {
+      try {
+        const farmResponse = await fetch('/api/farms')
+        if (farmResponse.ok) {
+          const farmData = await farmResponse.json()
+          setFarms(farmData)
+        }
+        // TODO: Add other data fetching as needed
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </DashboardLayout>
     )
-    const totalRevenue = yearlyFinancials
-      .filter(t => t.type === 'INCOME')
-      .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0)
-    const totalExpenses = yearlyFinancials
-      .filter(t => t.type === 'EXPENSE')
-      .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0)
-    
-    // Generate action-oriented data
-    const actionableTasks = generateActionableTasks(farms, weatherAlerts, financialData)
+  }
+
+  if (!session) {
+    return null
+  }
+
+  // Calculate key metrics
+  const totalFarms = farms.length
+  const totalArea = farms.reduce((sum, farm) => sum + (farm.totalArea || 0), 0)
+  const totalFields = farms.reduce((sum, farm) => sum + (farm.fields?.length || 0), 0)
+  
+  // Calculate financials
+  const currentYear = new Date().getFullYear()
+  const yearlyFinancials = financialData.filter(t => 
+    new Date(t.transactionDate).getFullYear() === currentYear
+  )
+  const totalRevenue = yearlyFinancials
+    .filter(t => t.type === 'INCOME')
+    .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0)
+  const totalExpenses = yearlyFinancials
+    .filter(t => t.type === 'EXPENSE')
+    .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0)
+  
+  // Generate action-oriented data
+  const actionableTasks = generateActionableTasks(farms, weatherAlerts, financialData)
     const marketInsights = generateMarketInsights(marketPrices)
     
     // Show onboarding for new users
@@ -271,7 +294,7 @@ export default async function DashboardPage() {
             weatherAlerts={weatherAlerts}
             crops={crops}
             livestock={livestock}
-            user={user}
+            user={session.user}
           />
         </div>
 
@@ -279,40 +302,4 @@ export default async function DashboardPage() {
         <GlobalFAB role="farmer" />
       </DashboardLayout>
     )
-  } catch (error) {
-    console.error('Dashboard page error:', error)
-    
-    // If it's an authentication error, redirect to login
-    if (error instanceof Error && (
-      error.message.includes('Unauthorized') || 
-      error.message.includes('Invalid token') ||
-      error.message.includes('No session')
-    )) {
-      redirect('/login')
-    }
-    
-    // For other errors, show an error page instead of crashing
-    return (
-      <DashboardLayout>
-        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-red-600 mb-4">Dashboard Temporarily Unavailable</h1>
-            <p className="text-lg text-gray-600 mb-6">
-              We're experiencing technical difficulties. Please try refreshing the page.
-            </p>
-            <div className="space-x-4">
-              <RefreshButton className="bg-sage-600 hover:bg-sage-700">
-                Refresh Page
-              </RefreshButton>
-              <Link href="/farms">
-                <Button variant="outline">
-                  Go to Farms
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </DashboardLayout>
-    )
-  }
 }

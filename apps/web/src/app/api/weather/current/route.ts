@@ -10,7 +10,7 @@ const currentWeatherSchema = z.object({
 });
 
 // GET /api/weather/current?latitude=40.7128&longitude=-74.0060
-export const GET = apiMiddleware.basic(
+export const GET = apiMiddleware.public(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);

@@ -1,18 +1,15 @@
 /**
- * Unified Auth System
+ * Supabase Authentication System
  * 
- * This provides a single interface that works with both NextAuth and Supabase Auth,
- * allowing for zero-downtime migration between authentication systems.
- * 
- * Use NEXT_PUBLIC_USE_SUPABASE_AUTH environment variable to control which system is active.
+ * Primary authentication system using Supabase Auth.
+ * NextAuth has been removed in favor of Supabase-only authentication.
  */
 
 import { supabaseAuth, type SupabaseSession, type SupabaseUser } from './supabase'
-import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession as useNextAuthSession } from 'next-auth/react'
 import { useEffect, useState, useCallback } from 'react'
 
-// Feature flag
-const USE_SUPABASE_AUTH = process.env.NEXT_PUBLIC_USE_SUPABASE_AUTH === 'true'
+// Supabase-only authentication (NextAuth removed)
+const USE_SUPABASE_AUTH = true
 
 // Unified session type that matches NextAuth structure
 export interface UnifiedSession {
@@ -30,143 +27,78 @@ export interface AuthResult {
   url?: string
 }
 
-// Unified auth functions
+// Supabase-only auth functions
 export const unifiedAuth = {
-  // Sign in function that works with both systems
+  // Sign in using Supabase authentication
   signIn: async (email: string, password: string): Promise<AuthResult> => {
-    if (USE_SUPABASE_AUTH) {
-      try {
-        // For Supabase auth, we'll use a migration API endpoint
-        // to handle existing bcrypt users during transition
-        const response = await fetch('/api/auth/supabase-signin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        })
-
-        if (response.ok) {
-          const data = await response.json()
-          if (data.needsMigration) {
-            // User exists in old system, migrate to Supabase
-            const { error } = await supabaseAuth.signIn(email, password)
-            if (error) {
-              return { error: error.message }
-            }
-          }
-          return { ok: true }
-        } else {
-          const data = await response.json()
-          return { error: data.error || 'Authentication failed' }
-        }
-      } catch (error) {
-        return { error: 'Authentication failed' }
-      }
-    } else {
-      // Use NextAuth
-      const result = await nextAuthSignIn('credentials', {
-        email,
-        password,
-        redirect: false
+    try {
+      // First try migration endpoint for existing users
+      const migrationResponse = await fetch('/api/auth/supabase-signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       })
 
-      return {
-        ok: result?.ok,
-        error: result?.error || undefined,
-        url: result?.url || undefined
-      }
-    }
-  },
-
-  // Sign out function
-  signOut: async (options?: { callbackUrl?: string }): Promise<void> => {
-    if (USE_SUPABASE_AUTH) {
-      await supabaseAuth.signOut()
-      if (options?.callbackUrl) {
-        window.location.href = options.callbackUrl
-      }
-    } else {
-      await nextAuthSignOut(options)
-    }
-  },
-
-  // Sign up function
-  signUp: async (email: string, password: string, name: string): Promise<AuthResult> => {
-    if (USE_SUPABASE_AUTH) {
-      try {
-        const { data, error } = await supabaseAuth.signUp(email, password, { name })
-        if (error) {
-          return { error: error.message }
-        }
-        return { ok: true }
-      } catch (error) {
-        return { error: 'Registration failed' }
-      }
-    } else {
-      // Use existing registration API route
-      try {
-        const response = await fetch('/api/user-auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, name })
-        })
-
-        if (response.ok) {
+      if (migrationResponse.ok) {
+        const data = await migrationResponse.json()
+        if (data.migrated || data.legacy) {
+          // User migrated or handled via legacy system
           return { ok: true }
-        } else {
-          const data = await response.json()
-          return { error: data.error || 'Registration failed' }
         }
-      } catch (error) {
-        return { error: 'Registration failed' }
       }
-    }
-  },
 
-  // Password reset
-  resetPassword: async (email: string): Promise<AuthResult> => {
-    if (USE_SUPABASE_AUTH) {
-      const { error } = await supabaseAuth.resetPassword(email)
+      // Direct Supabase sign in
+      const { error } = await supabaseAuth.signIn(email, password)
       if (error) {
         return { error: error.message }
       }
       return { ok: true }
-    } else {
-      // Use existing forgot password API
-      try {
-        const response = await fetch('/api/user-auth/forgot-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        })
-
-        if (response.ok) {
-          return { ok: true }
-        } else {
-          const data = await response.json()
-          return { error: data.error || 'Password reset failed' }
-        }
-      } catch (error) {
-        return { error: 'Password reset failed' }
-      }
+    } catch (error) {
+      return { error: 'Authentication failed' }
     }
+  },
+
+  // Sign out using Supabase
+  signOut: async (options?: { callbackUrl?: string }): Promise<void> => {
+    await supabaseAuth.signOut()
+    if (options?.callbackUrl) {
+      window.location.href = options.callbackUrl
+    }
+  },
+
+  // Sign up using Supabase
+  signUp: async (email: string, password: string, name: string): Promise<AuthResult> => {
+    try {
+      const { data, error } = await supabaseAuth.signUp(email, password, { name })
+      if (error) {
+        return { error: error.message }
+      }
+      return { ok: true }
+    } catch (error) {
+      return { error: 'Registration failed' }
+    }
+  },
+
+  // Password reset using Supabase
+  resetPassword: async (email: string): Promise<AuthResult> => {
+    const { error } = await supabaseAuth.resetPassword(email)
+    if (error) {
+      return { error: error.message }
+    }
+    return { ok: true }
   }
 }
 
-// Unified session hook that works with both systems
+// Supabase session hook
 export function useSession(): { data: UnifiedSession | null; status: 'loading' | 'authenticated' | 'unauthenticated' } {
-  const nextAuthSession = useNextAuthSession()
-  const [supabaseSession, setSupabaseSession] = useState<UnifiedSession | null>(null)
-  const [supabaseStatus, setSupabaseStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
+  const [session, setSession] = useState<UnifiedSession | null>(null)
+  const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
 
-  // Supabase session management
   useEffect(() => {
-    if (!USE_SUPABASE_AUTH) return
-
     // Get initial session
     supabaseAuth.getSession().then(({ session }) => {
       if (session?.user) {
-        // Transform Supabase session to match NextAuth structure
-        setSupabaseSession({
+        setSession({
           user: {
             id: session.user.id,
             email: session.user.email || '',
@@ -174,17 +106,17 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
             role: session.user.user_metadata?.role || 'FARM_OWNER'
           }
         })
-        setSupabaseStatus('authenticated')
+        setStatus('authenticated')
       } else {
-        setSupabaseSession(null)
-        setSupabaseStatus('unauthenticated')
+        setSession(null)
+        setStatus('unauthenticated')
       }
     })
 
     // Listen for auth changes
     const { data: { subscription } } = supabaseAuth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        setSupabaseSession({
+        setSession({
           user: {
             id: session.user.id,
             email: session.user.email || '',
@@ -192,10 +124,10 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
             role: session.user.user_metadata?.role || 'FARM_OWNER'
           }
         })
-        setSupabaseStatus('authenticated')
+        setStatus('authenticated')
       } else {
-        setSupabaseSession(null)
-        setSupabaseStatus('unauthenticated')
+        setSession(null)
+        setStatus('unauthenticated')
       }
     })
 
@@ -204,19 +136,11 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
     }
   }, [])
 
-  // Return appropriate session based on feature flag
-  if (USE_SUPABASE_AUTH) {
-    return {
-      data: supabaseSession,
-      status: supabaseStatus
-    }
-  } else {
-    return {
-      data: nextAuthSession.data as UnifiedSession | null,
-      status: nextAuthSession.status
-    }
+  return {
+    data: session,
+    status: status
   }
 }
 
 // Export auth configuration flag for components that need it
-export const isUsingSupabaseAuth = () => USE_SUPABASE_AUTH
+export const isUsingSupabaseAuth = () => true

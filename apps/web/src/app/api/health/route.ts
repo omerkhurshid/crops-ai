@@ -1,17 +1,6 @@
 import { NextRequest } from 'next/server'
 import { prisma } from '../../../lib/prisma'
-// CacheService replaced with simple fallback for local development
-const CacheService = {
-  async set(key: string, value: any, ttl: number): Promise<void> {
-    // Simple fallback - in production you'd use Redis or similar
-
-  },
-  async get(key: string): Promise<any> {
-    // Simple fallback - in production you'd use Redis or similar
-
-    return 'ok' // Return a default value
-  }
-}
+import { RedisManager } from '../../../lib/redis'
 import { createSuccessResponse } from '../../../lib/api/errors'
 import { apiMiddleware, withMethods } from '../../../lib/api/middleware'
 
@@ -36,8 +25,8 @@ export const GET = apiMiddleware.basic(
     let cacheLatency = 0
     try {
       const cacheStart = Date.now()
-      await CacheService.set('health-check', 'ok', 10)
-      await CacheService.get('health-check')
+      await RedisManager.set('health-check', 'ok', { ex: 10 })
+      await RedisManager.get('health-check')
       cacheLatency = Date.now() - cacheStart
     } catch (error) {
       cacheStatus = 'unhealthy'

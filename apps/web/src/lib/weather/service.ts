@@ -416,32 +416,35 @@ class WeatherService {
     return 'none';
   }
 
-  // Cache weather data to reduce API calls
-  private weatherCache = new Map<string, { data: any; timestamp: number }>();
-  private readonly CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+  // Redis-based caching to reduce API calls
+  private readonly CACHE_DURATION = 10 * 60; // 10 minutes in seconds
 
   private getCacheKey(type: string, latitude: number, longitude: number): string {
-    return `${type}_${latitude.toFixed(4)}_${longitude.toFixed(4)}`;
+    return `weather:${type}:${latitude.toFixed(4)}_${longitude.toFixed(4)}`;
   }
 
-  private getCachedData<T>(key: string): T | null {
-    const cached = this.weatherCache.get(key);
-    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
-      return cached.data as T;
+  private async getCachedData<T>(key: string): Promise<T | null> {
+    try {
+      const { RedisManager } = await import('../redis');
+      return await RedisManager.get(key);
+    } catch (error) {
+      console.warn('Redis cache unavailable, falling back to fresh data');
+      return null;
     }
-    return null;
   }
 
-  private setCachedData(key: string, data: any): void {
-    this.weatherCache.set(key, {
-      data,
-      timestamp: Date.now(),
-    });
+  private async setCachedData(key: string, data: any): Promise<void> {
+    try {
+      const { RedisManager } = await import('../redis');
+      await RedisManager.set(key, data, { ex: this.CACHE_DURATION });
+    } catch (error) {
+      console.warn('Redis cache unavailable, skipping cache storage');
+    }
   }
 
   async getCurrentWeatherCached(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     const cacheKey = this.getCacheKey('current', latitude, longitude);
-    const cached = this.getCachedData<CurrentWeather>(cacheKey);
+    const cached = await this.getCachedData<CurrentWeather>(cacheKey);
     
     if (cached) {
       return cached;
@@ -449,7 +452,7 @@ class WeatherService {
     
     const weather = await this.getCurrentWeather(latitude, longitude);
     if (weather) {
-      this.setCachedData(cacheKey, weather);
+      await this.setCachedData(cacheKey, weather);
     }
     
     return weather;
@@ -457,14 +460,14 @@ class WeatherService {
 
   async getForecastCached(latitude: number, longitude: number, days: number = 7): Promise<WeatherForecast[]> {
     const cacheKey = this.getCacheKey(`forecast_${days}`, latitude, longitude);
-    const cached = this.getCachedData<WeatherForecast[]>(cacheKey);
+    const cached = await this.getCachedData<WeatherForecast[]>(cacheKey);
     
     if (cached) {
       return cached;
     }
     
     const forecast = await this.getWeatherForecast(latitude, longitude, days);
-    this.setCachedData(cacheKey, forecast);
+    await this.setCachedData(cacheKey, forecast);
     
     return forecast;
   }

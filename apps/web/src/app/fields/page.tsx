@@ -2,7 +2,6 @@
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState } from 'react'
-import { prisma } from '../../lib/prisma'
 import { ModernCard } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
 import { Badge } from '../../components/ui/badge'
@@ -11,11 +10,11 @@ import { FieldsQuickActions, FieldsNavigateButton } from '../../components/field
 import { FieldsHeaderActions } from '../../components/fields/fields-header-actions'
 import { Leaf, MapPin, Plus } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
 
 export default function FieldsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [allFields, setAllFields] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -26,14 +25,51 @@ export default function FieldsPage() {
       return
     }
 
-    setIsLoading(false)
+    // Fetch farms and fields data
+    const fetchFieldsData = async () => {
+      try {
+        const response = await fetch('/api/farms')
+        if (response.ok) {
+          const farms = await response.json()
+          
+          // Flatten all fields from all farms
+          const fields = farms.flatMap((farm: any) => 
+            (farm.fields || []).map((field: any) => ({
+              id: field.id,
+              name: field.name,
+              farmName: farm.name,
+              farmId: farm.id,
+              size: field.area || 0,
+              crop: field.crops?.[0]?.cropType || 'Not specified',
+              plantingDate: field.crops?.[0]?.plantingDate || null,
+              expectedHarvest: field.crops?.[0]?.expectedHarvestDate || null,
+              health: getHealthStatus(field.satelliteData?.[0]?.ndvi),
+              ndvi: field.satelliteData?.[0]?.ndvi || 0,
+              soilMoisture: Math.round(Math.random() * 40 + 40),
+              lastUpdate: field.satelliteData?.[0]?.captureDate 
+                ? getRelativeTime(new Date(field.satelliteData[0].captureDate))
+                : 'No data',
+              soilType: field.soilType || 'Unknown'
+            }))
+          )
+          
+          setAllFields(fields)
+        }
+      } catch (error) {
+        console.error('Error fetching fields data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFieldsData()
   }, [session, status, router])
 
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-        <p className="ml-4 text-gray-600">Loading...</p>
+        <p className="ml-4 text-gray-600">Loading fields...</p>
       </div>
     )
   }
@@ -41,52 +77,6 @@ export default function FieldsPage() {
   if (!session) {
     return null
   }
-
-  // Fetch user's farms and fields
-  const userFarms = await prisma.farm.findMany({
-    where: {
-      OR: [
-        { ownerId: user.id },
-        { managers: { some: { userId: user.id } } }
-      ]
-    },
-    include: {
-      fields: {
-        include: {
-          crops: {
-            where: { status: { not: 'HARVESTED' } },
-            orderBy: { createdAt: 'desc' },
-            take: 1
-          },
-          satelliteData: {
-            orderBy: { captureDate: 'desc' },
-            take: 1
-          }
-        }
-      }
-    }
-  })
-
-  // Flatten all fields from all farms
-  const allFields = userFarms.flatMap(farm => 
-    farm.fields.map(field => ({
-      id: field.id,
-      name: field.name,
-      farmName: farm.name,
-      farmId: farm.id,
-      size: field.area,
-      crop: field.crops[0]?.cropType || 'Not specified',
-      plantingDate: field.crops[0]?.plantingDate?.toISOString().split('T')[0] || null,
-      expectedHarvest: field.crops[0]?.expectedHarvestDate?.toISOString().split('T')[0] || null,
-      health: getHealthStatus(field.satelliteData[0]?.ndvi),
-      ndvi: field.satelliteData[0]?.ndvi || 0,
-      soilMoisture: Math.round(Math.random() * 40 + 40), // Mock soil moisture for now
-      lastUpdate: field.satelliteData[0]?.captureDate 
-        ? getRelativeTime(field.satelliteData[0].captureDate)
-        : 'No data',
-      soilType: field.soilType || 'Unknown'
-    }))
-  )
 
   function getHealthStatus(ndvi?: number) {
     if (!ndvi) return 'Unknown'

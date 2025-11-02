@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useSession } from '../../lib/auth-unified';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FinancialDashboard } from '../../components/financial/financial-dashboard';

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '../../lib/auth-unified'
 import { UserPreferences, DEFAULT_PREFERENCES } from '../lib/user-preferences'
 
 interface UserPreferencesContextType {

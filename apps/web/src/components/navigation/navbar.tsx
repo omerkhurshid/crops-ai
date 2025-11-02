@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, unifiedAuth } from '../../lib/auth-unified'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { KeyboardShortcuts } from './keyboard-shortcuts'
@@ -13,7 +13,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
+    unifiedAuth.signOut({ callbackUrl: '/' })
   }
 
   const navLinks = [

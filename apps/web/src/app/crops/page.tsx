@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession } from '../../lib/auth-unified'
 import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { CropCalendar } from '../../components/crops/crop-calendar'

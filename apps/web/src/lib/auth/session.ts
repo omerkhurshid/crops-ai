@@ -1,4 +1,4 @@
-import { getServerSession } from 'next-auth/next'
+// TODO: Add Supabase auth imports when implementing authentication
 import { getToken } from 'next-auth/jwt'
 import { NextRequest } from 'next/server'
 import { authOptions } from '../auth'

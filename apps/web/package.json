@@ -50,6 +50,7 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@react-google-maps/api": "^2.20.7",
     "@sentry/nextjs": "^10.19.0",
+    "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.78.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",

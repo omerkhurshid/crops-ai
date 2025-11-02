@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
+import { getAuthenticatedUser } from '../../../../lib/auth/server';
 import { prisma } from '../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory, Prisma } from '@prisma/client';
@@ -40,8 +39,8 @@ const querySchema = z.object({
 // GET /api/financial/transactions
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -55,7 +54,7 @@ export async function GET(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: query.farmId,
-        ownerId: session.user.id,
+        ownerId: user.id,
       },
     });
 
@@ -151,8 +150,8 @@ export async function GET(request: NextRequest) {
 // POST /api/financial/transactions
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -163,7 +162,7 @@ export async function POST(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: validatedData.farmId,
-        ownerId: session.user.id,
+        ownerId: user.id,
       },
     });
 
@@ -177,7 +176,7 @@ export async function POST(request: NextRequest) {
     try {
       // Prepare the data with proper field handling
       const transactionData = {
-        userId: session.user.id,
+        userId: user.id,
         farmId: validatedData.farmId,
         fieldId: validatedData.fieldId || null,
         cropId: validatedData.cropId || null,
@@ -193,7 +192,7 @@ export async function POST(request: NextRequest) {
         notes: validatedData.notes || null,
         tags: validatedData.tags || [],
         attachments: validatedData.attachments || null,
-        createdById: session.user.id,
+        createdById: user.id,
       };
 
       // Creating financial transaction with validated data
@@ -258,7 +257,7 @@ export async function POST(request: NextRequest) {
     try {
       await AuditLogger.logFinancialTransaction(
         'create',
-        session.user.id,
+        user.id,
         transaction.id,
         {
           farmId: transaction.farmId,

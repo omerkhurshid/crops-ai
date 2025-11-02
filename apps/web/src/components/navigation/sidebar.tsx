@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, unifiedAuth } from '../../lib/auth-unified'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -40,7 +40,7 @@ export function Sidebar({ collapsed: propCollapsed = false, onClose }: SidebarPr
   const [expandedSections, setExpandedSections] = useState<string[]>(['farms', 'livestock'])
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' })
+    unifiedAuth.signOut({ callbackUrl: '/' })
   }
 
   // Main navigation links

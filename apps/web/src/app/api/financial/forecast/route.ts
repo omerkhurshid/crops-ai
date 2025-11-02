@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
 import { prisma } from '../../../../lib/prisma';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { AuditLogger } from '../../../../lib/audit-logger';
+import { getAuthenticatedUser } from '../../../../lib/auth/server';
 
 const forecastQuerySchema = z.object({
   farmId: z.string().cuid(),
@@ -27,8 +26,9 @@ const createForecastSchema = z.object({
 // GET /api/financial/forecast
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    // Authenticate user with Supabase
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: query.farmId,
-        ownerId: session.user.id,
+        ownerId: user.id,
       },
     });
 
@@ -119,8 +119,9 @@ export async function GET(request: NextRequest) {
 // POST /api/financial/forecast
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    // Authenticate user with Supabase
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -131,7 +132,7 @@ export async function POST(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: validatedData.farmId,
-        ownerId: session.user.id,
+        ownerId: user.id,
       },
       include: {
         fields: {
@@ -282,7 +283,7 @@ export async function POST(request: NextRequest) {
 
       // Log the action
       await AuditLogger.logEvent({
-        userId: session.user.id,
+        userId: user.id,
         action: 'financial_forecast_generate',
         resource: 'financial_forecast',
         resourceId: validatedData.farmId,

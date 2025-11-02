@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../../lib/auth';
+import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { prisma } from '../../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory, Prisma } from '@prisma/client';
@@ -28,8 +27,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -48,11 +47,11 @@ export async function GET(
     }
 
     // Verify user has access to the farm
-    const hasAccess = transaction.farm.ownerId === session.user.id ||
+    const hasAccess = transaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
         where: {
           farmId: transaction.farmId,
-          userId: session.user.id,
+          userId: user.id,
         },
       });
 
@@ -73,8 +72,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -92,11 +91,11 @@ export async function PUT(
     }
 
     // Verify user has access to the farm
-    const hasAccess = existingTransaction.farm.ownerId === session.user.id ||
+    const hasAccess = existingTransaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
         where: {
           farmId: existingTransaction.farmId,
-          userId: session.user.id,
+          userId: user.id,
         },
       });
 
@@ -125,7 +124,7 @@ export async function PUT(
     // Log the action
     await AuditLogger.logFinancialTransaction(
       'update',
-      session.user.id,
+      user.id,
       updatedTransaction.id,
       {
         farmId: updatedTransaction.farmId,
@@ -152,8 +151,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -168,11 +167,11 @@ export async function DELETE(
     }
 
     // Verify user has access to the farm
-    const hasAccess = existingTransaction.farm.ownerId === session.user.id ||
+    const hasAccess = existingTransaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
         where: {
           farmId: existingTransaction.farmId,
-          userId: session.user.id,
+          userId: user.id,
         },
       });
 
@@ -206,7 +205,7 @@ export async function DELETE(
     // Log the action
     await AuditLogger.logFinancialTransaction(
       'delete',
-      session.user.id,
+      user.id,
       params.id,
       {
         farmId: existingTransaction.farmId,

@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useSession } from '../../lib/auth-unified'
 import { useState } from 'react'
 import { Sidebar } from '../navigation/sidebar'
 import { Navbar } from '../navigation/navbar'

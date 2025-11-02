@@ -247,44 +247,9 @@ async function authenticateRequest(request: NextRequest): Promise<{
   role: UserRole
 } | null> {
   try {
-    // Initialize config only on server-side to prevent client-side environment validation
-    let config: any = null;
-    if (typeof window === 'undefined') {
-      config = getConfig();
-    }
-    
-    if (!config) {
-      return null;
-    }
-    
-    // Get the session token from cookies (same logic as our session endpoint)
-    const cookieName = config.NODE_ENV === 'production' 
-      ? '__Secure-next-auth.session-token'
-      : 'next-auth.session-token'
-    
-    const token = request.cookies.get(cookieName)?.value
-    
-    if (!token) {
-      return null
-    }
-    
-    // Decode NextAuth JWT token using the same method as our session endpoint
-    const { decode } = await import('next-auth/jwt')
-    const decoded = await decode({
-      token,
-      secret: config.NEXTAUTH_SECRET
-    })
-    
-    if (!decoded) {
-      return null
-    }
-    
-    return {
-      id: decoded.id as string,
-      email: decoded.email as string,
-      name: decoded.name as string,
-      role: decoded.role as UserRole
-    }
+    // Use Supabase authentication from our server auth utility
+    const { getAuthenticatedUser } = await import('../auth/server')
+    return await getAuthenticatedUser(request)
   } catch (error) {
     console.error('Authentication error in middleware', error)
     return null

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
 import { prisma } from '../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory } from '@prisma/client';
 import { rateLimitWithFallback } from '../../../../lib/rate-limit';
+import { getAuthenticatedUser } from '../../../../lib/auth/server';
 
 const summaryQuerySchema = z.object({
   farmId: z.string().cuid(),
@@ -30,8 +29,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    // Authenticate user with Supabase
+    const user = await getAuthenticatedUser(request);
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const farm = await prisma.farm.findFirst({
       where: {
         id: query.farmId,
-        ownerId: session.user.id,
+        ownerId: user.id,
       },
     });
 

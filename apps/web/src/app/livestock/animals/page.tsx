@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { AnimalRegistry } from '../../../components/livestock/animal-registry'
@@ -7,9 +7,8 @@ import { ClientFloatingButton } from '../../../components/ui/client-floating-but
 import { Plus, Users, Heart, TrendingUp } from 'lucide-react'
 import { prisma } from '../../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
 
-export default async function AnimalsPage() {
+export default function AnimalsPage() {
   const user = await getAuthenticatedUser()
 
   if (!user) {

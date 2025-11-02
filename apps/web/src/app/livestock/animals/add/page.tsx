@@ -1,60 +1,80 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { AddAnimalForm } from '../../../../components/livestock/add-animal-form'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { prisma } from '../../../../lib/prisma'
 
-export const dynamic = 'force-dynamic'
+export default function AddAnimalPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [userFarms, setUserFarms] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-export default async function AddAnimalPage() {
-  const user = await getAuthenticatedUser()
+  useEffect(() => {
+    if (status === 'loading') return
 
-  if (!user) {
-    redirect('/login')
-  }
+    if (!session) {
+      router.push('/login')
+      return
+    }
 
-  // Get user's farms
-  let userFarms: any[] = []
-  try {
-    userFarms = await prisma.farm.findMany({
-      where: { ownerId: user.id },
-      select: { id: true, name: true }
-    })
-  } catch (error: any) {
-    console.error('Error fetching farms:', error)
-  }
-
-  // If no farms, redirect to farm creation
-  if (userFarms.length === 0) {
-    redirect('/farms/create?from=animals')
-  }
-
-  // Get existing animals for parent selection
-  let parentAnimals: any[] = []
-  try {
-    parentAnimals = await prisma.animal.findMany({
-      where: { 
-        userId: user.id,
-        status: 'active'
-      },
-      select: {
-        id: true,
-        tagNumber: true,
-        name: true,
-        species: true,
-        gender: true,
-        farm: {
-          select: { name: true }
+    // Fetch user's farms
+    const fetchFarms = async () => {
+      try {
+        const response = await fetch('/api/farms')
+        if (response.ok) {
+          const farms = await response.json()
+          setUserFarms(farms)
         }
-      },
-      orderBy: { tagNumber: 'asc' }
-    })
-  } catch (error: any) {
-    console.error('Error fetching parent animals:', error)
+      } catch (error: any) {
+        console.error('Error fetching farms:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFarms()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
+
+  if (!session) {
+    return null
+  }
+
+  // If no farms, show empty state
+  if (userFarms.length === 0) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
+            <p className="text-gray-600 mb-6">You need to create a farm before adding animals.</p>
+            <Link href="/farms/create?from=animals">
+              <button className="bg-green-600 text-white px-4 py-2 rounded-lg">Create Farm</button>
+            </Link>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  // Mock parent animals for now - would be fetched from API in real implementation
+  const parentAnimals: any[] = []
 
   return (
     <DashboardLayout>

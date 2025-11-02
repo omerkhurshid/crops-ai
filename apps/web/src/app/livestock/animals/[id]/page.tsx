@@ -1,14 +1,14 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUser } from '../../../../lib/auth/server'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useSession } from '../../../../lib/auth-unified'
+import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { AnimalProfile } from '../../../../components/livestock/animal-profile'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { ArrowLeft, Edit, Heart, TrendingUp, DollarSign } from 'lucide-react'
 import Link from 'next/link'
-import { prisma } from '../../../../lib/prisma'
 import { Button } from '../../../../components/ui/button'
-
-export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: {
@@ -16,58 +16,54 @@ interface PageProps {
   }
 }
 
-export default async function AnimalProfilePage({ params }: PageProps) {
-  const user = await getAuthenticatedUser()
+export default function AnimalProfilePage({ params }: PageProps) {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [animal, setAnimal] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  if (!user) {
-    redirect('/login')
-  }
+  useEffect(() => {
+    if (status === 'loading') return
 
-  // Get animal details with all related data
-  let animal: any = null
-  try {
-    animal = await prisma.animal.findUnique({
-      where: { 
-        id: params.id,
-        userId: user.id // Ensure user owns this animal
-      },
-      include: {
-        farm: { select: { id: true, name: true } },
-        mother: { select: { id: true, tagNumber: true, name: true } },
-        father: { select: { id: true, tagNumber: true, name: true } },
-        motherOffspring: { 
-          select: { id: true, tagNumber: true, name: true, birthDate: true },
-          where: { status: 'active' }
-        },
-        fatherOffspring: { 
-          select: { id: true, tagNumber: true, name: true, birthDate: true },
-          where: { status: 'active' }
-        },
-        healthRecords: {
-          orderBy: { recordDate: 'desc' },
-          take: 10
-        },
-        breedingRecords: {
-          orderBy: { breedingDate: 'desc' },
-          take: 5
-        },
-        weightRecords: {
-          orderBy: { weighDate: 'desc' },
-          take: 20
-        },
-        feedRecords: {
-          where: { animalId: params.id },
-          orderBy: { feedDate: 'desc' },
-          take: 10
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    // Fetch animal data
+    const fetchAnimal = async () => {
+      try {
+        const response = await fetch(`/api/livestock/animals/${params.id}`)
+        if (response.ok) {
+          const animalData = await response.json()
+          setAnimal(animalData)
+        } else if (response.status === 404) {
+          router.push('/livestock/animals')
         }
+      } catch (error) {
+        console.error('Error fetching animal:', error)
+        router.push('/livestock/animals')
+      } finally {
+        setIsLoading(false)
       }
-    })
-  } catch (error: any) {
-    console.error('Error fetching animal:', error)
+    }
+
+    fetchAnimal()
+  }, [session, status, router, params.id])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="ml-4 text-gray-600">Loading animal profile...</p>
+        </div>
+      </DashboardLayout>
+    )
   }
 
-  if (!animal) {
-    redirect('/livestock/animals')
+  if (!session || !animal) {
+    return null
   }
 
   // Calculate basic stats

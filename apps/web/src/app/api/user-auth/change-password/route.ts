@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
-import { getCurrentUser } from '../../../../lib/auth/session';
+import { getAuthenticatedUser } from '../../../../lib/auth/server';
 import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
@@ -16,7 +16,7 @@ const changePasswordSchema = z.object({
 export const POST = apiMiddleware.basic(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
-      const user = await getCurrentUser();
+      const user = await getAuthenticatedUser(request);
       if (!user) {
         throw new ValidationError('Authentication required');
       }

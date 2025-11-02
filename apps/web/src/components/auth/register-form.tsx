@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { unifiedAuth } from '../../lib/auth-unified'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -127,21 +127,15 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
         try {
           console.log('🔄 Attempting auto-login after registration...')
           
-          const result = await signIn('credentials', {
-            email: formData.email,
-            password: formData.password,
-            redirect: false,
-          })
+          const result = await unifiedAuth.signIn(formData.email, formData.password)
 
-          console.log('🔐 NextAuth auto-login result:', result)
+          console.log('🔐 Auto-login result:', result)
 
-          if (result?.ok && !result?.error) {
+          if (!result?.error) {
             console.log('✅ Auto-login successful, redirecting to dashboard')
-            // Force page refresh to ensure session is loaded
             window.location.href = callbackUrl
           } else {
             console.warn('⚠️ Auto-login failed, redirecting to login page', result?.error)
-            // Auto-login failed, redirect to login page
             router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
           }
         } catch (error) {

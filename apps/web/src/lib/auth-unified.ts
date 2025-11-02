@@ -6,7 +6,7 @@
  */
 
 import { supabaseAuth, type SupabaseSession, type SupabaseUser } from './supabase'
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 // Supabase-only authentication (NextAuth removed)
 const USE_SUPABASE_AUTH = true
@@ -144,3 +144,8 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
 
 // Export auth configuration flag for components that need it
 export const isUsingSupabaseAuth = () => true
+
+// Simple context provider for backward compatibility
+export function AuthContextProvider({ children }: { children: React.ReactNode }) {
+  return React.createElement(React.Fragment, null, children)
+}

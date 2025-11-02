@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { Navbar } from '../../components/navigation/navbar'
 import { GuidedFarmSetup } from '../../components/onboarding/guided-farm-setup'
 import { prisma } from '../../lib/prisma'
@@ -33,7 +33,7 @@ async function getUserStats(userId: string) {
 }
 
 export default async function OnboardingPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

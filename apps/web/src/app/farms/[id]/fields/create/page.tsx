@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getCurrentUser } from '../../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { Navbar } from '../../../../../components/navigation/navbar'
 import { FieldForm } from '../../../../../components/farm/field-form'
 import { prisma } from '../../../../../lib/prisma'
@@ -34,7 +34,7 @@ async function getFarm(farmId: string, userId: string) {
 }
 
 export default async function CreateFieldPage({ params }: { params: { id: string } }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
   
   if (!user) {
     redirect('/login')

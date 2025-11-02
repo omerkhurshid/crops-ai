@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { unifiedAuth } from '../../lib/auth-unified'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -110,29 +110,21 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     try {
       console.log('📧 Starting NextAuth signin for:', email)
       
-      // Use NextAuth signIn function
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
+      // Use unified auth for Supabase authentication
+      const result = await unifiedAuth.signIn(email, password)
 
-      console.log('🔐 NextAuth Result:', result)
+      console.log('🔐 Auth Result:', result)
 
       if (result?.error) {
-        setError(result.error === 'CredentialsSignin' ? 'Invalid email or password. Please check your credentials.' : result.error)
-      } else if (result?.ok) {
+        setError(result.error)
+      } else {
         console.log('✅ Login successful, redirecting to dashboard')
-        // Clear any existing errors
         setError('')
         setSuccessMessage('Login successful! Redirecting...')
         
-        // Small delay to show success message then redirect
         setTimeout(() => {
           window.location.href = callbackUrl
         }, 1000)
-      } else {
-        setError('Authentication failed. Please try again.')
       }
     } catch (err) {
       console.error('Login error:', err)

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { MLInsightsDashboard } from '../../components/ai/ml-insights-dashboard'
 import { RecommendationsDashboard } from '../../components/ai/recommendations-dashboard'
@@ -66,7 +66,7 @@ async function getSelectedFarm(farmId: string | null, userId: string) {
 }
 
 export default async function AIInsightsPage({ searchParams }: { searchParams: { farmId?: string } }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

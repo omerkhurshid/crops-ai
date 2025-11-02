@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCurrentUser } from '../../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { liveSatelliteService } from '../../../../../lib/satellite/live-satellite-service'
 import { copernicusService } from '../../../../../lib/satellite/copernicus-service'
 import { auditLogger } from '../../../../../lib/logging/audit-logger'
@@ -16,7 +16,7 @@ export async function GET(
   const startTime = Date.now()
   
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -118,7 +118,7 @@ export async function POST(
   const startTime = Date.now()
   
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

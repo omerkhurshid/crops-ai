@@ -1,4 +1,4 @@
-import { getCurrentUser } from './auth/session'
+// Server-side user preferences utilities
 import { prisma } from './prisma'
 
 export interface UserPreferences {
@@ -30,13 +30,12 @@ export const CURRENCY_SYMBOLS: Record<string, string> = {
 /**
  * Get user preferences from database or defaults
  */
-export async function getUserPreferences(): Promise<UserPreferences> {
+export async function getUserPreferences(userId?: string): Promise<UserPreferences> {
   try {
-    const user = await getCurrentUser()
-    if (!user) return DEFAULT_PREFERENCES
+    if (!userId) return DEFAULT_PREFERENCES
 
     const userWithPrefs = await prisma.user.findUnique({
-      where: { id: user.id },
+      where: { id: userId },
       select: {
         currency: true,
         landUnit: true,

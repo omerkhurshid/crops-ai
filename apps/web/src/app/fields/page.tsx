@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { prisma } from '../../lib/prisma'
 import { ModernCard } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
@@ -12,7 +12,7 @@ import { Leaf, MapPin, Plus } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export default async function FieldsPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

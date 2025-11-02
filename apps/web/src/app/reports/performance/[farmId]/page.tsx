@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { Navbar } from '../../../../components/navigation/navbar'
 import { FarmPerformanceReport } from '../../../../components/reports/farm-performance-report'
 import { Button } from '../../../../components/ui/button'
@@ -13,7 +13,7 @@ export default async function FarmPerformanceReportPage({
 }: { 
   params: { farmId: string } 
 }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

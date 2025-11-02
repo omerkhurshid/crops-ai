@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { WeatherDashboard } from '../../components/weather/weather-dashboard'
 import { WeatherAnalytics } from '../../components/weather/weather-analytics'
@@ -46,7 +46,7 @@ async function getAllUserFarms(userId: string) {
 }
 
 export default async function WeatherPage({ searchParams }: { searchParams: { farmId?: string } }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

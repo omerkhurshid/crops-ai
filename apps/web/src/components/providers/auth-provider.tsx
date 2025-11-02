@@ -1,22 +1,18 @@
 'use client'
 
-import { SessionProvider } from 'next-auth/react'
 import { ReactNode } from 'react'
+import { AuthContextProvider } from '../../lib/auth-unified'
 
 interface AuthProviderProps {
   children: ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  console.log('🔧 AuthProvider initializing with basePath: /api/auth')
+  console.log('🔧 AuthProvider initializing with Supabase auth')
   
   return (
-    <SessionProvider 
-      basePath="/api/auth"
-      refetchInterval={0}
-      refetchOnWindowFocus={false}
-    >
+    <AuthContextProvider>
       {children}
-    </SessionProvider>
+    </AuthContextProvider>
   )
 }

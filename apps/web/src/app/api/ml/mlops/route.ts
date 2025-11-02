@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCurrentUser } from '../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { modelRegistry } from '../../../../lib/ml/model-registry'
 import { mlOpsPipeline } from '../../../../lib/ml/mlops-pipeline'
 import { trainingService } from '../../../../lib/ml/training-service'
@@ -16,7 +16,7 @@ import { auditLogger } from '../../../../lib/logging/audit-logger'
  */
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

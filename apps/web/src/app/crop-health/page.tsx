@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { FarmerFocusedDashboard } from '../../components/crop-health/farmer-focused-dashboard'
 import { HealthDashboard } from '../../components/crop-health/health-dashboard'
@@ -72,7 +72,7 @@ async function getSelectedFarm(farmId: string | null, userId: string) {
 }
 
 export default async function CropHealthPage({ searchParams }: { searchParams: { farmId?: string; view?: string } }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

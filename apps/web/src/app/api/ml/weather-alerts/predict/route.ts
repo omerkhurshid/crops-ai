@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../../lib/api/middleware';
-import { getCurrentUser } from '../../../../../lib/auth/session';
+import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { mlOpsPipeline } from '../../../../../lib/ml/mlops-pipeline';
 
 const weatherAlertPredictionSchema = z.object({
@@ -515,7 +515,7 @@ export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
-      const user = await getCurrentUser();
+      const user = await getAuthenticatedUser(request);
       
       if (!user) {
         throw new ValidationError('User authentication required');
@@ -566,7 +566,7 @@ export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
-      const user = await getCurrentUser();
+      const user = await getAuthenticatedUser(request);
       
       if (!user) {
         throw new ValidationError('User authentication required');

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
@@ -64,7 +64,7 @@ async function getUserFarms(userId: string) {
 }
 
 export default async function FarmsPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

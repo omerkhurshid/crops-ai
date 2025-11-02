@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { Badge } from '../../components/ui/badge'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { Button } from '../../components/ui/button'
@@ -163,7 +163,7 @@ function generateMarketInsights(marketPrices: any[]) {
 
 export default async function DashboardPage() {
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser()
 
     if (!user) {
       redirect('/login')

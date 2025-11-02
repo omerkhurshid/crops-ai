@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../../../lib/auth/session";
+import { getAuthenticatedUser } from "../../../../lib/auth/server";
 import { DashboardLayout } from "../../../../components/layout/dashboard-layout";
 import {
   ModernCard,
@@ -26,7 +26,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function WeatherIntelligencePage() {
-  const user = await getCurrentUser();
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     redirect("/login");

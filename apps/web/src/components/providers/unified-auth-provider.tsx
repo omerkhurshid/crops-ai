@@ -12,7 +12,7 @@
  */
 
 import React, { createContext, useContext, ReactNode } from 'react'
-import { SessionProvider } from 'next-auth/react'
+// SessionProvider import removed - Supabase-only auth now
 import { useSession as useUnifiedSession, unifiedAuth, type UnifiedSession, isUsingSupabaseAuth } from '../../lib/auth-unified'
 
 // Auth context type
@@ -52,31 +52,14 @@ function UnifiedAuthContent({ children }: { children: ReactNode }) {
 
 // Main provider component
 export function UnifiedAuthProvider({ children }: { children: ReactNode }) {
-  const isUsingSupabase = isUsingSupabaseAuth()
+  console.log('🔐 UnifiedAuthProvider: Using Supabase authentication')
 
-  console.log(`🔐 UnifiedAuthProvider: Using ${isUsingSupabase ? 'Supabase' : 'NextAuth'} authentication`)
-
-  if (isUsingSupabase) {
-    // Supabase Auth - no session provider wrapper needed
-    return (
-      <UnifiedAuthContent>
-        {children}
-      </UnifiedAuthContent>
-    )
-  } else {
-    // NextAuth - wrap with SessionProvider
-    return (
-      <SessionProvider 
-        basePath="/api/auth"
-        refetchInterval={0}
-        refetchOnWindowFocus={false}
-      >
-        <UnifiedAuthContent>
-          {children}
-        </UnifiedAuthContent>
-      </SessionProvider>
-    )
-  }
+  // Supabase Auth only - no session provider wrapper needed
+  return (
+    <UnifiedAuthContent>
+      {children}
+    </UnifiedAuthContent>
+  )
 }
 
 // Hook to use auth context

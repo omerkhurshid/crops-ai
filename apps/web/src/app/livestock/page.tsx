@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { LivestockDashboard } from '../../components/livestock/livestock-dashboard'
 import { LivestockQuickActions } from '../../components/livestock/livestock-quick-actions'
@@ -11,7 +11,7 @@ import { prisma } from '../../lib/prisma'
 export const dynamic = 'force-dynamic'
 
 export default async function LivestockPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

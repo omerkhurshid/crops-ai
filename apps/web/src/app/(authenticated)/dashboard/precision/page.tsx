@@ -1,25 +1,54 @@
-import { getCurrentUser } from '../../../../lib/auth/session'
-import { redirect } from 'next/navigation'
-import { UnifiedFarmDashboard } from '../../../../components/precision/unified-farm-dashboard'
-import { prisma } from '../../../../lib/prisma'
+'use client'
 
-export default async function PrecisionDashboardPage() {
-  // Check authentication
-  const user = await getCurrentUser()
-  
-  if (!user) {
-    redirect('/login')
+import { useSession } from '../../../../lib/auth-unified'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { UnifiedFarmDashboard } from '../../../../components/precision/unified-farm-dashboard'
+
+export default function PrecisionDashboardPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [farm, setFarm] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    if (!session) {
+      router.push('/login')
+      return
+    }
+
+    // Fetch user's first farm
+    const fetchFarm = async () => {
+      try {
+        const response = await fetch('/api/farms')
+        if (response.ok) {
+          const farms = await response.json()
+          if (farms && farms.length > 0) {
+            setFarm(farms[0])
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch farm:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFarm()
+  }, [session, status, router])
+
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    )
   }
 
-  // Get the user's first farm for the demo
-  let farm = null
-  try {
-    farm = await prisma.farm.findFirst({
-      where: { ownerId: user.id },
-      select: { id: true, name: true, latitude: true, longitude: true }
-    })
-  } catch (error) {
-    console.error('Error loading farm:', error)
+  if (!session) {
+    return null // Will redirect
   }
 
   // Default demo farm if no farm exists  
@@ -39,9 +68,9 @@ export default async function PrecisionDashboardPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Welcome, {session.user.name}</h1>
         <p className="text-gray-600">
-          Role: {user.role} | Farm: {farmData.name}
+          Role: {session.user.role} | Farm: {farmData.name}
         </p>
       </div>
       

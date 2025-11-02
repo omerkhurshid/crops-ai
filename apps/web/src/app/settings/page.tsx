@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { SettingsForm } from '../../components/settings/settings-form'
 import { prisma } from '../../lib/prisma'
@@ -7,7 +7,7 @@ import { prisma } from '../../lib/prisma'
 export const dynamic = 'force-dynamic'
 
 export default async function SettingsPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

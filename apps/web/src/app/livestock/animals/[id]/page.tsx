@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { AnimalProfile } from '../../../../components/livestock/animal-profile'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
@@ -17,7 +17,7 @@ interface PageProps {
 }
 
 export default async function AnimalProfilePage({ params }: PageProps) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

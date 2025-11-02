@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { AddFeedForm } from '../../../../components/livestock/add-feed-form'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
@@ -10,7 +10,7 @@ import { prisma } from '../../../../lib/prisma'
 export const dynamic = 'force-dynamic'
 
 export default async function AddFeedPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

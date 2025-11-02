@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../lib/auth/session'
+import { getAuthenticatedUser } from '../../lib/auth/server'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { RecommendationsDashboard } from '../../components/ai/recommendations-dashboard'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription, MetricCard } from '../../components/ui/modern-card'
@@ -45,7 +45,7 @@ async function getSelectedFarm(farmId: string | null, userId: string) {
 }
 
 export default async function RecommendationsPage({ searchParams }: { searchParams: { farmId?: string } }) {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

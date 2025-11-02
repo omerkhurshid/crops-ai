@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { getCurrentUser } from '../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
 import { prisma } from '../../../lib/prisma'
@@ -8,7 +8,7 @@ import { prisma } from '../../../lib/prisma'
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
-      const user = await getCurrentUser()
+      const user = await getAuthenticatedUser(request)
       
       if (!user) {
         throw new ValidationError('User authentication required')

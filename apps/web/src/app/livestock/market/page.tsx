@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { MarketAnalysis } from '../../../components/livestock/market-analysis'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
@@ -9,7 +9,7 @@ import { prisma } from '../../../lib/prisma'
 export const dynamic = 'force-dynamic'
 
 export default async function LivestockMarketPage() {
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
 
   if (!user) {
     redirect('/login')

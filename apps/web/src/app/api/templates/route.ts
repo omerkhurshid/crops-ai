@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCurrentUser } from '../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { TemplateManager } from '../../../lib/templates/template-manager'
 import { z } from 'zod'
 
@@ -37,7 +37,7 @@ const getTemplatesSchema = z.object({
 // GET /api/templates
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
 // POST /api/templates
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser()
+    const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

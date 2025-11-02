@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCurrentUser } from '../../../../../lib/auth/session'
+import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { prisma } from '../../../../../lib/prisma'
 import { rateLimitWithFallback } from '../../../../../lib/rate-limit'
 // Logger replaced with console for local development
@@ -26,7 +26,7 @@ export async function GET(
   let user: any = null
   
   try {
-    user = await getCurrentUser()
+    user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

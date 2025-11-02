@@ -10,12 +10,12 @@ import {
   BarChart, Users, ArrowRight, Target, Eye, DollarSign
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
-import { getCurrentUser } from '../lib/auth/session'
+import { getAuthenticatedUser } from '../lib/auth/server'
 import { HomePageDemos } from '../components/demos/home-page-demos'
 
 export default async function Home() {
   // Check if user is logged in
-  const user = await getCurrentUser()
+  const user = await getAuthenticatedUser()
   if (user) {
     redirect('/dashboard')
   }

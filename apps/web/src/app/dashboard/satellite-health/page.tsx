@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from '../../lib/auth-unified'
+import { useSession } from '../../../lib/auth-unified'
 import { Navbar } from '../../../components/navigation/navbar'
 import { FieldHealthMonitor } from '../../../components/satellite/field-health-monitor'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/ui/card'

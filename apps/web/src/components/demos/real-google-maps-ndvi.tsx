@@ -179,70 +179,46 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
     return seasonalData[date] || seasonalData['2024-08-01']
   }, [])
 
-  // Load NDVI data with caching simulation
+  // Load NDVI data with simplified caching
   const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
     setIsLoading(true)
     setCacheStatus('refreshing')
     
-    // Simulate cache check
-    const cacheKey = `ndvi-${date}-${DEMO_FIELD_LOCATION.center.lat}-${DEMO_FIELD_LOCATION.center.lng}`
-    const cachedData = localStorage.getItem(cacheKey)
-    const cacheTime = localStorage.getItem(`${cacheKey}-time`)
+    // Check if we're in browser environment
+    const isClient = typeof window !== 'undefined'
     
-    // Use cache if less than 4 hours old and not forcing refresh
-    if (!forceRefresh && cachedData && cacheTime) {
-      const age = Date.now() - parseInt(cacheTime)
-      if (age < 4 * 60 * 60 * 1000) { // 4 hours
-        setTimeout(() => {
-          setNdviData(JSON.parse(cachedData))
-          setLastUpdate(new Date(parseInt(cacheTime)))
-          setCacheStatus('cached')
-          setIsLoading(false)
-        }, 800) // Simulate short loading for UX
-        return
+    // Simplified cache check - only use cache for very recent data
+    let cachedData: string | null = null
+    let cacheTime: string | null = null
+    
+    if (isClient && !forceRefresh) {
+      try {
+        const cacheKey = `ndvi-${date}`
+        cachedData = sessionStorage.getItem(cacheKey) // Use sessionStorage instead
+        cacheTime = sessionStorage.getItem(`${cacheKey}-time`)
+        
+        // Use cache if less than 30 minutes old
+        if (cachedData && cacheTime) {
+          const age = Date.now() - parseInt(cacheTime)
+          if (age < 30 * 60 * 1000) { // 30 minutes
+            setTimeout(() => {
+              setNdviData(JSON.parse(cachedData!))
+              setLastUpdate(new Date(parseInt(cacheTime!)))
+              setCacheStatus('cached')
+              setIsLoading(false)
+            }, 300) // Faster loading for UX
+            return
+          }
+        }
+      } catch (error) {
+        console.log('Cache read error, proceeding with fresh data')
       }
     }
     
-    // Simulate API call delay for realism
-    setTimeout(async () => {
+    // Simplified loading - use demo data directly for now
+    setTimeout(() => {
       try {
-        // Try to fetch from actual API first
-        const response = await fetch('/api/satellite/field-ndvi', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            coordinates: fieldBoundary,
-            date: date,
-            resolution: 10
-          }),
-        })
-
-        let data
-        if (response.ok) {
-          const apiData = await response.json()
-          data = {
-            ...getNDVIDataForDate(date),
-            ...apiData.data,
-            source: 'live'
-          }
-          setCacheStatus('live')
-        } else {
-          throw new Error('API unavailable')
-        }
-        
-        // Cache the result
-        const now = Date.now()
-        localStorage.setItem(cacheKey, JSON.stringify(data))
-        localStorage.setItem(`${cacheKey}-time`, now.toString())
-        setLastUpdate(new Date(now))
-        
-        setNdviData(data)
-      } catch (error) {
-        console.log('Using enhanced demo data for NDVI analysis')
-        
-        // Use enhanced realistic data
+        // Use enhanced realistic data directly
         const data = {
           ...getNDVIDataForDate(date),
           date: date,
@@ -250,18 +226,39 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           location: DEMO_FIELD_LOCATION.address
         }
         
-        // Cache the demo data too
-        const now = Date.now()
-        localStorage.setItem(cacheKey, JSON.stringify(data))
-        localStorage.setItem(`${cacheKey}-time`, now.toString())
-        setLastUpdate(new Date(now))
-        setCacheStatus('cached')
+        // Cache the demo data if in browser
+        if (isClient) {
+          try {
+            const now = Date.now()
+            const cacheKey = `ndvi-${date}`
+            sessionStorage.setItem(cacheKey, JSON.stringify(data))
+            sessionStorage.setItem(`${cacheKey}-time`, now.toString())
+            setLastUpdate(new Date(now))
+          } catch (error) {
+            console.log('Cache write error, continuing without cache')
+          }
+        }
         
+        setCacheStatus('cached')
         setNdviData(data)
+      } catch (error) {
+        console.error('Error loading NDVI data:', error)
+        // Fallback to basic data
+        setNdviData({
+          averageNDVI: 0.82,
+          maxNDVI: 0.95,
+          minNDVI: 0.65,
+          uniformity: 85,
+          stage: 'R3 - Milk Stage',
+          yieldProjection: 185,
+          healthStatus: 'Excellent',
+          source: 'fallback'
+        })
+        setCacheStatus('cached')
       } finally {
         setIsLoading(false)
       }
-    }, 1200) // Realistic API delay
+    }, 800) // Reduced delay
   }, [getNDVIDataForDate])
 
   // Initialize map and field boundary
@@ -312,8 +309,34 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
   }, [selectedDate, map, loadNDVIData])
 
   const refreshNDVIData = () => {
+    // Clear cache for current date
+    if (typeof window !== 'undefined') {
+      try {
+        const cacheKey = `ndvi-${selectedDate}`
+        sessionStorage.removeItem(cacheKey)
+        sessionStorage.removeItem(`${cacheKey}-time`)
+      } catch (error) {
+        console.log('Cache clear error:', error)
+      }
+    }
     loadNDVIData(selectedDate, true) // Force refresh
   }
+
+  // Clear all NDVI cache on component mount to prevent stale data
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        // Clear any old NDVI cache data
+        Object.keys(sessionStorage).forEach(key => {
+          if (key.startsWith('ndvi-')) {
+            sessionStorage.removeItem(key)
+          }
+        })
+      } catch (error) {
+        console.log('Cache cleanup error:', error)
+      }
+    }
+  }, [])
 
   const availableDates = [
     '2024-05-15',
@@ -410,6 +433,9 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                   </div>
                 </div>
               }
+              onError={(error) => {
+                console.error('Google Maps loading error:', error)
+              }}
             >
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}

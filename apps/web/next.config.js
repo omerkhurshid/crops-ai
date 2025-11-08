@@ -154,10 +154,6 @@ const nextConfig = {
         source: '/api/authentication/signin',
         destination: '/api/manual-auth/signin',
       },
-      {
-        source: '/api/authentication/register', 
-        destination: '/api/user-auth/register',
-      },
     ]
   },
 }

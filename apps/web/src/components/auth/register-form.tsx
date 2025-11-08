@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { unifiedAuth } from '../../lib/auth-unified'
@@ -9,11 +8,9 @@ import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { UserRole } from '@prisma/client'
 import { Sprout, Users, TreePine, Info } from 'lucide-react'
-
 interface RegisterFormProps {
   callbackUrl?: string
 }
-
 export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) {
   const [formData, setFormData] = useState({
     name: '',
@@ -29,7 +26,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const router = useRouter()
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const value = e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value
     setFormData(prev => ({
@@ -37,7 +33,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       [e.target.name]: value
     }))
   }
-
   const getPasswordStrength = (password: string) => {
     let strength = 0
     const checks = [
@@ -47,15 +42,12 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       /[0-9]/.test(password),
       /[!@#$%^&*(),.?":{}|<>]/.test(password)
     ]
-    
     strength = checks.filter(Boolean).length
-    
     if (strength < 2) return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
     if (strength < 4) return { level: 'medium', color: 'bg-yellow-500', text: 'Medium' }
     if (strength >= 4) return { level: 'strong', color: 'bg-green-500', text: 'Strong' }
     return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
   }
-
   const validateForm = () => {
     if (!formData.name.trim()) {
       return 'Name is required'
@@ -80,62 +72,32 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     }
     return null
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
-
     const validationError = validateForm()
     if (validationError) {
       setError(validationError)
       setIsLoading(false)
       return
     }
-
     try {
-      const response = await fetch('/api/authentication/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-          userType: formData.userType || null,
-        }),
-      })
-
-      let data
-      try {
-        data = await response.json()
-      } catch (parseError) {
-        throw new Error('Unable to process server response')
-      }
-
-      if (!response.ok) {
-        const errorMessage = data.error?.message || data.message || `Registration failed (${response.status})`
-        throw new Error(errorMessage)
-      }
-
-      setSuccess(true)
+      // Use unifiedAuth.signUp for Supabase registration
+      const result = await unifiedAuth.signUp(formData.email, formData.password, formData.name)
       
-      // Auto-login after successful registration using NextAuth
+      if (result?.error) {
+        throw new Error(result.error)
+      }
+      
+      setSuccess(true)
+      // Auto-login after successful registration
       setTimeout(async () => {
         try {
-          console.log('🔄 Attempting auto-login after registration...')
-          
-          const result = await unifiedAuth.signIn(formData.email, formData.password)
-
-          console.log('🔐 Auto-login result:', result)
-
-          if (!result?.error) {
-            console.log('✅ Auto-login successful, redirecting to dashboard')
+          const loginResult = await unifiedAuth.signIn(formData.email, formData.password)
+          if (!loginResult?.error) {
             window.location.href = callbackUrl
           } else {
-            console.warn('⚠️ Auto-login failed, redirecting to login page', result?.error)
             router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
           }
         } catch (error) {
@@ -143,7 +105,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
           router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`)
         }
       }, 1000)
-      
     } catch (err) {
       console.error('Registration error:', err)
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.')
@@ -151,12 +112,10 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       setIsLoading(false)
     }
   }
-
   const handleGoogleSignIn = () => {
     // Google signin not currently configured
     setError('Google sign-in is not available at this time. Please use email registration.')
   }
-
   if (success) {
     return (
       <Card className="w-full max-w-md">
@@ -169,7 +128,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       </Card>
     )
   }
-
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
@@ -193,7 +151,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               disabled={isLoading}
             />
           </div>
-          
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -207,7 +164,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               disabled={isLoading}
             />
           </div>
-
           {/* User Type Selection */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -239,7 +195,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               </div>
             </div>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
             <div className="relative">
@@ -263,7 +218,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               </div>
             </div>
           </div>
-          
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -303,7 +257,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               Password must have 8+ characters, one uppercase letter, and one special character
             </div>
           </div>
-          
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
@@ -317,7 +270,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               disabled={isLoading}
             />
           </div>
-
           {/* Terms & Conditions and Newsletter */}
           <div className="space-y-3 pt-2 border-t border-gray-200">
             <div className="flex items-start space-x-2">
@@ -351,7 +303,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <span className="text-red-500 ml-1">*</span>
               </label>
             </div>
-            
             <div className="flex items-start space-x-2">
               <input
                 id="subscribeNewsletter"
@@ -368,13 +319,11 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
               </label>
             </div>
           </div>
-          
           {error && (
             <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
               {error}
             </div>
           )}
-          
           <Button 
             type="submit" 
             className="w-full bg-sage-600 hover:bg-sage-700 text-white font-medium" 
@@ -383,7 +332,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>
         </form>
-        
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-sage-200" />
@@ -392,7 +340,6 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             <span className="bg-white px-2 text-sage-600">Or continue with</span>
           </div>
         </div>
-
         <Button
           variant="outline"
           className="w-full"

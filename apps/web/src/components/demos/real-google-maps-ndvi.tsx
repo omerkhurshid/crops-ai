@@ -15,7 +15,8 @@ import {
   Info,
   Play,
   Pause,
-  RefreshCw
+  RefreshCw,
+  AlertTriangle
 } from 'lucide-react'
 
 // Real coordinates for a corn field in Central Nebraska
@@ -339,16 +340,11 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
   }, [])
 
   const availableDates = [
-    '2024-05-15',
-    '2024-06-01', 
-    '2024-06-15',
-    '2024-07-01',
-    '2024-07-15',
-    '2024-08-01',
-    '2024-08-15',
-    '2024-09-01',
-    '2024-09-15',
-    '2024-10-01'
+    '2024-06-15', // V12 - Mid vegetative
+    '2024-07-15', // R1 - Peak growth/Silking
+    '2024-08-15', // R4 - Mid grain fill (current)
+    '2024-09-15', // R6 - Maturity
+    '2024-10-01'  // Harvest ready
   ]
 
   return (
@@ -533,26 +529,82 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           </div>
         )}
 
-        {/* Enhanced Real-time Insights */}
+        {/* Professional AI Insights & Actions */}
         {ndviData && (
-          <div className="bg-green-50 p-3 rounded-lg">
-            <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              AI-Powered Insights
-            </h5>
-            <div className="space-y-1 text-sm text-green-700">
-              <div>• Field health: <span className="font-medium">{ndviData.healthStatus}</span></div>
-              <div>• Growth stage: <span className="font-medium">{ndviData.stage}</span></div>
-              <div>• Yield projection: <span className="font-medium">{ndviData.yieldProjection} bu/acre</span></div>
-              <div>• Field uniformity: <span className="font-medium">{ndviData.uniformity}%</span></div>
-              {ndviData.recommendations && ndviData.recommendations.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-green-200">
-                  <div className="font-medium text-green-800 mb-1">Recommendations:</div>
+          <div className="space-y-4">
+            {/* Field Performance Analysis */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+              <h5 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Field Performance Analysis
+              </h5>
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div className="bg-white/60 p-3 rounded-lg">
+                  <div className="text-sm text-gray-600 mb-1">Health Status</div>
+                  <div className="font-semibold text-green-700">{ndviData.healthStatus}</div>
+                </div>
+                <div className="bg-white/60 p-3 rounded-lg">
+                  <div className="text-sm text-gray-600 mb-1">Projected Revenue</div>
+                  <div className="font-semibold text-green-700">
+                    ${((ndviData.yieldProjection * 4.25 * 160) / 1000).toFixed(0)}k
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm text-green-700">
+                <div className="flex justify-between items-center">
+                  <span>Field uniformity benchmark:</span>
+                  <span className="font-medium">{ndviData.uniformity}% (Above average)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Actionable Recommendations */}
+            {ndviData.recommendations && ndviData.recommendations.length > 0 && (
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                <h5 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Priority Actions - Next 7 Days
+                </h5>
+                <div className="space-y-3">
                   {ndviData.recommendations.map((rec: string, idx: number) => (
-                    <div key={idx} className="text-xs">• {rec}</div>
+                    <div key={idx} className="flex items-start gap-3 bg-white/60 p-3 rounded-lg">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-xs font-medium text-blue-700">{idx + 1}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-blue-800">{rec}</div>
+                        <div className="text-xs text-blue-600 mt-1">
+                          {idx === 0 && "Critical timing for optimal yield"}
+                          {idx === 1 && "Recommended within 5-7 days"}
+                          {idx === 2 && "Weather-dependent activity"}
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* Risk Assessment */}
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-lg border border-orange-200">
+              <h5 className="font-semibold text-orange-800 mb-3 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4" />
+                Risk Assessment & Alerts
+              </h5>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between bg-white/60 p-2 rounded">
+                  <span className="text-sm text-orange-700">Disease Pressure</span>
+                  <Badge className="bg-green-100 text-green-800 text-xs">Low</Badge>
+                </div>
+                <div className="flex items-center justify-between bg-white/60 p-2 rounded">
+                  <span className="text-sm text-orange-700">Moisture Stress</span>
+                  <Badge className="bg-yellow-100 text-yellow-800 text-xs">Monitor</Badge>
+                </div>
+                <div className="flex items-center justify-between bg-white/60 p-2 rounded">
+                  <span className="text-sm text-orange-700">Pest Activity</span>
+                  <Badge className="bg-green-100 text-green-800 text-xs">Normal</Badge>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -35,11 +35,11 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.app *.vercel-analytics.com *.sentry.io;
-      style-src 'self' 'unsafe-inline' fonts.googleapis.com;
-      img-src 'self' blob: data: *.cloudinary.com *.openweathermap.org;
-      font-src 'self' fonts.gstatic.com;
-      connect-src 'self' *.vercel.app *.vercel-analytics.com api.openweathermap.org *.supabase.co *.sentry.io;
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' *.vercel.app *.vercel-analytics.com *.sentry.io *.googleapis.com *.gstatic.com;
+      style-src 'self' 'unsafe-inline' fonts.googleapis.com *.googleapis.com;
+      img-src 'self' blob: data: *.cloudinary.com *.openweathermap.org *.googleapis.com *.gstatic.com *.google.com;
+      font-src 'self' fonts.gstatic.com *.gstatic.com;
+      connect-src 'self' *.vercel.app *.vercel-analytics.com api.openweathermap.org *.supabase.co *.sentry.io *.googleapis.com;
       object-src 'none';
       base-uri 'self';
       form-action 'self';

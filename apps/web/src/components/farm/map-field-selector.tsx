@@ -1,17 +1,14 @@
 'use client'
-
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-
 interface MapFieldSelectorProps {
   fieldId: string
   onBoundariesDetected: (boundaries: Array<{ lat: number; lng: number }>) => void
   onClose: () => void
 }
-
 export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: MapFieldSelectorProps) {
   const [coordinates, setCoordinates] = useState({
     centerLat: '',
@@ -21,19 +18,16 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
   const [isDetecting, setIsDetecting] = useState(false)
   const [detectedFields, setDetectedFields] = useState<any[]>([])
   const [selectedField, setSelectedField] = useState<number | null>(null)
-
   const detectBoundaries = async () => {
     if (!coordinates.centerLat || !coordinates.centerLng) {
       alert('Please enter coordinates for your field location')
       return
     }
-
     setIsDetecting(true)
     try {
       const lat = parseFloat(coordinates.centerLat)
       const lng = parseFloat(coordinates.centerLng)
       const radiusKm = parseFloat(coordinates.radius) / 1000
-
       // Create bounding box around the center point
       const bbox = {
         west: lng - radiusKm * 0.01,
@@ -41,7 +35,6 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
         east: lng + radiusKm * 0.01,
         north: lat + radiusKm * 0.01
       }
-
       const response = await fetch('/api/satellite/boundaries', {
         method: 'POST',
         headers: {
@@ -63,9 +56,7 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
           }
         })
       })
-
       const result = await response.json()
-      
       if (result.success && result.data.boundaries) {
         setDetectedFields(result.data.boundaries)
       } else {
@@ -78,28 +69,23 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
       setIsDetecting(false)
     }
   }
-
   const selectField = (index: number) => {
     setSelectedField(index)
   }
-
   const confirmSelection = () => {
     if (selectedField !== null && detectedFields[selectedField]) {
       const field = detectedFields[selectedField]
-      
       // Convert polygon coordinates to lat/lng array
       if (field.geometry && field.geometry.coordinates && field.geometry.coordinates[0]) {
         const coordinates = field.geometry.coordinates[0].map((coord: number[]) => ({
           lat: coord[1],
           lng: coord[0]
         }))
-        
         onBoundariesDetected(coordinates)
       }
     }
     onClose()
   }
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -158,7 +144,6 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
                 </Button>
               </div>
             </div>
-
             {/* Step 2: Select Detected Field */}
             {detectedFields.length > 0 && (
               <div>
@@ -192,14 +177,12 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
                 </div>
               </div>
             )}
-
             {detectedFields.length === 0 && !isDetecting && coordinates.centerLat && coordinates.centerLng && (
               <div className="text-center py-8 text-gray-500">
                 <p>No field boundaries detected in this area.</p>
                 <p className="text-sm mt-2">Try adjusting the coordinates or increasing the search radius.</p>
               </div>
             )}
-
             {/* Action Buttons */}
             <div className="flex justify-between pt-4 border-t">
               <Button variant="outline" onClick={onClose}>

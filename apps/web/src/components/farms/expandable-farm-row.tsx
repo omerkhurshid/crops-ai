@@ -1,17 +1,14 @@
 'use client'
-
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { ChevronDown, ChevronRight, MapPin } from 'lucide-react'
 import { FarmHealthCard } from './farm-health-card'
 import { cn } from '../../lib/utils'
-
 interface Field {
   id: string
   name: string
   area: number
 }
-
 interface Farm {
   id: string
   name: string
@@ -23,18 +20,14 @@ interface Farm {
   fieldsCount: number
   fields: Field[]
 }
-
 interface ExpandableFarmRowProps {
   farm: Farm
 }
-
 export function ExpandableFarmRow({ farm }: ExpandableFarmRowProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded)
   }
-
   return (
     <>
       <tr className="hover:bg-sage-50/30 transition-colors">
@@ -85,7 +78,6 @@ export function ExpandableFarmRow({ farm }: ExpandableFarmRowProps) {
           />
         </td>
       </tr>
-      
       {/* Expanded Fields Row */}
       {isExpanded && farm.fields && farm.fields.length > 0 && (
         <tr className="bg-sage-25/50">

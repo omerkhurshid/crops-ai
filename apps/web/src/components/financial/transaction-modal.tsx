@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -15,20 +14,17 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { X, DollarSign, Calendar, Tag, FileText, AlertCircle } from 'lucide-react';
-
 interface Field {
   id: string;
   name: string;
   area: number;
 }
-
 interface Crop {
   id: string;
   fieldId: string;
   cropType: string;
   variety?: string;
 }
-
 interface TransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,7 +34,6 @@ interface TransactionModalProps {
   onSuccess: () => void;
   editTransaction?: any;
 }
-
 const INCOME_CATEGORIES = [
   { value: 'CROP_SALES', label: 'Crop Sales', icon: '🌾' },
   { value: 'LIVESTOCK_SALES', label: 'Livestock Sales', icon: '🐄' },
@@ -46,7 +41,6 @@ const INCOME_CATEGORIES = [
   { value: 'LEASE_INCOME', label: 'Lease Income', icon: '🏡' },
   { value: 'OTHER_INCOME', label: 'Other Income', icon: '📈' },
 ];
-
 const EXPENSE_CATEGORIES = [
   { value: 'SEEDS', label: 'Seeds', icon: '🌱' },
   { value: 'FERTILIZER', label: 'Fertilizer', icon: '🧪' },
@@ -60,7 +54,6 @@ const EXPENSE_CATEGORIES = [
   { value: 'OVERHEAD', label: 'Overhead', icon: '🏢' },
   { value: 'OTHER_EXPENSE', label: 'Other Expense', icon: '📄' },
 ];
-
 export function TransactionModal({
   isOpen,
   onClose,
@@ -74,7 +67,6 @@ export function TransactionModal({
   const [fields, setFields] = useState<Field[]>([]);
   const [crops, setCrops] = useState<Crop[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
   const [formData, setFormData] = useState({
     type,
     category: '',
@@ -89,9 +81,7 @@ export function TransactionModal({
     notes: '',
     tags: [] as string[],
   });
-
   const [tagInput, setTagInput] = useState('');
-
   useEffect(() => {
     if (isOpen) {
       fetchFields();
@@ -102,13 +92,11 @@ export function TransactionModal({
       }
     }
   }, [isOpen, editTransaction]);
-
   useEffect(() => {
     if (formData.fieldId) {
       fetchCrops(formData.fieldId);
     }
   }, [formData.fieldId]);
-
   useEffect(() => {
     // Auto-calculate amount if quantity and unit price are provided
     if (formData.quantity && formData.unitPrice) {
@@ -116,7 +104,6 @@ export function TransactionModal({
       setFormData(prev => ({ ...prev, amount: calculatedAmount.toFixed(2) }));
     }
   }, [formData.quantity, formData.unitPrice]);
-
   const resetForm = () => {
     setFormData({
       type,
@@ -135,7 +122,6 @@ export function TransactionModal({
     setTagInput('');
     setErrors({});
   };
-
   const populateForm = (transaction: any) => {
     setFormData({
       type: transaction.type,
@@ -152,7 +138,6 @@ export function TransactionModal({
       tags: transaction.tags || [],
     });
   };
-
   const fetchFields = async () => {
     try {
       const response = await fetch(`/api/fields?farmId=${farmId}`);
@@ -164,7 +149,6 @@ export function TransactionModal({
       console.error('Error fetching fields:', error);
     }
   };
-
   const fetchCrops = async (fieldId: string) => {
     try {
       const response = await fetch(`/api/crops?fieldId=${fieldId}`);
@@ -176,39 +160,29 @@ export function TransactionModal({
       console.error('Error fetching crops:', error);
     }
   };
-
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.category) {
       newErrors.category = 'Category is required';
     }
-
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       newErrors.amount = 'Valid amount is required';
     }
-
     if (!formData.transactionDate) {
       newErrors.transactionDate = 'Transaction date is required';
     }
-
     if (formData.quantity && (!formData.unitPrice || parseFloat(formData.unitPrice) <= 0)) {
       newErrors.unitPrice = 'Unit price is required when quantity is specified';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setLoading(true);
-    
     try {
       const payload = {
         farmId,
@@ -221,19 +195,15 @@ export function TransactionModal({
         fieldId: formData.fieldId || undefined,
         cropId: formData.cropId || undefined,
       };
-
       const url = editTransaction
         ? `/api/financial/transactions/${editTransaction.id}`
         : '/api/financial/transactions';
-      
       const method = editTransaction ? 'PUT' : 'POST';
-
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
       if (response.ok) {
         onSuccess();
         onClose();
@@ -256,7 +226,6 @@ export function TransactionModal({
       setLoading(false);
     }
   };
-
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
       setFormData(prev => ({
@@ -266,17 +235,14 @@ export function TransactionModal({
       setTagInput('');
     }
   };
-
   const handleRemoveTag = (tagToRemove: string) => {
     setFormData(prev => ({
       ...prev,
       tags: prev.tags.filter(tag => tag !== tagToRemove)
     }));
   };
-
   const categories = type === 'INCOME' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
   const selectedCategory = categories.find(cat => cat.value === formData.category);
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -292,7 +258,6 @@ export function TransactionModal({
             </span>
           </DialogTitle>
         </DialogHeader>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           {errors.general && (
             <div className="flex items-center space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -300,7 +265,6 @@ export function TransactionModal({
               <span className="text-red-700">{errors.general}</span>
             </div>
           )}
-
           {/* Category Selection */}
           <div className="space-y-2">
             <Label htmlFor="category">Category *</Label>
@@ -331,7 +295,6 @@ export function TransactionModal({
             </Select>
             {errors.category && <p className="text-sm text-red-500">{errors.category}</p>}
           </div>
-
           {/* Subcategory */}
           <div className="space-y-2">
             <Label htmlFor="subcategory">Subcategory</Label>
@@ -342,7 +305,6 @@ export function TransactionModal({
               placeholder="Optional subcategory"
             />
           </div>
-
           {/* Amount, Quantity, Unit Price */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -359,7 +321,6 @@ export function TransactionModal({
               />
               {errors.amount && <p className="text-sm text-red-500">{errors.amount}</p>}
             </div>
-            
             <div className="space-y-2">
               <Label htmlFor="quantity">Quantity</Label>
               <Input
@@ -372,7 +333,6 @@ export function TransactionModal({
                 placeholder="Optional"
               />
             </div>
-            
             <div className="space-y-2">
               <Label htmlFor="unitPrice">Unit Price ($)</Label>
               <Input
@@ -388,7 +348,6 @@ export function TransactionModal({
               {errors.unitPrice && <p className="text-sm text-red-500">{errors.unitPrice}</p>}
             </div>
           </div>
-
           {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -402,7 +361,6 @@ export function TransactionModal({
               />
               {errors.transactionDate && <p className="text-sm text-red-500">{errors.transactionDate}</p>}
             </div>
-            
             <div className="space-y-2">
               <Label htmlFor="paymentDate">Payment Date</Label>
               <Input
@@ -414,7 +372,6 @@ export function TransactionModal({
               />
             </div>
           </div>
-
           {/* Field and Crop Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -435,7 +392,6 @@ export function TransactionModal({
                 </SelectContent>
               </Select>
             </div>
-            
             <div className="space-y-2">
               <Label htmlFor="crop">Crop</Label>
               <Select
@@ -456,7 +412,6 @@ export function TransactionModal({
               </Select>
             </div>
           </div>
-
           {/* Notes */}
           <div className="space-y-2">
             <Label htmlFor="notes">Notes</Label>
@@ -468,7 +423,6 @@ export function TransactionModal({
               rows={3}
             />
           </div>
-
           {/* Tags */}
           <div className="space-y-2">
             <Label>Tags</Label>
@@ -495,7 +449,6 @@ export function TransactionModal({
               </Button>
             </div>
           </div>
-
           {/* Actions */}
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading}>

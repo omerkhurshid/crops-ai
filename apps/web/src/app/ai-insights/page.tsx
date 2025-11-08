@@ -1,5 +1,4 @@
 'use client'
-
 import { useSession } from '../../lib/auth-unified'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -11,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/ta
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { Brain, Target, TrendingUp, Settings, Zap, BarChart } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
@@ -23,55 +21,45 @@ interface Farm {
     area: number
   }>
 }
-
 export default function AIInsightsPage({ searchParams }: { searchParams: { farmId?: string } }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farms, setFarms] = useState<Farm[]>([])
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Fetch farms data
     const fetchData = async () => {
       try {
         // Fetch user's farms
         const farmsResponse = await fetch('/api/farms')
         let farmsData: Farm[] = []
-        
         if (farmsResponse.ok) {
           farmsData = await farmsResponse.json()
           setFarms(farmsData)
         }
-
         // If no farms exist, redirect to farm creation
         if (farmsData.length === 0) {
           router.push('/farms/create-unified')
           return
         }
-
         // Select farm (either from searchParams or first farm)
         const targetFarmId = searchParams.farmId || farmsData[0]?.id
         const farm = farmsData.find(f => f.id === targetFarmId) || farmsData[0]
         setSelectedFarm(farm)
-
       } catch (error) {
         console.error('Error fetching farms data:', error)
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router, searchParams])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -82,11 +70,9 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null // Will redirect
   }
-
   return (
     <DashboardLayout>
       <ClientFloatingButton
@@ -94,7 +80,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
         label="AI Settings"
         variant="secondary"
       />
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -108,7 +93,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
                 Intelligent crop management and yield optimization powered by machine learning
               </p>
             </div>
-
             {farms.length > 0 && (
               <div className="w-64">
                 <FarmSelector 
@@ -119,7 +103,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
             )}
           </div>
         </div>
-
         {/* AI Capabilities Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <ModernCard variant="floating">
@@ -131,7 +114,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
               </ModernCardDescription>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating">
             <ModernCardContent className="p-6 text-center">
               <TrendingUp className="h-12 w-12 text-green-600 mx-auto mb-4" />
@@ -141,7 +123,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
               </ModernCardDescription>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating">
             <ModernCardContent className="p-6 text-center">
               <Zap className="h-12 w-12 text-purple-600 mx-auto mb-4" />
@@ -152,7 +133,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Main Content Tabs */}
         <Tabs defaultValue="ml-insights" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
@@ -165,7 +145,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
               Smart Recommendations
             </TabsTrigger>
           </TabsList>
-
           <TabsContent value="ml-insights" className="space-y-6">
             <ModernCard variant="floating">
               <ModernCardHeader>
@@ -185,7 +164,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
               </ModernCardContent>
             </ModernCard>
           </TabsContent>
-
           <TabsContent value="recommendations" className="space-y-6">
             <ModernCard variant="floating">
               <ModernCardHeader>
@@ -200,7 +178,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
             </ModernCard>
           </TabsContent>
         </Tabs>
-
         {/* Additional AI Tools */}
         <div className="mt-12">
           <h2 className="text-2xl font-light text-sage-800 mb-6">AI-Powered Tools</h2>
@@ -216,7 +193,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
                 </p>
               </ModernCardContent>
             </ModernCard>
-
             <ModernCard variant="floating" className="cursor-pointer hover:shadow-lg transition-shadow">
               <ModernCardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -228,7 +204,6 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
                 </p>
               </ModernCardContent>
             </ModernCard>
-
             <ModernCard variant="floating" className="cursor-pointer hover:shadow-lg transition-shadow">
               <ModernCardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">

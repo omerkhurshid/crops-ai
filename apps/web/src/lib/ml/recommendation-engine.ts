@@ -5,7 +5,6 @@
  * pest control, and operational decisions based on ML models, historical data,
  * weather patterns, and best practices.
  */
-
 import { redis } from '../redis';
 import { prisma } from '../prisma';
 import { yieldPrediction } from './yield-prediction';
@@ -21,7 +20,6 @@ import type {
   WeatherFeatures,
   SoilFeatures
 } from './types';
-
 export interface RecommendationRequest {
   farmId: string;
   fieldId?: string;
@@ -36,7 +34,6 @@ export interface RecommendationRequest {
     laborConstraints?: boolean;
   };
 }
-
 export type RecommendationCategory = 
   | 'planting' 
   | 'irrigation' 
@@ -47,7 +44,6 @@ export type RecommendationCategory =
   | 'soil_management'
   | 'equipment'
   | 'marketing';
-
 export interface Recommendation {
   id: string;
   category: RecommendationCategory;
@@ -84,7 +80,6 @@ export interface Recommendation {
   tags: string[];
   source: 'ml_model' | 'expert_system' | 'best_practices' | 'weather_based' | 'soil_based';
 }
-
 export interface Resource {
   type: 'seed' | 'fertilizer' | 'pesticide' | 'water' | 'equipment' | 'labor';
   name: string;
@@ -94,7 +89,6 @@ export interface Resource {
   supplier?: string;
   specifications?: Record<string, any>;
 }
-
 export interface RecommendationPlan {
   id: string;
   farmId: string;
@@ -112,14 +106,12 @@ export interface RecommendationPlan {
   timeline: TimelineEntry[];
   alternatives: AlternativePlan[];
 }
-
 export interface TimelineEntry {
   date: Date;
   recommendations: string[]; // recommendation IDs
   description: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
-
 export interface AlternativePlan {
   name: string;
   description: string;
@@ -128,7 +120,6 @@ export interface AlternativePlan {
   riskScore: number;
   tradeoffs: string[];
 }
-
 export interface RecommendationFeedback {
   recommendationId: string;
   userId: string;
@@ -143,40 +134,31 @@ export interface RecommendationFeedback {
   comments?: string;
   submittedAt: Date;
 }
-
 class AgricultureRecommendationEngine {
   private readonly CACHE_PREFIX = 'recommendation_';
   private readonly PLAN_TTL = 7 * 24 * 60 * 60; // 7 days
   private readonly FEEDBACK_TTL = 365 * 24 * 60 * 60; // 1 year
-
   private knowledgeBase: Map<string, any> = new Map();
   private bestPractices: Map<string, any> = new Map();
-
   constructor() {
     this.loadKnowledgeBase();
   }
-
   /**
    * Generate comprehensive recommendation plan
    */
   async generateRecommendations(request: RecommendationRequest): Promise<RecommendationPlan> {
     const startTime = Date.now();
-
     try {
       // Check cache first
       const cacheKey = this.generateCacheKey(request);
       const cached = await this.getCachedPlan(cacheKey);
       if (cached) {
-
         return cached;
       }
-
       // Gather context data
       const context = await this.gatherContext(request);
-      
       // Generate recommendations by category
       const recommendations: Recommendation[] = [];
-      
       for (const category of request.categories) {
         const categoryRecs = await this.generateCategoryRecommendations(
           category,
@@ -185,29 +167,23 @@ class AgricultureRecommendationEngine {
         );
         recommendations.push(...categoryRecs);
       }
-
       // Add weather pattern-based recommendations if weather analysis is available
       if (context.weatherAnalysis || context.seasonalForecast || context.climateAdaptation) {
         const weatherRecs = await this.generateWeatherPatternRecommendations(context, request);
         recommendations.push(...weatherRecs);
       }
-
       // Prioritize and filter recommendations
       const prioritizedRecs = await this.prioritizeRecommendations(
         recommendations,
         request.priority,
         request.constraints
       );
-
       // Create implementation timeline
       const timeline = await this.createTimeline(prioritizedRecs, request.timeHorizon);
-
       // Generate alternatives
       const alternatives = await this.generateAlternatives(prioritizedRecs, context, request);
-
       // Calculate summary metrics
       const summary = await this.calculateSummary(prioritizedRecs);
-
       const plan: RecommendationPlan = {
         id: `plan_${request.farmId}_${Date.now()}`,
         farmId: request.farmId,
@@ -219,18 +195,14 @@ class AgricultureRecommendationEngine {
         timeline,
         alternatives
       };
-
       // Cache the plan
       await this.cachePlan(cacheKey, plan);
-
       return plan;
-
     } catch (error) {
       console.error(`Failed to generate recommendations for farm ${request.farmId}`, error);
       throw error;
     }
   }
-
   /**
    * Get specific recommendations for planting decisions
    */
@@ -242,33 +214,26 @@ class AgricultureRecommendationEngine {
     try {
       const context = await this.gatherFieldContext(fieldId);
       const recommendations: Recommendation[] = [];
-
       // Variety selection
       if (targetCrop) {
         const varietyRec = await this.recommendVariety(targetCrop, context);
         if (varietyRec) recommendations.push(varietyRec);
       }
-
       // Planting timing
       const timingRec = await this.recommendPlantingTiming(context);
       if (timingRec) recommendations.push(timingRec);
-
       // Seed rate and spacing
       const seedingRec = await this.recommendSeedingRate(targetCrop || context.cropType, context);
       if (seedingRec) recommendations.push(seedingRec);
-
       // Soil preparation
       const soilPrepRec = await this.recommendSoilPreparation(context);
       if (soilPrepRec) recommendations.push(soilPrepRec);
-
       return recommendations;
-
     } catch (error) {
       console.error(`Failed to get planting recommendations for field ${fieldId}`, error);
       throw error;
     }
   }
-
   /**
    * Record user feedback on recommendations
    */
@@ -279,16 +244,13 @@ class AgricultureRecommendationEngine {
         const feedbackKey = `feedback_${feedback.recommendationId}_${feedback.userId}`;
         await redis.set(feedbackKey, feedback, { ex: this.FEEDBACK_TTL });
       }
-
       // Update recommendation effectiveness scores
       await this.updateRecommendationScores(feedback);
-
       } catch (error) {
       console.error(`Failed to record feedback for recommendation ${feedback.recommendationId}`, error);
       throw error;
     }
   }
-
   /**
    * Get recommendation effectiveness analytics
    */
@@ -297,7 +259,6 @@ class AgricultureRecommendationEngine {
       // Get all feedback for the farm
       const feedbackPattern = `feedback_*_${farmId}`;
       // In production, would query Redis or database for feedback data
-      
       return {
         totalRecommendations: 150,
         implementationRate: 0.72,
@@ -314,15 +275,12 @@ class AgricultureRecommendationEngine {
           effectivenessTrend: [3.8, 4.0, 4.1, 4.2, 4.1, 4.1]
         }
       };
-
     } catch (error) {
       console.error(`Failed to get recommendation analytics for farm ${farmId}`, error);
       throw error;
     }
   }
-
   // Private methods
-
   private async gatherContext(request: RecommendationRequest) {
     const context: any = {
       farm: null,
@@ -337,7 +295,6 @@ class AgricultureRecommendationEngine {
       seasonalForecast: null,
       climateAdaptation: null
     };
-
     try {
       // Get farm information
       context.farm = await prisma.farm.findUnique({
@@ -347,11 +304,9 @@ class AgricultureRecommendationEngine {
           owner: true
         }
       });
-
       if (!context.farm) {
         throw new Error(`Farm ${request.farmId} not found`);
       }
-
       // Get field-specific data if specified
       if (request.fieldId) {
         const field = await prisma.field.findUnique({
@@ -364,14 +319,12 @@ class AgricultureRecommendationEngine {
       } else {
         context.fields = context.farm.fields;
       }
-
       // Get USDA regional recommendations
       if (context.farm.latitude && context.farm.longitude) {
         context.usda = await usdaService.getRegionalRecommendations(
           context.farm.latitude,
           context.farm.longitude
         );
-        
         // Get peer benchmarking data
         if (request.cropType) {
           context.peerBenchmark = await usdaService.getPeerBenchmarkData(
@@ -380,7 +333,6 @@ class AgricultureRecommendationEngine {
             context.fields.reduce((sum: number, field: any) => sum + (field.area || 0), 0)
           );
         }
-
         // Get USDA market data
         if (request.cropType) {
           context.market = await usdaService.getMarketData(
@@ -388,16 +340,13 @@ class AgricultureRecommendationEngine {
             context.usda.region.code
           );
         }
-
         // Get weather patterns and climate adaptation strategies from USDA
         context.weatherPatterns = await usdaService.getWeatherPatterns(context.usda.region.code);
-        
         // Get detailed weather pattern analysis
         context.weatherAnalysis = await weatherPatternAnalysis.analyzeCurrentPatterns(
           context.farm.latitude,
           context.farm.longitude
         );
-
         // Get historical weather correlations for the crop
         if (request.cropType) {
           context.weatherCorrelations = await weatherPatternAnalysis.getHistoricalCorrelations(
@@ -406,7 +355,6 @@ class AgricultureRecommendationEngine {
             context.farm.longitude
           );
         }
-
         // Get seasonal forecast
         const currentSeason = this.getCurrentSeason();
         context.seasonalForecast = await weatherPatternAnalysis.generateSeasonalForecast(
@@ -414,7 +362,6 @@ class AgricultureRecommendationEngine {
           context.farm.longitude,
           currentSeason
         );
-
         // Get climate adaptation recommendations
         context.climateAdaptation = await weatherPatternAnalysis.getClimateAdaptation(
           context.farm.latitude,
@@ -422,39 +369,30 @@ class AgricultureRecommendationEngine {
           '10_year'
         );
       }
-
       // Get weather context (enhanced with pattern analysis)
       context.weather = await this.getWeatherContext(context.farm.address || context.farm.region || 'default');
-
       // Get soil context
       context.soil = await this.getSoilContext(context.fields);
-
       // Get historical performance
       context.historical = await this.getHistoricalContext(request.farmId);
-
       // Fallback market context if USDA data not available
       if (!context.market) {
         context.market = await this.getMarketContext(request.cropType);
       }
-
       return context;
-
     } catch (error) {
       console.error('Failed to gather context for recommendations', error);
       throw error;
     }
   }
-
   private async gatherFieldContext(fieldId: string) {
     const field = await prisma.field.findUnique({
       where: { id: fieldId },
       include: { farm: true }
     });
-
     if (!field) {
       throw new Error(`Field ${fieldId} not found`);
     }
-
     return {
       field,
       farm: field.farm,
@@ -463,7 +401,6 @@ class AgricultureRecommendationEngine {
       location: field.farm.address || field.farm.region || 'default'
     };
   }
-
   private async generateCategoryRecommendations(
     category: RecommendationCategory,
     context: any,
@@ -492,15 +429,12 @@ class AgricultureRecommendationEngine {
         return [];
     }
   }
-
   /**
    * Generate weather pattern-based recommendations
    */
   private async generateWeatherPatternRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
-
     if (!context.weatherAnalysis) return recommendations;
-
     // Active weather pattern recommendations
     context.weatherAnalysis.activePatterns.forEach((pattern: any) => {
       recommendations.push({
@@ -547,7 +481,6 @@ class AgricultureRecommendationEngine {
         source: 'weather_based'
       });
     });
-
     // Seasonal forecast recommendations
     if (context.seasonalForecast) {
       recommendations.push({
@@ -589,7 +522,6 @@ class AgricultureRecommendationEngine {
         source: 'weather_based'
       });
     }
-
     // Historical correlation-based recommendations
     if (context.weatherCorrelations?.length > 0) {
       const strongCorrelation = context.weatherCorrelations.find((c: any) => Math.abs(c.correlationCoefficient) > 0.7);
@@ -639,7 +571,6 @@ class AgricultureRecommendationEngine {
         });
       }
     }
-
     // Climate adaptation recommendations
     if (context.climateAdaptation) {
       recommendations.push({
@@ -685,18 +616,14 @@ class AgricultureRecommendationEngine {
         source: 'expert_system'
       });
     }
-
     return recommendations;
   }
-
   private async generatePlantingRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
-
     // Enhanced variety selection using USDA data
     if (request.cropType && context.usda) {
       const plantingGuide = await usdaService.getPlantingGuide(request.cropType, context.usda.region.code);
       const bestVariety = plantingGuide.varietyRecommendations[0];
-
       recommendations.push({
         id: `planting_variety_${Date.now()}`,
         category: 'planting',
@@ -744,7 +671,6 @@ class AgricultureRecommendationEngine {
         tags: ['usda_recommended', 'variety_selection', 'disease_resistance', 'yield_optimization'],
         source: 'expert_system'
       });
-
       // USDA-based planting timing recommendation
       const plantingDate = this.parsePlantingDate(plantingGuide.plantingTiming.optimal);
       recommendations.push({
@@ -788,7 +714,6 @@ class AgricultureRecommendationEngine {
         tags: ['usda_timing', 'soil_temperature', 'regional_adaptation'],
         source: 'expert_system'
       });
-
       // Peer benchmarking recommendation
       if (context.peerBenchmark) {
         recommendations.push({
@@ -828,7 +753,6 @@ class AgricultureRecommendationEngine {
         });
       }
     }
-
     // Planting timing recommendation
     recommendations.push({
       id: `planting_timing_${Date.now()}`,
@@ -871,13 +795,10 @@ class AgricultureRecommendationEngine {
       tags: ['timing', 'weather_based', 'emergence'],
       source: 'weather_based'
     });
-
     return recommendations;
   }
-
   private async generateIrrigationRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
-
     // Smart irrigation scheduling
     recommendations.push({
       id: `irrigation_schedule_${Date.now()}`,
@@ -928,18 +849,14 @@ class AgricultureRecommendationEngine {
       tags: ['water_management', 'sustainability', 'automation'],
       source: 'ml_model'
     });
-
     return recommendations;
   }
-
   private async generateFertilizationRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
-
     // Enhanced fertilization using USDA data
     if (request.cropType && context.usda) {
       const plantingGuide = await usdaService.getPlantingGuide(request.cropType, context.usda.region.code);
       const fertilizerRec = plantingGuide.fertilizer;
-
       // Pre-plant fertilizer recommendation
       recommendations.push({
         id: `fertilization_preplant_usda_${Date.now()}`,
@@ -1008,7 +925,6 @@ class AgricultureRecommendationEngine {
         tags: ['usda_recommended', 'preplant_fertilizer', 'regional_optimization', 'yield_optimization'],
         source: 'expert_system'
       });
-
       // Side-dress nitrogen applications
       fertilizerRec.sideDress.forEach((sideDress, index) => {
         recommendations.push({
@@ -1059,7 +975,6 @@ class AgricultureRecommendationEngine {
           source: 'expert_system'
         });
       });
-
       // Peer comparison fertilizer efficiency
       if (context.peerBenchmark) {
         recommendations.push({
@@ -1104,40 +1019,32 @@ class AgricultureRecommendationEngine {
         });
       }
     }
-
     return recommendations;
   }
-
   private async generatePestControlRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for pest control recommendations
     return [];
   }
-
   private async generateHarvestRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for harvest timing recommendations
     return [];
   }
-
   private async generateRotationRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for crop rotation recommendations
     return [];
   }
-
   private async generateSoilManagementRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for soil management recommendations
     return [];
   }
-
   private async generateEquipmentRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for equipment recommendations
     return [];
   }
-
   private async generateMarketingRecommendations(context: any, request: RecommendationRequest): Promise<Recommendation[]> {
     // Implementation for marketing recommendations
     return [];
   }
-
   // Helper methods for variety and timing recommendations
   private async recommendVariety(cropType: string, context: any): Promise<Recommendation | null> {
     try {
@@ -1146,7 +1053,6 @@ class AgricultureRecommendationEngine {
       if (comprehensiveVariety) {
         return comprehensiveVariety;
       }
-
       // Fallback to basic variety recommendation
       return {
         id: `variety_${cropType}_${Date.now()}`,
@@ -1194,7 +1100,6 @@ class AgricultureRecommendationEngine {
       return null;
     }
   }
-
   /**
    * Get variety recommendation from comprehensive database
    */
@@ -1233,17 +1138,14 @@ class AgricultureRecommendationEngine {
           ]
         }
       };
-
       const cropData = mockCropData[cropType.toLowerCase() as keyof typeof mockCropData];
       if (!cropData || !cropData.varieties.length) {
         return null;
       }
-
       // Select the best variety based on yield potential and disease resistance
       const bestVariety = cropData.varieties.reduce((best, current) => 
         current.yield_potential_kg_per_hectare > best.yield_potential_kg_per_hectare ? current : best
       );
-
       return {
         id: `comprehensive_variety_${cropType}_${Date.now()}`,
         category: 'planting',
@@ -1307,28 +1209,23 @@ class AgricultureRecommendationEngine {
         tags: ['comprehensive_database', 'variety_optimization', 'yield_maximization', 'disease_resistance'],
         source: 'ml_model'
       };
-
     } catch (error) {
       console.error(`Failed to get comprehensive crop variety for ${cropType}`, error);
       return null;
     }
   }
-
   private async recommendPlantingTiming(context: any): Promise<Recommendation | null> {
     // Implementation for planting timing recommendation
     return null;
   }
-
   private async recommendSeedingRate(cropType: string, context: any): Promise<Recommendation | null> {
     // Implementation for seeding rate recommendation
     return null;
   }
-
   private async recommendSoilPreparation(context: any): Promise<Recommendation | null> {
     // Implementation for soil preparation recommendation
     return null;
   }
-
   // Context gathering methods
   private async getWeatherContext(location: string) {
     try {
@@ -1339,11 +1236,9 @@ class AgricultureRecommendationEngine {
         new Date()
       );
     } catch (error) {
-
       return null;
     }
   }
-
   private async getSoilContext(fields: any[]) {
     // Simplified soil context
     return {
@@ -1354,7 +1249,6 @@ class AgricultureRecommendationEngine {
       potassium: 180
     };
   }
-
   private async getHistoricalContext(farmId: string) {
     // Simplified historical context
     return {
@@ -1364,7 +1258,6 @@ class AgricultureRecommendationEngine {
       bestPractices: ['cover_crops', 'precision_agriculture']
     };
   }
-
   private async getMarketContext(cropType?: string) {
     // Simplified market context
     return {
@@ -1374,7 +1267,6 @@ class AgricultureRecommendationEngine {
       forecast: 'stable'
     };
   }
-
   // Utility methods
   private async prioritizeRecommendations(
     recommendations: Recommendation[],
@@ -1391,7 +1283,6 @@ class AgricultureRecommendationEngine {
       })
       .slice(0, 10); // Limit to top 10 recommendations
   }
-
   private calculatePriorityScore(recommendation: Recommendation, priority: string): number {
     switch (priority) {
       case 'yield_maximization':
@@ -1406,11 +1297,9 @@ class AgricultureRecommendationEngine {
         return recommendation.confidence;
     }
   }
-
   private async createTimeline(recommendations: Recommendation[], timeHorizon: number): Promise<TimelineEntry[]> {
     const timeline: TimelineEntry[] = [];
     const timelineMap = new Map<string, string[]>();
-
     recommendations.forEach(rec => {
       const dateKey = rec.timing.optimal.toISOString().split('T')[0];
       if (!timelineMap.has(dateKey)) {
@@ -1418,7 +1307,6 @@ class AgricultureRecommendationEngine {
       }
       timelineMap.get(dateKey)!.push(rec.id);
     });
-
     Array.from(timelineMap.entries()).forEach(([dateStr, recIds]) => {
       timeline.push({
         date: new Date(dateStr),
@@ -1427,10 +1315,8 @@ class AgricultureRecommendationEngine {
         priority: 'medium'
       });
     });
-
     return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
   }
-
   private async generateAlternatives(
     recommendations: Recommendation[],
     context: any,
@@ -1455,12 +1341,10 @@ class AgricultureRecommendationEngine {
       }
     ];
   }
-
   private async calculateSummary(recommendations: Recommendation[]) {
     const totalCost = recommendations.reduce((sum, rec) => sum + rec.impact.cost, 0);
     const expectedRevenue = recommendations.reduce((sum, rec) => sum + rec.impact.revenue, 0);
     const avgSustainability = recommendations.reduce((sum, rec) => sum + rec.impact.sustainability, 0) / recommendations.length;
-
     return {
       totalCost,
       expectedROI: expectedRevenue > 0 ? (expectedRevenue - totalCost) / totalCost : 0,
@@ -1469,60 +1353,48 @@ class AgricultureRecommendationEngine {
       implementationComplexity: recommendations.length > 7 ? 'complex' : recommendations.length > 3 ? 'moderate' : 'simple'
     } as any;
   }
-
   private generateCacheKey(request: RecommendationRequest): string {
     return `${this.CACHE_PREFIX}${request.farmId}_${request.fieldId || 'all'}_${request.categories.join('_')}_${request.timeHorizon}`;
   }
-
   private async getCachedPlan(cacheKey: string): Promise<RecommendationPlan | null> {
     if (!redis) {
       return null;
     }
-    
     try {
       return await redis.get(cacheKey) as RecommendationPlan;
     } catch (error) {
       return null;
     }
   }
-
   private async cachePlan(cacheKey: string, plan: RecommendationPlan): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(cacheKey, plan, { ex: this.PLAN_TTL });
     } catch (error) {
       // Cache miss is not critical
     }
   }
-
   private async updateRecommendationScores(feedback: RecommendationFeedback): Promise<void> {
     // Update internal scoring based on feedback
     // In production, this would update ML model weights
   }
-
   private async loadKnowledgeBase(): Promise<void> {
     // Load agricultural knowledge base and best practices
     // In production, this would load from database or external sources
-
   }
-
   private parsePlantingDate(dateString: string): Date {
     // Parse MM-DD format to current year date
     const [month, day] = dateString.split('-').map(n => parseInt(n));
     const currentYear = new Date().getFullYear();
     const date = new Date(currentYear, month - 1, day);
-    
     // If date has passed this year, use next year
     if (date < new Date()) {
       date.setFullYear(currentYear + 1);
     }
-    
     return date;
   }
-
   private getCurrentSeason(): 'spring' | 'summer' | 'fall' | 'winter' {
     const month = new Date().getMonth();
     if (month >= 2 && month <= 4) return 'spring';
@@ -1531,5 +1403,4 @@ class AgricultureRecommendationEngine {
     return 'winter';
   }
 }
-
 export const recommendationEngine = new AgricultureRecommendationEngine();

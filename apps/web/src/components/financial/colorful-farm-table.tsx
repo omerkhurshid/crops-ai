@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -9,7 +8,6 @@ import {
   Eye, DollarSign, Banknote, Calculator
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface FarmBreakdown {
   id: string
   name: string
@@ -23,12 +21,10 @@ interface FarmBreakdown {
   profitPerArea: number
   transactionCount: number
 }
-
 interface ColorfulFarmTableProps {
   farms: FarmBreakdown[]
   onFarmSelect: (farmId: string) => void
 }
-
 export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -38,7 +34,6 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   const getProfitColor = (profit: number) => {
     if (profit > 50000) return 'bg-emerald-500'
     if (profit > 20000) return 'bg-green-500'
@@ -46,12 +41,10 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
     if (profit > -10000) return 'bg-orange-500'
     return 'bg-red-500'
   }
-
   const getProfitTextColor = (profit: number) => {
     if (profit >= 0) return 'text-green-600'
     return 'text-red-600'
   }
-
   const getMarginBadgeColor = (margin: number) => {
     if (margin > 30) return 'bg-emerald-100 text-emerald-800 border-emerald-200'
     if (margin > 20) return 'bg-green-100 text-green-800 border-green-200'
@@ -59,10 +52,8 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
     if (margin > 0) return 'bg-yellow-100 text-yellow-800 border-yellow-200'
     return 'bg-red-100 text-red-800 border-red-200'
   }
-
   const sortedFarms = [...farms].sort((a, b) => b.netProfit - a.netProfit)
   const maxProfit = Math.max(...farms.map(f => Math.abs(f.netProfit)))
-
   return (
     <Card>
       <CardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
@@ -131,7 +122,6 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
             </div>
           ))}
         </div>
-
         {/* Desktop Table Layout */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
@@ -188,14 +178,12 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                       </div>
                     </div>
                   </td>
-
                   {/* Area */}
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <div className="text-sm font-medium text-gray-900">
                       {farm.totalArea.toFixed(1)} ha
                     </div>
                   </td>
-
                   {/* Revenue */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     <div className="text-sm font-medium text-gray-900">
@@ -205,14 +193,12 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                       {farm.transactionCount} trans
                     </div>
                   </td>
-
                   {/* Expenses */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     <div className="text-sm font-medium text-gray-900">
                       {formatCurrency(farm.expenses)}
                     </div>
                   </td>
-
                   {/* Net Profit with Visual Bar */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-3">
@@ -237,14 +223,12 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                       </div>
                     </div>
                   </td>
-
                   {/* Profit Margin */}
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <Badge className={getMarginBadgeColor(farm.profitMargin)}>
                       {farm.profitMargin.toFixed(1)}%
                     </Badge>
                   </td>
-
                   {/* Profit per Hectare */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     <div className={cn(
@@ -259,7 +243,6 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                       {formatCurrency(farm.profitPerArea)}
                     </div>
                   </td>
-
                   {/* Actions */}
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <Button
@@ -320,7 +303,6 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
             </tfoot>
           </table>
         </div>
-
         {/* Legend */}
         <div className="p-4 border-t border-gray-200 bg-gray-50">
           <div className="flex flex-wrap items-center gap-4 text-xs">

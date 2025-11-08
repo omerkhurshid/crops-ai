@@ -1,9 +1,7 @@
 'use client'
-
 import React from 'react'
 import { cn } from '../../lib/utils'
 import { CheckCircle2, AlertTriangle, XCircle, Info } from 'lucide-react'
-
 interface TrafficLightStatusProps {
   status: 'excellent' | 'good' | 'warning' | 'critical'
   size?: 'sm' | 'md' | 'lg'
@@ -11,7 +9,6 @@ interface TrafficLightStatusProps {
   showText?: boolean
   className?: string
 }
-
 const statusConfig = {
   excellent: {
     color: 'bg-green-500',
@@ -42,7 +39,6 @@ const statusConfig = {
     description: 'Immediate attention needed'
   }
 }
-
 const sizeConfig = {
   sm: {
     circle: 'w-3 h-3',
@@ -63,7 +59,6 @@ const sizeConfig = {
     container: 'gap-3'
   }
 }
-
 export function TrafficLightStatus({
   status,
   size = 'md',
@@ -74,7 +69,6 @@ export function TrafficLightStatus({
   const config = statusConfig[status]
   const sizes = sizeConfig[size]
   const Icon = config.icon
-
   return (
     <div className={cn('flex items-center', sizes.container, className)}>
       {showIcon ? (
@@ -88,7 +82,6 @@ export function TrafficLightStatus({
           )} 
         />
       )}
-      
       {showText && (
         <span className={cn('font-medium', sizes.text, config.textColor)}>
           {config.label}
@@ -97,14 +90,12 @@ export function TrafficLightStatus({
     </div>
   )
 }
-
 export function getHealthStatus(healthScore: number): 'excellent' | 'good' | 'warning' | 'critical' {
   if (healthScore >= 85) return 'excellent'
   if (healthScore >= 70) return 'good'
   if (healthScore >= 50) return 'warning'
   return 'critical'
 }
-
 export function getStressStatus(stressPercentage: number): 'excellent' | 'good' | 'warning' | 'critical' {
   if (stressPercentage <= 5) return 'excellent'
   if (stressPercentage <= 15) return 'good'

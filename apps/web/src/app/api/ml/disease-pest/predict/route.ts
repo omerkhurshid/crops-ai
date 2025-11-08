@@ -4,7 +4,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { mlOpsPipeline } from '../../../../../lib/ml/mlops-pipeline';
-
 const diseasePestPredictionSchema = z.object({
   modelId: z.string().default('disease-pest-predictor'),
   input: z.object({
@@ -62,7 +61,6 @@ const diseasePestPredictionSchema = z.object({
     timeHorizon: z.number().min(1).max(30).default(14) // days
   }).optional()
 });
-
 // Disease and pest prediction service
 class DiseasePestPredictor {
   async predictThreats(input: any, options: any = {}) {
@@ -76,7 +74,6 @@ class DiseasePestPredictor {
           options: options
         }
       });
-
       if (modelResponse.prediction) {
         return {
           diseases: modelResponse.prediction.diseases || [],
@@ -93,44 +90,35 @@ class DiseasePestPredictor {
     } catch (error) {
       // ML model not available - using intelligent disease/pest analysis fallback
     }
-
     // Intelligent fallback with sophisticated crop health analysis
     return this.generateIntelligentPredictions(input, options);
   }
-
   private generateIntelligentPredictions(input: any, options: any) {
     const { field, weather, satellite, soil, historical, season, growthStage } = input;
     const diseases = [];
     const pests = [];
     const currentTime = new Date();
-
     // Analyze disease risk factors
     if (options.includeDisease !== false) {
       const diseaseRisks = this.analyzeDiseaseRisks(field, weather, satellite, soil, season, growthStage);
       diseases.push(...diseaseRisks);
     }
-
     // Analyze pest risk factors
     if (options.includePest !== false) {
       const pestRisks = this.analyzePestRisks(field, weather, satellite, soil, season, growthStage);
       pests.push(...pestRisks);
     }
-
     // Filter by confidence threshold
     const filteredDiseases = diseases.filter(d => d.confidence >= (options.confidenceThreshold || 0.6));
     const filteredPests = pests.filter(p => p.confidence >= (options.confidenceThreshold || 0.6));
-
     // Calculate overall risk score
     const allRiskScores = [...filteredDiseases.map(d => d.riskScore), ...filteredPests.map(p => p.riskScore)];
     const overallRiskScore = allRiskScores.length > 0 ? 
       Math.round(allRiskScores.reduce((sum, score) => sum + score, 0) / allRiskScores.length) : 0;
-
     // Generate critical actions
     const criticalActions = this.generateCriticalActions(filteredDiseases, filteredPests);
-
     // Generate monitoring recommendations
     const monitoringRecommendations = this.generateMonitoringRecommendations(filteredDiseases, filteredPests, field);
-
     return {
       diseases: filteredDiseases.slice(0, options.maxPredictions || 10),
       pests: filteredPests.slice(0, options.maxPredictions || 10),
@@ -156,12 +144,10 @@ class DiseasePestPredictor {
       }
     };
   }
-
   private analyzeDiseaseRisks(field: any, weather: any, satellite: any, soil: any, season: string, growthStage: string) {
     const diseases = [];
     const current = weather.current;
     const forecast = weather.forecast;
-
     // Fungal diseases thrive in humid conditions
     if (current.humidity > 80 && current.temperature > 60 && current.temperature < 85) {
       diseases.push(this.createDiseaseRisk({
@@ -179,13 +165,11 @@ class DiseasePestPredictor {
         growthStage
       }));
     }
-
     // Rust diseases favor specific conditions
     if (current.humidity > 95 && current.temperature > 55 && current.temperature < 80) {
       const rustName = field.cropType === 'corn' ? 'Common Rust' : 
                       field.cropType === 'soybean' ? 'Soybean Rust' : 
                       field.cropType === 'wheat' ? 'Stripe Rust' : 'Rust Disease';
-      
       diseases.push(this.createDiseaseRisk({
         id: 'rust',
         name: rustName,
@@ -201,7 +185,6 @@ class DiseasePestPredictor {
         growthStage
       }));
     }
-
     // Bacterial diseases in warm, wet conditions
     if (current.temperature > 75 && forecast.some((day: any) => day.precipitation > 0.2)) {
       diseases.push(this.createDiseaseRisk({
@@ -219,7 +202,6 @@ class DiseasePestPredictor {
         growthStage
       }));
     }
-
     // Soil-borne diseases
     if (soil.moisture > 25 && (soil.ph < 6.0 || soil.ph > 7.5)) {
       diseases.push(this.createDiseaseRisk({
@@ -237,16 +219,13 @@ class DiseasePestPredictor {
         growthStage
       }));
     }
-
     return diseases.sort((a, b) => b.riskScore - a.riskScore);
   }
-
   private analyzePestRisks(field: any, weather: any, satellite: any, soil: any, season: string, growthStage: string) {
     const pests = [];
     const current = weather.current;
     const avgTemp = (current.temperature + weather.forecast.slice(0, 7)
       .reduce((sum: number, day: any) => sum + (day.temp_min + day.temp_max) / 2, 0) / 7) / 2;
-
     // Temperature-driven pest development
     if (avgTemp > 60 && avgTemp < 90) {
       // Corn-specific pests
@@ -267,7 +246,6 @@ class DiseasePestPredictor {
             growthStage
           }));
         }
-
         if (avgTemp > 55 && soil.moisture > 20) {
           pests.push(this.createPestRisk({
             id: 'corn_rootworm',
@@ -285,7 +263,6 @@ class DiseasePestPredictor {
           }));
         }
       }
-
       // Soybean-specific pests
       if (field.cropType === 'soybean') {
         if (current.temperature > 70 && current.humidity > 60) {
@@ -304,7 +281,6 @@ class DiseasePestPredictor {
             growthStage
           }));
         }
-
         if (avgTemp > 60 && season === 'spring') {
           pests.push(this.createPestRisk({
             id: 'bean_leaf_beetle',
@@ -322,7 +298,6 @@ class DiseasePestPredictor {
           }));
         }
       }
-
       // Wheat-specific pests
       if (field.cropType === 'wheat') {
         if (avgTemp > 45 && avgTemp < 75 && season === 'spring') {
@@ -343,7 +318,6 @@ class DiseasePestPredictor {
         }
       }
     }
-
     // General polyphagous pests
     if (current.temperature > 75 && satellite.stressLevel === 'HIGH') {
       pests.push(this.createPestRisk({
@@ -361,47 +335,37 @@ class DiseasePestPredictor {
         growthStage
       }));
     }
-
     return pests.sort((a, b) => b.riskScore - a.riskScore);
   }
-
   private createDiseaseRisk(params: any) {
     const { id, name, type, riskFactors, field, season, growthStage } = params;
-    
     let riskScore = 0;
     let confidence = 0.7;
-
     // Environmental risk scoring
     if (type === 'fungal') {
       if (riskFactors.humidity > 80) riskScore += 25;
       if (riskFactors.leafWetness > 8) riskScore += 20;
       if (riskFactors.temperature > 60 && riskFactors.temperature < 85) riskScore += 15;
     }
-
     if (type === 'bacterial') {
       if (riskFactors.temperature > 75) riskScore += 20;
       if (riskFactors.precipitation > 1.0) riskScore += 25;
       if (riskFactors.woundingSites) riskScore += 15;
     }
-
     // Plant stress increases susceptibility
     if (riskFactors.stressLevel === 'HIGH' || riskFactors.stressLevel === 'SEVERE') {
       riskScore += 20;
       confidence += 0.1;
     }
-
     // Growth stage susceptibility
     if (['reproductive', 'grain_filling'].includes(growthStage)) {
       riskScore += 10;
     }
-
     // Seasonal factors
     if (season === 'summer' && type === 'fungal') riskScore += 10;
     if (season === 'fall' && type === 'bacterial') riskScore += 5;
-
     riskScore = Math.min(100, Math.max(0, riskScore));
     confidence = Math.min(1, Math.max(0.5, confidence));
-
     return {
       id,
       name,
@@ -423,47 +387,37 @@ class DiseasePestPredictor {
       }
     };
   }
-
   private createPestRisk(params: any) {
     const { id, name, lifecycle, riskFactors, field, season, growthStage } = params;
-    
     let riskScore = 0;
     let confidence = 0.7;
-
     // Temperature-based development risk
     if (riskFactors.temperature > 60 && riskFactors.temperature < 90) {
       riskScore += 25;
     }
-
     // Degree day accumulation
     if (riskFactors.degreedays > 500) {
       riskScore += 20;
       confidence += 0.1;
     }
-
     // Host plant availability and stage
     if (['vegetative_late', 'reproductive'].includes(growthStage)) {
       riskScore += 15;
     }
-
     // Seasonal migration or emergence patterns
     if (riskFactors.migrationPressure || riskFactors.earlyEmergence) {
       riskScore += 20;
     }
-
     // Soil conditions for soil-dwelling pests
     if (id.includes('rootworm') && riskFactors.soilMoisture > 20) {
       riskScore += 15;
     }
-
     // Plant stress attractiveness
     if (riskFactors.plantStress === 'HIGH') {
       riskScore += 10;
     }
-
     riskScore = Math.min(100, Math.max(0, riskScore));
     confidence = Math.min(1, Math.max(0.5, confidence));
-
     return {
       id,
       name,
@@ -485,7 +439,6 @@ class DiseasePestPredictor {
       }
     };
   }
-
   // Helper methods
   private scoreToRiskLevel(score: number): string {
     if (score < 20) return 'very_low';
@@ -494,24 +447,19 @@ class DiseasePestPredictor {
     if (score < 80) return 'high';
     return 'severe';
   }
-
   private estimateLeafWetness(current: any, forecast: any[]): number {
     let wetHours = 0;
     if (current.humidity > 95) wetHours += 6;
     if (current.precipitation > 0) wetHours += 8;
-    
     forecast.forEach(day => {
       if (day.precipitation > 0) wetHours += 10;
       if (day.humidity > 90) wetHours += 4;
     });
-    
     return wetHours;
   }
-
   private calculateDegreeDays(avgTemp: number, baseTemp: number): number {
     return Math.max(0, avgTemp - baseTemp) * 7; // Weekly accumulation
   }
-
   private calculateFlyFreeDate(latitude: number): Date {
     // Simplified fly-free date calculation
     const baseDate = new Date();
@@ -519,7 +467,6 @@ class DiseasePestPredictor {
     baseDate.setDate(15 + Math.round((latitude - 40) * 0.5));
     return baseDate;
   }
-
   private getDiseaseSymptoms(diseaseId: string): string[] {
     const symptoms: Record<string, string[]> = {
       leaf_blight: ['Cigar-shaped lesions', 'Gray-green spots', 'Leaf yellowing'],
@@ -529,10 +476,8 @@ class DiseasePestPredictor {
     };
     return symptoms[diseaseId] || ['Monitor for symptoms'];
   }
-
   private getDiseaseRecommendations(diseaseId: string, riskScore: number): any[] {
     const recommendations = [];
-    
     if (riskScore > 60) {
       recommendations.push({
         type: 'chemical',
@@ -543,7 +488,6 @@ class DiseasePestPredictor {
         effectivenessRating: 85
       });
     }
-    
     recommendations.push({
       type: 'cultural',
       priority: 'preventive',
@@ -552,10 +496,8 @@ class DiseasePestPredictor {
       estimatedCost: 5,
       effectivenessRating: 70
     });
-    
     return recommendations;
   }
-
   private getPestDetectionMethods(pestId: string): string[] {
     const methods: Record<string, string[]> = {
       corn_borer: ['Pheromone traps', 'Egg mass monitoring', 'Visual scouting'],
@@ -567,10 +509,8 @@ class DiseasePestPredictor {
     };
     return methods[pestId] || ['Visual scouting', 'Monitoring traps'];
   }
-
   private getPestRecommendations(pestId: string, riskScore: number): any[] {
     const recommendations = [];
-    
     if (riskScore > 70) {
       recommendations.push({
         type: 'chemical',
@@ -582,7 +522,6 @@ class DiseasePestPredictor {
         targetLifecycleStage: ['larva', 'adult']
       });
     }
-    
     if (riskScore > 40) {
       recommendations.push({
         type: 'biological',
@@ -594,64 +533,47 @@ class DiseasePestPredictor {
         targetLifecycleStage: ['egg', 'larva']
       });
     }
-    
     return recommendations;
   }
-
   private generateCriticalActions(diseases: any[], pests: any[]): string[] {
     const actions: string[] = [];
-    
     diseases.filter(d => d.riskScore > 70).forEach(disease => {
       actions.push(`Immediate fungicide treatment needed for ${disease.commonName}`);
     });
-    
     pests.filter(p => p.riskScore > 70).forEach(pest => {
       actions.push(`Urgent pest control for ${pest.commonName}`);
     });
-    
     return actions.slice(0, 5);
   }
-
   private generateMonitoringRecommendations(diseases: any[], pests: any[], field: any): string[] {
     const recommendations: string[] = [];
-    
     if (diseases.length > 0) {
       recommendations.push('Increase disease scouting to 2-3 times per week');
     }
-    
     if (pests.length > 0) {
       recommendations.push('Deploy pest monitoring traps in field');
     }
-    
     recommendations.push('Monitor weather conditions for rapid changes');
     recommendations.push('Check satellite data weekly for stress indicators');
-    
     return recommendations.slice(0, 4);
   }
 }
-
 const diseasePestPredictor = new DiseasePestPredictor();
-
 // POST /api/ml/disease-pest/predict
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = diseasePestPredictionSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const { modelId, input, options } = validation.data;
-      
       const prediction = await diseasePestPredictor.predictThreats(input, options);
-
       const summary = {
         modelId,
         fieldId: input.field.id,
@@ -665,7 +587,6 @@ export const POST = apiMiddleware.protected(
         modelVersion: prediction.modelVersion,
         usingRealModel: prediction.isRealModel
       };
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -680,27 +601,22 @@ export const POST = apiMiddleware.protected(
         message: `Analyzed ${prediction.diseases.length} diseases and ${prediction.pests.length} pests for field ${input.field.id}`,
         action: 'disease_pest_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/disease-pest/predict?fieldId=123&cropType=corn
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const fieldId = searchParams.get('fieldId') || 'default-field';
       const cropType = searchParams.get('cropType') || 'corn';
-
       // Simple prediction with default parameters
       const input = {
         field: {
@@ -739,16 +655,13 @@ export const GET = apiMiddleware.protected(
         growthStage: 'vegetative_late',
         date: new Date().toISOString()
       };
-
       const options = {
         includeDisease: searchParams.get('includeDisease') !== 'false',
         includePest: searchParams.get('includePest') !== 'false',
         confidenceThreshold: parseFloat(searchParams.get('confidenceThreshold') || '0.6'),
         maxPredictions: parseInt(searchParams.get('maxPredictions') || '5')
       };
-
       const prediction = await diseasePestPredictor.predictThreats(input, options);
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -760,13 +673,11 @@ export const GET = apiMiddleware.protected(
         message: `Quick analysis for ${cropType} field completed`,
         action: 'simple_disease_pest_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 function getCurrentSeason(): string {
   const month = new Date().getMonth();
   if (month >= 2 && month <= 4) return 'spring';

@@ -1,8 +1,6 @@
 'use client'
-
 import React from 'react'
 import { Loader2, RefreshCw } from 'lucide-react'
-
 // Basic spinner component
 export function Spinner({ size = 'default', className = '' }: { 
   size?: 'small' | 'default' | 'large'
@@ -13,19 +11,16 @@ export function Spinner({ size = 'default', className = '' }: {
     default: 'h-6 w-6',
     large: 'h-8 w-8'
   }
-
   return (
     <Loader2 className={`animate-spin ${sizeClasses[size]} ${className}`} />
   )
 }
-
 // Skeleton loaders for different content types
 export function SkeletonLine({ width = 'w-full' }: { width?: string }) {
   return (
     <div className={`h-4 bg-gray-200 rounded animate-pulse ${width}`} />
   )
 }
-
 export function SkeletonText({ lines = 3 }: { lines?: number }) {
   return (
     <div className="space-y-2">
@@ -38,7 +33,6 @@ export function SkeletonText({ lines = 3 }: { lines?: number }) {
     </div>
   )
 }
-
 export function SkeletonCard() {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -59,7 +53,6 @@ export function SkeletonCard() {
     </div>
   )
 }
-
 export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number, cols?: number }) {
   return (
     <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
@@ -84,7 +77,6 @@ export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number, cols?: nu
     </div>
   )
 }
-
 // Loading overlays
 export function LoadingOverlay({ isLoading, children, message = "Loading..." }: {
   isLoading: boolean
@@ -105,7 +97,6 @@ export function LoadingOverlay({ isLoading, children, message = "Loading..." }: 
     </div>
   )
 }
-
 // Inline loading states
 export function InlineLoading({ message }: { message: string }) {
   return (
@@ -115,7 +106,6 @@ export function InlineLoading({ message }: { message: string }) {
     </div>
   )
 }
-
 // Page loading state
 export function PageLoading({ title = "Loading page...", description }: { 
   title?: string
@@ -133,7 +123,6 @@ export function PageLoading({ title = "Loading page...", description }: {
     </div>
   )
 }
-
 // Full page loading with branded spinner
 export function FullPageLoading() {
   return (
@@ -152,7 +141,6 @@ export function FullPageLoading() {
     </div>
   )
 }
-
 // Button loading state
 export function LoadingButton({ 
   children, 
@@ -182,7 +170,6 @@ export function LoadingButton({
     </button>
   )
 }
-
 // Data loading states for lists/grids
 export function ListLoading({ count = 3 }: { count?: number }) {
   return (
@@ -202,14 +189,12 @@ export function ListLoading({ count = 3 }: { count?: number }) {
     </div>
   )
 }
-
 export function GridLoading({ count = 6, cols = 3 }: { count?: number, cols?: number }) {
   const gridCols = {
     2: 'grid-cols-2',
     3: 'grid-cols-3',
     4: 'grid-cols-4'
   }[cols] || 'grid-cols-3'
-
   return (
     <div className={`grid ${gridCols} gap-4`}>
       {Array.from({ length: count }).map((_, i) => (
@@ -218,7 +203,6 @@ export function GridLoading({ count = 6, cols = 3 }: { count?: number, cols?: nu
     </div>
   )
 }
-
 // Dashboard specific loading states
 export function DashboardMetricLoading() {
   return (
@@ -232,7 +216,6 @@ export function DashboardMetricLoading() {
     </div>
   )
 }
-
 export function ChartLoading({ height = "h-64" }: { height?: string }) {
   return (
     <div className={`bg-white rounded-lg border p-6 animate-pulse`}>
@@ -252,7 +235,6 @@ export function ChartLoading({ height = "h-64" }: { height?: string }) {
     </div>
   )
 }
-
 // NBA Recommendations loading state
 export function RecommendationLoading() {
   return (
@@ -286,7 +268,6 @@ export function RecommendationLoading() {
     </div>
   )
 }
-
 // Progress loading with steps
 export function ProgressLoading({ 
   steps, 

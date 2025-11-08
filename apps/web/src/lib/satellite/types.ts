@@ -1,17 +1,14 @@
 /**
  * Shared types for satellite monitoring system
  */
-
 export * from './sentinel-hub';
 import type { VegetationIndices } from './ndvi-analysis';
-
 export interface BoundingBox {
   west: number;
   east: number;
   north: number;
   south: number;
 }
-
 export interface SatelliteAnalysisResult {
   id: string;
   fieldId: string;
@@ -41,7 +38,6 @@ export interface SatelliteAnalysisResult {
     confidence: number;
   };
 }
-
 export interface FieldBoundary {
   id: string;
   fieldId: string;
@@ -61,7 +57,6 @@ export interface FieldBoundary {
   createdAt: Date;
   updatedAt: Date;
 }
-
 export interface CropStressDetection {
   id: string;
   fieldId: string;
@@ -85,7 +80,6 @@ export interface CropStressDetection {
   recommendations: ActionRecommendation[];
   urgency: 'low' | 'medium' | 'high' | 'critical';
 }
-
 export interface StressDetails {
   detected: boolean;
   severity: 'none' | 'low' | 'moderate' | 'high' | 'severe';
@@ -93,7 +87,6 @@ export interface StressDetails {
   indicators: string[];
   affectedPercentage: number;
 }
-
 export interface StressZone {
   id: string;
   type: string;
@@ -105,7 +98,6 @@ export interface StressZone {
   area: number; // hectares
   centerPoint: [number, number];
 }
-
 export interface ActionRecommendation {
   id: string;
   type: 'immediate' | 'short-term' | 'preventive';
@@ -116,7 +108,6 @@ export interface ActionRecommendation {
   resources: string[];
   deadline?: Date;
 }
-
 export interface SatelliteImageMetadata {
   id: string;
   satellite: string;
@@ -131,7 +122,6 @@ export interface SatelliteImageMetadata {
   quality: 'excellent' | 'good' | 'fair' | 'poor';
   processingLevel: string;
 }
-
 export interface TimeSeriesData {
   fieldId: string;
   metric: 'ndvi' | 'evi' | 'savi' | 'ndre' | 'gndvi';
@@ -159,7 +149,6 @@ export interface TimeSeriesData {
     amplitude: number;
   };
 }
-
 export interface AnalysisPreset {
   id: string;
   name: string;
@@ -178,7 +167,6 @@ export interface AnalysisPreset {
     timeWindow?: { start: number; end: number };
   };
 }
-
 export interface ProcessingJob {
   id: string;
   fieldId: string;
@@ -211,7 +199,6 @@ export interface ProcessingJob {
   failedAt?: Date;
   processingTime?: number;
 }
-
 export interface ProcessedImage {
   id: string;
   originalId: string;

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
@@ -18,7 +17,6 @@ import {
   Gift,
   Sparkles
 } from 'lucide-react'
-
 interface OnboardingStep {
   id: string
   title: string
@@ -29,23 +27,19 @@ interface OnboardingStep {
   completed: boolean
   priority: 'essential' | 'important' | 'helpful'
 }
-
 interface GuidedSetupProps {
   userId: string
   onComplete?: () => void
   className?: string
 }
-
 export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupProps) {
   const router = useRouter()
   const [steps, setSteps] = useState<OnboardingStep[]>([])
   const [loading, setLoading] = useState(true)
   const [showDemo, setShowDemo] = useState(false)
-
   useEffect(() => {
     loadOnboardingProgress()
   }, [userId])
-
   const loadOnboardingProgress = async () => {
     try {
       // Check user's current setup progress
@@ -54,17 +48,14 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
         fetch('/api/fields'),
         fetch('/api/crops')
       ])
-
       const [farms, fields, crops] = await Promise.all([
         farmsRes.ok ? farmsRes.json() : { farms: [] },
         fieldsRes.ok ? fieldsRes.json() : [],
         cropsRes.ok ? cropsRes.json() : []
       ])
-
       const hasFarms = farms.farms?.length > 0
       const hasFields = fields.length > 0 
       const hasCrops = crops.length > 0
-
       setSteps([
         {
           id: 'create-farm',
@@ -127,7 +118,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
       setLoading(false)
     }
   }
-
   const generateRecommendations = async () => {
     if (steps.find(s => s.id === 'create-farm')?.completed) {
       const farmId = await getCurrentFarmId()
@@ -136,7 +126,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
       }
     }
   }
-
   const getCurrentFarmId = async (): Promise<string | null> => {
     try {
       const response = await fetch('/api/farms')
@@ -146,29 +135,24 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
       return null
     }
   }
-
   const enableDemoMode = () => {
     setShowDemo(true)
     router.push('/dashboard?demo=true')
   }
-
   const completedSteps = steps.filter(s => s.completed).length
   const totalEssentialSteps = steps.filter(s => s.priority === 'essential').length
   const completedEssentialSteps = steps.filter(s => s.completed && s.priority === 'essential').length
   const progressPercentage = totalEssentialSteps > 0 ? (completedEssentialSteps / totalEssentialSteps) * 100 : 0
-
   const priorityColors = {
     essential: 'border-red-200 bg-red-50',
     important: 'border-orange-200 bg-orange-50', 
     helpful: 'border-blue-200 bg-blue-50'
   }
-
   const priorityLabels = {
     essential: 'Required',
     important: 'Recommended',
     helpful: 'Optional'
   }
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -185,7 +169,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
       </ModernCard>
     )
   }
-
   return (
     <ModernCard className={className}>
       <ModernCardHeader>
@@ -205,7 +188,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
               Let&apos;s get your farm set up in just a few steps. You&apos;ll be tracking crops and getting insights in no time!
             </p>
           </div>
-          
           <div className="text-right">
             <div className="text-2xl font-bold text-sage-800">
               {completedSteps}/{steps.length}
@@ -213,7 +195,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
             <div className="text-sm text-sage-600">steps completed</div>
           </div>
         </div>
-        
         {/* Progress bar */}
         <div className="mt-4">
           <div className="flex items-center justify-between text-sm text-sage-600 mb-2">
@@ -223,7 +204,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
           <Progress value={progressPercentage} className="h-2" />
         </div>
       </ModernCardHeader>
-
       <ModernCardContent>
         {/* Demo mode option */}
         {completedSteps === 0 && (
@@ -250,7 +230,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
             </div>
           </div>
         )}
-
         {/* Setup steps */}
         <div className="space-y-3">
           {steps.map((step, index) => (
@@ -277,7 +256,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                       step.icon
                     )}
                   </div>
-                  
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className={`font-semibold ${
@@ -302,7 +280,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                     </p>
                   </div>
                 </div>
-                
                 {!step.completed && (step.href || step.action) && (
                   <ArrowRight className="h-4 w-4 text-gray-400" />
                 )}
@@ -310,7 +287,6 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
             </div>
           ))}
         </div>
-
         {/* Completion celebration */}
         {completedEssentialSteps === totalEssentialSteps && (
           <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">

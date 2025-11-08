@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -11,7 +10,6 @@ import {
   Wheat, Beef, TreePine, Apple, Flower2, 
   ChevronRight, CheckCircle
 } from 'lucide-react'
-
 interface Farm {
   name: string
   type: 'crops' | 'livestock' | 'mixed' | 'orchard'
@@ -21,7 +19,6 @@ interface Farm {
     address?: string
   }
 }
-
 const farmTypes = [
   {
     id: 'crops',
@@ -52,7 +49,6 @@ const farmTypes = [
     color: 'border-blue-500 bg-blue-50 text-blue-700'
   }
 ]
-
 export function SimpleFarmCreator() {
   const [farm, setFarm] = useState<Farm>({
     name: '',
@@ -63,7 +59,6 @@ export function SimpleFarmCreator() {
   const [isLoading, setIsLoading] = useState(false)
   const [detectingLocation, setDetectingLocation] = useState(false)
   const router = useRouter()
-
   const getCurrentLocation = () => {
     setDetectingLocation(true)
     if ('geolocation' in navigator) {
@@ -89,10 +84,8 @@ export function SimpleFarmCreator() {
       alert('Location services not available in your browser.')
     }
   }
-
   const parseLocationInput = async () => {
     const coordPattern = /^-?\d+\.?\d*,\s*-?\d+\.?\d*$/
-    
     if (coordPattern.test(locationInput.trim())) {
       const [lat, lng] = locationInput.split(',').map(coord => parseFloat(coord.trim()))
       setFarm(prev => ({
@@ -107,13 +100,11 @@ export function SimpleFarmCreator() {
       }))
     }
   }
-
   const handleSubmit = async () => {
     if (!farm.name || !farm.type || farm.location.lat === 0) {
       alert('Please fill in all required fields')
       return
     }
-
     setIsLoading(true)
     try {
       const response = await fetch('/api/farms', {
@@ -133,9 +124,7 @@ export function SimpleFarmCreator() {
           }
         })
       })
-
       if (!response.ok) throw new Error('Failed to create farm')
-      
       router.push('/dashboard')
     } catch (error) {
       console.error('Error creating farm:', error)
@@ -144,9 +133,7 @@ export function SimpleFarmCreator() {
       setIsLoading(false)
     }
   }
-
   const isValid = farm.name && farm.type && farm.location.lat !== 0
-
   return (
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
@@ -171,7 +158,6 @@ export function SimpleFarmCreator() {
             autoFocus
           />
         </div>
-
         {/* Step 2: Farm Type */}
         <div>
           <Label className="text-base font-medium mb-3 block">
@@ -201,7 +187,6 @@ export function SimpleFarmCreator() {
             ))}
           </div>
         </div>
-
         {/* Step 3: Location */}
         <div>
           <Label className="text-base font-medium mb-3 block">
@@ -225,11 +210,9 @@ export function SimpleFarmCreator() {
                 Find
               </Button>
             </div>
-            
             <div className="text-center">
               <span className="text-sm text-gray-500">or</span>
             </div>
-            
             <Button
               onClick={getCurrentLocation}
               disabled={detectingLocation}
@@ -244,7 +227,6 @@ export function SimpleFarmCreator() {
               Use My Current Location
             </Button>
           </div>
-
           {/* Location Preview */}
           {farm.location.lat !== 0 && (
             <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
@@ -265,7 +247,6 @@ export function SimpleFarmCreator() {
             </div>
           )}
         </div>
-
         {/* What You'll Get */}
         {isValid && (
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -292,7 +273,6 @@ export function SimpleFarmCreator() {
             </div>
           </div>
         )}
-
         {/* Create Button */}
         <Button
           onClick={handleSubmit}

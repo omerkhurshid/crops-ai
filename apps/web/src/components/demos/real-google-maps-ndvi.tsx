@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useCallback } from 'react'
 import { GoogleMap, LoadScript, OverlayView, InfoWindow } from '@react-google-maps/api'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
@@ -18,7 +17,6 @@ import {
   RefreshCw,
   AlertTriangle
 } from 'lucide-react'
-
 // Real coordinates for a corn field in Central Nebraska
 const DEMO_FIELD_LOCATION = {
   center: { lat: 41.305150, lng: -98.161795 },
@@ -27,13 +25,11 @@ const DEMO_FIELD_LOCATION = {
   acres: 160,
   crop: "Corn (Pioneer P1366AM)"
 }
-
 // Google Maps configuration
 const mapContainerStyle = {
   width: '100%',
   height: '400px'
 }
-
 const mapOptions = {
   zoom: 15,
   center: DEMO_FIELD_LOCATION.center,
@@ -47,7 +43,6 @@ const mapOptions = {
   fullscreenControl: true,
   gestureHandling: 'cooperative'
 }
-
 // Field boundary coordinates (approximate rectangular field) - Central Nebraska
 const fieldBoundary = [
   { lat: 41.3061, lng: -98.1635 }, // Northwest corner
@@ -56,11 +51,9 @@ const fieldBoundary = [
   { lat: 41.3041, lng: -98.1635 }, // Southwest corner
   { lat: 41.3061, lng: -98.1635 }  // Close polygon
 ]
-
 interface RealGoogleMapsNDVIProps {
   className?: string
 }
-
 export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) {
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [ndviData, setNdviData] = useState<any>(null)
@@ -71,7 +64,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
   const [showInfo, setShowInfo] = useState(true)
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null)
   const [cacheStatus, setCacheStatus] = useState<'cached' | 'live' | 'refreshing'>('cached')
-
   // Enhanced NDVI data with realistic stats for Nebraska corn field
   const getNDVIDataForDate = useCallback((date: string) => {
     const seasonalData: { [key: string]: any } = {
@@ -176,28 +168,22 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
         recommendations: ['Harvest at 20-22% moisture', 'Monitor weather conditions']
       }
     }
-    
     return seasonalData[date] || seasonalData['2024-08-01']
   }, [])
-
   // Load NDVI data with simplified caching
   const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
     setIsLoading(true)
     setCacheStatus('refreshing')
-    
     // Check if we're in browser environment
     const isClient = typeof window !== 'undefined'
-    
     // Simplified cache check - only use cache for very recent data
     let cachedData: string | null = null
     let cacheTime: string | null = null
-    
     if (isClient && !forceRefresh) {
       try {
         const cacheKey = `ndvi-${date}`
         cachedData = sessionStorage.getItem(cacheKey) // Use sessionStorage instead
         cacheTime = sessionStorage.getItem(`${cacheKey}-time`)
-        
         // Use cache if less than 30 minutes old
         if (cachedData && cacheTime) {
           const age = Date.now() - parseInt(cacheTime)
@@ -211,11 +197,8 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             return
           }
         }
-      } catch (error) {
-        console.log('Cache read error, proceeding with fresh data')
-      }
+      } catch (error) {}
     }
-    
     // Simplified loading - use demo data directly for now
     setTimeout(() => {
       try {
@@ -226,7 +209,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           source: 'demo',
           location: DEMO_FIELD_LOCATION.address
         }
-        
         // Cache the demo data if in browser
         if (isClient) {
           try {
@@ -235,11 +217,8 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             sessionStorage.setItem(cacheKey, JSON.stringify(data))
             sessionStorage.setItem(`${cacheKey}-time`, now.toString())
             setLastUpdate(new Date(now))
-          } catch (error) {
-            console.log('Cache write error, continuing without cache')
-          }
+          } catch (error) {}
         }
-        
         setCacheStatus('cached')
         setNdviData(data)
       } catch (error) {
@@ -261,11 +240,9 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       }
     }, 800) // Reduced delay
   }, [getNDVIDataForDate])
-
   // Initialize map and field boundary
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
-    
     // Create field boundary polygon
     const polygon = new google.maps.Polygon({
       paths: fieldBoundary,
@@ -275,25 +252,20 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       fillColor: showNDVIOverlay ? '#00FF00' : 'transparent',
       fillOpacity: showNDVIOverlay ? 0.35 : 0,
     })
-    
     polygon.setMap(map)
     setFieldPolygon(polygon)
-    
     // Load initial NDVI data
     loadNDVIData(selectedDate)
   }, [selectedDate, showNDVIOverlay, loadNDVIData])
-
   // Update field polygon when NDVI overlay toggle changes
   useEffect(() => {
     if (fieldPolygon && ndviData) {
       const ndviValue = ndviData.averageNDVI || 0.82
-      
       // Color field based on NDVI value
       let fillColor = '#FF0000' // Red for low NDVI
       if (ndviValue > 0.7) fillColor = '#00FF00' // Green for high NDVI
       else if (ndviValue > 0.5) fillColor = '#FFFF00' // Yellow for medium NDVI
       else if (ndviValue > 0.3) fillColor = '#FFA500' // Orange for low-medium NDVI
-      
       fieldPolygon.setOptions({
         fillColor: showNDVIOverlay ? fillColor : 'transparent',
         fillOpacity: showNDVIOverlay ? 0.35 : 0,
@@ -301,14 +273,12 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       })
     }
   }, [fieldPolygon, ndviData, showNDVIOverlay])
-
   // Update NDVI data when date changes
   useEffect(() => {
     if (map) {
       loadNDVIData(selectedDate)
     }
   }, [selectedDate, map, loadNDVIData])
-
   const refreshNDVIData = () => {
     // Clear cache for current date
     if (typeof window !== 'undefined') {
@@ -316,13 +286,10 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
         const cacheKey = `ndvi-${selectedDate}`
         sessionStorage.removeItem(cacheKey)
         sessionStorage.removeItem(`${cacheKey}-time`)
-      } catch (error) {
-        console.log('Cache clear error:', error)
-      }
+      } catch (error) {}
     }
     loadNDVIData(selectedDate, true) // Force refresh
   }
-
   // Clear all NDVI cache on component mount to prevent stale data
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -333,12 +300,9 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             sessionStorage.removeItem(key)
           }
         })
-      } catch (error) {
-        console.log('Cache cleanup error:', error)
-      }
+      } catch (error) {}
     }
   }, [])
-
   const availableDates = [
     '2024-06-15', // V12 - Mid vegetative
     '2024-07-15', // R1 - Peak growth/Silking
@@ -346,7 +310,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
     '2024-09-15', // R6 - Maturity
     '2024-10-01'  // Harvest ready
   ]
-
   return (
     <ModernCard variant="floating" className={`h-full ${className}`}>
       <ModernCardHeader>
@@ -375,7 +338,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           </div>
         </div>
       </ModernCardHeader>
-      
       <ModernCardContent className="space-y-4">
         {/* Field Information */}
         <div className="bg-sage-50 p-3 rounded-lg">
@@ -387,7 +349,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             {DEMO_FIELD_LOCATION.address} • {DEMO_FIELD_LOCATION.acres} acres • {DEMO_FIELD_LOCATION.crop}
           </div>
         </div>
-
         {/* Date Selection */}
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-gray-600" />
@@ -415,7 +376,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           </Button>
         </div>
-
         {/* Google Maps with NDVI Overlay */}
         <div className="relative">
           {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
@@ -464,7 +424,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                           <span className="font-medium">{(ndviData.minNDVI || 0.65).toFixed(2)}</span>
                         </div>
                         <div className="text-xs text-gray-600 mt-2">
-                          Data from Sentinel-2 satellite
+                          Data from Google Earth Engine
                         </div>
                       </div>
                     </div>
@@ -490,7 +450,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             </div>
           )}
         </div>
-
         {/* Enhanced NDVI Analysis Results */}
         {ndviData && (
           <div className="space-y-4">
@@ -514,7 +473,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 <div className="text-xs text-gray-600">Uniformity</div>
               </div>
             </div>
-            
             {/* Crop Stage and Yield Projection */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
@@ -528,7 +486,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             </div>
           </div>
         )}
-
         {/* Professional AI Insights & Actions */}
         {ndviData && (
           <div className="space-y-4">
@@ -557,7 +514,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
               </div>
             </div>
-
             {/* Actionable Recommendations */}
             {ndviData.recommendations && ndviData.recommendations.length > 0 && (
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
@@ -584,7 +540,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
               </div>
             )}
-
             {/* Risk Assessment */}
             <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 rounded-lg border border-orange-200">
               <h5 className="font-semibold text-orange-800 mb-3 flex items-center gap-2">
@@ -608,13 +563,12 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             </div>
           </div>
         )}
-        
         {/* Cache and Update Info */}
         <div className="bg-gray-50 p-3 rounded-lg">
           <div className="flex items-center justify-between text-xs text-gray-600">
             <div className="flex items-center gap-2">
               <Eye className="h-3 w-3" />
-              <span>Sentinel-2 • 10m resolution • {ndviData?.source === 'live' ? 'Live API' : 'Enhanced Demo'}</span>
+              <span>Google Earth Engine • 10m resolution • {ndviData?.source === 'live' ? 'Live API' : 'Enhanced Demo'}</span>
             </div>
             {lastUpdate && (
               <div className="text-right">
@@ -624,7 +578,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             )}
           </div>
         </div>
-
       </ModernCardContent>
     </ModernCard>
   )

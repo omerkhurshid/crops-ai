@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -8,7 +7,6 @@ import {
   ZoomIn, ZoomOut, Maximize2, Move, MapPin, 
   Satellite, Map as MapIcon, Check, Info
 } from 'lucide-react';
-
 interface LocationMapAdjusterProps {
   initialLocation: {
     lat: number;
@@ -18,7 +16,6 @@ interface LocationMapAdjusterProps {
   onLocationConfirm: (location: { lat: number; lng: number; zoom: number }) => void;
   onBack: () => void;
 }
-
 export function LocationMapAdjuster({ 
   initialLocation, 
   onLocationConfirm,
@@ -29,7 +26,6 @@ export function LocationMapAdjuster({
   const [mapType, setMapType] = useState<'satellite' | 'hybrid' | 'terrain'>('satellite');
   const [isDragging, setIsDragging] = useState(false);
   const [showHelp, setShowHelp] = useState(true);
-
   // Simulated map bounds for demonstration
   const [mapBounds, setMapBounds] = useState({
     north: location.lat + 0.05,
@@ -37,21 +33,17 @@ export function LocationMapAdjuster({
     east: location.lng + 0.05,
     west: location.lng - 0.05
   });
-
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 1, 20));
   };
-
   const handleZoomOut = () => {
     setZoom(prev => Math.max(prev - 1, 5));
   };
-
   const handleMapTypeToggle = () => {
     const types: Array<'satellite' | 'hybrid' | 'terrain'> = ['satellite', 'hybrid', 'terrain'];
     const currentIndex = types.indexOf(mapType);
     setMapType(types[(currentIndex + 1) % types.length]);
   };
-
   const handleLocationUpdate = (lat: number, lng: number) => {
     setLocation({ ...location, lat, lng });
     setMapBounds({
@@ -61,11 +53,9 @@ export function LocationMapAdjuster({
       west: lng - (0.05 / Math.pow(2, zoom - 15))
     });
   };
-
   const handleConfirm = () => {
     onLocationConfirm({ ...location, zoom });
   };
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -92,11 +82,9 @@ export function LocationMapAdjuster({
           break;
       }
     };
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [location, zoom]);
-
   return (
     <div className="space-y-4">
       <Card className="shadow-soft">
@@ -133,7 +121,6 @@ export function LocationMapAdjuster({
                     <ZoomOut className="h-4 w-4" />
                   </Button>
                 </div>
-                
                 <Button
                   size="sm"
                   variant="secondary"
@@ -146,7 +133,6 @@ export function LocationMapAdjuster({
                   {mapType === 'terrain' && <Maximize2 className="h-4 w-4" />}
                 </Button>
               </div>
-
               {/* Center Marker */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <div className="relative">
@@ -156,7 +142,6 @@ export function LocationMapAdjuster({
                   </div>
                 </div>
               </div>
-
               {/* Simulated Satellite Imagery */}
               <div className="absolute inset-0 opacity-30">
                 <div className="grid grid-cols-8 grid-rows-8 h-full">
@@ -170,7 +155,6 @@ export function LocationMapAdjuster({
                   ))}
                 </div>
               </div>
-
               {/* Location Info Overlay */}
               <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-md p-3">
                 <div className="text-sm space-y-1">
@@ -190,7 +174,6 @@ export function LocationMapAdjuster({
                   </div>
                 </div>
               </div>
-
               {/* Help Tooltip */}
               {showHelp && (
                 <div className="absolute top-4 left-4 bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-xs">
@@ -215,7 +198,6 @@ export function LocationMapAdjuster({
                 </div>
               )}
             </div>
-
             {/* Drag Instruction */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg text-sm">
@@ -223,7 +205,6 @@ export function LocationMapAdjuster({
               </div>
             </div>
           </div>
-
           {/* Additional Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-50 rounded-lg p-4">
@@ -245,7 +226,6 @@ export function LocationMapAdjuster({
               </p>
             </div>
           </div>
-
           {/* Action Buttons */}
           <div className="flex justify-between pt-4">
             <Button variant="outline" onClick={onBack}>

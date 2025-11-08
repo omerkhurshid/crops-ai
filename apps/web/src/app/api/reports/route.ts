@@ -2,11 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { prisma } from '../../../lib/prisma'
 import { rateLimitWithFallback } from '../../../lib/rate-limit'
-
 export async function GET(request: NextRequest) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -17,21 +15,17 @@ export async function GET(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
     const reportType = searchParams.get('type') || 'overview'
-
     if (!farmId) {
       return NextResponse.json({ error: 'farmId is required' }, { status: 400 })
     }
-
     // Verify user owns the farm
     const farm = await prisma.farm.findFirst({
       where: { 
@@ -39,14 +33,11 @@ export async function GET(request: NextRequest) {
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 })
     }
-
     // Generate report data based on type
     let reportData: any = {}
-
     try {
       switch (reportType) {
         case 'overview':
@@ -73,7 +64,6 @@ export async function GET(request: NextRequest) {
               take: 5
             }).catch(() => [])
           ])
-
           reportData = {
             farm: {
               id: farm.id,
@@ -97,22 +87,18 @@ export async function GET(request: NextRequest) {
             recentTasks: tasks
           }
           break
-
         case 'financial':
           // Financial report
           const financialData = await prisma.financialTransaction.findMany({
             where: { farmId },
             orderBy: { transactionDate: 'desc' }
           }).catch(() => [])
-
           const income = financialData
             .filter(t => t.type === 'INCOME')
             .reduce((sum, t) => sum + Number(t.amount), 0)
-          
           const expenses = financialData
             .filter(t => t.type === 'EXPENSE')
             .reduce((sum, t) => sum + Number(t.amount), 0)
-
           reportData = {
             summary: {
               totalIncome: income,
@@ -124,7 +110,6 @@ export async function GET(request: NextRequest) {
             monthlyBreakdown: financialData.reduce((acc: any, transaction: any) => {
               const month = transaction.transactionDate.toISOString().slice(0, 7)
               if (!acc[month]) acc[month] = { income: 0, expenses: 0 }
-              
               if (transaction.type === 'INCOME') {
                 acc[month].income += Number(transaction.amount)
               } else {
@@ -134,7 +119,6 @@ export async function GET(request: NextRequest) {
             }, {})
           }
           break
-
         case 'crop-health':
           // Crop health report
           const fieldsWithHealth = await prisma.field.findMany({
@@ -151,7 +135,6 @@ export async function GET(request: NextRequest) {
               }
             }
           }).catch(() => [])
-
           reportData = {
             fieldsHealth: fieldsWithHealth.map(field => ({
               id: field.id,
@@ -174,12 +157,10 @@ export async function GET(request: NextRequest) {
             }
           }
           break
-
         default:
           return NextResponse.json({ error: 'Invalid report type' }, { status: 400 })
       }
     } catch (dbError: any) {
-
       // Return empty report data if database queries fail
       reportData = {
         message: 'Report data unavailable - some database tables may not exist yet',
@@ -188,14 +169,12 @@ export async function GET(request: NextRequest) {
         timestamp: new Date().toISOString()
       }
     }
-
     return NextResponse.json({
       reportType,
       farmId,
       data: reportData,
       generatedAt: new Date().toISOString()
     })
-
   } catch (error) {
     console.error('Error generating report:', error)
     return NextResponse.json(

@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { 
   Leaf, 
@@ -18,7 +17,6 @@ import {
 } from 'lucide-react'
 import { Button } from './button'
 import { ModernCard, ModernCardContent } from './modern-card'
-
 interface NoDataStateProps {
   type: 'farms' | 'fields' | 'crops' | 'tasks' | 'livestock' | 'financial' | 'weather' | 'analytics' | 'general'
   title?: string
@@ -31,7 +29,6 @@ interface NoDataStateProps {
   error?: string
   className?: string
 }
-
 const noDataConfig = {
   farms: {
     icon: MapPin,
@@ -88,7 +85,6 @@ const noDataConfig = {
     actionLabel: 'Get Started'
   }
 }
-
 export function NoDataState({ 
   type, 
   title, 
@@ -100,7 +96,6 @@ export function NoDataState({
 }: NoDataStateProps) {
   const config = noDataConfig[type]
   const IconComponent = config.icon
-
   if (isLoading) {
     return (
       <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
@@ -109,7 +104,6 @@ export function NoDataState({
       </div>
     )
   }
-
   if (error) {
     return (
       <ModernCard className={`border-red-200 bg-red-50 ${className}`}>
@@ -138,21 +132,17 @@ export function NoDataState({
       </ModernCard>
     )
   }
-
   return (
     <div className={`flex flex-col items-center justify-center py-12 px-4 ${className}`}>
       <div className="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mb-6">
         <IconComponent className="h-10 w-10 text-sage-600" />
       </div>
-      
       <h3 className="text-xl font-semibold text-sage-800 mb-2 text-center">
         {title || config.title}
       </h3>
-      
       <p className="text-sage-600 mb-6 text-center max-w-md">
         {description || config.description}
       </p>
-      
       {action && (
         <Button
           onClick={action.onClick}
@@ -165,7 +155,6 @@ export function NoDataState({
     </div>
   )
 }
-
 // Specialized no-data states for common scenarios
 export function NoFarmsState({ onAddFarm }: { onAddFarm?: () => void }) {
   return (
@@ -175,7 +164,6 @@ export function NoFarmsState({ onAddFarm }: { onAddFarm?: () => void }) {
     />
   )
 }
-
 export function NoFieldsState({ onAddField }: { onAddField?: () => void }) {
   return (
     <NoDataState
@@ -184,7 +172,6 @@ export function NoFieldsState({ onAddField }: { onAddField?: () => void }) {
     />
   )
 }
-
 export function NoCropsState({ onAddCrop }: { onAddCrop?: () => void }) {
   return (
     <NoDataState
@@ -193,7 +180,6 @@ export function NoCropsState({ onAddCrop }: { onAddCrop?: () => void }) {
     />
   )
 }
-
 export function NoTasksState({ onAddTask }: { onAddTask?: () => void }) {
   return (
     <NoDataState
@@ -202,7 +188,6 @@ export function NoTasksState({ onAddTask }: { onAddTask?: () => void }) {
     />
   )
 }
-
 export function NoLivestockState({ onAddLivestock }: { onAddLivestock?: () => void }) {
   return (
     <NoDataState
@@ -211,7 +196,6 @@ export function NoLivestockState({ onAddLivestock }: { onAddLivestock?: () => vo
     />
   )
 }
-
 export function NoFinancialDataState({ onAddTransaction }: { onAddTransaction?: () => void }) {
   return (
     <NoDataState
@@ -220,7 +204,6 @@ export function NoFinancialDataState({ onAddTransaction }: { onAddTransaction?: 
     />
   )
 }
-
 export function NoAnalyticsDataState() {
   return (
     <NoDataState
@@ -229,7 +212,6 @@ export function NoAnalyticsDataState() {
     />
   )
 }
-
 // Data pending state for when data is being calculated/processed
 export function DataPendingState({ 
   message = 'Processing data...', 
@@ -248,7 +230,6 @@ export function DataPendingState({
     </div>
   )
 }
-
 // Connection error state for offline/network issues
 export function ConnectionErrorState({ onRetry }: { onRetry?: () => void }) {
   return (

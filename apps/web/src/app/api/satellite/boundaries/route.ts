@@ -5,7 +5,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
 import { prisma } from '../../../../lib/prisma';
-
 const boundarySchema = z.object({
   action: z.enum(['detect', 'save', 'list']),
   // For detect action
@@ -39,40 +38,33 @@ const boundarySchema = z.object({
     centroid: z.tuple([z.number(), z.number()])
   })).optional()
 });
-
 // POST /api/satellite/boundaries
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       // Validate input
       const validation = boundarySchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
       let result;
-
       switch (params.action) {
         case 'detect':
           {
             if (!params.bbox || !params.date) {
               throw new ValidationError('bbox and date are required for boundary detection');
             }
-
             result = await boundaryDetector.detectBoundaries(
               params.bbox,
               params.date,
               params.options as any
             );
-
             // Generate summary
             const summary = {
               action: 'detect',
@@ -86,20 +78,17 @@ export const POST = apiMiddleware.protected(
                 ['No fields detected - try adjusting detection parameters or selecting a different date'] :
                 ['Review detected boundaries for accuracy', 'Save confirmed boundaries to database']
             };
-
             return createSuccessResponse({
               data: result,
               summary,
               message: `Detected ${result.boundaries.length} field boundaries`
             });
           }
-
         case 'save':
           {
             if (!params.fieldId || !params.boundaries || params.boundaries.length === 0) {
               throw new ValidationError('fieldId and boundaries are required for saving');
             }
-
             // Save boundaries to database (simplified for now)
             const field = await prisma.field.update({
               where: { id: params.fieldId },
@@ -108,14 +97,12 @@ export const POST = apiMiddleware.protected(
                 updatedAt: new Date()
               }
             });
-
             result = {
               fieldId: field.id,
               saved: true,
               area: field.area,
               message: 'Field boundaries saved successfully'
             };
-
             return createSuccessResponse({
               data: result,
               summary: {
@@ -127,7 +114,6 @@ export const POST = apiMiddleware.protected(
               message: 'Field boundaries saved successfully'
             });
           }
-
         case 'list':
           {
             // List all fields with boundaries for the user
@@ -144,7 +130,6 @@ export const POST = apiMiddleware.protected(
                 }
               }
             });
-
             const fieldsWithBoundaries = farms.flatMap((farm: any) => 
               farm.fields.map((field: any) => ({
                 ...field,
@@ -153,12 +138,10 @@ export const POST = apiMiddleware.protected(
                 hasBoundaries: !!field.area // Use area as proxy for boundaries
               }))
             );
-
             result = {
               fields: fieldsWithBoundaries,
               total: fieldsWithBoundaries.length
             };
-
             return createSuccessResponse({
               data: result,
               summary: {
@@ -169,30 +152,24 @@ export const POST = apiMiddleware.protected(
               message: `Found ${fieldsWithBoundaries.length} fields with boundaries`
             });
           }
-
         default:
           throw new ValidationError('Invalid action');
       }
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/satellite/boundaries?fieldId=123
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const fieldId = searchParams.get('fieldId');
-
       if (fieldId) {
         // Get specific field boundaries
         const field = await prisma.field.findFirst({
@@ -203,11 +180,9 @@ export const GET = apiMiddleware.protected(
             }
           }
         });
-
         if (!field) {
           throw new ValidationError('Field not found or access denied');
         }
-
         return createSuccessResponse({
           data: {
             fieldId: field.id,
@@ -230,7 +205,6 @@ export const GET = apiMiddleware.protected(
             }
           }
         });
-
         const fieldsWithBoundaries = farms.flatMap((farm: any) => 
           farm.fields.map((field: any) => ({
             fieldId: field.id,
@@ -240,7 +214,6 @@ export const GET = apiMiddleware.protected(
             hasBoundaries: !!field.area
           }))
         );
-
         return createSuccessResponse({
           data: fieldsWithBoundaries,
           summary: {
@@ -250,7 +223,6 @@ export const GET = apiMiddleware.protected(
           message: `Found ${fieldsWithBoundaries.length} fields with defined boundaries`
         });
       }
-
     } catch (error) {
       return handleApiError(error);
     }

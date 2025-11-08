@@ -1,12 +1,10 @@
 import { cn } from "../../lib/utils"
 import { Loader2, RefreshCw, Activity, Brain, Satellite, Sprout } from "lucide-react"
 import { ReactNode } from "react"
-
 interface LoadingSpinnerProps {
   className?: string
   size?: "sm" | "md" | "lg" | "xl"
 }
-
 export function LoadingSpinner({ className, size = "md" }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: "h-4 w-4",
@@ -14,19 +12,16 @@ export function LoadingSpinner({ className, size = "md" }: LoadingSpinnerProps) 
     lg: "h-8 w-8",
     xl: "h-12 w-12"
   }
-  
   return (
     <Loader2 className={cn("animate-spin", sizeClasses[size], className)} />
   )
 }
-
 interface LoadingStateProps {
   message?: string
   type?: "default" | "dashboard" | "farm" | "health" | "ai" | "satellite"
   size?: "sm" | "md" | "lg"
   className?: string
 }
-
 export function LoadingState({ 
   message = "Loading...", 
   type = "default", 
@@ -41,9 +36,7 @@ export function LoadingState({
     ai: Brain,
     satellite: Satellite
   }
-  
   const Icon = icons[type]
-  
   const sizeClasses = {
     sm: {
       icon: "h-6 w-6",
@@ -61,9 +54,7 @@ export function LoadingState({
       container: "py-16"
     }
   }
-  
   const sizes = sizeClasses[size]
-  
   return (
     <div className={cn("flex flex-col items-center justify-center", sizes.container, className)}>
       <div className="relative mb-4">
@@ -74,13 +65,11 @@ export function LoadingState({
     </div>
   )
 }
-
 interface LoadingCardProps {
   title?: string
   message?: string
   type?: "default" | "dashboard" | "farm" | "health" | "ai" | "satellite"
 }
-
 export function LoadingCard({ 
   title = "Loading", 
   message = "Please wait while we fetch your data...",
@@ -103,7 +92,6 @@ export function LoadingCard({
     </div>
   )
 }
-
 interface LoadingButtonProps {
   loading: boolean
   children: React.ReactNode
@@ -111,7 +99,6 @@ interface LoadingButtonProps {
   disabled?: boolean
   onClick?: () => void
 }
-
 export function LoadingButton({ 
   loading, 
   children, 
@@ -135,17 +122,14 @@ export function LoadingButton({
     </button>
   )
 }
-
 interface SkeletonProps {
   className?: string
 }
-
 export function Skeleton({ className }: SkeletonProps) {
   return (
     <div className={cn("animate-pulse rounded-md bg-sage-100", className)} />
   )
 }
-
 export function SkeletonCard() {
   return (
     <div className="border border-sage-200 rounded-xl p-6 space-y-4">
@@ -165,7 +149,6 @@ export function SkeletonCard() {
     </div>
   )
 }
-
 interface AsyncWrapperProps {
   error: string | null
   loading: boolean
@@ -175,7 +158,6 @@ interface AsyncWrapperProps {
   emptyState?: ReactNode
   isEmpty?: boolean
 }
-
 export function AsyncWrapper({ 
   error, 
   loading, 
@@ -192,14 +174,11 @@ export function AsyncWrapper({
       </div>
     )}</>
   }
-  
   if (error) {
     return <div className="py-8 text-center text-red-600">{error}</div>
   }
-  
   if (isEmpty && emptyState) {
     return <>{emptyState}</>
   }
-  
   return <>{children}</>
 }

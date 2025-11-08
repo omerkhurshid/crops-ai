@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -11,7 +10,6 @@ import {
   AlertTriangle, CheckCircle, Activity, MapPin, Clock,
   Droplets, Bug, Zap, Target, Calendar, BarChart3
 } from 'lucide-react'
-
 interface FieldHealthData {
   fieldId: string
   fieldName: string
@@ -45,14 +43,12 @@ interface FieldHealthData {
     significance: 'high' | 'moderate' | 'low'
   }
 }
-
 interface FieldHealthMonitorProps {
   farmId?: string
   fieldIds?: string[]
   autoRefresh?: boolean
   refreshInterval?: number
 }
-
 export function FieldHealthMonitor({ 
   farmId, 
   fieldIds, 
@@ -63,28 +59,22 @@ export function FieldHealthMonitor({
   const [isLoading, setIsLoading] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null)
   const [error, setError] = useState<string | null>(null)
-
   // Fetch field health data
   const fetchHealthData = async () => {
     setIsLoading(true)
     setError(null)
-    
     try {
       const endpoint = '/api/satellite/field-analysis'
       const params = farmId ? { farmId } : { fieldIds }
-      
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(params)
       })
-
       if (!response.ok) {
         throw new Error(`Analysis failed: ${response.statusText}`)
       }
-
       const data = await response.json()
-      
       if (data.success && data.results) {
         setHealthData(data.results)
         setLastRefresh(new Date())
@@ -98,17 +88,14 @@ export function FieldHealthMonitor({
       setIsLoading(false)
     }
   }
-
   // Auto-refresh setup
   useEffect(() => {
     fetchHealthData()
-    
     if (autoRefresh) {
       const interval = setInterval(fetchHealthData, refreshInterval)
       return () => clearInterval(interval)
     }
   }, [farmId, fieldIds, autoRefresh, refreshInterval])
-
   // Get health status color and icon
   const getHealthStatus = (healthScore: number) => {
     if (healthScore >= 80) {
@@ -121,7 +108,6 @@ export function FieldHealthMonitor({
       return { color: 'text-red-600', bg: 'bg-red-50', icon: AlertTriangle, label: 'Poor' }
     }
   }
-
   // Get trend icon
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -130,7 +116,6 @@ export function FieldHealthMonitor({
       default: return <Minus className="h-4 w-4 text-gray-600" />
     }
   }
-
   // Get stress indicator icon
   const getStressIcon = (type: string) => {
     switch (type) {
@@ -140,7 +125,6 @@ export function FieldHealthMonitor({
       default: return <AlertTriangle className="h-4 w-4" />
     }
   }
-
   // Get alert severity badge
   const getAlertBadge = (severity: string) => {
     const variants = {
@@ -151,18 +135,15 @@ export function FieldHealthMonitor({
     }
     return variants[severity as keyof typeof variants] || variants.moderate
   }
-
   const formatTimeAgo = (date: Date) => {
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
-    
     if (diffMins < 1) return 'Just now'
     if (diffMins < 60) return `${diffMins}m ago`
     if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`
     return `${Math.floor(diffMins / 1440)}d ago`
   }
-
   if (error) {
     return (
       <Alert className="border-red-200 bg-red-50">
@@ -181,7 +162,6 @@ export function FieldHealthMonitor({
       </Alert>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -195,7 +175,6 @@ export function FieldHealthMonitor({
             </p>
           </div>
         </div>
-        
         <div className="flex items-center space-x-3">
           {lastRefresh && (
             <div className="flex items-center text-sm text-gray-500">
@@ -203,7 +182,6 @@ export function FieldHealthMonitor({
               {formatTimeAgo(lastRefresh)}
             </div>
           )}
-          
           <Button
             variant="outline"
             size="sm"
@@ -215,14 +193,12 @@ export function FieldHealthMonitor({
           </Button>
         </div>
       </div>
-
       {/* Field Health Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {healthData.map((field) => {
           const healthStatus = getHealthStatus(field.vegetationHealth.healthScore)
           const criticalAlerts = field.stressAlerts.filter(alert => alert.severity === 'critical')
           const highPriorityRecommendations = field.recommendations.filter(rec => rec.priority === 'urgent' || rec.priority === 'high')
-
           return (
             <Card key={field.fieldId} className="relative overflow-hidden">
               <CardHeader className="pb-3">
@@ -238,7 +214,6 @@ export function FieldHealthMonitor({
                   Last analyzed: {field.analysisDate}
                 </CardDescription>
               </CardHeader>
-
               <CardContent className="space-y-4">
                 {/* Health Score */}
                 <div className={`p-3 rounded-lg ${healthStatus.bg}`}>
@@ -260,7 +235,6 @@ export function FieldHealthMonitor({
                     <span>100</span>
                   </div>
                 </div>
-
                 {/* NDVI Value */}
                 <div className="flex items-center justify-between py-2 border-b">
                   <span className="text-sm text-gray-600">NDVI Index</span>
@@ -268,11 +242,9 @@ export function FieldHealthMonitor({
                     {field.vegetationHealth.ndvi.toFixed(3)}
                   </span>
                 </div>
-
                 {/* Stress Indicators */}
                 <div className="space-y-2">
                   <h4 className="text-sm font-medium text-gray-700">Stress Indicators</h4>
-                  
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
                       <Droplets className={`h-4 w-4 mb-1 ${
@@ -284,7 +256,6 @@ export function FieldHealthMonitor({
                         {(field.vegetationHealth.stressIndicators.drought * 100).toFixed(0)}%
                       </span>
                     </div>
-
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
                       <Bug className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.disease > 0.6 ? 'text-red-500' : 
@@ -295,7 +266,6 @@ export function FieldHealthMonitor({
                         {(field.vegetationHealth.stressIndicators.disease * 100).toFixed(0)}%
                       </span>
                     </div>
-
                     <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
                       <Zap className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.nutrient > 0.6 ? 'text-red-500' : 
@@ -308,7 +278,6 @@ export function FieldHealthMonitor({
                     </div>
                   </div>
                 </div>
-
                 {/* Active Alerts */}
                 {field.stressAlerts.length > 0 && (
                   <div className="space-y-2">
@@ -341,7 +310,6 @@ export function FieldHealthMonitor({
                     </div>
                   </div>
                 )}
-
                 {/* Top Recommendations */}
                 {highPriorityRecommendations.length > 0 && (
                   <div className="space-y-2">
@@ -364,7 +332,6 @@ export function FieldHealthMonitor({
                     </div>
                   </div>
                 )}
-
                 {/* Trend Indicator */}
                 {field.comparisonToPrevious && (
                   <div className="flex items-center justify-between pt-2 border-t text-xs">
@@ -382,7 +349,6 @@ export function FieldHealthMonitor({
                   </div>
                 )}
               </CardContent>
-
               {/* Critical Alert Indicator */}
               {criticalAlerts.length > 0 && (
                 <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
@@ -391,7 +357,6 @@ export function FieldHealthMonitor({
           )
         })}
       </div>
-
       {/* Loading State */}
       {isLoading && healthData.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 space-y-4">
@@ -404,7 +369,6 @@ export function FieldHealthMonitor({
           </div>
         </div>
       )}
-
       {/* Empty State */}
       {!isLoading && healthData.length === 0 && !error && (
         <div className="text-center py-12">

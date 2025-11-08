@@ -1,14 +1,11 @@
 'use client'
-
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { Plus } from 'lucide-react'
-
 export function FieldsHeaderActions() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isQuickMode = searchParams?.get('quick') === 'true'
-
   return (
     <div className="flex gap-2">
       <Button 

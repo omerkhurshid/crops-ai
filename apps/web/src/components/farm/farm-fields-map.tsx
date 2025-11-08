@@ -1,10 +1,8 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { MapPin, Leaf, AlertTriangle, Sprout } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface Field {
   id: string
   name: string
@@ -14,7 +12,6 @@ interface Field {
   stressLevel?: 'none' | 'low' | 'moderate' | 'high' | 'severe'
   coordinates?: number[][][]
 }
-
 interface Farm {
   id: string
   name: string
@@ -22,22 +19,18 @@ interface Farm {
   longitude?: number | null
   fields?: Field[]
 }
-
 interface FarmFieldsMapProps {
   farms: Farm[]
 }
-
 // Mock field health data for visualization
 function generateMockFieldData(field: Field): Field {
   const healthScore = Math.floor(Math.random() * 40) + 60 // 60-100
   const stressScore = 100 - healthScore
-  
   let stressLevel: Field['stressLevel'] = 'none'
   if (stressScore > 40) stressLevel = 'severe'
   else if (stressScore > 30) stressLevel = 'high'
   else if (stressScore > 20) stressLevel = 'moderate'
   else if (stressScore > 10) stressLevel = 'low'
-  
   return {
     ...field,
     healthScore,
@@ -45,11 +38,9 @@ function generateMockFieldData(field: Field): Field {
     cropType: field.cropType || ['Corn', 'Wheat', 'Soybeans', 'Cotton'][Math.floor(Math.random() * 4)]
   }
 }
-
 export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [fields, setFields] = useState<Field[]>([])
-  
   useEffect(() => {
     // Aggregate all fields from all farms
     const allFields: Field[] = []
@@ -62,7 +53,6 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     })
     setFields(allFields)
   }, [farms])
-  
   const getFieldColor = (field: Field) => {
     if (field.stressLevel === 'severe') return 'bg-red-500'
     if (field.stressLevel === 'high') return 'bg-orange-500'
@@ -70,7 +60,6 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     if (field.stressLevel === 'low') return 'bg-green-400'
     return 'bg-green-600'
   }
-  
   const getFieldBorderColor = (field: Field) => {
     if (field.stressLevel === 'severe') return 'border-red-600'
     if (field.stressLevel === 'high') return 'border-orange-600'
@@ -78,13 +67,11 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     if (field.stressLevel === 'low') return 'border-green-500'
     return 'border-green-700'
   }
-  
   // Calculate summary stats
   const totalFields = fields.length
   const healthyFields = fields.filter(f => f.healthScore && f.healthScore >= 80).length
   const stressedFields = fields.filter(f => f.stressLevel === 'high' || f.stressLevel === 'severe').length
   const totalArea = fields.reduce((sum, f) => sum + (f.area || 0), 0)
-  
   return (
     <ModernCard variant="floating" className="mb-8">
       <ModernCardHeader>
@@ -113,7 +100,6 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
             <div className="text-sm text-blue-600">Total Area</div>
           </div>
         </div>
-        
         {/* Visual Map Representation */}
         <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -153,7 +139,6 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
             ))}
           </div>
         </div>
-        
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-4 text-sm">
           <div className="font-medium text-sage-700">Field Health Status:</div>

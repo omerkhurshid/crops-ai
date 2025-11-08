@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState, Suspense } from 'react'
@@ -12,12 +11,10 @@ import { NoRecommendationsEmptyState, EmptyStateCard } from '../../components/ui
 import { Badge } from '../../components/ui/badge'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { Brain, Zap, Target, Settings, Activity, TrendingUp } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
 }
-
 function RecommendationsPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -26,44 +23,34 @@ function RecommendationsPageContent() {
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   const farmIdFromParams = searchParams?.get('farmId')
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchFarmsData() {
       try {
         setIsLoading(true)
-        
         // Fetch all farms
         const farmsResponse = await fetch('/api/farms')
         if (!farmsResponse.ok) {
           throw new Error('Failed to fetch farms')
         }
-        
         const farmsData = await farmsResponse.json()
         const userFarms = farmsData.farms || []
         setFarms(userFarms)
-
         // Determine selected farm
         let selected: Farm | null = null
-        
         if (farmIdFromParams && userFarms.length > 0) {
           // Try to find the specific farm from URL parameter
           selected = userFarms.find((farm: Farm) => farm.id === farmIdFromParams) || null
         }
-        
         // If no specific farm selected or not found, use first farm as default
         if (!selected && userFarms.length > 0) {
           selected = userFarms[0]
         }
-        
         setSelectedFarm(selected)
       } catch (error) {
         console.error('Error fetching farms data:', error)
@@ -72,10 +59,8 @@ function RecommendationsPageContent() {
         setIsLoading(false)
       }
     }
-
     fetchFarmsData()
   }, [session, status, router, farmIdFromParams])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -86,11 +71,9 @@ function RecommendationsPageContent() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   if (error) {
     return (
       <DashboardLayout>
@@ -108,24 +91,19 @@ function RecommendationsPageContent() {
       </DashboardLayout>
     )
   }
-
   // If no farms exist, show empty state instead of redirect
   const showEmptyState = farms.length === 0
-
   // If no farm selected or invalid farm, use first farm
   const farmId = selectedFarm?.id || farms[0]?.id
   const farmName = selectedFarm?.name || farms[0]?.name
-
   return (
     <DashboardLayout>
-      
       {/* Floating Action Button */}
       <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
         label="AI Settings"
         variant="primary"
       />
-      
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -133,7 +111,6 @@ function RecommendationsPageContent() {
           <p className="text-lg text-sage-600 mb-6">
             AI-powered farming insights and recommendations for {farmName}
           </p>
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
             </div>
@@ -148,7 +125,6 @@ function RecommendationsPageContent() {
             </div>
           </div>
         </div>
-
         {/* AI Intelligence Overview */}
         <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
@@ -171,7 +147,6 @@ function RecommendationsPageContent() {
                     <div className="text-sm text-sage-600">Farm Status</div>
                   </div>
                 </div>
-                
                 <div className="group">
                   <div className="text-center p-6 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-earth-200/30">
                     <div className="p-3 bg-earth-200 rounded-xl mx-auto w-fit mb-4">
@@ -181,7 +156,6 @@ function RecommendationsPageContent() {
                     <div className="text-sm text-earth-600">Data Sources</div>
                   </div>
                 </div>
-                
                 <div className="group">
                   <div className="text-center p-6 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-cream-200/30">
                     <div className="p-3 bg-cream-200 rounded-xl mx-auto w-fit mb-4">
@@ -191,7 +165,6 @@ function RecommendationsPageContent() {
                     <div className="text-sm text-sage-600">Analysis</div>
                   </div>
                 </div>
-                
                 <div className="group">
                   <div className="text-center p-6 bg-gradient-to-br from-sage-100/70 to-earth-100/70 rounded-2xl hover:shadow-soft transition-all duration-300 border border-sage-200/30">
                     <div className="p-3 bg-sage-200 rounded-xl mx-auto w-fit mb-4">
@@ -205,7 +178,6 @@ function RecommendationsPageContent() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Recommendations Dashboard with Modern Wrapper */}
         {showEmptyState ? (
           <EmptyStateCard className="max-w-3xl mx-auto">
@@ -220,7 +192,6 @@ function RecommendationsPageContent() {
     </DashboardLayout>
   )
 }
-
 export default function RecommendationsPage() {
   return (
     <Suspense fallback={

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -7,13 +6,11 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
-
 interface AddWeightFormProps {
   farms: any[]
   animals: any[]
   userId: string
 }
-
 export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -24,34 +21,28 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
     bodyConditionScore: '',
     notes: ''
   })
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
       // Validate required fields
       if (!formData.animalId || !formData.weighDate || !formData.weight) {
         throw new Error('Please fill in all required fields')
       }
-
       const weight = parseFloat(formData.weight)
       if (weight <= 0) {
         throw new Error('Weight must be a positive number')
       }
-
       if (formData.bodyConditionScore) {
         const bcs = parseFloat(formData.bodyConditionScore)
         if (bcs < 1 || bcs > 5) {
           throw new Error('Body condition score must be between 1 and 5')
         }
       }
-
       // Submit weight record
       const response = await fetch('/api/livestock/weight', {
         method: 'POST',
@@ -63,14 +54,11 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           bodyConditionScore: formData.bodyConditionScore ? parseFloat(formData.bodyConditionScore) : null
         })
       })
-
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || 'Failed to add weight record')
       }
-
       const newRecord = await response.json()
-      
       toast.success('Weight record added successfully!')
       router.push('/livestock/weight')
     } catch (error) {
@@ -80,10 +68,8 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
       setIsSubmitting(false)
     }
   }
-
   // Get selected animal details
   const selectedAnimal = animals.find(animal => animal.id === formData.animalId)
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
@@ -106,7 +92,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="weighDate">Weigh Date *</Label>
           <Input
@@ -119,7 +104,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           />
         </div>
       </div>
-
       {/* Weight and Body Condition */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -140,7 +124,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             </p>
           )}
         </div>
-
         <div>
           <Label htmlFor="bodyConditionScore">Body Condition Score (1-5)</Label>
           <select
@@ -166,7 +149,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           </p>
         </div>
       </div>
-
       {/* Weight Change Preview */}
       {selectedAnimal?.currentWeight && formData.weight && (
         <div className="bg-blue-50 p-4 rounded-lg">
@@ -177,7 +159,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
               const previousWeight = selectedAnimal.currentWeight
               const change = currentWeight - previousWeight
               const percentage = ((change / previousWeight) * 100)
-              
               return (
                 <div className="flex items-center gap-4">
                   <span>
@@ -197,7 +178,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           </div>
         </div>
       )}
-
       {/* Age Information */}
       {selectedAnimal?.birthDate && (
         <div className="bg-gray-50 p-4 rounded-lg">
@@ -210,11 +190,9 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
                   const birth = new Date(selectedAnimal.birthDate)
                   const now = new Date(formData.weighDate)
                   const monthsDiff = (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth()
-                  
                   if (monthsDiff < 12) return `${monthsDiff} months`
                   const years = Math.floor(monthsDiff / 12)
                   const remainingMonths = monthsDiff % 12
-                  
                   if (remainingMonths === 0) return `${years} ${years === 1 ? 'year' : 'years'}`
                   return `${years}y ${remainingMonths}m`
                 })()}
@@ -227,7 +205,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           </div>
         </div>
       )}
-
       {/* Notes */}
       <div>
         <Label htmlFor="notes">Notes</Label>
@@ -240,7 +217,6 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
           rows={3}
         />
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-end gap-4">
         <Button

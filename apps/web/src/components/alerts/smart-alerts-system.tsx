@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -18,7 +17,6 @@ import {
   X
 } from 'lucide-react'
 import { convertHealthScore, convertStressLevel } from '../../lib/farmer-language'
-
 interface SmartAlert {
   id: string
   type: 'weather' | 'crop_health' | 'pest' | 'market' | 'financial'
@@ -32,18 +30,15 @@ interface SmartAlert {
   createdAt: Date
   dismissed?: boolean
 }
-
 interface SmartAlertsSystemProps {
   farmId: string
   userId: string
   isPremium?: boolean
 }
-
 export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAlertsSystemProps) {
   const [alerts, setAlerts] = useState<SmartAlert[]>([])
   const [loading, setLoading] = useState(true)
   const [showSettings, setShowSettings] = useState(false)
-
   // Sample premium alerts to demonstrate value
   const generatePremiumAlerts = (): SmartAlert[] => [
     {
@@ -104,7 +99,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000) // 1 day ago
     }
   ]
-
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
@@ -128,10 +122,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
         setLoading(false)
       }
     }
-
     fetchAlerts()
   }, [farmId, userId, isPremium])
-
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'weather': return <CloudRain className="h-5 w-5" />
@@ -142,7 +134,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       default: return <Bell className="h-5 w-5" />
     }
   }
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-red-100 text-red-800 border-red-200'
@@ -152,28 +143,23 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
-
   const dismissAlert = (alertId: string) => {
     setAlerts(alerts.map(alert => 
       alert.id === alertId ? { ...alert, dismissed: true } : alert
     ))
   }
-
   const formatTimeAgo = (date: Date) => {
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const minutes = Math.floor(diff / (1000 * 60))
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
     if (minutes < 60) return `${minutes}m ago`
     if (hours < 24) return `${hours}h ago`
     return `${days}d ago`
   }
-
   const activeAlerts = alerts.filter(alert => !alert.dismissed)
   const criticalAlerts = activeAlerts.filter(alert => alert.severity === 'critical' || alert.severity === 'high')
-
   if (loading) {
     return (
       <ModernCard>
@@ -186,7 +172,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       </ModernCard>
     )
   }
-
   return (
     <div className="space-y-4">
       {/* Alert Summary Header */}
@@ -212,13 +197,11 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
             </p>
           </div>
         </div>
-        
         <Button variant="outline" size="sm" onClick={() => setShowSettings(!showSettings)}>
           <Settings className="h-4 w-4 mr-2" />
           Settings
         </Button>
       </div>
-
       {/* Premium Upgrade Notice for Free Users */}
       {!isPremium && (
         <Alert className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
@@ -236,7 +219,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
           </AlertDescription>
         </Alert>
       )}
-
       {/* Active Alerts List */}
       <div className="space-y-3">
         {activeAlerts.length === 0 ? (
@@ -267,7 +249,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                     }`}>
                       {getAlertIcon(alert.type)}
                     </div>
-                    
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h4 className="font-semibold text-sage-800">{alert.title}</h4>
@@ -278,9 +259,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                           {alert.confidence}% confidence
                         </Badge>
                       </div>
-                      
                       <p className="text-sage-700 mb-3">{alert.message}</p>
-                      
                       <div className="flex flex-wrap items-center gap-4 text-sm text-sage-600">
                         {alert.farmField && (
                           <div className="flex items-center gap-1">
@@ -296,7 +275,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                           <span>{formatTimeAgo(alert.createdAt)}</span>
                         </div>
                       </div>
-                      
                       {alert.actionRequired && (
                         <div className="mt-3 flex gap-2">
                           <Button size="sm" className="bg-sage-600 hover:bg-sage-700">
@@ -309,7 +287,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                       )}
                     </div>
                   </div>
-                  
                   <Button
                     variant="ghost"
                     size="sm"
@@ -324,7 +301,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
           ))
         )}
       </div>
-
       {/* Alert Settings Panel */}
       {showSettings && (
         <ModernCard>
@@ -345,7 +321,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                     ))}
                   </div>
                 </div>
-                
                 <div>
                   <h4 className="font-medium text-sage-800 mb-2">Notification Methods</h4>
                   <div className="space-y-2">
@@ -365,7 +340,6 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                   </div>
                 </div>
               </div>
-              
               <div className="pt-4 border-t border-sage-200">
                 <Button className="bg-sage-600 hover:bg-sage-700">
                   Save Settings

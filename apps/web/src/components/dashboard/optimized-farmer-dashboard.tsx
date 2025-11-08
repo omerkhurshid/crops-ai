@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { DashboardDataProvider, useDashboardData } from './dashboard-data-provider'
 import { OptimizedWeatherAlerts } from './optimized-weather-alerts'
@@ -12,7 +11,6 @@ import { useScreenSize } from '../../hooks/useResponsive'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { RefreshCw, AlertTriangle, CheckCircle } from 'lucide-react'
-
 interface OptimizedFarmerDashboardProps {
   farmId: string
   farmData?: {
@@ -33,7 +31,6 @@ interface OptimizedFarmerDashboardProps {
     email: string
   }
 }
-
 function DashboardContent({ 
   farmId, 
   farmData, 
@@ -45,12 +42,10 @@ function DashboardContent({
 }: OptimizedFarmerDashboardProps) {
   const { loading, error, lastUpdated, refetch } = useDashboardData()
   const { isMobile } = useScreenSize()
-
   // Calculate quick stats from passed data
   const totalFields = farmData?.fields?.length || 0
   const totalArea = farmData?.totalArea || 0
   const activeAlerts = weatherAlerts?.filter(alert => alert.isActive)?.length || 0
-
   if (error) {
     return (
       <ModernCard variant="soft" className="border-red-200 bg-red-50">
@@ -72,7 +67,6 @@ function DashboardContent({
       </ModernCard>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Loading Indicator */}
@@ -82,7 +76,6 @@ function DashboardContent({
           Loading latest data...
         </div>
       )}
-
       {/* Quick Stats Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total fields count">
@@ -105,7 +98,6 @@ function DashboardContent({
           <div className="text-sm text-gray-600">Active Alerts</div>
         </div>
       </div>
-
       {/* Morning Briefing - Only show core weather data initially */}
       <MorningBriefing 
         farmName={farmData?.name || "Your Farm"}
@@ -154,32 +146,27 @@ function DashboardContent({
         livestockHealthStatus="good"
         lastSatelliteUpdate={lastUpdated || undefined}
       />
-
       {/* Market Ticker */}
       {isMobile ? (
         <MobileMarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
       ) : (
         <MarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
       )}
-
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Tasks and Weather */}
         <div className="lg:col-span-2 space-y-6">
           {/* Today's Tasks */}
           <TodaysTasksSummary farmId={farmId} />
-          
           {/* Weather Alerts - Optimized */}
           <OptimizedWeatherAlerts maxAlerts={5} />
         </div>
-
         {/* Right Column - Recommendations */}
         <div className="space-y-6">
           {/* AI Recommendations - Optimized */}
           <OptimizedRecommendations limit={4} />
         </div>
       </div>
-
       {/* Farms Map */}
       <div>
         <div className="flex items-center justify-between mb-6">
@@ -197,7 +184,6 @@ function DashboardContent({
             </Badge>
           )}
         </div>
-        
         <FarmsMap 
           farms={[{
             id: String(farmId) || "farm-1",
@@ -221,7 +207,6 @@ function DashboardContent({
     </div>
   )
 }
-
 export function OptimizedFarmerDashboard(props: OptimizedFarmerDashboardProps) {
   return (
     <DashboardDataProvider

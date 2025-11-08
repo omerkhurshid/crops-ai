@@ -1,13 +1,9 @@
 'use client'
-
 import { useState } from 'react'
-
 export function ProfitCalculator() {
   const [acres, setAcres] = useState<number>(0)
   const [profitPerAcre] = useState(45) // Based on research showing $45/acre improvement
-
   const totalProfit = acres * profitPerAcre
-
   return (
     <div className="bg-gradient-to-r from-green-50 to-sage-50 p-6 rounded-xl border border-green-200 mb-6 max-w-2xl mx-auto">
       <h3 className="text-lg font-semibold text-sage-800 mb-3">Your Potential Additional Profit:</h3>

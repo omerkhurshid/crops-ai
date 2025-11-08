@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
@@ -11,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../../../components/ui/textarea'
 import { ArrowLeft, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
-
 export default function AddAnimalPage() {
   const router = useRouter()
   const [farms, setFarms] = useState<any[]>([])
@@ -26,11 +24,9 @@ export default function AddAnimalPage() {
     healthStatus: 'healthy',
     notes: ''
   })
-
   useEffect(() => {
     fetchFarms()
   }, [])
-
   const fetchFarms = async () => {
     try {
       const response = await fetch('/api/farms')
@@ -43,7 +39,6 @@ export default function AddAnimalPage() {
           setFormData(prev => ({ ...prev, farmId: farmsArray[0].id }))
         }
       } else {
-
         setFarms([]) // Set empty array on error
       }
     } catch (error) {
@@ -51,11 +46,9 @@ export default function AddAnimalPage() {
       setFarms([]) // Set empty array on error
     }
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
     try {
       // For now, just show a message that this feature is not yet implemented
       toast.success('Animal registration feature coming soon!')
@@ -68,7 +61,6 @@ export default function AddAnimalPage() {
       setLoading(false)
     }
   }
-
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -81,13 +73,11 @@ export default function AddAnimalPage() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Livestock
           </Button>
-          
           <h1 className="text-4xl font-light text-sage-800 mb-2">Add Animal</h1>
           <p className="text-lg text-sage-600">
             Register a new animal to your herd
           </p>
         </div>
-
         <ModernCard>
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
@@ -122,7 +112,6 @@ export default function AddAnimalPage() {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <Label htmlFor="animalType">Animal Type</Label>
                   <Select 
@@ -142,7 +131,6 @@ export default function AddAnimalPage() {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <Label htmlFor="tagNumber">Tag/ID Number</Label>
                   <Input
@@ -152,7 +140,6 @@ export default function AddAnimalPage() {
                     placeholder="Enter animal identification number"
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="breed">Breed</Label>
                   <Input
@@ -162,7 +149,6 @@ export default function AddAnimalPage() {
                     placeholder="Enter breed (optional)"
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="birthDate">Birth Date</Label>
                   <Input
@@ -172,7 +158,6 @@ export default function AddAnimalPage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, birthDate: e.target.value }))}
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="weight">Weight (kg)</Label>
                   <Input
@@ -183,7 +168,6 @@ export default function AddAnimalPage() {
                     placeholder="Enter weight in kilograms (optional)"
                   />
                 </div>
-
                 <div>
                   <Label htmlFor="healthStatus">Health Status</Label>
                   <Select 
@@ -202,7 +186,6 @@ export default function AddAnimalPage() {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div>
                   <Label htmlFor="notes">Notes</Label>
                   <Textarea
@@ -214,7 +197,6 @@ export default function AddAnimalPage() {
                   />
                 </div>
               </div>
-
               <div className="flex justify-end space-x-4">
                 <Button
                   type="button"

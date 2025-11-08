@@ -1,7 +1,5 @@
 'use client'
-
 import { FloatingActionButton } from './floating-button'
-
 interface ClientFloatingButtonProps {
   icon: React.ReactNode
   label: string
@@ -9,7 +7,6 @@ interface ClientFloatingButtonProps {
   onClick?: () => void
   href?: string
 }
-
 export function ClientFloatingButton({ icon, label, variant = 'primary', onClick, href }: ClientFloatingButtonProps) {
   const handleClick = () => {
     if (onClick) {
@@ -23,11 +20,9 @@ export function ClientFloatingButton({ icon, label, variant = 'primary', onClick
       } else if (label.includes('Crop')) {
         window.location.href = '/crops?action=add-planting'
       } else {
-
       }
     }
   }
-
   return (
     <FloatingActionButton
       icon={icon}

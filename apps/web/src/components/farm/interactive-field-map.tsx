@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '../ui/button'
@@ -8,13 +7,11 @@ import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { MapPin, Move, Square, RotateCcw, Check, X, Shapes, MapPinned, Info, ZoomIn, ZoomOut } from 'lucide-react'
-
 interface InteractiveFieldMapProps {
   fieldId: string
   onBoundariesDetected: (boundaries: Array<{ lat: number; lng: number }>) => void
   onClose: () => void
 }
-
 interface MapPoint {
   id: string
   lat: number
@@ -23,7 +20,6 @@ interface MapPoint {
   y: number
   isDragging: boolean
 }
-
 export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: InteractiveFieldMapProps) {
   const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 })
   const [coordinates, setCoordinates] = useState({
@@ -39,12 +35,10 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
   const [isDetecting, setIsDetecting] = useState(false)
   const [detectedFields, setDetectedFields] = useState<any[]>([])
   const [selectedField, setSelectedField] = useState<number | null>(null)
-  
   const mapRef = useRef<HTMLDivElement>(null)
   const dragOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
   const [satelliteImage, setSatelliteImage] = useState<string | null>(null)
   const [loadingImage, setLoadingImage] = useState(false)
-
   useEffect(() => {
     // Simulate map loading and create initial square
     const timer = setTimeout(() => {
@@ -56,22 +50,17 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     }, 500)
     return () => clearTimeout(timer)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
   // Fetch satellite image when center changes
   useEffect(() => {
     const fetchSatelliteImage = async () => {
       // Only fetch if we have valid coordinates and map is loaded
       if (!mapCenter.lat || !mapCenter.lng || !mapLoaded) {
-
         return
       }
-      
       // Skip if coordinates haven't been explicitly set by user
       if (coordinates.centerLat === '' && coordinates.centerLng === '') {
-
         return
       }
-      
       setLoadingImage(true)
       try {
         const bbox = {
@@ -80,23 +69,19 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           east: mapCenter.lng + 0.01,
           north: mapCenter.lat + 0.01
         }
-
         // Use a date range for the last 30 days to find available imagery
         const endDate = new Date()
         const startDate = new Date()
         startDate.setDate(startDate.getDate() - 30)
-        
         // Calculate bbox size based on zoom level (higher zoom = smaller area = better resolution)
         const zoomFactor = Math.pow(2, 16 - currentZoom) // Base zoom 16
         const bboxSize = 0.01 * zoomFactor
-        
         const adjustedBbox = {
           west: mapCenter.lng - bboxSize,
           south: mapCenter.lat - bboxSize,
           east: mapCenter.lng + bboxSize,
           north: mapCenter.lat + bboxSize
         }
-        
         const params = new URLSearchParams({
           west: adjustedBbox.west.toString(),
           south: adjustedBbox.south.toString(),
@@ -107,30 +92,22 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           height: '600',
           date: endDate.toISOString().split('T')[0]
         })
-
         const response = await fetch(`/api/satellite/images?${params}`, {
           method: 'GET'
         })
-
         if (response.ok) {
           const result = await response.json()
-          
           // Handle both wrapped and direct API responses
           const data = result.data || result; // result.data if wrapped, result if direct response
-          
           if (data) {
             // Check for different response formats
             if (data.imageUrl) {
-
               setSatelliteImage(data.imageUrl)
             } else if (data.imageData) {
-
               setSatelliteImage(data.imageData)
             } else {
-
             }
           } else {
-
           }
         } else {
           const errorText = await response.text()
@@ -142,53 +119,43 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
         setLoadingImage(false)
       }
     }
-
     fetchSatelliteImage()
   }, [mapCenter, mapLoaded, coordinates.centerLat, coordinates.centerLng, currentZoom])
-
   const updateMapCenter = () => {
     const lat = parseFloat(coordinates.centerLat)
     const lng = parseFloat(coordinates.centerLng)
-
     if (!isNaN(lat) && !isNaN(lng)) {
       setMapCenter({ lat, lng })
       // Clear existing points when changing location
       setPoints([])
       setDetectedFields([])
       setSelectedField(null)
-
     } else {
-
       alert('Please enter valid numeric coordinates')
     }
   }
-
   const zoomIn = () => {
     if (currentZoom < 20) {
       setCurrentZoom(prev => prev + 1)
       setCoordinates(prev => ({ ...prev, zoom: (currentZoom + 1).toString() }))
     }
   }
-
   const zoomOut = () => {
     if (currentZoom > 10) {
       setCurrentZoom(prev => prev - 1)
       setCoordinates(prev => ({ ...prev, zoom: (currentZoom - 1).toString() }))
     }
   }
-
   const detectBoundariesFromSatellite = async () => {
     if (!mapCenter.lat || !mapCenter.lng || mapCenter.lat === 0 || mapCenter.lng === 0) {
       alert('Please enter coordinates and click "Update Map" first')
       return
     }
-
     setIsDetecting(true)
     try {
       const lat = parseFloat(coordinates.centerLat)
       const lng = parseFloat(coordinates.centerLng)
       const radiusKm = 2 // Fixed 2km radius for detection
-
       // Create bounding box around the center point
       const bbox = {
         west: lng - radiusKm * 0.01,
@@ -196,7 +163,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
         east: lng + radiusKm * 0.01,
         north: lat + radiusKm * 0.01
       }
-
       const response = await fetch('/api/satellite/boundaries', {
         method: 'POST',
         headers: {
@@ -218,9 +184,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
           }
         })
       })
-
       const result = await response.json()
-      
       if (result.success && result.data.boundaries) {
         setDetectedFields(result.data.boundaries)
         // Convert first detected field to points for visualization
@@ -237,7 +201,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
       setIsDetecting(false)
     }
   }
-
   const convertFieldToPoints = (field: any) => {
     if (field.geometry?.coordinates?.[0]) {
       const coords = field.geometry.coordinates[0]
@@ -252,35 +215,27 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
       setPoints(newPoints)
     }
   }
-
   const createSquareField = () => {
     const centerX = 400
     const centerY = 300
     const size = 150
-    
     const squarePoints: MapPoint[] = [
       { id: 'p1', lat: mapCenter.lat + 0.001, lng: mapCenter.lng - 0.001, x: centerX - size/2, y: centerY - size/2, isDragging: false },
       { id: 'p2', lat: mapCenter.lat + 0.001, lng: mapCenter.lng + 0.001, x: centerX + size/2, y: centerY - size/2, isDragging: false },
       { id: 'p3', lat: mapCenter.lat - 0.001, lng: mapCenter.lng + 0.001, x: centerX + size/2, y: centerY + size/2, isDragging: false },
       { id: 'p4', lat: mapCenter.lat - 0.001, lng: mapCenter.lng - 0.001, x: centerX - size/2, y: centerY + size/2, isDragging: false }
     ]
-    
     setPoints(squarePoints)
   }
-
   const addCustomPoint = (e: React.MouseEvent<HTMLDivElement>) => {
     if (mode !== 'manual') return
-    
     const rect = mapRef.current?.getBoundingClientRect()
     if (!rect) return
-
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    
     // Convert screen coordinates to approximate lat/lng (simplified)
     const lat = mapCenter.lat + (300 - y) * 0.00001
     const lng = mapCenter.lng + (x - 400) * 0.00001
-
     const newPoint: MapPoint = {
       id: `point-${Date.now()}`,
       lat,
@@ -289,49 +244,37 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
       y,
       isDragging: false
     }
-
     setPoints(prev => [...prev, newPoint])
   }
-
   const handleMouseDown = (e: React.MouseEvent, pointId: string) => {
     e.preventDefault()
     e.stopPropagation()
-    
     const rect = mapRef.current?.getBoundingClientRect()
     if (!rect) return
-
     const point = points.find(p => p.id === pointId)
     if (!point) return
-
     dragOffset.current = {
       x: e.clientX - point.x,
       y: e.clientY - point.y
     }
-
     setDragPoint(pointId)
     setPoints(prev => prev.map(p => 
       p.id === pointId ? { ...p, isDragging: true } : p
     ))
   }
-
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!dragPoint) return
-
     const rect = mapRef.current?.getBoundingClientRect()
     if (!rect) return
-
     const x = e.clientX - rect.left - dragOffset.current.x
     const y = e.clientY - rect.top - dragOffset.current.y
-
     // Convert to lat/lng (simplified conversion)
     const lat = mapCenter.lat + (300 - y) * 0.00001
     const lng = mapCenter.lng + (x - 400) * 0.00001
-
     setPoints(prev => prev.map(p => 
       p.id === dragPoint ? { ...p, x, y, lat, lng } : p
     ))
   }
-
   const handleMouseUp = () => {
     if (dragPoint) {
       setPoints(prev => prev.map(p => 
@@ -340,16 +283,13 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
       setDragPoint(null)
     }
   }
-
   const clearPoints = () => {
     setPoints([])
     setDetectedFields([])
     setSelectedField(null)
   }
-
   const calculateArea = () => {
     if (points.length < 3) return 0
-    
     // Simplified area calculation (hectares)
     let area = 0
     for (let i = 0; i < points.length; i++) {
@@ -359,25 +299,21 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
     }
     return Math.abs(area) * 6378137 * 6378137 / 20000000 // Rough conversion to hectares
   }
-
   const confirmField = () => {
     if (points.length < 3) {
       alert('Please define at least 3 points to create a field boundary')
       return
     }
-
     const boundaries = points.map(p => ({ lat: p.lat, lng: p.lng }))
     onBoundariesDetected(boundaries)
     onClose()
   }
-
   const selectDetectedField = (index: number) => {
     setSelectedField(index)
     if (detectedFields[index]) {
       convertFieldToPoints(detectedFields[index])
     }
   }
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-6xl max-h-[95vh] overflow-y-auto">
@@ -395,7 +331,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
             {/* Location Input */}
             <div>
               <h4 className="font-medium mb-4">1. Set Map Location (Optional)</h4>
-              
               {/* Location helpers */}
               <div className="mb-4 p-3 bg-blue-50 rounded-lg flex items-start space-x-2">
                 <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -404,7 +339,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   <p className="text-xs">Just select &quot;Manual Drawing&quot; below and start creating your field boundaries.</p>
                 </div>
               </div>
-              
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="center-lat">Latitude</Label>
@@ -446,7 +380,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 </div>
               </div>
             </div>
-
             {/* Mode Selection */}
             <div>
               <h4 className="font-medium mb-4">2. Choose Detection Method</h4>
@@ -468,7 +401,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   <span>Manual Drawing</span>
                 </Button>
               </div>
-
               {mode === 'satellite' && (
                 <div className="flex space-x-4">
                   <Button 
@@ -479,7 +411,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   </Button>
                 </div>
               )}
-
               {mode === 'manual' && (
                 <div className="space-y-2">
                   <p className="text-sm text-gray-600">Click on the map to add points, or use a preset shape:</p>
@@ -496,7 +427,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 </div>
               )}
             </div>
-
             {/* Interactive Map */}
             <div>
               <h4 className="font-medium mb-4">3. Interactive Map</h4>
@@ -526,7 +456,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-green-200 via-green-300 to-green-400 opacity-70"></div>
                   )}
-                  
                   {/* Grid overlay for reference */}
                   <svg className="absolute inset-0 w-full h-full pointer-events-none">
                     <defs>
@@ -536,7 +465,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                     </defs>
                     <rect width="100%" height="100%" fill="url(#grid)" />
                   </svg>
-
                   {/* Zoom Controls */}
                   <div className="absolute top-4 right-4 flex flex-col space-y-2 z-10">
                     <Button
@@ -563,14 +491,12 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       <ZoomOut className="h-4 w-4" />
                     </Button>
                   </div>
-
                   {/* Center marker - only show if coordinates are set */}
                   {(coordinates.centerLat !== '' && coordinates.centerLng !== '') && (
                     <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-500">
                       <MapPin className="h-6 w-6" />
                     </div>
                   )}
-
                   {/* Field boundary polygon */}
                   {points.length > 2 && (
                     <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -583,7 +509,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       />
                     </svg>
                   )}
-
                   {/* Field boundary lines */}
                   {points.length > 1 && (
                     <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -603,7 +528,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       })}
                     </svg>
                   )}
-
                   {/* Draggable points */}
                   {points.map((point, index) => (
                     <div
@@ -619,7 +543,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       </div>
                     </div>
                   ))}
-
                   {/* Instructions overlay */}
                   {mode === 'manual' && points.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -631,7 +554,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                     </div>
                   )}
                 </div>
-
                 {/* Map Info Bar */}
                 <div className="bg-gray-50 px-4 py-2 flex justify-between items-center text-sm">
                   <div className="flex space-x-4">
@@ -646,7 +568,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 </div>
               </div>
             </div>
-
             {/* Detected Fields List */}
             {detectedFields.length > 0 && (
               <div>
@@ -677,7 +598,6 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 </div>
               </div>
             )}
-
             {/* Action Buttons */}
             <div className="flex justify-between pt-4 border-t">
               <Button variant="outline" onClick={onClose}>

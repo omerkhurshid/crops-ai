@@ -1,10 +1,8 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Search, Clock, ChevronRight, X } from 'lucide-react'
-
 interface HelpArticle {
   id: string
   title: string
@@ -15,7 +13,6 @@ interface HelpArticle {
   readTime: string
   keywords: string[]
 }
-
 // Sample help articles data - in a real app this would come from a CMS or database
 const helpArticles: HelpArticle[] = [
   {
@@ -109,25 +106,21 @@ const helpArticles: HelpArticle[] = [
     keywords: ['sync', 'data', 'delay', 'update', 'satellite', 'weather']
   }
 ]
-
 interface HelpSearchProps {
   onArticleSelect?: (article: HelpArticle) => void
   placeholder?: string
 }
-
 export function HelpSearch({ onArticleSelect, placeholder = "Search help articles..." }: HelpSearchProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [results, setResults] = useState<HelpArticle[]>([])
   const [recentSearches, setRecentSearches] = useState<string[]>([])
   const [showResults, setShowResults] = useState(false)
-
   useEffect(() => {
     if (searchTerm.length < 2) {
       setResults([])
       setShowResults(false)
       return
     }
-
     const searchWords = searchTerm.toLowerCase().split(' ')
     const filtered = helpArticles.filter(article => {
       const searchableText = [
@@ -137,21 +130,17 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
         ...article.tags,
         ...article.keywords
       ].join(' ').toLowerCase()
-
       return searchWords.every(word => searchableText.includes(word))
     }).slice(0, 8) // Limit to 8 results
-
     setResults(filtered)
     setShowResults(true)
   }, [searchTerm])
-
   const handleSearch = (term: string) => {
     setSearchTerm(term)
     if (term.length >= 2 && !recentSearches.includes(term)) {
       setRecentSearches(prev => [term, ...prev.slice(0, 4)]) // Keep last 5 searches
     }
   }
-
   const handleArticleClick = (article: HelpArticle) => {
     setShowResults(false)
     setSearchTerm('')
@@ -159,13 +148,11 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
       onArticleSelect(article)
     }
   }
-
   const clearSearch = () => {
     setSearchTerm('')
     setResults([])
     setShowResults(false)
   }
-
   return (
     <div className="relative">
       {/* Search Input */}
@@ -188,7 +175,6 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
           </button>
         )}
       </div>
-
       {/* Search Results */}
       {showResults && (
         <div className="absolute top-full left-0 right-0 mt-2 z-50">
@@ -242,7 +228,6 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                   </p>
                 </div>
               )}
-
               {/* Recent Searches */}
               {recentSearches.length > 0 && results.length === 0 && searchTerm.length < 2 && (
                 <div className="mt-4 pt-4 border-t border-sage-200">
@@ -264,7 +249,6 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
           </ModernCard>
         </div>
       )}
-
       {/* Click outside to close */}
       {showResults && (
         <div 

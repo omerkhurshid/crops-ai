@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,39 +14,32 @@ import {
   Bar,
   Legend
 } from 'recharts';
-
 interface MonthlyTrend {
   month: string;
   income: number;
   expenses: number;
   profit: number;
 }
-
 interface TrendChartProps {
   farmId: string;
   dateRange: { start: Date; end: Date };
 }
-
 export function TrendChart({ farmId, dateRange }: TrendChartProps) {
   const [data, setData] = useState<MonthlyTrend[]>([]);
   const [loading, setLoading] = useState(true);
   const [chartType, setChartType] = useState<'line' | 'bar'>('line');
-
   useEffect(() => {
     fetchTrendData();
   }, [farmId, dateRange]);
-
   const fetchTrendData = async () => {
     try {
       setLoading(true);
       const response = await fetch(
         `/api/financial/summary?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       );
-      
       if (response.ok) {
         const responseData = await response.json();
         const monthlyTrends = responseData.monthlyTrends || [];
-        
         // Transform data for chart
         const chartData = monthlyTrends.map((trend: any) => ({
           month: new Date(trend.month + '-01').toLocaleDateString('en-US', { 
@@ -58,7 +50,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
           expenses: trend.expenses,
           profit: trend.income - trend.expenses,
         }));
-        
         setData(chartData);
       }
     } catch (error) {
@@ -67,7 +58,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       setLoading(false);
     }
   };
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -76,7 +66,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       maximumFractionDigits: 0,
     }).format(value);
   };
-
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -92,7 +81,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
     }
     return null;
   };
-
   if (loading) {
     return (
       <Card className="p-6">
@@ -103,7 +91,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       </Card>
     );
   }
-
   if (data.length === 0) {
     return (
       <Card className="p-6">
@@ -115,12 +102,10 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       </Card>
     );
   }
-
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900">Financial Trends</h3>
-        
         <div className="flex items-center space-x-2">
           <Badge 
             variant={chartType === 'line' ? 'default' : 'outline'}
@@ -138,7 +123,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
           </Badge>
         </div>
       </div>
-
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           {chartType === 'line' ? (
@@ -206,7 +190,6 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
           )}
         </ResponsiveContainer>
       </div>
-
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t">
         <div className="text-center">
@@ -215,14 +198,12 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
             {formatCurrency(data.reduce((sum, item) => sum + item.income, 0))}
           </p>
         </div>
-        
         <div className="text-center">
           <p className="text-sm text-gray-600">Total Expenses</p>
           <p className="text-lg font-semibold text-red-600">
             {formatCurrency(data.reduce((sum, item) => sum + item.expenses, 0))}
           </p>
         </div>
-        
         <div className="text-center">
           <p className="text-sm text-gray-600">Net Profit</p>
           <p className={`text-lg font-semibold ${

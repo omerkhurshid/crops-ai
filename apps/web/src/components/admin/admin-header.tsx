@@ -1,9 +1,7 @@
 'use client'
-
 import { Shield, RefreshCw, Download, Settings } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
-
 interface AdminHeaderProps {
   user: {
     name: string
@@ -11,12 +9,10 @@ interface AdminHeaderProps {
     role: string
   }
 }
-
 export function AdminHeader({ user }: AdminHeaderProps) {
   const handleRefresh = () => {
     window.location.reload()
   }
-
   const handleExportData = async () => {
     try {
       const response = await fetch('/api/admin/export-data')
@@ -35,7 +31,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
       console.error('Failed to export data:', error)
     }
   }
-
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between">
@@ -58,7 +53,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             </span>
           </div>
         </div>
-
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
@@ -69,7 +63,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <RefreshCw className="h-4 w-4" />
             Refresh
           </Button>
-          
           <Button
             variant="outline"
             size="sm"
@@ -79,7 +72,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             <Download className="h-4 w-4" />
             Export Data
           </Button>
-
           <Button
             variant="outline"
             size="sm"

@@ -6,18 +6,15 @@ import { ThemeProvider } from '../components/theme/theme-provider'
 import { CacheProvider } from '../components/providers/cache-provider'
 import { UserPreferencesProvider } from '../contexts/user-preferences-context'
 import { Toaster } from 'react-hot-toast'
-
 const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap',
   preload: true
 })
-
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
 }
-
 export const metadata: Metadata = {
   title: 'Crops.AI - Smart Farm Management',
   description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
@@ -65,7 +62,6 @@ export const metadata: Metadata = {
     },
   },
 }
-
 export default function RootLayout({
   children,
 }: {

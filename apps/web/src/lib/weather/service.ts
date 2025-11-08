@@ -4,7 +4,6 @@ export interface WeatherCondition {
   description: string;
   icon: string;
 }
-
 export interface CurrentWeather {
   id: string;
   location: {
@@ -34,7 +33,6 @@ export interface CurrentWeather {
   sunrise?: string;
   sunset?: string;
 }
-
 export interface WeatherForecast {
   id: string;
   location: {
@@ -61,7 +59,6 @@ export interface WeatherForecast {
   conditions: WeatherCondition[];
   uvIndex?: number;
 }
-
 export interface WeatherAlert {
   id: string;
   alertType: 'frost' | 'storm' | 'drought' | 'heat' | 'wind' | 'hail' | 'flood';
@@ -74,7 +71,6 @@ export interface WeatherAlert {
   recommendations: string[];
   isActive: boolean;
 }
-
 export interface AgricultureWeatherData {
   location: {
     latitude: number;
@@ -98,37 +94,26 @@ export interface AgricultureWeatherData {
   frostRisk?: 'none' | 'low' | 'moderate' | 'high';
   heatStress?: 'none' | 'low' | 'moderate' | 'high' | 'severe';
 }
-
 class WeatherService {
   private readonly API_KEY: string;
   private readonly BASE_URL = 'https://api.openweathermap.org/data/2.5';
   private readonly ONECALL_URL = 'https://api.openweathermap.org/data/3.0/onecall';
   private readonly AGRO_URL = 'https://api.openweathermap.org/data/2.5/agro';
-
   constructor() {
     this.API_KEY = process.env.OPENWEATHER_API_KEY || '';
-    if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
-      console.warn('OpenWeather API key not configured. Weather data will be unavailable.');
-    }
+    if (!this.API_KEY || this.API_KEY === 'mock_development_key') {}
   }
-
   async getCurrentWeather(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     try {
-      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
-        console.warn(`Weather API unavailable - OpenWeather API key not configured for ${latitude}, ${longitude}`);
-        throw new Error('Weather service unavailable. Please configure OpenWeather API key.');
+      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {throw new Error('Weather service unavailable. Please configure OpenWeather API key.');
       }
-
       const url = `${this.BASE_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`;
       const response = await fetch(url);
-
       if (!response.ok) {
         console.error(`Weather API error ${response.status}: ${response.statusText}`);
         throw new Error(`Weather API error: ${response.status} ${response.statusText}`);
       }
-
       const data = await response.json();
-
       const currentWeather: CurrentWeather = {
         id: `current_${latitude}_${longitude}_${Date.now()}`,
         location: {
@@ -157,35 +142,27 @@ class WeatherService {
         sunrise: data.sys?.sunrise ? new Date(data.sys.sunrise * 1000).toISOString() : undefined,
         sunset: data.sys?.sunset ? new Date(data.sys.sunset * 1000).toISOString() : undefined,
       };
-
       return currentWeather;
     } catch (error) {
       console.error('Error fetching current weather:', error);
       return null;
     }
   }
-
   async getWeatherForecast(
     latitude: number,
     longitude: number,
     days: number = 7
   ): Promise<WeatherForecast[]> {
     try {
-      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {
-        console.warn(`Weather forecast API unavailable - OpenWeather API key not configured for ${latitude}, ${longitude}`);
-        throw new Error('Weather forecast service unavailable. Please configure OpenWeather API key.');
+      if (!this.API_KEY || this.API_KEY === 'mock_development_key') {throw new Error('Weather forecast service unavailable. Please configure OpenWeather API key.');
       }
-
       const url = `${this.ONECALL_URL}?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric&exclude=minutely,hourly`;
       const response = await fetch(url);
-
       if (!response.ok) {
         console.error(`Weather forecast API error ${response.status}: ${response.statusText}`);
         throw new Error(`Weather forecast API error: ${response.status} ${response.statusText}`);
       }
-
       const data = await response.json();
-
       const forecasts: WeatherForecast[] = (data.daily || [])
         .slice(0, days)
         .map((day: any, index: number) => ({
@@ -213,29 +190,23 @@ class WeatherService {
           conditions: day.weather || [],
           uvIndex: day.uvi,
         }));
-
       return forecasts;
     } catch (error) {
       console.error('Error fetching weather forecast:', error);
       return [];
     }
   }
-
   async getWeatherAlerts(latitude: number, longitude: number): Promise<WeatherAlert[]> {
     try {
       if (!this.API_KEY) {
         return [];
       }
-
       const url = `${this.ONECALL_URL}?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&exclude=current,minutely,hourly,daily`;
       const response = await fetch(url);
-
       if (!response.ok) {
         return [];
       }
-
       const data = await response.json();
-
       const alerts: WeatherAlert[] = (data.alerts || []).map((alert: any, index: number) => ({
         id: `alert_${latitude}_${longitude}_${index}`,
         alertType: this.categorizeAlert(alert.event),
@@ -248,31 +219,25 @@ class WeatherService {
         recommendations: this.generateRecommendations(alert.event),
         isActive: true,
       }));
-
       return alerts;
     } catch (error) {
       console.error('Error fetching weather alerts:', error);
       return [];
     }
   }
-
   async getAgricultureData(latitude: number, longitude: number): Promise<AgricultureWeatherData | null> {
     try {
       if (!this.API_KEY) {
         return null;
       }
-
       // Note: This requires a paid OpenWeatherMap plan
       const url = `${this.AGRO_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}`;
       const response = await fetch(url);
-
       if (!response.ok) {
         // Fallback to basic calculations from current weather
         return this.calculateBasicAgricultureData(latitude, longitude);
       }
-
       const data = await response.json();
-
       return {
         location: { latitude, longitude },
         soilTemperature: data.soil_temp,
@@ -288,7 +253,6 @@ class WeatherService {
       return this.calculateBasicAgricultureData(latitude, longitude);
     }
   }
-
   private async calculateBasicAgricultureData(
     latitude: number,
     longitude: number
@@ -296,9 +260,7 @@ class WeatherService {
     try {
       const currentWeather = await this.getCurrentWeather(latitude, longitude);
       if (!currentWeather) return null;
-
       const forecast = await this.getWeatherForecast(latitude, longitude, 3);
-
       // Basic frost risk calculation
       const minTempNext3Days = Math.min(
         ...forecast.map(f => f.temperature.min),
@@ -308,7 +270,6 @@ class WeatherService {
         minTempNext3Days <= 0 ? 'high' :
         minTempNext3Days <= 3 ? 'moderate' :
         minTempNext3Days <= 7 ? 'low' : 'none';
-
       // Basic heat stress calculation
       const maxTempNext3Days = Math.max(
         ...forecast.map(f => f.temperature.max),
@@ -319,11 +280,9 @@ class WeatherService {
         maxTempNext3Days >= 35 ? 'high' :
         maxTempNext3Days >= 30 ? 'moderate' :
         maxTempNext3Days >= 25 ? 'low' : 'none';
-
       // Basic growing degree days (base 10°C)
       const avgTemp = (currentWeather.temperature + currentWeather.feelsLike) / 2;
       const growingDegreeDays = Math.max(0, avgTemp - 10);
-
       return {
         location: { latitude, longitude },
         growingDegreeDays,
@@ -335,10 +294,8 @@ class WeatherService {
       return null;
     }
   }
-
   private categorizeAlert(event: string): WeatherAlert['alertType'] {
     const eventLower = event.toLowerCase();
-    
     if (eventLower.includes('frost') || eventLower.includes('freeze')) return 'frost';
     if (eventLower.includes('storm') || eventLower.includes('thunder')) return 'storm';
     if (eventLower.includes('drought') || eventLower.includes('dry')) return 'drought';
@@ -346,23 +303,17 @@ class WeatherService {
     if (eventLower.includes('wind') || eventLower.includes('gust')) return 'wind';
     if (eventLower.includes('hail')) return 'hail';
     if (eventLower.includes('flood') || eventLower.includes('rain')) return 'flood';
-    
     return 'storm'; // default
   }
-
   private mapSeverity(tags: string[]): WeatherAlert['severity'] {
     if (!tags || tags.length === 0) return 'moderate';
-    
     const severityTag = tags.find(tag => 
       ['minor', 'moderate', 'severe', 'extreme'].includes(tag.toLowerCase())
     );
-    
     return (severityTag?.toLowerCase() as WeatherAlert['severity']) || 'moderate';
   }
-
   private generateRecommendations(event: string): string[] {
     const eventLower = event.toLowerCase();
-    
     if (eventLower.includes('frost') || eventLower.includes('freeze')) {
       return [
         'Protect sensitive crops with covers or greenhouse',
@@ -371,7 +322,6 @@ class WeatherService {
         'Monitor soil temperature in the morning',
       ];
     }
-    
     if (eventLower.includes('storm') || eventLower.includes('thunder')) {
       return [
         'Secure loose equipment and structures',
@@ -380,7 +330,6 @@ class WeatherService {
         'Ensure proper drainage to prevent flooding',
       ];
     }
-    
     if (eventLower.includes('drought') || eventLower.includes('dry')) {
       return [
         'Implement water conservation measures',
@@ -389,7 +338,6 @@ class WeatherService {
         'Monitor soil moisture levels closely',
       ];
     }
-    
     if (eventLower.includes('heat') || eventLower.includes('hot')) {
       return [
         'Provide shade for sensitive crops',
@@ -398,80 +346,59 @@ class WeatherService {
         'Monitor livestock for heat stress',
       ];
     }
-    
     return [
       'Monitor weather conditions closely',
       'Follow local agricultural extension advice',
       'Check crops and equipment regularly',
     ];
   }
-
   private calculateFrostRisk(data: any): AgricultureWeatherData['frostRisk'] {
     // Implementation would depend on specific agriculture API data structure
     return 'none';
   }
-
   private calculateHeatStress(data: any): AgricultureWeatherData['heatStress'] {
     // Implementation would depend on specific agriculture API data structure
     return 'none';
   }
-
   // Redis-based caching to reduce API calls
   private readonly CACHE_DURATION = 10 * 60; // 10 minutes in seconds
-
   private getCacheKey(type: string, latitude: number, longitude: number): string {
     return `weather:${type}:${latitude.toFixed(4)}_${longitude.toFixed(4)}`;
   }
-
   private async getCachedData<T>(key: string): Promise<T | null> {
     try {
       const { RedisManager } = await import('../redis');
       return await RedisManager.get(key);
-    } catch (error) {
-      console.warn('Redis cache unavailable, falling back to fresh data');
-      return null;
+    } catch (error) {return null;
     }
   }
-
   private async setCachedData(key: string, data: any): Promise<void> {
     try {
       const { RedisManager } = await import('../redis');
       await RedisManager.set(key, data, { ex: this.CACHE_DURATION });
-    } catch (error) {
-      console.warn('Redis cache unavailable, skipping cache storage');
-    }
+    } catch (error) {}
   }
-
   async getCurrentWeatherCached(latitude: number, longitude: number): Promise<CurrentWeather | null> {
     const cacheKey = this.getCacheKey('current', latitude, longitude);
     const cached = await this.getCachedData<CurrentWeather>(cacheKey);
-    
     if (cached) {
       return cached;
     }
-    
     const weather = await this.getCurrentWeather(latitude, longitude);
     if (weather) {
       await this.setCachedData(cacheKey, weather);
     }
-    
     return weather;
   }
-
   async getForecastCached(latitude: number, longitude: number, days: number = 7): Promise<WeatherForecast[]> {
     const cacheKey = this.getCacheKey(`forecast_${days}`, latitude, longitude);
     const cached = await this.getCachedData<WeatherForecast[]>(cacheKey);
-    
     if (cached) {
       return cached;
     }
-    
     const forecast = await this.getWeatherForecast(latitude, longitude, days);
     await this.setCachedData(cacheKey, forecast);
-    
     return forecast;
   }
-
 }
-
 export const weatherService = new WeatherService();

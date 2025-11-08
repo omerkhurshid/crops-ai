@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -11,12 +10,10 @@ import {
   CheckCircle, AlertCircle, ThumbsUp, Target, Plus
 } from 'lucide-react';
 import Link from 'next/link';
-
 // Farm Performance Preview Card - Farmer-Friendly Version
 export function FarmPerformancePreview({ farmId }: { farmId: string }) {
   const [performanceData, setPerformanceData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchPerformanceData = async () => {
       try {
@@ -31,10 +28,8 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
         setLoading(false)
       }
     }
-
     fetchPerformanceData()
   }, [farmId])
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -48,7 +43,6 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   if (!performanceData) {
     return (
       <div className="space-y-4 text-center py-8">
@@ -68,7 +62,6 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -82,7 +75,6 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-3 gap-3 text-center">
         <div className="bg-white rounded-lg p-3 border">
           <div className="text-xl font-bold text-green-600">{performanceData.yieldPerAcre || 'N/A'}</div>
@@ -97,7 +89,6 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           <div className="text-xs text-sage-600">profit per acre</div>
         </div>
       </div>
-
       <Link href={`/reports/performance/${farmId}`} className="block">
         <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
@@ -107,12 +98,10 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
     </div>
   );
 }
-
 // Weather Impact Preview Card - Farmer-Friendly Version
 export function WeatherImpactPreview({ farmId }: { farmId: string }) {
   const [weatherData, setWeatherData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
@@ -127,10 +116,8 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
         setLoading(false)
       }
     }
-
     fetchWeatherData()
   }, [farmId])
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -140,7 +127,6 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   if (!weatherData) {
     return (
       <div className="space-y-4 text-center py-8">
@@ -160,7 +146,6 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -172,7 +157,6 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <div className="bg-white border border-sage-200 rounded-lg p-4">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -204,7 +188,6 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <Link href={`/weather`} className="block">
         <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
@@ -214,12 +197,10 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
     </div>
   );
 }
-
 // Crop Health Preview Card - Farmer-Friendly Version  
 export function CropHealthPreview({ farmId }: { farmId: string }) {
   const [cropHealthData, setCropHealthData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchCropHealthData = async () => {
       try {
@@ -234,10 +215,8 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
         setLoading(false)
       }
     }
-
     fetchCropHealthData()
   }, [farmId])
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -247,7 +226,6 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   if (!cropHealthData) {
     return (
       <div className="space-y-4 text-center py-8">
@@ -267,15 +245,12 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   const getHealthColor = (score: number) => {
     if (score >= 80) return 'green'
     if (score >= 60) return 'yellow'
     return 'red'
   }
-
   const healthColor = getHealthColor(cropHealthData.overallHealth)
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -289,7 +264,6 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <div className="space-y-3">
         <div>
           <div className="flex justify-between text-sm mb-2">
@@ -300,7 +274,6 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
             <div className={`bg-${healthColor}-500 h-3 rounded-full`} style={{ width: `${cropHealthData.overallHealth}%` }}></div>
           </div>
         </div>
-
         {cropHealthData.issues && cropHealthData.issues.length > 0 && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <div className="flex items-start gap-2">
@@ -313,7 +286,6 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
           </div>
         )}
       </div>
-
       <Link href={`/crop-health`} className="block">
         <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
@@ -323,12 +295,10 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
     </div>
   );
 }
-
 // Financial Summary Preview Card - Farmer-Friendly Version
 export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
   const [financialData, setFinancialData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchFinancialData = async () => {
       try {
@@ -343,10 +313,8 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
         setLoading(false)
       }
     }
-
     fetchFinancialData()
   }, [farmId])
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -355,7 +323,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -368,7 +335,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   if (!financialData) {
     return (
       <div className="space-y-4 text-center py-8">
@@ -388,7 +354,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -400,7 +365,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <div className="text-center bg-white border border-sage-200 rounded-lg p-4">
         <div className={`text-3xl font-bold mb-1 ${
           financialData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
@@ -412,7 +376,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           {financialData.transactionCount} transactions recorded
         </div>
       </div>
-
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
           <div className="text-lg font-bold text-green-700">{formatCurrency(financialData.income)}</div>
@@ -423,7 +386,6 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           <div className="text-xs text-red-600 mb-1">Expenses</div>
         </div>
       </div>
-
       <Link href={`/reports/financial/${farmId}`} className="block">
         <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
@@ -433,12 +395,10 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
     </div>
   );
 }
-
 // Sustainability Preview Card - Farmer-Friendly Version
 export function SustainabilityPreview({ farmId }: { farmId: string }) {
   const [sustainabilityData, setSustainabilityData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchSustainabilityData = async () => {
       try {
@@ -453,10 +413,8 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
         setLoading(false)
       }
     }
-
     fetchSustainabilityData()
   }, [farmId])
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -469,7 +427,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   if (!sustainabilityData) {
     return (
       <div className="space-y-4 text-center py-8">
@@ -489,7 +446,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
       </div>
     )
   }
-
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -508,7 +464,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
           />
         </div>
       </div>
-
       <div className="space-y-3">
         {sustainabilityData.waterUsage && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -521,7 +476,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
             </div>
           </div>
         )}
-        
         {sustainabilityData.carbonFootprint && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
@@ -533,7 +487,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
             </div>
           </div>
         )}
-
         {sustainabilityData.soilHealth && (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
@@ -546,7 +499,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
           </div>
         )}
       </div>
-
       <Link href={`/reports/sustainability/${farmId}`} className="block">
         <Button variant="sage" className="w-full">
           <Eye className="h-4 w-4 mr-2" />
@@ -556,7 +508,6 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
     </div>
   );
 }
-
 // Custom Report Builder Preview - Farmer-Friendly Version
 export function CustomReportPreview({ farmId }: { farmId: string }) {
   return (
@@ -572,7 +523,6 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
           Mix and match the information that matters most to you
         </p>
       </div>
-
       <div className="bg-sage-50 border border-sage-200 rounded-lg p-4">
         <p className="text-sm font-medium text-sage-800 mb-3">Popular combinations:</p>
         <div className="space-y-2">
@@ -590,7 +540,6 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
           </div>
         </div>
       </div>
-
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm text-sage-700">
           <span className="w-5 h-5 bg-sage-600 text-white rounded-full flex items-center justify-center text-xs font-medium">1</span>
@@ -605,7 +554,6 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
           <span>Get your custom insights</span>
         </div>
       </div>
-
       <Link href={`/reports/custom/${farmId}`} className="block">
         <Button variant="sage" className="w-full">
           <ArrowRight className="h-4 w-4 mr-2" />

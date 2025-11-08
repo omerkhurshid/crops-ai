@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { livestockCategories, LivestockCategory, LivestockItem } from '../../lib/farm-categories'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -7,16 +6,13 @@ import { Badge } from '../ui/badge'
 import { Input } from '../ui/input'
 import { Search } from 'lucide-react'
 import { InfoTooltip } from '../ui/info-tooltip'
-
 interface LivestockCategorySelectorProps {
   selectedLivestock?: string
   onSelect: (livestock: LivestockItem, category: LivestockCategory) => void
 }
-
 export function LivestockCategorySelector({ selectedLivestock, onSelect }: LivestockCategorySelectorProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-
   const filteredCategories = livestockCategories.map(category => ({
     ...category,
     items: category.items.filter(item =>
@@ -27,7 +23,6 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
       )
     )
   })).filter(category => category.items.length > 0)
-
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -40,7 +35,6 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
           className="pl-10"
         />
       </div>
-
       {/* Categories */}
       <div className="space-y-4">
         {filteredCategories.map((category) => (
@@ -73,7 +67,6 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                 </div>
               </div>
             </CardHeader>
-            
             {selectedCategory === category.id && (
               <CardContent className="pt-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -94,13 +87,11 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                           description={`${livestock.scientificName ? `Scientific: ${livestock.scientificName}. ` : ''}${livestock.typicalHerdSize ? `Typical size: ${livestock.typicalHerdSize}. ` : ''}${livestock.housingRequirements ? `Housing: ${livestock.housingRequirements}. ` : ''}Purpose: ${livestock.primaryPurpose.join(', ')}`}
                         />
                       </div>
-                      
                       {livestock.scientificName && (
                         <p className="text-xs text-gray-500 italic mb-2">
                           {livestock.scientificName}
                         </p>
                       )}
-                      
                       <div className="flex flex-wrap gap-1 mb-2">
                         {livestock.primaryPurpose.map((purpose) => (
                           <Badge key={purpose} variant="secondary" className="text-xs px-2 py-0">
@@ -108,13 +99,11 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                           </Badge>
                         ))}
                       </div>
-                      
                       {livestock.typicalHerdSize && (
                         <p className="text-xs text-gray-600 mb-2">
                           <strong>Size:</strong> {livestock.typicalHerdSize}
                         </p>
                       )}
-                      
                       <div className="text-xs text-gray-600">
                         <p className="mb-1"><strong>Monitors:</strong></p>
                         <p>{livestock.monitoringParameters.slice(0, 3).join(', ')}</p>
@@ -130,7 +119,6 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
           </Card>
         ))}
       </div>
-
       {filteredCategories.length === 0 && (
         <div className="text-center py-12 text-gray-500">
           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />

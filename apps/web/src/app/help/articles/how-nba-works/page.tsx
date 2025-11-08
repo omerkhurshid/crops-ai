@@ -21,10 +21,7 @@ import {
   Droplets,
   CheckCircle,
 } from "lucide-react";
-
-
 export default function HowNBAWorksPage() {
-
   return (
     <DashboardLayout>
       <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -34,18 +31,15 @@ export default function HowNBAWorksPage() {
             <Brain className="h-6 w-6 text-sage-700" />
             <span className="text-sage-600">AI Recommendations</span>
           </div>
-
           <h1 className="text-3xl font-bold text-sage-800 mb-4">
             How Your AI Farm Assistant Works (NBA Engine)
           </h1>
-
           <div className="flex items-center gap-4 text-sm text-sage-600">
             <Badge variant="outline">10 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
           </div>
         </div>
-
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
@@ -55,7 +49,6 @@ export default function HowNBAWorksPage() {
               weather 24/7, monitors your crops, and tells you exactly what
               needs attention today.
             </p>
-
             <Alert>
               <Zap className="h-4 w-4" />
               <AlertDescription>
@@ -66,7 +59,6 @@ export default function HowNBAWorksPage() {
             </Alert>
           </ModernCardContent>
         </ModernCard>
-
         {/* How NBA Works */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -82,7 +74,6 @@ export default function HowNBAWorksPage() {
                 about your farm to determine what actions will give you the best
                 return on your time and investment:
               </p>
-
               <div className="space-y-4">
                 <div className="bg-sage-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-sage-800 mb-3">
@@ -113,7 +104,6 @@ export default function HowNBAWorksPage() {
                     </div>
                   </div>
                 </div>
-
                 <div className="bg-earth-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-earth-800 mb-3">
                     2. Analysis Phase
@@ -130,7 +120,6 @@ export default function HowNBAWorksPage() {
                     <li>• Resource availability and constraints</li>
                   </ul>
                 </div>
-
                 <div className="bg-green-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-green-800 mb-3">
                     3. Recommendation Phase
@@ -145,7 +134,6 @@ export default function HowNBAWorksPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Scoring System */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -159,7 +147,6 @@ export default function HowNBAWorksPage() {
               <p className="text-sage-700">
                 Each potential action is scored on multiple factors:
               </p>
-
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="bg-red-100 p-2 rounded-lg">
@@ -180,7 +167,6 @@ export default function HowNBAWorksPage() {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-3">
                   <div className="bg-green-100 p-2 rounded-lg">
                     <DollarSign className="h-5 w-5 text-green-600" />
@@ -200,7 +186,6 @@ export default function HowNBAWorksPage() {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-3">
                   <div className="bg-blue-100 p-2 rounded-lg">
                     <Shield className="h-5 w-5 text-blue-600" />
@@ -220,7 +205,6 @@ export default function HowNBAWorksPage() {
                   </div>
                 </div>
               </div>
-
               <div className="bg-sage-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-sage-800 mb-2">
                   Total Impact Score
@@ -239,7 +223,6 @@ export default function HowNBAWorksPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Types of Recommendations */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -263,7 +246,6 @@ export default function HowNBAWorksPage() {
                   <li>• "Check Field 3 for water stress"</li>
                 </ul>
               </div>
-
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Bug className="h-5 w-5 text-orange-600" />
@@ -277,7 +259,6 @@ export default function HowNBAWorksPage() {
                   <li>• "Disease risk high - inspect wheat"</li>
                 </ul>
               </div>
-
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <CloudRain className="h-5 w-5 text-gray-600" />
@@ -291,7 +272,6 @@ export default function HowNBAWorksPage() {
                   <li>• "Frost warning - protect crops"</li>
                 </ul>
               </div>
-
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="h-5 w-5 text-green-600" />
@@ -308,7 +288,6 @@ export default function HowNBAWorksPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Confidence Levels */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -322,7 +301,6 @@ export default function HowNBAWorksPage() {
               Each recommendation comes with a confidence level to help you
               decide when to rely on AI vs. your experience:
             </p>
-
             <div className="space-y-4">
               <div className="border-l-4 border-green-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
@@ -337,7 +315,6 @@ export default function HowNBAWorksPage() {
                   confidence.
                 </p>
               </div>
-
               <div className="border-l-4 border-yellow-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle className="h-5 w-5 text-yellow-600" />
@@ -351,7 +328,6 @@ export default function HowNBAWorksPage() {
                   the timing.
                 </p>
               </div>
-
               <div className="border-l-4 border-orange-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-5 w-5 text-orange-600" />
@@ -368,7 +344,6 @@ export default function HowNBAWorksPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Tips for Success */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -390,7 +365,6 @@ export default function HowNBAWorksPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">2.</span>
                 <div>
@@ -403,7 +377,6 @@ export default function HowNBAWorksPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">3.</span>
                 <div>
@@ -416,7 +389,6 @@ export default function HowNBAWorksPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">4.</span>
                 <div>
@@ -432,7 +404,6 @@ export default function HowNBAWorksPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Final Note */}
         <Alert>
           <Brain className="h-4 w-4" />

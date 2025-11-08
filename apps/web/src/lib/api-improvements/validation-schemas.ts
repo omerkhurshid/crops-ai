@@ -1,12 +1,10 @@
 // Common Validation Schemas
 import { z } from 'zod'
-
 // Common field types
 export const idSchema = z.string().cuid()
 export const emailSchema = z.string().email()
 export const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number')
 export const urlSchema = z.string().url()
-
 // Pagination schema
 export const paginationSchema = z.object({
   page: z.coerce.number().min(1).default(1),
@@ -14,7 +12,6 @@ export const paginationSchema = z.object({
   sortBy: z.string().optional(),
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 })
-
 // Common response schemas
 export const successResponseSchema = z.object({
   success: z.literal(true),
@@ -22,14 +19,12 @@ export const successResponseSchema = z.object({
   message: z.string().optional(),
   timestamp: z.string().datetime()
 })
-
 export const errorResponseSchema = z.object({
   error: z.string(),
   code: z.string(),
   details: z.any().optional(),
   timestamp: z.string().datetime()
 })
-
 // Farm-related schemas
 export const createFarmSchema = z.object({
   name: z.string().min(1).max(100),
@@ -38,9 +33,7 @@ export const createFarmSchema = z.object({
   type: z.enum(['CROP', 'LIVESTOCK', 'MIXED']),
   description: z.string().max(500).optional()
 })
-
 export const updateFarmSchema = createFarmSchema.partial()
-
 // Field-related schemas
 export const createFieldSchema = z.object({
   farmId: idSchema,
@@ -52,7 +45,6 @@ export const createFieldSchema = z.object({
     lng: z.number()
   })).min(3)
 })
-
 // Task-related schemas
 export const createTaskSchema = z.object({
   farmId: idSchema,
@@ -63,21 +55,17 @@ export const createTaskSchema = z.object({
   dueDate: z.string().datetime().optional(),
   category: z.string().max(50).optional()
 })
-
 // Helper function to validate request body
 export function validateRequestBody<T>(schema: z.ZodSchema<T>, body: unknown): T {
   return schema.parse(body)
 }
-
 // Helper function to validate query parameters
 export function validateQueryParams<T>(schema: z.ZodSchema<T>, params: Record<string, string>): T {
   return schema.parse(params)
 }
-
 // Usage example:
 /*
 import { validateRequestBody, createFarmSchema } from '@/lib/api-improvements/validation-schemas'
-
 export async function POST(request: NextRequest) {
   const body = await request.json()
   const validatedData = validateRequestBody(createFarmSchema, body)

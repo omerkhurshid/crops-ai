@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -10,7 +9,6 @@ import {
   Tag, Send, Copy, Move, MoreHorizontal, AlertTriangle,
   CheckCircle2, X, Loader2, ChevronDown
 } from 'lucide-react'
-
 export interface BulkAction {
   id: string
   label: string
@@ -21,7 +19,6 @@ export interface BulkAction {
   disabled?: boolean
   description?: string
 }
-
 interface BulkActionsToolbarProps {
   selectedItems: string[]
   totalItems: number
@@ -32,7 +29,6 @@ interface BulkActionsToolbarProps {
   className?: string
   showSelectAll?: boolean
 }
-
 export function BulkActionsToolbar({
   selectedItems,
   totalItems,
@@ -46,10 +42,8 @@ export function BulkActionsToolbar({
   const [isExecuting, setIsExecuting] = useState<string | null>(null)
   const [showConfirmation, setShowConfirmation] = useState<string | null>(null)
   const [showActions, setShowActions] = useState(false)
-
   const allSelected = selectedItems.length === totalItems
   const someSelected = selectedItems.length > 0 && selectedItems.length < totalItems
-
   const handleSelectAllToggle = () => {
     if (allSelected || someSelected) {
       onDeselectAll()
@@ -57,7 +51,6 @@ export function BulkActionsToolbar({
       onSelectAll(true)
     }
   }
-
   const handleActionClick = (action: BulkAction) => {
     if (action.requiresConfirmation) {
       setShowConfirmation(action.id)
@@ -65,12 +58,10 @@ export function BulkActionsToolbar({
       executeAction(action.id)
     }
   }
-
   const executeAction = async (actionId: string) => {
     setIsExecuting(actionId)
     setShowConfirmation(null)
     setShowActions(false)
-
     try {
       await onActionExecute(actionId, selectedItems)
       onDeselectAll() // Clear selection after successful action
@@ -81,14 +72,11 @@ export function BulkActionsToolbar({
       setIsExecuting(null)
     }
   }
-
   const primaryActions = actions.filter(action => action.variant === 'primary').slice(0, 2)
   const secondaryActions = actions.filter(action => action.variant !== 'primary')
-
   if (selectedItems.length === 0) {
     return null
   }
-
   return (
     <div className={`sticky top-20 z-40 ${className}`}>
       <ModernCard variant="floating" className="shadow-lg border-sage-300">
@@ -115,7 +103,6 @@ export function BulkActionsToolbar({
                   </span>
                 </button>
               )}
-              
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="bg-sage-100 text-sage-800">
                   {selectedItems.length} selected
@@ -125,7 +112,6 @@ export function BulkActionsToolbar({
                 </span>
               </div>
             </div>
-
             {/* Actions */}
             <div className="flex items-center gap-2">
               {/* Primary Actions - Always Visible */}
@@ -140,7 +126,6 @@ export function BulkActionsToolbar({
                   onClick={() => handleActionClick(action)}
                 />
               ))}
-
               {/* Secondary Actions - Dropdown */}
               {secondaryActions.length > 0 && (
                 <div className="relative">
@@ -150,7 +135,6 @@ export function BulkActionsToolbar({
                     variant="ghost"
                     onClick={() => setShowActions(!showActions)}
                   />
-                  
                   {showActions && (
                     <div className="absolute top-full right-0 mt-2 bg-white border border-sage-200 rounded-lg shadow-lg z-50 min-w-48">
                       <div className="py-2">
@@ -185,7 +169,6 @@ export function BulkActionsToolbar({
                   )}
                 </div>
               )}
-
               {/* Clear Selection */}
               <button
                 onClick={onDeselectAll}
@@ -196,7 +179,6 @@ export function BulkActionsToolbar({
               </button>
             </div>
           </div>
-
           {/* Confirmation Dialog */}
           {showConfirmation && (
             <div className="mt-4 pt-4 border-t border-sage-200">
@@ -228,7 +210,6 @@ export function BulkActionsToolbar({
               </Alert>
             </div>
           )}
-
           {/* Click outside to close actions dropdown */}
           {showActions && (
             <div 
@@ -241,11 +222,9 @@ export function BulkActionsToolbar({
     </div>
   )
 }
-
 // Hook for managing bulk selection
 export function useBulkSelection<T extends { id: string }>(items: T[]) {
   const [selectedItems, setSelectedItems] = useState<string[]>([])
-
   const toggleItem = (itemId: string) => {
     setSelectedItems(prev =>
       prev.includes(itemId)
@@ -253,19 +232,14 @@ export function useBulkSelection<T extends { id: string }>(items: T[]) {
         : [...prev, itemId]
     )
   }
-
   const selectAll = () => {
     setSelectedItems(items.map(item => item.id))
   }
-
   const deselectAll = () => {
     setSelectedItems([])
   }
-
   const isSelected = (itemId: string) => selectedItems.includes(itemId)
-
   const selectedItemsData = items.filter(item => selectedItems.includes(item.id))
-
   return {
     selectedItems,
     selectedItemsData,
@@ -277,7 +251,6 @@ export function useBulkSelection<T extends { id: string }>(items: T[]) {
     selectionCount: selectedItems.length
   }
 }
-
 // Pre-configured bulk actions for different data types
 export const farmBulkActions: BulkAction[] = [
   {
@@ -313,7 +286,6 @@ export const farmBulkActions: BulkAction[] = [
     description: 'Permanently remove farms'
   }
 ]
-
 export const fieldBulkActions: BulkAction[] = [
   {
     id: 'update-crop',
@@ -353,7 +325,6 @@ export const fieldBulkActions: BulkAction[] = [
     description: 'Permanently remove fields'
   }
 ]
-
 export const financialBulkActions: BulkAction[] = [
   {
     id: 'categorize',

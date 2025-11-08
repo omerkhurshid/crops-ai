@@ -1,19 +1,15 @@
 'use client'
-
 import { useSession } from '../../lib/auth-unified'
 import { useState } from 'react'
 import { Sidebar } from '../navigation/sidebar'
 import { Navbar } from '../navigation/navbar'
 import { MobileNavbar } from '../navigation/mobile-navbar'
-
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
-
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data: session } = useSession()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
   // For unauthenticated users, show full-width layout with navbar
   if (!session) {
     return (
@@ -23,7 +19,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
     )
   }
-
   // For authenticated users, show responsive sidebar + content layout
   return (
     <div className="bg-canvas min-h-screen">
@@ -31,7 +26,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
         <Sidebar />
       </div>
-
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <>
@@ -46,7 +40,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </>
       )}
-
       {/* Main Content Area */}
       <div className="lg:pl-64">
         {/* Mobile Top Navigation */}
@@ -56,7 +49,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             user={session.user}
           />
         </div>
-
         {/* Page Content */}
         <main className="relative">
           <div className="px-4 py-6 sm:px-6 lg:px-8">

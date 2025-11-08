@@ -1,7 +1,6 @@
 // Enhanced Rate Limiting Setup
 import { NextRequest } from 'next/server'
 import { RateLimitError } from './error-middleware'
-
 interface RateLimitConfig {
   windowMs: number
   maxRequests: number
@@ -9,7 +8,6 @@ interface RateLimitConfig {
   skipSuccessfulRequests?: boolean
   skipFailedRequests?: boolean
 }
-
 // Default configurations for different endpoint types
 export const rateLimitConfigs = {
   auth: {
@@ -33,10 +31,8 @@ export const rateLimitConfigs = {
     message: 'Too many search requests, please slow down'
   }
 }
-
 class InMemoryRateLimit {
   private requests = new Map<string, { count: number; resetTime: number }>()
-
   async checkLimit(
     identifier: string,
     config: RateLimitConfig
@@ -44,9 +40,7 @@ class InMemoryRateLimit {
     const now = Date.now()
     const key = identifier
     const windowEnd = now + config.windowMs
-    
     const existing = this.requests.get(key)
-    
     if (!existing || existing.resetTime <= now) {
       // First request or window expired
       this.requests.set(key, { count: 1, resetTime: windowEnd })
@@ -57,7 +51,6 @@ class InMemoryRateLimit {
         resetTime: windowEnd
       }
     }
-    
     if (existing.count >= config.maxRequests) {
       // Limit exceeded
       return {
@@ -67,11 +60,9 @@ class InMemoryRateLimit {
         resetTime: existing.resetTime
       }
     }
-    
     // Increment count
     existing.count++
     this.requests.set(key, existing)
-    
     return {
       success: true,
       limit: config.maxRequests,
@@ -79,7 +70,6 @@ class InMemoryRateLimit {
       resetTime: existing.resetTime
     }
   }
-
   // Clean up expired entries periodically
   cleanup() {
     const now = Date.now()
@@ -92,36 +82,27 @@ class InMemoryRateLimit {
     }
   }
 }
-
 const rateLimit = new InMemoryRateLimit()
-
 // Clean up every 5 minutes
 setInterval(() => rateLimit.cleanup(), 5 * 60 * 1000)
-
 export async function applyRateLimit(
   request: NextRequest,
   configType: keyof typeof rateLimitConfigs = 'api'
 ): Promise<void> {
   const config = rateLimitConfigs[configType]
-  
   // Get identifier (IP address or user ID)
   const forwarded = request.headers.get('x-forwarded-for')
   const ip = forwarded ? forwarded.split(',')[0] : 
              request.headers.get('x-real-ip') || 
              'unknown'
-  
   const identifier = ip
-  
   const result = await rateLimit.checkLimit(identifier, config)
-  
   if (!result.success) {
     throw new RateLimitError(config.message)
   }
-  
   // Note: In a real implementation, you might want to set response headers here
   // but since we're in middleware, that's handled by the error handler
 }
-
 // Wrapper function for easier usage
 export function withRateLimit(configType: keyof typeof rateLimitConfigs = 'api') {
   return function<T extends any[]>(
@@ -133,12 +114,10 @@ export function withRateLimit(configType: keyof typeof rateLimitConfigs = 'api')
     }
   }
 }
-
 // Usage example:
 /*
 import { withRateLimit } from '@/lib/api-improvements/rate-limiting'
 import { withErrorHandling } from '@/lib/api-improvements/error-middleware'
-
 export const POST = withErrorHandling(
   withRateLimit('auth')(async (request: NextRequest) => {
     // Your authentication logic here

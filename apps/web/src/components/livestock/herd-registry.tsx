@@ -1,13 +1,10 @@
 'use client'
-
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Users, Plus } from 'lucide-react'
-
 interface HerdRegistryProps {
   farmId: string
 }
-
 export function HerdRegistry({ farmId }: HerdRegistryProps) {
   return (
     <div className="space-y-6">

@@ -5,7 +5,6 @@ import { dataPipeline } from '../../../../lib/ml/data-pipeline';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const trainModelSchema = z.object({
   dataSource: z.enum(['pipeline', 'custom']).default('pipeline'),
   trainingData: z.array(z.any()).optional(),
@@ -17,12 +16,10 @@ const trainModelSchema = z.object({
     stratified: z.boolean().default(true)
   }).optional()
 });
-
 const evaluateModelSchema = z.object({
   modelId: z.string().min(1, 'Model ID is required'),
   testData: z.array(z.any()).optional()
 });
-
 const pipelineConfigSchema = z.object({
   sources: z.object({
     weather: z.boolean().default(true),
@@ -54,29 +51,23 @@ const pipelineConfigSchema = z.object({
     aggregationPeriod: z.enum(['daily', 'weekly', 'monthly', 'seasonal']).default('seasonal')
   }).optional()
 });
-
 // POST /api/ml/models
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const action = body.action || 'train';
-
       switch (action) {
         case 'train': {
           const validation = trainModelSchema.safeParse(body);
           if (!validation.success) {
             throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
           }
-
           const params = validation.data;
-          
           const model = await yieldPrediction.trainModel({
             dataSource: params.dataSource,
             trainingData: params.trainingData,
@@ -85,7 +76,6 @@ export const POST = apiMiddleware.protected(
             features: params.features,
             crossValidation: params.crossValidation
           });
-
           const summary = {
             modelId: model.id,
             modelType: model.type,
@@ -99,7 +89,6 @@ export const POST = apiMiddleware.protected(
             trainingCompleted: model.lastTrained,
             status: model.status
           };
-
           return createSuccessResponse({
             data: model,
             summary,
@@ -107,17 +96,13 @@ export const POST = apiMiddleware.protected(
             action: 'train_model'
           });
         }
-
         case 'evaluate': {
           const validation = evaluateModelSchema.safeParse(body);
           if (!validation.success) {
             throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
           }
-
           const params = validation.data;
-          
           const performance = await yieldPrediction.evaluateModel(params.modelId, params.testData);
-
           const summary = {
             modelId: params.modelId,
             evaluationDate: performance.lastEvaluation,
@@ -125,7 +110,6 @@ export const POST = apiMiddleware.protected(
             performance: performance.metrics,
             crossValidationScore: performance.crossValidation.avgScore
           };
-
           return createSuccessResponse({
             data: performance,
             summary,
@@ -133,15 +117,12 @@ export const POST = apiMiddleware.protected(
             action: 'evaluate_model'
           });
         }
-
         case 'pipeline': {
           const validation = pipelineConfigSchema.safeParse(body);
           if (!validation.success) {
             throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
           }
-
           const params = validation.data;
-          
           const result = await dataPipeline.executePipeline(
             {
               sources: params.sources,
@@ -164,7 +145,6 @@ export const POST = apiMiddleware.protected(
               aggregationPeriod: 'seasonal'
             }
           );
-
           const summary = {
             totalRecords: result.statistics.totalRecords,
             validRecords: result.statistics.validRecords,
@@ -177,7 +157,6 @@ export const POST = apiMiddleware.protected(
             sources: result.metadata.sources,
             features: result.metadata.features.length
           };
-
           return createSuccessResponse({
             data: {
               statistics: result.statistics,
@@ -193,34 +172,27 @@ export const POST = apiMiddleware.protected(
             action: 'execute_pipeline'
           });
         }
-
         default:
           throw new ValidationError('Invalid action. Supported actions: train, evaluate, pipeline');
       }
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/models
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const action = searchParams.get('action') || 'list';
-
       switch (action) {
         case 'list': {
           const models = await yieldPrediction.getAvailableModels();
-
           const summary = {
             totalModels: models.length,
             readyModels: models.filter(m => m.status === 'ready').length,
@@ -233,7 +205,6 @@ export const GET = apiMiddleware.protected(
                 new Date(current.lastTrained) > new Date(latest.lastTrained) ? current : latest
               ).id : null
           };
-
           return createSuccessResponse({
             data: { models },
             summary,
@@ -241,15 +212,12 @@ export const GET = apiMiddleware.protected(
             action: 'list_models'
           });
         }
-
         case 'performance': {
           const modelId = searchParams.get('modelId');
           if (!modelId) {
             throw new ValidationError('modelId parameter is required for performance action');
           }
-
           const performance = await yieldPrediction.evaluateModel(modelId);
-
           const summary = {
             modelId,
             accuracy: performance.metrics.r2,
@@ -258,7 +226,6 @@ export const GET = apiMiddleware.protected(
             validationSamples: performance.validationData.samples,
             crossValidationScore: performance.crossValidation.avgScore
           };
-
           return createSuccessResponse({
             data: performance,
             summary,
@@ -266,11 +233,9 @@ export const GET = apiMiddleware.protected(
             action: 'get_performance'
           });
         }
-
         default:
           throw new ValidationError('Invalid action. Supported actions: list, performance');
       }
-
     } catch (error) {
       return handleApiError(error);
     }

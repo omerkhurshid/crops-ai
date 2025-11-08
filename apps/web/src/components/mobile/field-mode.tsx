@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, memo } from 'react'
 import { cn } from '../../lib/utils'
 import { 
@@ -15,7 +14,6 @@ import {
   Home,
   Loader2
 } from 'lucide-react'
-
 interface FieldModeProps {
   onExit: () => void
   className?: string
@@ -26,7 +24,6 @@ interface FieldModeProps {
     longitude: number
   }
 }
-
 interface QuickAction {
   id: string
   label: string
@@ -34,14 +31,12 @@ interface QuickAction {
   color: string
   action: () => void
 }
-
 export const FieldMode = memo(function FieldMode({ onExit, className, field }: FieldModeProps) {
   const [currentLocation, setCurrentLocation] = useState<string>('Getting location...')
   const [isCapturing, setIsCapturing] = useState(false)
   const [expenseAmount, setExpenseAmount] = useState(0)
   const [weatherData, setWeatherData] = useState<any>(null)
   const [taskId, setTaskId] = useState<string | null>(null)
-
   // Get GPS location for field identification
   React.useEffect(() => {
     if (navigator.geolocation) {
@@ -55,7 +50,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       )
     }
   }, [])
-
   // Camera capture functionality
   const capturePhoto = async () => {
     setIsCapturing(true)
@@ -69,22 +63,18 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
             height: { ideal: 1080 }
           } 
         })
-        
         // Create video element to capture frame
         const video = document.createElement('video')
         video.srcObject = stream
         video.play()
-        
         video.onloadedmetadata = () => {
           // Create canvas to capture image
           const canvas = document.createElement('canvas')
           canvas.width = video.videoWidth
           canvas.height = video.videoHeight
           const ctx = canvas.getContext('2d')
-          
           if (ctx) {
             ctx.drawImage(video, 0, 0)
-            
             // Convert to blob and save/upload
             canvas.toBlob(async (blob) => {
               if (blob) {
@@ -93,14 +83,12 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
                 formData.append('photo', blob, `field-photo-${Date.now()}.jpg`)
                 formData.append('location', currentLocation)
                 formData.append('timestamp', new Date().toISOString())
-                
                 try {
                   // Upload to API endpoint
                   const response = await fetch('/api/field-photos/upload', {
                     method: 'POST',
                     body: formData
                   })
-                  
                   if (response.ok) {
                     // Success feedback
                     const successMsg = document.createElement('div')
@@ -163,7 +151,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
                   reader.readAsDataURL(blob)
                 }
               }
-              
               // Clean up
               stream.getTracks().forEach(track => track.stop())
             }, 'image/jpeg', 0.8)
@@ -219,7 +206,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       setIsCapturing(false)
     }
   }
-
   const quickActions: QuickAction[] = [
     {
       id: 'photo',
@@ -247,7 +233,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
                 timestamp: new Date().toISOString()
               })
             })
-            
             if (response.ok) {
               const successMsg = document.createElement('div')
               successMsg.innerHTML = `
@@ -268,7 +253,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
               timestamp: new Date().toISOString()
             })
             localStorage.setItem('fieldIssues', JSON.stringify(issues))
-            
             const localMsg = document.createElement('div')
             localMsg.innerHTML = `
               <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #f59e0b; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
@@ -301,7 +285,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
                 status: 'completed'
               })
             })
-            
             if (response.ok) {
               const successMsg = document.createElement('div')
               successMsg.innerHTML = `
@@ -323,7 +306,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
               status: 'completed'
             })
             localStorage.setItem('completedTasks', JSON.stringify(tasks))
-            
             const localMsg = document.createElement('div')
             localMsg.innerHTML = `
               <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #f59e0b; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
@@ -358,9 +340,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
               transactionDate: new Date()
             })
           })
-          const expense = await response.json()
-          console.log('Expense logged:', expense.id)
-        } catch (error) {
+          const expense = await response.json()} catch (error) {
           console.error('Failed to log expense:', error)
         }
       }
@@ -393,7 +373,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
         const startTime = Date.now()
         // ... operation logic ...
         const duration = Date.now() - startTime
-        
         try {
           const response = await fetch(`/api/tasks/${taskId || 'current'}`, {
             method: 'PATCH',
@@ -405,15 +384,12 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
               lastWorkedOn: new Date()
             })
           })
-          const task = await response.json()
-          console.log('Time tracked:', task.id)
-        } catch (error) {
+          const task = await response.json()} catch (error) {
           console.error('Failed to track time:', error)
         }
       }
     }
   ]
-
   return (
     <div className={cn(
       'min-h-screen bg-gradient-to-b from-green-50 to-green-100 p-4 relative',
@@ -429,7 +405,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           <ArrowLeft className="h-6 w-6 text-gray-700" />
           <span className="text-lg font-medium text-gray-700">Exit</span>
         </button>
-
         <div className="bg-white rounded-2xl px-6 py-4 shadow-lg">
           <div className="text-center">
             <div className="text-lg font-bold text-green-800">Field Mode</div>
@@ -439,7 +414,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
             </div>
           </div>
         </div>
-
         <a 
           href="tel:+1-800-CROPS-AI"
           className="flex items-center gap-3 bg-green-600 text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all min-h-[56px] min-w-[56px]"
@@ -449,7 +423,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           <span className="text-lg font-medium">Help</span>
         </a>
       </div>
-
       {/* Quick Actions Grid - Large touch targets for gloved hands */}
       <div className="grid grid-cols-2 gap-6 mb-8">
         {quickActions.map((action) => (
@@ -474,7 +447,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           </button>
         ))}
       </div>
-
       {/* Today's Priority - Simplified view */}
       <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -490,7 +462,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           </div>
         </div>
       </div>
-
       {/* Weather Alert - Simple and clear */}
       <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 shadow-lg">
         <div className="flex items-center gap-3 mb-3">
@@ -502,7 +473,6 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           Great for spraying between 6-10 AM
         </div>
       </div>
-
       {/* Emergency Contact - Always visible */}
       <div className="fixed bottom-4 right-4">
         <a
@@ -516,11 +486,9 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
     </div>
   )
 })
-
 // Hook to enable Field Mode
 export function useFieldMode() {
   const [isFieldMode, setIsFieldMode] = useState(false)
-
   const enableFieldMode = () => {
     setIsFieldMode(true)
     // Lock screen orientation to portrait if supported
@@ -530,7 +498,6 @@ export function useFieldMode() {
       })
     }
   }
-
   const disableFieldMode = () => {
     setIsFieldMode(false)
     // Unlock screen orientation
@@ -538,7 +505,6 @@ export function useFieldMode() {
       screen.orientation.unlock()
     }
   }
-
   return {
     isFieldMode,
     enableFieldMode,

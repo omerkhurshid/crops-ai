@@ -1,16 +1,12 @@
 'use client'
-
 import React, { createContext, useContext, useState, useEffect } from 'react'
-
 export type UserRole = 'farmer' | 'landowner' | 'rancher' | 'mixed'
-
 interface UserRoleContextType {
   role: UserRole
   setRole: (role: UserRole) => void
   modulePreferences: ModulePreferences
   updateModulePreferences: (preferences: Partial<ModulePreferences>) => void
 }
-
 interface ModulePreferences {
   showCrops: boolean
   showLivestock: boolean
@@ -21,7 +17,6 @@ interface ModulePreferences {
   defaultView: 'dashboard' | 'farms' | 'financials' | 'weather'
   compactMode: boolean
 }
-
 const defaultPreferences: Record<UserRole, ModulePreferences> = {
   farmer: {
     showCrops: true,
@@ -64,20 +59,16 @@ const defaultPreferences: Record<UserRole, ModulePreferences> = {
     compactMode: false
   }
 }
-
 const UserRoleContext = createContext<UserRoleContextType | undefined>(undefined)
-
 export function UserRoleProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<UserRole>('farmer')
   const [modulePreferences, setModulePreferences] = useState<ModulePreferences>(
     defaultPreferences.farmer
   )
-
   // Load preferences from localStorage
   useEffect(() => {
     const savedRole = localStorage.getItem('userRole') as UserRole
     const savedPreferences = localStorage.getItem('modulePreferences')
-    
     if (savedRole && defaultPreferences[savedRole]) {
       setRole(savedRole)
       setModulePreferences(
@@ -87,19 +78,16 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
       )
     }
   }, [])
-
   // Update preferences when role changes
   useEffect(() => {
     setModulePreferences(defaultPreferences[role])
     localStorage.setItem('userRole', role)
   }, [role])
-
   const updateModulePreferences = (updates: Partial<ModulePreferences>) => {
     const newPreferences = { ...modulePreferences, ...updates }
     setModulePreferences(newPreferences)
     localStorage.setItem('modulePreferences', JSON.stringify(newPreferences))
   }
-
   return (
     <UserRoleContext.Provider value={{
       role,
@@ -111,7 +99,6 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
     </UserRoleContext.Provider>
   )
 }
-
 export function useUserRole() {
   const context = useContext(UserRoleContext)
   if (context === undefined) {
@@ -119,11 +106,9 @@ export function useUserRole() {
   }
   return context
 }
-
 // Hook for filtering components based on user role
 export function useRoleBasedComponents() {
   const { role, modulePreferences } = useUserRole()
-  
   const shouldShow = {
     crops: modulePreferences.showCrops,
     livestock: modulePreferences.showLivestock,
@@ -131,7 +116,6 @@ export function useRoleBasedComponents() {
     weather: modulePreferences.showWeather,
     markets: modulePreferences.showMarkets,
     tasks: modulePreferences.showTasks,
-    
     // Navigation items
     nav: {
       dashboard: true,
@@ -143,7 +127,6 @@ export function useRoleBasedComponents() {
       reports: true,
       help: true
     },
-    
     // Dashboard sections
     dashboard: {
       marketTicker: modulePreferences.showMarkets,
@@ -154,10 +137,8 @@ export function useRoleBasedComponents() {
       financials: modulePreferences.showFinancials
     }
   }
-  
   const getQuickActions = () => {
     const actions = []
-    
     if (modulePreferences.showFinancials) {
       actions.push({
         id: 'expense',
@@ -165,7 +146,6 @@ export function useRoleBasedComponents() {
         category: 'financial'
       })
     }
-    
     if (modulePreferences.showCrops) {
       actions.push(
         {
@@ -180,7 +160,6 @@ export function useRoleBasedComponents() {
         }
       )
     }
-    
     if (modulePreferences.showLivestock) {
       actions.push({
         id: 'livestock',
@@ -188,10 +167,8 @@ export function useRoleBasedComponents() {
         category: 'livestock'
       })
     }
-    
     return actions
   }
-  
   return {
     shouldShow,
     getQuickActions,

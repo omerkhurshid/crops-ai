@@ -1,9 +1,7 @@
 /**
  * Crop Details Page with Comprehensive Database Information
  */
-
 'use client'
-
 import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
@@ -12,7 +10,6 @@ import { Button } from '../../../components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs'
 import { ArrowLeft, MapPin, Calendar, Thermometer, Droplets, Leaf, TrendingUp, Users, Award } from 'lucide-react'
 import Link from 'next/link'
-
 interface CropDetails {
   id: string;
   name: string;
@@ -48,29 +45,24 @@ interface CropDetails {
   disease_susceptibilities: string[];
   major_producing_countries: string[];
 }
-
 export default function CropDetailPage() {
   const params = useParams()
   const cropId = params?.id as string
   const [crop, setCrop] = useState<CropDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     // Load crop data from our comprehensive database
     const loadCropDetails = async () => {
       try {
         setLoading(true)
-        
         // For now, load from the JSON file we created
         const response = await fetch('/comprehensive-crops-data.json')
         const data = await response.json()
-        
         const foundCrop = data.crops.find((c: any) => 
           c.name.toLowerCase().replace(/\s+/g, '_') === cropId ||
           c.scientific_name.toLowerCase().replace(/\s+/g, '_') === cropId
         )
-
         if (foundCrop) {
           // Add varieties from the varieties array
           const cropVarieties = data.varieties.filter((v: any) => v.crop_name === foundCrop.name)
@@ -89,12 +81,10 @@ export default function CropDetailPage() {
         }
       } catch (err) {
         setError('Failed to load crop details')
-
       } finally {
         setLoading(false)
       }
     }
-
     if (cropId && typeof cropId === 'string') {
       loadCropDetails()
     } else if (!cropId) {
@@ -102,7 +92,6 @@ export default function CropDetailPage() {
       setLoading(false)
     }
   }, [cropId])
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -113,7 +102,6 @@ export default function CropDetailPage() {
       </div>
     )
   }
-
   if (error || !crop) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -130,7 +118,6 @@ export default function CropDetailPage() {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -155,7 +142,6 @@ export default function CropDetailPage() {
           </div>
         </div>
       </div>
-
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="overview" className="space-y-6">
@@ -165,7 +151,6 @@ export default function CropDetailPage() {
             <TabsTrigger value="varieties">Varieties</TabsTrigger>
             <TabsTrigger value="markets">Markets</TabsTrigger>
           </TabsList>
-
           <TabsContent value="overview" className="space-y-6">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -182,7 +167,6 @@ export default function CropDetailPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
@@ -196,7 +180,6 @@ export default function CropDetailPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
@@ -210,7 +193,6 @@ export default function CropDetailPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
@@ -225,7 +207,6 @@ export default function CropDetailPage() {
                 </ModernCardContent>
               </ModernCard>
             </div>
-
             {/* Common Names & Climate */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <ModernCard>
@@ -242,7 +223,6 @@ export default function CropDetailPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardHeader>
                   <ModernCardTitle>Climate Zones</ModernCardTitle>
@@ -258,7 +238,6 @@ export default function CropDetailPage() {
                 </ModernCardContent>
               </ModernCard>
             </div>
-
             {/* Tolerance Levels */}
             <ModernCard>
               <ModernCardHeader>
@@ -287,7 +266,6 @@ export default function CropDetailPage() {
                 </div>
               </ModernCardContent>
             </ModernCard>
-
             {/* Nutrition Data */}
             {crop.nutrition_data && (
               <ModernCard>
@@ -317,7 +295,6 @@ export default function CropDetailPage() {
               </ModernCard>
             )}
           </TabsContent>
-
           <TabsContent value="growing" className="space-y-6">
             {/* Companion Plants */}
             <ModernCard>
@@ -337,7 +314,6 @@ export default function CropDetailPage() {
                 </div>
               </ModernCardContent>
             </ModernCard>
-
             {/* Pest & Disease Management */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <ModernCard>
@@ -355,7 +331,6 @@ export default function CropDetailPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardHeader>
                   <ModernCardTitle className="text-orange-600">Common Diseases</ModernCardTitle>
@@ -373,7 +348,6 @@ export default function CropDetailPage() {
               </ModernCard>
             </div>
           </TabsContent>
-
           <TabsContent value="varieties" className="space-y-6">
             {crop.varieties && crop.varieties.length > 0 ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -419,7 +393,6 @@ export default function CropDetailPage() {
               </ModernCard>
             )}
           </TabsContent>
-
           <TabsContent value="markets" className="space-y-6">
             <ModernCard>
               <ModernCardHeader>
@@ -439,7 +412,6 @@ export default function CropDetailPage() {
                 </div>
               </ModernCardContent>
             </ModernCard>
-
             <ModernCard>
               <ModernCardHeader>
                 <ModernCardTitle>Market Information</ModernCardTitle>

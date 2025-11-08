@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useCallback, useRef, useEffect } from 'react'
 // Removed getConfig import - using process.env directly for client-side access
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
@@ -11,7 +10,6 @@ import {
   Square, Edit3, Check, X, Loader2, RotateCcw 
 } from 'lucide-react'
 import { Alert, AlertDescription } from '../ui/alert'
-
 interface Field {
   id: string
   name: string
@@ -20,19 +18,16 @@ interface Field {
   centerLat: number
   centerLng: number
 }
-
 interface GoogleMapsFieldEditorProps {
   farmLocation: { lat: number; lng: number }
   farmBoundaries?: google.maps.LatLngLiteral[]
   onFieldsDetected: (fields: Field[]) => void
   onClose?: () => void
 }
-
 const mapContainerStyle = {
   width: '100%',
   height: '600px'
 }
-
 const defaultOptions = {
   mapTypeId: 'satellite' as google.maps.MapTypeId,
   mapTypeControl: true,
@@ -45,7 +40,6 @@ const defaultOptions = {
   zoomControl: true,
   drawingControl: false
 }
-
 const getDrawingOptions = () => ({
   drawingControl: true,
   drawingControlOptions: {
@@ -63,9 +57,7 @@ const getDrawingOptions = () => ({
     draggable: false
   }
 })
-
 const libraries: ("drawing" | "geometry" | "places" | "visualization")[] = ["drawing", "geometry"]
-
 export function GoogleMapsFieldEditor({ 
   farmLocation, 
   farmBoundaries,
@@ -79,11 +71,9 @@ export function GoogleMapsFieldEditor({
   const [editingField, setEditingField] = useState<string | null>(null)
   const [drawingManager, setDrawingManager] = useState<google.maps.drawing.DrawingManager | null>(null)
   const polygonsRef = useRef<Map<string, google.maps.Polygon>>(new Map())
-
   // Load map
   const onLoad = useCallback((map: google.maps.Map) => {
     const bounds = new google.maps.LatLngBounds()
-    
     if (farmBoundaries && farmBoundaries.length > 0) {
       farmBoundaries.forEach(coord => bounds.extend(coord))
     } else {
@@ -97,32 +87,26 @@ export function GoogleMapsFieldEditor({
         lng: farmLocation.lng + 0.01 
       })
     }
-    
     map.fitBounds(bounds)
     setMap(map)
   }, [farmLocation, farmBoundaries])
-
   // Initialize drawing manager
   const onDrawingManagerLoad = useCallback((drawingManager: google.maps.drawing.DrawingManager) => {
     setDrawingManager(drawingManager)
   }, [])
-
   // Handle polygon complete
   const onPolygonComplete = useCallback((polygon: google.maps.Polygon) => {
     const path = polygon.getPath()
     const coordinates: google.maps.LatLngLiteral[] = []
-    
     for (let i = 0; i < path.getLength(); i++) {
       const latLng = path.getAt(i)
       coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
     }
-
     // Calculate area and center
     const area = google.maps.geometry.spherical.computeArea(path)
     const bounds = new google.maps.LatLngBounds()
     coordinates.forEach(coord => bounds.extend(coord))
     const center = bounds.getCenter()
-
     const newField: Field = {
       id: `field-${Date.now()}`,
       name: `Field ${fields.length + 1}`,
@@ -131,38 +115,29 @@ export function GoogleMapsFieldEditor({
       centerLat: center?.lat() || farmLocation.lat,
       centerLng: center?.lng() || farmLocation.lng
     }
-
     // Store polygon reference
     polygonsRef.current.set(newField.id, polygon)
-
     // Add click listener to polygon
     polygon.addListener('click', () => {
       setSelectedField(newField.id)
     })
-
     setFields([...fields, newField])
-    
     // Hide the polygon temporarily as we'll render it through React
     polygon.setMap(null)
-
     // Reset drawing mode
     if (drawingManager) {
       drawingManager.setDrawingMode(null)
     }
   }, [fields, farmLocation, drawingManager])
-
   // Auto-detect fields using satellite analysis
   const autoDetectFields = async () => {
     setIsDetecting(true)
-    
     try {
       // Get map bounds
       const bounds = map?.getBounds()
       if (!bounds) return
-
       const ne = bounds.getNorthEast()
       const sw = bounds.getSouthWest()
-
       // Call our field detection API
       const response = await fetch('/api/satellite/detect-fields', {
         method: 'POST',
@@ -176,10 +151,8 @@ export function GoogleMapsFieldEditor({
           }
         })
       })
-
       if (response.ok) {
         const { fields: detectedFields } = await response.json()
-        
         const newFields: Field[] = detectedFields.map((field: any, index: number) => ({
           id: field.id,
           name: field.name || `Field ${fields.length + index + 1}`,
@@ -188,7 +161,6 @@ export function GoogleMapsFieldEditor({
           centerLat: field.center?.lat || field.centerLat,
           centerLng: field.center?.lng || field.centerLng
         }))
-
         setFields([...fields, ...newFields])
       }
     } catch (error) {
@@ -197,7 +169,6 @@ export function GoogleMapsFieldEditor({
       setIsDetecting(false)
     }
   }
-
   // Delete field
   const deleteField = (fieldId: string) => {
     setFields(fields.filter(f => f.id !== fieldId))
@@ -210,18 +181,14 @@ export function GoogleMapsFieldEditor({
       setSelectedField(null)
     }
   }
-
   // Save fields
   const saveFields = () => {
     onFieldsDetected(fields)
   }
-
   // Calculate total area
   const totalArea = fields.reduce((sum, field) => sum + field.area, 0)
-
   // Check if Google Maps API key is available (use public env var directly in client)
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-  
   if (!apiKey) {
     return (
       <Card>
@@ -245,7 +212,6 @@ export function GoogleMapsFieldEditor({
       </Card>
     )
   }
-
   return (
     <LoadScript
       googleMapsApiKey={apiKey}
@@ -260,11 +226,9 @@ export function GoogleMapsFieldEditor({
         </div>
       }
       onLoad={() => {
-
       }}
       onError={(error) => {
         console.error('Google Maps script failed to load:', error)
-
       }}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -299,7 +263,6 @@ export function GoogleMapsFieldEditor({
                     }}
                   />
                 )}
-
                 {/* Render fields */}
                 {fields.map(field => (
                   <Polygon
@@ -318,7 +281,6 @@ export function GoogleMapsFieldEditor({
                     onClick={() => setSelectedField(field.id)}
                   />
                 ))}
-
                 {/* Field center markers */}
                 {fields.map(field => (
                   <Marker
@@ -332,7 +294,6 @@ export function GoogleMapsFieldEditor({
                     }}
                   />
                 ))}
-
                 {/* Drawing Manager */}
                 <DrawingManager
                   onLoad={onDrawingManagerLoad}
@@ -340,7 +301,6 @@ export function GoogleMapsFieldEditor({
                   options={getDrawingOptions()}
                 />
               </GoogleMap>
-
               {/* Map Controls */}
               <div className="absolute bottom-4 left-4 flex gap-2">
                 <Button
@@ -367,14 +327,12 @@ export function GoogleMapsFieldEditor({
                   Auto-Detect
                 </Button>
               </div>
-
               {/* Satellite Analysis Integration */}
               {fields.length > 0 && (
                 <div className="absolute top-4 right-4">
                   <Button
                     onClick={() => {
                       // Trigger satellite analysis for all defined fields
-
                       // This will be connected to the field analysis pipeline
                     }}
                     size="sm"
@@ -389,7 +347,6 @@ export function GoogleMapsFieldEditor({
             </CardContent>
           </Card>
         </div>
-
         {/* Field List */}
         <div className="space-y-4">
           <Card>
@@ -453,7 +410,6 @@ export function GoogleMapsFieldEditor({
               )}
             </CardContent>
           </Card>
-
           {/* Actions */}
           <div className="flex gap-2">
             <Button

@@ -5,7 +5,6 @@
  * system events, and performance monitoring with multiple output
  * destinations and log levels.
  */
-
 export interface AuditEvent {
   id: string
   timestamp: string
@@ -32,14 +31,12 @@ export interface AuditEvent {
   errorCode?: string
   errorMessage?: string
 }
-
 export interface SecurityEvent extends AuditEvent {
   level: 'security'
   securityType: 'authentication' | 'authorization' | 'data_access' | 'rate_limit' | 'malicious_activity'
   riskLevel: 'low' | 'medium' | 'high' | 'critical'
   blocked: boolean
 }
-
 export interface PerformanceEvent extends AuditEvent {
   level: 'performance'
   performanceType: 'api_response' | 'database_query' | 'external_api' | 'ml_processing'
@@ -47,13 +44,11 @@ export interface PerformanceEvent extends AuditEvent {
   threshold?: number
   exceeded: boolean
 }
-
 class AuditLogger {
   private environment: string
   private version: string
   private enabledLevels: Set<string>
   private outputs: LogOutput[]
-
   constructor() {
     this.environment = process.env.NODE_ENV || 'development'
     this.version = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0'
@@ -65,7 +60,6 @@ class AuditLogger {
       // new ExternalServiceOutput(), // For services like DataDog, Sentry
     ]
   }
-
   /**
    * Log a general audit event
    */
@@ -85,14 +79,11 @@ class AuditLogger {
       success: true,
       ...event
     }
-
     if (!this.enabledLevels.has(fullEvent.level)) {
       return
     }
-
     await this.writeToOutputs(fullEvent)
   }
-
   /**
    * Log user authentication events
    */
@@ -127,10 +118,8 @@ class AuditLogger {
       riskLevel: success ? 'low' : action === 'failed_login' ? 'medium' : 'low',
       blocked: !success
     }
-
     await this.writeToOutputs(securityEvent)
   }
-
   /**
    * Log authorization events
    */
@@ -168,10 +157,8 @@ class AuditLogger {
       riskLevel: allowed ? 'low' : 'medium',
       blocked: !allowed
     }
-
     await this.writeToOutputs(securityEvent)
   }
-
   /**
    * Log data access events
    */
@@ -200,7 +187,6 @@ class AuditLogger {
       }
     })
   }
-
   /**
    * Log API performance events
    */
@@ -214,7 +200,6 @@ class AuditLogger {
   ): Promise<void> {
     const threshold = this.getPerformanceThreshold(endpoint)
     const exceeded = duration > threshold
-
     const performanceEvent: PerformanceEvent = {
       id: this.generateId(),
       timestamp: new Date().toISOString(),
@@ -239,10 +224,8 @@ class AuditLogger {
       success: statusCode < 400,
       performanceType: 'api_response'
     }
-
     await this.writeToOutputs(performanceEvent)
   }
-
   /**
    * Log security incidents
    */
@@ -273,15 +256,12 @@ class AuditLogger {
       riskLevel,
       blocked
     }
-
     await this.writeToOutputs(securityEvent)
-
     // Alert for high/critical incidents
     if (riskLevel === 'high' || riskLevel === 'critical') {
       await this.sendSecurityAlert(securityEvent)
     }
   }
-
   /**
    * Log system events
    */
@@ -304,7 +284,6 @@ class AuditLogger {
       }
     })
   }
-
   /**
    * Log ML/AI model events
    */
@@ -332,7 +311,6 @@ class AuditLogger {
       }
     })
   }
-
   /**
    * Write event to all configured outputs
    */
@@ -342,17 +320,14 @@ class AuditLogger {
         console.error('Failed to write to log output:', error)
       })
     )
-    
     await Promise.allSettled(promises)
   }
-
   /**
    * Generate unique event ID
    */
   private generateId(): string {
     return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
-
   /**
    * Extract IP address from request
    */
@@ -363,7 +338,6 @@ class AuditLogger {
            request.headers?.get('x-real-ip') ||
            request.connection?.remoteAddress
   }
-
   /**
    * Get performance threshold for endpoint
    */
@@ -375,16 +349,13 @@ class AuditLogger {
       '/api/farms': 1000,      // 1 second for farm operations
       '/api/auth': 1000,       // 1 second for auth operations
     }
-
     for (const [path, threshold] of Object.entries(thresholds)) {
       if (endpoint.startsWith(path)) {
         return threshold
       }
     }
-
     return 2000 // Default 2 seconds
   }
-
   /**
    * Send security alert for high-risk incidents
    */
@@ -398,14 +369,12 @@ class AuditLogger {
     })
   }
 }
-
 /**
  * Abstract base class for log outputs
  */
 abstract class LogOutput {
   abstract write(event: AuditEvent): Promise<void>
 }
-
 /**
  * Console output for development
  */
@@ -415,7 +384,6 @@ class ConsoleOutput extends LogOutput {
                      event.level === 'warn' ? console.warn :
                      event.level === 'security' ? console.warn :
                      console.log
-
     logMethod(`[${event.level.toUpperCase()}] ${event.category}:${event.action}`, {
       id: event.id,
       timestamp: event.timestamp,
@@ -426,7 +394,6 @@ class ConsoleOutput extends LogOutput {
     })
   }
 }
-
 /**
  * File output for persistent logging
  */
@@ -437,7 +404,6 @@ class FileOutput extends LogOutput {
     return Promise.resolve()
   }
 }
-
 /**
  * Database output for queryable logs
  */
@@ -452,7 +418,6 @@ class DatabaseOutput extends LogOutput {
     }
   }
 }
-
 // Export singleton instance
 export const auditLogger = new AuditLogger()
 export { AuditLogger }

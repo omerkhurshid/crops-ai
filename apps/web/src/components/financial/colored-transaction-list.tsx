@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -10,7 +9,6 @@ import {
   Tag, Plus, Filter, Search, MoreVertical
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface Transaction {
   id: string
   type: 'INCOME' | 'EXPENSE'
@@ -27,14 +25,12 @@ interface Transaction {
     cropType: string
   }
 }
-
 interface ColoredTransactionListProps {
   farmId?: string
   limit?: number
   onAddTransaction?: (type: 'INCOME' | 'EXPENSE') => void
   compact?: boolean
 }
-
 // Enhanced category colors with more vibrant palette
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   // Income categories
@@ -43,7 +39,6 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   SUBSIDIES: { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
   LEASE_INCOME: { bg: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-300' },
   OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' },
-  
   // Expense categories
   SEEDS: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300' },
   FERTILIZER: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
@@ -56,7 +51,6 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   INSURANCE: { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-300' },
   OTHER_EXPENSE: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-300' },
 }
-
 const CATEGORY_LABELS: Record<string, string> = {
   CROP_SALES: 'Crop Sales',
   LIVESTOCK_SALES: 'Livestock',
@@ -74,7 +68,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   INSURANCE: 'Insurance',
   OTHER_EXPENSE: 'Other',
 }
-
 export function ColoredTransactionList({ 
   farmId, 
   limit = 10, 
@@ -84,17 +77,14 @@ export function ColoredTransactionList({
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all')
-
   useEffect(() => {
     fetchTransactions()
   }, [farmId, limit])
-
   const fetchTransactions = async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({ limit: limit.toString() })
       if (farmId) params.append('farmId', farmId)
-      
       const response = await fetch(`/api/financial/transactions?${params}`)
       if (response.ok) {
         const data = await response.json()
@@ -107,7 +97,6 @@ export function ColoredTransactionList({
       setLoading(false)
     }
   }
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -116,34 +105,28 @@ export function ColoredTransactionList({
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
     const diffTime = now.getTime() - date.getTime()
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    
     if (diffDays === 0) return 'Today'
     if (diffDays === 1) return 'Yesterday'
     if (diffDays < 7) return `${diffDays} days ago`
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
-
   const filteredTransactions = transactions.filter(t => {
     if (filter === 'all') return true
     if (filter === 'income') return t.type === 'INCOME'
     if (filter === 'expense') return t.type === 'EXPENSE'
     return true
   })
-
   const totalIncome = filteredTransactions
     .filter(t => t.type === 'INCOME')
     .reduce((sum, t) => sum + t.amount, 0)
-  
   const totalExpenses = filteredTransactions
     .filter(t => t.type === 'EXPENSE')
     .reduce((sum, t) => sum + t.amount, 0)
-
   if (loading) {
     return (
       <Card>
@@ -168,7 +151,6 @@ export function ColoredTransactionList({
       </Card>
     )
   }
-
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-3">
@@ -196,7 +178,6 @@ export function ColoredTransactionList({
             )}
           </div>
         </div>
-        
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 mt-3">
           <div className="bg-green-50 rounded-lg p-3 border border-green-200">
@@ -219,13 +200,11 @@ export function ColoredTransactionList({
           </div>
         </div>
       </CardHeader>
-      
       <CardContent className="flex-1 p-0">
         <ScrollArea className="h-[600px] px-6">
           <div className="space-y-2 py-3">
             {filteredTransactions.map((transaction) => {
               const categoryStyle = CATEGORY_COLORS[transaction.category] || CATEGORY_COLORS.OTHER_EXPENSE
-              
               return (
                 <div
                   key={transaction.id}
@@ -255,14 +234,12 @@ export function ColoredTransactionList({
                           {formatDate(transaction.transactionDate)}
                         </span>
                       </div>
-                      
                       {/* Description */}
                       {transaction.notes && (
                         <p className="text-sm text-gray-700 truncate">
                           {transaction.notes}
                         </p>
                       )}
-                      
                       {/* Metadata */}
                       <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                         {transaction.field && (
@@ -278,7 +255,6 @@ export function ColoredTransactionList({
                         )}
                       </div>
                     </div>
-                    
                     {/* Amount */}
                     <div className="text-right">
                       <div className={cn(

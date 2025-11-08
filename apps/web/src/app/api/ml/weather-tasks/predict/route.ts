@@ -4,7 +4,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { mlOpsPipeline } from '../../../../../lib/ml/mlops-pipeline';
-
 const weatherTaskPredictionSchema = z.object({
   modelId: z.string().default('weather-task-generator'),
   input: z.object({
@@ -43,7 +42,6 @@ const weatherTaskPredictionSchema = z.object({
     timeWindow: z.number().min(1).max(7).default(3) // days
   }).optional()
 });
-
 // Weather task prediction service
 class WeatherTaskPredictor {
   async predictTasks(input: any, options: any = {}) {
@@ -57,7 +55,6 @@ class WeatherTaskPredictor {
           options: options
         }
       });
-
       if (modelResponse.prediction) {
         return {
           tasks: modelResponse.prediction.tasks || [],
@@ -68,18 +65,14 @@ class WeatherTaskPredictor {
         };
       }
     } catch (error) {
-
     }
-
     // Intelligent fallback with weather-based logic
     return this.generateIntelligentTasks(input, options);
   }
-
   private generateIntelligentTasks(input: any, options: any) {
     const { weather, crops, season, location } = input;
     const tasks = [];
     const currentTime = new Date();
-
     // High priority weather-driven tasks
     if (weather.windSpeed < 8 && weather.precipitation === 0) {
       tasks.push({
@@ -98,7 +91,6 @@ class WeatherTaskPredictor {
         isRecommended: true
       });
     }
-
     // Temperature-based crop monitoring
     if (weather.temperature > 85) {
       crops.forEach((crop: any, index: number) => {
@@ -121,7 +113,6 @@ class WeatherTaskPredictor {
         }
       });
     }
-
     // Humidity and disease risk
     if (weather.humidity > 80) {
       tasks.push({
@@ -140,7 +131,6 @@ class WeatherTaskPredictor {
         isRecommended: true
       });
     }
-
     // Wind-based equipment safety
     if (weather.windSpeed > 15) {
       tasks.push({
@@ -159,7 +149,6 @@ class WeatherTaskPredictor {
         isRecommended: true
       });
     }
-
     // Forecast-based planning
     const rainExpected = weather.forecast.some((day: any) => day.precipitation > 30);
     if (rainExpected && weather.precipitation < 5) {
@@ -179,7 +168,6 @@ class WeatherTaskPredictor {
         isRecommended: true
       });
     }
-
     // Seasonal tasks
     if (season === 'spring' && weather.temperature > 50) {
       const springCrops = crops.filter((c: any) => c.stage === 'planned' || c.stage === 'planting');
@@ -201,7 +189,6 @@ class WeatherTaskPredictor {
         });
       }
     }
-
     if (season === 'fall' && weather.windSpeed < 12) {
       const matureCrops = crops.filter((c: any) => c.stage === 'mature' || c.stage === 'ready');
       if (matureCrops.length > 0) {
@@ -222,7 +209,6 @@ class WeatherTaskPredictor {
         });
       }
     }
-
     // Filter by confidence threshold and max tasks
     const filteredTasks = tasks
       .filter(task => task.confidence >= (options.priorityThreshold || 0.5))
@@ -233,7 +219,6 @@ class WeatherTaskPredictor {
         return b.confidence - a.confidence;
       })
       .slice(0, options.maxTasks || 10);
-
     return {
       tasks: filteredTasks,
       confidence: 0.82,
@@ -253,29 +238,22 @@ class WeatherTaskPredictor {
     };
   }
 }
-
 const weatherTaskPredictor = new WeatherTaskPredictor();
-
 // POST /api/ml/weather-tasks/predict
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = weatherTaskPredictionSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const { modelId, input, version, options } = validation.data;
-      
       const prediction = await weatherTaskPredictor.predictTasks(input, options);
-
       const summary = {
         modelId,
         tasksGenerated: prediction.tasks.length,
@@ -286,7 +264,6 @@ export const POST = apiMiddleware.protected(
         modelVersion: prediction.modelVersion,
         usingRealModel: prediction.isRealModel
       };
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -298,30 +275,25 @@ export const POST = apiMiddleware.protected(
         message: `Generated ${prediction.tasks.length} weather-based tasks`,
         action: 'weather_task_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/weather-tasks/predict?temperature=75&humidity=60&windSpeed=5
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       // Extract weather parameters from query string
       const temperature = parseFloat(searchParams.get('temperature') || '72');
       const humidity = parseFloat(searchParams.get('humidity') || '65');
       const windSpeed = parseFloat(searchParams.get('windSpeed') || '8');
       const precipitation = parseFloat(searchParams.get('precipitation') || '0');
-
       // Simple prediction with query parameters
       const input = {
         weather: {
@@ -339,14 +311,11 @@ export const GET = apiMiddleware.protected(
           longitude: parseFloat(searchParams.get('longitude') || '-98.5795') // Geographic center of US
         }
       };
-
       const options = {
         maxTasks: parseInt(searchParams.get('maxTasks') || '5'),
         priorityThreshold: parseFloat(searchParams.get('priorityThreshold') || '0.6')
       };
-
       const prediction = await weatherTaskPredictor.predictTasks(input, options);
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -357,13 +326,11 @@ export const GET = apiMiddleware.protected(
         message: `Generated ${prediction.tasks.length} weather-based tasks for current conditions`,
         action: 'simple_weather_task_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 function getCurrentSeason(): string {
   const month = new Date().getMonth();
   if (month >= 2 && month <= 4) return 'spring';

@@ -2,9 +2,7 @@
  * Real Health Check System
  * Production-ready service monitoring and health checks
  */
-
 import { prisma } from '../prisma'
-
 export interface ServiceHealth {
   serviceName: string
   status: 'healthy' | 'unhealthy' | 'degraded'
@@ -13,7 +11,6 @@ export interface ServiceHealth {
   errorMessage?: string
   metadata?: any
 }
-
 export interface HealthCheckResult {
   service: string
   healthy: boolean
@@ -21,10 +18,8 @@ export interface HealthCheckResult {
   error?: string
   metadata?: any
 }
-
 export class HealthMonitor {
   private services: Map<string, HealthChecker> = new Map()
-
   constructor() {
     // Register default health checkers
     this.registerService('database', new DatabaseHealthChecker())
@@ -33,14 +28,12 @@ export class HealthMonitor {
     this.registerService('satellite-service', new SatelliteServiceHealthChecker())
     this.registerService('queue-system', new QueueHealthChecker())
   }
-
   /**
    * Register a new service health checker
    */
   registerService(name: string, checker: HealthChecker): void {
     this.services.set(name, checker)
   }
-
   /**
    * Check health of a specific service
    */
@@ -54,19 +47,16 @@ export class HealthMonitor {
         error: 'Service not registered'
       }
     }
-
     const startTime = Date.now()
     try {
       const result = await checker.check()
       const responseTime = Date.now() - startTime
-
       // Store result in database
       await this.storeHealthCheck(serviceName, {
         service: serviceName,
         ...result,
         responseTime
       })
-
       return {
         service: serviceName,
         healthy: result.healthy,
@@ -76,7 +66,6 @@ export class HealthMonitor {
     } catch (error) {
       const responseTime = Date.now() - startTime
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
       // Store failure in database
       await this.storeHealthCheck(serviceName, {
         service: serviceName,
@@ -84,7 +73,6 @@ export class HealthMonitor {
         responseTime,
         error: errorMessage
       })
-
       return {
         service: serviceName,
         healthy: false,
@@ -93,21 +81,17 @@ export class HealthMonitor {
       }
     }
   }
-
   /**
    * Check health of all registered services
    */
   async checkAllServices(): Promise<HealthCheckResult[]> {
     const results: HealthCheckResult[] = []
-    
     for (const serviceName of Array.from(this.services.keys())) {
       const result = await this.checkService(serviceName)
       results.push(result)
     }
-
     return results
   }
-
   /**
    * Get current health status of all services
    */
@@ -118,7 +102,6 @@ export class HealthMonitor {
           lastCheckAt: 'desc'
         }
       })
-      
       return serviceHealthRecords.map(record => ({
         serviceName: record.serviceName,
         status: record.status as 'healthy' | 'degraded' | 'unhealthy',
@@ -131,7 +114,6 @@ export class HealthMonitor {
       return []
     }
   }
-
   /**
    * Get health status of a specific service
    */
@@ -142,9 +124,7 @@ export class HealthMonitor {
           serviceName
         }
       })
-      
       if (!record) return null
-      
       return {
         serviceName: record.serviceName,
         status: record.status as 'healthy' | 'degraded' | 'unhealthy',
@@ -157,7 +137,6 @@ export class HealthMonitor {
       return null
     }
   }
-
   /**
    * Store health check result in database
    */
@@ -182,7 +161,6 @@ export class HealthMonitor {
           metadata: result.metadata || {}
         }
       })
-      
       // Log the health check
       await prisma.healthCheckLog.create({
         data: {
@@ -197,14 +175,12 @@ export class HealthMonitor {
       console.error('Error storing health check:', error)
     }
   }
-
   /**
    * Get health history for a service
    */
   async getHealthHistory(serviceName: string, hours: number = 24): Promise<any[]> {
     try {
       const since = new Date(Date.now() - (hours * 60 * 60 * 1000))
-      
       const logs = await prisma.healthCheckLog.findMany({
         where: {
           serviceName,
@@ -217,7 +193,6 @@ export class HealthMonitor {
         },
         take: 100 // Limit to last 100 checks
       })
-      
       return logs.map(log => ({
         serviceName: log.serviceName,
         status: log.status,
@@ -230,7 +205,6 @@ export class HealthMonitor {
       return []
     }
   }
-
   /**
    * Check if system is healthy overall
    */
@@ -239,14 +213,12 @@ export class HealthMonitor {
     return services.every(service => service.status === 'healthy')
   }
 }
-
 /**
  * Abstract health checker interface
  */
 export abstract class HealthChecker {
   abstract check(): Promise<{ healthy: boolean; error?: string; metadata?: any }>
 }
-
 /**
  * Database health checker
  */
@@ -255,10 +227,8 @@ class DatabaseHealthChecker extends HealthChecker {
     try {
       // Simple query to test database connectivity
       await prisma.$queryRaw`SELECT 1`
-      
       // Test write capability
       const testResult = await prisma.$queryRaw`SELECT NOW() as current_time`
-      
       return {
         healthy: true,
         metadata: {
@@ -274,7 +244,6 @@ class DatabaseHealthChecker extends HealthChecker {
     }
   }
 }
-
 /**
  * Redis health checker
  */
@@ -284,10 +253,8 @@ class RedisHealthChecker extends HealthChecker {
       // In a real implementation, this would check Redis connection
       // For now, we'll simulate a basic check
       const testKey = `health_check_${Date.now()}`
-      
       // Simulate Redis ping
       await new Promise(resolve => setTimeout(resolve, 10))
-      
       return {
         healthy: true,
         metadata: {
@@ -303,7 +270,6 @@ class RedisHealthChecker extends HealthChecker {
     }
   }
 }
-
 /**
  * Weather API health checker
  */
@@ -317,20 +283,17 @@ class WeatherAPIHealthChecker extends HealthChecker {
           error: 'Weather API key not configured'
         }
       }
-
       // Test API with a simple request
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=London&appid=${apiKey}`,
         { method: 'HEAD', timeout: 5000 } as any
       )
-
       if (!response.ok) {
         return {
           healthy: false,
           error: `Weather API returned ${response.status}`
         }
       }
-
       return {
         healthy: true,
         metadata: {
@@ -346,7 +309,6 @@ class WeatherAPIHealthChecker extends HealthChecker {
     }
   }
 }
-
 /**
  * Satellite service health checker
  */
@@ -355,7 +317,6 @@ class SatelliteServiceHealthChecker extends HealthChecker {
     try {
       // Check satellite processing queue health
       const since = new Date(Date.now() - (24 * 60 * 60 * 1000)) // Last 24 hours
-      
       const [totalJobs, failedJobs, pendingJobs] = await Promise.all([
         prisma.queueJob.count({
           where: {
@@ -377,10 +338,8 @@ class SatelliteServiceHealthChecker extends HealthChecker {
           }
         })
       ])
-      
       const failureRate = totalJobs > 0 ? (failedJobs / totalJobs) * 100 : 0
       const healthy = failureRate < 10 && pendingJobs < 100 // Less than 10% failure rate and under 100 pending jobs
-      
       return { 
         healthy, 
         metadata: { 
@@ -398,7 +357,6 @@ class SatelliteServiceHealthChecker extends HealthChecker {
     }
   }
 }
-
 /**
  * Queue system health checker
  */
@@ -423,9 +381,7 @@ class QueueHealthChecker extends HealthChecker {
           }
         })
       ])
-      
       const healthy = pendingJobs < 1000 && stuckJobs === 0 // Less than 1000 pending jobs and no stuck jobs
-      
       return {
         healthy,
         metadata: {
@@ -443,6 +399,5 @@ class QueueHealthChecker extends HealthChecker {
     }
   }
 }
-
 // Export singleton instance
 export const healthMonitor = new HealthMonitor()

@@ -1,6 +1,5 @@
 // Weather-to-task generation engine
 // Automatically creates actionable tasks based on weather conditions
-
 interface WeatherCondition {
   temperature: number
   humidity: number
@@ -10,13 +9,11 @@ interface WeatherCondition {
   heatStress: number
   conditions: string
 }
-
 interface CropInfo {
   type: string
   growthStage: 'seedling' | 'vegetative' | 'flowering' | 'fruiting' | 'harvest'
   plantingDate: Date
 }
-
 interface GeneratedTask {
   id: string
   title: string
@@ -27,7 +24,6 @@ interface GeneratedTask {
   field?: string
   impact?: string
 }
-
 export function generateWeatherTasks(
   weather: WeatherCondition,
   forecast: WeatherCondition[],
@@ -35,7 +31,6 @@ export function generateWeatherTasks(
   soilMoisture?: number
 ): GeneratedTask[] {
   const tasks: GeneratedTask[] = []
-  
   // Frost Protection Tasks
   if (weather.frostRisk > 70) {
     crops.forEach((crop, index) => {
@@ -53,11 +48,9 @@ export function generateWeatherTasks(
       }
     })
   }
-
   // Irrigation Tasks
   const nextRainIndex = forecast.findIndex(f => f.precipitation > 0.1)
   const daysUntilRain = nextRainIndex === -1 ? 7 : nextRainIndex
-  
   if (soilMoisture !== undefined && soilMoisture < 30 && daysUntilRain > 2) {
     tasks.push({
       id: 'irrigation-1',
@@ -69,7 +62,6 @@ export function generateWeatherTasks(
       impact: 'Maintain optimal growth'
     })
   }
-
   // Heat Stress Management
   if (weather.heatStress > 60) {
     tasks.push({
@@ -82,13 +74,11 @@ export function generateWeatherTasks(
       impact: 'Reduce heat damage'
     })
   }
-
   // Harvest Timing
   const goodHarvestDays = forecast
     .slice(0, 5)
     .map((f, i) => ({ day: i, weather: f }))
     .filter(d => d.weather.precipitation < 0.1 && d.weather.humidity < 60)
-  
   if (goodHarvestDays.length > 0) {
     crops.forEach((crop, index) => {
       if (crop.growthStage === 'harvest') {
@@ -105,12 +95,10 @@ export function generateWeatherTasks(
       }
     })
   }
-
   // Storm Preparation
   const stormIndex = forecast.findIndex(f => 
     f.windSpeed > 30 || f.precipitation > 2
   )
-  
   if (stormIndex !== -1 && stormIndex < 3) {
     tasks.push({
       id: 'storm-prep',
@@ -122,7 +110,6 @@ export function generateWeatherTasks(
       impact: 'Prevent equipment damage'
     })
   }
-
   // Disease Prevention (high humidity after rain)
   const wetPeriod = forecast.filter(f => f.humidity > 80).length
   if (wetPeriod > 3) {
@@ -136,13 +123,11 @@ export function generateWeatherTasks(
       impact: 'Prevent fungal infections'
     })
   }
-
   return tasks.sort((a, b) => {
     const urgencyOrder = { critical: 4, high: 3, medium: 2, low: 1 }
     return urgencyOrder[b.urgency] - urgencyOrder[a.urgency]
   })
 }
-
 // Convert weather alerts to farmer-friendly language
 export function convertWeatherAlert(
   alertType: string, 
@@ -176,7 +161,6 @@ export function convertWeatherAlert(
       high: 'Damaging winds possible - reinforce structures'
     }
   }
-
   return alerts[alertType]?.[severity] || 
     `${alertType.replace(/_/g, ' ')} - ${severity} conditions expected`
 }

@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect, memo } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -20,7 +19,6 @@ import {
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { convertWeatherAlert } from '../../lib/farmer-language'
-
 interface WeatherAlert {
   id: string
   alertType: 'frost' | 'storm' | 'drought' | 'heat' | 'wind' | 'hail' | 'flood' | 'fire_risk'
@@ -43,7 +41,6 @@ interface WeatherAlert {
   priority: number
   confidence: number
 }
-
 interface WeatherAlertsWidgetProps {
   farmData?: {
     latitude?: number
@@ -51,31 +48,25 @@ interface WeatherAlertsWidgetProps {
   }
   className?: string
 }
-
 export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData, className }: WeatherAlertsWidgetProps) {
   const [alerts, setAlerts] = useState<WeatherAlert[]>([])
   const [loading, setLoading] = useState(true)
   const [showAll, setShowAll] = useState(false)
-
   useEffect(() => {
     fetchWeatherAlerts()
   }, [farmData])
-
   const fetchWeatherAlerts = async () => {
     if (!farmData?.latitude || !farmData?.longitude) {
       setLoading(false)
       return
     }
-
     try {
       const params = new URLSearchParams({
         latitude: farmData.latitude.toString(),
         longitude: farmData.longitude.toString(),
         type: 'advanced'
       })
-
       const response = await fetch(`/api/weather/alerts?${params}`)
-      
       if (response.ok) {
         const data = await response.json()
         setAlerts(data.alerts || [])
@@ -89,7 +80,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
       setLoading(false)
     }
   }
-
   const getAlertIcon = (type: string) => {
     const iconMap = {
       frost: Snowflake,
@@ -104,7 +94,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
     const IconComponent = iconMap[type as keyof typeof iconMap] || AlertTriangle
     return <IconComponent className="h-5 w-5" />
   }
-
   const getSeverityColor = (severity: string, urgency: string) => {
     if (urgency === 'critical' || severity === 'extreme') {
       return 'bg-red-100 border-red-200 text-red-800'
@@ -117,7 +106,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
     }
     return 'bg-blue-100 border-blue-200 text-blue-800'
   }
-
   const getFarmerFriendlyAlert = (alert: WeatherAlert): string => {
     // Convert technical alert to farmer language
     const typeMap = {
@@ -130,20 +118,16 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
       hail: 'Hail Warning',
       fire_risk: 'Fire Risk'
     }
-
     const severityMap = {
       minor: 'Light',
       moderate: 'Moderate',
       severe: 'Strong',
       extreme: 'Severe'
     }
-
     const alertType = typeMap[alert.alertType] || alert.alertType
     const severity = severityMap[alert.severity] || alert.severity
-    
     return `${severity} ${alertType}`
   }
-
   const getActionableMessage = (alert: WeatherAlert): string => {
     if (alert.actionRequired.immediate.length > 0) {
       return alert.actionRequired.immediate[0]
@@ -153,10 +137,8 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
     }
     return "Monitor conditions closely"
   }
-
   const activeAlerts = alerts.filter(alert => alert.isActive)
   const displayAlerts = showAll ? activeAlerts : activeAlerts.slice(0, 3)
-
   if (loading) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -175,7 +157,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
       </ModernCard>
     )
   }
-
   if (activeAlerts.length === 0) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -199,7 +180,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -260,7 +240,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
                   </div>
                 </div>
               </div>
-              
               <div className="text-right text-xs opacity-75">
                 <div className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
@@ -270,12 +249,10 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
                 </div>
               </div>
             </div>
-
             {/* Farmer-friendly description */}
             <p className="text-sm mb-3 leading-relaxed">
               {alert.description}
             </p>
-
             {/* What to do */}
             <div className="bg-white/50 p-3 rounded-md">
               <h5 className="font-medium text-sm mb-2 flex items-center gap-1">
@@ -286,7 +263,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
                 {getActionableMessage(alert)}
               </p>
             </div>
-
             {/* Crops at risk */}
             {alert.farmImpact.cropsAtRisk.length > 0 && (
               <div className="mt-3">
@@ -304,7 +280,6 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
             )}
           </div>
         ))}
-
         {/* Location info if available */}
         {farmData?.latitude && farmData?.longitude && (
           <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t">

@@ -1,8 +1,6 @@
 'use client'
-
 import { useState } from 'react'
 import { Info } from 'lucide-react'
-
 interface InfoTooltipProps {
   title: string
   description: string
@@ -11,7 +9,6 @@ interface InfoTooltipProps {
   className?: string
   variant?: 'default' | 'light'
 }
-
 export function InfoTooltip({ 
   title, 
   description, 
@@ -21,27 +18,23 @@ export function InfoTooltip({
   variant = 'default'
 }: InfoTooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
-
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-5 w-5',
     lg: 'h-6 w-6'
   }
-
   const tooltipPositions = {
     top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
     bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
     left: 'right-full top-1/2 transform -translate-y-1/2 mr-2',
     right: 'left-full top-1/2 transform -translate-y-1/2 ml-2'
   }
-
   const arrowPositions = {
     top: 'top-full left-1/2 transform -translate-x-1/2 border-l-transparent border-r-transparent border-b-transparent border-t-slate-800',
     bottom: 'bottom-full left-1/2 transform -translate-x-1/2 border-l-transparent border-r-transparent border-t-transparent border-b-slate-800',
     left: 'left-full top-1/2 transform -translate-y-1/2 border-t-transparent border-b-transparent border-r-transparent border-l-slate-800',
     right: 'right-full top-1/2 transform -translate-y-1/2 border-t-transparent border-b-transparent border-l-transparent border-r-slate-800'
   }
-
   return (
     <div className={`relative inline-block ${className}`}>
       <button
@@ -59,7 +52,6 @@ export function InfoTooltip({
       >
         <Info className={`${sizeClasses[size]} opacity-60 hover:opacity-100 transition-opacity`} />
       </button>
-      
       {isVisible && (
         <div className={`absolute z-50 ${tooltipPositions[position]} pointer-events-none`}>
           <div className="bg-slate-800/95 backdrop-blur-sm text-white text-sm rounded-lg px-3 py-2 shadow-lg border border-slate-700/50 max-w-xs">
@@ -72,4 +64,3 @@ export function InfoTooltip({
     </div>
   )
 }
-

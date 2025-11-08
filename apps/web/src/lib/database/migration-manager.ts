@@ -4,11 +4,9 @@
  * Provides automated database migration, data seeding, and maintenance
  * operations for the Crops.AI platform.
  */
-
 import { prisma } from '../prisma'
 import { auditLogger } from '../logging/audit-logger'
 import { createSampleFieldBoundaries, updateFieldBoundary } from './field-boundary-utils'
-
 export interface MigrationResult {
   success: boolean
   migrationsRun: string[]
@@ -16,7 +14,6 @@ export interface MigrationResult {
   duration: number
   affectedRecords: number
 }
-
 export interface DataSeeding {
   users: number
   farms: number
@@ -26,10 +23,8 @@ export interface DataSeeding {
   satelliteData: number
   recommendations: number
 }
-
 class DatabaseMigrationManager {
   private readonly migrationHistory: string[] = []
-
   /**
    * Run all pending migrations
    */
@@ -38,10 +33,8 @@ class DatabaseMigrationManager {
     const migrationsRun: string[] = []
     const errors: string[] = []
     let affectedRecords = 0
-
     try {
       await auditLogger.logSystem('database_migration_started', true)
-
       // 1. Ensure PostGIS extension is enabled
       try {
         await this.ensurePostGISExtension()
@@ -49,7 +42,6 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`PostGIS setup failed: ${error}`)
       }
-
       // 2. Populate missing field boundaries
       try {
         const boundaryResult = await this.populateFieldBoundaries()
@@ -58,7 +50,6 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`Field boundary population failed: ${error}`)
       }
-
       // 3. Create missing indexes
       try {
         await this.createOptimizationIndexes()
@@ -66,7 +57,6 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`Index creation failed: ${error}`)
       }
-
       // 4. Migrate legacy data formats
       try {
         const legacyResult = await this.migrateLegacyData()
@@ -75,7 +65,6 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`Legacy data migration failed: ${error}`)
       }
-
       // 5. Clean up orphaned records
       try {
         const cleanupResult = await this.cleanupOrphanedRecords()
@@ -84,7 +73,6 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`Cleanup failed: ${error}`)
       }
-
       // 6. Update statistics and metadata
       try {
         await this.updateDatabaseStatistics()
@@ -92,10 +80,8 @@ class DatabaseMigrationManager {
       } catch (error) {
         errors.push(`Statistics update failed: ${error}`)
       }
-
       const duration = Date.now() - startTime
       const success = errors.length === 0
-
       await auditLogger.logSystem(
         'database_migration_completed',
         success,
@@ -106,7 +92,6 @@ class DatabaseMigrationManager {
           affectedRecords
         }
       )
-
       return {
         success,
         migrationsRun,
@@ -114,17 +99,14 @@ class DatabaseMigrationManager {
         duration,
         affectedRecords
       }
-
     } catch (error) {
       const duration = Date.now() - startTime
-      
       await auditLogger.logSystem(
         'database_migration_failed',
         false,
         { error: error instanceof Error ? error.message : 'Unknown error', duration },
         'error'
       )
-
       return {
         success: false,
         migrationsRun,
@@ -134,7 +116,6 @@ class DatabaseMigrationManager {
       }
     }
   }
-
   /**
    * Seed database with sample data for development/testing
    */
@@ -144,7 +125,6 @@ class DatabaseMigrationManager {
       true,
       { environment }
     )
-
     try {
       const seeding: DataSeeding = {
         users: 0,
@@ -155,7 +135,6 @@ class DatabaseMigrationManager {
         satelliteData: 0,
         recommendations: 0
       }
-
       // Demo data seeding disabled for production
       // Uncomment below ONLY for development environments
       /*
@@ -167,15 +146,12 @@ class DatabaseMigrationManager {
       seeding.satelliteData += await this.generateSampleSatelliteData()
       seeding.recommendations += await this.generateSampleRecommendations()
       */
-
       await auditLogger.logSystem(
         'database_seeding_completed',
         true,
         { environment, seeding }
       )
-
       return seeding
-
     } catch (error) {
       await auditLogger.logSystem(
         'database_seeding_failed',
@@ -186,11 +162,9 @@ class DatabaseMigrationManager {
         },
         'error'
       )
-      
       throw error
     }
   }
-
   /**
    * Ensure PostGIS extension is enabled
    */
@@ -202,44 +176,35 @@ class DatabaseMigrationManager {
           SELECT 1 FROM pg_extension WHERE extname = 'postgis'
         ) as enabled
       ` as Array<{ enabled: boolean }>
-
       if (!result[0].enabled) {
         // Enable PostGIS extension
         await prisma.$executeRaw`CREATE EXTENSION IF NOT EXISTS postgis`
-
       } else {
-
       }
-
     } catch (error) {
       console.error('Error ensuring PostGIS extension:', error)
       throw error
     }
   }
-
   /**
    * Populate field boundaries for existing fields
    */
   private async populateFieldBoundaries(): Promise<{ fieldsProcessed: number }> {
     try {
       await createSampleFieldBoundaries()
-      
       const fieldsWithBoundaries = await prisma.$queryRaw`
         SELECT COUNT(*) as count 
         FROM fields 
         WHERE boundary IS NOT NULL
       ` as Array<{ count: bigint }>
-
       return {
         fieldsProcessed: Number(fieldsWithBoundaries[0].count)
       }
-
     } catch (error) {
       console.error('Error populating field boundaries:', error)
       throw error
     }
   }
-
   /**
    * Create database indexes for optimization
    */
@@ -248,45 +213,35 @@ class DatabaseMigrationManager {
       // Weather data indexes
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_weather_data_field_timestamp 
        ON weather_data (field_id, timestamp DESC)`,
-      
       // Satellite data indexes
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_satellite_data_field_date 
        ON satellite_data (field_id, capture_date DESC)`,
-      
       // Farm location index
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_farms_location 
        ON farms (latitude, longitude)`,
-      
       // Crop status index
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_crops_status_date 
        ON crops (status, planting_date DESC)`,
-      
       // Market prices index
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_market_prices_commodity_date 
        ON market_prices (commodity, date DESC)`,
-      
       // Recommendations priority index
       `CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_recommendations_priority_date 
        ON recommendations (priority, created_at DESC)`
     ]
-
     for (const indexSQL of indexes) {
       try {
         await prisma.$executeRawUnsafe(indexSQL)
-
       } catch (error) {
         // Index might already exist, log but don't fail
-
       }
     }
   }
-
   /**
    * Migrate legacy data formats
    */
   private async migrateLegacyData(): Promise<{ recordsUpdated: number }> {
     let recordsUpdated = 0
-
     try {
       // Update any legacy coordinate formats
       const fieldsWithoutProperArea = await prisma.field.findMany({
@@ -297,37 +252,29 @@ class DatabaseMigrationManager {
           farm: true
         }
       })
-
       for (const field of fieldsWithoutProperArea) {
         // Calculate area from boundary if available, or estimate from farm size
         const estimatedArea = Math.random() * 10 + 5 // 5-15 hectares estimate
-        
         await prisma.field.update({
           where: { id: field.id },
           data: { area: estimatedArea }
         })
-        
         recordsUpdated++
       }
-
       return { recordsUpdated }
-
     } catch (error) {
       console.error('Error migrating legacy data:', error)
       throw error
     }
   }
-
   /**
    * Clean up orphaned records
    */
   private async cleanupOrphanedRecords(): Promise<{ recordsDeleted: number }> {
     let recordsDeleted = 0
-
     try {
       // Clean up old weather data (older than 2 years)
       const twoYearsAgo = new Date(Date.now() - 2 * 365 * 24 * 60 * 60 * 1000)
-      
       const deletedWeatherData = await prisma.weatherData.deleteMany({
         where: {
           timestamp: {
@@ -335,12 +282,9 @@ class DatabaseMigrationManager {
           }
         }
       })
-      
       recordsDeleted += deletedWeatherData.count
-
       // Clean up old market prices (older than 1 year)
       const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
-      
       const deletedMarketPrices = await prisma.marketPrice.deleteMany({
         where: {
           date: {
@@ -348,17 +292,13 @@ class DatabaseMigrationManager {
           }
         }
       })
-      
       recordsDeleted += deletedMarketPrices.count
-
       return { recordsDeleted }
-
     } catch (error) {
       console.error('Error cleaning up orphaned records:', error)
       throw error
     }
   }
-
   /**
    * Update database statistics
    */
@@ -366,13 +306,11 @@ class DatabaseMigrationManager {
     try {
       // Update table statistics for query optimization
       await prisma.$executeRaw`ANALYZE`
-
     } catch (error) {
       console.error('Error updating database statistics:', error)
       throw error
     }
   }
-
   /**
    * Create demo users for testing
    */
@@ -394,7 +332,6 @@ class DatabaseMigrationManager {
         role: 'AGRONOMIST' as const
       }
     ]
-
     let created = 0
     for (const userData of demoUsers) {
       try {
@@ -408,13 +345,10 @@ class DatabaseMigrationManager {
         })
         created++
       } catch (error) {
-
       }
     }
-
     return created
   }
-
   /**
    * Create sample farms
    */
@@ -422,11 +356,9 @@ class DatabaseMigrationManager {
     const demoUser = await prisma.user.findUnique({
       where: { email: 'demo@crops.ai' }
     })
-
     if (!demoUser) {
       return 0
     }
-
     const sampleFarms = [
       {
         name: 'Green Valley Farm',
@@ -451,26 +383,21 @@ class DatabaseMigrationManager {
         location: 'Prairie Wind Farm, Iowa'
       }
     ]
-
     let created = 0
     for (const farmData of sampleFarms) {
       try {
         const existingFarm = await prisma.farm.findFirst({
           where: { name: farmData.name, ownerId: farmData.ownerId }
         })
-
         if (!existingFarm) {
           await prisma.farm.create({ data: farmData })
           created++
         }
       } catch (error) {
-
       }
     }
-
     return created
   }
-
   /**
    * Create sample fields
    */
@@ -482,17 +409,14 @@ class DatabaseMigrationManager {
         }
       }
     })
-
     let created = 0
     for (const farm of farms) {
       const fieldCount = Math.floor(Math.random() * 3) + 2 // 2-4 fields per farm
-      
       for (let i = 1; i <= fieldCount; i++) {
         try {
           const existingField = await prisma.field.findFirst({
             where: { name: `Field ${i}`, farmId: farm.id }
           })
-
           if (!existingField) {
             await prisma.field.create({
               data: {
@@ -505,32 +429,26 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-
         }
       }
     }
-
     return created
   }
-
   /**
    * Create sample crops
    */
   private async createSampleCrops(): Promise<number> {
     const fields = await prisma.field.findMany()
     const cropTypes = ['Corn', 'Soybeans', 'Wheat', 'Cotton']
-    
     let created = 0
     for (const field of fields) {
       try {
         const existingCrop = await prisma.crop.findFirst({
           where: { fieldId: field.id }
         })
-
         if (!existingCrop) {
           const plantingDate = new Date(2024, 3, Math.floor(Math.random() * 30) + 1) // April
           const harvestDate = new Date(2024, 9, Math.floor(Math.random() * 30) + 1) // October
-
           await prisma.crop.create({
             data: {
               fieldId: field.id,
@@ -545,26 +463,21 @@ class DatabaseMigrationManager {
           created++
         }
       } catch (error) {
-
       }
     }
-
     return created
   }
-
   /**
    * Generate sample weather data
    */
   private async generateSampleWeatherData(): Promise<number> {
     const fields = await prisma.field.findMany()
     let created = 0
-
     for (const field of fields) {
       // Create 30 days of sample weather data
       for (let i = 0; i < 30; i++) {
         try {
           const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
-          
           const existingWeather = await prisma.weatherData.findFirst({
             where: { 
               fieldId: field.id,
@@ -574,7 +487,6 @@ class DatabaseMigrationManager {
               }
             }
           })
-
           if (!existingWeather) {
             await prisma.weatherData.create({
               data: {
@@ -592,27 +504,22 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-
         }
       }
     }
-
     return created
   }
-
   /**
    * Generate sample satellite data
    */
   private async generateSampleSatelliteData(): Promise<number> {
     const fields = await prisma.field.findMany()
     let created = 0
-
     for (const field of fields) {
       // Create weekly satellite data for past 12 weeks
       for (let i = 0; i < 12; i++) {
         try {
           const date = new Date(Date.now() - i * 7 * 24 * 60 * 60 * 1000)
-          
           const existingSatellite = await prisma.satelliteData.findFirst({
             where: { 
               fieldId: field.id,
@@ -622,11 +529,9 @@ class DatabaseMigrationManager {
               }
             }
           })
-
           if (!existingSatellite) {
             const ndvi = Math.random() * 0.6 + 0.2 // 0.2-0.8 NDVI
             const stressLevels = ['NONE', 'LOW', 'MODERATE', 'HIGH', 'SEVERE'] as const
-            
             await prisma.satelliteData.create({
               data: {
                 fieldId: field.id,
@@ -639,43 +544,35 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-
         }
       }
     }
-
     return created
   }
-
   /**
    * Generate sample recommendations
    */
   private async generateSampleRecommendations(): Promise<number> {
     const fields = await prisma.field.findMany()
     let created = 0
-
     const recommendationTypes = [
       { type: 'irrigation', title: 'Irrigation Recommendation', description: 'Apply 25mm irrigation within next 3 days' },
       { type: 'fertilization', title: 'Fertilizer Application', description: 'Apply nitrogen fertilizer at 120kg/ha' },
       { type: 'pest_control', title: 'Pest Monitoring', description: 'Monitor for corn borer activity in field' },
       { type: 'harvest', title: 'Harvest Planning', description: 'Prepare for harvest in 2-3 weeks' }
     ]
-
     for (const field of fields) {
       // Create 2-3 recommendations per field
       const recCount = Math.floor(Math.random() * 2) + 2
-      
       for (let i = 0; i < recCount; i++) {
         try {
           const rec = recommendationTypes[Math.floor(Math.random() * recommendationTypes.length)]
-          
           const existing = await prisma.recommendation.findFirst({
             where: { 
               fieldId: field.id,
               recommendationType: rec.type
             }
           })
-
           if (!existing) {
             await prisma.recommendation.create({
               data: {
@@ -693,15 +590,12 @@ class DatabaseMigrationManager {
             created++
           }
         } catch (error) {
-
         }
       }
     }
-
     return created
   }
 }
-
 // Export singleton instance
 export const migrationManager = new DatabaseMigrationManager()
 export { DatabaseMigrationManager }

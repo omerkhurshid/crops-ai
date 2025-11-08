@@ -1,5 +1,4 @@
 import { prisma } from '../prisma'
-
 export interface Template {
   id: string
   name: string
@@ -15,7 +14,6 @@ export interface Template {
   createdAt?: Date
   updatedAt?: Date
 }
-
 export interface TemplateInstance {
   id: string
   templateId: string
@@ -29,7 +27,6 @@ export interface TemplateInstance {
   createdAt: Date
   updatedAt: Date
 }
-
 export class TemplateManager {
   static async createTemplate(
     userId: string,
@@ -50,28 +47,22 @@ export class TemplateManager {
         createdById: userId
       }
     })
-
     return this.mapToTemplate(dbTemplate)
   }
-
   static async getTemplates(filters?: any): Promise<Template[]> {
     const where: any = {}
-    
     if (filters?.category) where.category = filters.category
     if (filters?.cropType) where.cropType = filters.cropType
     if (filters?.isPublic !== undefined) where.isPublic = filters.isPublic
     if (filters?.tags && filters.tags.length > 0) {
       where.tags = { hasSome: filters.tags }
     }
-
     const templates = await prisma.farmTemplate.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     })
-
     return templates.map(this.mapToTemplate)
   }
-
   static async getTemplate(templateId: string, userId: string): Promise<Template | null> {
     const template = await prisma.farmTemplate.findFirst({
       where: {
@@ -82,10 +73,8 @@ export class TemplateManager {
         ]
       }
     })
-
     return template ? this.mapToTemplate(template) : null
   }
-
   static async createInstance(
     templateId: string,
     farmId: string,
@@ -98,9 +87,7 @@ export class TemplateManager {
     if (!template) {
       throw new Error('Template not found or access denied')
     }
-
     this.validateVariables(template.variables, variables)
-
     const instance = await prisma.templateInstance.create({
       data: {
         templateId,
@@ -113,19 +100,15 @@ export class TemplateManager {
         completedSteps: []
       }
     })
-
     return this.mapToTemplateInstance(instance)
   }
-
   static async startInstance(instanceId: string, userId: string): Promise<TemplateInstance> {
     const instance = await prisma.templateInstance.findFirst({
       where: { id: instanceId, userId }
     })
-
     if (!instance) {
       throw new Error('Template instance not found')
     }
-
     const updatedInstance = await prisma.templateInstance.update({
       where: { id: instanceId },
       data: { 
@@ -133,10 +116,8 @@ export class TemplateManager {
         updatedAt: new Date()
       }
     })
-
     return this.mapToTemplateInstance(updatedInstance)
   }
-
   static async completeStep(
     instanceId: string,
     stepId: string,
@@ -147,18 +128,15 @@ export class TemplateManager {
     const instance = await prisma.templateInstance.findFirst({
       where: { id: instanceId, userId }
     })
-
     if (!instance) {
       throw new Error('Template instance not found')
     }
-
     const completedSteps = [...(instance.completedSteps as any[]), {
       stepId,
       completedAt: new Date(),
       results,
       notes
     }]
-
     const updatedInstance = await prisma.templateInstance.update({
       where: { id: instanceId },
       data: {
@@ -167,10 +145,8 @@ export class TemplateManager {
         updatedAt: new Date()
       }
     })
-
     return this.mapToTemplateInstance(updatedInstance)
   }
-
   static async getFarmInstances(
     farmId: string,
     userId: string,
@@ -178,33 +154,26 @@ export class TemplateManager {
   ): Promise<TemplateInstance[]> {
     const where: any = { farmId, userId }
     if (status) where.status = status
-
     const instances = await prisma.templateInstance.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     })
-
     return instances.map(this.mapToTemplateInstance)
   }
-
   static async getBuiltInTemplates(): Promise<Template[]> {
     const templates = await prisma.farmTemplate.findMany({
       where: { isPublic: true },
       orderBy: { name: 'asc' }
     })
-
     return templates.map(this.mapToTemplate)
   }
-
   private static validateVariables(templateVariables: any[], instanceVariables: any): void {
     for (const templateVar of templateVariables) {
       if (templateVar.required && !(templateVar.name in instanceVariables)) {
         throw new Error(`Required variable '${templateVar.name}' is missing`)
       }
-
       if (templateVar.name in instanceVariables) {
         const value = instanceVariables[templateVar.name]
-        
         switch (templateVar.type) {
           case 'number':
             if (typeof value !== 'number') {
@@ -230,7 +199,6 @@ export class TemplateManager {
       }
     }
   }
-
   private static mapToTemplate(data: any): Template {
     return {
       id: data.id,
@@ -248,7 +216,6 @@ export class TemplateManager {
       updatedAt: data.updatedAt
     }
   }
-
   private static mapToTemplateInstance(data: any): TemplateInstance {
     return {
       id: data.id,
@@ -265,5 +232,4 @@ export class TemplateManager {
     }
   }
 }
-
 export default TemplateManager

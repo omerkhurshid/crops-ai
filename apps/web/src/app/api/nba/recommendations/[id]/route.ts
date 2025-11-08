@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { prisma } from '../../../../../lib/prisma'
 import { z } from 'zod'
-
 const updateRecommendationSchema = z.object({
   status: z.enum(['PENDING', 'ACCEPTED', 'REJECTED', 'COMPLETED']).optional(),
   userResponse: z.string().optional(),
@@ -16,7 +15,6 @@ const updateRecommendationSchema = z.object({
     wouldRecommendAgain: z.boolean().optional()
   }).optional()
 })
-
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -26,10 +24,8 @@ export async function PATCH(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const updateData = updateRecommendationSchema.parse(body)
-
     // Find the recommendation
     const recommendation = await prisma.decisionRecommendation.findFirst({
       where: {
@@ -37,11 +33,9 @@ export async function PATCH(
         userId: user.id
       }
     })
-
     if (!recommendation) {
       return NextResponse.json({ error: 'Recommendation not found' }, { status: 404 })
     }
-
     // Update the recommendation
     const updatedRecommendation = await prisma.decisionRecommendation.update({
       where: { id: params.id },
@@ -53,7 +47,6 @@ export async function PATCH(
         updatedAt: new Date()
       }
     })
-
     // If status is COMPLETED and we have actual outcome data, create decision execution record
     if (updateData.status === 'COMPLETED' && updateData.actualOutcome) {
       await prisma.decisionExecution.create({
@@ -82,7 +75,6 @@ export async function PATCH(
         }
       })
     }
-
     return NextResponse.json({
       success: true,
       recommendation: {
@@ -94,7 +86,6 @@ export async function PATCH(
         updatedAt: updatedRecommendation.updatedAt
       }
     })
-
   } catch (error) {
     console.error('Error updating recommendation:', error)
     return NextResponse.json(
@@ -103,7 +94,6 @@ export async function PATCH(
     )
   }
 }
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -113,7 +103,6 @@ export async function GET(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const recommendation = await prisma.decisionRecommendation.findFirst({
       where: {
         id: params.id,
@@ -125,11 +114,9 @@ export async function GET(
         }
       }
     })
-
     if (!recommendation) {
       return NextResponse.json({ error: 'Recommendation not found' }, { status: 404 })
     }
-
     return NextResponse.json({
       recommendation: {
         id: recommendation.id,
@@ -165,7 +152,6 @@ export async function GET(
         completedAt: recommendation.completedAt
       }
     })
-
   } catch (error) {
     console.error('Error fetching recommendation:', error)
     return NextResponse.json(
@@ -174,7 +160,6 @@ export async function GET(
     )
   }
 }
-
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -184,18 +169,15 @@ export async function DELETE(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const recommendation = await prisma.decisionRecommendation.findFirst({
       where: {
         id: params.id,
         userId: user.id
       }
     })
-
     if (!recommendation) {
       return NextResponse.json({ error: 'Recommendation not found' }, { status: 404 })
     }
-
     // Soft delete by updating status
     await prisma.decisionRecommendation.update({
       where: { id: params.id },
@@ -205,9 +187,7 @@ export async function DELETE(
         updatedAt: new Date()
       }
     })
-
     return NextResponse.json({ success: true })
-
   } catch (error) {
     console.error('Error deleting recommendation:', error)
     return NextResponse.json(

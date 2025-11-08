@@ -8,7 +8,6 @@ import {
   ArrowRight, DollarSign, Calculator, HelpCircle,
   Sprout, MapPin, Activity, Brain, Shield, Headphones
 } from 'lucide-react'
-
 export default function PricingPage() {
   const plans = [
     {
@@ -77,7 +76,6 @@ export default function PricingPage() {
       color: "golden"
     }
   ]
-
   const addOns = [
     {
       name: "IoT Sensor Integration",
@@ -100,7 +98,6 @@ export default function PricingPage() {
       description: "ERP, accounting, and equipment management system connections"
     }
   ]
-
   const faq = [
     {
       question: "How accurate is the field monitoring?",
@@ -127,11 +124,9 @@ export default function PricingPage() {
       answer: "Basic plan checks your fields weekly, Farm Pro checks daily. You'll get regular updates on how your crops are doing."
     }
   ]
-
   return (
     <div className="minimal-page">
       <Navbar />
-      
       {/* Animated Background */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <DollarSign className="h-8 w-8 text-sage-600" />
@@ -139,7 +134,6 @@ export default function PricingPage() {
       <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
         <Calculator className="h-8 w-8 text-sage-600" />
       </div>
-      
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-20">
@@ -147,18 +141,15 @@ export default function PricingPage() {
             <Star className="h-4 w-4 mr-2" />
             Transparent Pricing
           </Badge>
-          
           <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-8 tracking-tight">
             Choose Your
             <br />
             <span className="text-sage-500">Farming Plan</span>
           </h1>
-          
           <p className="text-xl text-sage-600 font-light leading-relaxed mb-12 max-w-3xl mx-auto">
             Scale your agricultural intelligence with flexible pricing designed for farms of all sizes. 
             Start free, upgrade as you grow.
           </p>
-          
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="flex items-center gap-2 text-sage-600">
               <Check className="h-5 w-5 text-sage-500" />
@@ -174,7 +165,6 @@ export default function PricingPage() {
             </div>
           </div>
         </div>
-
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {plans.map((plan, index) => (
@@ -193,7 +183,6 @@ export default function PricingPage() {
                   </Badge>
                 </div>
               )}
-              
               <ModernCardHeader className={`${plan.popular ? 'bg-gradient-to-br from-sage-50/90 to-forest-50/90' : ''}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`p-3 rounded-xl ${
@@ -207,7 +196,6 @@ export default function PricingPage() {
                     <ModernCardTitle className="text-xl text-sage-800">{plan.name}</ModernCardTitle>
                   </div>
                 </div>
-                
                 <div className="mb-4">
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-sage-800">
@@ -218,12 +206,10 @@ export default function PricingPage() {
                     )}
                   </div>
                 </div>
-                
                 <ModernCardDescription className="text-sage-600 leading-relaxed">
                   {plan.description}
                 </ModernCardDescription>
               </ModernCardHeader>
-              
               <ModernCardContent className="space-y-6">
                 <div className="space-y-3">
                   {plan.features.map((feature, idx) => (
@@ -232,7 +218,6 @@ export default function PricingPage() {
                       <span className="text-sm text-sage-700">{feature}</span>
                     </div>
                   ))}
-                  
                   {plan.limitations.length > 0 && (
                     <>
                       <div className="border-t border-sage-200/50 pt-3 mt-6"></div>
@@ -245,7 +230,6 @@ export default function PricingPage() {
                     </>
                   )}
                 </div>
-                
                 <div className="pt-6">
                   {plan.name === 'Custom' ? (
                     <InlineFloatingButton
@@ -271,7 +255,6 @@ export default function PricingPage() {
             </ModernCard>
           ))}
         </div>
-
         {/* Add-ons Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
@@ -280,7 +263,6 @@ export default function PricingPage() {
               Enhance your plan with specialized features and premium services
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {addOns.map((addon, index) => (
               <ModernCard key={index} variant="soft" className="hover:variant-floating transition-all">
@@ -304,7 +286,6 @@ export default function PricingPage() {
             ))}
           </div>
         </div>
-
         {/* ROI Calculator */}
         <div className="mb-20">
           <ModernCard variant="glow" className="overflow-hidden">
@@ -326,20 +307,17 @@ export default function PricingPage() {
                   <div className="text-sage-600 font-medium">Yield Increase</div>
                   <div className="text-sm text-sage-500">Through optimized timing and resource management</div>
                 </div>
-                
                 <div className="space-y-3">
                   <div className="text-3xl font-bold text-sage-800">20-40%</div>
                   <div className="text-sage-600 font-medium">Cost Reduction</div>
                   <div className="text-sm text-sage-500">Via precision application and waste reduction</div>
                 </div>
-                
                 <div className="space-y-3">
                   <div className="text-3xl font-bold text-sage-800">25%+</div>
                   <div className="text-sage-600 font-medium">Loss Prevention</div>
                   <div className="text-sm text-sage-500">Through predictive analytics and early warnings</div>
                 </div>
               </div>
-              
               <div className="text-center mt-8">
                 <p className="text-sage-600 mb-6">
                   For a 500-acre farm, this typically means <strong className="text-sage-800">$50,000-$150,000</strong> in additional annual profit
@@ -354,7 +332,6 @@ export default function PricingPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* FAQ Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
@@ -363,7 +340,6 @@ export default function PricingPage() {
               Get answers to common questions about our pricing and features
             </p>
           </div>
-          
           <div className="space-y-4">
             {faq.map((item, index) => (
               <ModernCard key={index} variant="soft">
@@ -380,7 +356,6 @@ export default function PricingPage() {
             ))}
           </div>
         </div>
-
         {/* Final CTA */}
         <ModernCard variant="floating" className="overflow-hidden max-w-4xl mx-auto">
           <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center py-12">

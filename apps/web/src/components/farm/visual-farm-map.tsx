@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { GoogleMap, LoadScript, Polygon, Marker, InfoWindow } from '@react-google-maps/api'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -21,9 +20,7 @@ import {
   Loader2,
   Info
 } from 'lucide-react'
-
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
-
 interface Farm {
   id: string
   name: string
@@ -33,7 +30,6 @@ interface Farm {
   address?: string
   boundary?: Array<{ lat: number; lng: number }>
 }
-
 interface Field {
   id: string
   name: string
@@ -49,12 +45,10 @@ interface Field {
     stressLevel: string
   }
 }
-
 interface VisualFarmMapProps {
   farm: Farm
   onFieldUpdate?: (fieldId: string, updates: Partial<Field>) => void
 }
-
 const defaultFieldColors = [
   '#3b82f6', // blue
   '#10b981', // emerald
@@ -67,12 +61,10 @@ const defaultFieldColors = [
   '#ec4899', // pink
   '#6b7280', // gray
 ]
-
 const mapContainerStyle = {
   width: '100%',
   height: '500px'
 }
-
 export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   const [fields, setFields] = useState<Field[]>([])
   const [loading, setLoading] = useState(true)
@@ -85,9 +77,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   const [mapZoom, setMapZoom] = useState(15)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [showMap, setShowMap] = useState(false)
-
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-
   // Fetch fields for this farm
   const fetchFields = async () => {
     try {
@@ -96,7 +86,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       if (response.ok) {
         const data = await response.json()
         const farmFields = data.fields.filter((field: any) => field.farmId === farm.id)
-        
         // Process fields and assign colors if not set
         const processedFields = farmFields.map((field: any, index: number) => ({
           id: field.id,
@@ -110,7 +99,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
           // Parse boundary from database if it exists
           boundary: field.boundary ? parseFieldBoundary(field.boundary) : undefined
         }))
-        
         setFields(processedFields)
         // Initially show all fields
         setVisibleFields(new Set(processedFields.map((f: Field) => f.id)))
@@ -121,15 +109,12 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchFields()
   }, [farm.id])
-
   const handleLoadMap = () => {
     setShowMap(true)
   }
-
   // Parse field boundary from database format
   const parseFieldBoundary = (boundary: any): Array<{ lat: number; lng: number }> | undefined => {
     try {
@@ -144,12 +129,10 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       return undefined
     }
   }
-
   const handleFieldClick = (field: Field) => {
     setSelectedField(field)
     setShowInfoWindow(true)
   }
-
   const startEditing = (field: Field) => {
     setEditingField(field.id)
     setEditData({
@@ -159,17 +142,14 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       status: field.status
     })
   }
-
   const saveFieldEdits = async () => {
     if (!editingField || !editData) return
-
     try {
       const response = await fetch(`/api/fields/${editingField}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editData)
       })
-
       if (response.ok) {
         // Update local state
         setFields(prev => prev.map(field => 
@@ -177,12 +157,10 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
             ? { ...field, ...editData }
             : field
         ))
-        
         // Callback to parent component
         if (onFieldUpdate && editingField) {
           onFieldUpdate(editingField, editData)
         }
-        
         setEditingField(null)
         setEditData({})
       }
@@ -190,7 +168,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       console.error('Error updating field:', error)
     }
   }
-
   const toggleFieldVisibility = (fieldId: string) => {
     setVisibleFields(prev => {
       const newSet = new Set(prev)
@@ -202,11 +179,9 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       return newSet
     })
   }
-
   const formatArea = (area: number) => {
     return `${area.toFixed(1)} acres`
   }
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800'
@@ -215,7 +190,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   if (!apiKey) {
     return (
       <Card>
@@ -227,7 +201,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       </Card>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Farm Map */}
@@ -295,7 +268,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                   position={{ lat: farm.latitude, lng: farm.longitude }}
                   title={farm.name}
                 />
-
                 {/* Farm boundary */}
                 {farm.boundary && farm.boundary.length > 0 && (
                   <Polygon
@@ -309,7 +281,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                     }}
                   />
                 )}
-
                 {/* Field boundaries */}
                 {fields.map((field) => (
                   field.boundary && 
@@ -330,7 +301,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                     />
                   )
                 ))}
-
                 {/* Info window for selected field */}
                 {selectedField && showInfoWindow && selectedField.boundary && (
                   <InfoWindow
@@ -360,7 +330,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Field Management Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Field List */}
@@ -408,7 +377,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                             className="w-6 h-6 rounded-full border-2 border-gray-300"
                             style={{ backgroundColor: field.color }}
                           />
-                          
                           <div className="flex-1">
                             {editingField === field.id ? (
                               <div className="space-y-2">
@@ -448,14 +416,12 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                             )}
                           </div>
                         </div>
-
                         <div className="flex items-center space-x-2">
                           {field.status && (
                             <Badge variant="secondary" className={getStatusColor(field.status)}>
                               {field.status}
                             </Badge>
                           )}
-                          
                           {editingField === field.id ? (
                             <div className="flex space-x-1">
                               <Button size="sm" onClick={saveFieldEdits}>
@@ -470,7 +436,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                               <Edit3 className="h-3 w-3" />
                             </Button>
                           )}
-                          
                           <Button
                             size="sm"
                             variant="outline"
@@ -484,7 +449,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                           </Button>
                         </div>
                       </div>
-
                       {/* Field stats */}
                       {field.lastAnalysis && (
                         <div className="mt-3 pt-3 border-t border-gray-100">
@@ -510,7 +474,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
             </CardContent>
           </Card>
         </div>
-
         {/* Summary Stats */}
         <div className="space-y-4">
           <Card>
@@ -526,19 +489,16 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                   <div className="text-2xl font-bold">{fields.length}</div>
                   <div className="text-sm text-gray-600">Total Fields</div>
                 </div>
-                
                 <div>
                   <div className="text-2xl font-bold">{farm.totalArea.toFixed(1)}</div>
                   <div className="text-sm text-gray-600">Total Acres</div>
                 </div>
-
                 <div>
                   <div className="text-2xl font-bold">
                     {fields.reduce((sum, field) => sum + field.area, 0).toFixed(1)}
                   </div>
                   <div className="text-sm text-gray-600">Mapped Acres</div>
                 </div>
-
                 {fields.length > 0 && (
                   <div>
                     <div className="text-sm font-medium text-gray-700 mb-2">Field Coverage</div>
@@ -558,7 +518,6 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
               </div>
             </CardContent>
           </Card>
-
           {/* Quick Actions */}
           <Card>
             <CardHeader>

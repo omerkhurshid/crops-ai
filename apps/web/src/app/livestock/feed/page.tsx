@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,8 +7,6 @@ import { FeedManagement } from '../../../components/livestock/feed-management'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { Plus, Activity, DollarSign, TrendingUp, Wheat } from 'lucide-react'
-
-
 export default function FeedPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -23,15 +20,12 @@ export default function FeedPage() {
     totalQuantity30Days: 0 
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -39,27 +33,22 @@ export default function FeedPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=feed')
             return
           }
-
           // Fetch feed records
           const feedResponse = await fetch('/api/livestock/feed')
           if (feedResponse.ok) {
             const records = await feedResponse.json()
             setFeedRecords(records)
-
             // Calculate stats on client side
             const thirtyDaysAgo = new Date()
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-            
             const recentRecords = records.filter((record: any) => 
               new Date(record.feedDate) >= thirtyDaysAgo
             )
-
             const calculatedStats = {
               totalRecords: records.length,
               totalCost30Days: recentRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0),
@@ -67,10 +56,8 @@ export default function FeedPage() {
               totalQuantity30Days: recentRecords.reduce((sum: number, record: any) => sum + (record.quantity || 0), 0)
             }
             calculatedStats.avgCostPerDay = calculatedStats.totalCost30Days / 30
-
             setStats(calculatedStats)
           }
-
           // Fetch animals for feeding
           const animalsResponse = await fetch('/api/livestock/animals')
           if (animalsResponse.ok) {
@@ -85,10 +72,8 @@ export default function FeedPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -99,11 +84,9 @@ export default function FeedPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -123,7 +106,6 @@ export default function FeedPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -141,7 +123,6 @@ export default function FeedPage() {
             />
           </div>
         </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -155,7 +136,6 @@ export default function FeedPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -167,7 +147,6 @@ export default function FeedPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -179,7 +158,6 @@ export default function FeedPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -192,7 +170,6 @@ export default function FeedPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Feed Management */}
         <ModernCard>
           <ModernCardHeader>

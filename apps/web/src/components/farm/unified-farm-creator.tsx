@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
@@ -15,9 +14,7 @@ import {
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
 import { SmartAgricultureSelector } from './smart-agriculture-selector'
-
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
-
 interface SelectedItem {
   id: string
   name: string
@@ -32,7 +29,6 @@ interface SelectedItem {
     typicalHerdSize?: string
   }
 }
-
 interface Farm {
   name: string
   type: string
@@ -42,7 +38,6 @@ interface Farm {
   fields?: Field[]
   selectedAgriculture?: SelectedItem[]
 }
-
 interface Field {
   id: string
   name: string
@@ -50,7 +45,6 @@ interface Field {
   boundaries: Array<{ lat: number; lng: number }>
   color?: string
 }
-
 const farmTypes = [
   { id: 'crops', label: 'Row Crops', icon: Wheat, desc: 'Corn, soybeans, wheat' },
   { id: 'livestock', label: 'Livestock', icon: Beef, desc: 'Cattle, pigs, sheep' },
@@ -58,12 +52,10 @@ const farmTypes = [
   { id: 'forestry', label: 'Forestry', icon: TreePine, desc: 'Timber, wood products' },
   { id: 'greenhouse', label: 'Greenhouse', icon: Flower2, desc: 'Protected cultivation' },
 ]
-
 const fieldColors = [
   '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', 
   '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6b7280'
 ]
-
 export function UnifiedFarmCreator() {
   const [farm, setFarm] = useState<Farm>({
     name: '',
@@ -81,19 +73,16 @@ export function UnifiedFarmCreator() {
   const [activeField, setActiveField] = useState<string | null>(null)
   const [showMap, setShowMap] = useState(false)
   const router = useRouter()
-
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   const isBasicInfoComplete = farm.name && farm.type && farm.location.lat !== 0
   const hasValidBoundaries = farm.boundaries && farm.boundaries.length >= 3
   const canCreateFields = hasValidBoundaries
-
   const handleAgricultureSelection = (selectedItems: SelectedItem[]) => {
     setFarm(prev => ({
       ...prev,
       selectedAgriculture: selectedItems
     }))
   }
-
   const getCurrentLocation = () => {
     setDetectingLocation(true)
     if ('geolocation' in navigator) {
@@ -101,14 +90,12 @@ export function UnifiedFarmCreator() {
         async (position) => {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
-          
           try {
             // Try to get a friendly location name using reverse geocoding
             const response = await fetch(`/api/weather/reverse-geocoding?latitude=${lat}&longitude=${lng}&limit=1`)
             if (response.ok) {
               const data = await response.json()
               const locationName = data.results?.[0]?.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`
-              
               setFarm(prev => ({
                 ...prev,
                 location: { lat, lng, address: locationName }
@@ -126,14 +113,12 @@ export function UnifiedFarmCreator() {
               location: { lat, lng }
             }))
           }
-          
           setDetectingLocation(false)
           setShowMap(true)
         },
         (error) => {
           console.error('Error getting location:', error)
           setDetectingLocation(false)
-          
           let errorMessage = 'Unable to get your location. Please enter it manually.'
           if (error.code === error.PERMISSION_DENIED) {
             errorMessage = 'Location access denied. Please enable location permissions or enter your address manually.'
@@ -142,7 +127,6 @@ export function UnifiedFarmCreator() {
           } else if (error.code === error.TIMEOUT) {
             errorMessage = 'Location request timed out. Please try again or enter your address manually.'
           }
-          
           alert(errorMessage)
         }
       )
@@ -151,24 +135,19 @@ export function UnifiedFarmCreator() {
       alert('Geolocation is not supported by this browser. Please enter your address manually.')
     }
   }
-
   const parseLocationInput = async () => {
     if (!locationInput.trim()) return
-
     setGeocodingLocation(true)
     const coordPattern = /^-?\d+\.?\d*,\s*-?\d+\.?\d*$/
-    
     if (coordPattern.test(locationInput.trim())) {
       // Direct coordinate input
       const [lat, lng] = locationInput.split(',').map(coord => parseFloat(coord.trim()))
-      
       try {
         // Try to get location name from coordinates using reverse geocoding
         const response = await fetch(`/api/weather/reverse-geocoding?latitude=${lat}&longitude=${lng}&limit=1`)
         if (response.ok) {
           const data = await response.json()
           const locationName = data.results?.[0]?.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`
-          
           setFarm(prev => ({ 
             ...prev, 
             location: { lat, lng, address: locationName }
@@ -180,7 +159,6 @@ export function UnifiedFarmCreator() {
         console.error('Error getting location name:', error)
         setFarm(prev => ({ ...prev, location: { lat, lng } }))
       }
-      
       setShowMap(true)
     } else {
       // Address input - use geocoding to get coordinates
@@ -188,7 +166,6 @@ export function UnifiedFarmCreator() {
         const response = await fetch(`/api/weather/geocoding?address=${encodeURIComponent(locationInput.trim())}&limit=1`)
         if (response.ok) {
           const data = await response.json()
-          
           if (data.results && data.results.length > 0) {
             const result = data.results[0]
             setFarm(prev => ({
@@ -221,16 +198,13 @@ export function UnifiedFarmCreator() {
         setShowMap(true)
       }
     }
-    
     setGeocodingLocation(false)
   }
-
   const resetCoordinates = () => {
     const hasData = farm.boundaries || farm.fields?.length
     const message = hasData 
       ? 'This will reset your location and remove all farm boundaries and fields. Are you sure?'
       : 'This will reset your farm location. Are you sure?'
-    
     if (window.confirm(message)) {
       setFarm(prev => ({
         ...prev,
@@ -242,64 +216,50 @@ export function UnifiedFarmCreator() {
       setLocationInput('')
       setShowMap(false)
       setActiveField(null)
-      
       // Reset drawing manager if it exists
       if (drawingManager) {
         drawingManager.setDrawingMode(null)
       }
     }
   }
-
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
     setGoogleMapsLoaded(true)
   }, [])
-
   const onDrawingManagerLoad = useCallback((drawingManager: google.maps.drawing.DrawingManager) => {
     setDrawingManager(drawingManager)
   }, [])
-
   const onFarmBoundaryComplete = useCallback((polygon: google.maps.Polygon) => {
     if (!window.google?.maps?.geometry) return
-
     const path = polygon.getPath()
     const coordinates: Array<{ lat: number; lng: number }> = []
-    
     for (let i = 0; i < path.getLength(); i++) {
       const latLng = path.getAt(i)
       coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
     }
-
     // Calculate area
     const area = window.google.maps.geometry.spherical.computeArea(path)
     const areaInAcres = Math.round(area / 4047) // Convert sq meters to acres
-
     setFarm(prev => ({
       ...prev,
       boundaries: coordinates,
       totalArea: areaInAcres
     }))
-
     polygon.setMap(null)
     if (drawingManager) {
       drawingManager.setDrawingMode(null)
     }
   }, [drawingManager])
-
   const onFieldBoundaryComplete = useCallback((polygon: google.maps.Polygon) => {
     if (!window.google?.maps?.geometry || !hasValidBoundaries) return
-
     const path = polygon.getPath()
     const coordinates: Array<{ lat: number; lng: number }> = []
-    
     for (let i = 0; i < path.getLength(); i++) {
       const latLng = path.getAt(i)
       coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
     }
-
     const area = window.google.maps.geometry.spherical.computeArea(path)
     const areaInAcres = Math.round(area / 4047)
-
     const newField: Field = {
       id: `field-${Date.now()}`,
       name: `Field ${(farm.fields?.length || 0) + 1}`,
@@ -307,31 +267,26 @@ export function UnifiedFarmCreator() {
       boundaries: coordinates,
       color: fieldColors[(farm.fields?.length || 0) % fieldColors.length]
     }
-
     setFarm(prev => ({
       ...prev,
       fields: [...(prev.fields || []), newField]
     }))
-
     polygon.setMap(null)
     if (drawingManager) {
       drawingManager.setDrawingMode(null)
     }
   }, [drawingManager, hasValidBoundaries, farm.fields])
-
   const deleteField = (fieldId: string) => {
     setFarm(prev => ({
       ...prev,
       fields: prev.fields?.filter(f => f.id !== fieldId) || []
     }))
   }
-
   const resetBoundaries = () => {
     const hasFields = farm.fields?.length
     const message = hasFields
       ? 'This will remove farm boundaries and all field boundaries. Are you sure?'
       : 'This will remove your farm boundaries. Are you sure?'
-    
     if (window.confirm(message)) {
       setFarm(prev => ({
         ...prev,
@@ -340,14 +295,12 @@ export function UnifiedFarmCreator() {
         fields: undefined
       }))
       setActiveField(null)
-      
       // Reset drawing manager if it exists
       if (drawingManager) {
         drawingManager.setDrawingMode(null)
       }
     }
   }
-
   const clearAllFields = () => {
     if (window.confirm('This will remove all field boundaries. Are you sure?')) {
       setFarm(prev => ({
@@ -357,12 +310,9 @@ export function UnifiedFarmCreator() {
       setActiveField(null)
     }
   }
-
   const getFieldColor = (index: number) => fieldColors[index % fieldColors.length]
-
   const submitFarm = async () => {
     if (!isBasicInfoComplete) return
-
     setIsLoading(true)
     try {
       const response = await fetch('/api/farms', {
@@ -379,11 +329,8 @@ export function UnifiedFarmCreator() {
           selectedAgriculture: farm.selectedAgriculture || []
         })
       })
-
       if (!response.ok) throw new Error('Failed to create farm')
-      
       const result = await response.json()
-      
       // Create fields if mapped
       if (farm.fields && result.farm?.id) {
         for (let i = 0; i < farm.fields.length; i++) {
@@ -405,7 +352,6 @@ export function UnifiedFarmCreator() {
           })
         }
       }
-
       router.push('/dashboard')
     } catch (error) {
       console.error('Error creating farm:', error)
@@ -414,7 +360,6 @@ export function UnifiedFarmCreator() {
       setIsLoading(false)
     }
   }
-
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Header */}
@@ -422,7 +367,6 @@ export function UnifiedFarmCreator() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Farm</h1>
         <p className="text-lg text-gray-600">Set up your farm profile and map your fields</p>
       </div>
-
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Basic Information */}
         <ModernCard variant="soft">
@@ -444,7 +388,6 @@ export function UnifiedFarmCreator() {
                 className="mt-1"
               />
             </div>
-
             <div>
               <Label>Farm Type</Label>
               <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2 mt-2">
@@ -472,7 +415,6 @@ export function UnifiedFarmCreator() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Smart Agriculture Selection */}
         <ModernCard variant="soft">
           <ModernCardHeader>
@@ -492,7 +434,6 @@ export function UnifiedFarmCreator() {
             />
           </ModernCardContent>
         </ModernCard>
-
         {/* Location */}
         <ModernCard variant="soft">
           <ModernCardHeader>
@@ -522,7 +463,6 @@ export function UnifiedFarmCreator() {
                 )}
               </Button>
             </div>
-
             <div className="flex gap-2">
               <Button
                 onClick={getCurrentLocation}
@@ -538,7 +478,6 @@ export function UnifiedFarmCreator() {
                 Use Current Location
               </Button>
             </div>
-
             {farm.location.lat !== 0 && (
               <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                 <div className="flex items-center gap-2 text-sm text-green-600">
@@ -561,7 +500,6 @@ export function UnifiedFarmCreator() {
             )}
           </ModernCardContent>
         </ModernCard>
-
         {/* Farm Mapping */}
         <ModernCard variant="soft">
           <ModernCardHeader>
@@ -624,7 +562,6 @@ export function UnifiedFarmCreator() {
                       }}
                     >
                       <Marker position={farm.location} />
-                      
                       {/* Farm boundary */}
                       {farm.boundaries && farm.boundaries.length > 0 && (
                         <Polygon
@@ -638,7 +575,6 @@ export function UnifiedFarmCreator() {
                           }}
                         />
                       )}
-
                       {/* Field boundaries */}
                       {farm.fields?.map((field) => (
                         <Polygon
@@ -653,7 +589,6 @@ export function UnifiedFarmCreator() {
                           }}
                         />
                       ))}
-
                       {googleMapsLoaded && (
                         <DrawingManager
                           onLoad={onDrawingManagerLoad}
@@ -678,7 +613,6 @@ export function UnifiedFarmCreator() {
                     </GoogleMap>
                   </LoadScript>
                 </div>
-                
                 {/* Enhanced Map Instructions */}
                 <div className="space-y-3">
                   {!hasValidBoundaries ? (
@@ -709,7 +643,6 @@ export function UnifiedFarmCreator() {
                       </AlertDescription>
                     </Alert>
                   )}
-                  
                   {farm.totalArea && (
                     <div className="text-center p-3 bg-gray-50 rounded-lg">
                       <p className="text-sm text-gray-600">
@@ -726,7 +659,6 @@ export function UnifiedFarmCreator() {
             )}
           </ModernCardContent>
         </ModernCard>
-
         {/* Field Summary */}
         {hasValidBoundaries && (
           <ModernCard variant="soft">
@@ -789,7 +721,6 @@ export function UnifiedFarmCreator() {
             </ModernCardContent>
           </ModernCard>
         )}
-
         {/* Create Farm Button */}
         <ModernCard variant="soft">
           <ModernCardContent className="pt-6">
@@ -801,7 +732,6 @@ export function UnifiedFarmCreator() {
                 </AlertDescription>
               </Alert>
             )}
-
             <Button
               onClick={submitFarm}
               disabled={!isBasicInfoComplete || isLoading}
@@ -820,7 +750,6 @@ export function UnifiedFarmCreator() {
                 </>
               )}
             </Button>
-
             <p className="text-sm text-gray-600 text-center mt-3">
               {hasValidBoundaries 
                 ? "Fields are optional - you can add them later from your dashboard"

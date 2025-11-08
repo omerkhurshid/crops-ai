@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -7,8 +6,6 @@ import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { LivestockFinancials } from '../../../components/livestock/livestock-financials'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { DollarSign, TrendingUp, TrendingDown, Calculator, PieChart } from 'lucide-react'
-
-
 export default function LivestockFinancialsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -30,15 +27,12 @@ export default function LivestockFinancialsPage() {
     }
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -46,13 +40,11 @@ export default function LivestockFinancialsPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=financials')
             return
           }
-
           // Fetch comprehensive financial data
           const [animalsResponse, healthResponse, feedResponse, breedingResponse] = await Promise.all([
             fetch('/api/livestock/animals'),
@@ -60,32 +52,27 @@ export default function LivestockFinancialsPage() {
             fetch('/api/livestock/feed'),
             fetch('/api/livestock/breeding')
           ])
-
           if (animalsResponse.ok && healthResponse.ok && feedResponse.ok && breedingResponse.ok) {
             const animals = await animalsResponse.json()
             const healthRecords = await healthResponse.json()
             const feedRecords = await feedResponse.json()
             const breedingRecords = await breedingResponse.json()
-
             // Group records by animal ID
             const animalHealthMap = healthRecords.reduce((acc: any, record: any) => {
               if (!acc[record.animalId]) acc[record.animalId] = []
               acc[record.animalId].push(record)
               return acc
             }, {})
-
             const animalFeedMap = feedRecords.reduce((acc: any, record: any) => {
               if (!acc[record.animalId]) acc[record.animalId] = []
               acc[record.animalId].push(record)
               return acc
             }, {})
-
             const animalBreedingMap = breedingRecords.reduce((acc: any, record: any) => {
               if (!acc[record.animalId]) acc[record.animalId] = []
               acc[record.animalId].push(record)
               return acc
             }, {})
-
             // Combine all data and calculate financials
             const enrichedAnimals = animals.map((animal: any) => ({
               ...animal,
@@ -93,7 +80,6 @@ export default function LivestockFinancialsPage() {
               feedRecords: animalFeedMap[animal.id] || [],
               breedingRecords: animalBreedingMap[animal.id] || []
             }))
-
             // Calculate financial metrics
             const newFinancialData = {
               totalInvestment: 0,
@@ -111,42 +97,34 @@ export default function LivestockFinancialsPage() {
                 breeding: 0
               }
             }
-
             const thirtyDaysAgo = new Date()
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-
             // Calculate total investment and current value
             newFinancialData.totalInvestment = enrichedAnimals.reduce((sum: number, animal: any) => {
               const purchasePrice = animal.purchasePrice || 0
               const healthCosts = animal.healthRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
               const feedCosts = animal.feedRecords.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
               const breedingCosts = animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
-              
               return sum + purchasePrice + healthCosts + feedCosts + breedingCosts
             }, 0)
-
             newFinancialData.totalValue = enrichedAnimals.reduce((sum: number, animal: any) => sum + (animal.currentValue || animal.purchasePrice || 0), 0)
             newFinancialData.profitLoss = newFinancialData.totalValue - newFinancialData.totalInvestment
-
             // Calculate 30-day costs
             newFinancialData.feedCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
               return sum + animal.feedRecords
                 .filter((record: any) => new Date(record.feedDate) >= thirtyDaysAgo)
                 .reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
             }, 0)
-
             newFinancialData.healthCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
               return sum + animal.healthRecords
                 .filter((record: any) => new Date(record.recordDate) >= thirtyDaysAgo)
                 .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
             }, 0)
-
             newFinancialData.breedingCosts30Days = enrichedAnimals.reduce((sum: number, animal: any) => {
               return sum + animal.breedingRecords
                 .filter((record: any) => new Date(record.breedingDate) >= thirtyDaysAgo)
                 .reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
             }, 0)
-
             // Cost breakdown
             newFinancialData.costBreakdown.purchase = enrichedAnimals.reduce((sum: number, animal: any) => sum + (animal.purchasePrice || 0), 0)
             newFinancialData.costBreakdown.feed = enrichedAnimals.reduce((sum: number, animal: any) => {
@@ -158,12 +136,10 @@ export default function LivestockFinancialsPage() {
             newFinancialData.costBreakdown.breeding = enrichedAnimals.reduce((sum: number, animal: any) => {
               return sum + animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
             }, 0)
-
             // Calculate revenue opportunities
             newFinancialData.revenueOpportunities = enrichedAnimals
               .filter((animal: any) => animal.status === 'active')
               .reduce((sum: number, animal: any) => sum + (animal.currentValue || 0), 0)
-
             newFinancialData.animals = enrichedAnimals.map((animal: any) => ({
               ...animal,
               totalCosts: (animal.purchasePrice || 0) + 
@@ -177,7 +153,6 @@ export default function LivestockFinancialsPage() {
                 animal.breedingRecords.reduce((sum: number, record: any) => sum + (record.cost || 0), 0)
               )
             }))
-
             setFinancialData(newFinancialData)
           }
         }
@@ -187,10 +162,8 @@ export default function LivestockFinancialsPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -201,11 +174,9 @@ export default function LivestockFinancialsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -225,7 +196,6 @@ export default function LivestockFinancialsPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -236,7 +206,6 @@ export default function LivestockFinancialsPage() {
             <p className="text-gray-600">Track costs, profits, and financial performance</p>
           </div>
         </div>
-
         {/* Financial Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -250,7 +219,6 @@ export default function LivestockFinancialsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -262,7 +230,6 @@ export default function LivestockFinancialsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -282,7 +249,6 @@ export default function LivestockFinancialsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -297,7 +263,6 @@ export default function LivestockFinancialsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Cost Breakdown */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ModernCard>
@@ -331,7 +296,6 @@ export default function LivestockFinancialsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardHeader>
               <ModernCardTitle>Monthly Expenses (Last 30 Days)</ModernCardTitle>
@@ -360,7 +324,6 @@ export default function LivestockFinancialsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Detailed Financial Tracking */}
         <ModernCard>
           <ModernCardHeader>

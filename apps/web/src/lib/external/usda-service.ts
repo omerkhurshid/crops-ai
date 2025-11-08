@@ -8,10 +8,8 @@
  * - Pest and disease management guidelines
  * - Fertilizer recommendations by region
  */
-
 // Logger replaced with console for local development;
 import { redis } from '../redis';
-
 export interface USDARegion {
   code: string;
   name: string;
@@ -21,7 +19,6 @@ export interface USDARegion {
   averageRainfall: number; // inches per year
   hardiness_zone: string;
 }
-
 export interface USDAPlantingGuide {
   cropName: string;
   varietyRecommendations: {
@@ -69,7 +66,6 @@ export interface USDAPlantingGuide {
     storageRecommendations: string;
   };
 }
-
 export interface USDAMarketData {
   crop: string;
   region: string;
@@ -79,7 +75,6 @@ export interface USDAMarketData {
   demandFactors: string[];
   marketingRecommendations: string[];
 }
-
 export interface USDAWeatherPattern {
   region: string;
   climateTrends: {
@@ -95,11 +90,9 @@ export interface USDAWeatherPattern {
   };
   adaptationStrategies: string[];
 }
-
 class USDAService {
   private readonly CACHE_TTL = 24 * 60 * 60; // 24 hours
   private readonly BASE_URL = 'https://api.usda.gov';
-  
   // USDA Regional Knowledge Base (simplified - in production would query APIs)
   private regions: Map<string, USDARegion> = new Map([
     ['midwest', {
@@ -139,7 +132,6 @@ class USDAService {
       hardiness_zone: '9a-10b'
     }]
   ]);
-
   /**
    * Get regional crop recommendations based on location
    */
@@ -158,25 +150,20 @@ class USDAService {
     const cacheKey = `usda_recommendations_${latitude}_${longitude}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const region = this.determineRegion(latitude, longitude);
-      
       const recommendations = {
         region,
         recommendedCrops: this.getCropRecommendations(region),
         seasonalCalendar: this.getSeasonalCalendar(region)
       };
-
       await this.setCached(cacheKey, recommendations);
       return recommendations;
-
     } catch (error) {
       console.error('Failed to get USDA regional recommendations', error);
       throw error;
     }
   }
-
   /**
    * Get detailed planting guide for specific crop and region
    */
@@ -184,18 +171,15 @@ class USDAService {
     const cacheKey = `usda_planting_guide_${crop}_${region}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const guide = this.generatePlantingGuide(crop, region);
       await this.setCached(cacheKey, guide);
       return guide;
-
     } catch (error) {
       console.error(`Failed to get planting guide for ${crop} in ${region}`, error);
       throw error;
     }
   }
-
   /**
    * Get market data and outlook for crop
    */
@@ -203,7 +187,6 @@ class USDAService {
     const cacheKey = `usda_market_data_${crop}_${region}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       // In production, would fetch from USDA NASS API
       const marketData: USDAMarketData = {
@@ -215,16 +198,13 @@ class USDAService {
         demandFactors: this.getDemandFactors(crop),
         marketingRecommendations: this.getMarketingRecommendations(crop, region)
       };
-
       await this.setCached(cacheKey, marketData);
       return marketData;
-
     } catch (error) {
       console.error(`Failed to get market data for ${crop}`, error);
       throw error;
     }
   }
-
   /**
    * Get weather pattern analysis and climate adaptation strategies
    */
@@ -232,18 +212,15 @@ class USDAService {
     const cacheKey = `usda_weather_patterns_${region}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const patterns = this.getClimatePatterns(region);
       await this.setCached(cacheKey, patterns);
       return patterns;
-
     } catch (error) {
       console.error(`Failed to get weather patterns for ${region}`, error);
       throw error;
     }
   }
-
   /**
    * Get peer farm data for benchmarking (anonymized)
    */
@@ -260,7 +237,6 @@ class USDAService {
     const cacheKey = `usda_peer_benchmark_${crop}_${region}_${Math.floor(farmSize / 100)}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       // Simulate peer benchmarking data (in production would aggregate real farm data)
       const benchmarkData = {
@@ -273,18 +249,14 @@ class USDAService {
         bestPractices: this.getRegionalBestPractices(crop, region),
         improvementOpportunities: this.getImprovementOpportunities(crop, region)
       };
-
       await this.setCached(cacheKey, benchmarkData, 7200); // 2 hour cache for dynamic data
       return benchmarkData;
-
     } catch (error) {
       console.error(`Failed to get peer benchmark data for ${crop}`, error);
       throw error;
     }
   }
-
   // Private helper methods
-
   private determineRegion(lat: number, lng: number): USDARegion {
     // Simplified region determination based on coordinates
     if (lat >= 40 && lat <= 45 && lng >= -100 && lng <= -80) {
@@ -296,11 +268,9 @@ class USDAService {
     } else if (lat >= 35 && lat <= 40 && lng >= -125 && lng <= -115) {
       return this.regions.get('california_central')!;
     }
-    
     // Default to midwest for unmatched coordinates
     return this.regions.get('midwest')!;
   }
-
   private getCropRecommendations(region: USDARegion): {
     primary: string[];
     secondary: string[];
@@ -328,10 +298,8 @@ class USDAService {
         specialty: ['pistachios', 'garlic', 'organic_vegetables']
       }
     };
-
     return recommendations[region.code.toLowerCase() as keyof typeof recommendations] || recommendations.midwest;
   }
-
   private getSeasonalCalendar(region: USDARegion): { month: string; activities: string[] }[] {
     const baseCalendar = [
       { month: 'January', activities: ['Plan crop rotations', 'Order seeds', 'Equipment maintenance'] },
@@ -347,7 +315,6 @@ class USDAService {
       { month: 'November', activities: ['Harvest completion', 'Equipment storage', 'Financial planning'] },
       { month: 'December', activities: ['Year-end analysis', 'Record keeping', 'Next year planning'] }
     ];
-
     // Adjust timing based on region climate
     if (region.climate === 'humid_subtropical') {
       // Shift activities earlier for southern regions
@@ -359,10 +326,8 @@ class USDAService {
         }
       });
     }
-
     return baseCalendar;
   }
-
   private generatePlantingGuide(crop: string, region: string): USDAPlantingGuide {
     // Comprehensive planting guide based on USDA extension data
     const cornGuide: USDAPlantingGuide = {
@@ -424,11 +389,9 @@ class USDAService {
         storageRecommendations: 'Dry to 15% moisture for safe storage'
       }
     };
-
     // Return crop-specific guide (simplified to corn example)
     return cornGuide;
   }
-
   private getCurrentPrice(crop: string): number {
     const prices: Record<string, number> = {
       corn: 4.85,
@@ -439,11 +402,9 @@ class USDAService {
     };
     return prices[crop] || 5.00;
   }
-
   private getHistoricalAverage(crop: string): number {
     return this.getCurrentPrice(crop) * 0.92; // Slightly lower than current
   }
-
   private getPriceOutlook(crop: string): 'increasing' | 'stable' | 'decreasing' {
     const outlooks: Record<string, 'increasing' | 'stable' | 'decreasing'> = {
       corn: 'stable',
@@ -453,7 +414,6 @@ class USDAService {
     };
     return outlooks[crop] || 'stable';
   }
-
   private getDemandFactors(crop: string): string[] {
     const factors: Record<string, string[]> = {
       corn: ['Ethanol production', 'Export demand', 'Livestock feed'],
@@ -462,7 +422,6 @@ class USDAService {
     };
     return factors[crop] || ['Market conditions', 'Weather', 'Global demand'];
   }
-
   private getMarketingRecommendations(crop: string, region: string): string[] {
     return [
       'Consider forward contracting 30-50% of expected production',
@@ -472,7 +431,6 @@ class USDAService {
       'Track export sales and weather developments'
     ];
   }
-
   private getClimatePatterns(region: string): USDAWeatherPattern {
     return {
       region,
@@ -496,7 +454,6 @@ class USDAService {
       ]
     };
   }
-
   private getRegionalAverageYield(crop: string, region: string): number {
     const yields: Record<string, Record<string, number>> = {
       midwest: { corn: 205, soybeans: 58, wheat: 68 },
@@ -504,10 +461,8 @@ class USDAService {
       great_plains: { wheat: 48, sorghum: 85, sunflowers: 1450 },
       california_central: { tomatoes: 42, almonds: 2100, grapes: 8.5 }
     };
-    
     return yields[region]?.[crop] || 100;
   }
-
   private getRegionalCostPerAcre(crop: string, region: string): number {
     const costs: Record<string, Record<string, number>> = {
       midwest: { corn: 650, soybeans: 480, wheat: 420 },
@@ -515,10 +470,8 @@ class USDAService {
       great_plains: { wheat: 380, sorghum: 420, sunflowers: 320 },
       california_central: { tomatoes: 2800, almonds: 3200, grapes: 4500 }
     };
-    
     return costs[region]?.[crop] || 500;
   }
-
   private getRegionalProfitMargin(crop: string): number {
     const margins: Record<string, number> = {
       corn: 0.18,
@@ -528,10 +481,8 @@ class USDAService {
       tomatoes: 0.25,
       almonds: 0.35
     };
-    
     return margins[crop] || 0.20;
   }
-
   private getRegionalBestPractices(crop: string, region: string): string[] {
     return [
       'Precision agriculture adoption',
@@ -542,7 +493,6 @@ class USDAService {
       'Water use efficiency improvements'
     ];
   }
-
   private getImprovementOpportunities(crop: string, region: string): string[] {
     return [
       'Optimize nitrogen application timing',
@@ -553,24 +503,20 @@ class USDAService {
       'Upgrade equipment for better precision'
     ];
   }
-
   private async getCached(key: string): Promise<any> {
     if (!redis) {
       return null;
     }
-    
     try {
       return await redis.get(key);
     } catch (error) {
       return null;
     }
   }
-
   private async setCached(key: string, data: any, ttl: number = this.CACHE_TTL): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
@@ -578,5 +524,4 @@ class USDAService {
     }
   }
 }
-
 export const usdaService = new USDAService();

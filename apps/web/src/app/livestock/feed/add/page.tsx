@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,23 +7,18 @@ import { AddFeedForm } from '../../../../components/livestock/add-feed-form'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-
-
 export default function AddFeedPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [userFarms, setUserFarms] = useState<any[]>([])
   const [animals, setAnimals] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -32,13 +26,11 @@ export default function AddFeedPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=feed')
             return
           }
-
           // Fetch animals for feeding
           const animalsResponse = await fetch('/api/livestock/animals')
           if (animalsResponse.ok) {
@@ -54,10 +46,8 @@ export default function AddFeedPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -68,11 +58,9 @@ export default function AddFeedPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -92,7 +80,6 @@ export default function AddFeedPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -106,12 +93,10 @@ export default function AddFeedPage() {
             Back to Feed Management
           </Link>
         </div>
-
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Record Feeding</h1>
           <p className="text-gray-600">Track feed costs and nutrition information</p>
         </div>
-
         {/* Add Feed Form */}
         <ModernCard>
           <ModernCardHeader>

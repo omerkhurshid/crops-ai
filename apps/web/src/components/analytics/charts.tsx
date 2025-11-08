@@ -1,18 +1,15 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { TrendingUp, TrendingDown, BarChart3, Calendar, Download } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface ChartDataPoint {
   date: string
   value: number
   label?: string
 }
-
 interface TimeSeriesChartProps {
   title: string
   description?: string
@@ -22,7 +19,6 @@ interface TimeSeriesChartProps {
   height?: number
   showTrend?: boolean
 }
-
 interface MetricCardProps {
   title: string
   value: string | number
@@ -32,30 +28,24 @@ interface MetricCardProps {
   description?: string
   icon?: React.ReactNode
 }
-
 interface AnalyticsDashboardProps {
   farmId: string
   timeRange?: '7d' | '30d' | '90d' | '1y'
 }
-
 // Simple line chart component (since we can't use external chart libraries)
 export function SimpleLineChart({ title, description, data, color = '#10b981', unit = '', height = 200, showTrend = true }: TimeSeriesChartProps) {
   if (!data || data.length === 0) return null
-
   const minValue = Math.min(...ensureArray(data).map(d => d.value))
   const maxValue = Math.max(...ensureArray(data).map(d => d.value))
   const range = maxValue - minValue || 1
-
   const points = data.map((point, index) => {
     const x = (index / (data.length - 1)) * 100
     const y = 100 - ((point.value - minValue) / range) * 100
     return `${x},${y}`
   }).join(' ')
-
   const currentValue = data[data.length - 1]?.value || 0
   const previousValue = data[data.length - 2]?.value || 0
   const change = previousValue ? ((currentValue - previousValue) / previousValue) * 100 : 0
-
   return (
     <Card className="border-2">
       <CardHeader>
@@ -81,7 +71,6 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
             Current value • {data.length} data points
           </div>
         </div>
-        
         <div className="relative" style={{ height: `${height}px` }}>
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Grid lines */}
@@ -91,14 +80,12 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
-            
             {/* Area under curve */}
             <path
               d={`M 0,100 L ${points} L 100,100 Z`}
               fill={color}
               fillOpacity="0.1"
             />
-            
             {/* Main line */}
             <polyline
               points={points}
@@ -107,7 +94,6 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
               strokeWidth="2"
               vectorEffect="non-scaling-stroke"
             />
-            
             {/* Data points */}
             {data.map((point, index) => {
               const x = (index / (data.length - 1)) * 100
@@ -124,7 +110,6 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
               )
             })}
           </svg>
-          
           {/* Y-axis labels */}
           <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 -ml-12">
             <span>{maxValue.toFixed(1)}</span>
@@ -132,7 +117,6 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
             <span>{minValue.toFixed(1)}</span>
           </div>
         </div>
-        
         {/* X-axis labels */}
         <div className="mt-2 flex justify-between text-xs text-gray-500">
           <span>{new Date(data[0]?.date).toLocaleDateString()}</span>
@@ -142,20 +126,17 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
     </Card>
   )
 }
-
 export function MetricCard({ title, value, change, unit = '', trend, description, icon }: MetricCardProps) {
   const getTrendColor = () => {
     if (trend === 'up') return 'text-green-600'
     if (trend === 'down') return 'text-red-600'
     return 'text-gray-600'
   }
-
   const getTrendIcon = () => {
     if (trend === 'up') return <TrendingUp className="h-4 w-4" />
     if (trend === 'down') return <TrendingDown className="h-4 w-4" />
     return null
   }
-
   return (
     <Card className="border-2">
       <CardContent className="p-6">
@@ -189,7 +170,6 @@ export function MetricCard({ title, value, change, unit = '', trend, description
     </Card>
   )
 }
-
 export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashboardProps) {
   const [selectedRange, setSelectedRange] = useState(timeRange)
   const [farmMetrics, setFarmMetrics] = useState({
@@ -200,14 +180,12 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
     healthScore: 0,
     stressedAreas: 0
   })
-
   // Chart data state
   const [ndviData, setNdviData] = useState<ChartDataPoint[]>([])
   const [temperatureData, setTemperatureData] = useState<ChartDataPoint[]>([])
   const [humidityData, setHumidityData] = useState<ChartDataPoint[]>([])
   const [precipitationData, setPrecipitationData] = useState<ChartDataPoint[]>([])
   const [loading, setLoading] = useState(true)
-
   const getDaysFromRange = (range: string) => {
     switch (range) {
       case '7d': return 7
@@ -217,23 +195,19 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
       default: return 30
     }
   }
-
   // Fetch chart data from APIs
   useEffect(() => {
     const fetchChartData = async () => {
       if (!farmId) return
-      
       setLoading(true)
       try {
         const days = getDaysFromRange(selectedRange)
-        
         // Fetch NDVI data from satellite API
         const ndviRes = await fetch(`/api/satellite/ndvi/${farmId}?range=${selectedRange}`)
         if (ndviRes.ok) {
           const ndviResponseData = await ndviRes.json()
           setNdviData(ndviResponseData.timeSeries || [])
         }
-        
         // Fetch weather data 
         const weatherRes = await fetch(`/api/weather/historical?farmId=${farmId}&days=${days}`)
         if (weatherRes.ok) {
@@ -249,10 +223,8 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
         setLoading(false)
       }
     }
-    
     fetchChartData()
   }, [farmId, selectedRange])
-
   // Fetch real farm metrics
   useEffect(() => {
     const fetchFarmMetrics = async () => {
@@ -261,7 +233,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
         if (farmRes.ok) {
           const farm = await farmRes.json()
           const totalArea = farm.totalArea || 100
-          
           setFarmMetrics({
             fieldCoverage: totalArea,
             dataAccuracy: 92 + Math.random() * 6,
@@ -275,19 +246,16 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
         console.error('Error fetching farm metrics:', error)
       }
     }
-
     if (farmId) {
       fetchFarmMetrics()
     }
   }, [farmId, selectedRange])
-
   const timeRangeOptions = [
     { value: '7d', label: '7 Days' },
     { value: '30d', label: '30 Days' },
     { value: '90d', label: '90 Days' },
     { value: '1y', label: '1 Year' }
   ]
-
   return (
     <div className="space-y-6">
       {/* Time Range Selector */}
@@ -319,7 +287,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           </div>
         </CardHeader>
       </Card>
-
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard
@@ -330,7 +297,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           description="Vegetation health index"
           icon={<TrendingUp className="h-5 w-5 text-green-600" />}
         />
-        
         <MetricCard
           title="Field Coverage"
           value={farmMetrics.fieldCoverage.toFixed(1)}
@@ -340,7 +306,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           description="Total monitored area"
           icon={<BarChart3 className="h-5 w-5 text-blue-600" />}
         />
-        
         <MetricCard
           title="Health Score"
           value={Math.round(farmMetrics.healthScore).toString()}
@@ -350,7 +315,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           description="Overall crop health"
           icon={<TrendingUp className="h-5 w-5 text-green-600" />}
         />
-        
         <MetricCard
           title="Stressed Areas"
           value={farmMetrics.stressedAreas.toFixed(1)}
@@ -361,7 +325,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           icon={<TrendingDown className="h-5 w-5 text-red-600" />}
         />
       </div>
-
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <SimpleLineChart
@@ -372,7 +335,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           unit=""
           height={250}
         />
-        
         <SimpleLineChart
           title="Temperature"
           description="Average daily temperature"
@@ -381,7 +343,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           unit="°C"
           height={250}
         />
-        
         <SimpleLineChart
           title="Humidity"
           description="Relative humidity levels"
@@ -390,7 +351,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           unit="%"
           height={250}
         />
-        
         <SimpleLineChart
           title="Precipitation"
           description="Daily rainfall measurements"
@@ -400,7 +360,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           height={250}
         />
       </div>
-
       {/* Additional Analytics */}
       <Card className="border-2">
         <CardHeader>
@@ -418,7 +377,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
                 High-quality satellite data coverage
               </div>
             </div>
-            
             <div className="text-center p-4 bg-blue-50 rounded-lg">
               <div className="text-2xl font-bold text-blue-800 mb-2">{Math.round(farmMetrics.yieldImprovement)}%</div>
               <div className="text-sm font-medium text-blue-700">Yield Improvement</div>
@@ -426,7 +384,6 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
                 Compared to regional average
               </div>
             </div>
-            
             <div className="text-center p-4 bg-purple-50 rounded-lg">
               <div className="text-2xl font-bold text-purple-800 mb-2">${farmMetrics.costSavings.toLocaleString()}</div>
               <div className="text-sm font-medium text-purple-700">Cost Savings</div>

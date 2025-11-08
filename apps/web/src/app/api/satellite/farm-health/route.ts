@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
 import { liveSatelliteService } from '../../../../lib/satellite/live-satellite-service'
-
 /**
  * Get crop health data for all fields in a farm
  * GET /api/satellite/farm-health?farmId=xxx
@@ -13,16 +12,13 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
-
     if (!farmId) {
       return NextResponse.json({ 
         error: 'Farm ID is required' 
       }, { status: 400 })
     }
-
     // Verify user has access to this farm
     const farm = await prisma.farm.findUnique({
       where: { id: farmId },
@@ -43,47 +39,38 @@ export async function GET(request: NextRequest) {
         managers: true
       }
     })
-
     if (!farm) {
       return NextResponse.json({ 
         error: 'Farm not found' 
       }, { status: 404 })
     }
-
     // Check if user owns the farm or is a manager
     const hasAccess = farm.ownerId === user.id || 
       farm.managers.some(manager => manager.userId === user.id)
-
     if (!hasAccess) {
       return NextResponse.json({ 
         error: 'Access denied' 
       }, { status: 403 })
     }
-
     // Transform fields data to match FieldHealth interface
     let hasRealSatelliteData = false
     const fieldsHealth = await Promise.all(farm.fields.map(async (field) => {
       const latestSatelliteData = field.satelliteData[0]
       const currentCrop = field.crops[0]
-      
       // If no satellite data, skip this field (no mock data)
       if (!latestSatelliteData) {
         return null
       }
-
       // Mark that we have real satellite data
       hasRealSatelliteData = true
-
       // Calculate health score from NDVI
       const healthScore = Math.round(latestSatelliteData.ndvi * 100)
-      
       // Determine stress level
       const stressLevel = 
         healthScore >= 85 ? 'none' :
         healthScore >= 70 ? 'low' :
         healthScore >= 50 ? 'moderate' :
         healthScore >= 30 ? 'high' : 'severe'
-
       // Generate realistic indices based on NDVI
       const indices = {
         ndvi: latestSatelliteData.ndvi,
@@ -95,7 +82,6 @@ export async function GET(request: NextRequest) {
         lai: 3.5 + (latestSatelliteData.ndvi * 2),
         fvc: latestSatelliteData.ndvi * 1.1
       }
-
       // Generate stress indicators based on actual data
       const stressIndicators = {
         drought: { 
@@ -120,7 +106,6 @@ export async function GET(request: NextRequest) {
           description: 'Low pest activity' 
         }
       }
-
       // Calculate zone distribution based on health score
       const zones = {
         excellent: { 
@@ -140,35 +125,28 @@ export async function GET(request: NextRequest) {
           area: 0 
         }
       }
-
       // Calculate actual areas
       zones.excellent.area = field.area * zones.excellent.percentage / 100
       zones.good.area = field.area * zones.good.percentage / 100
       zones.moderate.area = field.area * zones.moderate.percentage / 100
       zones.stressed.area = field.area * zones.stressed.percentage / 100
-
       // Generate recommendations based on actual conditions
       const recommendations = []
-      
       if (latestSatelliteData.stressLevel === 'HIGH' || latestSatelliteData.stressLevel === 'MODERATE') {
         recommendations.push('Address stress conditions in affected areas')
       }
-      
       if (indices.ndwi < 0.3) {
         recommendations.push('Monitor soil moisture levels closely')
       }
-      
       if (healthScore < 70) {
         recommendations.push('Consider field inspection for problem areas')
       } else {
         recommendations.push('Continue current management practices')
       }
-
       // Calculate yield prediction based on health
       const basePotential = currentCrop?.cropType === 'Corn' ? 220 : 
                            currentCrop?.cropType === 'Soybeans' ? 65 : 180
       const currentYield = Math.round(basePotential * (healthScore / 100) * 0.9)
-      
       return {
         fieldId: field.id,
         fieldName: field.name,
@@ -188,10 +166,8 @@ export async function GET(request: NextRequest) {
         }
       }
     }))
-
     // Filter out null values (fields without satellite data)
     const validFieldsHealth = fieldsHealth.filter(field => field !== null)
-
     // If no fields have satellite data, return error
     if (validFieldsHealth.length === 0) {
       return NextResponse.json({
@@ -200,7 +176,6 @@ export async function GET(request: NextRequest) {
         message: 'No satellite data is available for any fields in this farm.'
       }, { status: 404 })
     }
-
     return NextResponse.json({
       success: true,
       fields: validFieldsHealth,
@@ -211,10 +186,8 @@ export async function GET(request: NextRequest) {
         totalArea: farm.totalArea
       }
     })
-
   } catch (error) {
     console.error('Error fetching farm health data:', error)
-    
     return NextResponse.json({
       success: false,
       error: 'Failed to fetch farm health data',

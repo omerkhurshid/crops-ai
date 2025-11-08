@@ -4,10 +4,8 @@
  * Central registry for all machine learning models used in the platform,
  * including pre-configured models for agricultural applications.
  */
-
 import { mlOpsPipeline, ModelMetadata } from './mlops-pipeline'
 import { auditLogger } from '../logging/audit-logger'
-
 export interface RegisteredModel {
   id: string
   name: string
@@ -19,7 +17,6 @@ export interface RegisteredModel {
   performance: ModelPerformance
   isActive: boolean
 }
-
 export interface ModelRequirements {
   minDataPoints: number
   dataFrequency: 'daily' | 'weekly' | 'monthly' | 'seasonal'
@@ -28,7 +25,6 @@ export interface ModelRequirements {
   spatialResolution?: string
   temporalWindow?: number // days
 }
-
 export interface ModelPerformance {
   accuracy?: number
   rmse?: number
@@ -37,14 +33,11 @@ export interface ModelPerformance {
   testedOn: string
   lastUpdated: Date
 }
-
 class ModelRegistry {
   private models: Map<string, RegisteredModel> = new Map()
-
   constructor() {
     this.initializeRegistry()
   }
-
   /**
    * Initialize registry with pre-configured agricultural models
    */
@@ -102,7 +95,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     this.registerPrebuiltModel({
       id: 'yield_pred_soybean_v1',
       name: 'Soybean Yield Predictor',
@@ -144,7 +136,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     // Crop Health Models
     this.registerPrebuiltModel({
       id: 'crop_stress_detector_v1',
@@ -189,7 +180,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     // Weather Prediction Models
     this.registerPrebuiltModel({
       id: 'hyperlocal_weather_v1',
@@ -252,7 +242,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     // Pest & Disease Models
     this.registerPrebuiltModel({
       id: 'pest_outbreak_predictor_v1',
@@ -295,7 +284,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     // Soil Models
     this.registerPrebuiltModel({
       id: 'soil_nutrient_predictor_v1',
@@ -342,7 +330,6 @@ class ModelRegistry {
       },
       isActive: true
     })
-
     // Market Models
     this.registerPrebuiltModel({
       id: 'price_forecast_grain_v1',
@@ -396,39 +383,32 @@ class ModelRegistry {
       isActive: true
     })
   }
-
   /**
    * Register a pre-built model in the registry
    */
   private registerPrebuiltModel(model: RegisteredModel): void {
     this.models.set(model.id, model)
-
   }
-
   /**
    * Get all models in a category
    */
   getModelsByCategory(category: RegisteredModel['category']): RegisteredModel[] {
     return Array.from(this.models.values()).filter(m => m.category === category && m.isActive)
   }
-
   /**
    * Get a specific model by ID
    */
   getModel(modelId: string): RegisteredModel | null {
     return this.models.get(modelId) || null
   }
-
   /**
    * Deploy a registered model to production
    */
   async deployModel(modelId: string, environment: 'development' | 'staging' | 'production' = 'production'): Promise<string> {
     const model = this.getModel(modelId)
-    
     if (!model) {
       throw new Error(`Model ${modelId} not found in registry`)
     }
-
     await auditLogger.logML(
       'deploying_registered_model',
       modelId,
@@ -436,7 +416,6 @@ class ModelRegistry {
       undefined,
       { modelName: model.name, category: model.category, environment }
     )
-
     // Register with MLOps pipeline
     const metadata = await mlOpsPipeline.registerModel(
       model.name,
@@ -445,7 +424,6 @@ class ModelRegistry {
       model.description,
       'model-registry'
     )
-
     // Deploy the model
     const deploymentConfig = {
       modelId: metadata.id,
@@ -462,9 +440,7 @@ class ModelRegistry {
         targetLatency: 100
       }
     }
-
     const endpointUrl = await mlOpsPipeline.deployModel(deploymentConfig)
-
     await auditLogger.logML(
       'registered_model_deployed',
       modelId,
@@ -472,10 +448,8 @@ class ModelRegistry {
       undefined,
       { endpointUrl, environment }
     )
-
     return endpointUrl
   }
-
   /**
    * Get model recommendations for a specific use case
    */
@@ -485,10 +459,8 @@ class ModelRegistry {
     objective: 'yield' | 'health' | 'cost' | 'risk'
   }): RegisteredModel[] {
     const recommendations: RegisteredModel[] = []
-
     // Filter models based on objective
     let relevantCategories: RegisteredModel['category'][] = []
-    
     switch (useCase.objective) {
       case 'yield':
         relevantCategories = ['yield_prediction', 'weather', 'soil']
@@ -503,23 +475,19 @@ class ModelRegistry {
         relevantCategories = ['weather', 'pest_disease', 'market']
         break
     }
-
     // Check each relevant model
     for (const category of relevantCategories) {
       const models = this.getModelsByCategory(category)
-      
       for (const model of models) {
         // Check if user has required data
         const hasRequiredData = model.requirements.requiredFeatures.every(
           feature => useCase.dataAvailable.some(data => data.includes(feature))
         )
-
         if (hasRequiredData) {
           recommendations.push(model)
         }
       }
     }
-
     // Sort by performance
     return recommendations.sort((a, b) => {
       const perfA = a.performance.confidence || a.performance.accuracy || 0
@@ -527,7 +495,6 @@ class ModelRegistry {
       return perfB - perfA
     })
   }
-
   /**
    * Map category to MLOps model type
    */
@@ -546,7 +513,6 @@ class ModelRegistry {
         return 'regression'
     }
   }
-
   /**
    * Get model statistics
    */
@@ -561,24 +527,20 @@ class ModelRegistry {
     let totalPerformance = 0
     let performanceCount = 0
     let lastUpdated = new Date(0)
-
     for (const model of models) {
       // Count by category
       byCategory[model.category] = (byCategory[model.category] || 0) + 1
-
       // Calculate average performance
       const perf = model.performance.confidence || model.performance.accuracy
       if (perf) {
         totalPerformance += perf
         performanceCount++
       }
-
       // Track last updated
       if (model.performance.lastUpdated > lastUpdated) {
         lastUpdated = model.performance.lastUpdated
       }
     }
-
     return {
       totalModels: models.length,
       byCategory,
@@ -587,7 +549,6 @@ class ModelRegistry {
     }
   }
 }
-
 // Export singleton instance
 export const modelRegistry = new ModelRegistry()
 export { ModelRegistry }

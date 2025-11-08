@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,8 +7,6 @@ import { WeightTracking } from '../../../components/livestock/weight-tracking'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { Plus, Weight, TrendingUp, Activity, Target } from 'lucide-react'
-
-
 export default function WeightPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -23,15 +20,12 @@ export default function WeightPage() {
     recentMeasurements: 0 
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -39,24 +33,20 @@ export default function WeightPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=weight')
             return
           }
-
           // Fetch weight records and animals
           const [weightResponse, animalsResponse] = await Promise.all([
             fetch('/api/livestock/weight'),
             fetch('/api/livestock/animals')
           ])
-
           if (weightResponse.ok && animalsResponse.ok) {
             const records = await weightResponse.json()
             const animalsData = await animalsResponse.json()
             const activeAnimals = animalsData.filter((animal: any) => animal.status === 'active')
-            
             setWeightRecords(records)
             setAnimals(activeAnimals)
             calculateStats(records)
@@ -68,10 +58,8 @@ export default function WeightPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   const calculateStats = (records: any[]) => {
     // Calculate stats
     const newStats = {
@@ -80,18 +68,15 @@ export default function WeightPage() {
       avgGrowthRate: 0,
       recentMeasurements: 0
     }
-    
     // Count unique animals with weight records
     const uniqueAnimals = new Set(records.map((record: any) => record.animalId))
     newStats.animalsTracked = uniqueAnimals.size
-
     // Calculate average growth rate
     const animalGrowthRates: number[] = []
     uniqueAnimals.forEach(animalId => {
       const animalRecords = records
         .filter((record: any) => record.animalId === animalId)
         .sort((a: any, b: any) => new Date(a.weighDate).getTime() - new Date(b.weighDate).getTime())
-      
       if (animalRecords.length >= 2) {
         const firstRecord = animalRecords[0]
         const lastRecord = animalRecords[animalRecords.length - 1]
@@ -99,28 +84,23 @@ export default function WeightPage() {
         const daysDiff = Math.abs(
           new Date(lastRecord.weighDate).getTime() - new Date(firstRecord.weighDate).getTime()
         ) / (1000 * 60 * 60 * 24)
-        
         if (daysDiff > 0) {
           const growthRatePerDay = weightChange / daysDiff
           animalGrowthRates.push(growthRatePerDay * 30) // Monthly growth rate
         }
       }
     })
-
     if (animalGrowthRates.length > 0) {
       newStats.avgGrowthRate = animalGrowthRates.reduce((sum, rate) => sum + rate, 0) / animalGrowthRates.length
     }
-
     // Count recent measurements (last 30 days)
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
     newStats.recentMeasurements = records.filter((record: any) => 
       new Date(record.weighDate) >= thirtyDaysAgo
     ).length
-
     setStats(newStats)
   }
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -131,11 +111,9 @@ export default function WeightPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -155,7 +133,6 @@ export default function WeightPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -173,7 +150,6 @@ export default function WeightPage() {
             />
           </div>
         </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -187,7 +163,6 @@ export default function WeightPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -199,7 +174,6 @@ export default function WeightPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -211,7 +185,6 @@ export default function WeightPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -224,7 +197,6 @@ export default function WeightPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Weight Tracking */}
         <ModernCard>
           <ModernCardHeader>

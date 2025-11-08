@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useSession } from '../../lib/auth-unified'
 import { useRouter } from 'next/navigation'
@@ -8,25 +7,20 @@ import { CropCalendar } from '../../components/crops/crop-calendar'
 import { ModernCard, ModernCardContent } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Plus, Sprout } from 'lucide-react'
-
 export default function CropsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farmId, setFarmId] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Set initial farmId - use user ID as fallback
     const initialFarmId = session.user?.id || 'default-farm'
     setFarmId(initialFarmId)
-
     // Try to fetch actual farm data in the background
     const fetchFarmData = async () => {
       try {
@@ -38,15 +32,12 @@ export default function CropsPage() {
           }
         }
       } catch (error) {
-
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchFarmData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -57,11 +48,9 @@ export default function CropsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null // Will redirect
   }
-
   return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -70,7 +59,6 @@ export default function CropsPage() {
         label="Add Crop Plan"
         variant="primary"
       />
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -78,7 +66,6 @@ export default function CropsPage() {
           <p className="text-lg text-sage-600 mb-6">
             Plan your plantings and track crop progress throughout the season
           </p>
-          
           {/* Getting Started Guide */}
           <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6 border border-sage-200">
             <h3 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
@@ -110,7 +97,6 @@ export default function CropsPage() {
             </div>
           </div>
         </div>
-
         {/* Main Timeline View - Full Width */}
         <div className="space-y-6">
           <ModernCard variant="floating">
@@ -119,7 +105,6 @@ export default function CropsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
       </main>
     </DashboardLayout>
   )

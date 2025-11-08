@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 import { rateLimitWithFallback } from '../../../lib/rate-limit'
-
 const taskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
@@ -15,11 +14,9 @@ const taskSchema = z.object({
   cropId: z.string().optional(),
   tags: z.array(z.string()).default([])
 })
-
 export async function GET(request: NextRequest) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -30,30 +27,24 @@ export async function GET(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
     const status = searchParams.get('status')
-
     // Build where clause
     const where: any = {
       userId: user.id
     }
-
     if (farmId) {
       where.farmId = farmId
     }
-
     if (status && status !== 'all') {
       where.status = status
     }
-
     const tasks = await prisma.task.findMany({
       where,
       include: {
@@ -73,7 +64,6 @@ export async function GET(request: NextRequest) {
         { dueDate: 'asc' }
       ]
     })
-
     return NextResponse.json(tasks)
   } catch (error) {
     console.error('Error fetching tasks:', error)
@@ -83,11 +73,9 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 export async function POST(request: NextRequest) {
   // Apply rate limiting for write operations
   const { success, headers } = await rateLimitWithFallback(request, 'write')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -98,16 +86,13 @@ export async function POST(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const data = taskSchema.parse(body)
-
     // Get user's first farm if no farmId provided
     let farmId = data.farmId
     if (!farmId) {
@@ -118,14 +103,12 @@ export async function POST(request: NextRequest) {
         farmId = farm.id
       }
     }
-
     if (!farmId) {
       return NextResponse.json(
         { error: 'No farm found. Please create a farm first.' },
         { status: 400 }
       )
     }
-
     const task = await prisma.task.create({
       data: {
         ...data,
@@ -145,7 +128,6 @@ export async function POST(request: NextRequest) {
         }
       }
     })
-
     return NextResponse.json(task, { status: 201 })
   } catch (error) {
     console.error('Error creating task:', error)

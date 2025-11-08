@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect, memo } from 'react'
 import { FarmDataService } from '../../lib/services/farm-data'
 import { FieldMode, useFieldMode } from '../mobile/field-mode'
@@ -37,7 +36,6 @@ import {
   Smartphone
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface FarmSummary {
   farmName: string
   totalAcres: number
@@ -68,7 +66,6 @@ interface FarmSummary {
     category: 'water' | 'pest' | 'weather' | 'financial' | 'health'
   }>
 }
-
 interface FarmerDashboardProps {
   farmId: string
   farmData?: {
@@ -98,7 +95,6 @@ interface FarmerDashboardProps {
     email: string
   }
 }
-
 export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
@@ -116,19 +112,16 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
   const [financialTrend, setFinancialTrend] = useState(0)
   const [selectedFarmId, setSelectedFarmId] = useState<string>()
   const { isMobile } = useScreenSize()
-
   // Fetch real satellite data or demo data
   useEffect(() => {
     const fetchFarmData = async () => {
       try {
         // Always use real data - no more demo mode
         let satelliteData
-        
         try {
           // Import the real satellite service
           const { RealSatelliteService } = await import('../../lib/satellite/real-data-service')
           const satelliteService = new RealSatelliteService()
-          
           // Get real satellite data
           satelliteData = await satelliteService.getFarmDashboardData(farmId)
         } catch (error) {
@@ -142,11 +135,9 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             lastUpdate: new Date()
           }
         }
-        
         // Use passed farm data if available
         const farmName = passedFarmData?.name || "Your Farm"
         const totalAcres = passedFarmData?.totalArea || 0
-        
         // Fetch real weather data with coordinates if available
         // Default to a central US location if no farm coordinates provided
         const lat = passedFarmData?.latitude || 39.8283  // Geographic center of US
@@ -158,7 +149,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
           precipitation: 0.2,
           humidity: 68
         }
-        
         if (weatherResponse.ok) {
           const result = await weatherResponse.json()
           const weather = result.weather || result // Handle different response formats
@@ -170,12 +160,10 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             humidity: weather.humidity || weather.main?.humidity || 65
           }
         }
-        
         // Calculate financial data
         const currentYear = new Date().getFullYear()
         let netYTD = 0
         let financialTrend = 0
-        
         if (passedFinancialData) {
           const yearlyFinancials = ensureArray(passedFinancialData).filter(t => 
             new Date(t.transactionDate).getFullYear() === currentYear
@@ -187,11 +175,9 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             .filter(t => t.type === 'EXPENSE')
             .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0)
           netYTD = totalRevenue - totalExpenses
-          
           // Calculate trend (mock for now)
           financialTrend = netYTD > 0 ? 8 : -5
         }
-        
         // Calculate crop counts from crops data
         const plantingsCount = ensureArray(passedCrops).filter(c => c.status === 'PLANNED').length
         const growingCount = ensureArray(passedCrops).filter(c => c.status === 'PLANTED' || c.status === 'GROWING').length  
@@ -202,16 +188,13 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
           const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
           return daysToHarvest >= 0 && daysToHarvest <= 14
         }).length
-        
         // Identify fields needing attention based on real satellite data
         const fieldsNeedingAttention: string[] = []
         // Note: Real field stress analysis will be handled by satellite service
         // Removed placeholder random data generation
-        
         // Calculate livestock metrics
         const livestockCount = ensureArray(passedLivestock).reduce((sum, l) => sum + (l.count || 1), 0)
         const livestockHealthStatus = livestockCount > 0 ? 'good' : 'good' // Mock for now
-        
         // Set state values - use real satellite timestamp from service
         setLastSatelliteUpdate(satelliteData.lastSatelliteUpdate || new Date()) // Use real timestamp or fallback to current time
         setPlantingsCount(plantingsCount)
@@ -222,7 +205,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
         setLivestockHealthStatus(livestockHealthStatus)
         setNetYTD(netYTD)
         setFinancialTrend(financialTrend)
-        
         const farmData: FarmSummary = {
           farmName,
           totalAcres,
@@ -240,29 +222,23 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
           todayHighlights: satelliteData.todayHighlights || [],
           urgentTasks: []
         }
-
         setFarmData(farmData)
         setLoading(false)
       } catch (error) {
         console.error('Error fetching farm data:', error)
-        
         // No data available - set to empty/null state
         setFarmData(null)
         setLoading(false)
       }
     }
-
     fetchFarmData()
   }, [farmId, passedFarmData, passedFinancialData, passedWeatherAlerts, passedCrops, passedLivestock])
-
   // Remove sample actions - use real data only
   const realActions = farmData?.urgentTasks || []
-
   // Show Field Mode if enabled
   if (isFieldMode) {
     return <FieldMode onExit={disableFieldMode} />
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -277,7 +253,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       </div>
     )
   }
-
   if (!farmData) {
     return (
       <div className="space-y-6">
@@ -289,10 +264,8 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       </div>
     )
   }
-
   const healthStatus = getHealthStatus(farmData.overallHealth)
   const stressStatus = getStressStatus(farmData.stressedAreas)
-
   return (
     <div className="space-y-6">
       {/* Field Mode Button - Prominent for mobile users */}
@@ -313,7 +286,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
           </div>
         </div>
       )}
-
       {/* Morning Briefing - Unified Dashboard */}
       <MorningBriefing 
         farmName={farmData.farmName}
@@ -360,7 +332,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
         livestockHealthStatus={livestockHealthStatus}
         lastSatelliteUpdate={lastSatelliteUpdate || undefined}
       />
-
       {/* Farms Overview Map */}
       <div>
         <div className="flex items-center justify-between mb-6">
@@ -374,26 +345,21 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             </p>
           </div>
         </div>
-        
         <FarmsMap 
           farms={allFarms && allFarms.length > 0 ? allFarms.map((farm, index) => {
             // Calculate unique farm-specific health metrics
             const farmFieldCount = farm.fields?.length || 0
             const farmCropCount = ensureArray(passedCrops).filter(c => c.farmId === farm.id).length
-            
             // Generate unique health based on farm characteristics
             const baseHealth = 70 + (farmFieldCount * 2) + (farmCropCount * 3)
             const healthVariation = (parseInt(farm.id.slice(-1) || '0') % 10) * 2 // Use farm ID for variation
             const farmHealth = Math.min(Math.max(baseHealth + healthVariation, 65), 95)
-            
             // Generate unique stress levels based on farm area and field count
             const stressVariation = farm.totalArea > 100 ? 5 : farm.totalArea > 50 ? 10 : 15
             const farmStress = Math.max(stressVariation + (parseInt(farm.id.slice(-2, -1) || '0') % 5), 5)
-            
             // Generate unique health trend based on farm ID
             const trendSeed = parseInt(farm.id.slice(-1) || '0')
             const farmTrend = trendSeed % 2 === 0 ? Math.abs(trendSeed % 6) : -(trendSeed % 4)
-            
             return {
               id: farm.id,
               name: farm.name,
@@ -426,16 +392,13 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
           className="mb-6"
         />
       </div>
-
       {/* Market Ticker - Moved below metrics */}
       {isMobile ? (
         <MobileMarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
       ) : (
         <MarketTicker className="-mx-4 sm:mx-0 sm:rounded-lg" />
       )}
-
       {/* Removed urgent tasks section per requirements */}
-
       {/* Today's Tasks from Task Board */}
       <div>
         <div className="flex items-center justify-between mb-6">
@@ -448,10 +411,8 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             </p>
           </div>
         </div>
-        
         <TodaysTasksSummary farmId={farmId} />
       </div>
-
       {/* Weather-Based Tasks */}
       <WeatherTasksGenerator 
         farmData={{
@@ -461,7 +422,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
         crops={passedCrops}
         className="mb-8"
       />
-
       {/* Alerts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         {/* Weather Alerts */}
@@ -471,17 +431,14 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             longitude: passedFarmData?.longitude
           }}
         />
-
         {/* Harvest Alerts */}
         <HarvestAlerts farmId={farmId} />
       </div>
-
       {/* Disease & Pest Monitoring */}
       <DiseasePestAlertsWidget 
         farmId={farmId}
         className="mb-8"
       />
-
       {/* Detailed View (Progressive Disclosure) */}
       {showDetailedView && (
         <div className="space-y-6">
@@ -496,7 +453,6 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
               Hide Details
             </Button>
           </div>
-
           {/* Additional technical metrics can be shown here in detailed view */}
           <div className="text-center py-8 text-sage-600">
             <p>Additional detailed metrics and analysis will be displayed here</p>

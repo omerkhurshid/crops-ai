@@ -2,38 +2,28 @@
  * Database seeding script for comprehensive livestock data
  * Extends existing livestock event system with detailed breed information
  */
-
 import { PrismaClient } from '@prisma/client'
 import { livestockSeedData } from './livestock-seed-data'
-
 const prisma = new PrismaClient()
-
 export async function seedLivestockDatabase() {
-
   try {
     // Since we don't have a comprehensive livestock schema like crops,
     // we'll create seed data for the existing livestock event system
     // and add reference data for common livestock types
-
     let totalBreeds = 0
     const livestockTypes = new Set<string>()
-
     // Extract unique livestock types for enum validation
     for (const livestock of livestockSeedData) {
       const typeKey = livestock.category.toUpperCase()
       livestockTypes.add(typeKey)
       totalBreeds += livestock.varieties.length
     }
-
     // For now, log the comprehensive data that would be inserted
     // This demonstrates the full livestock information available
     for (const livestock of livestockSeedData) {
-
       for (const variety of livestock.varieties) {
-
       }
     }
-
     // Create reference data that can be used by the existing livestock event system
     const livestockReference = livestockSeedData.map(livestock => ({
       type: livestock.category.toLowerCase().replace('_', '-'),
@@ -67,10 +57,8 @@ export async function seedLivestockDatabase() {
       },
       varieties: livestock.varieties
     }))
-
     // Store reference data in a way that can be accessed by the application
     // This could be saved to a JSON file or used to populate a reference table
-    
     return {
       success: true,
       livestockTypes: livestockSeedData.length,
@@ -78,7 +66,6 @@ export async function seedLivestockDatabase() {
       categories: Array.from(livestockTypes),
       referenceData: livestockReference
     }
-
   } catch (error) {
     console.error('❌ Error processing livestock database:', error)
     throw error
@@ -86,12 +73,10 @@ export async function seedLivestockDatabase() {
     await prisma.$disconnect()
   }
 }
-
 // Run seeding if called directly
 if (require.main === module) {
   seedLivestockDatabase()
     .then((result) => {
-
       process.exit(0)
     })
     .catch((error) => {
@@ -99,7 +84,6 @@ if (require.main === module) {
       process.exit(1)
     })
 }
-
 /**
  * Enhanced livestock event validation
  * Validates livestock types against comprehensive database
@@ -108,7 +92,6 @@ export function validateLivestockType(type: string): boolean {
   const validTypes = livestockSeedData.map(l => l.category.toLowerCase())
   return validTypes.includes(type.toLowerCase())
 }
-
 /**
  * Get livestock information by type
  */
@@ -118,7 +101,6 @@ export function getLivestockInfo(type: string) {
     l.name.toLowerCase() === type.toLowerCase()
   )
 }
-
 /**
  * Get all available livestock breeds for a type
  */
@@ -126,7 +108,6 @@ export function getLivestockBreeds(type: string) {
   const livestock = getLivestockInfo(type)
   return livestock?.varieties || []
 }
-
 /**
  * Enhanced livestock type mappings for the existing enum system
  */

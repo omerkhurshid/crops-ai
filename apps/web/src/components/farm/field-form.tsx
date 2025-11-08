@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -11,7 +10,6 @@ import { Badge } from '../ui/badge'
 import { MapPin, Plus, Save, AlertCircle, Lightbulb } from 'lucide-react'
 import { FieldFormWithMap } from './field-form-with-map'
 import { cropCategories } from '../../lib/farm-categories'
-
 interface FieldFormProps {
   farmId: string
   farmName: string
@@ -20,17 +18,14 @@ interface FieldFormProps {
   farmTotalArea?: number
   existingFields?: Array<{ id: string; name: string; area: number }>
 }
-
 // Get all crop types from comprehensive categories
 const cropTypes = cropCategories.flatMap(category => 
   category.items.map(item => item.name)
 ).sort()
-
 const soilTypes = [
   'Clay', 'Sandy', 'Loam', 'Silt', 'Sandy Loam', 'Clay Loam', 'Silty Clay', 
   'Silty Clay Loam', 'Sandy Clay', 'Sandy Clay Loam', 'Unknown'
 ]
-
 // Helper functions for smart suggestions
 function getPlantingWindow(cropType: string): string {
   const windows: { [key: string]: string } = {
@@ -43,7 +38,6 @@ function getPlantingWindow(cropType: string): string {
   }
   return windows[cropType] || 'Varies by region'
 }
-
 function getExpectedYield(cropType: string): string {
   const yields: { [key: string]: string } = {
     'Corn': '180-200',
@@ -55,7 +49,6 @@ function getExpectedYield(cropType: string): string {
   }
   return yields[cropType] || '-- '
 }
-
 export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmTotalArea, existingFields }: FieldFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -68,7 +61,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
     confidence: 95
   })
   const [useMetric, setUseMetric] = useState(false) // Default to acres for US
-
   // Use the enhanced form with map if we have coordinates
   if (farmLatitude && farmLongitude) {
     return (
@@ -82,31 +74,26 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
       />
     )
   }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
-
   const validateForm = () => {
     if (!formData.name.trim()) return 'Field name is required'
     if (!formData.area || parseFloat(formData.area) <= 0) return 'Valid area is required'
     if (!formData.cropType) return 'Crop type is required'
     return null
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
-
     const validationError = validateForm()
     if (validationError) {
       setError(validationError)
       setLoading(false)
       return
     }
-
     try {
       const response = await fetch('/api/fields', {
         method: 'POST',
@@ -121,7 +108,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
           soilType: formData.soilType || undefined
         })
       })
-
       if (!response.ok) {
         const data = await response.json()
         // Handle both string errors and error objects
@@ -130,7 +116,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
           : data.error?.message || 'Failed to create field'
         throw new Error(errorMessage)
       }
-
       const field = await response.json()
       router.push(`/farms/${farmId}`)
       router.refresh()
@@ -150,7 +135,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
       setLoading(false)
     }
   }
-
   return (
     <Card className="border-2">
       <CardHeader>
@@ -176,7 +160,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                 disabled={loading}
               />
             </div>
-            
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label htmlFor="area">Field Size *</Label>
@@ -218,7 +201,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
               </p>
             </div>
           </div>
-
           {/* Crop and Soil Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -238,7 +220,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                 ))}
               </select>
             </div>
-            
             <div>
               <Label htmlFor="soilType">Soil Type (Optional)</Label>
               <select
@@ -256,7 +237,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
               </select>
             </div>
           </div>
-
           {/* Smart Defaults and Tips */}
           <div className="space-y-4">
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -277,7 +257,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                 )}
               </div>
             </div>
-
             {/* Quick Start Tips */}
             <div className="p-4 bg-sage-50 border border-sage-200 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
@@ -291,7 +270,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                 <div>• You'll be able to draw precise boundaries on satellite maps after creation</div>
               </div>
             </div>
-
             {/* Farm Location Info */}
             <div className="p-4 bg-blue-50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
@@ -306,7 +284,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
               </p>
             </div>
           </div>
-
           {/* Error Message */}
           {error && (
             <div className="flex items-center gap-2 p-3 bg-red-50 border-2 border-red-200 rounded-lg">
@@ -314,7 +291,6 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
-
           {/* Submit Buttons */}
           <div className="flex gap-3 pt-4">
             <Button type="submit" disabled={loading} className="flex-1">

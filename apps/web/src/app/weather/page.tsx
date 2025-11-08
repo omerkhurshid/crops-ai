@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState, Suspense } from 'react'
@@ -12,86 +11,70 @@ import { ClientFloatingButton } from '../../components/ui/client-floating-button
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { WeatherAlertsWidget } from '../../components/dashboard/weather-alerts-widget'
 import { CloudRain, MapPin, Thermometer, Settings, BarChart, AlertTriangle } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
   latitude: number | null
   longitude: number | null
 }
-
 interface FarmListItem {
   id: string
   name: string
 }
-
 function WeatherPageContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
   const farmId = searchParams?.get('farmId')
-  
   const [farm, setFarm] = useState<Farm | null>(null)
   const [allFarms, setAllFarms] = useState<FarmListItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchFarmData() {
       try {
         setLoading(true)
         setError(null)
-
         // Fetch all user farms
         const farmsResponse = await fetch('/api/farms')
         if (!farmsResponse.ok) {
           throw new Error('Failed to fetch farms')
         }
-
         const farmsData = await farmsResponse.json()
         const userFarms = farmsData.farms || []
         setAllFarms(userFarms.map((f: any) => ({ id: f.id, name: f.name })))
-
         // Determine which farm to load
         let targetFarmId = farmId
         if (!targetFarmId && userFarms.length > 0) {
           targetFarmId = userFarms[0].id
         }
-
         if (!targetFarmId) {
           // No farms available, redirect to farms page
           router.push('/farms')
           return
         }
-
         // Fetch specific farm details
         const farmResponse = await fetch(`/api/farms/${targetFarmId}`)
         if (!farmResponse.ok) {
           throw new Error('Failed to fetch farm details')
         }
-
         const farmData = await farmResponse.json()
         const selectedFarm = farmData
-
         if (!selectedFarm) {
           router.push('/farms')
           return
         }
-
         setFarm({
           id: selectedFarm.id,
           name: selectedFarm.name,
           latitude: selectedFarm.latitude,
           longitude: selectedFarm.longitude
         })
-
       } catch (error) {
         console.error('Error fetching farm data:', error)
         setError('Failed to load farm data')
@@ -99,10 +82,8 @@ function WeatherPageContent() {
         setLoading(false)
       }
     }
-
     fetchFarmData()
   }, [session, status, router, farmId])
-
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
@@ -131,11 +112,9 @@ function WeatherPageContent() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   if (error) {
     return (
       <DashboardLayout>
@@ -150,25 +129,20 @@ function WeatherPageContent() {
       </DashboardLayout>
     )
   }
-
   if (!farm) {
     return null
   }
-
   // Use farm coordinates or default to geographic center of US
   const latitude = farm.latitude || 39.8283  // Geographic center of US
   const longitude = farm.longitude || -98.5795
-
   return (
     <DashboardLayout>
-      
       {/* Floating Action Button */}
       <ClientFloatingButton
         icon={<Settings className="h-5 w-5" />}
         label="Weather Settings"
         variant="primary"
       />
-      
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -176,7 +150,6 @@ function WeatherPageContent() {
           <p className="text-lg text-sage-600 mb-6">
             Real-time weather data and forecasting for {farm.name}
           </p>
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
               <div className="flex items-center gap-2 text-sage-600">
@@ -195,7 +168,6 @@ function WeatherPageContent() {
             </div>
           </div>
         </div>
-
         {/* Modern Tabs with Enhanced Styling */}
         <div className="space-y-8">
           <ModernCard variant="floating" className="overflow-hidden">
@@ -230,7 +202,6 @@ function WeatherPageContent() {
                   Current conditions and forecasting data to help with farming decisions
                 </ModernCardDescription>
               </ModernCardHeader>
-              
               <TabsContent value="current" className="m-0">
                 <div className="p-0">
                   <WeatherDashboard 
@@ -239,7 +210,6 @@ function WeatherPageContent() {
                   />
                 </div>
               </TabsContent>
-              
               <TabsContent value="alerts" className="m-0">
                 <div className="p-6">
                   <div className="space-y-6">
@@ -258,7 +228,6 @@ function WeatherPageContent() {
                   </div>
                 </div>
               </TabsContent>
-              
               <TabsContent value="analytics" className="m-0">
                 <div className="p-0">
                   <WeatherAnalytics 
@@ -274,7 +243,6 @@ function WeatherPageContent() {
     </DashboardLayout>
   )
 }
-
 export default function WeatherPage() {
   return (
     <Suspense fallback={

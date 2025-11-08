@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { unifiedAuth } from '../../lib/auth-unified'
@@ -8,11 +7,9 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-
 interface LoginFormProps {
   callbackUrl?: string
 }
-
 function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -21,36 +18,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
   const [successMessage, setSuccessMessage] = useState('')
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  // Immediate console logs to track component lifecycle
-  console.log('🎯 LoginFormContent component rendering...', {
-    timestamp: new Date().toISOString(),
-    isServer: typeof window === 'undefined',
-    location: typeof window !== 'undefined' ? window.location.href : 'server-side'
-  })
-
-  // Test React hydration with DOM manipulation
-  useEffect(() => {
-    console.log('🚀 LoginForm React component mounted and hydrated successfully!')
-    console.log('🔍 Client environment confirmed:', {
-      location: window.location.href,
-      userAgent: navigator.userAgent.substring(0, 50)
-    })
-    
-    // Add a visible indicator that React is working
-    const indicator = document.createElement('div')
-    indicator.id = 'react-hydration-test'
-    indicator.style.cssText = 'position:fixed;top:10px;right:10px;background:green;color:white;padding:4px 8px;border-radius:4px;z-index:9999;font-size:12px;'
-    indicator.textContent = '✅ React Hydrated'
-    document.body.appendChild(indicator)
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-      const el = document.getElementById('react-hydration-test')
-      if (el) el.remove()
-    }, 3000)
-  }, [])
-
+  // Component lifecycle and registration success check
   useEffect(() => {
     // Check for registration success
     const registered = searchParams?.get('registered')
@@ -58,22 +26,18 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     const verified = searchParams?.get('verified')
     const errorParam = searchParams?.get('error')
     const passwordReset = searchParams?.get('password-reset')
-    
     if (registered === 'true') {
       setSuccessMessage('Account created successfully! Please sign in with your credentials.')
       if (emailParam) {
         setEmail(decodeURIComponent(emailParam))
       }
     }
-    
     if (verified === 'true') {
       setSuccessMessage('Email verified successfully! You can now sign in.')
     }
-    
     if (passwordReset === 'true') {
       setSuccessMessage('Password reset successfully! You can now sign in with your new password.')
     }
-    
     if (errorParam) {
       switch (errorParam) {
         case 'missing-token':
@@ -99,29 +63,18 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
       }
     }
   }, [searchParams])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('🔥 FORM SUBMIT TRIGGERED!', { email, password: password ? '***' : 'empty' })
-    
     setIsLoading(true)
     setError('')
-
     try {
-      console.log('📧 Starting NextAuth signin for:', email)
-      
       // Use unified auth for Supabase authentication
       const result = await unifiedAuth.signIn(email, password)
-
-      console.log('🔐 Auth Result:', result)
-
       if (result?.error) {
         setError(result.error)
       } else {
-        console.log('✅ Login successful, redirecting to dashboard')
         setError('')
         setSuccessMessage('Login successful! Redirecting...')
-        
         setTimeout(() => {
           window.location.href = callbackUrl
         }, 1000)
@@ -133,7 +86,6 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
       setIsLoading(false)
     }
   }
-
   return (
     <Card className="w-full border-0 shadow-none">
       <CardHeader className="px-0 pb-4">
@@ -200,11 +152,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
     </Card>
   )
 }
-
-export function LoginForm({ callbackUrl }: LoginFormProps) {
-  console.log('🚀 LoginForm component rendering at top level!')
-  
-  // Wrap in Suspense to handle useSearchParams for SSR
+export function LoginForm({ callbackUrl }: LoginFormProps) {// Wrap in Suspense to handle useSearchParams for SSR
   return (
     <Suspense fallback={
       <Card className="w-full border-0 shadow-none">

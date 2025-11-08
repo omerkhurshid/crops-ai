@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card';
 import { Button } from '../ui/button';
@@ -13,7 +12,6 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { convertHealthScore, getFarmerTerm } from '../../lib/farmer-language';
-
 interface CropHealthData {
   summary: {
     overallHealth: number;
@@ -55,20 +53,16 @@ interface CropHealthData {
     actionRequired: boolean;
   }>;
 }
-
 interface CropHealthReportProps {
   farmId: string;
 }
-
 export function CropHealthReport({ farmId }: CropHealthReportProps) {
   const [data, setData] = useState<CropHealthData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-
   useEffect(() => {
     fetchHealthData();
   }, [farmId]);
-
   const fetchHealthData = async () => {
     setLoading(true);
     try {
@@ -86,7 +80,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       setLoading(false);
     }
   };
-
   const generateReport = async () => {
     setGenerating(true);
     try {
@@ -99,7 +92,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           format: 'pdf'
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -117,9 +109,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       setGenerating(false);
     }
   };
-
   // Removed mock data function - only show real data from API
-
   const getStressFactorIcon = (type: string) => {
     switch (type) {
       case 'drought': return <Droplets className="h-4 w-4 text-orange-600" />;
@@ -129,7 +119,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       default: return <Activity className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const getStressFactorName = (type: string) => {
     switch (type) {
       case 'drought': return 'Water Stress';
@@ -139,7 +128,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       default: return 'Unknown';
     }
   };
-
   const getAlertColor = (level: string) => {
     switch (level) {
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -149,7 +137,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   if (loading) {
     return (
       <ModernCard variant="soft">
@@ -162,7 +149,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       </ModernCard>
     );
   }
-
   if (!data) {
     return (
       <ModernCard variant="soft">
@@ -181,7 +167,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       </ModernCard>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -207,7 +192,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           {generating ? 'Creating Report...' : 'Download Report'}
         </Button>
       </div>
-
       {/* Overall Health Summary */}
       <ModernCard variant="glow" className="overflow-hidden">
         <ModernCardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
@@ -251,7 +235,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               </span>
             </div>
           </div>
-          
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FarmerMetricCard
               title="Healthy Areas"
@@ -260,7 +243,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               status="excellent"
               icon={<Leaf className="h-5 w-5 text-green-600" />}
             />
-            
             <FarmerMetricCard
               title="Stressed Areas"
               value={`${data.summary.stressedArea}%`}
@@ -268,7 +250,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               status={getStressStatus(data.summary.stressedArea)}
               icon={<AlertTriangle className="h-5 w-5 text-orange-600" />}
             />
-            
             <FarmerMetricCard
               title="Plant Vigor"
               value={data.summary.avgNDVI.toFixed(2)}
@@ -279,7 +260,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Field-by-Field Analysis */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -312,7 +292,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                     <div className="text-sm text-sage-600">Health Score</div>
                   </div>
                 </div>
-
                 {/* Stress Factors */}
                 {field.stressFactors.length > 0 && (
                   <div className="mb-4">
@@ -332,7 +311,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                     </div>
                   </div>
                 )}
-
                 {/* Recommendations */}
                 <div>
                   <h5 className="text-sm font-medium text-sage-800 mb-2">What to do:</h5>
@@ -350,7 +328,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Health Alerts */}
       {data.alerts.length > 0 && (
         <ModernCard variant="soft">
@@ -384,7 +361,6 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Health Trends */}
       <ModernCard variant="soft">
         <ModernCardHeader>

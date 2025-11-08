@@ -21,10 +21,7 @@ import {
   Sun,
   Lightbulb,
 } from "lucide-react";
-
-
 export default function WeatherIntelligencePage() {
-
   return (
     <DashboardLayout>
       <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -34,18 +31,15 @@ export default function WeatherIntelligencePage() {
             <CloudRain className="h-6 w-6 text-sage-700" />
             <span className="text-sage-600">Weather Intelligence</span>
           </div>
-
           <h1 className="text-3xl font-bold text-sage-800 mb-4">
             Weather Data Integration & Smart Alerts
           </h1>
-
           <div className="flex items-center gap-4 text-sm text-sage-600">
             <Badge variant="outline">10 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
           </div>
         </div>
-
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
@@ -55,7 +49,6 @@ export default function WeatherIntelligencePage() {
               help you make better farming decisions before weather events
               impact your crops.
             </p>
-
             <Alert>
               <Lightbulb className="h-4 w-4" />
               <AlertDescription>
@@ -66,7 +59,6 @@ export default function WeatherIntelligencePage() {
             </Alert>
           </ModernCardContent>
         </ModernCard>
-
         {/* Weather Data Sources */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -81,7 +73,6 @@ export default function WeatherIntelligencePage() {
                 Your weather forecasts combine data from multiple sources for
                 maximum accuracy:
               </p>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
@@ -105,7 +96,6 @@ export default function WeatherIntelligencePage() {
                     </li>
                   </ul>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
                     Forecast Models
@@ -129,7 +119,6 @@ export default function WeatherIntelligencePage() {
                   </ul>
                 </div>
               </div>
-
               <div className="bg-sage-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-sage-800 mb-3">
                   Precision by Field
@@ -144,7 +133,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Key Weather Metrics */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -170,7 +158,6 @@ export default function WeatherIntelligencePage() {
                     <li>• Snow/ice conditions</li>
                   </ul>
                 </div>
-
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Thermometer className="h-5 w-5 text-red-600" />
@@ -183,7 +170,6 @@ export default function WeatherIntelligencePage() {
                     <li>• Heat stress indicators</li>
                   </ul>
                 </div>
-
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Wind className="h-5 w-5 text-gray-600" />
@@ -198,7 +184,6 @@ export default function WeatherIntelligencePage() {
                     <li>• Evapotranspiration impact</li>
                   </ul>
                 </div>
-
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Eye className="h-5 w-5 text-yellow-600" />
@@ -217,7 +202,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Smart Alert System */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -232,7 +216,6 @@ export default function WeatherIntelligencePage() {
                 Our AI doesn't just tell you the weather - it tells you what to
                 do about it:
               </p>
-
               <div className="space-y-4">
                 <div className="border-l-4 border-red-500 pl-4">
                   <h4 className="font-semibold text-red-800 mb-2">
@@ -253,7 +236,6 @@ export default function WeatherIntelligencePage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-yellow-500 pl-4">
                   <h4 className="font-semibold text-yellow-800 mb-2">
                     Planning Alerts (24-72 Hours)
@@ -273,7 +255,6 @@ export default function WeatherIntelligencePage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-blue-500 pl-4">
                   <h4 className="font-semibold text-blue-800 mb-2">
                     Opportunity Alerts
@@ -297,7 +278,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Weather-Based Recommendations */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -312,7 +292,6 @@ export default function WeatherIntelligencePage() {
                 Weather data is integrated into every recommendation our AI
                 makes:
               </p>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
@@ -327,7 +306,6 @@ export default function WeatherIntelligencePage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
                     Spray Applications
@@ -341,7 +319,6 @@ export default function WeatherIntelligencePage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
                     Field Operations
@@ -355,7 +332,6 @@ export default function WeatherIntelligencePage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">
                     Harvest Timing
@@ -373,7 +349,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Understanding Forecast Accuracy */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -387,7 +362,6 @@ export default function WeatherIntelligencePage() {
               <p className="text-sage-700 mb-4">
                 Different forecast timeframes have different accuracy levels:
               </p>
-
               <div className="space-y-4">
                 <div className="border-l-4 border-green-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -402,7 +376,6 @@ export default function WeatherIntelligencePage() {
                     and urgent operations.
                   </p>
                 </div>
-
                 <div className="border-l-4 border-yellow-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="h-5 w-5 text-yellow-600" />
@@ -416,7 +389,6 @@ export default function WeatherIntelligencePage() {
                     approaches.
                   </p>
                 </div>
-
                 <div className="border-l-4 border-orange-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="h-5 w-5 text-orange-600" />
@@ -430,7 +402,6 @@ export default function WeatherIntelligencePage() {
                     changes.
                   </p>
                 </div>
-
                 <div className="border-l-4 border-red-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -448,7 +419,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Customizing Weather Alerts */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -459,7 +429,6 @@ export default function WeatherIntelligencePage() {
               <p className="text-sage-700 mb-4">
                 Tailor weather alerts to your specific crops and operations:
               </p>
-
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <span className="text-sage-400">1.</span>
@@ -473,7 +442,6 @@ export default function WeatherIntelligencePage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-3">
                   <span className="text-sage-400">2.</span>
                   <div>
@@ -486,7 +454,6 @@ export default function WeatherIntelligencePage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-3">
                   <span className="text-sage-400">3.</span>
                   <div>
@@ -499,7 +466,6 @@ export default function WeatherIntelligencePage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-3">
                   <span className="text-sage-400">4.</span>
                   <div>
@@ -516,7 +482,6 @@ export default function WeatherIntelligencePage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Final Tips */}
         <Alert>
           <CloudRain className="h-4 w-4" />

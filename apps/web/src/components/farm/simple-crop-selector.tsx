@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Label } from '../ui/label'
@@ -8,19 +7,15 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from
 import { Badge } from '../ui/badge'
 import { Search, Clock, MapPin, TrendingUp, Droplets } from 'lucide-react'
 import { COMPREHENSIVE_CROP_DATABASE, CROP_CATEGORIES, getCropsByCategory } from '../../lib/farm/comprehensive-crops'
-
 interface SimpleCropSelectorProps {
   selectedCrop?: string
   onCropSelect: (cropId: string) => void
   showDetails?: boolean
 }
-
 export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = true }: SimpleCropSelectorProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
-  
   const cropsByCategory = getCropsByCategory()
-  
   // Filter crops based on search term across all categories
   const searchResults = searchTerm.length > 2 ? 
     Object.values(COMPREHENSIVE_CROP_DATABASE).filter(crop =>
@@ -28,9 +23,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
       crop.scientificName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       crop.category.toLowerCase().includes(searchTerm.toLowerCase())
     ) : []
-
   const selectedCropData = selectedCrop ? COMPREHENSIVE_CROP_DATABASE[selectedCrop] : null
-
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -43,7 +36,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
           className="pl-10"
         />
       </div>
-
       {/* Search Results */}
       {searchResults.length > 0 && (
         <div>
@@ -83,7 +75,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
           </Select>
         </div>
       )}
-
       {/* Category Dropdown */}
       {searchTerm.length <= 2 && (
         <div>
@@ -121,7 +112,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
           </Select>
         </div>
       )}
-
       {/* Crop Dropdown */}
       {selectedCategory && cropsByCategory[selectedCategory] && searchTerm.length <= 2 && (
         <div>
@@ -164,7 +154,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
           </Select>
         </div>
       )}
-
       {/* Selected Crop Details */}
       {selectedCropData && showDetails && (
         <ModernCard>
@@ -180,7 +169,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
               Family: {selectedCropData.botanicalFamily}
             </p>
           </ModernCardHeader>
-          
           <ModernCardContent className="space-y-4">
             {/* Key Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -191,7 +179,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 </div>
                 <div className="text-xs text-gray-600">Growing Season</div>
               </div>
-              
               <div className="text-center p-3 bg-green-50 rounded-lg">
                 <TrendingUp className="h-5 w-5 text-green-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-green-800">
@@ -199,7 +186,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 </div>
                 <div className="text-xs text-gray-600">Expected Yield/acre</div>
               </div>
-              
               <div className="text-center p-3 bg-blue-50 rounded-lg">
                 <Droplets className="h-5 w-5 text-blue-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-blue-800 capitalize">
@@ -207,7 +193,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 </div>
                 <div className="text-xs text-gray-600">Water Needs</div>
               </div>
-              
               <div className="text-center p-3 bg-yellow-50 rounded-lg">
                 <MapPin className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-yellow-800">
@@ -216,7 +201,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 <div className="text-xs text-gray-600">Market Price</div>
               </div>
             </div>
-
             {/* Growing Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
@@ -238,7 +222,6 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 <p className="text-sage-800 capitalize">{selectedCropData.marketValue.demand}</p>
               </div>
             </div>
-
             {/* Benefits */}
             {selectedCropData.benefits.length > 0 && (
               <div>

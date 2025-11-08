@@ -2,9 +2,7 @@
  * Comprehensive crop database seed data
  * Production-ready crop information for agricultural management
  */
-
 import { ProduceCategory, ClimateZone, SoilType, WaterRequirement, SunRequirement, GrowthHabit } from '@prisma/client'
-
 export interface CropSeedData {
   name: string
   scientificName: string
@@ -60,7 +58,6 @@ export interface CropSeedData {
     potassium?: number
   }
 }
-
 export const cropSeedData: CropSeedData[] = [
   // GRAINS & CEREALS
   {

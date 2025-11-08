@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -20,18 +19,15 @@ import {
   AlertTriangle
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface ProfitCalculatorProps {
   farmId?: string
   className?: string
 }
-
 interface CalculatorInputs {
   acres: number
   crop: string
   expectedYield: number
   pricePerUnit: number
-  
   // Costs
   seedCost: number
   fertilizerCost: number
@@ -40,7 +36,6 @@ interface CalculatorInputs {
   equipmentCost: number
   otherCosts: number
 }
-
 interface ProfitResults {
   totalRevenue: number
   totalCosts: number
@@ -50,7 +45,6 @@ interface ProfitResults {
   breakEvenYield: number
   breakEvenPrice: number
 }
-
 const cropDefaults = {
   corn: { yield: 180, price: 4.20, unit: 'bu' },
   soybeans: { yield: 50, price: 11.50, unit: 'bu' },
@@ -58,7 +52,6 @@ const cropDefaults = {
   barley: { yield: 70, price: 4.50, unit: 'bu' },
   oats: { yield: 80, price: 3.20, unit: 'bu' }
 }
-
 export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
   const [inputs, setInputs] = useState<CalculatorInputs>({
     acres: 100,
@@ -72,10 +65,8 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
     equipmentCost: 90,
     otherCosts: 60
   })
-
   const [results, setResults] = useState<ProfitResults | null>(null)
   const [showDetails, setShowDetails] = useState(false)
-
   // Update defaults when crop changes
   useEffect(() => {
     const crop = inputs.crop as keyof typeof cropDefaults
@@ -87,12 +78,10 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
       }))
     }
   }, [inputs.crop])
-
   // Calculate results whenever inputs change
   useEffect(() => {
     calculateProfit()
   }, [inputs])
-
   const calculateProfit = () => {
     const totalRevenue = inputs.acres * inputs.expectedYield * inputs.pricePerUnit
     const costsPerAcre = inputs.seedCost + inputs.fertilizerCost + inputs.fuelCost + 
@@ -101,11 +90,9 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
     const grossProfit = totalRevenue - totalCosts
     const profitPerAcre = grossProfit / inputs.acres
     const profitMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0
-    
     // Break-even calculations
     const breakEvenYield = costsPerAcre / inputs.pricePerUnit
     const breakEvenPrice = costsPerAcre / inputs.expectedYield
-
     setResults({
       totalRevenue,
       totalCosts,
@@ -116,22 +103,18 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
       breakEvenPrice
     })
   }
-
   const updateInput = (field: keyof CalculatorInputs, value: number) => {
     setInputs(prev => ({ ...prev, [field]: Math.max(0, value) }))
   }
-
   const getCropUnit = () => {
     const crop = inputs.crop as keyof typeof cropDefaults
     return cropDefaults[crop]?.unit || 'bu'
   }
-
   const getProfitColor = (profit: number) => {
     if (profit > 0) return 'text-green-600'
     if (profit < 0) return 'text-red-600'
     return 'text-gray-600'
   }
-
   const getProfitIndicator = (profit: number, margin: number) => {
     if (profit > 0 && margin > 15) return { icon: TrendingUp, text: 'Excellent', color: 'text-green-600' }
     if (profit > 0 && margin > 5) return { icon: TrendingUp, text: 'Good', color: 'text-green-600' }
@@ -139,11 +122,8 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
     if (profit < 0) return { icon: TrendingDown, text: 'Loss', color: 'text-red-600' }
     return { icon: Minus, text: 'Break Even', color: 'text-gray-600' }
   }
-
   if (!results) return null
-
   const indicator = getProfitIndicator(results.grossProfit, results.profitMargin)
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -161,7 +141,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
           </Button>
         </div>
       </ModernCardHeader>
-      
       <ModernCardContent className="space-y-6">
         {/* Quick Setup */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -179,7 +158,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               <option value="oats">Oats</option>
             </select>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Acres</label>
             <input
@@ -191,7 +169,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               step="0.1"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Expected Yield ({getCropUnit()}/acre)
@@ -205,7 +182,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               step="0.1"
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Price per {getCropUnit()}
@@ -223,7 +199,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </div>
           </div>
         </div>
-
         {/* Results Summary */}
         <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -236,7 +211,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
                 ${results.totalRevenue.toLocaleString()}
               </div>
             </div>
-
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Minus className="h-5 w-5 text-red-600" />
@@ -246,7 +220,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
                 ${results.totalCosts.toLocaleString()}
               </div>
             </div>
-
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <indicator.icon className={cn("h-5 w-5", indicator.color)} />
@@ -261,7 +234,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </div>
           </div>
         </div>
-
         {/* Key Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-gray-50 rounded-lg">
@@ -270,21 +242,18 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </div>
             <div className="text-sm text-gray-600">Profit per Acre</div>
           </div>
-
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <div className="text-lg font-bold text-gray-900">
               {results.breakEvenYield.toFixed(1)}
             </div>
             <div className="text-sm text-gray-600">Break-even Yield</div>
           </div>
-
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <div className="text-lg font-bold text-gray-900">
               ${results.breakEvenPrice.toFixed(2)}
             </div>
             <div className="text-sm text-gray-600">Break-even Price</div>
           </div>
-
           <div className="text-center p-4 bg-gray-50 rounded-lg">
             <div className="text-lg font-bold text-gray-900">
               {results.profitMargin.toFixed(1)}%
@@ -292,7 +261,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             <div className="text-sm text-gray-600">Profit Margin</div>
           </div>
         </div>
-
         {/* Detailed Cost Breakdown */}
         {showDetails && (
           <div className="space-y-4">
@@ -300,7 +268,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               <BarChart3 className="h-4 w-4" />
               Cost Breakdown (per acre)
             </h4>
-            
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { key: 'seedCost', label: 'Seeds', icon: Wheat },
@@ -331,7 +298,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </div>
           </div>
         )}
-
         {/* Recommendations */}
         {results.grossProfit < 0 && (
           <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
@@ -348,7 +314,6 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </div>
           </div>
         )}
-
         {results.profitMargin > 15 && (
           <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
             <div className="flex items-start gap-3">

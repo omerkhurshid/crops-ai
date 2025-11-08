@@ -3,14 +3,12 @@ import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { prisma } from '../../../../../lib/prisma'
 import { rateLimitWithFallback } from '../../../../../lib/rate-limit'
 // Logger replaced with console for local development
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -21,16 +19,13 @@ export async function GET(
       },
     })
   }
-
   const farmId = params.id
   let user: any = null
-  
   try {
     user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     // Verify the user owns this farm
     const farm = await prisma.farm.findFirst({
       where: {
@@ -38,11 +33,9 @@ export async function GET(
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
-
     // Fetch fields with their latest satellite data
     const fields = await prisma.field.findMany({
       where: {
@@ -68,17 +61,14 @@ export async function GET(
         }
       }
     })
-
     // Transform the data to include NDVI and stress info
     const fieldsWithNDVI = fields.map(field => {
       const latestData = field.satelliteData[0]
       const previousData = field.satelliteData[1]
-      
       let ndviChange = undefined
       if (latestData && previousData && previousData.ndvi) {
         ndviChange = ((latestData.ndvi - previousData.ndvi) / previousData.ndvi) * 100
       }
-
       return {
         id: field.id,
         name: field.name,
@@ -95,7 +85,6 @@ export async function GET(
         temperature: latestData ? Math.round(18 + Math.random() * 10) : undefined
       }
     })
-
     return NextResponse.json(fieldsWithNDVI)
   } catch (error) {
     console.error('Error fetching fields with NDVI', error, { farmId, userId: user?.id })

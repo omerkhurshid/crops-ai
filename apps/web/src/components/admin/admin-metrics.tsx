@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,7 +7,6 @@ import {
   BarChart3, TrendingUp, Users, MapPin, 
   Calendar, Clock, Globe, DollarSign 
 } from 'lucide-react'
-
 interface AdminMetricsProps {
   totalUsers: number
   totalFarms: number
@@ -16,14 +14,12 @@ interface AdminMetricsProps {
   activeUsers: number
   userGrowthRate: number
 }
-
 interface MetricData {
   label: string
   value: number
   change: number
   period: string
 }
-
 export function AdminMetrics({ 
   totalUsers, 
   totalFarms, 
@@ -33,7 +29,6 @@ export function AdminMetrics({
 }: AdminMetricsProps) {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
   const [metrics, setMetrics] = useState<MetricData[]>([])
-
   useEffect(() => {
     // Generate some sample metrics data
     const generateMetrics = () => {
@@ -47,30 +42,24 @@ export function AdminMetrics({
       ]
       setMetrics(baseMetrics)
     }
-
     generateMetrics()
   }, [selectedPeriod, totalUsers, totalFarms, totalFields, activeUsers])
-
   const overallHealth = () => {
     const userRetention = (activeUsers / totalUsers) * 100
     const growthScore = Math.min(Math.max(userGrowthRate, -50), 50) + 50
     const adoptionScore = ((totalFarms / totalUsers) * 100) * 2 // Assuming good adoption is 50%
-    
     return Math.round((userRetention + growthScore + adoptionScore) / 3)
   }
-
   const getHealthColor = (score: number) => {
     if (score >= 80) return 'text-green-600'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
-
   const getChangeColor = (change: number) => {
     if (change > 0) return 'text-green-600'
     if (change < 0) return 'text-red-600'
     return 'text-gray-600'
   }
-
   const businessMetrics = [
     {
       title: 'User Engagement',
@@ -97,7 +86,6 @@ export function AdminMetrics({
       icon: <TrendingUp className="h-5 w-5 text-sage-600" />
     }
   ]
-
   return (
     <ModernCard variant="floating">
       <ModernCardHeader>
@@ -113,7 +101,6 @@ export function AdminMetrics({
             <TabsTrigger value="engagement">Engagement</TabsTrigger>
             <TabsTrigger value="technical">Technical</TabsTrigger>
           </TabsList>
-
           <TabsContent value="business" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {businessMetrics.map((metric, index) => (
@@ -127,7 +114,6 @@ export function AdminMetrics({
                 </div>
               ))}
             </div>
-
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Key Performance Indicators</h4>
               <div className="space-y-3">
@@ -146,7 +132,6 @@ export function AdminMetrics({
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="engagement" className="space-y-6">
             <div className="flex items-center gap-4 mb-4">
               <label className="text-sm font-medium">Time Period:</label>
@@ -161,7 +146,6 @@ export function AdminMetrics({
                 <option value="90d">Last 90 days</option>
               </select>
             </div>
-
             <div className="space-y-3">
               {metrics.map((metric, index) => (
                 <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -180,7 +164,6 @@ export function AdminMetrics({
               ))}
             </div>
           </TabsContent>
-
           <TabsContent value="technical" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-gray-50 rounded-lg">
@@ -203,7 +186,6 @@ export function AdminMetrics({
                   </div>
                 </div>
               </div>
-
               <div className="p-4 bg-gray-50 rounded-lg">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
@@ -225,7 +207,6 @@ export function AdminMetrics({
                 </div>
               </div>
             </div>
-
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Database Statistics</h4>
               <div className="space-y-3">

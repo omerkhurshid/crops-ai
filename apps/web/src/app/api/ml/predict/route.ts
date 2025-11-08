@@ -4,7 +4,6 @@ import { yieldPrediction } from '../../../../lib/ml/yield-prediction';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const yieldPredictionSchema = z.object({
   fieldId: z.string().min(1, 'Field ID is required'),
   cropType: z.string().min(1, 'Crop type is required'),
@@ -40,7 +39,6 @@ const yieldPredictionSchema = z.object({
     timeHorizon: z.number().min(1).max(365).default(30)
   }).optional()
 });
-
 const batchPredictionSchema = z.object({
   fieldIds: z.array(z.string()).min(1, 'At least one field ID is required').max(50, 'Maximum 50 fields allowed'),
   cropTypes: z.array(z.string()).optional(),
@@ -53,18 +51,15 @@ const batchPredictionSchema = z.object({
     timeHorizon: z.number().min(1).max(365).default(30)
   })
 });
-
 // POST /api/ml/predict
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       // Check if this is a batch prediction request
       if (body.fieldIds && Array.isArray(body.fieldIds)) {
         // Batch prediction
@@ -72,16 +67,13 @@ export const POST = apiMiddleware.protected(
         if (!validation.success) {
           throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
         }
-
         const params = validation.data;
-        
         const predictions = await yieldPrediction.predictYieldBatch({
           fieldIds: params.fieldIds,
           cropTypes: params.cropTypes,
           modelVersion: params.modelVersion,
           options: params.options
         });
-
         const summary = {
           totalFields: params.fieldIds.length,
           successfulPredictions: predictions.length,
@@ -89,7 +81,6 @@ export const POST = apiMiddleware.protected(
           averageConfidence: predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length,
           totalRecommendations: predictions.reduce((sum, p) => sum + p.recommendations.length, 0)
         };
-
         return createSuccessResponse({
           data: {
             predictions,
@@ -98,16 +89,13 @@ export const POST = apiMiddleware.protected(
           message: `Batch yield prediction completed for ${predictions.length} fields`,
           action: 'batch_predict'
         });
-
       } else {
         // Single prediction
         const validation = yieldPredictionSchema.safeParse(body);
         if (!validation.success) {
           throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
         }
-
         const params = validation.data;
-        
         const prediction = await yieldPrediction.predictYield({
           fieldId: params.fieldId,
           cropType: params.cropType,
@@ -117,7 +105,6 @@ export const POST = apiMiddleware.protected(
           modelVersion: params.modelVersion,
           confidenceLevel: params.confidenceLevel
         }, params.options);
-
         const summary = {
           fieldId: params.fieldId,
           cropType: params.cropType,
@@ -129,7 +116,6 @@ export const POST = apiMiddleware.protected(
             sum + (rec.impact - rec.cost), 0
           )
         };
-
         return createSuccessResponse({
           data: prediction,
           summary,
@@ -137,31 +123,25 @@ export const POST = apiMiddleware.protected(
           action: 'predict'
         });
       }
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/predict?fieldId=123&cropType=corn
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const fieldId = searchParams.get('fieldId');
       const cropType = searchParams.get('cropType');
-      
       if (!fieldId || !cropType) {
         throw new ValidationError('fieldId and cropType parameters are required');
       }
-
       // Use default options for GET request
       const prediction = await yieldPrediction.predictYield({
         fieldId,
@@ -175,7 +155,6 @@ export const GET = apiMiddleware.protected(
         includeComparisons: searchParams.get('includeComparisons') === 'true',
         timeHorizon: parseInt(searchParams.get('timeHorizon') || '30')
       });
-
       const summary = {
         fieldId,
         cropType,
@@ -183,14 +162,12 @@ export const GET = apiMiddleware.protected(
         confidence: prediction.confidence,
         recommendationCount: prediction.recommendations.length
       };
-
       return createSuccessResponse({
         data: prediction,
         summary,
         message: `Yield prediction retrieved for field ${fieldId}`,
         action: 'get_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }

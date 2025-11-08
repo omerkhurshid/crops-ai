@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -18,50 +17,38 @@ import {
   Activity
 } from 'lucide-react'
 import Link from 'next/link'
-
 interface AnimalProfileProps {
   animal: any
 }
-
 export function AnimalProfile({ animal }: AnimalProfileProps) {
   const [activeTab, setActiveTab] = useState('overview')
-
   const calculateAge = (birthDate: string) => {
     if (!birthDate) return 'Unknown'
-    
     const birth = new Date(birthDate)
     const now = new Date()
     const monthsDiff = (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth()
-    
     if (monthsDiff < 12) return `${monthsDiff} months`
     const years = Math.floor(monthsDiff / 12)
     const remainingMonths = monthsDiff % 12
-    
     if (remainingMonths === 0) return `${years} ${years === 1 ? 'year' : 'years'}`
     return `${years}y ${remainingMonths}m`
   }
-
   const getHealthStatus = () => {
     const recentHealthIssues = animal.healthRecords?.filter((record: any) => 
       ['illness', 'injury'].includes(record.recordType) && 
       new Date(record.recordDate) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     ) || []
-    
     if (recentHealthIssues.length > 0) return { status: 'needs-attention', color: 'yellow' }
     return { status: 'healthy', color: 'green' }
   }
-
   const getWeightTrend = () => {
     if (!animal.weightRecords || animal.weightRecords.length < 2) return { trend: 'stable', change: 0 }
-    
     const [latest, previous] = animal.weightRecords
     const change = latest.weight - previous.weight
-    
     if (change > 5) return { trend: 'up', change }
     if (change < -5) return { trend: 'down', change }
     return { trend: 'stable', change }
   }
-
   const tabs = [
     { id: 'overview', label: 'Overview', icon: FileText },
     { id: 'health', label: 'Health Records', icon: Heart },
@@ -70,10 +57,8 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
     { id: 'feed', label: 'Feed & Nutrition', icon: Activity },
     { id: 'financial', label: 'Financial', icon: DollarSign }
   ]
-
   const healthStatus = getHealthStatus()
   const weightTrend = getWeightTrend()
-
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
@@ -98,7 +83,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           })}
         </nav>
       </div>
-
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -144,21 +128,18 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                   <p className="text-lg font-semibold">{animal.farm?.name}</p>
                 </div>
               </div>
-              
               {animal.color && (
                 <div>
                   <label className="text-sm font-medium text-gray-600">Color</label>
                   <p className="text-lg font-semibold">{animal.color}</p>
                 </div>
               )}
-              
               {animal.markings && (
                 <div>
                   <label className="text-sm font-medium text-gray-600">Markings</label>
                   <p className="text-lg font-semibold">{animal.markings}</p>
                 </div>
               )}
-              
               {animal.notes && (
                 <div>
                   <label className="text-sm font-medium text-gray-600">Notes</label>
@@ -167,7 +148,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               )}
             </ModernCardContent>
           </ModernCard>
-
           {/* Parentage & Offspring */}
           <ModernCard>
             <ModernCardHeader>
@@ -201,7 +181,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                   </div>
                 </div>
               )}
-              
               {((animal.motherOffspring && animal.motherOffspring.length > 0) || (animal.fatherOffspring && animal.fatherOffspring.length > 0)) && (
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Offspring ({(animal.motherOffspring?.length || 0) + (animal.fatherOffspring?.length || 0)})</h4>
@@ -224,7 +203,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                   </div>
                 </div>
               )}
-              
               {!animal.mother && !animal.father && (!animal.motherOffspring || animal.motherOffspring.length === 0) && (!animal.fatherOffspring || animal.fatherOffspring.length === 0) && (
                 <p className="text-gray-500 text-center py-4">No family records available</p>
               )}
@@ -232,7 +210,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           </ModernCard>
         </div>
       )}
-
       {activeTab === 'health' && (
         <ModernCard>
           <ModernCardHeader className="flex flex-row items-center justify-between">
@@ -272,15 +249,12 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                         </Button>
                       </div>
                     </div>
-                    
                     {record.description && (
                       <p className="text-gray-700 mb-2">{record.description}</p>
                     )}
-                    
                     {record.veterinarian && (
                       <p className="text-sm text-gray-600">Veterinarian: {record.veterinarian}</p>
                     )}
-                    
                     {record.cost && (
                       <p className="text-sm text-gray-600">Cost: ${record.cost}</p>
                     )}
@@ -297,7 +271,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           </ModernCardContent>
         </ModernCard>
       )}
-
       {activeTab === 'weight' && (
         <ModernCard>
           <ModernCardHeader className="flex flex-row items-center justify-between">
@@ -344,7 +317,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                     </p>
                   </div>
                 </div>
-                
                 <div className="space-y-3">
                   {animal.weightRecords.map((record: any) => (
                     <div key={record.id} className="flex items-center justify-between p-3 border border-gray-200 rounded">
@@ -376,7 +348,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           </ModernCardContent>
         </ModernCard>
       )}
-
       {activeTab === 'breeding' && (
         <ModernCard>
           <ModernCardHeader className="flex flex-row items-center justify-between">
@@ -410,19 +381,16 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                         </Button>
                       </div>
                     </div>
-                    
                     {record.mateId && (
                       <p className="text-sm text-gray-600 mb-1">
                         Mate: {record.mate?.tagNumber} {record.mate?.name && `(${record.mate.name})`}
                       </p>
                     )}
-                    
                     {record.expectedDueDate && (
                       <p className="text-sm text-gray-600 mb-1">
                         Expected Due: {new Date(record.expectedDueDate).toLocaleDateString()}
                       </p>
                     )}
-                    
                     {record.notes && (
                       <p className="text-gray-700">{record.notes}</p>
                     )}
@@ -439,7 +407,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           </ModernCardContent>
         </ModernCard>
       )}
-
       {activeTab === 'feed' && (
         <ModernCard>
           <ModernCardHeader className="flex flex-row items-center justify-between">
@@ -471,7 +438,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                         )}
                       </div>
                     </div>
-                    
                     {record.notes && (
                       <p className="text-sm text-gray-700">{record.notes}</p>
                     )}
@@ -488,7 +454,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           </ModernCardContent>
         </ModernCard>
       )}
-
       {activeTab === 'financial' && (
         <ModernCard>
           <ModernCardHeader>
@@ -518,7 +483,6 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                   </div>
                 </div>
               </div>
-
               <div className="space-y-4">
                 <h4 className="font-medium text-gray-900">Cost Summary</h4>
                 <div className="space-y-2">

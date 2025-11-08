@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -26,7 +25,6 @@ import {
   Bug
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface CropPlanning {
   id: string
   cropName: string
@@ -43,12 +41,10 @@ interface CropPlanning {
   status: 'planned' | 'planted' | 'growing' | 'harvesting' | 'completed'
   notes?: string
 }
-
 interface SimplifiedCropTimelineProps {
   farmId: string
   year?: number
 }
-
 const statusColors = {
   planned: 'bg-fk-text-muted',
   planted: 'bg-fk-info',
@@ -56,7 +52,6 @@ const statusColors = {
   harvesting: 'bg-fk-accent-wheat',
   completed: 'bg-fk-neutral'
 }
-
 const statusLabels = {
   planned: 'Planned',
   planted: 'Planted',
@@ -64,7 +59,6 @@ const statusLabels = {
   harvesting: 'Ready to Harvest',
   completed: 'Harvested'
 }
-
 const statusIcons = {
   planned: <Calendar className="h-4 w-4" />,
   planted: <Circle className="h-4 w-4" />,
@@ -72,7 +66,6 @@ const statusIcons = {
   harvesting: <Scissors className="h-4 w-4" />,
   completed: <TrendingUp className="h-4 w-4" />
 }
-
 export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTimelineProps) {
   const [currentYear, setCurrentYear] = useState(year)
   const [selectedCrop, setSelectedCrop] = useState<string>('all')
@@ -80,7 +73,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
   const [showAddForm, setShowAddForm] = useState(false)
   const [plannings, setPlannings] = useState<CropPlanning[]>([])
   const [loading, setLoading] = useState(true)
-
   // Calculate attention items based on real logic
   const getAttentionItems = (plannings: CropPlanning[]) => {
     const today = new Date()
@@ -91,13 +83,11 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
       crop: string
       location: string
     }> = []
-
     plannings.forEach(planning => {
       const harvestDate = new Date(planning.harvestDate)
       const plantDate = new Date(planning.plantDate)
       const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
       const daysFromPlant = Math.ceil((today.getTime() - plantDate.getTime()) / (1000 * 60 * 60 * 24))
-
       // Approaching harvest window (within 7 days)
       if (daysToHarvest > 0 && daysToHarvest <= 7 && planning.status === 'growing') {
         items.push({
@@ -108,7 +98,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           location: planning.location
         })
       }
-
       // Overdue harvest
       if (daysToHarvest < 0 && planning.status !== 'completed') {
         items.push({
@@ -119,7 +108,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           location: planning.location
         })
       }
-
       // Overdue planting (planned but not planted past plant date)
       if (planning.status === 'planned' && today > plantDate) {
         const overdueDays = Math.ceil((today.getTime() - plantDate.getTime()) / (1000 * 60 * 60 * 24))
@@ -131,7 +119,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           location: planning.location
         })
       }
-
       // Pest risk based on growth stage (30-60 days from planting)
       if (planning.status === 'growing' && daysFromPlant >= 30 && daysFromPlant <= 60) {
         items.push({
@@ -143,13 +130,11 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
         })
       }
     })
-
     return items.sort((a, b) => {
       const priorityOrder = { high: 3, medium: 2, low: 1 }
       return priorityOrder[b.priority] - priorityOrder[a.priority]
     })
   }
-
   // Fetch crop planning data from API
   useEffect(() => {
     async function fetchPlannings() {
@@ -187,28 +172,23 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
         setLoading(false)
       }
     }
-
     fetchPlannings()
   }, [farmId, currentYear])
-
   // Filter plannings by year
   const yearPlannings = plannings.filter(planning => {
     const startYear = new Date(planning.startDate).getFullYear()
     const endYear = new Date(planning.harvestDate).getFullYear()
     return startYear === currentYear || endYear === currentYear
   })
-
   // Get unique crops and locations for filtering
   const uniqueCrops = Array.from(new Set(ensureArray(plannings).map(p => p.cropName)))
   const uniqueLocations = Array.from(new Set(ensureArray(plannings).map(p => p.location)))
-  
   // Filter plannings based on selected filters
   const filteredPlannings = yearPlannings.filter(planning => {
     const matchesCrop = selectedCrop === 'all' || planning.cropName === selectedCrop
     const matchesLocation = selectedLocation === 'all' || planning.location === selectedLocation
     return matchesCrop && matchesLocation
   })
-  
   // Calculate summary statistics
   const totalPlanned = filteredPlannings.filter(p => p.status === 'planned').length
   const growingNow = filteredPlannings.filter(p => p.status === 'growing').length
@@ -218,14 +198,11 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
     const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
     return daysToHarvest >= 0 && daysToHarvest <= 14
   }).length
-  
   const attentionItems = getAttentionItems(filteredPlannings)
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
-
   const formatQuantity = (quantity: number, unit: string) => {
     if (quantity >= 1000000) {
       return `${(quantity / 1000000).toFixed(1)}M ${unit}`
@@ -234,21 +211,16 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
     }
     return `${quantity} ${unit}`
   }
-
   const getSeasonProgress = (planning: CropPlanning) => {
     const today = new Date()
     const startDate = new Date(planning.plantDate)
     const endDate = new Date(planning.harvestDate)
-    
     if (today < startDate) return 0
     if (today > endDate) return 100
-    
     const totalDuration = endDate.getTime() - startDate.getTime()
     const elapsedDuration = today.getTime() - startDate.getTime()
-    
     return Math.max(0, Math.min(100, Math.round((elapsedDuration / totalDuration) * 100)))
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -259,7 +231,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header Controls */}
@@ -291,7 +262,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
             </Button>
           </div>
         </div>
-
         <div className="flex items-center gap-3">
           <Button 
             variant="outline" 
@@ -310,7 +280,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           </Button>
         </div>
       </div>
-
       {/* Filter Controls */}
       <div className="flex flex-wrap gap-4 p-4 bg-surface rounded-card border border-fk-border">
         <div className="flex items-center gap-2">
@@ -327,7 +296,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
             </SelectContent>
           </Select>
         </div>
-        
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold text-fk-text">Location:</span>
           <Select value={selectedLocation} onValueChange={setSelectedLocation}>
@@ -343,7 +311,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           </Select>
         </div>
       </div>
-
       {/* Summary Stats - Moved to Top */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
@@ -357,7 +324,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
             </div>
           </CardContent>
         </Card>
-
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -369,7 +335,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
             </div>
           </CardContent>
         </Card>
-
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -382,7 +347,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           </CardContent>
         </Card>
       </div>
-
       {/* Timeline */}
       <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
         <CardHeader>
@@ -411,7 +375,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
                       {statusLabels[planning.status]}
                     </div>
                   </div>
-
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
                     <div>
                       <span className="font-medium text-fk-text-muted">Planted:</span>
@@ -430,7 +393,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
                       <p className="text-fk-text">{planning.estimatedYield} {planning.yieldUnit}</p>
                     </div>
                   </div>
-
                   <div className="mt-3">
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-fk-text-muted">Season Progress</span>
@@ -455,7 +417,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
           )}
         </CardContent>
       </Card>
-
       {/* What Needs Your Attention - Real Logic */}
       {attentionItems.length > 0 && (
         <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
@@ -484,7 +445,6 @@ export function SimplifiedCropTimeline({ farmId, year = 2024 }: SimplifiedCropTi
                   medium: 'text-orange-700',
                   low: 'text-yellow-700'
                 }
-                
                 return (
                   <div key={index} className={`p-3 rounded-card border ${priorityColors[item.priority]}`}>
                     <div className="flex items-start gap-3">

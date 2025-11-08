@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useRef } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,7 +7,6 @@ import {
   X, ArrowRight, ArrowLeft, Target, Lightbulb, 
   CheckCircle2, Zap, Eye, Info
 } from 'lucide-react'
-
 interface TooltipStep {
   id: string
   target: string // CSS selector for the target element
@@ -22,7 +20,6 @@ interface TooltipStep {
     onClick: () => void
   }
 }
-
 interface OnboardingTooltipsProps {
   steps: TooltipStep[]
   onComplete?: () => void
@@ -31,7 +28,6 @@ interface OnboardingTooltipsProps {
   showProgress?: boolean
   theme?: 'sage' | 'earth' | 'cream'
 }
-
 export function OnboardingTooltips({
   steps,
   onComplete,
@@ -47,9 +43,7 @@ export function OnboardingTooltips({
   const tooltipRef = useRef<HTMLDivElement>(null)
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
   const [isActive, setIsActive] = useState(false)
-
   const currentStepData = steps[currentStep]
-
   // Initialize tooltips after delay
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -58,20 +52,16 @@ export function OnboardingTooltips({
         showStep(0)
       }
     }, startDelay)
-
     return () => clearTimeout(timer)
   }, [startDelay, steps])
-
   // Position calculation
   const calculatePosition = (target: HTMLElement, tooltipEl: HTMLElement) => {
     const targetRect = target.getBoundingClientRect()
     const tooltipRect = tooltipEl.getBoundingClientRect()
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
-    
     let top = 0
     let left = 0
-    
     switch (currentStepData?.position || 'auto') {
       case 'top':
         top = targetRect.top - tooltipRect.height - 12
@@ -111,46 +101,36 @@ export function OnboardingTooltips({
         }
         break
     }
-
     // Constrain to viewport
     left = Math.max(12, Math.min(left, viewportWidth - tooltipRect.width - 12))
     top = Math.max(12, Math.min(top, viewportHeight - tooltipRect.height - 12))
-
     return { top, left }
   }
-
   const showStep = (stepIndex: number) => {
     if (stepIndex >= steps.length) {
       handleComplete()
       return
     }
-
     const step = steps[stepIndex]
     const targetEl = document.querySelector(step.target) as HTMLElement
-    
     if (!targetEl) {
-
       // Skip to next step
       setCurrentStep(stepIndex + 1)
       return
     }
-
     setTargetElement(targetEl)
     setCurrentStep(stepIndex)
-
     // Highlight target element
     targetEl.style.position = 'relative'
     targetEl.style.zIndex = '9998'
     targetEl.style.outline = '2px solid rgb(132, 204, 22)'
     targetEl.style.outlineOffset = '2px'
     targetEl.style.borderRadius = '8px'
-
     // Show tooltip after brief delay
     setTimeout(() => {
       setIsVisible(true)
     }, step.showDelay || 300)
   }
-
   const hideCurrentHighlight = () => {
     if (targetElement) {
       targetElement.style.position = ''
@@ -160,15 +140,12 @@ export function OnboardingTooltips({
       targetElement.style.borderRadius = ''
     }
   }
-
   const handleNext = () => {
     if (!completedSteps.includes(currentStepData.id)) {
       setCompletedSteps(prev => [...prev, currentStepData.id])
     }
-    
     hideCurrentHighlight()
     setIsVisible(false)
-    
     setTimeout(() => {
       if (currentStep < steps.length - 1) {
         showStep(currentStep + 1)
@@ -177,32 +154,27 @@ export function OnboardingTooltips({
       }
     }, 200)
   }
-
   const handlePrevious = () => {
     hideCurrentHighlight()
     setIsVisible(false)
-    
     setTimeout(() => {
       if (currentStep > 0) {
         showStep(currentStep - 1)
       }
     }, 200)
   }
-
   const handleSkip = () => {
     hideCurrentHighlight()
     setIsVisible(false)
     setIsActive(false)
     if (onSkip) onSkip()
   }
-
   const handleComplete = () => {
     hideCurrentHighlight()
     setIsVisible(false)
     setIsActive(false)
     if (onComplete) onComplete()
   }
-
   // Update tooltip position when visible
   useEffect(() => {
     if (isVisible && targetElement && tooltipRef.current) {
@@ -210,34 +182,27 @@ export function OnboardingTooltips({
         const newPosition = calculatePosition(targetElement, tooltipRef.current!)
         setPosition(newPosition)
       }
-      
       updatePosition()
-      
       // Update position on scroll and resize
       const handleResize = () => updatePosition()
       const handleScroll = () => updatePosition()
-      
       window.addEventListener('resize', handleResize)
       window.addEventListener('scroll', handleScroll, true)
-      
       return () => {
         window.removeEventListener('resize', handleResize)
         window.removeEventListener('scroll', handleScroll, true)
       }
     }
   }, [isVisible, targetElement, currentStep])
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       hideCurrentHighlight()
     }
   }, [])
-
   if (!isActive || !currentStepData || !isVisible) {
     return null
   }
-
   const themeColors = {
     sage: {
       bg: 'from-sage-50 to-white',
@@ -258,14 +223,11 @@ export function OnboardingTooltips({
       accent: 'text-sage-600'
     }
   }
-
   const colors = themeColors[theme]
-
   return (
     <>
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[9997]" />
-      
       {/* Tooltip */}
       <div
         ref={tooltipRef}
@@ -309,11 +271,9 @@ export function OnboardingTooltips({
                 <X className="h-4 w-4" />
               </button>
             </div>
-
             <p className={`${colors.accent} text-sm mb-6 leading-relaxed`}>
               {currentStepData.content}
             </p>
-
             {currentStepData.action && (
               <div className="mb-4">
                 <InlineFloatingButton
@@ -325,7 +285,6 @@ export function OnboardingTooltips({
                 />
               </div>
             )}
-
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 {currentStep > 0 && (
@@ -345,7 +304,6 @@ export function OnboardingTooltips({
                   onClick={handleSkip}
                 />
               </div>
-
               <InlineFloatingButton
                 icon={currentStep === steps.length - 1 ? <CheckCircle2 className="h-3 w-3" /> : <ArrowRight className="h-3 w-3" />}
                 label={currentStep === steps.length - 1 ? "Finish" : "Next"}
@@ -355,7 +313,6 @@ export function OnboardingTooltips({
                 onClick={handleNext}
               />
             </div>
-
             {/* Progress indicator */}
             {showProgress && (
               <div className="mt-4 pt-4 border-t border-sage-200">
@@ -377,7 +334,6 @@ export function OnboardingTooltips({
     </>
   )
 }
-
 // Pre-defined tooltip configurations for common scenarios
 export const dashboardTooltips: TooltipStep[] = [
   {
@@ -413,7 +369,6 @@ export const dashboardTooltips: TooltipStep[] = [
     position: 'auto'
   }
 ]
-
 export const farmTooltips: TooltipStep[] = [
   {
     id: 'farm-creation-form',

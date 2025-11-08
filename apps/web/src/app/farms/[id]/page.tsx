@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from '../../../lib/auth-unified'
@@ -25,9 +24,7 @@ import {
   CloudRain, Sun, Droplets, Wind, Thermometer, BarChart,
   Satellite, Brain, DollarSign, Calendar, ArrowLeft, Eye, Plus, Settings
 } from 'lucide-react'
-
 export const dynamic = 'force-dynamic'
-
 async function getFarmDetails(farmId: string, userId: string) {
   try {
     const farm = await prisma.farm.findFirst({
@@ -51,18 +48,15 @@ async function getFarmDetails(farmId: string, userId: string) {
         }
       }
     })
-
     if (!farm) {
       return null
     }
-
     // Calculate aggregate stats
     const totalArea = (farm.fields || []).reduce((sum, field) => sum + field.area, 0)
     const averageNDVI = (farm.fields || []).reduce((sum, field) => {
       const latestData = field.satelliteData?.[0]
       return sum + (latestData?.ndvi || 0)
     }, 0) / ((farm.fields || []).length || 1)
-
     return {
       ...farm,
       stats: {
@@ -77,21 +71,17 @@ async function getFarmDetails(farmId: string, userId: string) {
     return null
   }
 }
-
 export default function FarmDetailsPage({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farm, setFarm] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchFarm() {
       try {
         const response = await fetch(`/api/farms/${params.id}`)
@@ -108,10 +98,8 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
         setIsLoading(false)
       }
     }
-
     fetchFarm()
   }, [session, status, router, params.id])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -122,11 +110,9 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
       </DashboardLayout>
     )
   }
-
   if (!session || !farm) {
     return null
   }
-
   return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -135,7 +121,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
         label="Farm Settings"
         variant="primary"
       />
-      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         {/* Modern Header with Asymmetric Layout */}
         <div className="mb-12 relative">
@@ -143,7 +128,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Farms
           </Link>
-          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Main Farm Info - Takes 2 columns */}
             <div className="lg:col-span-2">
@@ -163,7 +147,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 </Badge>
               </div>
             </div>
-            
             {/* Quick Action Panel */}
             <div className="lg:col-span-1">
               <ModernCard variant="glass" className="h-full">
@@ -194,7 +177,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             </div>
           </div>
         </div>
-
         {/* Sophisticated Stats Grid - Mobile Optimized */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 lg:mb-12">
           <MetricCard
@@ -205,7 +187,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             variant="soft"
             tooltip={TOOLTIP_CONTENT.area}
           />
-          
           <MetricCard
             title="Fields"
             value={farm.stats.fieldsCount.toString()}
@@ -214,7 +195,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             variant="glass"
             tooltip={TOOLTIP_CONTENT.field}
           />
-          
           <MetricCard
             title="Health"
             value={`${farm.stats.healthScore}%`}
@@ -223,7 +203,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             variant="glow"
             tooltip={TOOLTIP_CONTENT.healthScore}
           />
-          
           <MetricCard
             title="Next Task"
             value="Inspection"
@@ -232,19 +211,16 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             variant="glow"
           />
         </div>
-
         {/* Enhanced Farm Map with NDVI - Full Width */}
         <div className="mb-8">
           <EnhancedFarmMap farm={farm} />
         </div>
-
         {/* Asymmetric Magazine-Style Layout - Mobile Optimized */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Main Content Area - Takes 8 columns, full width on mobile */}
           <div className="lg:col-span-8 space-y-6 lg:space-y-8 order-2 lg:order-1">
             {/* Farm Health Metrics */}
             <FarmHealthCard farmId={farm.id} farmName={farm.name} />
-
             {/* Fields Overview with Modern Design */}
             <ModernCard variant="floating" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
@@ -296,7 +272,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                                 initialStatus={field.isActive ?? true}
                               />
                             </div>
-                            
                             <div className="text-right">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-medium text-sage-700">NDVI:</span>
@@ -312,7 +287,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                               </div>
                             </div>
                           </div>
-                          
                           {field.satelliteData[0] && (
                             <div className="mt-4 flex items-center justify-between">
                               <div className="flex gap-3">
@@ -344,7 +318,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 )}
               </ModernCardContent>
             </ModernCard>
-
             {/* Visual Farm Map */}
             <VisualFarmMap 
               farm={{
@@ -360,7 +333,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 window.location.reload()
               }}
             />
-
             {/* Satellite Imagery */}
             {(farm.fields || []).length > 0 && (
               <div className="space-y-6">
@@ -373,20 +345,17 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 ))}
               </div>
             )}
-
             {/* Market Intelligence */}
             <div className="mt-8">
               <MarketDashboard 
                 cropTypes={(farm.fields || []).map((f: any) => f.crops?.[0]?.cropType).filter(Boolean)}
               />
             </div>
-
             {/* Analytics Dashboard */}
             <div className="mt-8">
               <AnalyticsDashboard farmId={farm.id} />
             </div>
           </div>
-
           {/* Right Column - Weather & Insights, appears first on mobile */}
           <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
             {/* Weather Widget - Data Not Available */}
@@ -423,7 +392,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 </div>
               </ModernCardContent>
             </ModernCard>
-
             {/* AI Insights */}
             <ModernCard variant="floating" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-br from-sage-50/90 to-cream-50/90">
@@ -456,7 +424,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                 </div>
               </ModernCardContent>
             </ModernCard>
-
             {/* Market Prices */}
             <ModernCard variant="soft" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-br from-cream-100/80 to-earth-50/80">
@@ -490,7 +457,6 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             </ModernCard>
           </div>
         </div>
-
         {/* Modern Action Buttons */}
         <div className="mt-12">
           <ModernCard variant="glass" className="max-w-2xl mx-auto">

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -21,7 +20,6 @@ import {
   Target
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface CropAction {
   id: string
   cropName: string
@@ -32,7 +30,6 @@ interface CropAction {
   daysUntil: number
   icon: React.ReactNode
 }
-
 interface CropCard {
   id: string
   cropName: string
@@ -51,9 +48,7 @@ interface CropCard {
   healthScore: number
   icon: string
 }
-
 // Removed mock data - will fetch real data from database
-
 const statusConfig = {
   planned: {
     label: 'Planned',
@@ -91,7 +86,6 @@ const statusConfig = {
     borderColor: 'border-fk-neutral/30'
   }
 }
-
 const priorityConfig = {
   urgent: {
     color: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30',
@@ -106,17 +100,14 @@ const priorityConfig = {
     label: 'Upcoming'
   }
 }
-
 interface FarmerFriendlyCropViewProps {
   farmId: string
 }
-
 export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) {
   const [viewMode, setViewMode] = useState<'cards' | 'timeline'>('cards')
   const [crops, setCrops] = useState<CropCard[]>([])
   const [nextActions, setNextActions] = useState<CropAction[]>([])
   const [loading, setLoading] = useState(true)
-
   // Fetch crops data from API
   useEffect(() => {
     async function fetchCropsData() {
@@ -128,7 +119,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           // Transform API data to component format if needed
           setCrops(cropsData)
         }
-
         // Fetch related tasks/recommendations
         const actionsResponse = await fetch(`/api/recommendations?farmId=${farmId}&limit=5`)
         if (actionsResponse.ok) {
@@ -141,10 +131,8 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
         setLoading(false)
       }
     }
-
     fetchCropsData()
   }, [farmId])
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -152,14 +140,12 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
       minimumFractionDigits: 0
     }).format(amount)
   }
-
   const formatArea = (area: number, unit: string) => {
     if (unit === 'acres') {
       return `${area} acres`
     }
     return `${area} ${unit}`
   }
-
   const getDaysText = (days: number) => {
     if (days === 0) return 'Today!'
     if (days === 1) return 'Tomorrow'
@@ -167,11 +153,9 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
     const weeks = Math.floor(days / 7)
     return weeks === 1 ? '1 week' : `${weeks} weeks`
   }
-
   const totalExpectedRevenue = crops.reduce((sum, crop) => sum + crop.expectedRevenue, 0)
   const growingCrops = crops.filter(c => c.status === 'growing' || c.status === 'planted')
   const readyToHarvest = crops.filter(c => c.status === 'ready_harvest')
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -182,7 +166,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Quick Actions - Most Important */}
@@ -229,7 +212,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </CardContent>
         </Card>
       )}
-
       {/* Quick Overview Stats - FieldKit KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
@@ -237,26 +219,22 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           <div className="text-2xl font-bold text-fk-success">{growingCrops.length}</div>
           <div className="text-sm font-medium text-fk-text-muted">Crops Growing</div>
         </Card>
-        
         <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">✂️</div>
           <div className="text-2xl font-bold text-fk-accent-wheat">{readyToHarvest.length}</div>
           <div className="text-sm font-medium text-fk-text-muted">Ready to Harvest</div>
         </Card>
-
         <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">🎯</div>
           <div className="text-2xl font-bold text-fk-accent-sky">{nextActions.length}</div>
           <div className="text-sm font-medium text-fk-text-muted">Tasks Due</div>
         </Card>
-
         <Card className="text-center p-5 bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <div className="text-3xl mb-2">💰</div>
           <div className="text-2xl font-bold text-fk-earth">{formatCurrency(totalExpectedRevenue)}</div>
           <div className="text-sm font-medium text-fk-text-muted">Expected Income</div>
         </Card>
       </div>
-
       {/* View Toggle */}
       <div className="flex justify-center">
         <div className="bg-fk-border/30 rounded-control p-1 flex">
@@ -278,7 +256,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           </Button>
         </div>
       </div>
-
       {/* Mobile-First Crop Cards */}
       {viewMode === 'cards' && (
         <div className="space-y-4">
@@ -304,7 +281,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       {statusInfo.label}
                     </Badge>
                   </div>
-
                   {/* Progress Bar for Growing Crops */}
                   {(crop.status === 'growing' || crop.status === 'planted') && (
                     <div className="mb-3">
@@ -320,7 +296,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       )}
                     </div>
                   )}
-
                   {/* Next Action - Most Important */}
                   <div className={`p-3 ${statusInfo.bgColor} rounded-lg mb-3`}>
                     <div className="flex items-center gap-2 mb-1">
@@ -330,7 +305,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                     <p className="font-medium text-gray-900">{crop.nextAction}</p>
                     <p className="text-sm text-gray-600">Due: {crop.nextActionDate}</p>
                   </div>
-
                   {/* Key Stats Row */}
                   <div className="grid grid-cols-3 gap-4 text-center text-sm">
                     <div>
@@ -352,7 +326,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       <div className="text-gray-500">Revenue</div>
                     </div>
                   </div>
-
                   {/* Health Score */}
                   {crop.healthScore > 0 && (
                     <div className="mt-3 pt-3 border-t border-gray-100">
@@ -383,7 +356,6 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
           )}
         </div>
       )}
-
       {/* Timeline View - Simplified */}
       {viewMode === 'timeline' && (
         <Card>

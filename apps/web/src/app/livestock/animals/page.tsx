@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,7 +7,6 @@ import { AnimalRegistry } from '../../../components/livestock/animal-registry'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { Plus, Users, Heart, TrendingUp } from 'lucide-react'
-
 export default function AnimalsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -16,15 +14,12 @@ export default function AnimalsPage() {
   const [animals, setAnimals] = useState<any[]>([])
   const [stats, setStats] = useState({ total: 0, healthy: 0, needingAttention: 0, growthRate: 0 })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -32,19 +27,16 @@ export default function AnimalsPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=animals')
             return
           }
-
           // Fetch animals
           const animalsResponse = await fetch('/api/livestock/animals')
           if (animalsResponse.ok) {
             const animalsData = await animalsResponse.json()
             setAnimals(animalsData)
-            
             // Calculate stats
             const calculatedStats = {
               total: animalsData.length,
@@ -61,10 +53,8 @@ export default function AnimalsPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -75,11 +65,9 @@ export default function AnimalsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -99,7 +87,6 @@ export default function AnimalsPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -117,7 +104,6 @@ export default function AnimalsPage() {
             />
           </div>
         </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -131,7 +117,6 @@ export default function AnimalsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -143,7 +128,6 @@ export default function AnimalsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -157,7 +141,6 @@ export default function AnimalsPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -170,7 +153,6 @@ export default function AnimalsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Animal Registry */}
         <ModernCard>
           <ModernCardHeader>

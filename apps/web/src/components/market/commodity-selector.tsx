@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card'
 import { Button } from '../ui/button'
@@ -14,13 +13,11 @@ import {
   DollarSign
 } from 'lucide-react'
 import { COMMODITY_TIERS } from '../../lib/market/commodity-tiers'
-
 interface CommoditySelectorProps {
   userId: string
   currentCommodities: string[]
   onUpdate: (commodities: string[]) => void
 }
-
 export function CommoditySelector({ 
   userId, 
   currentCommodities, 
@@ -28,7 +25,6 @@ export function CommoditySelector({
 }: CommoditySelectorProps) {
   const [selected, setSelected] = useState<string[]>(currentCommodities)
   const [showAll, setShowAll] = useState(false)
-
   const commodityIcons: Record<string, JSX.Element> = {
     'CORN': <span>🌽</span>,
     'WHEAT': <span>🌾</span>,
@@ -41,7 +37,6 @@ export function CommoditySelector({
     'SUGAR': <span>🍬</span>,
     'MILK': <span>🥛</span>
   }
-
   const toggleCommodity = (symbol: string) => {
     if (selected.includes(symbol)) {
       setSelected(selected.filter(s => s !== symbol))
@@ -49,7 +44,6 @@ export function CommoditySelector({
       setSelected([...selected, symbol])
     }
   }
-
   const savePrefences = async () => {
     // Save to database
     await fetch('/api/user/commodity-preferences', {
@@ -57,22 +51,17 @@ export function CommoditySelector({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ commodities: selected })
     })
-    
     onUpdate(selected)
   }
-
   const tier1 = Object.entries(COMMODITY_TIERS)
     .filter(([_, info]) => info.tier === 1)
     .map(([symbol]) => symbol)
-  
   const tier2 = Object.entries(COMMODITY_TIERS)
     .filter(([_, info]) => info.tier === 2)
     .map(([symbol]) => symbol)
-  
   const tier3 = Object.entries(COMMODITY_TIERS)
     .filter(([_, info]) => info.tier === 3)
     .map(([symbol]) => symbol)
-
   return (
     <Card>
       <CardHeader>
@@ -112,7 +101,6 @@ export function CommoditySelector({
             ))}
           </div>
         </div>
-
         {/* Secondary Commodities */}
         <div>
           <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
@@ -140,7 +128,6 @@ export function CommoditySelector({
             ))}
           </div>
         </div>
-
         {/* Show More */}
         {showAll && (
           <div>
@@ -164,7 +151,6 @@ export function CommoditySelector({
             </div>
           </div>
         )}
-
         <div className="flex items-center justify-between">
           <Button
             variant="outline"
@@ -173,7 +159,6 @@ export function CommoditySelector({
           >
             {showAll ? 'Show Less' : 'Show Specialty Crops'}
           </Button>
-          
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-600">
               {selected.length}/6 selected
@@ -186,7 +171,6 @@ export function CommoditySelector({
             </Button>
           </div>
         </div>
-
         {/* Info Box */}
         <div className="bg-blue-50 p-4 rounded-lg">
           <div className="flex gap-3">

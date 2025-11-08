@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
 import { z } from 'zod'
-
 const harvestSchema = z.object({
   farmId: z.string(),
   fieldName: z.string(),
@@ -12,28 +11,23 @@ const harvestSchema = z.object({
   qualityNotes: z.string().optional(),
   date: z.string().optional()
 })
-
 export async function POST(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const validatedData = harvestSchema.parse(body)
-
     const farm = await prisma.farm.findFirst({
       where: {
         id: validatedData.farmId,
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
-
     const harvestRecord = await prisma.harvestRecord.create({
       data: {
         farmId: validatedData.farmId,
@@ -46,7 +40,6 @@ export async function POST(request: NextRequest) {
         userId: user.id
       }
     })
-
     const priceMap: Record<string, number> = {
       WHEAT: 280,
       CORN: 220,
@@ -56,9 +49,7 @@ export async function POST(request: NextRequest) {
       OTHER: 300
     }
     const estimatedPricePerTon = priceMap[validatedData.cropType.toUpperCase()] || 300
-
     const estimatedRevenue = validatedData.quantity * estimatedPricePerTon
-
     await prisma.financialTransaction.create({
       data: {
         type: 'INCOME',
@@ -71,7 +62,6 @@ export async function POST(request: NextRequest) {
         farmId: validatedData.farmId
       }
     })
-
     return NextResponse.json({
       success: true,
       harvest: {
@@ -91,14 +81,12 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const harvests = await prisma.harvestRecord.findMany({
       where: {
         userId: user.id
@@ -111,7 +99,6 @@ export async function GET(request: NextRequest) {
       orderBy: { harvestDate: 'desc' },
       take: 10
     })
-
     return NextResponse.json({ harvests })
   } catch (error) {
     console.error('Error fetching harvest records:', error)

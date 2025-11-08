@@ -1,22 +1,17 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Cat, Heart, Calendar, AlertTriangle, Plus } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface LivestockOverviewProps {
   farmId: string
 }
-
 // Removed mock data - will fetch from database
-
 export function LivestockOverview({ farmId }: LivestockOverviewProps) {
   const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-
   // Fetch livestock data from API
   useEffect(() => {
     async function fetchLivestockData() {
@@ -32,10 +27,8 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
         setLoading(false)
       }
     }
-
     fetchLivestockData()
   }, [farmId])
-
   if (loading) {
     return (
       <ModernCard>
@@ -46,7 +39,6 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
       </ModernCard>
     )
   }
-
   if (!data || data.totalAnimals === 0) {
     return (
       <ModernCard>
@@ -73,7 +65,6 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
       </ModernCard>
     )
   }
-
   return (
     <div className="space-y-6">
       <ModernCard>
@@ -105,7 +96,6 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
               <div className="text-sm text-sage-600">Health Score</div>
             </div>
           </div>
-          
           <div className="space-y-3">
             <h4 className="font-semibold text-sage-800">Species Breakdown</h4>
             {ensureArray(data.species).map((species: any, index: number) => (
@@ -129,7 +119,6 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       <ModernCard>
         <ModernCardHeader>
           <ModernCardTitle className="text-sage-800 flex items-center gap-2">
@@ -172,7 +161,6 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       <ModernCard>
         <ModernCardHeader>
           <ModernCardTitle className="text-sage-800">Recent Activity</ModernCardTitle>

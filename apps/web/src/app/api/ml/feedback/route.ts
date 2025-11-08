@@ -4,7 +4,6 @@ import { recommendationEngine } from '../../../../lib/ml/recommendation-engine';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const feedbackSchema = z.object({
   recommendationId: z.string().min(1, 'Recommendation ID is required'),
   implemented: z.boolean(),
@@ -17,25 +16,20 @@ const feedbackSchema = z.object({
   }).optional(),
   comments: z.string().max(1000).optional()
 });
-
 // POST /api/ml/feedback
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = feedbackSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
-      
       await recommendationEngine.recordFeedback({
         recommendationId: params.recommendationId,
         userId: user.id,
@@ -46,7 +40,6 @@ export const POST = apiMiddleware.protected(
         comments: params.comments,
         submittedAt: new Date()
       });
-
       const summary = {
         recommendationId: params.recommendationId,
         implemented: params.implemented,
@@ -54,7 +47,6 @@ export const POST = apiMiddleware.protected(
         userId: user.id,
         submittedAt: new Date().toISOString()
       };
-
       return createSuccessResponse({
         data: {
           feedbackId: `feedback_${params.recommendationId}_${user.id}`,
@@ -65,7 +57,6 @@ export const POST = apiMiddleware.protected(
         message: `Feedback recorded for recommendation ${params.recommendationId}`,
         action: 'record_feedback'
       });
-
     } catch (error) {
       return handleApiError(error);
     }

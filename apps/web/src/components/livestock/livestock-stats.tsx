@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -14,16 +13,13 @@ import {
   DollarSign,
   Activity
 } from 'lucide-react'
-
 interface LivestockStatsProps {
   farmId: string
 }
-
 interface LivestockData {
   totalAnimals: number
   events: any[]
 }
-
 const speciesIcons: Record<string, string> = {
   cattle: '🐄',
   sheep: '🐑',
@@ -31,18 +27,15 @@ const speciesIcons: Record<string, string> = {
   goats: '🐐',
   chickens: '🐓'
 }
-
 const activityTypeIcons: Record<string, any> = {
   vaccination: <Heart className="h-4 w-4 text-blue-600" />,
   health_check: <Activity className="h-4 w-4 text-green-600" />,
   treatment: <AlertTriangle className="h-4 w-4 text-orange-600" />,
   birth: <TrendingUp className="h-4 w-4 text-purple-600" />
 }
-
 export function LivestockStats({ farmId }: LivestockStatsProps) {
   const [livestockData, setLivestockData] = useState<LivestockData | null>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     const fetchLivestockData = async () => {
       try {
@@ -57,10 +50,8 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
         setLoading(false)
       }
     }
-
     fetchLivestockData()
   }, [farmId])
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -74,7 +65,6 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
       </div>
     )
   }
-
   if (!livestockData || livestockData.totalAnimals === 0) {
     return (
       <div className="space-y-6">
@@ -94,7 +84,6 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Basic Stats from Real Data */}
@@ -135,7 +124,6 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Recent Events from Real Data */}
       {livestockData.events && livestockData.events.length > 0 && (
         <Card>

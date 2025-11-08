@@ -4,7 +4,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { mlOpsPipeline } from '../../../../../lib/ml/mlops-pipeline';
-
 const analyticalBenchmarkSchema = z.object({
   farmId: z.string(),
   region: z.string(),
@@ -15,7 +14,6 @@ const analyticalBenchmarkSchema = z.object({
     longitude: z.number().optional()
   }).optional()
 });
-
 // Analytical benchmarking service using ML models
 class AnalyticalBenchmarkService {
   async analyzeBenchmarks(params: any) {
@@ -35,18 +33,14 @@ class AnalyticalBenchmarkService {
           farmId: params.farmId
         }
       });
-
       if (modelResponse.prediction) {
         return this.transformMLPrediction(modelResponse.prediction, params);
       }
     } catch (error) {
-
     }
-
     // Use analytical engine with real agricultural data
     return this.generateAnalyticalBenchmarks(params);
   }
-
   private async getHistoricalData(farmId: string) {
     // Fetch historical performance data
     try {
@@ -61,7 +55,6 @@ class AnalyticalBenchmarkService {
       return null;
     }
   }
-
   private transformMLPrediction(prediction: any, params: any) {
     return {
       success: true,
@@ -81,13 +74,11 @@ class AnalyticalBenchmarkService {
       }
     };
   }
-
   private generateAnalyticalBenchmarks(params: any) {
     // Use real agricultural data and statistics
     const regionData = this.getRegionalData(params.region);
     const cropData = this.getCropData(params.cropType);
     const farmPerformance = this.calculateFarmPerformance(params.farmSize, regionData, cropData);
-
     return {
       success: true,
       benchmarks: {
@@ -106,7 +97,6 @@ class AnalyticalBenchmarkService {
       }
     };
   }
-
   private getRegionalData(region: string) {
     const regions: Record<string, any> = {
       'Midwest Corn Belt': {
@@ -131,10 +121,8 @@ class AnalyticalBenchmarkService {
         avgProfit: { corn: 185, soybeans: 220, wheat: 105 }
       }
     };
-
     return regions[region] || regions['Midwest Corn Belt'];
   }
-
   private getCropData(cropType: string) {
     const crops: Record<string, any> = {
       'CORN': {
@@ -156,14 +144,11 @@ class AnalyticalBenchmarkService {
         profitMargin: 0.176
       }
     };
-
     return crops[cropType.toUpperCase()] || crops['CORN'];
   }
-
   private calculateFarmPerformance(farmSize: number = 250, regionData: any, cropData: any) {
     // Calculate realistic performance based on farm size and regional factors
     const sizeEfficiency = farmSize > 500 ? 1.12 : farmSize > 200 ? 1.0 : 0.88;
-    
     return {
       yield: cropData.nationalAvgYield * sizeEfficiency * (0.9 + Math.random() * 0.2),
       cost: cropData.inputCostPerAcre * (2 - sizeEfficiency) * (0.95 + Math.random() * 0.1),
@@ -173,11 +158,9 @@ class AnalyticalBenchmarkService {
       percentile: Math.min(95, Math.max(15, 50 + (sizeEfficiency - 1) * 100 + (Math.random() - 0.5) * 30))
     };
   }
-
   private generateRealMetrics(performance: any, params: any) {
     const cropType = params.cropType?.toUpperCase() || 'CORN';
     const unit = ['CORN', 'SOYBEANS', 'WHEAT'].includes(cropType) ? 'bu/acre' : 'units/acre';
-
     return [
       {
         metric: 'Crop Yield',
@@ -247,64 +230,49 @@ class AnalyticalBenchmarkService {
       }
     ];
   }
-
   private calculateCategory(percentile: number): string {
     if (percentile >= 75) return 'Top Performer';
     if (percentile >= 50) return 'Above Average';
     if (percentile >= 25) return 'Average';
     return 'Below Average';
   }
-
   private generateInsights(performance: any, params: any): string[] {
     const insights = [];
-    
     if (performance.percentile >= 70) {
       insights.push(`Your farm ranks in the top 30% for ${params.region || 'your region'}`);
     }
-    
     if (performance.efficiency < 75) {
       insights.push('Water use efficiency below regional average - consider irrigation upgrades');
     }
-    
     if (performance.yield > performance.avgYield * 1.1) {
       insights.push('Excellent yield performance - continue current management practices');
     }
-    
     insights.push('Technology adoption above regional average - leveraging modern tools effectively');
-    
     return insights.slice(0, 4);
   }
-
   private generateDataDrivenInsights(performance: any, regionData: any, params: any): string[] {
     const insights = [];
-    
     // Yield insights
     if (performance.yield > regionData.avgYield[params.cropType?.toLowerCase() || 'corn'] * 1.05) {
       insights.push(`Your yield exceeds regional average by ${Math.round((performance.yield / regionData.avgYield[params.cropType?.toLowerCase() || 'corn'] - 1) * 100)}%`);
     }
-    
     // Cost insights
     if (performance.cost < regionData.avgCost[params.cropType?.toLowerCase() || 'corn']) {
       insights.push('Production costs well-managed compared to regional peers');
     }
-    
     // Efficiency insights
     if (performance.efficiency > 80) {
       insights.push('Resource efficiency in top quartile - sustainable practices paying off');
     }
-    
     // Size-based insight
     const farmSize = params.farmSize || 250;
     if (farmSize > 500) {
       insights.push('Large-scale operations achieving economies of scale effectively');
     }
-    
     return insights.slice(0, 4);
   }
-
   private generateGoals(metrics: any): any[] {
     const goals = [];
-    
     if (metrics.efficiency < 80) {
       goals.push({
         metric: 'Water Use Efficiency',
@@ -314,7 +282,6 @@ class AnalyticalBenchmarkService {
         priority: 'high'
       });
     }
-    
     if (metrics.cost > metrics.avgCost * 1.05) {
       goals.push({
         metric: 'Input Cost per Acre',
@@ -324,13 +291,10 @@ class AnalyticalBenchmarkService {
         priority: 'medium'
       });
     }
-    
     return goals;
   }
-
   private generateDataDrivenGoals(performance: any): any[] {
     const goals = [];
-    
     // Only generate goals for metrics below optimal performance
     if (performance.efficiency < 85) {
       goals.push({
@@ -341,7 +305,6 @@ class AnalyticalBenchmarkService {
         priority: performance.efficiency < 75 ? 'high' : 'medium'
       });
     }
-    
     if (performance.percentile < 75) {
       const yieldTarget = performance.yield * 1.08;
       goals.push({
@@ -352,33 +315,25 @@ class AnalyticalBenchmarkService {
         priority: performance.percentile < 50 ? 'high' : 'medium'
       });
     }
-    
     return goals.slice(0, 3);
   }
 }
-
 const analyticalBenchmarkService = new AnalyticalBenchmarkService();
-
 // POST /api/ml/benchmarks/analyze
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = analyticalBenchmarkSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
-      
       const benchmarkAnalysis = await analyticalBenchmarkService.analyzeBenchmarks(params);
-
       const summary = {
         farmId: params.farmId,
         region: params.region,
@@ -393,14 +348,12 @@ export const POST = apiMiddleware.protected(
         insightsGenerated: benchmarkAnalysis.benchmarks.insights.length,
         goalsIdentified: benchmarkAnalysis.benchmarks.goals.length
       };
-
       return createSuccessResponse({
         ...benchmarkAnalysis,
         summary,
         message: `Analytical benchmark analysis completed for ${params.cropType} in ${params.region}`,
         action: 'analytical_benchmark_analysis'
       });
-
     } catch (error) {
       return handleApiError(error);
     }

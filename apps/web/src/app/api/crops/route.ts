@@ -2,11 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { prisma } from '../../../lib/prisma'
 import { rateLimitWithFallback } from '../../../lib/rate-limit'
-
 export async function GET(request: NextRequest) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -17,21 +15,17 @@ export async function GET(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
     const year = searchParams.get('year')
-
     if (!farmId) {
       return NextResponse.json({ error: 'farmId is required' }, { status: 400 })
     }
-
     // Build where clause
     const where: any = {
       field: {
@@ -41,7 +35,6 @@ export async function GET(request: NextRequest) {
         }
       }
     }
-
     // Filter by year if provided
     if (year) {
       const yearNum = parseInt(year)
@@ -60,7 +53,6 @@ export async function GET(request: NextRequest) {
         }
       ]
     }
-
     let crops: any[] = []
     try {
       crops = await prisma.crop.findMany({
@@ -78,11 +70,9 @@ export async function GET(request: NextRequest) {
         ]
       })
     } catch (dbError: any) {
-
       // Return empty array if table doesn't exist yet
       crops = []
     }
-
     // Transform crops to include enhanced planning data
     const enhancedCrops = crops.map(crop => ({
       id: crop.id,
@@ -100,7 +90,6 @@ export async function GET(request: NextRequest) {
       status: crop.status?.toLowerCase() || 'planned',
       notes: ''
     }))
-
     return NextResponse.json(enhancedCrops)
   } catch (error) {
     console.error('Error fetching crops:', error)
@@ -110,11 +99,9 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 export async function POST(request: NextRequest) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -125,13 +112,11 @@ export async function POST(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const { 
       cropId, 
@@ -144,14 +129,12 @@ export async function POST(request: NextRequest) {
       notes,
       farmId
     } = body
-
     // Validate required fields
     if (!cropId || !fieldId || !plantingDate || !farmId) {
       return NextResponse.json({ 
         error: 'Missing required fields: cropId, fieldId, plantingDate, farmId' 
       }, { status: 400 })
     }
-
     // Verify user owns the farm
     const farm = await prisma.farm.findFirst({
       where: {
@@ -159,11 +142,9 @@ export async function POST(request: NextRequest) {
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found or not owned by user' }, { status: 404 })
     }
-
     // Verify field belongs to farm
     const field = await prisma.field.findFirst({
       where: {
@@ -171,19 +152,15 @@ export async function POST(request: NextRequest) {
         farmId: farmId
       }
     })
-
     if (!field) {
       return NextResponse.json({ error: 'Field not found or not in specified farm' }, { status: 404 })
     }
-
     // Get crop information from our knowledge database
     const { getCropById } = await import('../../../lib/crop-planning/crop-knowledge')
     const cropInfo = getCropById(cropId)
-    
     if (!cropInfo) {
       return NextResponse.json({ error: 'Invalid crop type' }, { status: 400 })
     }
-
     // Create crop planning entry
     const crop = await prisma.crop.create({
       data: {
@@ -208,7 +185,6 @@ export async function POST(request: NextRequest) {
         }
       }
     })
-
     // Transform response to match frontend expectations
     const response = {
       id: crop.id,
@@ -228,7 +204,6 @@ export async function POST(request: NextRequest) {
       cropInfo: cropInfo,
       farmName: crop.field.farm.name
     }
-
     return NextResponse.json(response)
   } catch (error) {
     console.error('Error creating crop plan:', error)

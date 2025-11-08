@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -16,7 +15,6 @@ import {
   Eye
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface HarvestAlert {
   id: string
   fieldName: string
@@ -30,21 +28,17 @@ interface HarvestAlert {
   weatherImpact: 'favorable' | 'neutral' | 'concerning'
   recommendations: string[]
 }
-
 interface HarvestAlertsProps {
   farmId: string
   className?: string
 }
-
 export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
   const [alerts, setAlerts] = useState<HarvestAlert[]>([])
   const [loading, setLoading] = useState(true)
   const [showAll, setShowAll] = useState(false)
-
   useEffect(() => {
     fetchHarvestAlerts()
   }, [farmId])
-
   const fetchHarvestAlerts = async () => {
     try {
       // First get crops for this farm
@@ -52,14 +46,12 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       if (cropsResponse.ok) {
         const cropsData = await cropsResponse.json()
         const crops = cropsData.crops || []
-        
         // Generate harvest alerts from crop data
         const harvestAlerts = crops
           .filter((crop: any) => crop.status !== 'HARVESTED' && crop.expectedHarvestDate)
           .map((crop: any) => generateHarvestAlert(crop))
           .filter(Boolean)
           .sort((a: HarvestAlert, b: HarvestAlert) => a.actualDaysToHarvest - b.actualDaysToHarvest)
-
         setAlerts(harvestAlerts)
       } else {
         // No data available - show empty state
@@ -72,29 +64,23 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       setLoading(false)
     }
   }
-
   const generateHarvestAlert = (crop: any): HarvestAlert | null => {
     if (!crop.expectedHarvestDate) return null
-
     const harvestDate = new Date(crop.expectedHarvestDate)
     const today = new Date()
     const daysToHarvest = Math.ceil((harvestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-
     let status: HarvestAlert['status'] = 'soon'
     if (daysToHarvest <= 0) status = 'overdue'
     else if (daysToHarvest <= 7) status = 'ready'
     else if (daysToHarvest <= 14) status = 'optimal'
-
     // Generate realistic yield estimates based on crop type
     const yieldEstimates = {
       'CORN': { min: 160, max: 220 },
       'SOYBEANS': { min: 40, max: 65 },
       'WHEAT': { min: 55, max: 85 }
     }
-
     const yieldRange = yieldEstimates[crop.cropType as keyof typeof yieldEstimates] || { min: 100, max: 200 }
     const estimatedYield = Math.floor(Math.random() * (yieldRange.max - yieldRange.min) + yieldRange.min)
-
     return {
       id: crop.id,
       fieldName: crop.field?.name || 'Unknown Field',
@@ -109,10 +95,8 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       recommendations: generateRecommendations(status, daysToHarvest, crop.cropType)
     }
   }
-
   const generateDemoAlerts = (): HarvestAlert[] => {
     const today = new Date()
-    
     return [
       {
         id: 'demo-1',
@@ -167,10 +151,8 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       }
     ]
   }
-
   const generateRecommendations = (status: string, days: number, cropType: string): string[] => {
     const recommendations: string[] = []
-    
     if (status === 'ready') {
       recommendations.push('Perfect timing for harvest this week')
       recommendations.push('Check moisture content daily')
@@ -187,10 +169,8 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       recommendations.push('Continue monitoring field conditions')
       recommendations.push(`Expect harvest in ${days} days`)
     }
-
     return recommendations
   }
-
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'ready':
@@ -223,7 +203,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         }
     }
   }
-
   const getWeatherImpactColor = (impact: string) => {
     switch (impact) {
       case 'favorable': return 'text-green-600'
@@ -231,7 +210,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       default: return 'text-gray-600'
     }
   }
-
   const getCropUnit = (cropType: string) => {
     const units = {
       'CORN': 'bu/acre',
@@ -240,10 +218,8 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
     }
     return units[cropType as keyof typeof units] || 'units/acre'
   }
-
   const readyAlerts = alerts.filter(alert => alert.status === 'ready' || alert.status === 'overdue')
   const displayAlerts = showAll ? alerts : alerts.slice(0, 3)
-
   if (loading) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -262,7 +238,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       </ModernCard>
     )
   }
-
   if (alerts.length === 0) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -286,7 +261,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -315,7 +289,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         {displayAlerts.map((alert) => {
           const config = getStatusConfig(alert.status)
           const Icon = config.icon
-          
           return (
             <div
               key={alert.id}
@@ -343,7 +316,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                     </div>
                   </div>
                 </div>
-                
                 <div className="text-right text-xs">
                   <div className="font-medium">
                     {alert.actualDaysToHarvest <= 0 ? 
@@ -356,7 +328,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                   </div>
                 </div>
               </div>
-
               {/* Yield Estimate */}
               <div className="bg-white/50 p-3 rounded-md mb-3">
                 <div className="flex items-center justify-between">
@@ -376,7 +347,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                   </div>
                 </div>
               </div>
-
               {/* Recommendations */}
               <div className="space-y-2">
                 <h5 className="text-xs font-medium text-gray-600 flex items-center gap-1">
@@ -393,7 +363,6 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
             </div>
           )
         })}
-
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-3 pt-4 border-t">
           <div className="text-center">

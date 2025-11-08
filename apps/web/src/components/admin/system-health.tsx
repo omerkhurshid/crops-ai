@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,7 +7,6 @@ import {
   CheckCircle, AlertTriangle, XCircle, Database, 
   Cpu, HardDrive, Wifi, Zap, RefreshCw 
 } from 'lucide-react'
-
 interface SystemStatus {
   database: 'healthy' | 'warning' | 'error'
   api: 'healthy' | 'warning' | 'error'
@@ -19,7 +17,6 @@ interface SystemStatus {
   errorRate: number
   lastUpdate: Date
 }
-
 export function SystemHealth() {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     database: 'healthy',
@@ -32,7 +29,6 @@ export function SystemHealth() {
     lastUpdate: new Date()
   })
   const [loading, setLoading] = useState(false)
-
   const fetchSystemHealth = async () => {
     setLoading(true)
     try {
@@ -50,14 +46,12 @@ export function SystemHealth() {
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchSystemHealth()
     // Refresh every 30 seconds
     const interval = setInterval(fetchSystemHealth, 30000)
     return () => clearInterval(interval)
   }, [])
-
   const getStatusIcon = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
@@ -68,7 +62,6 @@ export function SystemHealth() {
         return <XCircle className="h-4 w-4 text-red-600" />
     }
   }
-
   const getStatusColor = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
@@ -79,7 +72,6 @@ export function SystemHealth() {
         return 'bg-red-100 text-red-800 border-red-200'
     }
   }
-
   const services = [
     {
       name: 'Database',
@@ -106,7 +98,6 @@ export function SystemHealth() {
       description: 'OpenWeatherMap and forecasting APIs'
     }
   ]
-
   return (
     <ModernCard variant="floating">
       <ModernCardHeader>
@@ -148,7 +139,6 @@ export function SystemHealth() {
             ))}
           </div>
         </div>
-
         {/* Performance Metrics */}
         <div>
           <h4 className="font-semibold text-gray-900 mb-3">Performance Metrics</h4>
@@ -160,7 +150,6 @@ export function SystemHealth() {
               </div>
               <Progress value={systemStatus.uptime} className="h-2" />
             </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div className="p-3 bg-blue-50 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600">{systemStatus.responseTime}ms</div>
@@ -173,7 +162,6 @@ export function SystemHealth() {
             </div>
           </div>
         </div>
-
         {/* Last Update */}
         <div className="text-xs text-gray-500 text-center">
           Last updated: {systemStatus.lastUpdate.toLocaleTimeString()}

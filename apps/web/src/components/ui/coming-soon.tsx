@@ -1,23 +1,19 @@
 'use client'
-
 import { Badge } from './badge'
 import { ModernCard, ModernCardContent } from './modern-card'
 import { Clock, Sparkles } from 'lucide-react'
-
 interface ComingSoonProps {
   title?: string
   description?: string
   variant?: 'default' | 'compact' | 'inline'
   className?: string
 }
-
 export function ComingSoon({ 
   title = "Feature Coming Soon",
   description = "This feature is currently in development and will be available in a future update.",
   variant = 'default',
   className = '' 
 }: ComingSoonProps) {
-  
   if (variant === 'inline') {
     return (
       <div className={`inline-flex items-center gap-2 ${className}`}>
@@ -28,7 +24,6 @@ export function ComingSoon({
       </div>
     )
   }
-  
   if (variant === 'compact') {
     return (
       <div className={`p-4 bg-gradient-to-br from-sage-50 to-cream-50 rounded-xl border-2 border-sage-100 ${className}`}>
@@ -40,7 +35,6 @@ export function ComingSoon({
       </div>
     )
   }
-  
   return (
     <ModernCard variant="glow" className={`text-center ${className}`}>
       <ModernCardContent className="p-12">

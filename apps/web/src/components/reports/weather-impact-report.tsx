@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -10,7 +9,6 @@ import {
   Zap, Activity
 } from 'lucide-react';
 import { ensureArray } from '../../lib/utils';
-
 interface WeatherImpactData {
   summary: {
     overallImpact: 'positive' | 'neutral' | 'negative';
@@ -56,20 +54,16 @@ interface WeatherImpactData {
     timeframe: string;
   }>;
 }
-
 interface WeatherImpactReportProps {
   farmId: string;
 }
-
 export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
   const [data, setData] = useState<WeatherImpactData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-
   useEffect(() => {
     fetchWeatherImpactData();
   }, [farmId]);
-
   const fetchWeatherImpactData = async () => {
     setLoading(true);
     try {
@@ -87,7 +81,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       setLoading(false);
     }
   };
-
   const generateReport = async () => {
     setGenerating(true);
     try {
@@ -100,7 +93,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
           format: 'pdf'
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -118,9 +110,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       setGenerating(false);
     }
   };
-
   // Removed mock data function - only show real data from API
-
   const getImpactColor = (impact: string) => {
     switch (impact) {
       case 'positive': return 'text-green-600 bg-green-50';
@@ -128,7 +118,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return 'text-yellow-600 bg-yellow-50';
     }
   };
-
   const getEffectColor = (effect: string) => {
     switch (effect) {
       case 'beneficial': return 'text-green-600';
@@ -136,7 +125,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return 'text-yellow-600';
     }
   };
-
   const getEffectIcon = (effect: string) => {
     switch (effect) {
       case 'beneficial': return <TrendingUp className="h-4 w-4" />;
@@ -144,7 +132,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return <Activity className="h-4 w-4" />;
     }
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'high': return 'bg-red-100 text-red-800';
@@ -153,7 +140,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
@@ -162,7 +148,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getEventIcon = (type: string) => {
     switch (type) {
       case 'drought': return <Sun className="h-4 w-4 text-orange-600" />;
@@ -173,7 +158,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       default: return <Cloud className="h-4 w-4 text-gray-600" />;
     }
   };
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -183,7 +167,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       </div>
     );
   }
-
   if (!data) {
     return (
       <div className="text-center py-8">
@@ -192,7 +175,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -215,7 +197,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
           {generating ? 'Generating...' : 'Download Report'}
         </Button>
       </div>
-
       {/* Summary */}
       <Card className={`border-2 ${getImpactColor(data.summary.overallImpact)}`}>
         <CardHeader>
@@ -253,7 +234,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Weather Factors Impact */}
       <Card>
         <CardHeader>
@@ -282,7 +262,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
                     <p className="text-sm text-gray-600">{impact.details}</p>
                   </div>
                 </div>
-                
                 <div className="text-right">
                   <div className={`text-lg font-bold ${getEffectColor(impact.effect)}`}>
                     {impact.score}%
@@ -297,7 +276,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Critical Weather Events */}
       <Card>
         <CardHeader>
@@ -334,7 +312,6 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Recommendations */}
       <Card>
         <CardHeader>

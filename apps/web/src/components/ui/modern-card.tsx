@@ -1,31 +1,24 @@
 'use client'
-
 import React, { memo } from 'react'
 import { cn } from '../../lib/utils'
 import { InfoTooltip } from './info-tooltip'
 import { ColorCombinations } from '../../lib/design-system/color-standards'
-
 interface ModernCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'glass' | 'floating' | 'soft' | 'glow'
   children: React.ReactNode
 }
-
 interface ModernCardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
 }
-
 interface ModernCardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
 }
-
 interface ModernCardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode
 }
-
 interface ModernCardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: React.ReactNode
 }
-
 const cardVariants = {
   default: 'bg-white/90 backdrop-blur-xs border border-fk-border/50 shadow-soft',
   glass: 'bg-white/70 backdrop-blur-md border border-white/20 shadow-glass',
@@ -33,7 +26,6 @@ const cardVariants = {
   soft: 'bg-surface/90 backdrop-blur-xs border border-fk-border/30 shadow-soft',
   glow: 'bg-white/85 backdrop-blur-sm border border-fk-border/40 shadow-glow'
 }
-
 export const ModernCard = memo(function ModernCard({ 
   className, 
   variant = 'default', 
@@ -53,7 +45,6 @@ export const ModernCard = memo(function ModernCard({
     </div>
   )
 })
-
 export const ModernCardHeader = memo(function ModernCardHeader({ 
   className, 
   children, 
@@ -71,7 +62,6 @@ export const ModernCardHeader = memo(function ModernCardHeader({
     </div>
   )
 })
-
 export const ModernCardContent = memo(function ModernCardContent({ 
   className, 
   children, 
@@ -89,7 +79,6 @@ export const ModernCardContent = memo(function ModernCardContent({
     </div>
   )
 })
-
 export const ModernCardTitle = memo(function ModernCardTitle({ 
   className, 
   children, 
@@ -107,7 +96,6 @@ export const ModernCardTitle = memo(function ModernCardTitle({
     </h3>
   )
 })
-
 export const ModernCardDescription = memo(function ModernCardDescription({ 
   className, 
   children, 
@@ -125,7 +113,6 @@ export const ModernCardDescription = memo(function ModernCardDescription({
     </p>
   )
 })
-
 // Metric card specifically for displaying data with tooltips
 interface MetricCardProps {
   title: string
@@ -142,7 +129,6 @@ interface MetricCardProps {
   variant?: 'default' | 'glass' | 'floating' | 'soft' | 'glow'
   className?: string
 }
-
 export const MetricCard = memo(function MetricCard({
   title,
   value,
@@ -160,13 +146,11 @@ export const MetricCard = memo(function MetricCard({
     if (trend === 'down') return 'text-fk-danger'
     return 'text-fk-text-muted'
   }
-
   const getTrendIcon = () => {
     if (trend === 'up') return '↗'
     if (trend === 'down') return '↘'
     return '→'
   }
-
   return (
     <ModernCard variant={variant} className={`group hover:bg-white/95 ${className}`}>
       <ModernCardContent className="p-5">
@@ -184,7 +168,6 @@ export const MetricCard = memo(function MetricCard({
                 </div>
               )}
             </div>
-            
             <div className="flex items-baseline gap-2 mb-2">
               <p className="text-2xl font-bold text-fk-text">
                 {typeof value === 'number' ? value.toLocaleString() : value}{unit}
@@ -198,12 +181,10 @@ export const MetricCard = memo(function MetricCard({
                 </div>
               )}
             </div>
-            
             {description && (
               <p className="text-xs text-fk-text-muted leading-relaxed">{description}</p>
             )}
           </div>
-          
           {icon && (
             <div className="ml-4 p-3 bg-fk-background/50 rounded-xl group-hover:bg-fk-background-muted/50 transition-colors">
               {icon}

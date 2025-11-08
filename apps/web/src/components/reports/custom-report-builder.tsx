@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -14,7 +13,6 @@ import {
   Plus, X, Copy, Eye, Filter, Layers, Target,
   PieChart, LineChart, TrendingUp, Database, Clock
 } from 'lucide-react';
-
 interface MetricOption {
   id: string;
   name: string;
@@ -23,7 +21,6 @@ interface MetricOption {
   unit: string;
   available: boolean;
 }
-
 interface ReportTemplate {
   id: string;
   name: string;
@@ -32,7 +29,6 @@ interface ReportTemplate {
   format: string;
   schedule: string;
 }
-
 interface CustomReportConfig {
   name: string;
   description: string;
@@ -55,11 +51,9 @@ interface CustomReportConfig {
     time: string;
   };
 }
-
 interface CustomReportBuilderProps {
   farmId: string;
 }
-
 export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
   const [config, setConfig] = useState<CustomReportConfig>({
     name: '',
@@ -79,18 +73,15 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       time: '08:00'
     }
   });
-  
   const [availableMetrics, setAvailableMetrics] = useState<MetricOption[]>([]);
   const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [building, setBuilding] = useState(false);
   const [previewing, setPreviewing] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
-
   useEffect(() => {
     loadAvailableMetrics();
     loadTemplates();
   }, [farmId]);
-
   const loadAvailableMetrics = () => {
     const metrics: MetricOption[] = [
       // Financial Metrics
@@ -99,35 +90,29 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       { id: 'profit', name: 'Net Profit', category: 'Financial', description: 'Revenue minus expenses', unit: 'USD', available: true },
       { id: 'profit-margin', name: 'Profit Margin', category: 'Financial', description: 'Profit as percentage of revenue', unit: '%', available: true },
       { id: 'cost-per-acre', name: 'Cost per Acre', category: 'Financial', description: 'Average cost per cultivated acre', unit: 'USD/acre', available: true },
-      
       // Production Metrics
       { id: 'yield', name: 'Crop Yield', category: 'Production', description: 'Total harvest quantity', unit: 'tonnes', available: true },
       { id: 'yield-per-acre', name: 'Yield per Acre', category: 'Production', description: 'Average yield per cultivated acre', unit: 'tonnes/acre', available: true },
       { id: 'quality-score', name: 'Crop Quality Score', category: 'Production', description: 'Overall quality assessment', unit: 'score', available: true },
       { id: 'harvest-efficiency', name: 'Harvest Efficiency', category: 'Production', description: 'Percentage of potential yield achieved', unit: '%', available: true },
-      
       // Environmental Metrics
       { id: 'water-usage', name: 'Water Usage', category: 'Environmental', description: 'Total water consumption', unit: 'liters', available: true },
       { id: 'carbon-footprint', name: 'Carbon Footprint', category: 'Environmental', description: 'CO2 equivalent emissions', unit: 'tCO2e', available: true },
       { id: 'soil-health', name: 'Soil Health Index', category: 'Environmental', description: 'Composite soil health score', unit: 'index', available: true },
       { id: 'pesticide-usage', name: 'Pesticide Usage', category: 'Environmental', description: 'Total pesticide application', unit: 'kg', available: true },
       { id: 'biodiversity-index', name: 'Biodiversity Index', category: 'Environmental', description: 'Farm biodiversity assessment', unit: 'index', available: true },
-      
       // Health Metrics
       { id: 'ndvi-avg', name: 'Average NDVI', category: 'Crop Health', description: 'Normalized Difference Vegetation Index', unit: 'index', available: true },
       { id: 'stress-events', name: 'Stress Events', category: 'Crop Health', description: 'Number of crop stress incidents', unit: 'count', available: true },
       { id: 'disease-incidents', name: 'Disease Incidents', category: 'Crop Health', description: 'Recorded disease occurrences', unit: 'count', available: true },
       { id: 'recovery-rate', name: 'Recovery Rate', category: 'Crop Health', description: 'Crop recovery from stress events', unit: '%', available: true },
-      
       // Weather Metrics
       { id: 'rainfall', name: 'Total Rainfall', category: 'Weather', description: 'Precipitation received', unit: 'mm', available: true },
       { id: 'temperature-avg', name: 'Average Temperature', category: 'Weather', description: 'Mean temperature', unit: '°C', available: true },
       { id: 'extreme-events', name: 'Extreme Weather Events', category: 'Weather', description: 'Severe weather occurrences', unit: 'count', available: true }
     ];
-    
     setAvailableMetrics(metrics);
   };
-
   const loadTemplates = () => {
     const templates: ReportTemplate[] = [
       {
@@ -163,10 +148,8 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
         schedule: 'weekly'
       }
     ];
-    
     setTemplates(templates);
   };
-
   const applyTemplate = (template: ReportTemplate) => {
     setConfig({
       ...config,
@@ -177,7 +160,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
     });
     setActiveStep(2);
   };
-
   const toggleMetric = (metricId: string) => {
     setConfig(prev => ({
       ...prev,
@@ -186,21 +168,18 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
         : [...prev.metrics, metricId]
     }));
   };
-
   const addFilter = () => {
     setConfig(prev => ({
       ...prev,
       filters: [...prev.filters, { field: '', operator: 'equals', value: '' }]
     }));
   };
-
   const removeFilter = (index: number) => {
     setConfig(prev => ({
       ...prev,
       filters: prev.filters.filter((_, i) => i !== index)
     }));
   };
-
   const updateFilter = (index: number, field: string, value: string) => {
     setConfig(prev => ({
       ...prev,
@@ -209,7 +188,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       )
     }));
   };
-
   const previewReport = async () => {
     setPreviewing(true);
     try {
@@ -221,10 +199,8 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           config
         })
       });
-      
       if (response.ok) {
         const data = await response.json();
-
       }
     } catch (error) {
       console.error('Error previewing report:', error);
@@ -232,7 +208,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       setPreviewing(false);
     }
   };
-
   const buildReport = async () => {
     setBuilding(true);
     try {
@@ -244,7 +219,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           config
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -263,11 +237,9 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       setBuilding(false);
     }
   };
-
   const getMetricsByCategory = (category: string) => {
     return availableMetrics.filter(m => m.category === category);
   };
-
   const renderStepIndicator = () => (
     <div className="flex items-center space-x-4 mb-6">
       {[1, 2, 3, 4].map(step => (
@@ -285,7 +257,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       ))}
     </div>
   );
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -305,10 +276,8 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           </Button>
         </div>
       </div>
-
       {/* Step Indicator */}
       {renderStepIndicator()}
-
       {/* Step Content */}
       {activeStep === 1 && (
         <div className="space-y-4">
@@ -347,7 +316,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           </Card>
         </div>
       )}
-
       {activeStep === 2 && (
         <div className="space-y-4">
           <Card>
@@ -402,7 +370,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           </Card>
         </div>
       )}
-
       {activeStep === 3 && (
         <div className="space-y-4">
           <Card>
@@ -442,7 +409,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   </Select>
                 </div>
               </div>
-
               <div>
                 <Label htmlFor="report-description">Description (Optional)</Label>
                 <Input 
@@ -452,7 +418,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   placeholder="Brief description of this report"
                 />
               </div>
-
               {/* Date Range */}
               <div>
                 <Label>Date Range</Label>
@@ -496,7 +461,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   </div>
                 </div>
               </div>
-
               {/* Group By */}
               <div>
                 <Label>Group Data By</Label>
@@ -513,7 +477,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   </SelectContent>
                 </Select>
               </div>
-
               {/* Filters */}
               <div>
                 <div className="flex justify-between items-center">
@@ -560,7 +523,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   ))}
                 </div>
               </div>
-
               <div className="flex justify-between mt-6">
                 <Button onClick={() => setActiveStep(2)} variant="outline">
                   Back
@@ -573,7 +535,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           </Card>
         </div>
       )}
-
       {activeStep === 4 && (
         <div className="space-y-4">
           <Card>
@@ -612,7 +573,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   </div>
                 </div>
               </div>
-
               {/* Selected Metrics */}
               <div>
                 <h4 className="font-semibold mb-3">Selected Metrics</h4>
@@ -627,7 +587,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   })}
                 </div>
               </div>
-
               {/* Date Range */}
               <div>
                 <h4 className="font-semibold mb-2">Date Range</h4>
@@ -635,7 +594,6 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                   {config.dateRange.start?.toLocaleDateString()} to {config.dateRange.end?.toLocaleDateString()}
                 </p>
               </div>
-
               {/* Actions */}
               <div className="flex justify-between pt-4 border-t">
                 <Button onClick={() => setActiveStep(3)} variant="outline">

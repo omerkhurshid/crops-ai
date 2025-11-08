@@ -4,10 +4,8 @@
  * Connects to ESA's Copernicus Data Space Ecosystem for real Sentinel-2
  * multispectral satellite imagery and vegetation analysis.
  */
-
 import { auditLogger } from '../logging/audit-logger'
 import { ndviCalculator, VegetationIndices } from './ndvi-calculator'
-
 export interface Sentinel2Scene {
   id: string
   productType: string
@@ -28,14 +26,12 @@ export interface Sentinel2Scene {
     [bandName: string]: string
   }
 }
-
 export interface FieldBounds {
   north: number
   south: number
   east: number
   west: number
 }
-
 export interface NDVICalculation {
   fieldId: string
   date: string
@@ -53,7 +49,6 @@ export interface NDVICalculation {
     severity: 'low' | 'moderate' | 'high'
   }>
 }
-
 export interface SpectralIndices {
   ndvi: number        // Normalized Difference Vegetation Index
   savi: number        // Soil Adjusted Vegetation Index
@@ -66,7 +61,6 @@ export interface SpectralIndices {
   msavi: number       // Modified Soil Adjusted Vegetation Index
   gci: number         // Green Chlorophyll Index
 }
-
 class CopernicusService {
   private readonly apiUrl = 'https://catalogue.dataspace.copernicus.eu/odata/v1'
   private readonly authUrl = 'https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token'
@@ -76,7 +70,6 @@ class CopernicusService {
   private tokenExpiry: number = 0
   private readonly clientId: string
   private readonly clientSecret: string
-  
   constructor() {
     // Initialize config only on server-side to prevent client-side environment validation
     let config: any = null;
@@ -84,15 +77,11 @@ class CopernicusService {
       const { getConfig } = require('../config/environment');
       config = getConfig();
     }
-    
     this.clientId = config?.COPERNICUS_CLIENT_ID || ''
     this.clientSecret = config?.COPERNICUS_CLIENT_SECRET || ''
-    
     if (!this.clientId || !this.clientSecret) {
-
     }
   }
-
   /**
    * Get OAuth access token for Copernicus Data Space Ecosystem
    */
@@ -100,11 +89,9 @@ class CopernicusService {
     if (this.accessToken && Date.now() < this.tokenExpiry) {
       return this.accessToken
     }
-
     if (!this.clientId || !this.clientSecret) {
       throw new Error('Copernicus credentials not configured')
     }
-
     try {
       const response = await fetch(this.authUrl, {
         method: 'POST',
@@ -117,27 +104,22 @@ class CopernicusService {
           client_secret: this.clientSecret,
         }),
       })
-
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Authentication failed: ${response.statusText} - ${errorText}`)
       }
-
       const data = await response.json()
       this.accessToken = data.access_token
       this.tokenExpiry = Date.now() + (data.expires_in * 1000) - 60000 // 1 minute buffer
-
       if (!this.accessToken) {
         throw new Error('Failed to obtain access token from Copernicus')
       }
-
       return this.accessToken
     } catch (error) {
       console.error('Error getting Copernicus access token:', error)
       throw error
     }
   }
-
   /**
    * Find available Sentinel-2 scenes for a field area and date range
    */
@@ -152,10 +134,8 @@ class CopernicusService {
         await auditLogger.logSystem('copernicus_offline_mode', false, { reason: 'No credentials configured' }, 'warn')
         throw new Error('Copernicus credentials not configured')
       }
-
       const token = await this.getAccessToken()
       await auditLogger.logSystem('sentinel2_search_started', true, { bounds, startDate, endDate })
-
       // Construct OData query for Copernicus Data Space Ecosystem
       const polygon = `POLYGON((${bounds.west} ${bounds.south},${bounds.east} ${bounds.south},${bounds.east} ${bounds.north},${bounds.west} ${bounds.north},${bounds.west} ${bounds.south}))`
       const query = new URLSearchParams({
@@ -169,7 +149,6 @@ class CopernicusService {
         '$orderby': 'ContentDate/Start desc',
         '$top': '50'
       }).toString()
-
       const response = await fetch(`${this.apiUrl}/Products?${query}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -177,46 +156,36 @@ class CopernicusService {
         },
         signal: AbortSignal.timeout(30000)
       })
-
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Copernicus API error: ${response.status} ${response.statusText} - ${errorText}`)
       }
-
       const data = await response.json()
       const scenes: Sentinel2Scene[] = []
-
       for (const product of data.value || []) {
         try {
           const scene = await this.parseProductToScene(product)
           scenes.push(scene)
         } catch (error) {
-
         }
       }
-
       await auditLogger.logSystem('sentinel2_search_completed', true, { 
         scenesFound: scenes.length,
         bounds,
         dateRange: `${startDate} to ${endDate}`
       })
-
       return scenes
-
     } catch (error) {
       await auditLogger.logSystem('sentinel2_search_failed', false, { 
         error: error instanceof Error ? error.message : 'Unknown error',
         bounds,
         dateRange: `${startDate} to ${endDate}`
       }, 'error')
-
       console.error('Error searching Sentinel-2 scenes:', error)
-      
       // Return empty array on error - no mock data
       return []
     }
   }
-
   /**
    * Calculate NDVI and other indices for a specific field and date
    */
@@ -227,31 +196,25 @@ class CopernicusService {
   ): Promise<NDVICalculation | null> {
     try {
       await auditLogger.logSystem('ndvi_calculation_started', true, { fieldId, targetDate })
-
       // Find best available scene within ±7 days
       const startDate = new Date(targetDate)
       startDate.setDate(startDate.getDate() - 7)
       const endDate = new Date(targetDate)
       endDate.setDate(endDate.getDate() + 7)
-
       const scenes = await this.findSentinel2Scenes(
         bounds,
         startDate.toISOString().split('T')[0],
         endDate.toISOString().split('T')[0],
         40 // Allow higher cloud cover for NDVI calculation
       )
-
       if (scenes.length === 0) {
         await auditLogger.logSystem('no_sentinel2_scenes_found', false, { fieldId, targetDate })
         return null
       }
-
       // Use the scene with lowest cloud cover
       const bestScene = scenes.sort((a, b) => a.cloudCover - b.cloudCover)[0]
-      
       // Calculate spectral indices using Copernicus Sentinel Hub processing
       const indices = await this.processImageForIndices(bounds, bestScene.acquisitionDate)
-      
       const ndviCalculation: NDVICalculation = {
         fieldId,
         date: bestScene.acquisitionDate,
@@ -264,28 +227,23 @@ class CopernicusService {
         quality: this.assessImageQuality(bestScene.cloudCover),
         stressAreas: this.identifyStressAreas(bounds, indices)
       }
-
       await auditLogger.logSystem('ndvi_calculation_completed', true, { 
         fieldId, 
         ndvi: indices.ndvi,
         quality: ndviCalculation.quality,
         cloudCover: bestScene.cloudCover
       })
-
       return ndviCalculation
-
     } catch (error) {
       await auditLogger.logSystem('ndvi_calculation_failed', false, {
         fieldId,
         targetDate,
         error: error instanceof Error ? error.message : 'Unknown error'
       }, 'error')
-
       console.error('Error calculating field NDVI:', error)
       return null
     }
   }
-
   /**
    * Get the latest available NDVI data for a field
    */
@@ -293,7 +251,6 @@ class CopernicusService {
     const today = new Date().toISOString().split('T')[0]
     return this.calculateFieldIndices(fieldId, bounds, today)
   }
-
   /**
    * Calculate multiple spectral indices from Sentinel-2 data
    */
@@ -304,13 +261,10 @@ class CopernicusService {
       // 2. Crop to field boundary
       // 3. Calculate pixel-wise indices
       // 4. Aggregate statistics
-      
       // For now, we'll simulate realistic spectral band values
       const simulatedBands = this.generateRealisticSpectralBands(scene, bounds)
-      
       // Use our real NDVI calculator for accurate vegetation indices
       const indices = ndviCalculator.calculateVegetationIndices(simulatedBands)
-      
       await auditLogger.logSystem('spectral_indices_calculated', true, {
         sceneId: scene.id,
         ndvi: indices.ndvi,
@@ -318,11 +272,8 @@ class CopernicusService {
         evi: indices.evi,
         lai: indices.lai
       })
-      
       return indices
-
     } catch (error) {
-
       // Fallback calculation using NDVI calculator with default values
       const fallbackBands = {
         red: 0.15,
@@ -332,11 +283,9 @@ class CopernicusService {
         swir1: 0.25,
         swir2: 0.20
       }
-      
       return ndviCalculator.calculateVegetationIndices(fallbackBands)
     }
   }
-
   /**
    * Generate realistic spectral band values for simulation
    */
@@ -350,11 +299,9 @@ class CopernicusService {
       swir1: 0.25, // SWIR values vary with water content
       swir2: 0.20
     }
-    
     // Adjust based on scene metadata
     const seasonalFactor = this.getSeasonalAdjustment(scene.acquisitionDate)
     const cloudFactor = (100 - scene.cloudCover) / 100
-    
     // Apply realistic variations
     return {
       red: baseValues.red * (0.8 + Math.random() * 0.4) * cloudFactor,
@@ -365,7 +312,6 @@ class CopernicusService {
       swir2: baseValues.swir2 * (0.7 + Math.random() * 0.6)
     }
   }
-
   /**
    * Get seasonal adjustment factor for vegetation reflectance
    */
@@ -373,7 +319,6 @@ class CopernicusService {
     const date = new Date(acquisitionDate)
     const month = date.getMonth() + 1
     const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
-    
     // Peak growing season factor (Northern Hemisphere)
     if (month >= 5 && month <= 8) {
       return 1.0 + 0.3 * Math.sin((dayOfYear - 120) * Math.PI / 180) // Peak in summer
@@ -383,7 +328,6 @@ class CopernicusService {
       return 0.5 + Math.random() * 0.2 // Winter dormancy
     }
   }
-
   /**
    * Parse Copernicus API product into our scene format
    */
@@ -405,13 +349,11 @@ class CopernicusService {
       downloadLinks: this.generateDownloadLinks(product.Id)
     }
   }
-
   /**
    * Generate download links for Sentinel-2 bands via Copernicus Sentinel Hub
    */
   private generateDownloadLinks(productId: string): { [bandName: string]: string } {
     const baseUrl = `${this.sentinelHubUrl}/ogc/wms/${productId}`
-    
     return {
       'B02': `${baseUrl}?REQUEST=GetMap&LAYERS=B02&FORMAT=image/tiff`,
       'B03': `${baseUrl}?REQUEST=GetMap&LAYERS=B03&FORMAT=image/tiff`,
@@ -421,7 +363,6 @@ class CopernicusService {
       'B12': `${baseUrl}?REQUEST=GetMap&LAYERS=B12&FORMAT=image/tiff`
     }
   }
-
   /**
    * Process satellite image for NDVI and vegetation indices via Copernicus Sentinel Hub
    */
@@ -433,7 +374,6 @@ class CopernicusService {
   ): Promise<SpectralIndices> {
     try {
       const token = await this.getAccessToken()
-
       const evalscript = `
         //VERSION=3
         function setup() {
@@ -442,7 +382,6 @@ class CopernicusService {
             output: { bands: 6, sampleType: "FLOAT32" }
           };
         }
-
         function evaluatePixel(sample) {
           // Return normalized reflectance values
           return [
@@ -455,7 +394,6 @@ class CopernicusService {
           ];
         }
       `
-
       const processRequest = {
         input: {
           bounds: {
@@ -483,7 +421,6 @@ class CopernicusService {
         },
         evalscript
       }
-
       const response = await fetch(`${this.sentinelHubUrl}/api/v1/process`, {
         method: 'POST',
         headers: {
@@ -492,27 +429,22 @@ class CopernicusService {
         },
         body: JSON.stringify(processRequest),
       })
-
       if (!response.ok) {
         throw new Error(`Sentinel Hub processing failed: ${response.statusText}`)
       }
-
       // In real implementation, parse the returned TIFF data
       // For now, simulate spectral indices based on realistic values
       const seasonalFactor = this.getSeasonalAdjustment(targetDate)
       const cloudNoise = Math.random() * 0.1
-
       const red = 0.15 * (0.8 + Math.random() * 0.4)
       const nir = 0.45 * seasonalFactor * (0.8 + Math.random() * 0.4)
       const blue = 0.08 * (0.7 + Math.random() * 0.6)
       const green = 0.12 * (0.8 + Math.random() * 0.4)
       const swir1 = 0.25 * (0.7 + Math.random() * 0.6)
       const swir2 = 0.20 * (0.7 + Math.random() * 0.6)
-
       const calculated = ndviCalculator.calculateVegetationIndices({
         red, nir, blue, green, swir1, swir2
       })
-
       // Extend with additional indices for compatibility
       return {
         ...calculated,
@@ -521,21 +453,18 @@ class CopernicusService {
         msavi: calculated.savi * 1.05,
         gci: 1.2 + Math.random() * 0.8
       }
-
     } catch (error) {
       console.error('Error processing image for indices:', error)
       // Return fallback simulated indices
       return this.generateFallbackIndices(targetDate)
     }
   }
-
   /**
    * Generate fallback spectral indices when API is unavailable
    */
   private generateFallbackIndices(targetDate: string): SpectralIndices {
     const seasonalFactor = this.getSeasonalAdjustment(targetDate)
     const baseNDVI = 0.5 * seasonalFactor
-    
     return {
       ndvi: Math.max(0.1, Math.min(0.9, baseNDVI + (Math.random() - 0.5) * 0.2)),
       savi: baseNDVI * 0.9,
@@ -549,7 +478,6 @@ class CopernicusService {
       gci: 1.2 + Math.random() * 0.8
     }
   }
-
   /**
    * Estimate NDVI from scene metadata (when full processing isn't available)
    */
@@ -558,22 +486,17 @@ class CopernicusService {
     const date = new Date(scene.acquisitionDate)
     const month = date.getMonth() + 1
     const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
-    
     // Peak growing season NDVI (May-August in Northern Hemisphere)
     let seasonalNDVI = 0.3 // Base vegetation
-    
     if (month >= 5 && month <= 8) {
       seasonalNDVI = 0.7 + 0.2 * Math.sin((dayOfYear - 120) * Math.PI / 180)
     } else if (month >= 3 && month <= 10) {
       seasonalNDVI = 0.4 + 0.3 * Math.sin((dayOfYear - 80) * Math.PI / 260)
     }
-    
     // Adjust for cloud cover (clouds reduce apparent NDVI)
     const cloudAdjustment = (100 - scene.cloudCover) / 100
-    
     return Math.max(0.1, Math.min(0.9, seasonalNDVI * cloudAdjustment))
   }
-
   /**
    * Identify potential stress areas in the field
    */
@@ -591,14 +514,12 @@ class CopernicusService {
     }> = []
     const fieldCenterLat = (bounds.north + bounds.south) / 2
     const fieldCenterLng = (bounds.east + bounds.west) / 2
-    
     // Simulate stress detection - in reality this would analyze pixel-level data
     if (indices.ndvi < 0.4) {
       // Add a few stress points for low NDVI areas
       for (let i = 0; i < 3; i++) {
         const offsetLat = (Math.random() - 0.5) * (bounds.north - bounds.south) * 0.6
         const offsetLng = (Math.random() - 0.5) * (bounds.east - bounds.west) * 0.6
-        
         stressAreas.push({
           lat: fieldCenterLat + offsetLat,
           lng: fieldCenterLng + offsetLng,
@@ -607,10 +528,8 @@ class CopernicusService {
         })
       }
     }
-    
     return stressAreas
   }
-
   /**
    * Estimate pixel count for a field area
    */
@@ -618,14 +537,11 @@ class CopernicusService {
     // Sentinel-2 has 10m pixel resolution for visible/NIR bands
     const latDegreesToMeters = 111320
     const lngDegreesToMeters = 111320 * Math.cos(((bounds.north + bounds.south) / 2) * Math.PI / 180)
-    
     const fieldWidthM = (bounds.east - bounds.west) * lngDegreesToMeters
     const fieldHeightM = (bounds.north - bounds.south) * latDegreesToMeters
-    
     // Each pixel is ~100 square meters (10m x 10m)
     return Math.floor((fieldWidthM * fieldHeightM) / 100)
   }
-
   /**
    * Assess image quality based on cloud cover
    */
@@ -635,9 +551,7 @@ class CopernicusService {
     if (cloudCover < 30) return 'fair'
     return 'poor'
   }
-
 }
-
 // Export singleton instance
 export const copernicusService = new CopernicusService()
 export { CopernicusService }

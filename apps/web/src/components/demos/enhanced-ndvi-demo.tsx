@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -16,7 +15,6 @@ import {
   Play,
   Pause
 } from 'lucide-react'
-
 // Real coordinates for a corn field in Story County, Iowa
 const DEMO_FIELD_LOCATION = {
   center: { lat: 41.5868, lng: -93.6250 },
@@ -25,7 +23,6 @@ const DEMO_FIELD_LOCATION = {
   acres: 160,
   crop: "Corn (Pioneer P1366AM)"
 }
-
 // Realistic NDVI data for corn growing season in Iowa
 const NDVI_TIME_SERIES = [
   { 
@@ -109,51 +106,40 @@ const NDVI_TIME_SERIES = [
     hexColor: '#F0E0A0'
   }
 ]
-
 interface EnhancedNDVIDemoProps {
   className?: string
 }
-
 export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
   const [selectedTimePoint, setSelectedTimePoint] = useState(4) // R1 (Silking) - peak NDVI
   const [isAnimating, setIsAnimating] = useState(false)
   const [showFieldView, setShowFieldView] = useState(true)
-
   const currentData = NDVI_TIME_SERIES[selectedTimePoint]
-  
   const getNDVIInterpretation = (value: number) => {
     if (value < 0.3) return { status: 'Poor', color: 'text-red-600', bg: 'bg-red-50' }
     if (value < 0.5) return { status: 'Developing', color: 'text-orange-600', bg: 'bg-orange-50' }
     if (value < 0.7) return { status: 'Good', color: 'text-yellow-600', bg: 'bg-yellow-50' }
     return { status: 'Excellent', color: 'text-green-600', bg: 'bg-green-50' }
   }
-
   const interpretation = getNDVIInterpretation(currentData.value)
-
   const handleTimePointChange = (index: number) => {
     setSelectedTimePoint(index)
   }
-
   const animateGrowingSeason = () => {
     if (isAnimating) {
       setIsAnimating(false)
       return
     }
-
     setIsAnimating(true)
     let currentIndex = 0
-    
     const interval = setInterval(() => {
       setSelectedTimePoint(currentIndex)
       currentIndex++
-      
       if (currentIndex >= NDVI_TIME_SERIES.length) {
         setIsAnimating(false)
         clearInterval(interval)
       }
     }, 800)
   }
-
   return (
     <ModernCard variant="floating" className={`h-full ${className}`}>
       <ModernCardHeader>
@@ -175,7 +161,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
           </div>
         </div>
       </ModernCardHeader>
-      
       <ModernCardContent className="space-y-4">
         {/* Field Information */}
         <div className="bg-sage-50 p-3 rounded-lg">
@@ -187,7 +172,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             {DEMO_FIELD_LOCATION.address} • {DEMO_FIELD_LOCATION.acres} acres • {DEMO_FIELD_LOCATION.crop}
           </div>
         </div>
-
         {/* Field Visualization or Chart */}
         {showFieldView ? (
           <div className="relative">
@@ -211,19 +195,16 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
                   ))}
                 </div>
               </div>
-              
               {/* Field Info Overlay */}
               <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-2 rounded-lg">
                 <div className="text-sm font-medium">Story County, IA</div>
                 <div className="text-xs text-gray-600">Lat: 41.5868, Lng: -93.6250</div>
               </div>
-              
               {/* NDVI Value Overlay */}
               <div className="absolute top-3 right-3 bg-black/80 text-white px-3 py-2 rounded-lg">
                 <div className="text-lg font-bold">{currentData.value.toFixed(2)}</div>
                 <div className="text-xs">NDVI</div>
               </div>
-              
               {/* Scale Reference */}
               <div className="absolute bottom-3 left-3 right-3 flex justify-between text-xs bg-white/90 backdrop-blur px-3 py-2 rounded-lg">
                 <span>Low (0.0)</span>
@@ -262,7 +243,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             </div>
           </div>
         )}
-
         {/* Animation Control */}
         <div className="flex justify-center">
           <Button
@@ -275,7 +255,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             {isAnimating ? 'Pause' : 'Animate'} Growing Season
           </Button>
         </div>
-
         {/* Current NDVI Analysis */}
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
@@ -291,7 +270,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             <div className="text-xs text-blue-600">{currentData.date}</div>
           </div>
         </div>
-
         {/* Current Stage Description */}
         <div className="bg-blue-50 p-3 rounded-lg">
           <div className="flex items-start gap-2">
@@ -302,7 +280,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             </div>
           </div>
         </div>
-
         {/* Real-time Insights */}
         <div className="bg-green-50 p-3 rounded-lg">
           <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
@@ -316,7 +293,6 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             <div>• Next satellite pass: 2 days</div>
           </div>
         </div>
-
         <div className="pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <Eye className="h-3 w-3" />

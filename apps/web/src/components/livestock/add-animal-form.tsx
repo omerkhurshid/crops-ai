@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -7,13 +6,11 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
-
 interface AddAnimalFormProps {
   farms: any[]
   parentAnimals: any[]
   userId: string
 }
-
 export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,26 +33,21 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
     currentValue: '',
     notes: ''
   })
-
   const speciesOptions = [
     'cattle', 'sheep', 'goat', 'pig', 'chicken', 'horse', 'duck', 'goose', 'turkey'
   ]
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
       // Validate required fields
       if (!formData.tagNumber || !formData.species || !formData.gender) {
         throw new Error('Please fill in all required fields')
       }
-
       // Check for duplicate tag number
       const response = await fetch('/api/livestock/animals/check-tag', {
         method: 'POST',
@@ -65,17 +57,14 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           farmId: formData.farmId 
         })
       })
-
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || 'Failed to validate tag number')
       }
-
       const { exists } = await response.json()
       if (exists) {
         throw new Error('An animal with this tag number already exists on this farm')
       }
-
       // Submit animal data
       const submitResponse = await fetch('/api/livestock/animals', {
         method: 'POST',
@@ -93,14 +82,11 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           fatherId: formData.fatherId || null
         })
       })
-
       if (!submitResponse.ok) {
         const error = await submitResponse.json()
         throw new Error(error.message || 'Failed to add animal')
       }
-
       const newAnimal = await submitResponse.json()
-      
       toast.success('Animal added successfully!')
       router.push(`/livestock/animals/${newAnimal.id}`)
     } catch (error) {
@@ -110,15 +96,12 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
       setIsSubmitting(false)
     }
   }
-
   const motherOptions = parentAnimals.filter(animal => 
     animal.gender === 'female' && animal.species === formData.species
   )
-  
   const fatherOptions = parentAnimals.filter(animal => 
     animal.gender === 'male' && animal.species === formData.species
   )
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
@@ -138,7 +121,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="tagNumber">Tag Number *</Label>
           <Input
@@ -150,7 +132,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             required
           />
         </div>
-
         <div>
           <Label htmlFor="name">Name (Optional)</Label>
           <Input
@@ -161,7 +142,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             placeholder="e.g., Bessie"
           />
         </div>
-
         <div>
           <Label htmlFor="species">Species *</Label>
           <select
@@ -179,7 +159,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="breed">Breed</Label>
           <Input
@@ -190,7 +169,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             placeholder="e.g., Holstein, Angus"
           />
         </div>
-
         <div>
           <Label htmlFor="gender">Gender *</Label>
           <select
@@ -206,7 +184,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           </select>
         </div>
       </div>
-
       {/* Birth Information */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
@@ -219,7 +196,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             onChange={handleInputChange}
           />
         </div>
-
         <div>
           <Label htmlFor="birthWeight">Birth Weight (lbs)</Label>
           <Input
@@ -232,7 +208,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             placeholder="e.g., 75"
           />
         </div>
-
         <div>
           <Label htmlFor="currentWeight">Current Weight (lbs)</Label>
           <Input
@@ -246,7 +221,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           />
         </div>
       </div>
-
       {/* Parentage */}
       {parentAnimals.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,7 +241,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
               ))}
             </select>
           </div>
-
           <div>
             <Label htmlFor="fatherId">Father</Label>
             <select
@@ -287,7 +260,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           </div>
         </div>
       )}
-
       {/* Physical Characteristics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -300,7 +272,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             placeholder="e.g., Black, Brown, White"
           />
         </div>
-
         <div>
           <Label htmlFor="markings">Markings</Label>
           <Input
@@ -312,7 +283,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           />
         </div>
       </div>
-
       {/* Financial Information */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
@@ -327,7 +297,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             placeholder="e.g., 1500"
           />
         </div>
-
         <div>
           <Label htmlFor="purchaseDate">Purchase Date</Label>
           <Input
@@ -338,7 +307,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             onChange={handleInputChange}
           />
         </div>
-
         <div>
           <Label htmlFor="currentValue">Current Value ($)</Label>
           <Input
@@ -352,7 +320,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           />
         </div>
       </div>
-
       {/* Notes */}
       <div>
         <Label htmlFor="notes">Notes</Label>
@@ -365,7 +332,6 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
           rows={3}
         />
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-end gap-4">
         <Button

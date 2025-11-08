@@ -1,9 +1,7 @@
 "use client"
-
 import * as React from "react"
 import { Check } from "lucide-react"
 import { cn } from "../../lib/utils"
-
 interface CheckboxProps {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
@@ -11,7 +9,6 @@ interface CheckboxProps {
   className?: string
   id?: string
 }
-
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, checked, onCheckedChange, disabled, id, ...props }, ref) => {
     return (
@@ -47,7 +44,5 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     )
   }
 )
-
 Checkbox.displayName = "Checkbox"
-
 export { Checkbox }

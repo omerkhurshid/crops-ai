@@ -1,10 +1,7 @@
 import { NextRequest } from 'next/server'
-
 export async function GET(request: NextRequest) {
-
   const databaseUrl = process.env.DATABASE_URL || 'NOT SET'
   const directUrl = process.env.DIRECT_URL || 'NOT SET'
-  
   // Parse the database URL to check settings
   let connectionInfo = {
     hasPooler: false,
@@ -13,7 +10,6 @@ export async function GET(request: NextRequest) {
     port: 'unknown',
     isPgBouncer: false
   }
-  
   try {
     if (databaseUrl !== 'NOT SET') {
       const url = new URL(databaseUrl)
@@ -26,9 +22,7 @@ export async function GET(request: NextRequest) {
       }
     }
   } catch (e) {
-
   }
-  
   // Try different connection approaches
   const results: any = {
     environment: {
@@ -39,13 +33,11 @@ export async function GET(request: NextRequest) {
     },
     tests: []
   }
-  
   // Test 1: Check if we should append pgbouncer parameter
   try {
     const shouldUsePgBouncer = connectionInfo.isPgBouncer
     const pgBouncerParam = '?pgbouncer=true&connection_limit=1'
     const urlHasParams = databaseUrl.includes('?')
-    
     results.tests.push({
       test: 'PgBouncer Configuration',
       shouldUsePgBouncer,
@@ -60,7 +52,6 @@ export async function GET(request: NextRequest) {
       error: e.message
     })
   }
-  
   // Test 2: Check Supabase pooler settings
   results.tests.push({
     test: 'Supabase Pooler Check',
@@ -70,7 +61,6 @@ export async function GET(request: NextRequest) {
       'Using Supabase transaction pooler - add ?pgbouncer=true to DATABASE_URL' :
       'Check pooler configuration'
   })
-  
   return Response.json(results, { 
     status: 200,
     headers: { 'Content-Type': 'application/json' }

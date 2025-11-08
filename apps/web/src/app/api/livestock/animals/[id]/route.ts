@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { prisma } from '../../../../../lib/prisma'
-
 interface RouteParams {
   params: {
     id: string
   }
 }
-
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const animal = await prisma.animal.findUnique({
       where: {
         id: params.id,
@@ -54,11 +50,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         }
       }
     })
-
     if (!animal) {
       return NextResponse.json({ error: 'Animal not found' }, { status: 404 })
     }
-
     return NextResponse.json(animal)
   } catch (error) {
     console.error('Error fetching animal:', error)
@@ -68,17 +62,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     )
   }
 }
-
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const data = await request.json()
-
     // Verify animal ownership
     const existingAnimal = await prisma.animal.findFirst({
       where: {
@@ -86,11 +76,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         userId: user.id
       }
     })
-
     if (!existingAnimal) {
       return NextResponse.json({ error: 'Animal not found' }, { status: 404 })
     }
-
     // If tag number is being changed, check for duplicates
     if (data.tagNumber && data.tagNumber !== existingAnimal.tagNumber) {
       const duplicateAnimal = await prisma.animal.findFirst({
@@ -100,7 +88,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
           id: { not: params.id }
         }
       })
-
       if (duplicateAnimal) {
         return NextResponse.json(
           { error: 'An animal with this tag number already exists on this farm' },
@@ -108,10 +95,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         )
       }
     }
-
     // Update the animal
     const updateData: any = {}
-    
     if (data.tagNumber !== undefined) updateData.tagNumber = data.tagNumber
     if (data.name !== undefined) updateData.name = data.name || null
     if (data.species !== undefined) updateData.species = data.species
@@ -129,7 +114,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (data.currentValue !== undefined) updateData.currentValue = data.currentValue || null
     if (data.notes !== undefined) updateData.notes = data.notes || null
     if (data.status !== undefined) updateData.status = data.status
-
     const animal = await prisma.animal.update({
       where: { id: params.id },
       data: updateData,
@@ -137,7 +121,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         farm: { select: { name: true } }
       }
     })
-
     return NextResponse.json(animal)
   } catch (error) {
     console.error('Error updating animal:', error)
@@ -147,15 +130,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     )
   }
 }
-
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     // Verify animal ownership
     const animal = await prisma.animal.findFirst({
       where: {
@@ -163,17 +143,14 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
         userId: user.id
       }
     })
-
     if (!animal) {
       return NextResponse.json({ error: 'Animal not found' }, { status: 404 })
     }
-
     // Soft delete by setting status to 'removed'
     await prisma.animal.update({
       where: { id: params.id },
       data: { status: 'removed' }
     })
-
     return NextResponse.json({ message: 'Animal removed successfully' })
   } catch (error) {
     console.error('Error deleting animal:', error)

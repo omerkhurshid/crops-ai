@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -10,7 +9,6 @@ import {
   Timer, MapPin, Zap
 } from 'lucide-react'
 import { InfoTooltip } from '../ui/info-tooltip'
-
 interface FarmerAction {
   id: string
   action: string // What the farmer needs to do
@@ -24,19 +22,16 @@ interface FarmerAction {
   dueDate?: string
   category: 'water' | 'pests' | 'growth' | 'money' | 'timing'
 }
-
 interface FarmerActionCenterProps {
   farmId: string
   className?: string
 }
-
 const urgencyConfig = {
   now: { color: 'bg-red-100 text-red-800 border-red-200', icon: AlertTriangle, label: 'DO NOW' },
   today: { color: 'bg-orange-100 text-orange-800 border-orange-200', icon: Clock, label: 'TODAY' },
   'this-week': { color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: Calendar, label: 'THIS WEEK' },
   'this-month': { color: 'bg-blue-100 text-blue-800 border-blue-200', icon: Target, label: 'THIS MONTH' }
 }
-
 const categoryConfig = {
   water: { icon: Droplets, color: 'text-blue-600' },
   pests: { icon: Bug, color: 'text-red-600' },
@@ -44,27 +39,20 @@ const categoryConfig = {
   money: { icon: DollarSign, color: 'text-green-700' },
   timing: { icon: Timer, color: 'text-purple-600' }
 }
-
 export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProps) {
   const [actions, setActions] = useState<FarmerAction[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     fetchActions()
   }, [farmId])
-
   const fetchActions = async () => {
     try {
       setLoading(true)
-      
       const response = await fetch(`/api/insights/actions?farmId=${farmId}`)
-      
       if (!response.ok) {
         throw new Error('Failed to fetch actions')
       }
-      
       const data = await response.json()
-      
       if (data.success && data.actions) {
         setActions(data.actions)
       } else {
@@ -76,10 +64,8 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
       setLoading(false)
     }
   }
-
   const urgentActions = actions.filter(a => a.urgency === 'now' || a.urgency === 'today')
   const plannedActions = actions.filter(a => a.urgency === 'this-week' || a.urgency === 'this-month')
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -95,7 +81,6 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -109,7 +94,6 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
         </ModernCardTitle>
       </ModernCardHeader>
       <ModernCardContent className="space-y-6">
-        
         {/* Urgent Actions */}
         {urgentActions.length > 0 && (
           <div>
@@ -124,7 +108,6 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
             </div>
           </div>
         )}
-
         {/* Planned Actions */}
         {plannedActions.length > 0 && (
           <div>
@@ -139,7 +122,6 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
             </div>
           </div>
         )}
-
         {actions.length === 0 && (
           <div className="text-center py-8">
             <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
@@ -151,13 +133,11 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
     </ModernCard>
   )
 }
-
 function ActionCard({ action }: { action: FarmerAction }) {
   const urgencyInfo = urgencyConfig[action.urgency]
   const categoryInfo = categoryConfig[action.category]
   const UrgencyIcon = urgencyInfo.icon
   const CategoryIcon = categoryInfo.icon
-
   return (
     <div className="bg-white border border-sage-200 rounded-lg p-4 hover:border-sage-300 transition-colors">
       <div className="flex items-start justify-between mb-3">
@@ -181,13 +161,10 @@ function ActionCard({ action }: { action: FarmerAction }) {
           </div>
         )}
       </div>
-
       <h4 className="font-semibold text-sage-900 mb-2 text-base">
         {action.action}
       </h4>
-      
       <p className="text-sm text-sage-600 mb-3">{action.reason}</p>
-      
       <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
         <div className="flex items-center gap-1 text-sage-600">
           <Clock className="h-3 w-3" />
@@ -211,11 +188,9 @@ function ActionCard({ action }: { action: FarmerAction }) {
           </div>
         )}
       </div>
-
       <div className="bg-sage-50 p-3 rounded-lg mb-3">
         <p className="text-sm font-medium text-sage-800">{action.impact}</p>
       </div>
-
       <div className="flex gap-2">
         <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white flex-1">
           <CheckCircle2 className="h-3 w-3 mr-1" />

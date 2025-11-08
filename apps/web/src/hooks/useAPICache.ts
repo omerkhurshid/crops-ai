@@ -2,11 +2,9 @@
  * React Hook for API Caching
  * Provides a React-friendly interface to the API cache system
  */
-
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { apiCache, CachePresets, generateCacheKey, type CacheOptions } from '../lib/cache/api-cache'
 // Logger replaced with console for local development
-
 interface UseAPICacheOptions<T> extends CacheOptions {
   enabled?: boolean
   onSuccess?: (data: T) => void
@@ -15,7 +13,6 @@ interface UseAPICacheOptions<T> extends CacheOptions {
   retryCount?: number
   retryDelay?: number
 }
-
 interface UseAPICacheResult<T> {
   data: T | null
   loading: boolean
@@ -24,7 +21,6 @@ interface UseAPICacheResult<T> {
   invalidate: () => void
   prefetch: () => Promise<void>
 }
-
 /**
  * Hook for cached API calls with React state management
  */
@@ -42,23 +38,17 @@ export function useAPICache<T>(
     retryDelay = 1000,
     ...cacheOptions
   } = options
-
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
-  
   const retryCountRef = useRef(0)
   const mountedRef = useRef(true)
-
   const fetchData = useCallback(async (): Promise<void> => {
     if (!key || !fetcher || !enabled) return
-
     setLoading(true)
     setError(null)
-
     try {
       const result = await apiCache.get(key, fetcher, cacheOptions)
-      
       if (mountedRef.current) {
         setData(result)
         setError(null)
@@ -67,11 +57,9 @@ export function useAPICache<T>(
       }
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
-      
       if (mountedRef.current) {
         setError(error)
         onError?.(error)
-        
         // Retry logic
         if (retryOnError && retryCountRef.current < retryCount) {
           retryCountRef.current += 1
@@ -88,31 +76,26 @@ export function useAPICache<T>(
       }
     }
   }, [key, fetcher, enabled, cacheOptions, onSuccess, onError, retryOnError, retryCount, retryDelay])
-
   const invalidate = useCallback(() => {
     if (key) {
       apiCache.invalidate(key)
       setData(null)
     }
   }, [key])
-
   const prefetch = useCallback(async (): Promise<void> => {
     if (key && fetcher) {
       await apiCache.prefetch(key, fetcher, cacheOptions.ttl)
     }
   }, [key, fetcher, cacheOptions.ttl])
-
   useEffect(() => {
     fetchData()
   }, [fetchData])
-
   useEffect(() => {
     mountedRef.current = true
     return () => {
       mountedRef.current = false
     }
   }, [])
-
   return {
     data,
     loading,
@@ -122,7 +105,6 @@ export function useAPICache<T>(
     prefetch
   }
 }
-
 /**
  * Hook for cached farm data
  */
@@ -133,7 +115,6 @@ export function useCachedFarmData(farmId: string | null) {
     CachePresets.FARM_DATA
   )
 }
-
 /**
  * Hook for cached weather data
  */
@@ -144,7 +125,6 @@ export function useCachedWeatherData(farmId: string | null) {
     CachePresets.WEATHER
   )
 }
-
 /**
  * Hook for cached crop data
  */
@@ -155,7 +135,6 @@ export function useCachedCropData(farmId: string | null) {
     CachePresets.FARM_DATA
   )
 }
-
 /**
  * Hook for cached livestock data
  */
@@ -166,7 +145,6 @@ export function useCachedLivestockData(farmId: string | null) {
     CachePresets.FARM_DATA
   )
 }
-
 /**
  * Hook for cached task data
  */
@@ -177,13 +155,11 @@ export function useCachedTaskData(farmId: string | null) {
     CachePresets.USER_DATA
   )
 }
-
 /**
  * Hook for cached satellite data
  */
 export function useCachedSatelliteData(farmId: string | null, fieldId?: string) {
   const params = fieldId ? { farmId, fieldId } : { farmId }
-  
   return useAPICache(
     farmId ? generateCacheKey('/api/satellite/analysis', params) : null,
     farmId ? () => {
@@ -195,7 +171,6 @@ export function useCachedSatelliteData(farmId: string | null, fieldId?: string) 
     CachePresets.SATELLITE
   )
 }
-
 /**
  * Hook for cached market data
  */
@@ -203,7 +178,6 @@ export function useCachedMarketData(commodities: string[] = []) {
   const key = commodities.length > 0 
     ? generateCacheKey('/api/market/prices', { commodities: commodities.sort() })
     : null
-    
   return useAPICache(
     key,
     commodities.length > 0 ? () => {
@@ -214,7 +188,6 @@ export function useCachedMarketData(commodities: string[] = []) {
     CachePresets.MARKET
   )
 }
-
 /**
  * Hook to prefetch multiple data sources
  */
@@ -223,10 +196,8 @@ export function usePrefetchFarmData(farmId: string | null) {
   const weatherData = useCachedWeatherData(farmId)
   const cropData = useCachedCropData(farmId)
   const taskData = useCachedTaskData(farmId)
-
   const prefetchAll = useCallback(async () => {
     if (!farmId) return
-    
     await Promise.allSettled([
       farmData.prefetch(),
       weatherData.prefetch(),
@@ -234,10 +205,8 @@ export function usePrefetchFarmData(farmId: string | null) {
       taskData.prefetch()
     ])
   }, [farmId, farmData, weatherData, cropData, taskData])
-
   return { prefetchAll }
 }
-
 /**
  * Hook to invalidate related cache entries
  */
@@ -250,15 +219,12 @@ export function useCacheInvalidation() {
     apiCache.invalidatePattern(`livestock.*${farmId}`)
     apiCache.invalidatePattern(`satellite.*${farmId}`)
   }, [])
-
   const invalidateWeatherData = useCallback(() => {
     apiCache.invalidatePattern('weather.*')
   }, [])
-
   const invalidateMarketData = useCallback(() => {
     apiCache.invalidatePattern('market.*')
   }, [])
-
   return {
     invalidateFarmData,
     invalidateWeatherData,

@@ -1,6 +1,5 @@
 // Comprehensive Agricultural Knowledge Base
 // Based on USDA data, extension service research, and agricultural best practices
-
 export interface CropKnowledge {
   name: string
   varieties: string[]
@@ -65,7 +64,6 @@ export interface CropKnowledge {
     soilBenefits: string[]
   }
 }
-
 export interface LivestockKnowledge {
   species: string
   breeds: string[]
@@ -109,7 +107,6 @@ export interface LivestockKnowledge {
     treatment: string
   }[]
 }
-
 // Corn Knowledge Base
 export const CORN_KNOWLEDGE: CropKnowledge = {
   name: "Corn",
@@ -231,7 +228,6 @@ export const CORN_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Nitrogen depletion requires legume rotation", "Improves soil structure with deep roots"]
   }
 }
-
 // Soybeans Knowledge Base
 export const SOYBEAN_KNOWLEDGE: CropKnowledge = {
   name: "Soybeans",
@@ -331,7 +327,6 @@ export const SOYBEAN_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Fixes nitrogen for following crops", "Breaks disease cycles for cereals"]
   }
 }
-
 // Cattle Knowledge Base
 export const CATTLE_KNOWLEDGE: LivestockKnowledge = {
   species: "Cattle",
@@ -435,7 +430,6 @@ export const CATTLE_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Wheat Knowledge Base
 export const WHEAT_KNOWLEDGE: CropKnowledge = {
   name: "Wheat",
@@ -541,7 +535,6 @@ export const WHEAT_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Breaks disease cycles", "Improves soil structure", "Efficient water use"]
   }
 }
-
 // Cotton Knowledge Base
 export const COTTON_KNOWLEDGE: CropKnowledge = {
   name: "Cotton",
@@ -640,7 +633,6 @@ export const COTTON_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep taproot improves soil structure", "Efficient nutrient scavenger"]
   }
 }
-
 // Rice Knowledge Base
 export const RICE_KNOWLEDGE: CropKnowledge = {
   name: "Rice",
@@ -746,7 +738,6 @@ export const RICE_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Unique flooding breaks weed/pest cycles", "Increases soil organic matter in water"]
   }
 }
-
 // Swine (Pigs) Knowledge Base
 export const SWINE_KNOWLEDGE: LivestockKnowledge = {
   species: "Swine",
@@ -850,7 +841,6 @@ export const SWINE_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Poultry (Chickens) Knowledge Base
 export const POULTRY_KNOWLEDGE: LivestockKnowledge = {
   species: "Poultry (Layers)",
@@ -938,7 +928,6 @@ export const POULTRY_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Sheep Knowledge Base
 export const SHEEP_KNOWLEDGE: LivestockKnowledge = {
   species: "Sheep",
@@ -1026,7 +1015,6 @@ export const SHEEP_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Sorghum Knowledge Base
 export const SORGHUM_KNOWLEDGE: CropKnowledge = {
   name: "Sorghum",
@@ -1125,7 +1113,6 @@ export const SORGHUM_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Drought tolerance improves soil in dry years", "Efficient nutrient user"]
   }
 }
-
 // Canola Knowledge Base
 export const CANOLA_KNOWLEDGE: CropKnowledge = {
   name: "Canola",
@@ -1231,7 +1218,6 @@ export const CANOLA_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep taproot breaks compaction", "Good for wheat rotation", "Reduces cereal diseases"]
   }
 }
-
 // Barley Knowledge Base
 export const BARLEY_KNOWLEDGE: CropKnowledge = {
   name: "Barley",
@@ -1337,7 +1323,6 @@ export const BARLEY_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Early harvest allows cover crops", "Good nurse crop for alfalfa", "Breaks disease cycles"]
   }
 }
-
 // Sunflower Knowledge Base
 export const SUNFLOWER_KNOWLEDGE: CropKnowledge = {
   name: "Sunflower",
@@ -1443,9 +1428,7 @@ export const SUNFLOWER_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep taproot accesses nutrients", "Good for saline soils", "Mycorrhizal associations benefit next crop"]
   }
 }
-
 // PHASE 1: HIGH-VALUE VEGETABLE CROPS
-
 // Tomatoes Knowledge Base
 export const TOMATOES_KNOWLEDGE: CropKnowledge = {
   name: "Tomatoes",
@@ -1552,7 +1535,6 @@ export const TOMATOES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep root system", "Organic matter addition"]
   }
 }
-
 // Potatoes Knowledge Base  
 export const POTATOES_KNOWLEDGE: CropKnowledge = {
   name: "Potatoes",
@@ -1660,7 +1642,6 @@ export const POTATOES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Soil structure improvement", "Organic matter addition"]
   }
 }
-
 // Onions Knowledge Base
 export const ONIONS_KNOWLEDGE: CropKnowledge = {
   name: "Onions",
@@ -1768,9 +1749,7 @@ export const ONIONS_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Pest disruption", "Different root zone"]
   }
 }
-
 // PHASE 2: TREE CROPS
-
 // Apples Knowledge Base
 export const APPLES_KNOWLEDGE: CropKnowledge = {
   name: "Apples",
@@ -1878,7 +1857,6 @@ export const APPLES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep root system", "Perennial ground cover", "Carbon sequestration"]
   }
 }
-
 // Almonds Knowledge Base
 export const ALMONDS_KNOWLEDGE: CropKnowledge = {
   name: "Almonds",
@@ -1985,7 +1963,6 @@ export const ALMONDS_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep rooting", "Nitrogen fixation (with cover crops)", "Soil structure"]
   }
 }
-
 // Grapes Knowledge Base
 export const GRAPES_KNOWLEDGE: CropKnowledge = {
   name: "Grapes",
@@ -2093,9 +2070,7 @@ export const GRAPES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep root system", "Soil structure", "Erosion control"]
   }
 }
-
 // PHASE 3: SPECIALTY HIGH-VALUE CROPS
-
 // Strawberries Knowledge Base
 export const STRAWBERRIES_KNOWLEDGE: CropKnowledge = {
   name: "Strawberries",
@@ -2195,7 +2170,6 @@ export const STRAWBERRIES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Soil structure", "Organic matter from roots"]
   }
 }
-
 // Blueberries Knowledge Base
 export const BLUEBERRIES_KNOWLEDGE: CropKnowledge = {
   name: "Blueberries",
@@ -2286,9 +2260,7 @@ export const BLUEBERRIES_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Acidifies soil", "Shallow root system", "Perennial ground cover"]
   }
 }
-
 // PHASE 4: REGIONAL/ADDITIONAL CROPS
-
 // Peanuts Knowledge Base
 export const PEANUTS_KNOWLEDGE: CropKnowledge = {
   name: "Peanuts",
@@ -2379,7 +2351,6 @@ export const PEANUTS_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Nitrogen fixation", "Deep taproot", "Soil structure improvement"]
   }
 }
-
 // Sugar Beets Knowledge Base  
 export const SUGAR_BEETS_KNOWLEDGE: CropKnowledge = {
   name: "Sugar Beets",
@@ -2469,9 +2440,7 @@ export const SUGAR_BEETS_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Deep taproot", "Soil structure", "Residue management"]
   }
 }
-
 // PHASE 5: QUICK ADDITIONAL CROPS (Abbreviated entries for speed)
-
 // Carrots Knowledge Base
 export const CARROTS_KNOWLEDGE: CropKnowledge = {
   name: "Carrots",
@@ -2543,7 +2512,6 @@ export const CARROTS_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Taproot breaks compaction", "Organic matter"]
   }
 }
-
 // Lettuce Knowledge Base
 export const LETTUCE_KNOWLEDGE: CropKnowledge = {
   name: "Lettuce",
@@ -2616,7 +2584,6 @@ export const LETTUCE_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Light soil impact", "Quick turnover"]
   }
 }
-
 // Broccoli Knowledge Base
 export const BROCCOLI_KNOWLEDGE: CropKnowledge = {
   name: "Broccoli",
@@ -2688,7 +2655,6 @@ export const BROCCOLI_KNOWLEDGE: CropKnowledge = {
     soilBenefits: ["Heavy nutrient user", "Soil conditioning"]
   }
 }
-
 // Knowledge base registry - 24 CROP TYPES DEPLOYED
 export const CROP_KNOWLEDGE_BASE: { [key: string]: CropKnowledge } = {
   // Field crops (9 core types)
@@ -2703,7 +2669,6 @@ export const CROP_KNOWLEDGE_BASE: { [key: string]: CropKnowledge } = {
   "barley": BARLEY_KNOWLEDGE,
   "sunflower": SUNFLOWER_KNOWLEDGE,
   "sunflowers": SUNFLOWER_KNOWLEDGE, // alias
-  
   // High-value vegetable crops (6 types)
   "tomatoes": TOMATOES_KNOWLEDGE,
   "potatoes": POTATOES_KNOWLEDGE,
@@ -2711,23 +2676,19 @@ export const CROP_KNOWLEDGE_BASE: { [key: string]: CropKnowledge } = {
   "carrots": CARROTS_KNOWLEDGE,
   "lettuce": LETTUCE_KNOWLEDGE,
   "broccoli": BROCCOLI_KNOWLEDGE,
-  
   // Tree/fruit crops (3 types)
   "apples": APPLES_KNOWLEDGE,
   "almonds": ALMONDS_KNOWLEDGE,
   "grapes": GRAPES_KNOWLEDGE,
-  
   // Specialty berry crops (2 types) 
   "strawberries": STRAWBERRIES_KNOWLEDGE,
   "blueberries": BLUEBERRIES_KNOWLEDGE,
-  
   // Regional specialty crops (4 types)
   "peanuts": PEANUTS_KNOWLEDGE,
   "sugar_beets": SUGAR_BEETS_KNOWLEDGE,
   "sugarbeets": SUGAR_BEETS_KNOWLEDGE, // alias
   "beets": SUGAR_BEETS_KNOWLEDGE // alias
 }
-
 // Goats Knowledge Base
 export const GOATS_KNOWLEDGE: LivestockKnowledge = {
   species: "Goats",
@@ -2815,7 +2776,6 @@ export const GOATS_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Dairy Cows Knowledge Base (specialized from cattle)
 export const DAIRY_CATTLE_SPECIALIZED: LivestockKnowledge = {
   species: "Dairy Cattle",
@@ -2895,7 +2855,6 @@ export const DAIRY_CATTLE_SPECIALIZED: LivestockKnowledge = {
     }
   ]
 }
-
 // Turkeys Knowledge Base
 export const TURKEY_KNOWLEDGE: LivestockKnowledge = {
   species: "Turkeys",
@@ -2983,7 +2942,6 @@ export const TURKEY_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 // Horses Knowledge Base
 export const HORSES_KNOWLEDGE: LivestockKnowledge = {
   species: "Horses",
@@ -3078,7 +3036,6 @@ export const HORSES_KNOWLEDGE: LivestockKnowledge = {
     }
   ]
 }
-
 export const LIVESTOCK_KNOWLEDGE_BASE: { [key: string]: LivestockKnowledge } = {
   "cattle": CATTLE_KNOWLEDGE,
   "beef_cattle": CATTLE_KNOWLEDGE,
@@ -3100,50 +3057,39 @@ export const LIVESTOCK_KNOWLEDGE_BASE: { [key: string]: LivestockKnowledge } = {
   "horse": HORSES_KNOWLEDGE,
   "equine": HORSES_KNOWLEDGE
 }
-
 // Helper functions
 export function getCropKnowledge(cropType: string): CropKnowledge | null {
   const normalized = cropType.toLowerCase().replace(/[^a-z]/g, '')
   return CROP_KNOWLEDGE_BASE[normalized] || null
 }
-
 export function getLivestockKnowledge(species: string): LivestockKnowledge | null {
   const normalized = species.toLowerCase().replace(/[^a-z_]/g, '')
   return LIVESTOCK_KNOWLEDGE_BASE[normalized] || null
 }
-
 export function getBenchmarkYield(cropType: string, region: string): number | null {
   const knowledge = getCropKnowledge(cropType)
   if (!knowledge) return null
-  
   return knowledge.benchmarkYields[region]?.average || 
          knowledge.benchmarkYields["National"]?.average || 
          null
 }
-
 export function getCurrentGrowthStage(cropType: string, daysFromPlanting: number): string {
   const knowledge = getCropKnowledge(cropType)
   if (!knowledge) return "Unknown"
-  
   for (const stage of knowledge.growthStages) {
     if (daysFromPlanting >= stage.daysFromPlanting[0] && 
         daysFromPlanting <= stage.daysFromPlanting[1]) {
       return stage.stage
     }
   }
-  
   return "Mature"
 }
-
 export function getPestRiskLevel(cropType: string, daysFromPlanting: number, region: string): 'low' | 'medium' | 'high' {
   const knowledge = getCropKnowledge(cropType)
   if (!knowledge) return 'low'
-  
   const currentDate = new Date()
   const currentMonth = currentDate.getMonth() + 1
-  
   let highestRisk: 'low' | 'medium' | 'high' = 'low'
-  
   for (const pest of knowledge.pestCalendar) {
     if (pest.region.some(r => region.toLowerCase().includes(r.toLowerCase()))) {
       // Simple risk period parsing - in production, make this more sophisticated
@@ -3153,28 +3099,21 @@ export function getPestRiskLevel(cropType: string, daysFromPlanting: number, reg
       }
     }
   }
-  
   return highestRisk
 }
-
 export function getOptimalSellMonth(cropType: string): string {
   const knowledge = getCropKnowledge(cropType)
   return knowledge?.marketPatterns.storageRecommendation.optimalSellMonth || "Unknown"
 }
-
 export function shouldStoreForBetterPrice(cropType: string, currentMonth: string): boolean {
   const knowledge = getCropKnowledge(cropType)
   if (!knowledge) return false
-  
   const currentPattern = knowledge.marketPatterns.pricePatterns.find(p => p.month === currentMonth)
   const optimalPattern = knowledge.marketPatterns.pricePatterns.find(
     p => p.month === knowledge.marketPatterns.storageRecommendation.optimalSellMonth
   )
-  
   if (!currentPattern || !optimalPattern) return false
-  
   const priceDifference = optimalPattern.relativePrice - currentPattern.relativePrice
   const storageCostAdjustment = 0.05 // 5% to account for storage costs
-  
   return priceDifference > storageCostAdjustment
 }

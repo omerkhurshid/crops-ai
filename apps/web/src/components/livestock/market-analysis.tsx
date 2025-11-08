@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -17,33 +16,26 @@ import {
   CheckCircle
 } from 'lucide-react'
 import Link from 'next/link'
-
 interface MarketAnalysisProps {
   animals: any[]
   farms: any[]
 }
-
 export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFarm, setSelectedFarm] = useState('all')
   const [selectedSpecies, setSelectedSpecies] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
-
   // Filter animals
   const filteredAnimals = animals.filter(animal => {
     const matchesSearch = animal.tagNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (animal.name && animal.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    
     const matchesFarm = selectedFarm === 'all' || animal.farm?.name === selectedFarm
     const matchesSpecies = selectedSpecies === 'all' || animal.species === selectedSpecies
     const matchesStatus = selectedStatus === 'all' || animal.readinessStatus === selectedStatus
-    
     return matchesSearch && matchesFarm && matchesSpecies && matchesStatus
   })
-
   // Sort by readiness score (highest first)
   const sortedAnimals = [...filteredAnimals].sort((a, b) => b.readinessScore - a.readinessScore)
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'ready': return 'bg-green-100 text-green-800'
@@ -52,7 +44,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'ready': return <CheckCircle className="h-4 w-4 text-green-600" />
@@ -61,19 +52,16 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
       default: return <Calendar className="h-4 w-4 text-gray-600" />
     }
   }
-
   const getGrowthTrendIcon = (growthRate: number) => {
     if (growthRate > 0.5) return <TrendingUp className="h-4 w-4 text-green-500" />
     if (growthRate > 0) return <TrendingUp className="h-4 w-4 text-blue-500" />
     if (growthRate < -0.5) return <TrendingDown className="h-4 w-4 text-red-500" />
     return <TrendingDown className="h-4 w-4 text-gray-400" />
   }
-
   // Get unique values for filters
   const uniqueFarms = Array.from(new Set(animals.map(animal => animal.farm?.name).filter(Boolean)))
   const uniqueSpecies = Array.from(new Set(animals.map(animal => animal.species)))
   const uniqueStatuses = ['ready', 'approaching', 'not_ready']
-
   if (animals.length === 0) {
     return (
       <div className="text-center py-12">
@@ -88,7 +76,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -102,7 +89,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
             className="pl-10"
           />
         </div>
-        
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
@@ -113,7 +99,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
             <option key={farm} value={farm}>{farm}</option>
           ))}
         </select>
-
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
@@ -126,7 +111,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
             </option>
           ))}
         </select>
-
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
@@ -140,7 +124,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
           ))}
         </select>
       </div>
-
       {/* Market Analysis Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -190,13 +173,11 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     </div>
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
                     {animal.currentWeight || 0} lbs
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
                     {animal.marketTarget.optimal} lbs
@@ -205,7 +186,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     Range: {animal.marketTarget.min}-{animal.marketTarget.max} lbs
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     {getGrowthTrendIcon(animal.growthRate)}
@@ -214,7 +194,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     </span>
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2 mb-1">
                     {getStatusIcon(animal.readinessStatus)}
@@ -236,7 +215,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     {animal.readinessScore.toFixed(0)}% ready
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
                     ${animal.projectedValue.toFixed(0)}
@@ -245,7 +223,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     ${animal.pricePerLb.toFixed(2)}/lb
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   {animal.readinessStatus === 'ready' ? (
                     <span className="text-sm font-medium text-green-600">Ready Now</span>
@@ -262,7 +239,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     <span className="text-sm text-gray-500">No growth data</span>
                   )}
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center gap-2">
                     <Link href={`/livestock/animals/${animal.id}`}>
@@ -277,7 +253,6 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
           </tbody>
         </table>
       </div>
-
       {filteredAnimals.length === 0 && searchTerm && (
         <div className="text-center py-8">
           <p className="text-gray-500">No animals found matching your search criteria.</p>

@@ -5,7 +5,6 @@
  * historical data, weather patterns, soil conditions, and management practices.
  * Provides both real-time predictions and batch processing capabilities.
  */
-
 import { redis } from '../redis';
 import { prisma } from '../prisma';
 import { dataPipeline } from './data-pipeline';
@@ -20,7 +19,6 @@ import type {
   SoilFeatures,
   SatelliteFeatures
 } from './types';
-
 export interface YieldPredictionRequest {
   fieldId: string;
   cropType: string;
@@ -35,7 +33,6 @@ export interface YieldPredictionRequest {
   modelVersion?: string;
   confidenceLevel?: number; // 0.8, 0.9, 0.95
 }
-
 export interface YieldPredictionOptions {
   includeRecommendations: boolean;
   includeUncertainty: boolean;
@@ -43,14 +40,12 @@ export interface YieldPredictionOptions {
   includeComparisons: boolean;
   timeHorizon: number; // days ahead to predict
 }
-
 export interface BatchPredictionRequest {
   fieldIds: string[];
   cropTypes?: string[];
   options: YieldPredictionOptions;
   modelVersion?: string;
 }
-
 export interface ModelTrainingRequest {
   dataSource: 'pipeline' | 'custom';
   trainingData?: TrainingData[];
@@ -62,7 +57,6 @@ export interface ModelTrainingRequest {
     stratified: boolean;
   };
 }
-
 export interface YieldModel {
   id: string;
   name: string;
@@ -77,19 +71,15 @@ export interface YieldModel {
   lastTrained: Date;
   status: 'training' | 'ready' | 'deprecated';
 }
-
 class YieldPredictionService {
   private readonly CACHE_PREFIX = 'yield_prediction_';
   private readonly MODEL_PREFIX = 'yield_model_';
   private readonly PREDICTION_TTL = 24 * 60 * 60; // 24 hours
   private readonly DEFAULT_MODEL = 'yield_rf_v1.0';
-
   private models: Map<string, YieldModel> = new Map();
-
   constructor() {
     this.loadPretrainedModels();
   }
-
   /**
    * Predict yield for a single field
    */
@@ -104,35 +94,27 @@ class YieldPredictionService {
     }
   ): Promise<YieldPrediction> {
     const startTime = Date.now();
-
     try {
       // Get or create cache key
       const cacheKey = this.generateCacheKey(request, options);
       const cached = await this.getCachedPrediction(cacheKey);
       if (cached) {
-
         return cached;
       }
-
       // Get field information
       const field = await prisma.field.findUnique({
         where: { id: request.fieldId },
         include: { farm: true }
       });
-
       if (!field) {
         throw new Error(`Field ${request.fieldId} not found`);
       }
-
       // Select appropriate model
       const model = await this.selectModel(request.cropType, request.modelVersion);
-      
       // Prepare feature vector
       const features = await this.prepareFeatures(request, field);
-      
       // Make prediction
       const rawPrediction = await this.runInference(model, features);
-      
       // Post-process prediction
       const prediction = await this.postProcessPrediction(
         rawPrediction,
@@ -140,7 +122,6 @@ class YieldPredictionService {
         request,
         options
       );
-
       // Generate recommendations if requested
       if (options.includeRecommendations) {
         prediction.recommendations = await this.generateRecommendations(
@@ -149,81 +130,61 @@ class YieldPredictionService {
           model
         );
       }
-
       // Cache prediction
       await this.cachePrediction(cacheKey, prediction);
-
       return prediction;
-
     } catch (error) {
       console.error(`Yield prediction failed for field ${request.fieldId}`, error);
       throw error;
     }
   }
-
   /**
    * Predict yields for multiple fields
    */
   async predictYieldBatch(request: BatchPredictionRequest): Promise<YieldPrediction[]> {
     const startTime = Date.now();
-
     try {
-
       const predictions: YieldPrediction[] = [];
       const batchSize = 10; // Process in batches to avoid overload
-
       for (let i = 0; i < request.fieldIds.length; i += batchSize) {
         const batch = request.fieldIds.slice(i, i + batchSize);
-        
         const batchPromises = batch.map(async (fieldId) => {
           try {
             // Get field info to determine crop type
             const field = await prisma.field.findUnique({
               where: { id: fieldId }
             });
-
             if (!field) {
-
               return null;
             }
-
             const predictionRequest: YieldPredictionRequest = {
               fieldId,
               cropType: 'corn', // Default crop type since Field model doesn't have cropType
               plantingDate: new Date(), // Would get from actual planting records
               modelVersion: request.modelVersion
             };
-
             return await this.predictYield(predictionRequest, request.options);
-
           } catch (error) {
-
             return null;
           }
         });
-
         const batchResults = await Promise.allSettled(batchPromises);
         const validPredictions = batchResults
           .filter(result => result.status === 'fulfilled' && result.value !== null)
           .map(result => (result as PromiseFulfilledResult<YieldPrediction>).value);
-
         predictions.push(...validPredictions);
       }
-
       return predictions;
-
     } catch (error) {
       console.error('Batch yield prediction failed', error);
       throw error;
     }
   }
-
   /**
    * Train a new yield prediction model
    */
   async trainModel(request: ModelTrainingRequest): Promise<YieldModel> {
     const startTime = Date.now();
-
     try {
       // Get training data
       let trainingData: TrainingData[];
@@ -260,31 +221,24 @@ class YieldPredictionService {
       } else {
         trainingData = request.trainingData || [];
       }
-
       if (trainingData.length < 100) {
         throw new Error('Insufficient training data - minimum 100 samples required');
       }
-
       // Feature selection
       const selectedFeatures = request.features || this.selectImportantFeatures(trainingData);
-      
       // Prepare training matrices
       const { X, y } = this.prepareTrainingData(trainingData, selectedFeatures);
-      
       // Split data
       const splitIndex = Math.floor(X.length * (1 - request.validationSplit));
       const X_train = X.slice(0, splitIndex);
       const y_train = y.slice(0, splitIndex);
       const X_val = X.slice(splitIndex);
       const y_val = y.slice(splitIndex);
-
       // Train model (simplified implementation - in production would use actual ML library)
       const modelWeights = await this.trainRandomForest(X_train, y_train);
-      
       // Validate model
       const predictions = await this.predictBatch(modelWeights, X_val, selectedFeatures);
       const performance = this.calculateModelPerformance(y_val, predictions);
-
       // Create model object
       const model: YieldModel = {
         id: `yield_model_${Date.now()}`,
@@ -300,19 +254,15 @@ class YieldPredictionService {
         lastTrained: new Date(),
         status: 'ready'
       };
-
       // Save model
       await this.saveModel(model);
       this.models.set(model.id, model);
-
       return model;
-
     } catch (error) {
       console.error('Model training failed', error);
       throw error;
     }
   }
-
   /**
    * Evaluate model performance
    */
@@ -322,7 +272,6 @@ class YieldPredictionService {
       if (!model) {
         throw new Error(`Model ${modelId} not found`);
       }
-
       // Use provided test data or generate new validation set
       let evaluationData: TrainingData[];
       if (testData) {
@@ -361,23 +310,18 @@ class YieldPredictionService {
         );
         evaluationData = pipelineResult.validationData;
       }
-
       const { X, y } = this.prepareTrainingData(evaluationData, model.features);
       const predictions = await this.predictBatch(model.weights, X, model.features);
       const performance = this.calculateModelPerformance(y, predictions);
-
       // Update model performance
       model.performance = performance;
       await this.saveModel(model);
-
       return performance;
-
     } catch (error) {
       console.error(`Model evaluation failed for ${modelId}`, error);
       throw error;
     }
   }
-
   /**
    * Get available models
    */
@@ -400,16 +344,13 @@ class YieldPredictionService {
           dataRequirements: model.features
         }
       }));
-
       return models;
     } catch (error) {
       console.error('Failed to get available models', error);
       throw error;
     }
   }
-
   // Private helper methods
-
   private async selectModel(cropType: string, version?: string): Promise<YieldModel> {
     // Select best model for crop type
     const availableModels = Array.from(this.models.values())
@@ -419,22 +360,18 @@ class YieldPredictionService {
         (!version || model.version === version)
       )
       .sort((a, b) => b.performance.metrics.r2 - a.performance.metrics.r2);
-
     if (availableModels.length === 0) {
       // Return default model
       return this.getDefaultModel(cropType);
     }
-
     return availableModels[0];
   }
-
   private async prepareFeatures(
     request: YieldPredictionRequest,
     field: any
   ): Promise<Record<string, number>> {
     // Extract and prepare features for prediction
     const features: Record<string, number> = {};
-
     // Weather features (simplified - would get from actual weather service)
     if (request.features?.weather) {
       Object.assign(features, {
@@ -444,7 +381,6 @@ class YieldPredictionService {
         'weather.growingDegreeDays': request.features.weather.growingDegreeDays || 1500
       });
     }
-
     // Soil features
     if (request.features?.soil) {
       Object.assign(features, {
@@ -454,7 +390,6 @@ class YieldPredictionService {
         'soil.phosphorus': request.features.soil.phosphorus || 25
       });
     }
-
     // Satellite features
     if (request.features?.satellite) {
       Object.assign(features, {
@@ -463,51 +398,39 @@ class YieldPredictionService {
         'satellite.vegetationCover': request.features.satellite.vegetationCover || 80
       });
     }
-
     // Field characteristics
     features['field.area'] = field.area || 100;
     features['field.cropType'] = this.encodeCropType(request.cropType);
-
     // Temporal features
     const plantingDoy = this.getDayOfYear(request.plantingDate);
     features['planting.dayOfYear'] = plantingDoy;
     features['planting.month'] = request.plantingDate.getMonth() + 1;
-
     return features;
   }
-
   private async runInference(
     model: YieldModel,
     features: Record<string, number>
   ): Promise<{ yield: number; confidence: number }> {
     // Simplified inference - in production would use actual ML framework
-    
     // Scale features
     const scaledFeatures = this.scaleFeatures(features, model.scalers);
-    
     // Calculate prediction using simple weighted sum (simplified)
     let prediction = 0;
     let totalWeight = 0;
-
     for (const feature of model.features) {
       const value = scaledFeatures[feature] || 0;
       const weight = model.weights[feature] || 0;
       prediction += value * weight;
       totalWeight += Math.abs(weight);
     }
-
     // Add base yield
     prediction += 8.5; // Base yield assumption
-
     // Calculate confidence based on feature completeness and model performance
     const completeness = model.features.reduce((sum, feature) => 
       sum + (features[feature] !== undefined ? 1 : 0), 0) / model.features.length;
-    
     const confidence = Math.min(0.95, model.performance.metrics.r2 * completeness);
-
     return { yield: Math.max(0, prediction), confidence };
   }
-
   private async postProcessPrediction(
     rawPrediction: { yield: number; confidence: number },
     model: YieldModel,
@@ -535,17 +458,14 @@ class YieldPredictionService {
       createdAt: new Date(),
       validUntil: new Date(Date.now() + options.timeHorizon * 24 * 60 * 60 * 1000)
     };
-
     return prediction;
   }
-
   private async generateRecommendations(
     prediction: YieldPrediction,
     features: Record<string, number>,
     model: YieldModel
   ): Promise<PredictionRecommendation[]> {
     const recommendations: PredictionRecommendation[] = [];
-
     // Analyze feature impacts and generate recommendations
     if (features['soil.nitrogen'] < 25) {
       recommendations.push({
@@ -559,7 +479,6 @@ class YieldPredictionService {
         sustainability_impact: -0.1
       });
     }
-
     if (features['weather.totalRainfall'] < 400) {
       recommendations.push({
         type: 'irrigation',
@@ -572,7 +491,6 @@ class YieldPredictionService {
         sustainability_impact: -0.2
       });
     }
-
     if (features['satellite.avgNDVI'] < 0.6) {
       recommendations.push({
         type: 'pest_control',
@@ -585,15 +503,12 @@ class YieldPredictionService {
         sustainability_impact: 0.05
       });
     }
-
     return recommendations;
   }
-
   // Model training helpers (simplified implementations)
   private async trainRandomForest(X: number[][], y: number[]): Promise<Record<string, number>> {
     // Simplified training - returns random weights for demonstration
     const weights: Record<string, number> = {};
-    
     // Generate feature weights (in production would use actual Random Forest)
     const featureNames = [
       'weather.avgTemperature', 'weather.totalRainfall', 'weather.humidity',
@@ -601,51 +516,40 @@ class YieldPredictionService {
       'satellite.avgNDVI', 'satellite.avgEVI',
       'field.area', 'planting.dayOfYear'
     ];
-
     featureNames.forEach(feature => {
       weights[feature] = (Math.random() - 0.5) * 2; // -1 to 1
     });
-
     return weights;
   }
-
   private prepareTrainingData(
     data: TrainingData[],
     features: string[]
   ): { X: number[][]; y: number[] } {
     const X: number[][] = [];
     const y: number[] = [];
-
     data.forEach(sample => {
       if (sample.target?.yield) {
         const featureVector: number[] = [];
-        
         features.forEach(feature => {
           // Extract feature value from nested structure
           const value = this.extractFeatureValue(sample, feature);
           featureVector.push(value);
         });
-
         X.push(featureVector);
         y.push(sample.target.yield);
       }
     });
-
     return { X, y };
   }
-
   private extractFeatureValue(sample: TrainingData, feature: string): number {
     // Navigate nested feature structure
     const parts = feature.split('.');
     let current: any = sample.features;
-
     for (const part of parts) {
       current = current?.[part];
     }
-
     return typeof current === 'number' ? current : 0;
   }
-
   private selectImportantFeatures(data: TrainingData[]): string[] {
     // Return predefined important features
     return [
@@ -661,7 +565,6 @@ class YieldPredictionService {
       'planting.dayOfYear'
     ];
   }
-
   private async predictBatch(
     weights: Record<string, number>,
     X: number[][],
@@ -669,35 +572,27 @@ class YieldPredictionService {
   ): Promise<number[]> {
     return X.map(sample => {
       let prediction = 8.5; // Base yield
-      
       sample.forEach((value, index) => {
         const feature = features[index];
         const weight = weights[feature] || 0;
         prediction += value * weight * 0.1; // Scale factor
       });
-
       return Math.max(0, prediction);
     });
   }
-
   private calculateModelPerformance(actual: number[], predicted: number[]): ModelPerformance {
     const n = actual.length;
-    
     // Mean Absolute Error
     const mae = actual.reduce((sum, val, i) => sum + Math.abs(val - predicted[i]), 0) / n;
-    
     // Root Mean Square Error  
     const rmse = Math.sqrt(actual.reduce((sum, val, i) => sum + Math.pow(val - predicted[i], 2), 0) / n);
-    
     // R-squared
     const actualMean = actual.reduce((sum, val) => sum + val, 0) / n;
     const ss_res = actual.reduce((sum, val, i) => sum + Math.pow(val - predicted[i], 2), 0);
     const ss_tot = actual.reduce((sum, val) => sum + Math.pow(val - actualMean, 2), 0);
     const r2 = 1 - (ss_res / ss_tot);
-    
     // Mean Absolute Percentage Error
     const mape = actual.reduce((sum, val, i) => sum + Math.abs((val - predicted[i]) / val), 0) / n * 100;
-
     return {
       modelId: 'current',
       version: '1.0',
@@ -717,31 +612,25 @@ class YieldPredictionService {
       lastEvaluation: new Date()
     };
   }
-
   private calculateScalers(
     X: number[][],
     features: string[]
   ): Record<string, { mean: number; std: number }> {
     const scalers: Record<string, { mean: number; std: number }> = {};
-
     features.forEach((feature, index) => {
       const values = X.map(row => row[index]);
       const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
       const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
       const std = Math.sqrt(variance);
-
       scalers[feature] = { mean, std };
     });
-
     return scalers;
   }
-
   private scaleFeatures(
     features: Record<string, number>,
     scalers: Record<string, { mean: number; std: number }>
   ): Record<string, number> {
     const scaled: Record<string, number> = {};
-
     Object.keys(features).forEach(feature => {
       const scaler = scalers[feature];
       if (scaler && scaler.std > 0) {
@@ -750,10 +639,8 @@ class YieldPredictionService {
         scaled[feature] = features[feature];
       }
     });
-
     return scaled;
   }
-
   // Utility methods
   private generateCacheKey(request: YieldPredictionRequest, options: YieldPredictionOptions): string {
     const keyData = {
@@ -765,31 +652,26 @@ class YieldPredictionService {
     };
     return `${this.CACHE_PREFIX}${Buffer.from(JSON.stringify(keyData)).toString('base64')}`;
   }
-
   private async getCachedPrediction(cacheKey: string): Promise<YieldPrediction | null> {
     if (!redis) {
       return null;
     }
-    
     try {
       return await redis.get(cacheKey) as YieldPrediction;
     } catch (error) {
       return null;
     }
   }
-
   private async cachePrediction(cacheKey: string, prediction: YieldPrediction): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(cacheKey, prediction, { ex: this.PREDICTION_TTL });
     } catch (error) {
       // Cache miss is not critical
     }
   }
-
   private encodeCropType(cropType: string): number {
     const encoding: Record<string, number> = {
       'corn': 1,
@@ -801,12 +683,10 @@ class YieldPredictionService {
     };
     return encoding[cropType.toLowerCase()] || 0;
   }
-
   private getDayOfYear(date: Date): number {
     const start = new Date(date.getFullYear(), 0, 1);
     return Math.floor((date.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)) + 1;
   }
-
   private getDefaultModel(cropType: string): YieldModel {
     return {
       id: this.DEFAULT_MODEL,
@@ -842,26 +722,21 @@ class YieldPredictionService {
       status: 'ready'
     };
   }
-
   private async saveModel(model: YieldModel): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(`${this.MODEL_PREFIX}${model.id}`, model, { ex: 30 * 24 * 60 * 60 }); // 30 days
     } catch (error) {
       // Model saving failure is not critical
     }
   }
-
   private async loadPretrainedModels(): Promise<void> {
     // Load default models
     const defaultModel = this.getDefaultModel('general');
     this.models.set(defaultModel.id, defaultModel);
-
     // In production, would load models from storage
     }
 }
-
 export const yieldPrediction = new YieldPredictionService();

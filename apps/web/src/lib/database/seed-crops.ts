@@ -2,26 +2,19 @@
  * Database seeding script for comprehensive crop data
  * Populates ProduceType, ProduceVariety, and NutritionalData tables
  */
-
 import { PrismaClient } from '@prisma/client'
 import { cropSeedData } from './crop-seed-data'
-
 const prisma = new PrismaClient()
-
 export async function seedCropsDatabase() {
-
   try {
     // Clear existing data (in development only)
     if (process.env.NODE_ENV === 'development') {
       await prisma.nutritionalData.deleteMany()
       await prisma.produceVariety.deleteMany()
       await prisma.produceType.deleteMany()
-
     }
-
     let totalCrops = 0
     let totalVarieties = 0
-
     for (const crop of cropSeedData) {
       // Create the main crop/produce type
       const produceType = await prisma.produceType.create({
@@ -52,9 +45,7 @@ export async function seedCropsDatabase() {
           commonDiseases: crop.commonDiseases
         }
       })
-
       totalCrops++
-
       // Create varieties for this crop
       for (const variety of crop.varieties) {
         await prisma.produceVariety.create({
@@ -78,7 +69,6 @@ export async function seedCropsDatabase() {
         })
         totalVarieties++
       }
-
       // Create nutritional data if available
       if (crop.nutritionalData) {
         await prisma.nutritionalData.create({
@@ -99,19 +89,16 @@ export async function seedCropsDatabase() {
         })
       }
     }
-
     // Verify the data
     const cropCount = await prisma.produceType.count()
     const varietyCount = await prisma.produceVariety.count()
     const nutritionCount = await prisma.nutritionalData.count()
-
     return {
       success: true,
       crops: cropCount,
       varieties: varietyCount,
       nutritionalProfiles: nutritionCount
     }
-
   } catch (error) {
     console.error('❌ Error seeding crop database:', error)
     throw error
@@ -119,12 +106,10 @@ export async function seedCropsDatabase() {
     await prisma.$disconnect()
   }
 }
-
 // Run seeding if called directly
 if (require.main === module) {
   seedCropsDatabase()
     .then(() => {
-
       process.exit(0)
     })
     .catch((error) => {

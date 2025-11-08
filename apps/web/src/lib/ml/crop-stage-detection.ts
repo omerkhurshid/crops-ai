@@ -4,12 +4,10 @@
  * Uses satellite imagery, weather data, and agricultural models to detect
  * and predict crop growth stages with high accuracy.
  */
-
 import { auditLogger } from '../logging/audit-logger'
 import { copernicusService } from '../satellite/copernicus-service'
 import { ndviCalculator } from '../satellite/ndvi-calculator'
 import { hyperlocalWeather } from '../weather/hyperlocal-weather'
-
 export interface CropStageDetection {
   fieldId: string
   cropType: string
@@ -21,7 +19,6 @@ export interface CropStageDetection {
   daysToNextStage?: number
   stageTransitionProbability: number
 }
-
 export interface CropGrowthStage {
   stage: string
   displayName: string
@@ -42,7 +39,6 @@ export interface CropGrowthStage {
   }
   moistureRequirement: 'low' | 'medium' | 'high' | 'critical'
 }
-
 export interface CropStageHistory {
   fieldId: string
   cropType: string
@@ -64,7 +60,6 @@ export interface CropStageHistory {
   projectedHarvestDate: Date
   seasonProgress: number // 0-1
 }
-
 export interface StageTransitionPrediction {
   currentStage: string
   nextStage: string
@@ -77,14 +72,11 @@ export interface StageTransitionPrediction {
   triggeringFactors: string[]
   recommendedActions: string[]
 }
-
 class CropStageDetectionService {
   private readonly stageDefinitions: Map<string, CropGrowthStage[]> = new Map()
-
   constructor() {
     this.initializeStageDefinitions()
   }
-
   /**
    * Detect current crop growth stage using satellite and weather data
    */
@@ -100,18 +92,15 @@ class CropStageDetectionService {
       await auditLogger.logML('crop_stage_detection_started', fieldId, undefined, undefined, {
         cropType, latitude, longitude, plantingDate
       })
-
       // Get crop stage definitions
       const stages = this.stageDefinitions.get(cropType.toLowerCase())
       if (!stages) {
         throw new Error(`Crop stage definitions not available for ${cropType}`)
       }
-
       // Calculate days since planting
       const daysSincePlanting = Math.floor(
         (Date.now() - plantingDate.getTime()) / (24 * 60 * 60 * 1000)
       )
-
       // Get recent satellite data
       const satelliteData = await copernicusService.calculateFieldIndices(
         fieldId,
@@ -123,7 +112,6 @@ class CropStageDetectionService {
         },
         new Date().toISOString().split('T')[0] // Today
       )
-
       // Get weather data for the growing season
       const weatherForecast = await hyperlocalWeather.getFieldForecast(
         latitude,
@@ -131,7 +119,6 @@ class CropStageDetectionService {
         undefined,
         fieldId
       )
-
       // Get historical weather trends
       const seasonStart = new Date(plantingDate)
       const today = new Date()
@@ -141,13 +128,11 @@ class CropStageDetectionService {
         seasonStart,
         today
       )
-
       // Calculate current NDVI and growth metrics
       const currentNdvi = satelliteData?.meanNDVI || this.estimateNDVIFromStage(cropType, daysSincePlanting)
       const avgTemperature = weatherTrends.summary.avgTemperature
       const totalPrecipitation = weatherTrends.summary.totalPrecipitation
       const growingDegreeDays = weatherTrends.growingDegreeDays.reduce((sum, gdd) => sum + gdd, 0)
-
       // Detect current stage using ML model
       const stageDetection = this.detectStageFromFeatures(
         cropType,
@@ -158,17 +143,14 @@ class CropStageDetectionService {
         growingDegreeDays,
         stages
       )
-
       // Calculate stage timing and transitions
       const currentStageInfo = stages.find(s => s.stage === stageDetection.stage)!
       const stageIndex = stages.findIndex(s => s.stage === stageDetection.stage)
       const nextStage = stageIndex < stages.length - 1 ? stages[stageIndex + 1] : undefined
-
       // Calculate days in current stage and expected duration
       const stageStartDay = this.calculateStageStartDay(stages, stageIndex, daysSincePlanting)
       const daysInStage = daysSincePlanting - stageStartDay
       const expectedStageDuration = currentStageInfo.typicalDuration
-
       // Predict transition to next stage
       const daysToNextStage = nextStage ? Math.max(0, expectedStageDuration - daysInStage) : 0
       const transitionProbability = this.calculateTransitionProbability(
@@ -178,7 +160,6 @@ class CropStageDetectionService {
         currentStageInfo,
         weatherForecast
       )
-
       const result: CropStageDetection = {
         fieldId,
         cropType,
@@ -190,7 +171,6 @@ class CropStageDetectionService {
         daysToNextStage: nextStage ? daysToNextStage : undefined,
         stageTransitionProbability: transitionProbability
       }
-
       await auditLogger.logML('crop_stage_detected', fieldId, undefined, undefined, {
         cropType,
         detectedStage: stageDetection.stage,
@@ -199,9 +179,7 @@ class CropStageDetectionService {
         daysInStage,
         currentNdvi
       })
-
       return result
-
     } catch (error) {
       await auditLogger.logML('crop_stage_detection_error', fieldId, undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
@@ -209,7 +187,6 @@ class CropStageDetectionService {
       throw error
     }
   }
-
   /**
    * Get comprehensive stage history for a field
    */
@@ -222,28 +199,23 @@ class CropStageDetectionService {
     if (!stages) {
       throw new Error(`Crop stage definitions not available for ${cropType}`)
     }
-
     const currentDate = new Date()
     const totalSeasonDays = stages.reduce((sum, stage) => sum + stage.typicalDuration, 0)
     const daysSincePlanting = Math.floor(
       (currentDate.getTime() - plantingDate.getTime()) / (24 * 60 * 60 * 1000)
     )
-
     // Simulate historical stage progression
     const stageHistory = []
     let currentDay = 0
-
     for (let i = 0; i < stages.length && currentDay <= daysSincePlanting; i++) {
       const stage = stages[i]
       const stageEndDay = Math.min(currentDay + stage.typicalDuration, daysSincePlanting)
       const actualDuration = stageEndDay - currentDay
-
       if (actualDuration > 0) {
         const stageStartDate = new Date(plantingDate.getTime() + currentDay * 24 * 60 * 60 * 1000)
         const stageEndDate = currentDay + actualDuration < daysSincePlanting ?
           new Date(plantingDate.getTime() + stageEndDay * 24 * 60 * 60 * 1000) :
           undefined
-
         stageHistory.push({
           stage: stage.stage,
           startDate: stageStartDate,
@@ -258,15 +230,12 @@ class CropStageDetectionService {
           detectionConfidence: 0.82 + Math.random() * 0.15
         })
       }
-
       currentDay += stage.typicalDuration
     }
-
     // Project harvest date
     const projectedHarvestDate = new Date(
       plantingDate.getTime() + totalSeasonDays * 24 * 60 * 60 * 1000
     )
-
     return {
       fieldId,
       cropType,
@@ -277,7 +246,6 @@ class CropStageDetectionService {
       seasonProgress: Math.min(1.0, daysSincePlanting / totalSeasonDays)
     }
   }
-
   /**
    * Predict when next stage transition will occur
    */
@@ -292,19 +260,15 @@ class CropStageDetectionService {
     if (!stages) {
       throw new Error(`Crop stage definitions not available for ${cropType}`)
     }
-
     const currentStageIndex = stages.findIndex(s => s.stage === currentStage)
     if (currentStageIndex === -1) {
       throw new Error(`Invalid current stage: ${currentStage}`)
     }
-
     const nextStageIndex = currentStageIndex + 1
     if (nextStageIndex >= stages.length) {
       throw new Error('Already at final growth stage')
     }
-
     const nextStage = stages[nextStageIndex]
-    
     // Get weather forecast to predict transition timing
     const weatherForecast = await hyperlocalWeather.getFieldForecast(
       latitude,
@@ -312,27 +276,22 @@ class CropStageDetectionService {
       undefined,
       fieldId
     )
-
     // Calculate transition probability based on environmental factors
     const avgTemp = weatherForecast.daily.slice(0, 7).reduce(
       (sum, day) => sum + (day.temperatureMin + day.temperatureMax) / 2, 0
     ) / 7
-
     const totalPrecip = weatherForecast.daily.slice(0, 7).reduce(
       (sum, day) => sum + day.precipitation.total, 0
     )
-
     // Estimate transition timing
     const baseTransitionDays = stages[currentStageIndex].typicalDuration
     const weatherAdjustment = this.calculateWeatherAdjustment(avgTemp, totalPrecip, nextStage)
     const adjustedTransitionDays = Math.max(1, baseTransitionDays * (1 + weatherAdjustment))
-
     const expectedTransitionDate = new Date(Date.now() + adjustedTransitionDays * 24 * 60 * 60 * 1000)
     const confidenceInterval = {
       earliest: new Date(expectedTransitionDate.getTime() - 3 * 24 * 60 * 60 * 1000),
       latest: new Date(expectedTransitionDate.getTime() + 5 * 24 * 60 * 60 * 1000)
     }
-
     // Identify triggering factors
     const triggeringFactors = []
     if (avgTemp > nextStage.temperatureRange.optimal) {
@@ -341,7 +300,6 @@ class CropStageDetectionService {
     if (totalPrecip > 25) {
       triggeringFactors.push('Adequate moisture for transition')
     }
-    
     return {
       currentStage,
       nextStage: nextStage.stage,
@@ -352,9 +310,7 @@ class CropStageDetectionService {
       recommendedActions: nextStage.managementActions.slice(0, 3)
     }
   }
-
   // Private helper methods
-
   private initializeStageDefinitions(): void {
     // Corn growth stages
     this.stageDefinitions.set('corn', [
@@ -431,7 +387,6 @@ class CropStageDetectionService {
         moistureRequirement: 'low'
       }
     ])
-
     // Soybean growth stages
     this.stageDefinitions.set('soybean', [
       {
@@ -507,7 +462,6 @@ class CropStageDetectionService {
         moistureRequirement: 'low'
       }
     ])
-
     // Wheat growth stages
     this.stageDefinitions.set('wheat', [
       {
@@ -584,7 +538,6 @@ class CropStageDetectionService {
       }
     ])
   }
-
   private detectStageFromFeatures(
     cropType: string,
     daysSincePlanting: number,
@@ -597,14 +550,12 @@ class CropStageDetectionService {
     let bestStage = stages[0]
     let bestScore = 0
     let bestConfidence = 0.5
-
     // Calculate cumulative days for each stage
     let cumulativeDays = 0
     for (let i = 0; i < stages.length; i++) {
       const stage = stages[i]
       const stageStartDay = cumulativeDays
       const stageEndDay = cumulativeDays + stage.typicalDuration
-      
       // Score based on timing
       let timingScore = 0
       if (daysSincePlanting >= stageStartDay && daysSincePlanting <= stageEndDay) {
@@ -616,7 +567,6 @@ class CropStageDetectionService {
         )
         timingScore = Math.max(0, 1.0 - daysDifference / 10) // Decrease score with distance
       }
-      
       // Score based on NDVI
       let ndviScore = 0
       if (currentNdvi >= stage.ndviRange.min && currentNdvi <= stage.ndviRange.max) {
@@ -624,7 +574,6 @@ class CropStageDetectionService {
         const rangeSize = stage.ndviRange.max - stage.ndviRange.min
         ndviScore = 1.0 - (distanceFromOptimal / rangeSize)
       }
-      
       // Score based on temperature
       let tempScore = 0
       if (avgTemperature >= stage.temperatureRange.min && avgTemperature <= stage.temperatureRange.max) {
@@ -632,25 +581,20 @@ class CropStageDetectionService {
         const rangeSize = stage.temperatureRange.max - stage.temperatureRange.min
         tempScore = 1.0 - (distanceFromOptimal / rangeSize)
       }
-      
       // Combined score with weights
       const combinedScore = (timingScore * 0.4) + (ndviScore * 0.35) + (tempScore * 0.25)
-      
       if (combinedScore > bestScore) {
         bestScore = combinedScore
         bestStage = stage
         bestConfidence = Math.min(0.95, 0.6 + combinedScore * 0.3)
       }
-      
       cumulativeDays += stage.typicalDuration
     }
-
     return {
       stage: bestStage.stage,
       confidence: bestConfidence
     }
   }
-
   private estimateNDVIFromStage(cropType: string, daysSincePlanting: number): number {
     // Simplified NDVI estimation based on typical crop growth curves
     const cropCurves = {
@@ -670,9 +614,7 @@ class CropStageDetectionService {
         maturityDay: 140
       }
     }
-
     const curve = cropCurves[cropType as keyof typeof cropCurves] || cropCurves.corn
-
     if (daysSincePlanting < 5) {
       return 0.15 + Math.random() * 0.1
     } else if (daysSincePlanting < curve.peakDay) {
@@ -688,7 +630,6 @@ class CropStageDetectionService {
       return 0.2 + Math.random() * 0.1
     }
   }
-
   private calculateStageStartDay(stages: CropGrowthStage[], stageIndex: number, currentDay: number): number {
     let cumulativeDays = 0
     for (let i = 0; i < stageIndex; i++) {
@@ -696,7 +637,6 @@ class CropStageDetectionService {
     }
     return cumulativeDays
   }
-
   private calculateTransitionProbability(
     daysInStage: number,
     expectedDuration: number,
@@ -706,41 +646,34 @@ class CropStageDetectionService {
   ): number {
     // Base probability based on time in stage
     const baseProb = Math.min(0.9, daysInStage / expectedDuration)
-
     // Adjust based on NDVI relative to stage expectations
     const ndviOptimal = currentStage.ndviRange.optimal
     const ndviDeviation = Math.abs(currentNdvi - ndviOptimal) / ndviOptimal
     const ndviAdjustment = Math.max(-0.2, -ndviDeviation)
-
     // Adjust based on upcoming weather conditions
     const avgTemp = weatherForecast.daily.slice(0, 3).reduce(
       (sum: number, day: any) => sum + (day.temperatureMin + day.temperatureMax) / 2, 0
     ) / 3
-
     let weatherAdjustment = 0
     if (avgTemp < currentStage.temperatureRange.min) {
       weatherAdjustment = -0.15 // Cold will slow transition
     } else if (avgTemp > currentStage.temperatureRange.max) {
       weatherAdjustment = 0.1 // Heat will accelerate transition
     }
-
     return Math.max(0.1, Math.min(0.95, baseProb + ndviAdjustment + weatherAdjustment))
   }
-
   private calculateWeatherAdjustment(
     avgTemp: number,
     totalPrecip: number,
     nextStage: CropGrowthStage
   ): number {
     let adjustment = 0
-
     // Temperature adjustment
     if (avgTemp < nextStage.temperatureRange.min) {
       adjustment -= 0.2 // Cold delays transition
     } else if (avgTemp > nextStage.temperatureRange.max) {
       adjustment += 0.1 // Heat accelerates transition
     }
-
     // Moisture adjustment
     const moistureRequirements = {
       'low': 10,
@@ -748,18 +681,15 @@ class CropStageDetectionService {
       'high': 40,
       'critical': 60
     }
-
     const requiredMoisture = moistureRequirements[nextStage.moistureRequirement]
     if (totalPrecip < requiredMoisture * 0.7) {
       adjustment -= 0.15 // Insufficient moisture delays transition
     } else if (totalPrecip > requiredMoisture * 1.3) {
       adjustment += 0.05 // Excess moisture slightly accelerates
     }
-
     return adjustment
   }
 }
-
 // Export singleton instance
 export const cropStageDetection = new CropStageDetectionService()
 export { CropStageDetectionService }

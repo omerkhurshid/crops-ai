@@ -6,24 +6,19 @@ export class DemoDataService {
     if (typeof window === 'undefined') return false
     return localStorage.getItem('demoMode') === 'true'
   }
-
   static enableDemoMode(): void {
     // Demo mode disabled in production
-    if (process.env.NODE_ENV === 'production') {
-      console.warn('Demo mode cannot be enabled in production')
-      return
+    if (process.env.NODE_ENV === 'production') {return
     }
     if (typeof window !== 'undefined') {
       localStorage.setItem('demoMode', 'true')
     }
   }
-
   static disableDemoMode(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('demoMode')
     }
   }
-
   static getDemoFarmData() {
     return {
       id: 'demo-farm-1',
@@ -63,7 +58,6 @@ export class DemoDataService {
       ]
     }
   }
-
   static getDemoWeatherData() {
     return {
       current: {
@@ -90,7 +84,6 @@ export class DemoDataService {
       ]
     }
   }
-
   static getDemoFinancialData() {
     return {
       ytdProfit: 45250,
@@ -112,7 +105,6 @@ export class DemoDataService {
       ]
     }
   }
-
   static getDemoRecommendations() {
     return [
       {
@@ -144,7 +136,6 @@ export class DemoDataService {
       }
     ]
   }
-
   static getDemoLivestockData() {
     return {
       totalAnimals: 48,
@@ -160,7 +151,6 @@ export class DemoDataService {
       ]
     }
   }
-
   static getDemoMarketData() {
     return {
       corn: { price: 4.85, change: +0.12, trend: 'up' },
@@ -169,7 +159,6 @@ export class DemoDataService {
       lastUpdated: new Date()
     }
   }
-
   static getDemoTasks() {
     return [
       {

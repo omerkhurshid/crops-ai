@@ -1,22 +1,18 @@
 'use client'
-
 import { useTheme } from './theme-provider'
 import { InlineFloatingButton } from '../ui/floating-button'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { Moon, Sun, Monitor, Palette, Check } from 'lucide-react'
 import { useState } from 'react'
-
 interface ThemeToggleProps {
   variant?: 'button' | 'menu' | 'compact'
   showLabel?: boolean
   className?: string
 }
-
 export function ThemeToggle({ variant = 'button', showLabel = true, className = "" }: ThemeToggleProps) {
   const { theme, actualTheme, setTheme } = useTheme()
   const [showMenu, setShowMenu] = useState(false)
-
   const themes = [
     {
       key: 'light' as const,
@@ -37,7 +33,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
       icon: <Monitor className="h-4 w-4" />,
     },
   ]
-
   if (variant === 'compact') {
     return (
       <button
@@ -53,7 +48,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
       </button>
     )
   }
-
   if (variant === 'button') {
     return (
       <InlineFloatingButton
@@ -66,7 +60,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
       />
     )
   }
-
   // Menu variant
   return (
     <div className={`relative ${className}`}>
@@ -77,7 +70,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
         variant="ghost"
         onClick={() => setShowMenu(!showMenu)}
       />
-
       {showMenu && (
         <>
           {/* Backdrop */}
@@ -85,7 +77,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
             className="fixed inset-0 z-30" 
             onClick={() => setShowMenu(false)}
           />
-          
           {/* Menu */}
           <div className="absolute top-full right-0 mt-2 z-40">
             <ModernCard variant="floating" className="w-64 shadow-lg border">
@@ -137,7 +128,6 @@ export function ThemeToggle({ variant = 'button', showLabel = true, className = 
                     </button>
                   ))}
                 </div>
-                
                 <div className="mt-4 pt-4 border-t border-fk-border">
                   <div className="text-xs text-fk-text-muted">
                     Current: <span className="font-medium capitalize">{actualTheme}</span> mode

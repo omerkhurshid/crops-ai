@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import { cn } from '../../lib/utils'
 import { 
@@ -13,7 +12,6 @@ import {
   Package
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-
 interface QuickAction {
   id: string
   label: string
@@ -21,12 +19,10 @@ interface QuickAction {
   color: string
   onClick: () => void
 }
-
 interface GlobalFABProps {
   className?: string
   role?: 'farmer' | 'landowner' | 'rancher'
 }
-
 const farmerActions: QuickAction[] = [
   {
     id: 'expense',
@@ -57,7 +53,6 @@ const farmerActions: QuickAction[] = [
     onClick: () => window.location.href = '/crops?action=add-harvest'
   }
 ]
-
 const landowenerActions: QuickAction[] = [
   {
     id: 'payment',
@@ -74,12 +69,9 @@ const landowenerActions: QuickAction[] = [
     onClick: () => window.location.href = '/tasks?action=add-task&type=meeting'
   }
 ]
-
 export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
   const [isOpen, setIsOpen] = useState(false)
-  
   const actions = role === 'landowner' ? landowenerActions : farmerActions
-
   return (
     <div className={cn('fixed bottom-6 right-6 z-50', className)}>
       <AnimatePresence>
@@ -93,7 +85,6 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
               className="fixed inset-0 bg-black/20 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
-
             {/* Action Buttons */}
             <div className="relative">
               {actions.map((action, index) => (
@@ -125,7 +116,6 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
           </>
         )}
       </AnimatePresence>
-
       {/* Main FAB Button */}
       <motion.button
         whileHover={{ scale: 1.05 }}
@@ -149,13 +139,11 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
             <Plus className="h-6 w-6" />
           )}
         </motion.div>
-
         {/* Pulse animation when closed */}
         {!isOpen && (
           <span className="absolute inset-0 rounded-full bg-sage-600 animate-ping opacity-20" />
         )}
       </motion.button>
-
       {/* Tooltip */}
       <AnimatePresence>
         {!isOpen && (
@@ -177,12 +165,10 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
     </div>
   )
 }
-
 // Mobile-optimized version with bottom sheet
 export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
   const [isOpen, setIsOpen] = useState(false)
   const actions = role === 'landowner' ? landowenerActions : farmerActions
-
   return (
     <>
       {/* FAB Button */}
@@ -198,7 +184,6 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
       >
         <Plus className="h-6 w-6 mx-auto" />
       </button>
-
       {/* Bottom Sheet */}
       <AnimatePresence>
         {isOpen && (
@@ -210,7 +195,6 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
               className="fixed inset-0 bg-black/50 z-50"
               onClick={() => setIsOpen(false)}
             />
-
             <motion.div
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
@@ -222,7 +206,6 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
               <div className="flex justify-center pt-3 pb-2">
                 <div className="w-12 h-1 bg-gray-300 rounded-full" />
               </div>
-
               {/* Actions */}
               <div className="p-6 pb-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">

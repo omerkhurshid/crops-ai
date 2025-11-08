@@ -1,8 +1,6 @@
 "use client"
-
 import * as React from "react"
 import { cn } from "../../lib/utils"
-
 const Avatar = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -17,7 +15,6 @@ const Avatar = React.forwardRef<
   />
 ))
 Avatar.displayName = "Avatar"
-
 const AvatarImage = React.forwardRef<
   HTMLImageElement,
   React.ImgHTMLAttributes<HTMLImageElement>
@@ -29,7 +26,6 @@ const AvatarImage = React.forwardRef<
   />
 ))
 AvatarImage.displayName = "AvatarImage"
-
 const AvatarFallback = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -44,5 +40,4 @@ const AvatarFallback = React.forwardRef<
   />
 ))
 AvatarFallback.displayName = "AvatarFallback"
-
 export { Avatar, AvatarImage, AvatarFallback }

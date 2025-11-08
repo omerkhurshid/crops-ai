@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from '../../../../../lib/auth-unified'
@@ -7,21 +6,17 @@ import { useEffect, useState } from 'react'
 import { Navbar } from '../../../../../components/navigation/navbar'
 import { FieldForm } from '../../../../../components/farm/field-form'
 import { ArrowLeft } from 'lucide-react'
-
 export default function CreateFieldPage({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farm, setFarm] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchFarm() {
       try {
         const response = await fetch(`/api/farms/${params.id}`)
@@ -38,10 +33,8 @@ export default function CreateFieldPage({ params }: { params: { id: string } }) 
         setIsLoading(false)
       }
     }
-
     fetchFarm()
   }, [session, status, router, params.id])
-
   if (status === 'loading' || isLoading) {
     return (
       <div className="minimal-page">
@@ -52,28 +45,23 @@ export default function CreateFieldPage({ params }: { params: { id: string } }) 
       </div>
     )
   }
-
   if (!session || !farm) {
     return null
   }
-
   return (
     <div className="minimal-page">
       <Navbar />
-      
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <div className="mb-8">
           <Link href={`/farms/${farm.id}`} className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to {farm.name}
           </Link>
-          
           <h1 className="text-3xl font-bold text-gray-900">Add New Field</h1>
           <p className="text-gray-600 mt-2">
             Create a new field for monitoring and management
           </p>
         </div>
-
         <FieldForm 
           farmId={farm.id} 
           farmName={farm.name}

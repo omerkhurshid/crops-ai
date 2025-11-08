@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,7 +7,6 @@ import {
   Users, Sprout, Heart, TreePine, Target, 
   Shield, User, UserCheck, Clock, MapPin 
 } from 'lucide-react'
-
 interface UserAnalyticsProps {
   usersByType: Array<{
     userType: string | null
@@ -28,10 +26,8 @@ interface UserAnalyticsProps {
     }
   }>
 }
-
 export function UserAnalytics({ usersByType, usersByRole, recentActivity }: UserAnalyticsProps) {
   const [activeTab, setActiveTab] = useState('demographics')
-
   const getUserTypeIcon = (type: string | null) => {
     switch (type) {
       case 'CROPS': return <Sprout className="h-4 w-4 text-green-600" />
@@ -41,7 +37,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       default: return <User className="h-4 w-4 text-gray-600" />
     }
   }
-
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'FARM_OWNER': return <Shield className="h-4 w-4 text-blue-600" />
@@ -50,7 +45,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       default: return <User className="h-4 w-4 text-gray-600" />
     }
   }
-
   const getUserTypeName = (type: string | null) => {
     switch (type) {
       case 'CROPS': return 'Crops'
@@ -60,7 +54,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       default: return 'Not Specified'
     }
   }
-
   const getRoleName = (role: string) => {
     switch (role) {
       case 'FARM_OWNER': return 'Farm Owner'
@@ -69,9 +62,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       default: return role
     }
   }
-
   const totalUsers = usersByType.reduce((sum, type) => sum + type._count, 0)
-
   return (
     <ModernCard variant="floating">
       <ModernCardHeader>
@@ -87,7 +78,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
             <TabsTrigger value="roles">Roles</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
           </TabsList>
-
           <TabsContent value="demographics" className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Users by Interest Type</h4>
@@ -109,7 +99,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="roles" className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Users by Role</h4>
@@ -131,7 +120,6 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="activity" className="space-y-4">
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Recent Farm Registrations</h4>

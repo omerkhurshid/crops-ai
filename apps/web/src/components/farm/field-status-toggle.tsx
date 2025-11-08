@@ -1,17 +1,14 @@
 'use client'
-
 import { useState } from 'react'
 import { Switch } from '../ui/switch'
 import { Badge } from '../ui/badge'
 import { toast } from 'react-hot-toast'
-
 interface FieldStatusToggleProps {
   fieldId: string
   fieldName: string
   initialStatus: boolean
   onStatusChange?: (fieldId: string, isActive: boolean) => void
 }
-
 export function FieldStatusToggle({ 
   fieldId, 
   fieldName, 
@@ -20,10 +17,8 @@ export function FieldStatusToggle({
 }: FieldStatusToggleProps) {
   const [isActive, setIsActive] = useState(initialStatus)
   const [isLoading, setIsLoading] = useState(false)
-
   const handleToggle = async (newStatus: boolean) => {
     setIsLoading(true)
-    
     try {
       const response = await fetch('/api/fields', {
         method: 'PATCH',
@@ -35,15 +30,12 @@ export function FieldStatusToggle({
           isActive: newStatus
         })
       })
-
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || 'Failed to update field status')
       }
-
       setIsActive(newStatus)
       onStatusChange?.(fieldId, newStatus)
-      
       toast.success(
         `${fieldName} ${newStatus ? 'activated' : 'deactivated'} successfully`
       )
@@ -56,7 +48,6 @@ export function FieldStatusToggle({
       setIsLoading(false)
     }
   }
-
   return (
     <div className="flex items-center gap-3">
       <div className="flex items-center gap-2">
@@ -71,7 +62,6 @@ export function FieldStatusToggle({
           {isLoading ? 'Updating...' : isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
-      
       <Badge 
         className={`text-xs ${
           isActive 

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { InlineFloatingButton } from '../ui/floating-button'
@@ -11,7 +10,6 @@ import {
   CheckCircle2, ArrowRight, ArrowLeft, Info, Lightbulb,
   Target, Activity, CloudRain, BarChart3, Users, X, Eye
 } from 'lucide-react'
-
 interface SetupStep {
   id: string
   title: string
@@ -21,16 +19,13 @@ interface SetupStep {
   isOptional?: boolean
   estimatedTime?: string
 }
-
 interface GuidedFarmSetupProps {
   onComplete?: () => void
   onSkip?: () => void
 }
-
 export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
-
   const steps: SetupStep[] = [
     {
       id: 'welcome',
@@ -52,7 +47,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               to help you grow better crops and increase profits.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-sage-50 rounded-xl">
               <Activity className="h-8 w-8 text-sage-600 mx-auto mb-2" />
@@ -70,7 +64,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               <p className="text-xs text-sage-600">Tips to improve your farm</p>
             </div>
           </div>
-
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
@@ -78,7 +71,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               You can always skip steps and return later.
             </AlertDescription>
           </Alert>
-          
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <InlineFloatingButton
               icon={<Sprout className="h-4 w-4" />}
@@ -118,7 +110,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               Let&apos;s start with basic information about your farm.
             </p>
           </div>
-
           <div className="bg-sage-50 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-sage-200 rounded-lg">
@@ -129,7 +120,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 <p className="text-sm text-sage-600">Essential farm information for setup</p>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-sage-700">
@@ -153,7 +143,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               </div>
             </div>
           </div>
-
           <div className="bg-sage-50 rounded-xl p-4 mb-6">
             <h4 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
               <Lightbulb className="h-4 w-4 text-sage-600" />
@@ -166,7 +155,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               <li>• Popular crops: Corn, Soybeans, Wheat, Cotton, Barley</li>
             </ul>
           </div>
-
           <div className="text-center">
             <InlineFloatingButton
               icon={<MapPin className="h-4 w-4" />}
@@ -197,7 +185,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               Mapping your fields helps us track each field's health and give you specific recommendations.
             </p>
           </div>
-
           <div className="bg-gradient-to-r from-earth-50 to-sage-50 rounded-xl p-6">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-earth-200 rounded-xl">
@@ -226,7 +213,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               </div>
             </div>
           </div>
-
           <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-4 mb-6">
             <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
               <Target className="h-4 w-4 text-blue-600" />
@@ -245,7 +231,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               </div>
             </div>
           </div>
-
           <Alert>
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
@@ -253,7 +238,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               You can add multiple fields and change boundaries anytime.
             </AlertDescription>
           </Alert>
-
           <div className="text-center space-y-3">
             <p className="text-sm text-sage-600">
               Complete farm setup first, then return to add field boundaries
@@ -294,7 +278,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               Explore the tools that will help you grow better crops and increase profits.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
               <div className="flex items-start gap-3">
@@ -307,7 +290,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 </div>
               </div>
             </div>
-
             <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
               <div className="flex items-start gap-3">
                 <CloudRain className="h-6 w-6 text-sage-600 mt-1" />
@@ -319,7 +301,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 </div>
               </div>
             </div>
-
             <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
               <div className="flex items-start gap-3">
                 <Target className="h-6 w-6 text-sage-600 mt-1" />
@@ -331,7 +312,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
                 </div>
               </div>
             </div>
-
             <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
               <div className="flex items-start gap-3">
                 <DollarSign className="h-6 w-6 text-sage-600 mt-1" />
@@ -344,7 +324,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               </div>
             </div>
           </div>
-
           <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6">
             <h4 className="font-semibold text-sage-800 mb-3 flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-sage-600" />
@@ -369,7 +348,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               </div>
             </div>
           </div>
-
           <div className="text-center space-y-3">
             <p className="text-sm text-sage-600">
               Ready to explore all features and start optimizing your farm?
@@ -399,10 +377,8 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       )
     }
   ]
-
   const currentStepData = steps[currentStep]
   const progress = ((currentStep + 1) / steps.length) * 100
-
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1)
@@ -413,17 +389,14 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       if (onComplete) onComplete()
     }
   }
-
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1)
     }
   }
-
   const handleSkip = () => {
     if (onSkip) onSkip()
   }
-
   return (
     <div className="max-w-4xl mx-auto">
       {/* Progress Header */}
@@ -451,7 +424,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
           <Progress value={progress} className="h-2" />
         </ModernCardContent>
       </ModernCard>
-
       {/* Step Content */}
       <ModernCard variant="floating">
         <ModernCardHeader>
@@ -464,7 +436,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
           {currentStepData.content}
         </ModernCardContent>
       </ModernCard>
-
       {/* Navigation */}
       <div className="flex justify-between items-center mt-6">
         <div className="flex gap-3">
@@ -483,7 +454,6 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             onClick={handleSkip}
           />
         </div>
-
         <InlineFloatingButton
           icon={currentStep === steps.length - 1 ? <CheckCircle2 className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
           label={currentStep === steps.length - 1 ? "Complete Setup" : "Continue"}

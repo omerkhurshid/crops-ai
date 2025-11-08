@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../components/ui/modern-card'
@@ -7,13 +6,11 @@ import { LoadingSpinner } from '../../components/ui/loading'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { CheckCircle2, XCircle, Loader2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-
 function VerifyEmailContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying')
   const [errorMessage, setErrorMessage] = useState('')
-
   useEffect(() => {
     const token = searchParams?.get('token')
     if (token) {
@@ -23,7 +20,6 @@ function VerifyEmailContent() {
       setErrorMessage('No verification token provided')
     }
   }, [searchParams])
-
   async function verifyEmail(token: string) {
     try {
       const res = await fetch('/api/user-auth/verify-email', {
@@ -31,9 +27,7 @@ function VerifyEmailContent() {
         body: JSON.stringify({ token }),
         headers: { 'Content-Type': 'application/json' }
       })
-      
       const data = await res.json()
-      
       if (res.ok) {
         setStatus('success')
         // Redirect to login after 3 seconds
@@ -49,7 +43,6 @@ function VerifyEmailContent() {
       setErrorMessage('An error occurred during verification')
     }
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-agricultural py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 agricultural-overlay"></div>
@@ -65,7 +58,6 @@ function VerifyEmailContent() {
                 <p className="text-sage-600">Verifying your email address...</p>
               </div>
             )}
-            
             {status === 'success' && (
               <div className="space-y-4">
                 <div className="p-3 bg-green-100 rounded-full w-fit mx-auto">
@@ -87,7 +79,6 @@ function VerifyEmailContent() {
                 </div>
               </div>
             )}
-            
             {status === 'error' && (
               <div className="space-y-4">
                 <div className="p-3 bg-red-100 rounded-full w-fit mx-auto">
@@ -116,7 +107,6 @@ function VerifyEmailContent() {
     </div>
   )
 }
-
 export default function VerifyEmailPage() {
   return (
     <Suspense fallback={

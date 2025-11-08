@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,14 +7,12 @@ import {
   Filter, X, Calendar, MapPin, DollarSign, Activity,
   ChevronDown, Check, Search, SlidersHorizontal
 } from 'lucide-react'
-
 interface FilterOption {
   id: string
   label: string
   value: string
   count?: number
 }
-
 interface FilterGroup {
   id: string
   label: string
@@ -27,7 +24,6 @@ interface FilterGroup {
   max?: number
   placeholder?: string
 }
-
 interface AdvancedFiltersProps {
   filters: FilterGroup[]
   onFilterChange: (filterId: string, value: any) => void
@@ -36,7 +32,6 @@ interface AdvancedFiltersProps {
   className?: string
   showAsModal?: boolean
 }
-
 export function AdvancedFilters({
   filters,
   onFilterChange,
@@ -48,7 +43,6 @@ export function AdvancedFilters({
   const [isOpen, setIsOpen] = useState(!showAsModal)
   const [openDropdowns, setOpenDropdowns] = useState<string[]>([])
   const [searchValues, setSearchValues] = useState<{ [key: string]: string }>({})
-
   const toggleDropdown = (filterId: string) => {
     setOpenDropdowns(prev => 
       prev.includes(filterId) 
@@ -56,14 +50,12 @@ export function AdvancedFilters({
         : [...prev, filterId]
     )
   }
-
   const handleMultiselectChange = (filterId: string, optionValue: string, currentValues: string[] = []) => {
     const newValues = currentValues.includes(optionValue)
       ? currentValues.filter(v => v !== optionValue)
       : [...currentValues, optionValue]
     onFilterChange(filterId, newValues)
   }
-
   const renderFilterControl = (filter: FilterGroup) => {
     switch (filter.type) {
       case 'search':
@@ -82,7 +74,6 @@ export function AdvancedFilters({
             />
           </div>
         )
-
       case 'select':
         return (
           <div className="relative">
@@ -100,7 +91,6 @@ export function AdvancedFilters({
                 openDropdowns.includes(filter.id) ? 'rotate-180' : ''
               }`} />
             </button>
-            
             {openDropdowns.includes(filter.id) && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-sage-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                 {filter.options?.map((option) => (
@@ -127,7 +117,6 @@ export function AdvancedFilters({
             )}
           </div>
         )
-
       case 'multiselect':
         const selectedValues = Array.isArray(filter.value) ? filter.value : []
         return (
@@ -146,7 +135,6 @@ export function AdvancedFilters({
                 openDropdowns.includes(filter.id) ? 'rotate-180' : ''
               }`} />
             </button>
-            
             {openDropdowns.includes(filter.id) && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-sage-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                 {filter.options?.map((option) => (
@@ -170,7 +158,6 @@ export function AdvancedFilters({
                 ))}
               </div>
             )}
-            
             {selectedValues.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {selectedValues.map((value) => {
@@ -191,7 +178,6 @@ export function AdvancedFilters({
             )}
           </div>
         )
-
       case 'range':
         return (
           <div className="space-y-2">
@@ -224,7 +210,6 @@ export function AdvancedFilters({
             </div>
           </div>
         )
-
       case 'date':
         return (
           <div className="space-y-2">
@@ -250,12 +235,10 @@ export function AdvancedFilters({
             </div>
           </div>
         )
-
       default:
         return null
     }
   }
-
   const FilterContent = () => (
     <div className="space-y-6">
       {/* Filter Groups */}
@@ -272,7 +255,6 @@ export function AdvancedFilters({
           {renderFilterControl(filter)}
         </div>
       ))}
-
       {/* Clear All Button */}
       {activeFiltersCount > 0 && (
         <div className="pt-4 border-t border-sage-200">
@@ -288,7 +270,6 @@ export function AdvancedFilters({
       )}
     </div>
   )
-
   if (showAsModal) {
     return (
       <div className={className}>
@@ -300,7 +281,6 @@ export function AdvancedFilters({
           onClick={() => setIsOpen(!isOpen)}
           showLabel={true}
         />
-
         {/* Filter Modal */}
         {isOpen && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -328,7 +308,6 @@ export function AdvancedFilters({
       </div>
     )
   }
-
   return (
     <div className={className}>
       <ModernCard variant="soft">
@@ -348,7 +327,6 @@ export function AdvancedFilters({
     </div>
   )
 }
-
 // Pre-configured filter sets for common use cases
 export const farmFilters: FilterGroup[] = [
   {
@@ -384,7 +362,6 @@ export const farmFilters: FilterGroup[] = [
     icon: <Calendar className="h-4 w-4" />
   }
 ]
-
 export const fieldFilters: FilterGroup[] = [
   {
     id: 'search',
@@ -425,7 +402,6 @@ export const fieldFilters: FilterGroup[] = [
     ]
   }
 ]
-
 export const financialFilters: FilterGroup[] = [
   {
     id: 'search',

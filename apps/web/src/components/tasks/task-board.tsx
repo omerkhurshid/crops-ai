@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -21,7 +20,6 @@ import {
   MoreHorizontal
 } from 'lucide-react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-
 interface Task {
   id: string
   title: string
@@ -42,26 +40,22 @@ interface Task {
   field?: { name: string }
   crop?: { cropType: string; variety: string }
 }
-
 interface TaskBoardProps {
   farmId: string
   showAssignments?: boolean
 }
-
 const categoryIcons: Record<string, React.ReactNode> = {
   crop: <Sprout className="h-4 w-4" />,
   livestock: <Users className="h-4 w-4" />,
   equipment: <Tractor className="h-4 w-4" />,
   general: <AlertCircle className="h-4 w-4" />
 }
-
 const priorityColors = {
   low: 'bg-fk-neutral/10 text-fk-neutral border-fk-neutral/30',
   medium: 'bg-fk-info/10 text-fk-info border-fk-info/30', 
   high: 'bg-fk-warning/10 text-fk-warning border-fk-warning/30',
   urgent: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30'
 }
-
 const statusConfig = {
   todo: {
     title: 'To Do',
@@ -82,7 +76,6 @@ const statusConfig = {
     bgColor: 'bg-fk-success/10'
   }
 }
-
 export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -96,7 +89,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
     tags: [] as string[],
     assignedTo: ''
   })
-
   // Fetch tasks from API
   useEffect(() => {
     async function fetchTasks() {
@@ -112,35 +104,27 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
         setLoading(false)
       }
     }
-
     fetchTasks()
   }, [farmId])
-
   // Group tasks by status
   const tasksByStatus = {
     todo: tasks.filter(task => task.status === 'pending'),
     in_progress: tasks.filter(task => task.status === 'in_progress'),
     done: tasks.filter(task => task.status === 'completed')
   }
-
   const handleDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result
-
     if (!destination) return
-
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) return
-
     const statusMap: Record<string, Task['status']> = {
       'todo': 'pending',
       'in_progress': 'in_progress', 
       'done': 'completed'
     }
-
     const newStatus = statusMap[destination.droppableId]
-    
     try {
       const response = await fetch(`/api/tasks/${draggableId}`, {
         method: 'PATCH',
@@ -149,7 +133,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
         },
         body: JSON.stringify({ status: newStatus }),
       })
-
       if (response.ok) {
         const updatedTask = await response.json()
         setTasks(prevTasks => 
@@ -162,10 +145,8 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
       console.error('Failed to update task status:', error)
     }
   }
-
   const handleAddTask = async () => {
     if (!newTask.title.trim()) return
-    
     try {
       const response = await fetch('/api/tasks', {
         method: 'POST',
@@ -175,7 +156,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           farmId: farmId
         })
       })
-      
       if (response.ok) {
         const createdTask = await response.json()
         setTasks(prevTasks => [...prevTasks, createdTask])
@@ -194,30 +174,24 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
       console.error('Failed to create task:', error)
     }
   }
-
   const getTaskStats = () => {
     const total = tasks.length
     const completed = tasksByStatus.done.length // This references the 'done' key in tasksByStatus which maps to 'completed' status
     const inProgress = tasksByStatus.in_progress.length
     const urgent = tasks.filter(task => task.priority === 'urgent' && task.status !== 'completed').length
-    
     return { total, completed, inProgress, urgent }
   }
-
   const stats = getTaskStats()
-
   const formatDueDate = (dueDate: string) => {
     const date = new Date(dueDate)
     const today = new Date()
     const diffTime = date.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    
     if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`
     if (diffDays === 0) return 'Due today'
     if (diffDays === 1) return 'Due tomorrow'
     return `Due in ${diffDays} days`
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -228,7 +202,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Task Stats Header - FieldKit KPI Cards */}
@@ -244,7 +217,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
             </div>
           </CardContent>
         </Card>
-        
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -256,7 +228,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
             </div>
           </CardContent>
         </Card>
-        
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -268,7 +239,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
             </div>
           </CardContent>
         </Card>
-        
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -281,7 +251,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           </CardContent>
         </Card>
       </div>
-
       {/* Add Task Button */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-fk-text">Task Board</h2>
@@ -293,7 +262,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           Add Task
         </Button>
       </div>
-
       {/* Kanban Board */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -313,7 +281,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   </div>
                 </div>
               </div>
-
               {/* Task Cards */}
               <Droppable droppableId={status}>
                 {(provided, snapshot) => (
@@ -348,20 +315,16 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                   <MoreHorizontal className="h-4 w-4 text-fk-text-muted" />
                                 </Button>
                               </div>
-
                               {/* Task Description */}
                               {task.description && (
                                 <p className="text-sm text-fk-text-muted line-clamp-2">{task.description}</p>
                               )}
-
                               {/* Task Meta */}
                               <div className="flex items-center justify-between">
                                 <Badge className={`text-xs font-medium ${priorityColors[task.priority]}`}>
                                   {task.priority}
                                 </Badge>
-                                
                               </div>
-
                               {/* Due Date */}
                               {task.dueDate && (
                                 <div className="flex items-center gap-2 text-xs text-fk-text-muted">
@@ -373,7 +336,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                   </span>
                                 </div>
                               )}
-
                               {/* Tags */}
                               {task.tags && task.tags.length > 0 && (
                                 <div className="flex items-center gap-1 flex-wrap">
@@ -387,7 +349,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                                   ))}
                                 </div>
                               )}
-
                               {/* Assignment */}
                               {(task as any).assignedTo && (
                                 <div className="flex items-center gap-2 text-xs text-fk-text-muted">
@@ -408,7 +369,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
           ))}
         </div>
       </DragDropContext>
-
       {/* Simple Add Task Modal */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -427,7 +387,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   className="mt-1 rounded-control border-fk-border"
                 />
               </div>
-              
               <div>
                 <Label htmlFor="description" className="text-sm font-semibold text-fk-text">Description</Label>
                 <Textarea
@@ -439,7 +398,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   rows={3}
                 />
               </div>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="priority" className="text-sm font-semibold text-fk-text">Priority</Label>
@@ -455,7 +413,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                     <option value="urgent">Urgent</option>
                   </select>
                 </div>
-                
                 <div>
                   <Label htmlFor="category" className="text-sm font-semibold text-fk-text">Category</Label>
                   <select
@@ -472,7 +429,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   </select>
                 </div>
               </div>
-              
               <div>
                 <Label htmlFor="dueDate" className="text-sm font-semibold text-fk-text">Due Date</Label>
                 <Input
@@ -483,7 +439,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   className="mt-1 rounded-control border-fk-border"
                 />
               </div>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="assignedTo" className="text-sm font-semibold text-fk-text">Assigned To</Label>
@@ -495,7 +450,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                     className="mt-1 rounded-control border-fk-border"
                   />
                 </div>
-                
                 <div>
                   <Label htmlFor="tags" className="text-sm font-semibold text-fk-text">Tags</Label>
                   <Input
@@ -507,7 +461,6 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                   />
                 </div>
               </div>
-              
               <div className="flex gap-3 pt-4">
                 <Button
                   onClick={handleAddTask}

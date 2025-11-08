@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -13,7 +12,6 @@ import {
   Save, Upload, Download, Eye, Edit, Trash2, Clock
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface CropLogEntry {
   id: string
   date: string
@@ -35,13 +33,11 @@ interface CropLogEntry {
   tags: string[]
   createdBy: string
 }
-
 interface CropLoggingModuleProps {
   farmId: string
   fieldId?: string
   cropId?: string
 }
-
 const LOG_TYPES = [
   { id: 'planting', label: 'Planting', icon: Sprout, color: 'bg-green-100 text-green-800' },
   { id: 'irrigation', label: 'Irrigation', icon: Droplets, color: 'bg-blue-100 text-blue-800' },
@@ -51,7 +47,6 @@ const LOG_TYPES = [
   { id: 'harvest', label: 'Harvest', icon: Scissors, color: 'bg-yellow-100 text-yellow-800' },
   { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-gray-100 text-gray-800' }
 ]
-
 export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModuleProps) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [selectedLogType, setSelectedLogType] = useState<string>('')
@@ -87,7 +82,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
       createdBy: 'John Smith'
     }
   ])
-
   const [newLogEntry, setNewLogEntry] = useState<Partial<CropLogEntry>>({
     date: new Date().toISOString().split('T')[0],
     type: 'observation',
@@ -95,10 +89,8 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
     description: '',
     tags: []
   })
-
   const handleAddLogEntry = () => {
     if (!newLogEntry.title || !newLogEntry.description) return
-
     const entry: CropLogEntry = {
       id: Date.now().toString(),
       date: newLogEntry.date || new Date().toISOString().split('T')[0],
@@ -115,7 +107,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
       tags: newLogEntry.tags || [],
       createdBy: 'Current User'
     }
-
     setLogEntries([entry, ...logEntries])
     setNewLogEntry({
       date: new Date().toISOString().split('T')[0],
@@ -126,15 +117,12 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
     })
     setShowAddForm(false)
   }
-
   const getLogTypeConfig = (type: string) => {
     return LOG_TYPES.find(t => t.id === type) || LOG_TYPES[6]
   }
-
   const formatCost = (cost?: number) => {
     return cost ? `$${cost.toLocaleString()}` : 'N/A'
   }
-
   const getActivityTemplate = (type: string) => {
     const templates = {
       planting: {
@@ -158,20 +146,17 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
         suggestions: ['pest-control', 'insecticide', 'IPM', 'treatment']
       }
     }
-    
     return templates[type as keyof typeof templates] || {
       title: 'Crop Activity',
       description: '',
       suggestions: ['general', 'crop-care']
     }
   }
-
   const filteredEntries = logEntries.filter(entry => {
     if (fieldId && entry.fieldId !== fieldId) return false
     if (cropId && entry.cropId !== cropId) return false
     return true
   })
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -180,7 +165,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
           <h2 className="text-2xl font-bold text-sage-800 mb-2">Crop Activity Log</h2>
           <p className="text-sage-600">Track all farming activities, treatments, and observations</p>
         </div>
-        
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
@@ -192,7 +176,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
           </Button>
         </div>
       </div>
-
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {LOG_TYPES.slice(0, 4).map(type => {
@@ -200,7 +183,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
           const totalCost = filteredEntries
             .filter(e => e.type === type.id && e.cost)
             .reduce((sum, e) => sum + (e.cost || 0), 0)
-          
           return (
             <ModernCard key={type.id} className="p-4">
               <div className="flex items-center justify-between mb-2">
@@ -215,7 +197,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
           )
         })}
       </div>
-
       {/* Add Entry Form */}
       {showAddForm && (
         <ModernCard>
@@ -232,7 +213,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                   onChange={(e) => setNewLogEntry({...newLogEntry, date: e.target.value})}
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Activity Type</label>
                 <Select 
@@ -264,7 +244,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                 </Select>
               </div>
             </div>
-            
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Title</label>
               <Input
@@ -273,7 +252,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                 placeholder="Brief description of the activity"
               />
             </div>
-            
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Description</label>
               <Textarea
@@ -283,7 +261,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                 rows={4}
               />
             </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Quantity</label>
@@ -294,7 +271,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                   placeholder="Amount used"
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Unit</label>
                 <Select 
@@ -315,7 +291,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                   </SelectContent>
                 </Select>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Cost ($)</label>
                 <Input
@@ -326,7 +301,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                 />
               </div>
             </div>
-            
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setShowAddForm(false)}>
                 Cancel
@@ -339,19 +313,16 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Log Entries */}
       <div className="space-y-4">
         {filteredEntries.map((entry) => {
           const typeConfig = getLogTypeConfig(entry.type)
-          
           return (
             <ModernCard key={entry.id} className="overflow-hidden">
               <ModernCardContent className="p-0">
                 <div className="flex">
                   {/* Timeline indicator */}
                   <div className={cn('w-1 flex-shrink-0', typeConfig.color.split(' ')[0])}></div>
-                  
                   <div className="flex-1 p-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
                       <div className="flex items-start gap-3">
@@ -377,7 +348,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                           </div>
                         </div>
                       </div>
-                      
                       <div className="flex items-center gap-2">
                         <Badge className={typeConfig.color}>{typeConfig.label}</Badge>
                         <Button variant="ghost" size="sm">
@@ -385,10 +355,8 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                         </Button>
                       </div>
                     </div>
-                    
                     <div className="ml-11">
                       <p className="text-sage-700 mb-3 whitespace-pre-wrap">{entry.description}</p>
-                      
                       {(entry.quantity || entry.weather) && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
                           {entry.quantity && (
@@ -415,7 +383,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                           )}
                         </div>
                       )}
-                      
                       {entry.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {entry.tags.map((tag, index) => (
@@ -432,7 +399,6 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
             </ModernCard>
           )
         })}
-        
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
             <FileText className="h-12 w-12 text-sage-300 mx-auto mb-4" />

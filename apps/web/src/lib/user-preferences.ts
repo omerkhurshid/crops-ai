@@ -1,6 +1,5 @@
 // Server-side user preferences utilities
 import { prisma } from './prisma'
-
 export interface UserPreferences {
   currency: string
   landUnit: string
@@ -8,7 +7,6 @@ export interface UserPreferences {
   timezone: string
   language: string
 }
-
 export const DEFAULT_PREFERENCES: UserPreferences = {
   currency: 'USD',
   landUnit: 'hectares',
@@ -16,7 +14,6 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   timezone: 'UTC',
   language: 'en'
 }
-
 // Currency symbols mapping
 export const CURRENCY_SYMBOLS: Record<string, string> = {
   USD: '$', EUR: '€', GBP: '£', CAD: 'C$', AUD: 'A$', JPY: '¥', INR: '₹', BRL: 'R$',
@@ -26,14 +23,12 @@ export const CURRENCY_SYMBOLS: Record<string, string> = {
   NGN: '₦', KES: 'KSh', GHS: '₵', MAD: 'MAD', THB: '฿', VND: '₫', IDR: 'Rp',
   MYR: 'RM', PHP: '₱'
 }
-
 /**
  * Get user preferences from database or defaults
  */
 export async function getUserPreferences(userId?: string): Promise<UserPreferences> {
   try {
     if (!userId) return DEFAULT_PREFERENCES
-
     const userWithPrefs = await prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -44,9 +39,7 @@ export async function getUserPreferences(userId?: string): Promise<UserPreferenc
         language: true
       }
     })
-
     if (!userWithPrefs) return DEFAULT_PREFERENCES
-
     return {
       currency: userWithPrefs.currency || DEFAULT_PREFERENCES.currency,
       landUnit: userWithPrefs.landUnit || DEFAULT_PREFERENCES.landUnit,
@@ -59,13 +52,11 @@ export async function getUserPreferences(userId?: string): Promise<UserPreferenc
     return DEFAULT_PREFERENCES
   }
 }
-
 /**
  * Format currency amount based on user preferences
  */
 export function formatCurrency(amount: number, preferences: UserPreferences): string {
   const symbol = CURRENCY_SYMBOLS[preferences.currency] || preferences.currency
-  
   try {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -78,7 +69,6 @@ export function formatCurrency(amount: number, preferences: UserPreferences): st
     return `${symbol}${amount.toLocaleString()}`
   }
 }
-
 /**
  * Convert temperature based on user preferences
  */
@@ -89,7 +79,6 @@ export function formatTemperature(celsius: number, preferences: UserPreferences)
   }
   return `${Math.round(celsius)}°C`
 }
-
 /**
  * Convert area based on user preferences
  */
@@ -105,7 +94,6 @@ export function formatArea(hectares: number, preferences: UserPreferences): stri
       return `${hectares.toFixed(1)} ha`
   }
 }
-
 /**
  * Convert area value to hectares (base unit for storage)
  */
@@ -119,7 +107,6 @@ export function convertToHectares(value: number, unit: string): number {
       return value
   }
 }
-
 /**
  * Convert temperature to celsius (base unit for storage)
  */
@@ -129,7 +116,6 @@ export function convertToCelsius(value: number, unit: string): number {
   }
   return value
 }
-
 /**
  * Client-side preferences hook (for use in React components)
  */
@@ -148,6 +134,5 @@ export function useUserPreferences() {
     }
     return DEFAULT_PREFERENCES
   }
-
   return { fetchPreferences }
 }

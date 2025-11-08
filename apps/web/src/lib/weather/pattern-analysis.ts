@@ -8,11 +8,9 @@
  * - Weather-based risk assessment
  * - Optimal timing recommendations based on weather patterns
  */
-
 // Logger replaced with console for local development;
 import { redis } from '../redis';
 import { prisma } from '../prisma';
-
 export interface WeatherPattern {
   id: string;
   region: string;
@@ -35,7 +33,6 @@ export interface WeatherPattern {
     mitigationStrategies: string[];
   }[];
 }
-
 export interface HistoricalCorrelation {
   weatherMetric: string;
   cropType: string;
@@ -54,7 +51,6 @@ export interface HistoricalCorrelation {
     quality: number;
   }[];
 }
-
 export interface SeasonalForecast {
   season: 'spring' | 'summer' | 'fall' | 'winter';
   year: number;
@@ -96,7 +92,6 @@ export interface SeasonalForecast {
     };
   };
 }
-
 export interface ClimateAdaptation {
   region: string;
   timeHorizon: '5_year' | '10_year' | '20_year';
@@ -132,11 +127,9 @@ export interface ClimateAdaptation {
     benefitCostRatio: number;
   };
 }
-
 class WeatherPatternAnalysisService {
   private readonly CACHE_TTL = 6 * 60 * 60; // 6 hours
   private readonly HISTORICAL_YEARS = 30;
-
   /**
    * Analyze current weather patterns and their likely impacts
    */
@@ -157,27 +150,22 @@ class WeatherPatternAnalysisService {
     const cacheKey = `weather_patterns_${latitude}_${longitude}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const activePatterns = await this.detectActivePatterns(latitude, longitude);
       const riskAssessment = this.assessWeatherRisks(activePatterns);
       const recommendations = this.generateWeatherRecommendations(activePatterns, riskAssessment);
-
       const analysis = {
         activePatterns,
         riskAssessment,
         recommendations
       };
-
       await this.setCached(cacheKey, analysis);
       return analysis;
-
     } catch (error) {
       console.error('Failed to analyze weather patterns', error);
       throw error;
     }
   }
-
   /**
    * Get historical weather correlations with crop performance
    */
@@ -190,18 +178,15 @@ class WeatherPatternAnalysisService {
     const cacheKey = `historical_correlations_${cropType}_${latitude}_${longitude}_${years}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const correlations = await this.calculateHistoricalCorrelations(cropType, latitude, longitude, years);
       await this.setCached(cacheKey, correlations, 24 * 60 * 60); // 24 hour cache
       return correlations;
-
     } catch (error) {
       console.error('Failed to get historical correlations', error);
       throw error;
     }
   }
-
   /**
    * Generate seasonal forecast and growing condition predictions
    */
@@ -215,18 +200,15 @@ class WeatherPatternAnalysisService {
     const cacheKey = `seasonal_forecast_${latitude}_${longitude}_${season}_${targetYear}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const forecast = await this.buildSeasonalForecast(latitude, longitude, season, targetYear);
       await this.setCached(cacheKey, forecast, 7 * 24 * 60 * 60); // 7 day cache
       return forecast;
-
     } catch (error) {
       console.error('Failed to generate seasonal forecast', error);
       throw error;
     }
   }
-
   /**
    * Get climate adaptation recommendations
    */
@@ -238,18 +220,15 @@ class WeatherPatternAnalysisService {
     const cacheKey = `climate_adaptation_${latitude}_${longitude}_${timeHorizon}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const adaptation = await this.generateClimateAdaptation(latitude, longitude, timeHorizon);
       await this.setCached(cacheKey, adaptation, 30 * 24 * 60 * 60); // 30 day cache
       return adaptation;
-
     } catch (error) {
       console.error('Failed to get climate adaptation', error);
       throw error;
     }
   }
-
   /**
    * Get weather-based timing recommendations for farm operations
    */
@@ -279,24 +258,19 @@ class WeatherPatternAnalysisService {
     const cacheKey = `optimal_timing_${operation}_${cropType}_${latitude}_${longitude}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const timing = await this.calculateOptimalTiming(operation, cropType, latitude, longitude);
       await this.setCached(cacheKey, timing, 12 * 60 * 60); // 12 hour cache
       return timing;
-
     } catch (error) {
       console.error('Failed to get optimal timing', error);
       throw error;
     }
   }
-
   // Private implementation methods
-
   private async detectActivePatterns(latitude: number, longitude: number): Promise<WeatherPattern[]> {
     // Simulate pattern detection (in production would use real meteorological data)
     const patterns: WeatherPattern[] = [];
-
     // El Niño/La Niña detection
     const ninoIndex = this.simulateNinoIndex(); // Would fetch real ONI data
     if (Math.abs(ninoIndex) > 0.5) {
@@ -317,7 +291,6 @@ class WeatherPatternAnalysisService {
         cropImpacts: this.getCropImpacts(ninoIndex > 0 ? 'el_nino' : 'la_nina', latitude, longitude)
       });
     }
-
     // Drought pattern detection
     const droughtIndex = this.simulateDroughtIndex();
     if (droughtIndex < -1) {
@@ -338,10 +311,8 @@ class WeatherPatternAnalysisService {
         cropImpacts: this.getCropImpacts('drought', latitude, longitude)
       });
     }
-
     return patterns;
   }
-
   private assessWeatherRisks(patterns: WeatherPattern[]): {
     overall: number;
     immediate: string[];
@@ -352,11 +323,9 @@ class WeatherPatternAnalysisService {
     const immediate: string[] = [];
     const seasonal: string[] = [];
     const annual: string[] = [];
-
     patterns.forEach(pattern => {
       const riskContribution = pattern.confidence * this.getPatternRiskScore(pattern.pattern);
       overallRisk += riskContribution;
-
       // Categorize risks by timeframe
       if (pattern.endDate.getTime() - Date.now() < 30 * 24 * 60 * 60 * 1000) {
         immediate.push(...pattern.cropImpacts.flatMap(c => c.riskFactors));
@@ -366,7 +335,6 @@ class WeatherPatternAnalysisService {
         annual.push(...pattern.cropImpacts.flatMap(c => c.riskFactors));
       }
     });
-
     return {
       overall: Math.min(overallRisk, 10),
       immediate: Array.from(new Set(immediate)),
@@ -374,7 +342,6 @@ class WeatherPatternAnalysisService {
       annual: Array.from(new Set(annual))
     };
   }
-
   private generateWeatherRecommendations(patterns: WeatherPattern[], riskAssessment: any): {
     immediate: string[];
     seasonal: string[];
@@ -383,7 +350,6 @@ class WeatherPatternAnalysisService {
     const immediate: string[] = [];
     const seasonal: string[] = [];
     const strategic: string[] = [];
-
     patterns.forEach(pattern => {
       pattern.cropImpacts.forEach(cropImpact => {
         immediate.push(...cropImpact.mitigationStrategies.filter(s => s.includes('immediate') || s.includes('urgent')));
@@ -391,20 +357,17 @@ class WeatherPatternAnalysisService {
         strategic.push(...cropImpact.mitigationStrategies.filter(s => s.includes('long-term') || s.includes('strategic')));
       });
     });
-
     // Add general recommendations based on risk level
     if (riskAssessment.overall > 7) {
       immediate.push('Implement emergency water conservation measures');
       immediate.push('Review crop insurance coverage');
     }
-
     return {
       immediate: Array.from(new Set(immediate)),
       seasonal: Array.from(new Set(seasonal)),
       strategic: Array.from(new Set(strategic))
     };
   }
-
   private async calculateHistoricalCorrelations(
     cropType: string,
     latitude: number,
@@ -441,10 +404,8 @@ class WeatherPatternAnalysisService {
         historicalPerformance: this.generateHistoricalData('heat_stress', years)
       }
     ];
-
     return correlations;
   }
-
   private async buildSeasonalForecast(
     latitude: number,
     longitude: number,
@@ -452,7 +413,6 @@ class WeatherPatternAnalysisService {
     year: number
   ): Promise<SeasonalForecast> {
     const baseDate = new Date(year, this.getSeasonStartMonth(season), 1);
-    
     return {
       season: season as any,
       year,
@@ -495,14 +455,12 @@ class WeatherPatternAnalysisService {
       }
     };
   }
-
   private async generateClimateAdaptation(
     latitude: number,
     longitude: number,
     timeHorizon: string
   ): Promise<ClimateAdaptation> {
     const years = timeHorizon === '5_year' ? 5 : timeHorizon === '10_year' ? 10 : 20;
-    
     return {
       region: this.getClimateRegion(latitude, longitude),
       timeHorizon: timeHorizon as any,
@@ -559,7 +517,6 @@ class WeatherPatternAnalysisService {
       }
     };
   }
-
   private async calculateOptimalTiming(
     operation: string,
     cropType: string,
@@ -569,7 +526,6 @@ class WeatherPatternAnalysisService {
     const now = new Date();
     const optimalStart = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 2 weeks from now
     const optimalEnd = new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000); // 3 weeks from now
-
     const requirements: Record<string, any> = {
       planting: {
         temperature: { min: 50, max: 85 },
@@ -594,7 +550,6 @@ class WeatherPatternAnalysisService {
         windSpeed: { max: 20 }
       }
     };
-
     return {
       optimalWindow: {
         start: optimalStart,
@@ -615,19 +570,15 @@ class WeatherPatternAnalysisService {
       ]
     };
   }
-
   // Helper methods
-
   private simulateNinoIndex(): number {
     // Simulate ONI (Oceanic Niño Index) - normally would fetch from NOAA
     return (Math.random() - 0.5) * 4; // Range -2 to +2
   }
-
   private simulateDroughtIndex(): number {
     // Simulate PDSI (Palmer Drought Severity Index)
     return (Math.random() - 0.6) * 6; // Bias toward normal/dry conditions
   }
-
   private getClimateRegion(latitude: number, longitude: number): string {
     if (latitude >= 40 && latitude <= 45 && longitude >= -100 && longitude <= -80) {
       return 'Midwest Corn Belt';
@@ -638,7 +589,6 @@ class WeatherPatternAnalysisService {
     }
     return 'Unknown Region';
   }
-
   private getPatternRiskScore(pattern: string): number {
     const scores: Record<string, number> = {
       'drought': 3.5,
@@ -651,7 +601,6 @@ class WeatherPatternAnalysisService {
     };
     return scores[pattern] || 1.5;
   }
-
   private getCropImpacts(pattern: string, latitude: number, longitude: number): any[] {
     const impacts: Record<string, any[]> = {
       'el_nino': [
@@ -682,18 +631,14 @@ class WeatherPatternAnalysisService {
         }
       ]
     };
-
     return impacts[pattern] || [];
   }
-
   private generateHistoricalData(metric: string, years: number): any[] {
     const data = [];
     const currentYear = new Date().getFullYear();
-    
     for (let i = 0; i < years; i++) {
       const year = currentYear - i;
       let weatherValue, yieldValue;
-      
       switch (metric) {
         case 'gdd':
           weatherValue = 2400 + Math.random() * 800;
@@ -711,7 +656,6 @@ class WeatherPatternAnalysisService {
           weatherValue = Math.random() * 100;
           yieldValue = 150 + Math.random() * 30;
       }
-      
       data.push({
         year,
         weatherValue: Math.round(weatherValue * 10) / 10,
@@ -719,10 +663,8 @@ class WeatherPatternAnalysisService {
         quality: Math.round((85 + Math.random() * 15) * 10) / 10
       });
     }
-    
     return data.sort((a, b) => a.year - b.year);
   }
-
   private getSeasonStartMonth(season: string): number {
     const months: Record<string, number> = {
       'spring': 2, // March
@@ -732,7 +674,6 @@ class WeatherPatternAnalysisService {
     };
     return months[season] || 2;
   }
-
   private getSeasonalNormal(latitude: number, season: string, metric: 'temperature' | 'precipitation'): number {
     // Simplified seasonal normals (would use actual climatology data)
     if (metric === 'temperature') {
@@ -753,24 +694,20 @@ class WeatherPatternAnalysisService {
       return precip[season] || 11;
     }
   }
-
   private async getCached(key: string): Promise<any> {
     if (!redis) {
       return null;
     }
-    
     try {
       return await redis.get(key);
     } catch (error) {
       return null;
     }
   }
-
   private async setCached(key: string, data: any, ttl: number = this.CACHE_TTL): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
@@ -778,5 +715,4 @@ class WeatherPatternAnalysisService {
     }
   }
 }
-
 export const weatherPatternAnalysis = new WeatherPatternAnalysisService();

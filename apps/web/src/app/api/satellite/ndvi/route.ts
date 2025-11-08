@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { ndviAnalysis } from '../../../../lib/satellite/ndvi-analysis';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
-
 const ndviSchema = z.object({
   type: z.enum(['health', 'trends', 'compare', 'stress']),
   fieldId: z.string(),
@@ -41,22 +40,18 @@ const ndviSchema = z.object({
     gci: z.number().min(0).max(5).optional()
   })).optional()
 });
-
 // POST /api/satellite/ndvi
 export const POST = apiMiddleware.basic(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
-      
       // Validate input
       const validation = ndviSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
       let result;
-
       switch (params.type) {
         case 'health':
           {
@@ -70,7 +65,6 @@ export const POST = apiMiddleware.basic(
               swir1: params.swir1 || 0.15,
               swir2: params.swir2 || 0.1
             };
-
             const indices = ndviAnalysis.calculateVegetationIndices(bands);
             result = await ndviAnalysis.generateHealthReport(
               params.fieldId,
@@ -80,13 +74,11 @@ export const POST = apiMiddleware.basic(
             );
           }
           break;
-
         case 'trends':
           {
             if (!params.timeSeriesData || params.timeSeriesData.length === 0) {
               throw new ValidationError('Time series data is required for trends analysis');
             }
-
             result = await ndviAnalysis.analyzeTrends(
               params.fieldId,
               params.timeSeriesData,
@@ -94,13 +86,11 @@ export const POST = apiMiddleware.basic(
             );
           }
           break;
-
         case 'compare':
           {
             if (!params.comparisonFields || params.comparisonFields.length === 0) {
               throw new ValidationError('Comparison fields are required for field comparison');
             }
-
             // Convert comparison fields to include full indices
             const comparisonFieldsWithIndices = params.comparisonFields.map(field => {
               const indices = field.ndvi !== undefined ? {
@@ -115,7 +105,6 @@ export const POST = apiMiddleware.basic(
               } : ndviAnalysis.calculateVegetationIndices({
                 red: 0.1, nir: 0.6, redEdge: 0.4, green: 0.08, blue: 0.06, swir1: 0.15, swir2: 0.1
               });
-
               return {
                 fieldId: field.fieldId,
                 name: field.name,
@@ -123,11 +112,9 @@ export const POST = apiMiddleware.basic(
                 indices
               };
             });
-
             result = await ndviAnalysis.compareFields(params.fieldId, comparisonFieldsWithIndices);
           }
           break;
-
         case 'stress':
           {
             // Calculate vegetation indices from spectral bands or use defaults
@@ -140,16 +127,13 @@ export const POST = apiMiddleware.basic(
               swir1: params.swir1 || 0.15,
               swir2: params.swir2 || 0.1
             };
-
             const indices = ndviAnalysis.calculateVegetationIndices(bands);
             result = ndviAnalysis.detectCropStress(indices);
           }
           break;
-
         default:
           throw new ValidationError('Invalid NDVI analysis type');
       }
-
       // Generate summary based on type
       const summary = params.type === 'health' && (result as any).healthScore !== undefined
         ? {
@@ -208,7 +192,6 @@ export const POST = apiMiddleware.basic(
             recommendationsCount: (result as any).recommendations.length
           }
         : null;
-
       return createSuccessResponse({
         data: result,
         summary,
@@ -223,28 +206,22 @@ export const POST = apiMiddleware.basic(
         },
         message: `NDVI ${params.type} analysis completed successfully`
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/satellite/ndvi?fieldId=123&type=indices
 export const GET = apiMiddleware.basic(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
-      
       const fieldId = searchParams.get('fieldId');
       const type = searchParams.get('type') || 'indices';
-
       if (!fieldId) {
         throw new ValidationError('fieldId parameter is required');
       }
-
       let result;
-
       switch (type) {
         case 'indices':
           {
@@ -258,7 +235,6 @@ export const GET = apiMiddleware.basic(
               swir1: 0.1 + Math.random() * 0.1,
               swir2: 0.05 + Math.random() * 0.1
             };
-
             result = {
               fieldId,
               bands: sampleBands,
@@ -267,7 +243,6 @@ export const GET = apiMiddleware.basic(
             };
           }
           break;
-
         case 'quick-health':
           {
             const sampleBands = {
@@ -275,7 +250,6 @@ export const GET = apiMiddleware.basic(
             };
             const indices = ndviAnalysis.calculateVegetationIndices(sampleBands);
             const stress = ndviAnalysis.detectCropStress(indices);
-
             result = {
               fieldId,
               healthScore: Math.round((indices.ndvi + 1) * 50), // Convert NDVI to 0-100 scale
@@ -290,18 +264,15 @@ export const GET = apiMiddleware.basic(
             };
           }
           break;
-
         default:
           throw new ValidationError('Invalid analysis type for GET request');
       }
-
       return createSuccessResponse({
         data: result,
         type,
         fieldId,
         message: `NDVI ${type} data retrieved successfully`
       });
-
     } catch (error) {
       return handleApiError(error);
     }

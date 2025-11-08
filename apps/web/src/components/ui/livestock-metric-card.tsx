@@ -1,9 +1,7 @@
 'use client'
-
 import React from 'react'
 import { FarmerMetricCard } from './farmer-metric-card'
 import { Heart, TrendingUp, TrendingDown } from 'lucide-react'
-
 interface LivestockMetricCardProps {
   totalCount: number
   healthyCount: number
@@ -12,7 +10,6 @@ interface LivestockMetricCardProps {
   showMore?: boolean
   onShowMore?: () => void
 }
-
 export function LivestockMetricCard({
   totalCount,
   healthyCount,
@@ -22,20 +19,17 @@ export function LivestockMetricCard({
   onShowMore
 }: LivestockMetricCardProps) {
   const healthPercentage = totalCount > 0 ? Math.round((healthyCount / totalCount) * 100) : 100
-  
   const getStatus = () => {
     if (healthPercentage >= 95) return 'excellent'
     if (healthPercentage >= 85) return 'good'
     if (healthPercentage >= 70) return 'warning'
     return 'critical'
   }
-
   const trendData = trend !== 0 ? {
     direction: trend > 0 ? 'up' as const : 'down' as const,
     percentage: Math.abs(trend),
     label: 'vs last month'
   } : undefined
-
   return (
     <FarmerMetricCard
       title="Livestock Health"

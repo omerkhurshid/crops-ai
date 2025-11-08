@@ -1,15 +1,12 @@
 import { Redis } from '@upstash/redis';
 // Logger replaced with console for local development;
-
 // Create Redis instance with environment variables (safe for client-side)
 // Only initialize on server-side where environment variables are available
 let redis: Redis | null = null;
-
 if (typeof window === 'undefined') {
   // Server-side only - import getConfig here to avoid client-side execution
   const { getConfig } = require('./config/environment');
   const config = getConfig();
-  
   redis = config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN 
     ? new Redis({
         url: config.UPSTASH_REDIS_REST_URL,
@@ -17,20 +14,15 @@ if (typeof window === 'undefined') {
       })
     : null;
 }
-
 export { redis };
-
 // Utility functions for common Redis operations
 export class RedisManager {
   /**
    * Set a key-value pair with optional expiration
    */
   static async set(key: string, value: any, options?: { ex?: number; nx?: boolean }): Promise<string | null> {
-    if (!redis) {
-      console.warn('Redis not available, skipping SET operation');
-      return null;
+    if (!redis) {return null;
     }
-    
     try {
       // Handle Redis SET options properly
       if (options) {
@@ -39,14 +31,12 @@ export class RedisManager {
         if (options.nx) setOptions.nx = options.nx;
         return await redis.set(key, JSON.stringify(value), setOptions);
       }
-      
       return await redis.set(key, JSON.stringify(value));
     } catch (error) {
       console.error('Redis SET error', error, { key });
       return null;
     }
   }
-
   /**
    * Get a value by key
    */
@@ -54,7 +44,6 @@ export class RedisManager {
     if (!redis) {
       return null;
     }
-    
     try {
       const value = await redis.get(key);
       return value ? JSON.parse(value as string) : null;
@@ -63,7 +52,6 @@ export class RedisManager {
       return null;
     }
   }
-
   /**
    * Delete a key
    */
@@ -71,7 +59,6 @@ export class RedisManager {
     if (!redis) {
       return 0;
     }
-    
     try {
       return await redis.del(key);
     } catch (error) {
@@ -79,7 +66,6 @@ export class RedisManager {
       return 0;
     }
   }
-
   /**
    * Check if key exists
    */
@@ -87,7 +73,6 @@ export class RedisManager {
     if (!redis) {
       return false;
     }
-    
     try {
       const result = await redis.exists(key);
       return result === 1;
@@ -96,7 +81,6 @@ export class RedisManager {
       return false;
     }
   }
-
   /**
    * Set expiration on a key
    */
@@ -104,7 +88,6 @@ export class RedisManager {
     if (!redis) {
       return false;
     }
-    
     try {
       const result = await redis.expire(key, seconds);
       return result === 1;
@@ -113,7 +96,6 @@ export class RedisManager {
       return false;
     }
   }
-
   /**
    * Increment a numeric value
    */
@@ -121,7 +103,6 @@ export class RedisManager {
     if (!redis) {
       return 0;
     }
-    
     try {
       return await redis.incr(key);
     } catch (error) {
@@ -130,6 +111,5 @@ export class RedisManager {
     }
   }
 }
-
 // For backwards compatibility, export the Redis instance directly
 export default redis;

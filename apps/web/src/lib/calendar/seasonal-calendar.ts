@@ -8,12 +8,10 @@
  * - Crop-specific activity calendars
  * - Equipment and resource planning
  */
-
 // Logger replaced with console for local development;
 import { redis } from '../redis';
 import { usdaService } from '../external/usda-service';
 import { weatherPatternAnalysis } from '../weather/pattern-analysis';
-
 export interface SeasonalActivity {
   id: string;
   category: 'planting' | 'cultivation' | 'fertilization' | 'pest_control' | 'irrigation' | 'harvest' | 'soil_management' | 'equipment' | 'planning';
@@ -50,7 +48,6 @@ export interface SeasonalActivity {
   alternatives: string[];
   notes: string;
 }
-
 export interface MonthlyPlan {
   month: number;
   monthName: string;
@@ -70,7 +67,6 @@ export interface MonthlyPlan {
   riskFactors: string[];
   opportunities: string[];
 }
-
 export interface SeasonalCalendar {
   year: number;
   region: string;
@@ -106,10 +102,8 @@ export interface SeasonalCalendar {
     market_conditions: string[];
   };
 }
-
 class SeasonalCalendarService {
   private readonly CACHE_TTL = 24 * 60 * 60; // 24 hours
-  
   // Comprehensive activity database
   private activities: SeasonalActivity[] = [
     // Spring Activities (March-May)
@@ -177,7 +171,6 @@ class SeasonalCalendarService {
       alternatives: ['Split application', 'Liquid vs dry', 'Organic sources'],
       notes: 'Adjust rates based on yield goal and soil test recommendations'
     },
-
     // Summer Activities (June-August)
     {
       id: 'summer_cultivation',
@@ -245,7 +238,6 @@ class SeasonalCalendarService {
       alternatives: ['Deficit irrigation', 'Variable rate irrigation', 'Dryland farming'],
       notes: 'Critical during pollination - monitor stress indicators daily'
     },
-
     // Fall Activities (September-November)
     {
       id: 'harvest_preparation',
@@ -312,7 +304,6 @@ class SeasonalCalendarService {
       alternatives: ['No-till system', 'Strip tillage', 'Spring preparation only'],
       notes: 'Consider soil compaction and future erosion risk'
     },
-
     // Winter Activities (December-February)
     {
       id: 'equipment_maintenance',
@@ -379,7 +370,6 @@ class SeasonalCalendarService {
       notes: 'Essential for tax preparation and operating loan applications'
     }
   ];
-
   /**
    * Generate a complete seasonal calendar for a farm
    */
@@ -394,21 +384,17 @@ class SeasonalCalendarService {
     const cacheKey = `seasonal_calendar_${latitude}_${longitude}_${crop}_${farmSize}_${targetYear}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       // Get regional information
       const usdaData = await usdaService.getRegionalRecommendations(latitude, longitude);
       const region = usdaData.region.code.toLowerCase();
-
       // Get weather patterns for adaptation
       const weatherPatterns = await weatherPatternAnalysis.getClimateAdaptation(latitude, longitude);
-
       // Filter activities by region and crop
       const relevantActivities = this.activities.filter(activity => 
         (activity.region.includes(region) || activity.region.includes('all')) &&
         (activity.crops.includes(crop) || activity.crops.includes('all'))
       );
-
       // Generate monthly plans
       const monthlyPlans: MonthlyPlan[] = [];
       for (let month = 1; month <= 12; month++) {
@@ -416,13 +402,10 @@ class SeasonalCalendarService {
         const monthlyPlan = this.createMonthlyPlan(month, region, monthActivities, farmSize);
         monthlyPlans.push(monthlyPlan);
       }
-
       // Create yearly overview
       const yearlyOverview = this.createYearlyOverview(relevantActivities, farmSize, targetYear);
-
       // Create adaptation recommendations
       const adaptations = this.createAdaptations(weatherPatterns, usdaData);
-
       const calendar: SeasonalCalendar = {
         year: targetYear,
         region,
@@ -432,16 +415,13 @@ class SeasonalCalendarService {
         yearlyOverview,
         adaptations
       };
-
       await this.setCached(cacheKey, calendar);
       return calendar;
-
     } catch (error) {
       console.error('Failed to generate seasonal calendar', error);
       throw error;
     }
   }
-
   /**
    * Get monthly activity recommendations
    */
@@ -454,27 +434,22 @@ class SeasonalCalendarService {
     const cacheKey = `monthly_activities_${month}_${latitude}_${longitude}_${crop}`;
     const cached = await this.getCached(cacheKey);
     if (cached) return cached;
-
     try {
       const usdaData = await usdaService.getRegionalRecommendations(latitude, longitude);
       const region = usdaData.region.code.toLowerCase();
-
       const relevantActivities = this.activities.filter(activity => 
         activity.timing.month === month &&
         (activity.region.includes(region) || activity.region.includes('all')) &&
         (activity.crops.includes(crop) || activity.crops.includes('all'))
       );
-
       const monthlyPlan = this.createMonthlyPlan(month, region, relevantActivities, 500); // Default farm size
       await this.setCached(cacheKey, monthlyPlan, 12 * 60 * 60); // 12 hour cache
       return monthlyPlan;
-
     } catch (error) {
       console.error(`Failed to get monthly activities for month ${month}`, error);
       throw error;
     }
   }
-
   /**
    * Get weather-optimized timing for specific activities
    */
@@ -495,11 +470,9 @@ class SeasonalCalendarService {
   }> {
     const targetYear = year || new Date().getFullYear();
     const activity = this.activities.find(a => a.id === activityId);
-    
     if (!activity) {
       throw new Error(`Activity ${activityId} not found`);
     }
-
     try {
       // Get weather-based timing optimization
       const optimalTiming = await weatherPatternAnalysis.getOptimalTiming(
@@ -508,11 +481,9 @@ class SeasonalCalendarService {
         latitude,
         longitude
       );
-
       // Calculate optimal dates based on activity timing and weather
       const optimalDates: Date[] = [];
       const baseDate = new Date(targetYear, activity.timing.month - 1, 1);
-      
       if (activity.timing.dayRange) {
         for (let day = activity.timing.dayRange.start; day <= activity.timing.dayRange.end; day += 3) {
           optimalDates.push(new Date(targetYear, activity.timing.month - 1, day));
@@ -521,39 +492,32 @@ class SeasonalCalendarService {
         const weekStart = (activity.timing.weekOfMonth - 1) * 7 + 1;
         optimalDates.push(new Date(targetYear, activity.timing.month - 1, weekStart));
       }
-
       return {
         optimalDates,
         weatherWindow: optimalTiming.optimalWindow,
         riskFactors: optimalTiming.riskFactors,
         alternatives: optimalTiming.alternatives.map(alt => alt.backup)
       };
-
     } catch (error) {
       console.error(`Failed to get optimal timing for activity ${activityId}`, error);
       throw error;
     }
   }
-
   // Private helper methods
-
   private createMonthlyPlan(month: number, region: string, activities: SeasonalActivity[], farmSize: number): MonthlyPlan {
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-
     const criticalActivities = activities.filter(a => a.priority === 'critical');
     const importantActivities = activities.filter(a => a.priority === 'important');
     const recommendedActivities = activities.filter(a => a.priority === 'recommended');
-
     // Calculate resource requirements
     const totalLaborHours = activities.reduce((sum, a) => sum + (a.labor.hours_per_acre * farmSize), 0);
     const peakWorkdays = Math.ceil(totalLaborHours / 8); // 8 hours per day
     const equipmentNeeds = Array.from(new Set(activities.flatMap(a => a.equipment)));
     const materialNeeds = Array.from(new Set(activities.flatMap(a => a.materials)));
     const estimatedCost = activities.reduce((sum, a) => sum + (a.cost_per_acre * farmSize), 0);
-
     return {
       month,
       monthName: monthNames[month - 1],
@@ -574,7 +538,6 @@ class SeasonalCalendarService {
       opportunities: this.getOpportunities(month, region)
     };
   }
-
   private createYearlyOverview(activities: SeasonalActivity[], farmSize: number, year: number): any {
     const keyMilestones = activities
       .filter(a => a.priority === 'critical')
@@ -584,18 +547,14 @@ class SeasonalCalendarService {
         importance: a.priority
       }))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
-
     const totalBudget = activities.reduce((sum, a) => sum + (a.cost_per_acre * farmSize), 0);
-    
     const laborByMonth = Array(12).fill(0);
     activities.forEach(a => {
       laborByMonth[a.timing.month - 1] += a.labor.hours_per_acre * farmSize;
     });
-    
     const peakMonth = laborByMonth.indexOf(Math.max(...laborByMonth));
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                        'July', 'August', 'September', 'October', 'November', 'December'];
-
     return {
       keyMilestones,
       totalBudget,
@@ -608,7 +567,6 @@ class SeasonalCalendarService {
       riskCalendar: this.createRiskCalendar()
     };
   }
-
   private createAdaptations(weatherPatterns: any, usdaData: any): any {
     return {
       climate: weatherPatterns.adaptationStrategies.cropSelection.slice(0, 3),
@@ -624,7 +582,6 @@ class SeasonalCalendarService {
       ]
     };
   }
-
   private getWeatherConsiderations(month: number, region: string): string[] {
     const considerations: Record<number, string[]> = {
       1: ['Monitor winter weather patterns', 'Plan for equipment access'],
@@ -640,10 +597,8 @@ class SeasonalCalendarService {
       11: ['Winter weather preparation', 'Equipment storage planning'],
       12: ['Year-end weather analysis', 'Plan for next year patterns']
     };
-
     return considerations[month] || [];
   }
-
   private getRiskFactors(month: number, region: string): string[] {
     const risks: Record<number, string[]> = {
       3: ['Late frost damage', 'Wet field conditions delay'],
@@ -655,10 +610,8 @@ class SeasonalCalendarService {
       9: ['Harvest delays', 'Lodging from storms', 'Grain quality deterioration'],
       10: ['Early freeze damage', 'Equipment breakdowns', 'Market price volatility']
     };
-
     return risks[month] || ['General weather risks', 'Equipment maintenance needs'];
   }
-
   private getOpportunities(month: number, region: string): string[] {
     const opportunities: Record<number, string[]> = {
       1: ['Planning optimization', 'Input price negotiations', 'Equipment deals'],
@@ -670,14 +623,11 @@ class SeasonalCalendarService {
       10: ['Fall management benefits', 'Next year preparation advantages'],
       12: ['Year-end tax planning', 'Equipment depreciation optimization']
     };
-
     return opportunities[month] || ['Standard farming opportunities'];
   }
-
   private createEquipmentSchedule(activities: SeasonalActivity[]): any[] {
     const schedule: any[] = [];
     const equipmentUsage = new Map<string, Map<number, number>>();
-
     activities.forEach(activity => {
       activity.equipment.forEach(equipment => {
         if (!equipmentUsage.has(equipment)) {
@@ -688,16 +638,13 @@ class SeasonalCalendarService {
         monthUsage.set(activity.timing.month, currentUsage + activity.duration.days * 8); // 8 hours per day
       });
     });
-
     equipmentUsage.forEach((monthlyUsage, equipment) => {
       monthlyUsage.forEach((hours, month) => {
         schedule.push({ month, equipment, usage_hours: hours });
       });
     });
-
     return schedule.sort((a, b) => a.month - b.month);
   }
-
   private createRiskCalendar(): any[] {
     return [
       { month: 3, risks: ['Late frost', 'Wet field conditions'], mitigation: ['Monitor weather', 'Field drainage'] },
@@ -706,24 +653,20 @@ class SeasonalCalendarService {
       { month: 9, risks: ['Harvest delays', 'Quality deterioration'], mitigation: ['Equipment readiness', 'Storage preparation'] }
     ];
   }
-
   private async getCached(key: string): Promise<any> {
     if (!redis) {
       return null;
     }
-    
     try {
       return await redis.get(key);
     } catch (error) {
       return null;
     }
   }
-
   private async setCached(key: string, data: any, ttl: number = this.CACHE_TTL): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       await redis.set(key, data, { ex: ttl });
     } catch (error) {
@@ -731,5 +674,4 @@ class SeasonalCalendarService {
     }
   }
 }
-
 export const seasonalCalendar = new SeasonalCalendarService();

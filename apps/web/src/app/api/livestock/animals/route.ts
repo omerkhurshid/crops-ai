@@ -1,23 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
-
     const whereClause: any = { userId: user.id }
     if (farmId) {
       whereClause.farmId = farmId
     }
-
     const animals = await prisma.animal.findMany({
       where: whereClause,
       include: {
@@ -33,7 +28,6 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { createdAt: 'desc' }
     })
-
     return NextResponse.json(animals)
   } catch (error) {
     console.error('Error fetching animals:', error)
@@ -43,17 +37,13 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 export async function POST(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const data = await request.json()
-
     // Validate required fields
     if (!data.tagNumber || !data.species || !data.gender || !data.farmId) {
       return NextResponse.json(
@@ -61,7 +51,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
     // Verify farm ownership
     const farm = await prisma.farm.findFirst({
       where: {
@@ -69,14 +58,12 @@ export async function POST(request: NextRequest) {
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json(
         { error: 'Farm not found or not owned by user' },
         { status: 404 }
       )
     }
-
     // Check for duplicate tag number within the farm
     const existingAnimal = await prisma.animal.findFirst({
       where: {
@@ -84,14 +71,12 @@ export async function POST(request: NextRequest) {
         tagNumber: data.tagNumber
       }
     })
-
     if (existingAnimal) {
       return NextResponse.json(
         { error: 'An animal with this tag number already exists on this farm' },
         { status: 409 }
       )
     }
-
     // Create the animal
     const animalData = {
       userId: user.id,
@@ -114,14 +99,12 @@ export async function POST(request: NextRequest) {
       notes: data.notes || null,
       status: 'active'
     }
-
     const animal = await prisma.animal.create({
       data: animalData,
       include: {
         farm: { select: { name: true } }
       }
     })
-
     // If current weight is provided, create an initial weight record
     if (data.currentWeight) {
       await prisma.weightRecord.create({
@@ -135,7 +118,6 @@ export async function POST(request: NextRequest) {
         }
       })
     }
-
     return NextResponse.json(animal, { status: 201 })
   } catch (error) {
     console.error('Error creating animal:', error)

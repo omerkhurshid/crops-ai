@@ -4,10 +4,8 @@
  * Generates variable-rate application recommendations based on satellite analysis,
  * field variability, and agronomic best practices.
  */
-
 import type { FieldAnalysisResult } from './field-analysis-pipeline'
 import type { CropAlert } from './alert-system'
-
 export interface VariableRateRecommendation {
   id: string
   fieldId: string
@@ -48,7 +46,6 @@ export interface VariableRateRecommendation {
   }
   createdAt: string
 }
-
 export interface PrecisionAgPlan {
   farmId: string
   fieldId: string
@@ -82,7 +79,6 @@ export interface PrecisionAgPlan {
     }
   }
 }
-
 class PrecisionAgricultureEngine {
   /**
    * Generate comprehensive precision agriculture recommendations
@@ -93,19 +89,15 @@ class PrecisionAgricultureEngine {
     cropType: string = 'corn',
     season: string = '2025'
   ): Promise<PrecisionAgPlan> {
-    
     const recommendations = await Promise.all([
       this.generateFertilizerRecommendation(analysisResult),
       this.generateIrrigationRecommendation(analysisResult),
       this.generateSeedingRecommendation(analysisResult, cropType),
       this.generatePestManagementRecommendation(analysisResult)
     ])
-
     const validRecommendations = recommendations.filter(r => r !== null) as VariableRateRecommendation[]
-    
     const summary = this.calculatePlanSummary(validRecommendations)
     const implementation = this.createImplementationPlan(validRecommendations, cropType, season)
-
     return {
       farmId,
       fieldId: analysisResult.fieldId,
@@ -118,21 +110,17 @@ class PrecisionAgricultureEngine {
       implementation
     }
   }
-
   /**
    * Generate variable-rate fertilizer recommendations
    */
   private async generateFertilizerRecommendation(
     analysis: FieldAnalysisResult
   ): Promise<VariableRateRecommendation | null> {
-    
     if (analysis.vegetationHealth.stressIndicators.nutrient < 0.3) {
       return null // No significant nutrient stress
     }
-
     const baseNitrogenRate = 150 // lbs/acre
     const fieldArea = this.calculateFieldArea(analysis)
-    
     // Create application zones based on NDVI and stress indicators
     const applicationZones = [
       {
@@ -163,11 +151,9 @@ class PrecisionAgricultureEngine {
         coordinates: []
       }
     ]
-
     const totalQuantity = applicationZones.reduce((sum, zone) => 
       sum + (zone.area * zone.applicationRate), 0
     )
-
     return {
       id: `fertilizer_${analysis.fieldId}_${Date.now()}`,
       fieldId: analysis.fieldId,
@@ -219,21 +205,17 @@ class PrecisionAgricultureEngine {
       createdAt: new Date().toISOString()
     }
   }
-
   /**
    * Generate variable-rate irrigation recommendations
    */
   private async generateIrrigationRecommendation(
     analysis: FieldAnalysisResult
   ): Promise<VariableRateRecommendation | null> {
-    
     if (analysis.vegetationHealth.stressIndicators.drought < 0.4) {
       return null // No significant drought stress
     }
-
     const baseWaterRate = 1.0 // inches per week
     const fieldArea = this.calculateFieldArea(analysis)
-    
     const applicationZones = [
       {
         zoneId: 'drought_stress',
@@ -263,7 +245,6 @@ class PrecisionAgricultureEngine {
         coordinates: []
       }
     ]
-
     return {
       id: `irrigation_${analysis.fieldId}_${Date.now()}`,
       fieldId: analysis.fieldId,
@@ -317,7 +298,6 @@ class PrecisionAgricultureEngine {
       createdAt: new Date().toISOString()
     }
   }
-
   /**
    * Generate variable-rate seeding recommendations
    */
@@ -325,12 +305,10 @@ class PrecisionAgricultureEngine {
     analysis: FieldAnalysisResult,
     cropType: string
   ): Promise<VariableRateRecommendation | null> {
-    
     // Only recommend variable seeding for new plantings or replanting scenarios
     const standardSeeding = cropType === 'corn' ? 32000 : 
                            cropType === 'soybeans' ? 140000 : 35000
     const fieldArea = this.calculateFieldArea(analysis)
-
     const applicationZones = [
       {
         zoneId: 'high_potential',
@@ -360,7 +338,6 @@ class PrecisionAgricultureEngine {
         coordinates: []
       }
     ]
-
     return {
       id: `seeding_${analysis.fieldId}_${Date.now()}`,
       fieldId: analysis.fieldId,
@@ -414,20 +391,16 @@ class PrecisionAgricultureEngine {
       createdAt: new Date().toISOString()
     }
   }
-
   /**
    * Generate pest management recommendations
    */
   private async generatePestManagementRecommendation(
     analysis: FieldAnalysisResult
   ): Promise<VariableRateRecommendation | null> {
-    
     if (analysis.vegetationHealth.stressIndicators.disease < 0.5) {
       return null // No significant disease pressure
     }
-
     const fieldArea = this.calculateFieldArea(analysis)
-    
     return {
       id: `pest_mgmt_${analysis.fieldId}_${Date.now()}`,
       fieldId: analysis.fieldId,
@@ -500,19 +473,16 @@ class PrecisionAgricultureEngine {
       createdAt: new Date().toISOString()
     }
   }
-
   // Helper methods
   private calculateFieldArea(analysis: FieldAnalysisResult): number {
     // For demo, use estimated area - in production would calculate from actual boundaries
     return 50 + Math.random() * 100 // 50-150 acres
   }
-
   private calculatePlanSummary(recommendations: VariableRateRecommendation[]) {
     const totalCost = recommendations.reduce((sum, rec) => sum + rec.recommendation.estimatedCost, 0)
     const expectedRevenue = recommendations.reduce((sum, rec) => 
       sum + (rec.expectedOutcome.yieldIncrease * 50), 0 // $50 per % yield increase per acre
     )
-    
     return {
       totalCost,
       expectedRevenue,
@@ -521,7 +491,6 @@ class PrecisionAgricultureEngine {
       sustainabilityScore: 85 + Math.random() * 10 // 85-95 score
     }
   }
-
   private createImplementationPlan(
     recommendations: VariableRateRecommendation[], 
     cropType: string, 
@@ -563,6 +532,5 @@ class PrecisionAgricultureEngine {
     }
   }
 }
-
 export const precisionAgEngine = new PrecisionAgricultureEngine()
 export { PrecisionAgricultureEngine }

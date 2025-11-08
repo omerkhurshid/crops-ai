@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from '../../lib/auth-unified'
@@ -13,9 +12,7 @@ import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { ExpandableFarmRow } from '../../components/farms/expandable-farm-row'
 import { prisma } from '../../lib/prisma'
 // import { FarmFieldsMap } from '../../components/farm/farm-fields-map' // Temporarily disabled
-
 export const dynamic = 'force-dynamic'
-
 async function getUserFarms(userId: string) {
   try {
     const farms = await prisma.farm.findMany({
@@ -43,7 +40,6 @@ async function getUserFarms(userId: string) {
       },
       orderBy: { name: 'asc' }
     })
-    
     return farms.map(farm => ({
       id: farm.id,
       name: farm.name,
@@ -65,21 +61,17 @@ async function getUserFarms(userId: string) {
     return []
   }
 }
-
 export default function FarmsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [userFarms, setUserFarms] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchFarms() {
       try {
         const response = await fetch('/api/farms')
@@ -93,10 +85,8 @@ export default function FarmsPage() {
         setIsLoading(false)
       }
     }
-
     fetchFarms()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -107,14 +97,11 @@ export default function FarmsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   return (
     <DashboardLayout>
-      
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
           {/* Page Header - Consistent with other pages */}
@@ -123,7 +110,6 @@ export default function FarmsPage() {
             <p className="text-lg text-sage-600 mb-6">
               View and manage all your farm locations
             </p>
-            
             <Link href="/farms/create">
               <button className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
                 <Plus className="h-5 w-5" />
@@ -131,7 +117,6 @@ export default function FarmsPage() {
               </button>
             </Link>
           </div>
-        
           {/* Stats Cards - Mobile Optimized (Removed Regions) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 lg:mb-16">
             <MetricCard
@@ -141,7 +126,6 @@ export default function FarmsPage() {
               icon={<Sprout className="h-6 w-6" />}
               variant="soft"
             />
-
             <MetricCard
               title="Total Area"
               value={`${userFarms.reduce((total: number, farm: any) => total + (farm.totalArea || 0), 0).toFixed(1)} ha`}
@@ -149,7 +133,6 @@ export default function FarmsPage() {
               icon={<MapPin className="h-6 w-6" />}
               variant="glass"
             />
-
             <MetricCard
               title="Active Fields"
               value={userFarms.reduce((total: number, farm: any) => total + (farm.fieldsCount || 0), 0).toString()}
@@ -158,7 +141,6 @@ export default function FarmsPage() {
               variant="glow"
             />
           </div>
-
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">
@@ -198,7 +180,6 @@ export default function FarmsPage() {
                   ))}
                 </div>
               ) : null}
-              
               {userFarms.length > 0 && (
                 /* Desktop Table Layout */
                 <div className="hidden md:block overflow-x-auto">
@@ -223,7 +204,6 @@ export default function FarmsPage() {
                   </table>
                 </div>
               )}
-              
               {userFarms.length === 0 && (
                 <div className="p-8">
                   <EmptyStateCard>
@@ -233,7 +213,6 @@ export default function FarmsPage() {
               )}
             </ModernCardContent>
           </ModernCard>
-
         </div>
       </div>
     </DashboardLayout>

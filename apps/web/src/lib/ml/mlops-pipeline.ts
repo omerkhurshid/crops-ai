@@ -4,10 +4,8 @@
  * Provides infrastructure for training, versioning, deploying, and monitoring
  * machine learning models in the Crops.AI platform.
  */
-
 import { auditLogger } from '../logging/audit-logger'
 // Note: File system operations are handled server-side only
-
 export interface ModelMetadata {
   id: string
   name: string
@@ -23,7 +21,6 @@ export interface ModelMetadata {
   parameters: Record<string, any>
   status: 'training' | 'validating' | 'staging' | 'production' | 'archived'
 }
-
 export interface ModelMetrics {
   accuracy?: number
   precision?: number
@@ -34,7 +31,6 @@ export interface ModelMetrics {
   r2Score?: number
   customMetrics?: Record<string, number>
 }
-
 export interface TrainingConfig {
   datasetId: string
   modelType: ModelMetadata['type']
@@ -47,12 +43,10 @@ export interface TrainingConfig {
   learningRate?: number
   callbacks?: TrainingCallback[]
 }
-
 export interface TrainingCallback {
   type: 'early_stopping' | 'checkpoint' | 'lr_scheduler' | 'tensorboard' | 'custom'
   config: Record<string, any>
 }
-
 export interface ModelArtifact {
   modelId: string
   version: string
@@ -62,7 +56,6 @@ export interface ModelArtifact {
   format: 'h5' | 'pkl' | 'pt' | 'onnx' | 'savedmodel'
   compressionType?: 'gzip' | 'zip' | 'none'
 }
-
 export interface DeploymentConfig {
   modelId: string
   version: string
@@ -82,14 +75,12 @@ export interface DeploymentConfig {
   endpointUrl?: string
   apiKey?: string
 }
-
 export interface PredictionRequest {
   modelId: string
   version?: string
   input: any
   metadata?: Record<string, any>
 }
-
 export interface PredictionResponse {
   modelId: string
   version: string
@@ -99,7 +90,6 @@ export interface PredictionResponse {
   timestamp: Date
   metadata?: Record<string, any>
 }
-
 export interface ModelExperiment {
   id: string
   name: string
@@ -110,7 +100,6 @@ export interface ModelExperiment {
   createdAt: Date
   status: 'active' | 'completed' | 'failed'
 }
-
 export interface ExperimentRun {
   id: string
   experimentId: string
@@ -122,17 +111,14 @@ export interface ExperimentRun {
   status: 'running' | 'completed' | 'failed'
   logs?: string[]
 }
-
 class MLOpsPipeline {
   private readonly modelsBasePath: string
   private readonly experimentsBasePath: string
   private activeModels: Map<string, any> = new Map()
-
   constructor() {
     this.modelsBasePath = process.env.ML_MODELS_PATH || './ml_models'
     this.experimentsBasePath = process.env.ML_EXPERIMENTS_PATH || './ml_experiments'
   }
-
   /**
    * Register a new model in the MLOps system
    */
@@ -146,7 +132,6 @@ class MLOpsPipeline {
     try {
       const modelId = this.generateModelId(name)
       const version = '1.0.0'
-
       const metadata: ModelMetadata = {
         id: modelId,
         name,
@@ -162,13 +147,10 @@ class MLOpsPipeline {
         parameters: {},
         status: 'training'
       }
-
       // Create model directory (server-side only)
       if (typeof window === 'undefined') {
         // Server-side model storage would be handled here
-
       }
-
       await auditLogger.logML(
         'model_registered',
         modelId,
@@ -176,9 +158,7 @@ class MLOpsPipeline {
         undefined,
         { name, type, framework }
       )
-
       return metadata
-
     } catch (error) {
       await auditLogger.logSystem(
         'model_registration_failed',
@@ -189,7 +169,6 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   /**
    * Train a model with the specified configuration
    */
@@ -199,7 +178,6 @@ class MLOpsPipeline {
   ): Promise<ExperimentRun> {
     try {
       const startTime = Date.now()
-      
       await auditLogger.logML(
         'training_started',
         modelId,
@@ -207,14 +185,12 @@ class MLOpsPipeline {
         undefined,
         { config }
       )
-
       // Create experiment
       const experiment = await this.createExperiment(
         modelId,
         `Training ${modelId}`,
         'Automated training run'
       )
-
       // Initialize run
       const run: ExperimentRun = {
         id: this.generateRunId(),
@@ -226,24 +202,18 @@ class MLOpsPipeline {
         status: 'running',
         logs: []
       }
-
       // Simulate training process (in production, this would call actual ML frameworks)
       const trainedModel = await this.executeTraining(modelId, config, run)
-
       // Evaluate model
       const metrics = await this.evaluateModel(trainedModel, config)
       run.metrics = metrics
-
       // Save model artifacts
       const artifact = await this.saveModelArtifact(modelId, trainedModel)
       run.artifacts.push(artifact.artifactPath)
-
       // Update run status
       run.endTime = new Date()
       run.status = 'completed'
-
       const duration = Date.now() - startTime
-
       await auditLogger.logML(
         'training_completed',
         modelId,
@@ -251,9 +221,7 @@ class MLOpsPipeline {
         duration,
         { metrics, experimentId: experiment.id }
       )
-
       return run
-
     } catch (error) {
       await auditLogger.logSystem(
         'model_training_failed',
@@ -267,14 +235,12 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   /**
    * Deploy a trained model to the specified environment
    */
   async deployModel(config: DeploymentConfig): Promise<string> {
     try {
       const { modelId, version, environment } = config
-
       await auditLogger.logML(
         'deployment_started',
         modelId,
@@ -282,22 +248,16 @@ class MLOpsPipeline {
         undefined,
         { version, environment }
       )
-
       // Load model artifact
       const model = await this.loadModel(modelId, version)
-
       // Create deployment endpoint
       const endpointUrl = await this.createEndpoint(config)
-
       // Deploy model to endpoint
       await this.deployToEndpoint(model, endpointUrl, config)
-
       // Update model status
       await this.updateModelStatus(modelId, version, 'production')
-
       // Register deployment
       await this.registerDeployment(modelId, version, environment, endpointUrl)
-
       await auditLogger.logML(
         'deployment_completed',
         modelId,
@@ -305,9 +265,7 @@ class MLOpsPipeline {
         undefined,
         { version, environment, endpointUrl }
       )
-
       return endpointUrl
-
     } catch (error) {
       await auditLogger.logSystem(
         'model_deployment_failed',
@@ -321,7 +279,6 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   /**
    * Make a prediction using a deployed model
    */
@@ -329,25 +286,18 @@ class MLOpsPipeline {
     try {
       const startTime = Date.now()
       const { modelId, version, input } = request
-
       // Get active model
       const model = await this.getActiveModel(modelId, version)
-
       if (!model) {
         throw new Error(`Model ${modelId} version ${version || 'latest'} not found or not active`)
       }
-
       // Preprocess input
       const processedInput = await this.preprocessInput(model, input)
-
       // Make prediction
       const prediction = await this.executePrediction(model, processedInput)
-
       // Postprocess output
       const output = await this.postprocessOutput(model, prediction)
-
       const processingTime = Date.now() - startTime
-
       const response: PredictionResponse = {
         modelId,
         version: model.version,
@@ -357,7 +307,6 @@ class MLOpsPipeline {
         timestamp: new Date(),
         metadata: request.metadata
       }
-
       await auditLogger.logML(
         'prediction_made',
         modelId,
@@ -368,9 +317,7 @@ class MLOpsPipeline {
           confidence: response.confidence 
         }
       )
-
       return response
-
     } catch (error) {
       await auditLogger.logSystem(
         'prediction_failed',
@@ -384,7 +331,6 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   /**
    * Monitor model performance in production
    */
@@ -411,16 +357,13 @@ class MLOpsPipeline {
           conceptDrift: 0.02
         }
       }
-
       const predictionStats = {
         totalPredictions: 15420,
         avgLatency: 45, // milliseconds
         errorRate: 0.003,
         lastPrediction: new Date()
       }
-
       const driftDetected = performanceMetrics.customMetrics!.dataDrift > 0.1
-      
       const recommendations = []
       if (driftDetected) {
         recommendations.push('Data drift detected - consider retraining the model')
@@ -431,7 +374,6 @@ class MLOpsPipeline {
       if (predictionStats.errorRate > 0.01) {
         recommendations.push('Error rate above threshold - investigate recent predictions')
       }
-
       await auditLogger.logML(
         'model_monitored',
         modelId,
@@ -439,14 +381,12 @@ class MLOpsPipeline {
         undefined,
         { performanceMetrics, predictionStats, driftDetected }
       )
-
       return {
         performanceMetrics,
         predictionStats,
         driftDetected,
         recommendations
       }
-
     } catch (error) {
       await auditLogger.logSystem(
         'model_monitoring_failed',
@@ -460,7 +400,6 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   /**
    * Create A/B test for model comparison
    */
@@ -481,7 +420,6 @@ class MLOpsPipeline {
     const testId = `ab_test_${Date.now()}`
     const startTime = new Date()
     const endTime = new Date(startTime.getTime() + duration)
-
     await auditLogger.logML(
       'ab_test_created',
       `${modelAId}_vs_${modelBId}`,
@@ -489,7 +427,6 @@ class MLOpsPipeline {
       undefined,
       { testId, trafficSplit, duration }
     )
-
     return {
       testId,
       modelA: modelAId,
@@ -500,7 +437,6 @@ class MLOpsPipeline {
       status: 'active'
     }
   }
-
   /**
    * Rollback a model deployment
    */
@@ -517,20 +453,15 @@ class MLOpsPipeline {
         undefined,
         { currentVersion, targetVersion }
       )
-
       // Load target version
       const targetModel = await this.loadModel(modelId, targetVersion)
-
       // Get current deployment config
       const deploymentConfig = await this.getDeploymentConfig(modelId, currentVersion)
-
       // Deploy target version
       await this.deployToEndpoint(targetModel, deploymentConfig.endpointUrl!, deploymentConfig)
-
       // Update model status
       await this.updateModelStatus(modelId, currentVersion, 'archived')
       await this.updateModelStatus(modelId, targetVersion, 'production')
-
       await auditLogger.logML(
         'rollback_completed',
         modelId,
@@ -538,7 +469,6 @@ class MLOpsPipeline {
         undefined,
         { currentVersion, targetVersion }
       )
-
     } catch (error) {
       await auditLogger.logSystem(
         'model_rollback_failed',
@@ -552,26 +482,20 @@ class MLOpsPipeline {
       throw error
     }
   }
-
   // Private helper methods
-
   private generateModelId(name: string): string {
     const sanitized = name.toLowerCase().replace(/[^a-z0-9]/g, '_')
     const timestamp = Date.now()
     return `model_${sanitized}_${timestamp}`
   }
-
   private generateRunId(): string {
     return `run_${Date.now()}_${Math.random().toString(36).substring(7)}`
   }
-
   private async saveModelMetadata(metadata: ModelMetadata): Promise<void> {
     // Server-side only operation
     if (typeof window === 'undefined') {
-
     }
   }
-
   private async createExperiment(
     modelId: string,
     name: string,
@@ -587,7 +511,6 @@ class MLOpsPipeline {
       status: 'active'
     }
   }
-
   private async executeTraining(
     modelId: string,
     config: TrainingConfig,
@@ -599,23 +522,18 @@ class MLOpsPipeline {
     run.logs?.push(`Using ${config.framework} framework`)
     run.logs?.push(`Dataset: ${config.datasetId}`)
     run.logs?.push(`Hyperparameters: ${JSON.stringify(config.hyperparameters)}`)
-    
     // Simulate training progress
     if (config.epochs) {
       for (let epoch = 1; epoch <= config.epochs; epoch++) {
         run.logs?.push(`Epoch ${epoch}/${config.epochs} - loss: ${(Math.random() * 0.5).toFixed(4)}`)
       }
     }
-    
     run.logs?.push('Training completed successfully')
-    
     return { modelId, trainedAt: new Date(), config }
   }
-
   private async evaluateModel(model: any, config: TrainingConfig): Promise<ModelMetrics> {
     // In production, this would run actual model evaluation
     // For now, return simulated metrics based on model type
-    
     if (config.modelType === 'classification') {
       return {
         accuracy: 0.85 + Math.random() * 0.1,
@@ -637,15 +555,11 @@ class MLOpsPipeline {
       }
     }
   }
-
   private async saveModelArtifact(modelId: string, model: any): Promise<ModelArtifact> {
     const version = `v${Date.now()}`
-    
     // In production, serialize and save the actual model (server-side only)
     if (typeof window === 'undefined') {
-
     }
-    
     return {
       modelId,
       version,
@@ -655,42 +569,32 @@ class MLOpsPipeline {
       format: 'pkl'
     }
   }
-
   private async loadModel(modelId: string, version?: string): Promise<any> {
     // Check cache first
     const cacheKey = `${modelId}_${version || 'latest'}`
     if (this.activeModels.has(cacheKey)) {
       return this.activeModels.get(cacheKey)
     }
-
     // In production, load from storage and deserialize
     const mockModel = {
       modelId,
       version: version || '1.0.0',
       loadedAt: new Date()
     }
-
     // Cache the model
     this.activeModels.set(cacheKey, mockModel)
-    
     return mockModel
   }
-
   private async createEndpoint(config: DeploymentConfig): Promise<string> {
     // In production, this would create actual cloud endpoints
     return `https://api.crops.ai/ml/v1/models/${config.modelId}/predict`
   }
-
   private async deployToEndpoint(model: any, endpointUrl: string, config: DeploymentConfig): Promise<void> {
     // In production, deploy to cloud services like AWS SageMaker, GCP AI Platform, etc.
-
   }
-
   private async updateModelStatus(modelId: string, version: string, status: ModelMetadata['status']): Promise<void> {
     // Update model metadata with new status
-
   }
-
   private async registerDeployment(
     modelId: string,
     version: string,
@@ -698,18 +602,14 @@ class MLOpsPipeline {
     endpointUrl: string
   ): Promise<void> {
     // Register deployment in database
-
   }
-
   private async getActiveModel(modelId: string, version?: string): Promise<any> {
     return this.loadModel(modelId, version)
   }
-
   private async preprocessInput(model: any, input: any): Promise<any> {
     // In production, apply model-specific preprocessing
     return input
   }
-
   private async executePrediction(model: any, input: any): Promise<any> {
     // In production, run actual model inference
     return {
@@ -717,12 +617,10 @@ class MLOpsPipeline {
       raw_output: [Math.random(), Math.random(), Math.random()]
     }
   }
-
   private async postprocessOutput(model: any, prediction: any): Promise<any> {
     // In production, apply model-specific postprocessing
     return prediction.prediction
   }
-
   private calculateConfidence(prediction: any): number {
     // Calculate confidence based on prediction type
     if (prediction.raw_output && Array.isArray(prediction.raw_output)) {
@@ -731,7 +629,6 @@ class MLOpsPipeline {
     }
     return 0.85 + Math.random() * 0.1
   }
-
   private async getDeploymentConfig(modelId: string, version: string): Promise<DeploymentConfig> {
     // In production, fetch from database
     return {
@@ -752,7 +649,6 @@ class MLOpsPipeline {
     }
   }
 }
-
 // Export singleton instance
 export const mlOpsPipeline = new MLOpsPipeline()
 export { MLOpsPipeline }

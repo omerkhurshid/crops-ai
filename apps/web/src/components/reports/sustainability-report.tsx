@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -13,7 +12,6 @@ import {
   Award, CheckCircle, AlertCircle
 } from 'lucide-react';
 import { ensureArray } from '../../lib/utils';
-
 interface SustainabilityData {
   overview: {
     sustainabilityScore: number;
@@ -70,20 +68,16 @@ interface SustainabilityData {
     industry: { score: number; rating: string };
   };
 }
-
 interface SustainabilityReportProps {
   farmId: string;
 }
-
 export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
   const [data, setData] = useState<SustainabilityData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-
   useEffect(() => {
     fetchSustainabilityData();
   }, [farmId]);
-
   const fetchSustainabilityData = async () => {
     setLoading(true);
     try {
@@ -101,9 +95,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       setLoading(false);
     }
   };
-
   // Removed mock data function - only show real data from API
-
   const generateReport = async () => {
     setGenerating(true);
     try {
@@ -116,7 +108,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           format: 'pdf'
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -134,19 +125,16 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       setGenerating(false);
     }
   };
-
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
-
   const getScoreBg = (score: number) => {
     if (score >= 80) return 'bg-green-50 border-green-200';
     if (score >= 60) return 'bg-yellow-50 border-yellow-200';
     return 'bg-red-50 border-red-200';
   };
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-700';
@@ -155,7 +143,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       default: return 'bg-gray-100 text-gray-700';
     }
   };
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -165,7 +152,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       </div>
     );
   }
-
   if (!data) {
     return (
       <div className="text-center py-8">
@@ -174,7 +160,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -188,7 +173,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           {generating ? 'Generating...' : 'Download Report'}
         </Button>
       </div>
-
       {/* Overall Sustainability Score */}
       <div className={`p-6 rounded-lg border-2 ${getScoreBg(data.overview.sustainabilityScore)}`}>
         <div className="flex items-center justify-between">
@@ -209,7 +193,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           </div>
         </div>
       </div>
-
       {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
@@ -233,7 +216,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           <p className="text-xs text-gray-600">Renewable Energy</p>
         </div>
       </div>
-
       {/* Detailed Analysis Tabs */}
       <Tabs defaultValue="environmental" className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
@@ -242,7 +224,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           <TabsTrigger value="certifications">Certifications</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
         </TabsList>
-
         <TabsContent value="environmental" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
@@ -273,7 +254,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-green-600 flex items-center gap-2">
@@ -301,7 +281,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-amber-600 flex items-center gap-2">
@@ -332,7 +311,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="practices" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -360,7 +338,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Recommended Practices</CardTitle>
@@ -387,7 +364,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="certifications">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -413,7 +389,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -439,7 +414,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="benchmarks">
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -457,7 +431,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-center">National Percentile</CardTitle>
@@ -472,7 +445,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-center">Industry Rating</CardTitle>
@@ -488,7 +460,6 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                 </CardContent>
               </Card>
             </div>
-
             <div className="p-4 bg-green-50 rounded-lg">
               <p className="text-sm text-gray-700">
                 <strong>Sustainability Summary:</strong> Your farm demonstrates exceptional commitment to sustainable practices, 

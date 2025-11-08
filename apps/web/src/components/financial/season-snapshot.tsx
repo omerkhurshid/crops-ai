@@ -1,12 +1,10 @@
 'use client'
-
 import React from 'react'
 import { ModernCard, ModernCardContent, MetricCard } from '@/components/ui/modern-card'
 import { Badge } from '@/components/ui/badge'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '@/lib/tooltip-content'
 import { TrendingUp, TrendingDown, DollarSign, BarChart3, Wallet, PiggyBank, Calculator } from 'lucide-react'
-
 interface FinancialSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -17,25 +15,21 @@ interface FinancialSummary {
   profitChange: number;
   transactionCount: number;
 }
-
 interface Farm {
   id: string;
   name: string;
   totalArea: number;
 }
-
 interface DateRange {
   start: Date;
   end: Date;
 }
-
 interface SeasonSnapshotProps {
   summary: FinancialSummary;
   farm: Farm;
   dateRange: DateRange;
   onDateRangeChange: (range: DateRange) => void;
 }
-
 export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: SeasonSnapshotProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -45,13 +39,10 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
       maximumFractionDigits: 0,
     }).format(amount);
   };
-
   const formatPercentage = (percentage: number) => {
     return `${percentage.toFixed(1)}%`;
   };
-
   const acreage = farm.totalArea * 2.47105; // Convert hectares to acres
-
   return (
     <div className="space-y-6">
       {/* Main Profit Overview */}
@@ -68,7 +59,6 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
               </Badge>
             </div>
           </div>
-
         {/* Main Profit Display */}
         <div className="text-center py-6 border-b border-gray-200">
           <p className="text-sm text-gray-600 mb-2">Net Profit</p>
@@ -94,7 +84,6 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
         </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
@@ -103,14 +92,12 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           icon={<TrendingUp className="h-6 w-6" />}
           variant="glass"
         />
-        
         <MetricCard
           title="Total Expenses"
           value={formatCurrency(summary.totalExpenses)}
           icon={<TrendingDown className="h-6 w-6" />}
           variant="glow"
         />
-        
         <MetricCard
           title="Profit Margin"
           value={formatPercentage(summary.profitMargin)}
@@ -118,7 +105,6 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
           icon={<BarChart3 className="h-6 w-6" />}
           variant="glass"
         />
-        
         <MetricCard
           title="Profit per Acre"
           value={formatCurrency(summary.profitPerAcre)}

@@ -5,12 +5,10 @@
  * Resolution: 10m (Sentinel-2) with processed agricultural indices
  * Cost: $150/month for 100k requests (vs $5k+ for Planet Labs)
  */
-
 export interface AgroMonitoringConfig {
   apiKey: string
   baseUrl: string
 }
-
 export interface PolygonRequest {
   name: string
   geo_json: {
@@ -22,7 +20,6 @@ export interface PolygonRequest {
     }
   }
 }
-
 export interface AgroSatelliteImage {
   dt: number // Unix timestamp
   type: 'Landsat 8' | 'Sentinel-2'
@@ -65,7 +62,6 @@ export interface AgroSatelliteImage {
     }
   }
 }
-
 export interface AgroWeatherData {
   dt: number
   temperature: number
@@ -89,25 +85,21 @@ export interface AgroWeatherData {
     '1h': number
   }
 }
-
 export interface SoilData {
   dt: number
   t0: number // Surface temperature (K)
   t10: number // Soil temperature at 10cm depth (K)  
   moisture: number // Soil moisture m3/m3
 }
-
 export class AgroMonitoringService {
   private config: AgroMonitoringConfig
   private readonly REQUEST_TIMEOUT = 30000
-
   constructor(config: AgroMonitoringConfig) {
     this.config = {
       ...config,
       baseUrl: config.baseUrl || 'http://api.agromonitoring.com/agro/1.0'
     }
   }
-
   /**
    * Create a polygon (field boundary) for monitoring
    */
@@ -121,18 +113,15 @@ export class AgroMonitoringService {
         body: JSON.stringify(fieldData),
         signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
       })
-
       if (!response.ok) {
         throw new Error(`Failed to create polygon: ${response.statusText}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('AgroMonitoring polygon creation failed:', error)
       throw error
     }
   }
-
   /**
    * Get available satellite images for a field
    */
@@ -144,22 +133,18 @@ export class AgroMonitoringService {
     try {
       const url = `${this.config.baseUrl}/image/search?` + 
         `start=${start}&end=${end}&polyid=${polygonId}&appid=${this.config.apiKey}`
-
       const response = await fetch(url, {
         signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
       })
-
       if (!response.ok) {
         throw new Error(`Failed to get satellite images: ${response.statusText}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('AgroMonitoring satellite search failed:', error)
       throw error
     }
   }
-
   /**
    * Get current weather for field
    */
@@ -169,18 +154,15 @@ export class AgroMonitoringService {
         `${this.config.baseUrl}/weather?polyid=${polygonId}&appid=${this.config.apiKey}`,
         { signal: AbortSignal.timeout(this.REQUEST_TIMEOUT) }
       )
-
       if (!response.ok) {
         throw new Error(`Failed to get weather: ${response.statusText}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('AgroMonitoring weather request failed:', error)
       throw error
     }
   }
-
   /**
    * Get weather forecast for field
    */
@@ -190,11 +172,9 @@ export class AgroMonitoringService {
         `${this.config.baseUrl}/weather/forecast?polyid=${polygonId}&appid=${this.config.apiKey}`,
         { signal: AbortSignal.timeout(this.REQUEST_TIMEOUT) }
       )
-
       if (!response.ok) {
         throw new Error(`Failed to get forecast: ${response.statusText}`)
       }
-
       const data = await response.json()
       return data.list || []
     } catch (error) {
@@ -202,7 +182,6 @@ export class AgroMonitoringService {
       throw error
     }
   }
-
   /**
    * Get soil data for field
    */
@@ -212,18 +191,15 @@ export class AgroMonitoringService {
         `${this.config.baseUrl}/soil?polyid=${polygonId}&appid=${this.config.apiKey}`,
         { signal: AbortSignal.timeout(this.REQUEST_TIMEOUT) }
       )
-
       if (!response.ok) {
         throw new Error(`Failed to get soil data: ${response.statusText}`)
       }
-
       return await response.json()
     } catch (error) {
       console.error('AgroMonitoring soil request failed:', error)
       throw error
     }
   }
-
   /**
    * Calculate comprehensive field health from real satellite data
    */
@@ -232,30 +208,23 @@ export class AgroMonitoringService {
       // Get latest satellite imagery (past 30 days)
       const endDate = Math.floor(Date.now() / 1000)
       const startDate = endDate - (30 * 24 * 60 * 60) // 30 days ago
-
       const images = await this.getSatelliteImages(polygonId, startDate, endDate)
-      
       if (images.length === 0) {
         throw new Error('No recent satellite images available')
       }
-
       // Get the latest clear image (< 30% cloud cover)
       const clearImages = images
         .filter(img => img.cl < 30 && img.dc > 70)
         .sort((a, b) => b.dt - a.dt)
-
       if (clearImages.length === 0) {
         throw new Error('No clear satellite images in the past 30 days')
       }
-
       const latestImage = clearImages[0]
       const ndviStats = latestImage.stats.ndvi
       const eviStats = latestImage.stats.evi
-
       // Get current weather for context
       const weather = await this.getCurrentWeather(polygonId)
       const soil = await this.getSoilData(polygonId)
-
       // Calculate health score based on real data
       const healthScore = this.calculateHealthScore(ndviStats, eviStats, weather, soil)
       const stressLevel = this.determineStressLevel(healthScore, ndviStats.mean)
@@ -266,7 +235,6 @@ export class AgroMonitoringService {
         soil, 
         ndviStats
       )
-
       return {
         healthScore,
         stressLevel,
@@ -305,7 +273,6 @@ export class AgroMonitoringService {
       throw error
     }
   }
-
   /**
    * Calculate health score from multiple real data sources
    */
@@ -316,35 +283,29 @@ export class AgroMonitoringService {
     soil: SoilData
   ): number {
     let score = 0
-    
     // NDVI contribution (40% of score)
     if (ndvi.mean > 0.8) score += 40
     else if (ndvi.mean > 0.6) score += 32
     else if (ndvi.mean > 0.4) score += 24
     else if (ndvi.mean > 0.2) score += 16
     else score += 8
-
     // EVI contribution (30% of score)  
     if (evi.mean > 0.5) score += 30
     else if (evi.mean > 0.3) score += 24
     else if (evi.mean > 0.2) score += 18
     else score += 12
-
     // Soil moisture contribution (20% of score)
     if (soil.moisture > 0.3) score += 20
     else if (soil.moisture > 0.2) score += 16
     else if (soil.moisture > 0.1) score += 12
     else score += 8
-
     // Weather stress factors (10% of score)
     const tempC = weather.temperature - 273.15
     if (tempC > 35 || tempC < 0) score += 5  // Temperature stress
     else if (tempC > 30 || tempC < 5) score += 7
     else score += 10
-
     return Math.min(100, score)
   }
-
   /**
    * Determine stress level from health score and NDVI
    */
@@ -358,7 +319,6 @@ export class AgroMonitoringService {
     if (healthScore > 40) return 'high'
     return 'severe'
   }
-
   /**
    * Generate actionable recommendations based on real data
    */
@@ -370,54 +330,42 @@ export class AgroMonitoringService {
     ndvi: any
   ): Promise<string[]> {
     const recommendations: string[] = []
-    
     // Irrigation recommendations based on soil moisture
     if (soil.moisture < 0.15) {
       recommendations.push('🚰 Soil moisture critically low - consider irrigation within 24 hours')
     } else if (soil.moisture < 0.25) {
       recommendations.push('💧 Monitor soil moisture closely - irrigation may be needed soon')
     }
-
     // Temperature stress recommendations
     const tempC = weather.temperature - 273.15
     if (tempC > 35) {
       recommendations.push('🌡️ High temperature stress detected - avoid midday applications')
     }
-
     // NDVI-based recommendations
     if (ndvi.mean < 0.4 && ndvi.std > 0.2) {
       recommendations.push('🌱 Variable plant health detected - scout for pest/disease issues')
     }
-
     // Weather-based recommendations
     if (weather.pop > 60) {
       recommendations.push('🌧️ Rain likely in next 24 hours - postpone spraying operations')
     }
-
     if (recommendations.length === 0) {
       recommendations.push('✅ Field conditions look good - maintain current management')
     }
-
     return recommendations
   }
-
   private calculateConfidence(image: AgroSatelliteImage, weather: AgroWeatherData): number {
     let confidence = 100
-    
     // Reduce confidence for cloudy images
     confidence -= image.cl * 0.5
-    
     // Reduce confidence for low data coverage  
     confidence -= (100 - image.dc) * 0.3
-    
     // Reduce confidence for old data
     const daysOld = (Date.now() / 1000 - image.dt) / (24 * 60 * 60)
     confidence -= Math.min(daysOld * 2, 30)
-    
     return Math.max(0, Math.round(confidence))
   }
 }
-
 interface FieldHealthAssessment {
   healthScore: number
   stressLevel: 'none' | 'low' | 'moderate' | 'high' | 'severe'

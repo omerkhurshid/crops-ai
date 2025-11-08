@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -13,11 +12,9 @@ import {
 import { InfoTooltip } from '../ui/info-tooltip'
 import { LoadingCard } from '../ui/loading'
 import { ErrorBoundary } from '../ui/error-boundary'
-
 interface FarmerFocusedDashboardProps {
   farmId: string
 }
-
 interface SimpleFieldHealth {
   fieldId: string
   fieldName: string
@@ -36,29 +33,24 @@ interface SimpleFieldHealth {
     daysUntil: number
   }
 }
-
 const healthColors = {
   healthy: 'bg-green-100 text-green-800 border-green-200',
   watch: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   action_needed: 'bg-red-100 text-red-800 border-red-200'
 }
-
 const yieldColors = {
   excellent: 'text-green-600',
   good: 'text-blue-600',
   concerning: 'text-orange-600',
   poor: 'text-red-600'
 }
-
 export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) {
   const [fields, setFields] = useState<SimpleFieldHealth[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedField, setSelectedField] = useState<string | null>(null)
-
   useEffect(() => {
     fetchSimpleHealthData()
   }, [farmId])
-
   const fetchSimpleHealthData = async () => {
     setLoading(true)
     try {
@@ -66,7 +58,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       const response = await fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`)
       if (response.ok) {
         const data = await response.json()
-        
         // Transform real API data into farmer-friendly format
         const transformedFields = data.fieldAnalysis?.map((field: any) => ({
           fieldId: field.fieldId,
@@ -86,7 +77,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             daysUntil: field.healthScore < 60 ? 1 : field.healthScore < 80 ? 3 : 7
           }
         })) || []
-        
         setFields(transformedFields.length > 0 ? transformedFields : getEmptyStateData())
       } else {
         // Fallback to empty state if API fails
@@ -99,13 +89,11 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       setLoading(false)
     }
   }
-
   const getEmptyStateData = (): SimpleFieldHealth[] => {
     // Return empty array when no real data is available
     // This will trigger the appropriate empty state UI
     return []
   }
-
   const getHealthIcon = (stressLevel: string) => {
     switch (stressLevel) {
       case 'healthy': return <CheckCircle2 className="h-5 w-5 text-green-600" />
@@ -114,13 +102,11 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       default: return <MinusCircle className="h-5 w-5 text-gray-400" />
     }
   }
-
   const getYieldIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="h-4 w-4 text-green-600" />
     if (change < 0) return <TrendingDown className="h-4 w-4 text-red-600" />
     return <Activity className="h-4 w-4 text-gray-600" />
   }
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800'
@@ -129,13 +115,11 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   const selectedFieldData = fields.find(f => f.fieldId === selectedField) || fields[0]
   const totalArea = fields.reduce((sum, f) => sum + f.area, 0)
   const avgHealth = fields.reduce((sum, f) => sum + f.healthScore, 0) / fields.length
   const fieldsNeedingAction = fields.filter(f => f.stressLevel === 'action_needed').length
   const urgentTasks = fields.filter(f => f.nextAction.priority === 'high').length
-
   if (loading) {
     return (
       <LoadingCard 
@@ -145,7 +129,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       />
     )
   }
-
   return (
     <ErrorBoundary>
       <div className="space-y-6">
@@ -164,7 +147,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               </div>
             </CardContent>
           </Card>
-
           <Card className="border-2">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -179,7 +161,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               </div>
             </CardContent>
           </Card>
-
           <Card className="border-2">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -193,7 +174,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               </div>
             </CardContent>
           </Card>
-
           <Card className="border-2">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -208,7 +188,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             </CardContent>
           </Card>
         </div>
-
         {/* Field Overview Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {fields.map((field) => (
@@ -242,7 +221,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                       </Badge>
                     </div>
                   </div>
-
                   {/* Yield Outlook */}
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Yield Outlook</span>
@@ -256,7 +234,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                       </span>
                     </div>
                   </div>
-
                   {/* Next Action */}
                   <div className="pt-2 border-t border-gray-200">
                     <div className="flex items-center justify-between">
@@ -267,7 +244,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                     </div>
                     <p className="text-sm mt-1">{field.nextAction.task}</p>
                   </div>
-
                   {/* Issues Count */}
                   {field.mainIssues.length > 0 && (
                     <div className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
@@ -279,7 +255,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             </Card>
           ))}
         </div>
-
         {/* Detailed Field View */}
         {selectedFieldData && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -313,7 +288,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 )}
               </CardContent>
             </Card>
-
             {/* Action Plan */}
             <Card className="border-2">
               <CardHeader>
@@ -334,7 +308,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                     </div>
                   ))}
                 </div>
-
                 <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="h-4 w-4 text-green-600" />
@@ -349,7 +322,6 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             </Card>
           </div>
         )}
-
         {/* Quick Actions */}
         <Card className="border-2">
           <CardHeader>

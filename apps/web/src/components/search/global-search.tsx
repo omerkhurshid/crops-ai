@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useRef } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -8,7 +7,6 @@ import {
   CloudRain, DollarSign, Users, FileText, ChevronRight,
   X, Zap, BarChart3, Target, Settings, Plus
 } from 'lucide-react'
-
 interface SearchResult {
   id: string
   title: string
@@ -24,14 +22,12 @@ interface SearchResult {
   icon: React.ReactNode
   relevance: number
 }
-
 interface GlobalSearchProps {
   placeholder?: string
   showFilters?: boolean
   onResultSelect?: (result: SearchResult) => void
   className?: string
 }
-
 const searchFilters = [
   { id: 'all', label: 'All', icon: <Search className="h-3 w-3" /> },
   { id: 'farm', label: 'Farms', icon: <MapPin className="h-3 w-3" /> },
@@ -41,7 +37,6 @@ const searchFilters = [
   { id: 'financial', label: 'Financial', icon: <DollarSign className="h-3 w-3" /> },
   { id: 'help', label: 'Help', icon: <FileText className="h-3 w-3" /> }
 ]
-
 export function GlobalSearch({ 
   placeholder = "Search farms, fields, weather, and more...", 
   showFilters = true, 
@@ -57,23 +52,19 @@ export function GlobalSearch({
   ])
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-
   // Perform search API call
   const performSearch = async (searchTerm: string, filter: string): Promise<SearchResult[]> => {
     if (!searchTerm.trim()) return []
-    
     try {
       const params = new URLSearchParams({
         q: searchTerm,
         filter: filter !== 'all' ? filter : '',
         limit: '10'
       })
-      
       const response = await fetch(`/api/search?${params}`)
       if (!response.ok) {
         throw new Error('Search service unavailable')
       }
-      
       const data = await response.json()
       return data.results || []
     } catch (error) {
@@ -81,14 +72,12 @@ export function GlobalSearch({
       return []
     }
   }
-
   // Search functionality
   useEffect(() => {
     if (query.length < 2) {
       setResults([])
       return
     }
-
     const searchAsync = async () => {
       try {
         const results = await performSearch(query, selectedFilter)
@@ -98,10 +87,8 @@ export function GlobalSearch({
         setResults([])
       }
     }
-
     searchAsync()
   }, [query, selectedFilter])
-
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -114,11 +101,9 @@ export function GlobalSearch({
         setIsOpen(false)
       }
     }
-
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
-
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -126,30 +111,24 @@ export function GlobalSearch({
         setIsOpen(false)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
   const handleResultSelect = (result: SearchResult) => {
     setIsOpen(false)
     setQuery('')
-    
     // Add to recent searches
     if (!recentSearches.includes(query)) {
       setRecentSearches(prev => [query, ...prev.slice(0, 4)])
     }
-
     if (onResultSelect) {
       onResultSelect(result)
     }
   }
-
   const clearSearch = () => {
     setQuery('')
     setResults([])
   }
-
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {/* Search Input */}
@@ -179,7 +158,6 @@ export function GlobalSearch({
           </div>
         </div>
       </div>
-
       {/* Search Results Dropdown */}
       {isOpen && (
         <ModernCard className="absolute top-full mt-2 w-full z-50 shadow-xl border-sage-200">
@@ -206,7 +184,6 @@ export function GlobalSearch({
                   </div>
                 </div>
               )}
-
               {/* Search Results */}
               <div className="p-2">
                 {results.length > 0 ? (
@@ -278,7 +255,6 @@ export function GlobalSearch({
                   </div>
                 )}
               </div>
-
               {/* Quick Actions */}
               {query.length < 2 && (
                 <div className="border-t border-sage-200 p-4">

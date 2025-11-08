@@ -7,32 +7,26 @@ import { cache, CacheKeys, CacheTTL, CacheTags } from '../../../../lib/cache/red
 import { PerformanceMonitor, withCache } from '../../../../lib/performance/optimizations'
 // import { BudgetManager } from '../../../../lib/financial/budget-manager' // Temporarily disabled
 import { z } from 'zod'
-
 const recommendationRequestSchema = z.object({
   farmId: z.string(),
   includeDecisionTypes: z.array(z.enum(['SPRAY', 'HARVEST', 'IRRIGATE', 'PLANT', 'FERTILIZE', 'LIVESTOCK_HEALTH', 'MARKET_SELL', 'EQUIPMENT_MAINTAIN'])).optional(),
   excludeCompletedTasks: z.boolean().default(true),
   maxRecommendations: z.number().int().min(1).max(20).default(10)
 })
-
 export async function POST(request: NextRequest) {
   const timerId = 'nba-recommendations-generation'
   PerformanceMonitor.startTimer(timerId)
-  
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const { farmId, includeDecisionTypes, excludeCompletedTasks, maxRecommendations } = 
       recommendationRequestSchema.parse(body)
-
     // Create cache key for this specific request
     const cacheKey = CacheKeys.nbaRecommendations(farmId) + 
       `:${includeDecisionTypes?.join(',') || 'all'}:${excludeCompletedTasks}:${maxRecommendations}`
-
     // Check if we have recent recommendations cached (unless force refresh)
     const forceRefresh = body.forceRefresh === true
     if (!forceRefresh) {
@@ -42,7 +36,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(cached)
       }
     }
-
     // Verify farm ownership with caching
     const farm = await withCache(
       CacheKeys.farmData(farmId),
@@ -71,20 +64,15 @@ export async function POST(request: NextRequest) {
       },
       { ttl: CacheTTL.FARM_DATA, tags: [CacheTags.FARM] }
     )
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
-
     // Get weather context for the farm
     const weatherContext = await getWeatherContext(farm.latitude, farm.longitude)
-    
     // Get financial context for the farm
     const financialContext = await getFinancialContext(farmId)
-    
     // Get livestock context if any livestock exists
     const livestockContext = await getLivestockContext(farmId)
-    
     // Build comprehensive farm context for NBA engine
     const farmContext: FarmContext = {
       farmId: farm.id,
@@ -106,11 +94,9 @@ export async function POST(request: NextRequest) {
       financials: financialContext,
       livestock: livestockContext
     }
-    
     // Initialize NBA engine and generate real decisions
     const nbaEngine = new NBAEngine(process.env.OPENWEATHER_API_KEY)
     const decisions = await nbaEngine.generateDecisions(farmContext)
-    
     // Filter decisions based on request parameters
     let filteredDecisions = decisions
     if (includeDecisionTypes && includeDecisionTypes.length > 0) {
@@ -118,10 +104,8 @@ export async function POST(request: NextRequest) {
         includeDecisionTypes.includes(decision.type)
       )
     }
-    
     // Limit results
     const limitedDecisions = filteredDecisions.slice(0, maxRecommendations)
-    
     // Convert to response format and calculate scores
     const recommendations = limitedDecisions.map((decision, index) => {
       const scores = calculateDecisionScore(decision)
@@ -144,7 +128,6 @@ export async function POST(request: NextRequest) {
         totalScore: scores.total
       }
     })
-    
     // Store recommendations in database for tracking
     const savedRecommendations = await Promise.all(
       recommendations.map(async (rec) => {
@@ -175,12 +158,10 @@ export async function POST(request: NextRequest) {
             }
           })
         } catch (error) {
-
           return rec
         }
       })
     )
-
     const response = {
       success: true,
       recommendations,
@@ -196,12 +177,9 @@ export async function POST(request: NextRequest) {
         cached: false
       }
     }
-
     // Cache the response for future requests (5 minutes TTL)
     await cache.set(cacheKey, response, { ttl: 300, tags: [CacheTags.FARM, CacheTags.NBA] })
-    
     return NextResponse.json(response)
-
   } catch (error) {
     PerformanceMonitor.endTimer(timerId)
     console.error('Error generating NBA recommendations:', error)
@@ -211,23 +189,19 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
     const status = searchParams.get('status') || 'PENDING'
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50)
-
     if (!farmId) {
       return NextResponse.json({ error: 'farmId required' }, { status: 400 })
     }
-
     // Verify farm ownership
     const farm = await prisma.farm.findFirst({
       where: {
@@ -235,11 +209,9 @@ export async function GET(request: NextRequest) {
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
-
     // Get existing recommendations
     const recommendations = await prisma.decisionRecommendation.findMany({
       where: {
@@ -255,7 +227,6 @@ export async function GET(request: NextRequest) {
       ],
       take: limit
     })
-
     return NextResponse.json({
       recommendations: recommendations.map(rec => ({
         id: rec.id,
@@ -282,7 +253,6 @@ export async function GET(request: NextRequest) {
         createdAt: rec.createdAt
       }))
     })
-
   } catch (error) {
     console.error('Error fetching NBA recommendations:', error)
     return NextResponse.json(
@@ -291,21 +261,17 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 /**
  * Get weather context for farm location
  */
 async function getWeatherContext(latitude: number, longitude: number): Promise<{current: WeatherConditions, forecast: WeatherForecast[]}> {
   const weatherService = new WeatherService(process.env.OPENWEATHER_API_KEY)
-  
   const [current, forecast] = await Promise.all([
     weatherService.getCurrentWeather(latitude, longitude),
     weatherService.getWeatherForecast(latitude, longitude, 7)
   ])
-
   return { current, forecast }
 }
-
 /**
  * Get financial context for farm
  */
@@ -321,7 +287,6 @@ async function getFinancialContext(farmId: string): Promise<{
   ytdExpenses: number
 }> {
   const currentYear = new Date().getFullYear()
-  
   const transactions = await prisma.financialTransaction.findMany({
     where: {
       farmId,
@@ -331,21 +296,17 @@ async function getFinancialContext(farmId: string): Promise<{
       }
     }
   })
-
   const ytdRevenue = transactions
     .filter(t => t.type === 'INCOME')
     .reduce((sum, t) => sum + Number(t.amount), 0)
-
   const ytdExpenses = transactions
     .filter(t => t.type === 'EXPENSE')
     .reduce((sum, t) => sum + Number(t.amount), 0)
-
   // Get real budget information - temporarily disabled
   // const budget = await BudgetManager.getFarmBudget(farmId, currentYear)
   // const monthlyBudgetRemaining = await BudgetManager.getMonthlyBudgetRemaining(farmId)
   const budget = null
   const monthlyBudgetRemaining = 50000
-
   return {
     cashAvailable: ytdRevenue - ytdExpenses,
     monthlyBudget: 50000,
@@ -358,7 +319,6 @@ async function getFinancialContext(farmId: string): Promise<{
     ytdExpenses
   }
 }
-
 /**
  * Get livestock context for farm
  */
@@ -379,38 +339,29 @@ async function getLivestockContext(farmId: string): Promise<{
     },
     orderBy: { eventDate: 'desc' }
   })
-
   if (recentEvents.length === 0) return undefined
-
   const speciesMap = new Map<string, { count: number, lastVaccination?: Date }>()
-  
   for (const event of recentEvents) {
     if (!speciesMap.has(event.livestockType)) {
       speciesMap.set(event.livestockType, { count: 0 })
     }
-    
     const species = speciesMap.get(event.livestockType)!
-    
     if (event.eventType === 'VACCINATION' && !species.lastVaccination) {
       species.lastVaccination = event.eventDate
     }
-    
     // Estimate current count (simplified)
     species.count = event.animalCount
   }
-
   const species = Array.from(speciesMap.entries()).map(([type, data]) => ({
     type,
     count: data.count,
     lastVaccination: data.lastVaccination
   }))
-
   return {
     totalAnimals: species.reduce((sum, s) => sum + s.count, 0),
     species
   }
 }
-
 /**
  * Calculate decision scores for storage
  */
@@ -425,15 +376,12 @@ function calculateDecisionScore(decision: any): {
   else if (decision.priority === 'HIGH') urgency = 75
   else if (decision.priority === 'MEDIUM') urgency = 50
   else urgency = 25
-
   const totalImpact = 
     (decision.estimatedImpact.revenue || 0) +
     (decision.estimatedImpact.costSavings || 0) +
     ((decision.estimatedImpact.yieldIncrease || 0) * 1000)
-  
   const roi = Math.min(100, (totalImpact / 10000) * 100)
   const feasibility = decision.confidence
   const total = (urgency * 0.4) + (roi * 0.4) + (feasibility * 0.2)
-
   return { urgency, roi, feasibility, total }
 }

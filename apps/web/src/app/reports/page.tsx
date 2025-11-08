@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
@@ -17,23 +16,18 @@ import { RecentReports } from '../../components/reports/recent-reports'
 import { BenchmarkingSection } from '../../components/reports/benchmarking-section'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { BarChart, FileText, TrendingUp, DollarSign, Leaf, Plus, CloudRain, TreePine } from 'lucide-react'
-
 export default function ReportsPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (status === 'unauthenticated') {
       router.push('/login')
       return
     }
-
     setIsLoading(false)
   }, [status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -43,11 +37,9 @@ export default function ReportsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session?.user) {
     return null
   }
-
   return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -56,7 +48,6 @@ export default function ReportsPage() {
         label="New Report"
         variant="primary"
       />
-      
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -65,7 +56,6 @@ export default function ReportsPage() {
             View performance reports and analytics for your farming operations
           </p>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-8">
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
@@ -83,7 +73,6 @@ export default function ReportsPage() {
               <FarmPerformancePreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -100,7 +89,6 @@ export default function ReportsPage() {
               <WeatherImpactPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -117,7 +105,6 @@ export default function ReportsPage() {
               <CropHealthPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -134,7 +121,6 @@ export default function ReportsPage() {
               <FinancialSummaryPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -151,7 +137,6 @@ export default function ReportsPage() {
               <SustainabilityPreview farmId={session.user.id} />
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="glow" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -169,12 +154,10 @@ export default function ReportsPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Benchmarking Section */}
         <div className="mb-8">
           <BenchmarkingSection farm={{ id: session.user.id, name: 'Your Farm', totalArea: 100, region: 'Midwest' }} />
         </div>
-
         <ModernCard variant="soft">
           <ModernCardHeader>
             <ModernCardTitle>Your Recent Reports</ModernCardTitle>

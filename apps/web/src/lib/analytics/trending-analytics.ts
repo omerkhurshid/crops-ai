@@ -2,16 +2,13 @@
  * Trending Analytics System
  * Real-time analytics and trending calculations for farm data
  */
-
 import { prisma } from '../prisma'
-
 export interface TrendData {
   period: string
   value: number
   change: number
   changePercentage: number
 }
-
 export interface TrendingMetrics {
   crop_yield: TrendData[]
   revenue: TrendData[]
@@ -20,13 +17,11 @@ export interface TrendingMetrics {
   ndvi: TrendData[]
   weather_patterns: TrendData[]
 }
-
 export interface AnalyticsTimeRange {
   period: 'daily' | 'weekly' | 'monthly' | 'yearly'
   startDate: Date
   endDate: Date
 }
-
 export class TrendingAnalytics {
   /**
    * Get comprehensive trending metrics for a farm
@@ -50,7 +45,6 @@ export class TrendingAnalytics {
       this.getNDVITrends(farmId, timeRange),
       this.getWeatherPatternTrends(farmId, timeRange)
     ])
-
     return {
       crop_yield: yieldTrends,
       revenue: revenueTrends,
@@ -60,7 +54,6 @@ export class TrendingAnalytics {
       weather_patterns: weatherTrends
     }
   }
-
   /**
    * Calculate crop yield trends over time
    */
@@ -70,7 +63,6 @@ export class TrendingAnalytics {
   ): Promise<TrendData[]> {
     try {
       const dateFormat = this.getDateFormat(timeRange.period)
-      
       const yieldData = await prisma.crop.groupBy({
         by: ['actualHarvestDate'],
         where: {
@@ -87,7 +79,6 @@ export class TrendingAnalytics {
           yield: true
         }
       })
-
       return this.calculateTrendData(
         yieldData
           .filter(item => item.actualHarvestDate !== null)
@@ -101,7 +92,6 @@ export class TrendingAnalytics {
       return []
     }
   }
-
   /**
    * Calculate revenue trends from financial transactions
    */
@@ -124,7 +114,6 @@ export class TrendingAnalytics {
           amount: true
         }
       })
-
       const aggregatedData = this.aggregateByPeriod(
         revenueData.map(item => ({
           date: item.transactionDate,
@@ -132,14 +121,12 @@ export class TrendingAnalytics {
         })),
         timeRange.period
       )
-
       return this.calculateTrendData(aggregatedData)
     } catch (error) {
       console.error('Error calculating revenue trends:', error)
       return []
     }
   }
-
   /**
    * Calculate expense trends from financial transactions
    */
@@ -162,7 +149,6 @@ export class TrendingAnalytics {
           amount: true
         }
       })
-
       const aggregatedData = this.aggregateByPeriod(
         expenseData.map(item => ({
           date: item.transactionDate,
@@ -170,14 +156,12 @@ export class TrendingAnalytics {
         })),
         timeRange.period
       )
-
       return this.calculateTrendData(aggregatedData)
     } catch (error) {
       console.error('Error calculating expense trends:', error)
       return []
     }
   }
-
   /**
    * Calculate operational efficiency trends
    */
@@ -191,14 +175,11 @@ export class TrendingAnalytics {
         this.getRevenueTrends(farmId, timeRange),
         this.getExpenseTrends(farmId, timeRange)
       ])
-
       const efficiencyData: TrendData[] = []
       const maxLength = Math.min(revenue.length, expenses.length)
-
       for (let i = 0; i < maxLength; i++) {
         const revenueValue = revenue[i]?.value || 0
         const expenseValue = expenses[i]?.value || 1 // Avoid division by zero
-        
         efficiencyData.push({
           period: revenue[i]?.period || expenses[i]?.period,
           value: expenseValue > 0 ? revenueValue / expenseValue : 0,
@@ -206,14 +187,12 @@ export class TrendingAnalytics {
           changePercentage: 0
         })
       }
-
       return this.calculateTrendData(efficiencyData)
     } catch (error) {
       console.error('Error calculating efficiency trends:', error)
       return []
     }
   }
-
   /**
    * Calculate NDVI trends from satellite data
    */
@@ -237,7 +216,6 @@ export class TrendingAnalytics {
           ndvi: true
         }
       })
-
       const aggregatedData = this.aggregateByPeriod(
         ndviData.map(item => ({
           date: item.captureDate,
@@ -245,14 +223,12 @@ export class TrendingAnalytics {
         })),
         timeRange.period
       )
-
       return this.calculateTrendData(aggregatedData)
     } catch (error) {
       console.error('Error calculating NDVI trends:', error)
       return []
     }
   }
-
   /**
    * Calculate weather pattern trends
    */
@@ -266,11 +242,9 @@ export class TrendingAnalytics {
         where: { id: farmId },
         select: { latitude: true, longitude: true }
       })
-
       if (!farm?.latitude || !farm?.longitude) {
         return []
       }
-
       // Get weather data from stored weather data
       const weatherData = await prisma.weatherData.groupBy({
         by: ['timestamp'],
@@ -289,7 +263,6 @@ export class TrendingAnalytics {
           humidity: true
         }
       })
-
       // Create composite weather score (temperature + precipitation factors)
       const aggregatedData = this.aggregateByPeriod(
         weatherData.map(item => ({
@@ -302,14 +275,12 @@ export class TrendingAnalytics {
         })),
         timeRange.period
       )
-
       return this.calculateTrendData(aggregatedData)
     } catch (error) {
       console.error('Error calculating weather trends:', error)
       return []
     }
   }
-
   /**
    * Calculate a composite weather score for trending
    */
@@ -319,10 +290,8 @@ export class TrendingAnalytics {
     const tempScore = Math.max(0, 1 - Math.abs(temp - 22.5) / 22.5)
     const precipScore = Math.max(0, 1 - Math.abs(precip - 50) / 50)
     const humidityScore = Math.max(0, 1 - Math.abs(humidity - 70) / 70)
-    
     return (tempScore + precipScore + humidityScore) / 3 * 100
   }
-
   /**
    * Aggregate data by time period
    */
@@ -331,24 +300,19 @@ export class TrendingAnalytics {
     period: 'daily' | 'weekly' | 'monthly' | 'yearly'
   ): Array<{ period: string, value: number }> {
     const aggregated: Record<string, { sum: number, count: number }> = {}
-
     data.forEach(item => {
       const periodKey = this.formatPeriod(item.date, period)
-      
       if (!aggregated[periodKey]) {
         aggregated[periodKey] = { sum: 0, count: 0 }
       }
-      
       aggregated[periodKey].sum += item.value
       aggregated[periodKey].count += 1
     })
-
     return Object.entries(aggregated).map(([period, data]) => ({
       period,
       value: data.sum / data.count // Average
     })).sort((a, b) => a.period.localeCompare(b.period))
   }
-
   /**
    * Calculate trend data with changes and percentages
    */
@@ -359,7 +323,6 @@ export class TrendingAnalytics {
       const previousValue = index > 0 ? data[index - 1].value : item.value
       const change = item.value - previousValue
       const changePercentage = previousValue > 0 ? (change / previousValue) * 100 : 0
-
       return {
         period: item.period,
         value: item.value,
@@ -368,7 +331,6 @@ export class TrendingAnalytics {
       }
     })
   }
-
   /**
    * Format date according to period
    */
@@ -388,7 +350,6 @@ export class TrendingAnalytics {
         return date.toISOString().split('T')[0]
     }
   }
-
   /**
    * Get SQL date format for grouping
    */
@@ -406,7 +367,6 @@ export class TrendingAnalytics {
         return '%Y-%m-%d'
     }
   }
-
   /**
    * Get real-time analytics summary
    */
@@ -429,27 +389,21 @@ export class TrendingAnalytics {
         startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         endDate: new Date()
       }
-
       const trends = await this.getFarmTrends(farmId, last30Days)
-      
       // Calculate performance metrics
       const latestRevenue = trends.revenue[trends.revenue.length - 1]?.value || 0
       const latestExpenses = trends.expenses[trends.expenses.length - 1]?.value || 1
       const latestEfficiency = trends.efficiency[trends.efficiency.length - 1]?.value || 0
       const latestYield = trends.crop_yield[trends.crop_yield.length - 1]?.value || 0
-
       const efficiency = latestEfficiency * 100
       const profitability = latestExpenses > 0 ? ((latestRevenue - latestExpenses) / latestRevenue) * 100 : 0
       const productivity = latestYield
-
       // Determine trend directions
       const revenueTrend = this.getTrendDirection(trends.revenue)
       const yieldTrend = this.getTrendDirection(trends.crop_yield)
       const costTrend = this.getTrendDirection(trends.expenses)
-
       // Generate insights
       const insights = this.generateInsights(trends, { efficiency, profitability, productivity })
-
       return {
         performance: {
           efficiency: Math.round(efficiency),
@@ -472,24 +426,19 @@ export class TrendingAnalytics {
       }
     }
   }
-
   /**
    * Determine trend direction from data
    */
   private static getTrendDirection(data: TrendData[]): 'up' | 'down' | 'stable' {
     if (data.length < 2) return 'stable'
-    
     const latest = data[data.length - 1]
     const previous = data[data.length - 2]
-    
     const change = latest.value - previous.value
     const threshold = previous.value * 0.05 // 5% threshold
-    
     if (change > threshold) return 'up'
     if (change < -threshold) return 'down'
     return 'stable'
   }
-
   /**
    * Generate actionable insights from analytics data
    */
@@ -498,7 +447,6 @@ export class TrendingAnalytics {
     performance: { efficiency: number, profitability: number, productivity: number }
   ): string[] {
     const insights: string[] = []
-
     // Revenue insights
     if (trends.revenue.length > 0) {
       const revenueChange = trends.revenue[trends.revenue.length - 1]?.changePercentage || 0
@@ -508,14 +456,12 @@ export class TrendingAnalytics {
         insights.push(`Revenue decreased by ${Math.abs(revenueChange).toFixed(1)}% - consider market diversification`)
       }
     }
-
     // Efficiency insights
     if (performance.efficiency < 70) {
       insights.push('Operational efficiency below optimal - review resource allocation')
     } else if (performance.efficiency > 90) {
       insights.push('Excellent operational efficiency - maintain current practices')
     }
-
     // NDVI insights
     if (trends.ndvi.length > 0) {
       const ndviTrend = this.getTrendDirection(trends.ndvi)
@@ -525,7 +471,6 @@ export class TrendingAnalytics {
         insights.push('Crop health improving - current management practices are effective')
       }
     }
-
     // Weather pattern insights
     if (trends.weather_patterns.length > 0) {
       const weatherScore = trends.weather_patterns[trends.weather_patterns.length - 1]?.value || 0
@@ -533,7 +478,6 @@ export class TrendingAnalytics {
         insights.push('Challenging weather conditions - monitor crop stress indicators')
       }
     }
-
     return insights.slice(0, 5) // Limit to 5 insights
   }
 }

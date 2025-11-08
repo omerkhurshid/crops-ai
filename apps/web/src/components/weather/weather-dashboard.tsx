@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -9,13 +8,11 @@ import { InfoTooltip } from '../ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { Thermometer, Droplets, Wind, Eye, CloudRain, RotateCcw } from 'lucide-react'
 import { CurrentWeather, WeatherForecast, WeatherAlert, AgricultureWeatherData } from '../../lib/weather/service'
-
 interface WeatherDashboardProps {
   latitude: number
   longitude: number
   className?: string
 }
-
 export function WeatherDashboard({ latitude, longitude, className }: WeatherDashboardProps) {
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather | null>(null)
   const [forecast, setForecast] = useState<WeatherForecast[]>([])
@@ -23,17 +20,14 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
   const [agricultureData, setAgricultureData] = useState<AgricultureWeatherData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     if (latitude && longitude) {
       fetchWeatherData()
     }
   }, [latitude, longitude])
-
   const fetchWeatherData = async () => {
     setLoading(true)
     setError(null)
-
     try {
       // Fetch all weather data in parallel
       const [currentResponse, forecastResponse, alertsResponse, agriResponse] = await Promise.allSettled([
@@ -42,35 +36,26 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
         fetch(`/api/weather/alerts?latitude=${latitude}&longitude=${longitude}`),
         fetch(`/api/weather/agriculture?latitude=${latitude}&longitude=${longitude}`)
       ])
-
       // Process current weather
       if (currentResponse.status === 'fulfilled' && currentResponse.value.ok) {
         const currentData = await currentResponse.value.json()
-
         setCurrentWeather(currentData.data?.weather || currentData.weather)
       }
-
       // Process forecast
       if (forecastResponse.status === 'fulfilled' && forecastResponse.value.ok) {
         const forecastData = await forecastResponse.value.json()
-
         setForecast(forecastData.data?.forecast || forecastData.forecast || [])
       }
-
       // Process alerts
       if (alertsResponse.status === 'fulfilled' && alertsResponse.value.ok) {
         const alertsData = await alertsResponse.value.json()
-
         setAlerts(alertsData.data?.alerts || alertsData.alerts || [])
       }
-
       // Process agriculture data
       if (agriResponse.status === 'fulfilled' && agriResponse.value.ok) {
         const agriData = await agriResponse.value.json()
-
         setAgricultureData(agriData.data?.data || agriData.data)
       }
-
     } catch (err) {
       setError('Failed to fetch weather data')
       console.error('Weather data fetch error:', err)
@@ -78,7 +63,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       setLoading(false)
     }
   }
-
   const getWeatherIcon = (iconCode: string) => {
     // Weather icon mapping
     const iconMap: Record<string, string> = {
@@ -94,7 +78,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
     }
     return iconMap[iconCode] || '🌤️'
   }
-
   const getAlertIcon = (alertType: WeatherAlert['alertType']) => {
     const iconMap: Record<string, string> = {
       frost: '🌡️',
@@ -107,7 +90,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
     }
     return iconMap[alertType] || '⚠️'
   }
-
   const getSeverityColor = (severity: WeatherAlert['severity']) => {
     const colorMap: Record<string, string> = {
       minor: 'text-yellow-600 bg-yellow-50',
@@ -117,7 +99,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
     }
     return colorMap[severity] || 'text-gray-600 bg-gray-50'
   }
-
   if (loading) {
     return (
       <div className={`p-6 ${className}`}>
@@ -132,7 +113,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       </div>
     )
   }
-
   if (error) {
     return (
       <div className={`p-6 ${className}`}>
@@ -147,7 +127,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       </div>
     )
   }
-
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       <div className="flex justify-between items-center">
@@ -156,7 +135,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           Refresh
         </Button>
       </div>
-
       {/* Active Alerts */}
       {alerts.length > 0 && (
         <div className="space-y-2">
@@ -191,7 +169,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           ))}
         </div>
       )}
-
       {/* Current Weather */}
       {currentWeather && (
         <Card>
@@ -234,7 +211,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           </CardContent>
         </Card>
       )}
-
       {/* 5-Day Forecast */}
       {forecast.length > 0 && (
         <Card>
@@ -263,7 +239,6 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           </CardContent>
         </Card>
       )}
-
       {/* Agriculture Data */}
       {agricultureData && (
         <Card>

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -15,7 +14,6 @@ import {
 } from 'lucide-react'
 // import { GoogleMapsFieldEditor } from '../farm/google-maps-field-editor' // Temporarily disabled
 import { WorkflowDemo } from '../satellite/workflow-demo'
-
 interface FarmMetrics {
   farmOverview: {
     totalFields: number
@@ -51,7 +49,6 @@ interface FarmMetrics {
     lowPriority: number
   }
 }
-
 interface CriticalAlert {
   id: string
   fieldName: string
@@ -66,7 +63,6 @@ interface CriticalAlert {
     estimatedCost?: number
   }>
 }
-
 interface PrecisionRecommendation {
   id: string
   fieldName: string
@@ -85,12 +81,10 @@ interface PrecisionRecommendation {
     optimalWindow: { start: string; end: string }
   }
 }
-
 interface UnifiedFarmDashboardProps {
   farmId: string
   farmLocation: { lat: number; lng: number }
 }
-
 export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashboardProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [farmMetrics, setFarmMetrics] = useState<FarmMetrics | null>(null)
@@ -99,23 +93,18 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
   const [activeTab, setActiveTab] = useState('overview')
   const [runningAnalysis, setRunningAnalysis] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<string>('')
-
   useEffect(() => {
     loadFarmData()
   }, [farmId])
-
   const loadFarmData = async () => {
     try {
       setIsLoading(true)
-      
       // Load existing farm analysis or trigger new one
       const response = await fetch(`/api/satellite/precision-analysis?farmId=${farmId}`)
       const data = await response.json()
-
       if (data.success && data.summary) {
         setLastUpdated(data.summary.lastAnalysis || new Date().toISOString())
       }
-
       // Load mock data for demonstration
       setFarmMetrics({
         farmOverview: {
@@ -152,7 +141,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           lowPriority: 1
         }
       })
-
       setCriticalAlerts([
         {
           id: 'alert-1',
@@ -181,7 +169,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           ]
         }
       ])
-
       setPrecisionRecommendations([
         {
           id: 'rec-1',
@@ -226,18 +213,15 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           }
         }
       ])
-
     } catch (error) {
       console.error('Error loading farm data:', error)
     } finally {
       setIsLoading(false)
     }
   }
-
   const runComprehensiveAnalysis = async () => {
     try {
       setRunningAnalysis(true)
-      
       const response = await fetch('/api/satellite/precision-analysis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -246,11 +230,8 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           analysisType: 'comprehensive'
         })
       })
-
       const data = await response.json()
-      
       if (data.success) {
-
         setLastUpdated(data.timestamp)
         // Refresh data after analysis
         await loadFarmData()
@@ -261,7 +242,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       setRunningAnalysis(false)
     }
   }
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'emergency': return 'bg-red-600 text-white'
@@ -270,7 +250,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       default: return 'bg-yellow-500 text-white'
     }
   }
-
   const getRiskColor = (risk: string) => {
     switch (risk.toLowerCase()) {
       case 'critical': return 'text-red-600'
@@ -279,7 +258,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       default: return 'text-green-600'
     }
   }
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -288,18 +266,15 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
     const diffInHours = Math.round((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-    
     if (diffInHours < 1) return 'Just now'
     if (diffInHours < 24) return `${diffInHours}h ago`
     const diffInDays = Math.round(diffInHours / 24)
     return `${diffInDays}d ago`
   }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-96">
@@ -311,7 +286,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -351,7 +325,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           </Button>
         </div>
       </div>
-
       {/* Quick Stats */}
       {farmMetrics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -367,7 +340,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
@@ -380,7 +352,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
@@ -395,7 +366,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
@@ -410,7 +380,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           </Card>
         </div>
       )}
-
       {/* Critical Alerts */}
       {criticalAlerts.length > 0 && (
         <Card className="border-red-200 bg-red-50">
@@ -466,7 +435,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           </CardContent>
         </Card>
       )}
-
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
@@ -475,7 +443,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           <TabsTrigger value="precision">Precision Ag</TabsTrigger>
           <TabsTrigger value="workflow">Workflow Demo</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="space-y-6">
           {farmMetrics && (
             <>
@@ -512,7 +479,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <div className="text-sm text-red-600">Poor</div>
                     </div>
                   </div>
-
                   {/* Stress Analysis */}
                   <div className="space-y-4">
                     <h4 className="font-semibold">Primary Stress Factors</h4>
@@ -557,7 +523,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                   </div>
                 </CardContent>
               </Card>
-
               {/* Financial Overview */}
               <Card>
                 <CardHeader>
@@ -588,7 +553,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <p className="text-sm text-gray-500">ROI: {farmMetrics.precisionMetrics.averageROI.toFixed(0)}%</p>
                     </div>
                   </div>
-                  
                   <div className="mt-6 p-4 bg-green-50 rounded-lg">
                     <div className="flex items-center">
                       <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
@@ -607,7 +571,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
             </>
           )}
         </TabsContent>
-
         <TabsContent value="satellite" className="space-y-6">
           {/* Satellite Analysis would go here - showing placeholder for now */}
           <Card>
@@ -636,7 +599,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       </div>
                     </div>
                   </div>
-                  
                   <div className="space-y-2">
                     <p className="font-medium">Field Health Zones:</p>
                     <div className="space-y-1 text-sm">
@@ -655,7 +617,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                     </div>
                   </div>
                 </div>
-                
                 <div className="space-y-4">
                   <h4 className="font-semibold">Environmental Conditions</h4>
                   <div className="grid grid-cols-2 gap-4">
@@ -693,7 +654,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="precision" className="space-y-6">
           {/* Precision Agriculture Recommendations */}
           <Card>
@@ -714,7 +674,6 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       </div>
                       <Badge variant="outline">{rec.timing.optimalWindow.start} to {rec.timing.optimalWindow.end}</Badge>
                     </div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="bg-blue-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-blue-800">Application</p>
@@ -724,13 +683,11 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                         </p>
                         <p className="text-sm text-blue-600">Cost: {formatCurrency(rec.recommendation.estimatedCost)}</p>
                       </div>
-                      
                       <div className="bg-green-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-green-800">Expected Yield Increase</p>
                         <p className="text-lg font-bold text-green-600">+{rec.expectedOutcome.yieldIncrease.toFixed(1)}%</p>
                         <p className="text-sm text-green-600">Savings: {formatCurrency(rec.expectedOutcome.costSavings)}</p>
                       </div>
-                      
                       <div className="bg-purple-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-purple-800">ROI</p>
                         <p className="text-lg font-bold text-purple-600">{rec.expectedOutcome.roi.toFixed(0)}%</p>
@@ -743,12 +700,10 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="workflow" className="space-y-6">
           <WorkflowDemo 
             farmLocation={farmLocation}
             onComplete={(fields) => {
-
             }}
           />
         </TabsContent>

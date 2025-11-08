@@ -1,5 +1,4 @@
 'use client'
-
 import { useSession, unifiedAuth } from '../../lib/auth-unified'
 import Link from 'next/link'
 import { Button } from '../ui/button'
@@ -7,15 +6,12 @@ import { KeyboardShortcuts } from './keyboard-shortcuts'
 import { Menu, X, HelpCircle, Home, BarChart3, CloudRain, Activity, Brain, DollarSign, FileText } from 'lucide-react'
 import { useState } from 'react'
 import { CroppleLogo } from '../ui/cropple-logo'
-
 export function Navbar() {
   const { data: session, status } = useSession()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
   const handleSignOut = () => {
     unifiedAuth.signOut({ callbackUrl: '/' })
   }
-
   const navLinks = [
     { href: '/dashboard', label: 'Command Center', icon: <Home className="h-4 w-4" /> },
     { href: '/farms', label: 'Farms', icon: <BarChart3 className="h-4 w-4" /> },
@@ -26,7 +22,6 @@ export function Navbar() {
     { href: '/reports', label: 'Reports', icon: <FileText className="h-4 w-4" /> },
     { href: '/help', label: 'Help', icon: <HelpCircle className="h-4 w-4" /> },
   ]
-
   return (
     <nav className="glass-nav sticky top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,7 +32,6 @@ export function Navbar() {
               <CroppleLogo size="md" textColor="text-white drop-shadow-lg" />
             </Link>
           </div>
-
           {/* Desktop Navigation */}
           {session && (
             <div className="hidden lg:flex lg:items-center lg:space-x-1">
@@ -53,7 +47,6 @@ export function Navbar() {
               ))}
             </div>
           )}
-
           {/* User Menu */}
           <div className="flex items-center space-x-3">
             {status === 'loading' ? (
@@ -96,7 +89,6 @@ export function Navbar() {
             )}
           </div>
         </div>
-
         {/* Mobile Navigation Menu */}
         {session && isMobileMenuOpen && (
           <div className="lg:hidden border-t border-white/20 py-3">
@@ -127,7 +119,6 @@ export function Navbar() {
           </div>
         )}
       </div>
-
       {/* Keyboard Shortcuts System */}
       {session && <KeyboardShortcuts />}
     </nav>

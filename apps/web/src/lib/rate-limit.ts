@@ -1,14 +1,12 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 import { NextRequest } from 'next/server'
-
 // Check if Redis is available and properly configured
 const isRedisAvailable = () => {
   const url = process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
   return url && token && !url.startsWith('YOUR_') && url.startsWith('https://')
 }
-
 // Create Redis instance only if properly configured
 const createRedis = () => {
   if (!isRedisAvailable()) {
@@ -16,14 +14,10 @@ const createRedis = () => {
   }
   try {
     return Redis.fromEnv()
-  } catch (error) {
-    console.warn('Failed to create Redis client:', error)
-    return null
+  } catch (error) {return null
   }
 }
-
 const redis = createRedis()
-
 // Create a new ratelimiter that allows 30 requests per 60 seconds
 const ratelimit = redis ? new Ratelimit({
   redis,
@@ -31,7 +25,6 @@ const ratelimit = redis ? new Ratelimit({
   analytics: true,
   prefix: '@upstash/ratelimit',
 }) : null
-
 // Rate limit configurations for different endpoints
 const rateLimitConfigs = {
   // Authentication endpoints - stricter limits
@@ -41,7 +34,6 @@ const rateLimitConfigs = {
     analytics: true,
     prefix: 'auth',
   }) : null,
-  
   // API endpoints - standard limits
   api: redis ? new Ratelimit({
     redis,
@@ -49,7 +41,6 @@ const rateLimitConfigs = {
     analytics: true,
     prefix: 'api',
   }) : null,
-  
   // Write operations - moderate limits
   write: redis ? new Ratelimit({
     redis,
@@ -57,7 +48,6 @@ const rateLimitConfigs = {
     analytics: true,
     prefix: 'write',
   }) : null,
-  
   // Heavy operations (satellite, ML) - more permissive limits
   heavy: redis ? new Ratelimit({
     redis,
@@ -66,7 +56,6 @@ const rateLimitConfigs = {
     prefix: 'heavy',
   }) : null,
 }
-
 export async function rateLimit(
   request: NextRequest,
   type: 'auth' | 'api' | 'write' | 'heavy' = 'api'
@@ -85,13 +74,10 @@ export async function rateLimit(
       },
     }
   }
-
   // Get the IP address from the request
   const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'anonymous'
-  
   // Use the appropriate rate limiter based on type
   const limiter = rateLimitConfigs[type] || rateLimitConfigs.api
-  
   if (!limiter) {
     // Fallback if specific limiter is not available
     return {
@@ -106,10 +92,8 @@ export async function rateLimit(
       },
     }
   }
-  
   // Check the rate limit
   const { success, limit, reset, remaining } = await limiter.limit(ip)
-  
   return {
     success,
     limit,
@@ -122,7 +106,6 @@ export async function rateLimit(
     },
   }
 }
-
 // Middleware helper to apply rate limiting
 export async function withRateLimit(
   request: NextRequest,
@@ -130,7 +113,6 @@ export async function withRateLimit(
   type: 'auth' | 'api' | 'write' | 'heavy' = 'api'
 ) {
   const { success, headers } = await rateLimit(request, type)
-  
   if (!success) {
     return new Response('Too Many Requests', {
       status: 429,
@@ -141,36 +123,28 @@ export async function withRateLimit(
       },
     })
   }
-  
   // Execute the handler and add rate limit headers to the response
   const response = await handler()
-  
   // Add rate limit headers to the response
   Object.entries(headers).forEach(([key, value]) => {
     response.headers.set(key, value)
   })
-  
   return response
 }
-
 // Simple in-memory rate limiter for development/fallback
 class InMemoryRateLimiter {
   private requests: Map<string, number[]> = new Map()
   private readonly windowMs: number
   private readonly maxRequests: number
-  
   constructor(maxRequests: number, windowMs: number) {
     this.maxRequests = maxRequests
     this.windowMs = windowMs
   }
-  
   async limit(key: string) {
     const now = Date.now()
     const requests = this.requests.get(key) || []
-    
     // Remove old requests outside the window
     const validRequests = requests.filter(time => now - time < this.windowMs)
-    
     // Check if limit exceeded
     if (validRequests.length >= this.maxRequests) {
       return {
@@ -180,11 +154,9 @@ class InMemoryRateLimiter {
         reset: Math.min(...validRequests) + this.windowMs,
       }
     }
-    
     // Add current request
     validRequests.push(now)
     this.requests.set(key, validRequests)
-    
     return {
       success: true,
       limit: this.maxRequests,
@@ -193,7 +165,6 @@ class InMemoryRateLimiter {
     }
   }
 }
-
 // Fallback rate limiter for when Redis is not available
 const fallbackLimiters = {
   auth: new InMemoryRateLimiter(5, 15 * 60 * 1000), // 5 per 15 min
@@ -201,7 +172,6 @@ const fallbackLimiters = {
   write: new InMemoryRateLimiter(60, 60 * 1000), // 60 per min
   heavy: new InMemoryRateLimiter(50, 60 * 1000), // 50 per min
 }
-
 // Rate limit function with fallback
 export async function rateLimitWithFallback(
   request: NextRequest,
@@ -212,11 +182,9 @@ export async function rateLimitWithFallback(
     return await rateLimit(request, type)
   } catch (error) {
     // Fallback to in-memory rate limiter
-
     const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'anonymous'
     const limiter = fallbackLimiters[type]
     const result = await limiter.limit(ip)
-    
     return {
       ...result,
       headers: {

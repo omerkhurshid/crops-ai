@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useSession } from '../../../lib/auth-unified'
 import { Navbar } from '../../../components/navigation/navbar'
@@ -14,20 +13,17 @@ import {
   AlertTriangle, CheckCircle, RefreshCw, Settings, Download
 } from 'lucide-react'
 import { ensureArray } from '../../../lib/utils'
-
 interface Farm {
   id: string
   name: string
   totalArea: number
   fieldCount: number
 }
-
 export default function SatelliteHealthPage() {
   const { data: session } = useSession()
   const [farms, setFarms] = useState<Farm[]>([])
   const [selectedFarmId, setSelectedFarmId] = useState<string>('')
   const [isLoadingFarms, setIsLoadingFarms] = useState(true)
-
   // Fetch user's farms
   useEffect(() => {
     const fetchFarms = async () => {
@@ -46,14 +42,11 @@ export default function SatelliteHealthPage() {
         setIsLoadingFarms(false)
       }
     }
-
     if (session) {
       fetchFarms()
     }
   }, [session])
-
   const selectedFarm = farms.find(farm => farm.id === selectedFarmId)
-
   const stats = [
     {
       title: 'Fields Monitored',
@@ -80,7 +73,6 @@ export default function SatelliteHealthPage() {
       color: 'text-indigo-600'
     }
   ]
-
   if (!session) {
     return (
       <div className="min-h-screen bg-agricultural">
@@ -96,11 +88,9 @@ export default function SatelliteHealthPage() {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen bg-agricultural">
       <Navbar />
-      
       <div className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -113,7 +103,6 @@ export default function SatelliteHealthPage() {
                 Real-time crop health analysis using satellite imagery and AI
               </p>
             </div>
-            
             <div className="flex items-center space-x-3">
               <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
                 <Download className="h-4 w-4 mr-2" />
@@ -126,7 +115,6 @@ export default function SatelliteHealthPage() {
             </div>
           </div>
         </div>
-
         {/* Farm Selection */}
         {farms.length > 0 && (
           <Card className="mb-8 bg-white/10 backdrop-blur border-white/20">
@@ -155,7 +143,6 @@ export default function SatelliteHealthPage() {
                     ))}
                   </SelectContent>
                 </Select>
-                
                 {selectedFarm && (
                   <div className="text-white/80 text-sm">
                     {selectedFarm.totalArea} acres • {selectedFarm.fieldCount} fields
@@ -165,7 +152,6 @@ export default function SatelliteHealthPage() {
             </CardContent>
           </Card>
         )}
-
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat) => (
@@ -182,7 +168,6 @@ export default function SatelliteHealthPage() {
             </Card>
           ))}
         </div>
-
         {/* Key Features Info */}
         <Card className="mb-8 bg-white/10 backdrop-blur border-white/20">
           <CardHeader>
@@ -203,7 +188,6 @@ export default function SatelliteHealthPage() {
                   Normalized Difference Vegetation Index for crop health assessment
                 </p>
               </div>
-              
               <div className="text-center">
                 <AlertTriangle className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
                 <h3 className="text-white font-semibold mb-2">Stress Detection</h3>
@@ -211,7 +195,6 @@ export default function SatelliteHealthPage() {
                   Early detection of drought, disease, and nutrient deficiencies
                 </p>
               </div>
-              
               <div className="text-center">
                 <CheckCircle className="h-8 w-8 text-blue-400 mx-auto mb-3" />
                 <h3 className="text-white font-semibold mb-2">AI Recommendations</h3>
@@ -222,7 +205,6 @@ export default function SatelliteHealthPage() {
             </div>
           </CardContent>
         </Card>
-
         {/* Field Health Monitor Component */}
         {selectedFarmId ? (
           <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
@@ -258,7 +240,6 @@ export default function SatelliteHealthPage() {
             </CardContent>
           </Card>
         )}
-
         {/* Analysis Information */}
         <Card className="mt-8 bg-white/10 backdrop-blur border-white/20">
           <CardHeader>
@@ -278,7 +259,6 @@ export default function SatelliteHealthPage() {
                   <li>• Multi-spectral band analysis (RGB, NIR, Red Edge)</li>
                 </ul>
               </div>
-              
               <div>
                 <h4 className="font-semibold text-white mb-2">Analysis Metrics</h4>
                 <ul className="space-y-1 text-sm">
@@ -289,7 +269,6 @@ export default function SatelliteHealthPage() {
                 </ul>
               </div>
             </div>
-            
             <div className="mt-6 p-4 bg-white/5 rounded-lg">
               <h4 className="font-semibold text-white mb-2">Benefits</h4>
               <p className="text-sm">

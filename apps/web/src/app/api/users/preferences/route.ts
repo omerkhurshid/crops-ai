@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../lib/api/middleware';
-
 const preferencesSchema = z.object({
   currency: z.string().optional(),
   landUnit: z.enum(['hectares', 'acres', 'square_meters']).optional(),
@@ -11,13 +10,11 @@ const preferencesSchema = z.object({
   timezone: z.string().optional(),
   language: z.string().optional()
 });
-
 // GET /api/users/preferences
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
     try {
       const user = request.user;
-
       // Get user preferences from database
       const userPreferences = await prisma.user.findUnique({
         where: { id: user.id },
@@ -29,7 +26,6 @@ export const GET = apiMiddleware.protected(
           language: true
         }
       });
-
       // Return preferences with defaults
       const preferences = {
         currency: userPreferences?.currency || 'USD',
@@ -38,34 +34,27 @@ export const GET = apiMiddleware.protected(
         timezone: userPreferences?.timezone || 'UTC',
         language: userPreferences?.language || 'en'
       };
-
       return createSuccessResponse({
         preferences,
         message: 'User preferences retrieved successfully'
       });
-
     } catch (error) {
       console.error('Get preferences error:', error);
       return handleApiError(error);
     }
   })
 );
-
 // PUT /api/users/preferences
 export const PUT = apiMiddleware.protected(
   withMethods(['PUT'], async (request: AuthenticatedRequest) => {
     try {
       const user = request.user;
-
       const body = await request.json();
       const validation = preferencesSchema.safeParse(body);
-      
       if (!validation.success) {
         throw new ValidationError('Invalid preferences data');
       }
-
       const preferences = validation.data;
-
       // Update user preferences in database
       const updatedUser = await prisma.user.update({
         where: { id: user.id },
@@ -84,12 +73,10 @@ export const PUT = apiMiddleware.protected(
           language: true
         }
       });
-
       return createSuccessResponse({
         preferences: updatedUser,
         message: 'User preferences updated successfully'
       });
-
     } catch (error) {
       console.error('Update preferences error:', error);
       return handleApiError(error);

@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react'
 import { useNBARecommendations, type NBARecommendation } from '../../hooks/useNBARecommendations'
 import { ErrorBoundary, ErrorState, AsyncWrapper } from '../ui/error-boundary'
@@ -21,12 +20,10 @@ import {
   ThumbsDown
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface NBARecommendationsProps {
   farmId: string
   className?: string
 }
-
 const NBARecommendations = memo(function NBARecommendations({ farmId, className = '' }: NBARecommendationsProps) {
   const {
     recommendations,
@@ -39,10 +36,8 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
     getUrgentRecommendations,
     getHighValueRecommendations
   } = useNBARecommendations(farmId)
-
   const [selectedRecommendation, setSelectedRecommendation] = useState<NBARecommendation | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
-
   const handleGenerateRecommendations = useCallback(async () => {
     setIsGenerating(true)
     try {
@@ -52,18 +47,15 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
         maxRecommendations: 8
       })
     } catch (err) {
-
     } finally {
       setIsGenerating(false)
     }
   }, [farmId, generateRecommendations])
-
   useEffect(() => {
     if (farmId && recommendations.length === 0 && !loading) {
       handleGenerateRecommendations()
     }
   }, [farmId, recommendations.length, loading, handleGenerateRecommendations])
-
   const getRecommendationIcon = (type: NBARecommendation['type']) => {
     const iconProps = { className: "h-5 w-5" }
     switch (type) {
@@ -75,7 +67,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       default: return <Zap {...iconProps} />
     }
   }
-
   const getPriorityColor = (priority: NBARecommendation['priority']) => {
     switch (priority) {
       case 'URGENT': return 'bg-red-100 text-red-800 border-red-200'
@@ -84,7 +75,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       case 'LOW': return 'bg-green-100 text-green-800 border-green-200'
     }
   }
-
   const formatCurrency = (amount: number | undefined) => {
     if (!amount) return '$0'
     return new Intl.NumberFormat('en-US', {
@@ -93,7 +83,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       maximumFractionDigits: 0
     }).format(amount)
   }
-
   const formatDate = (date: Date | undefined) => {
     if (!date) return ''
     return new Intl.DateTimeFormat('en-US', {
@@ -103,37 +92,29 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       minute: '2-digit'
     }).format(new Date(date))
   }
-
   // Memoized computed values for performance
   const urgentRecs = useMemo(() => getUrgentRecommendations(), [getUrgentRecommendations])
   const highValueRecs = useMemo(() => getHighValueRecommendations(1000), [getHighValueRecommendations])
   const pendingRecs = useMemo(() => ensureArray(recommendations).filter(r => r.status === 'PENDING'), [recommendations])
-
   // Memoized event handlers
   const handleAcceptRecommendation = useCallback(async (id: string) => {
     try {
       await acceptRecommendation(id, 'Accepted via dashboard')
     } catch (err) {
-
     }
   }, [acceptRecommendation])
-
   const handleRejectRecommendation = useCallback(async (id: string, reason?: string) => {
     try {
       await rejectRecommendation(id, reason || 'Rejected via dashboard')
     } catch (err) {
-
     }
   }, [rejectRecommendation])
-
   const handleDismissRecommendation = useCallback(async (id: string) => {
     try {
       await dismissRecommendation(id)
     } catch (err) {
-
     }
   }, [dismissRecommendation])
-
   // Add input validation
   if (!farmId) {
     return (
@@ -144,7 +125,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       />
     )
   }
-
   return (
     <ErrorBoundary 
       fallback={
@@ -177,7 +157,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
               {isGenerating ? 'Analyzing...' : 'Refresh'}
             </button>
           </div>
-
           {/* Quick Stats */}
           <div className="flex gap-6 mt-4">
             <div className="flex items-center gap-2">
@@ -200,7 +179,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
             </div>
           </div>
         </div>
-
         <AsyncWrapper 
           loading={loading && recommendations.length === 0}
           error={error}
@@ -241,12 +219,10 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                         {rec.priority}
                       </div>
                     </div>
-
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-gray-900 mb-1">{rec.title}</h3>
                       <p className="text-sm text-gray-600 mb-2">{rec.description}</p>
-                      
                       {/* Financial Impact */}
                       <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
                         {rec.estimatedImpact.revenue && (
@@ -265,7 +241,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                           <span className="text-sage-600 font-medium">{rec.confidence}% confidence</span>
                         </div>
                       </div>
-
                       {/* Timing */}
                       {rec.timing.idealStart && (
                         <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -280,7 +255,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                       )}
                     </div>
                   </div>
-
                   {/* Actions */}
                   <div className="flex items-center gap-2 ml-4">
                     <button
@@ -315,7 +289,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                 </div>
               </div>
             ))}
-
             {pendingRecs.length > 5 && (
               <div className="text-center pt-4">
                 <button
@@ -330,7 +303,6 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
           </div>
         </AsyncWrapper>
       </div>
-
       {/* Recommendation Detail Modal */}
       {selectedRecommendation && (
         <RecommendationModal
@@ -343,14 +315,12 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
     </ErrorBoundary>
   )
 })
-
 interface RecommendationModalProps {
   recommendation: NBARecommendation
   onClose: () => void
   onAccept: () => void
   onReject: () => void
 }
-
 function RecommendationModal({ recommendation, onClose, onAccept, onReject }: RecommendationModalProps) {
   const formatCurrency = (amount: number | undefined) => {
     if (!amount) return '$0'
@@ -360,7 +330,6 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
       maximumFractionDigits: 0
     }).format(amount)
   }
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -375,14 +344,12 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             </button>
           </div>
         </div>
-
         <div className="p-6 space-y-6">
           {/* Description */}
           <div>
             <h3 className="font-medium text-gray-900 mb-2">Description</h3>
             <p className="text-gray-600">{recommendation.description}</p>
           </div>
-
           {/* Financial Impact */}
           <div>
             <h3 className="font-medium text-gray-900 mb-3">Financial Impact</h3>
@@ -411,13 +378,11 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
               </div>
             </div>
           </div>
-
           {/* Explanation */}
           <div>
             <h3 className="font-medium text-gray-900 mb-2">Analysis</h3>
             <p className="text-gray-600">{recommendation.explanation}</p>
           </div>
-
           {/* Action Steps */}
           <div>
             <h3 className="font-medium text-gray-900 mb-3">Action Steps</h3>
@@ -427,7 +392,6 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
               ))}
             </ol>
           </div>
-
           {/* Resource Requirements */}
           {recommendation.resourceRequirements && recommendation.resourceRequirements.length > 0 && (
             <div>
@@ -445,7 +409,6 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             </div>
           )}
         </div>
-
         <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
           <button
             onClick={() => {
@@ -470,5 +433,4 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
     </div>
   )
 }
-
 export default NBARecommendations

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -12,12 +11,10 @@ import {
 } from 'lucide-react'
 import { LoadingState, LoadingCard, LoadingButton, AsyncWrapper } from '../ui/loading'
 import { ErrorBoundary } from '../ui/error-boundary'
-
 interface RecommendationsProps {
   farmId: string
   fieldId?: string
 }
-
 interface Recommendation {
   id: string
   title: string
@@ -39,7 +36,6 @@ interface Recommendation {
     cost: number
   }>
 }
-
 const categoryIcons = {
   'planting': Sprout,
   'irrigation': Droplets,
@@ -50,14 +46,12 @@ const categoryIcons = {
   'equipment': CheckCircle2,
   'marketing': DollarSign
 }
-
 const priorityColors = {
   critical: 'bg-red-100 text-red-800 border-red-200',
   high: 'bg-orange-100 text-orange-800 border-orange-200',
   medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   low: 'bg-blue-100 text-blue-800 border-blue-200'
 }
-
 export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -66,24 +60,19 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
     'planting', 'irrigation', 'fertilization', 'pest_control', 'harvest_timing'
   ])
   const [priority, setPriority] = useState<'cost_optimization' | 'yield_maximization' | 'sustainability' | 'risk_minimization'>('yield_maximization')
-
   useEffect(() => {
     fetchRecommendations()
   }, [farmId, fieldId])
-
   const fetchRecommendations = async () => {
     setLoading(true)
     setError(null)
-
     try {
       // Generate working recommendations based on farm data and current conditions
       const currentDate = new Date()
       const season = getSeasonFromDate(currentDate)
       const workingRecommendations = generateWorkingRecommendations(farmId, season, selectedCategories, priority)
-      
       // Simulate API delay for better UX
       await new Promise(resolve => setTimeout(resolve, 1500))
-      
       setRecommendations(workingRecommendations)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
@@ -91,7 +80,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
       setLoading(false)
     }
   }
-
   const getSeasonFromDate = (date: Date) => {
     const month = date.getMonth() + 1
     if (month >= 3 && month <= 5) return 'spring'
@@ -99,7 +87,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
     if (month >= 9 && month <= 11) return 'fall'
     return 'winter'
   }
-
   const generateWorkingRecommendations = (farmId: string, season: string, categories: string[], priority: string): Recommendation[] => {
     const baseRecommendations: Partial<Recommendation>[] = [
       {
@@ -178,16 +165,13 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
         ]
       }
     ]
-
     // Filter by selected categories
     const filteredRecommendations = baseRecommendations.filter(rec => 
       categories.includes(rec.category as string)
     )
-
     // Adjust recommendations based on priority
     const adjustedRecommendations = filteredRecommendations.map(rec => {
       const adjusted = { ...rec } as Recommendation
-      
       if (priority === 'cost_optimization') {
         adjusted.impact.cost = Math.abs(adjusted.impact.cost) * -1 // Emphasize cost savings
         adjusted.confidence = Math.min(adjusted.confidence + 5, 100)
@@ -196,27 +180,22 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
       } else if (priority === 'sustainability') {
         adjusted.impact.sustainability = Math.max(adjusted.impact.sustainability * 1.5, 10)
       }
-      
       return adjusted
     })
-
     // Sort by priority and confidence
     return adjustedRecommendations.sort((a, b) => {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
       const aPriority = priorityOrder[a.priority as keyof typeof priorityOrder]
       const bPriority = priorityOrder[b.priority as keyof typeof priorityOrder]
-      
       if (aPriority !== bPriority) return bPriority - aPriority
       return (b.confidence || 0) - (a.confidence || 0)
     })
   }
-
   const getImpactColor = (value: number) => {
     if (value >= 15) return 'text-green-600'
     if (value >= 5) return 'text-yellow-600'
     return 'text-red-600'
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -229,7 +208,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
       </div>
     )
   }
-
   if (error) {
     return (
       <Card className="border-2">
@@ -247,7 +225,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
       </Card>
     )
   }
-
   return (
     <ErrorBoundary>
       <AsyncWrapper 
@@ -283,7 +260,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                 <option value="risk_minimization">Minimize Risk</option>
               </select>
             </div>
-
             <div>
               <label className="text-sm font-medium mb-2 block">Focus Categories</label>
               <div className="flex flex-wrap gap-2">
@@ -313,7 +289,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                 })}
               </div>
             </div>
-
             <Button onClick={fetchRecommendations} className="w-full">
               <RefreshCw className="h-4 w-4 mr-2" />
               Generate New Recommendations
@@ -321,7 +296,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
           </div>
         </CardContent>
       </Card>
-
       {/* Recommendations */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -332,7 +306,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
             </Badge>
           </div>
         </div>
-
         {recommendations.length === 0 ? (
           <Card className="border-2">
             <CardContent className="flex items-center justify-center h-32">
@@ -387,19 +360,16 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                         </div>
                       </div>
                     </div>
-
                     {/* Reasoning */}
                     <div className="bg-blue-50 rounded-lg p-3">
                       <div className="text-sm font-medium text-blue-900 mb-1">AI Reasoning</div>
                       <p className="text-sm text-blue-700">{recommendation.reasoning}</p>
                     </div>
-
                     {/* Timeline */}
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-gray-500" />
                       <span className="text-sm text-gray-600">Timeline: {recommendation.timeline}</span>
                     </div>
-
                     {/* Actions */}
                     {recommendation.actions && recommendation.actions.length > 0 && (
                       <div>
@@ -426,7 +396,6 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                         </div>
                       </div>
                     )}
-
                     {/* Action Buttons */}
                     <div className="flex gap-2 pt-2">
                       <Button size="sm" className="flex-1">

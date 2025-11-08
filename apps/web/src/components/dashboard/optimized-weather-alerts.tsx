@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useMemo } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -15,25 +14,20 @@ import {
   Clock,
   CheckCircle
 } from 'lucide-react'
-
 interface OptimizedWeatherAlertsProps {
   className?: string
   maxAlerts?: number
 }
-
 export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWeatherAlertsProps) {
   const weather = useWeatherData()
   const { loading } = useDashboardData()
-
   const alerts = useMemo(() => {
     if (!weather?.alerts) return []
-    
     // Sort alerts by priority and return top ones
     return weather.alerts
       .sort((a: any, b: any) => (b.priority || 0) - (a.priority || 0))
       .slice(0, maxAlerts)
   }, [weather?.alerts, maxAlerts])
-
   const getAlertIcon = (type: string) => {
     const iconMap: { [key: string]: React.ElementType } = {
       frost: Snowflake,
@@ -47,7 +41,6 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
     const IconComponent = iconMap[type] || AlertTriangle
     return <IconComponent className="h-4 w-4" />
   }
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'extreme': return 'bg-red-100 text-red-800 border-red-200'
@@ -56,7 +49,6 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
       default: return 'bg-blue-100 text-blue-800 border-blue-200'
     }
   }
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -76,7 +68,6 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
       </ModernCard>
     )
   }
-
   return (
     <ModernCard className={className}>
       <ModernCardHeader>

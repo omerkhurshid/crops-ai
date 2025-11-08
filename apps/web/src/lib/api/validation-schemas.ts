@@ -1,37 +1,31 @@
 import { z } from 'zod'
-
 // Common validation schemas
 const IdSchema = z.string().uuid('Invalid ID format')
 const EmailSchema = z.string().email('Invalid email address')
 const PasswordSchema = z.string().min(8, 'Password must be at least 8 characters')
   .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain uppercase, lowercase and number')
-
 const PaginationSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(10),
   sortBy: z.string().optional(),
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 })
-
 const CoordinatesSchema = z.object({
   latitude: z.coerce.number().min(-90).max(90),
   longitude: z.coerce.number().min(-180).max(180)
 })
-
 const DateRangeSchema = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime()
 }).refine(data => new Date(data.startDate) <= new Date(data.endDate), {
   message: 'Start date must be before end date'
 })
-
 // Auth validation schemas
 export const authSchemas = {
   login: z.object({
     email: EmailSchema,
     password: z.string().min(1, 'Password is required')
   }),
-  
   register: z.object({
     email: EmailSchema,
     password: PasswordSchema,
@@ -39,23 +33,19 @@ export const authSchemas = {
     farmName: z.string().min(2, 'Farm name is required').optional(),
     phoneNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number').optional()
   }),
-  
   forgotPassword: z.object({
     email: EmailSchema
   }),
-  
   resetPassword: z.object({
     token: z.string().min(1, 'Reset token is required'),
     password: PasswordSchema
   }),
-  
   updateProfile: z.object({
     name: z.string().min(2).optional(),
     phoneNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/).optional(),
     timezone: z.string().optional()
   })
 }
-
 // Farm validation schemas
 export const farmSchemas = {
   create: z.object({
@@ -67,7 +57,6 @@ export const farmSchemas = {
     description: z.string().max(500).optional(),
     farmType: z.enum(['CROP', 'LIVESTOCK', 'MIXED', 'ORGANIC']).optional()
   }),
-  
   update: z.object({
     name: z.string().min(2).max(100).optional(),
     location: z.string().min(2).max(200).optional(),
@@ -78,14 +67,12 @@ export const farmSchemas = {
     farmType: z.enum(['CROP', 'LIVESTOCK', 'MIXED', 'ORGANIC']).optional(),
     isActive: z.boolean().optional()
   }),
-  
   list: PaginationSchema.extend({
     search: z.string().optional(),
     isActive: z.boolean().optional(),
     farmType: z.enum(['CROP', 'LIVESTOCK', 'MIXED', 'ORGANIC']).optional()
   })
 }
-
 // Field validation schemas
 export const fieldSchemas = {
   create: z.object({
@@ -98,7 +85,6 @@ export const fieldSchemas = {
     plantingDate: z.string().datetime().optional(),
     expectedHarvestDate: z.string().datetime().optional()
   }),
-  
   update: z.object({
     name: z.string().min(2).max(100).optional(),
     area: z.number().positive().optional(),
@@ -109,14 +95,12 @@ export const fieldSchemas = {
     expectedHarvestDate: z.string().datetime().optional(),
     isActive: z.boolean().optional()
   }),
-  
   list: PaginationSchema.extend({
     farmId: IdSchema.optional(),
     cropType: z.string().optional(),
     isActive: z.boolean().optional()
   })
 }
-
 // Task validation schemas
 export const taskSchemas = {
   create: z.object({
@@ -131,7 +115,6 @@ export const taskSchemas = {
     recurring: z.boolean().default(false),
     recurrencePattern: z.enum(['DAILY', 'WEEKLY', 'MONTHLY']).optional()
   }),
-  
   update: z.object({
     title: z.string().min(2).max(200).optional(),
     description: z.string().max(1000).optional(),
@@ -141,7 +124,6 @@ export const taskSchemas = {
     status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']).optional(),
     completedAt: z.string().datetime().optional()
   }),
-  
   list: PaginationSchema.extend({
     farmId: IdSchema.optional(),
     fieldId: IdSchema.optional(),
@@ -151,7 +133,6 @@ export const taskSchemas = {
     dateRange: DateRangeSchema.optional()
   })
 }
-
 // Crop validation schemas
 export const cropSchemas = {
   create: z.object({
@@ -165,14 +146,12 @@ export const cropSchemas = {
     estimatedYield: z.number().positive().optional(),
     yieldUnit: z.string().max(20).optional()
   }),
-  
   update: z.object({
     status: z.enum(['PLANNED', 'PLANTED', 'GROWING', 'HARVESTED', 'FAILED']).optional(),
     actualHarvestDate: z.string().datetime().optional(),
     actualYield: z.number().positive().optional(),
     notes: z.string().max(1000).optional()
   }),
-  
   list: PaginationSchema.extend({
     farmId: IdSchema.optional(),
     fieldId: IdSchema.optional(),
@@ -181,7 +160,6 @@ export const cropSchemas = {
     season: z.string().optional()
   })
 }
-
 // Financial validation schemas
 export const financialSchemas = {
   createTransaction: z.object({
@@ -195,7 +173,6 @@ export const financialSchemas = {
     receiptUrl: z.string().url().optional(),
     tags: z.array(z.string()).max(10).optional()
   }),
-  
   updateTransaction: z.object({
     category: z.string().min(2).max(50).optional(),
     amount: z.number().positive().optional(),
@@ -205,7 +182,6 @@ export const financialSchemas = {
     receiptUrl: z.string().url().optional(),
     tags: z.array(z.string()).max(10).optional()
   }),
-  
   listTransactions: PaginationSchema.extend({
     farmId: IdSchema.optional(),
     type: z.enum(['INCOME', 'EXPENSE']).optional(),
@@ -215,50 +191,42 @@ export const financialSchemas = {
     maxAmount: z.number().positive().optional()
   })
 }
-
 // Weather validation schemas
 export const weatherSchemas = {
   current: CoordinatesSchema.extend({
     farmId: IdSchema.optional()
   }),
-  
   forecast: CoordinatesSchema.extend({
     farmId: IdSchema.optional(),
     days: z.coerce.number().int().min(1).max(10).default(7)
   }),
-  
   historical: CoordinatesSchema.extend({
     farmId: IdSchema.optional(),
     dateRange: DateRangeSchema
   }),
-  
   alerts: z.object({
     farmId: IdSchema.optional(),
     severity: z.enum(['LOW', 'MEDIUM', 'HIGH', 'EXTREME']).optional(),
     active: z.boolean().optional()
   })
 }
-
 // Satellite validation schemas
 export const satelliteSchemas = {
   ndvi: z.object({
     fieldId: IdSchema,
     dateRange: DateRangeSchema.optional()
   }),
-  
   imagery: z.object({
     fieldId: IdSchema,
     date: z.string().datetime().optional(),
     resolution: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('MEDIUM')
   }),
-  
   analysis: z.object({
     fieldId: IdSchema,
     analysisType: z.enum(['NDVI', 'MOISTURE', 'STRESS', 'GROWTH']),
     dateRange: DateRangeSchema.optional()
   })
 }
-
 // ML/AI validation schemas
 export const mlSchemas = {
   yieldPrediction: z.object({
@@ -272,19 +240,16 @@ export const mlSchemas = {
       potassium: z.number().min(0)
     }).optional()
   }),
-  
   diseaseDetection: z.object({
     fieldId: IdSchema,
     imageUrl: z.string().url(),
     cropType: z.string().min(2).max(50)
   }),
-  
   recommendation: z.object({
     farmId: IdSchema,
     recommendationType: z.enum(['PLANTING', 'IRRIGATION', 'FERTILIZATION', 'PEST_CONTROL', 'HARVEST'])
   })
 }
-
 // Livestock validation schemas
 export const livestockSchemas = {
   create: z.object({
@@ -297,7 +262,6 @@ export const livestockSchemas = {
     weight: z.number().positive().optional(),
     healthStatus: z.enum(['HEALTHY', 'SICK', 'QUARANTINE', 'DECEASED']).default('HEALTHY')
   }),
-  
   updateHealth: z.object({
     healthStatus: z.enum(['HEALTHY', 'SICK', 'QUARANTINE', 'DECEASED']),
     weight: z.number().positive().optional(),
@@ -306,14 +270,12 @@ export const livestockSchemas = {
     treatment: z.string().max(500).optional(),
     veterinarianNotes: z.string().max(1000).optional()
   }),
-  
   list: PaginationSchema.extend({
     farmId: IdSchema.optional(),
     type: z.enum(['CATTLE', 'SHEEP', 'GOATS', 'PIGS', 'POULTRY', 'OTHER']).optional(),
     healthStatus: z.enum(['HEALTHY', 'SICK', 'QUARANTINE', 'DECEASED']).optional()
   })
 }
-
 // Helper function to validate request data
 export async function validateRequest<T>(
   schema: z.ZodSchema<T>,
@@ -332,7 +294,6 @@ export async function validateRequest<T>(
     throw error
   }
 }
-
 // Custom validation error class
 export class ValidationError extends Error {
   constructor(

@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { cn, ensureArray } from '../../lib/utils'
 import { 
@@ -12,7 +11,6 @@ import {
   DollarSign,
   ChevronRight
 } from 'lucide-react'
-
 interface UrgentTask {
   id: string
   title: string
@@ -22,13 +20,11 @@ interface UrgentTask {
   impact?: string
   category: 'water' | 'pest' | 'weather' | 'financial' | 'health'
 }
-
 interface UrgentTasksProps {
   tasks: UrgentTask[]
   onTaskClick?: (taskId: string) => void
   className?: string
 }
-
 const categoryConfig = {
   water: {
     icon: Droplets,
@@ -61,12 +57,10 @@ const categoryConfig = {
     borderColor: 'border-red-200'
   }
 }
-
 export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps) {
   if (tasks.length === 0) {
     return null
   }
-
   return (
     <div className={cn('space-y-4', className)}>
       {/* Urgent Alert Header */}
@@ -89,13 +83,11 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
           </div>
         </div>
       </div>
-
       {/* Urgent Task Cards */}
       <div className="grid grid-cols-1 gap-3 sm:gap-4">
         {ensureArray(tasks).slice(0, 2).map((task) => {
           const config = categoryConfig[task.category as keyof typeof categoryConfig] || categoryConfig.health
           const Icon = config.icon
-          
           return (
             <button
               key={task.id}
@@ -114,7 +106,6 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
               <div className="absolute top-0 right-0 -mr-4 -mt-4 opacity-10">
                 <Icon className="h-32 w-32" />
               </div>
-
               {/* Content */}
               <div className="relative z-10">
                 {/* Header */}
@@ -128,32 +119,27 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
                     </span>
                   )}
                 </div>
-
                 {/* Task Details */}
                 <h3 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
                   {task.title}
                 </h3>
-                
                 {task.field && (
                   <p className="text-gray-700 font-medium mb-3">
                     📍 {task.field}
                   </p>
                 )}
-
                 {/* Timeframe and Impact */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Clock className="h-4 w-4" />
                     <span>Complete within: <strong>{task.timeframe}</strong></span>
                   </div>
-                  
                   {task.impact && (
                     <div className="text-sm font-medium text-gray-700">
                       💰 Potential impact: {task.impact}
                     </div>
                   )}
                 </div>
-
                 {/* Action Button */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-700">
@@ -168,7 +154,6 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
           )
         })}
       </div>
-
       {/* More Tasks Indicator */}
       {tasks.length > 2 && (
         <button className="w-full p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border-2 border-gray-200 transition-colors">
@@ -181,11 +166,9 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
     </div>
   )
 }
-
 // Compact version for mobile
 export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasksProps) {
   if (tasks.length === 0) return null
-
   return (
     <div className={cn('space-y-3', className)}>
       <div className="bg-red-600 text-white p-3 rounded-lg">
@@ -196,11 +179,9 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
           </span>
         </div>
       </div>
-
       {ensureArray(tasks).slice(0, 2).map((task) => {
         const config = categoryConfig[task.category as keyof typeof categoryConfig] || categoryConfig.health
         const Icon = config.icon
-        
         return (
           <button
             key={task.id}

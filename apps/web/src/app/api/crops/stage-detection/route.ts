@@ -4,7 +4,6 @@ import { cropStageDetection } from '@/lib/ml/crop-stage-detection'
 import { createSuccessResponse, handleApiError, ValidationError } from '@/lib/api/errors'
 import { apiMiddleware, withMethods } from '@/lib/api/middleware'
 import { auditLogger } from '@/lib/logging/audit-logger'
-
 const stageDetectionSchema = z.object({
   fieldId: z.string().min(1),
   cropType: z.string().min(1),
@@ -20,7 +19,6 @@ const stageDetectionSchema = z.object({
     west: z.number()
   }).optional()
 })
-
 const stageHistorySchema = z.object({
   fieldId: z.string().min(1),
   cropType: z.string().min(1),
@@ -28,7 +26,6 @@ const stageHistorySchema = z.object({
     message: 'Invalid date format'
   })
 })
-
 const transitionPredictionSchema = z.object({
   fieldId: z.string().min(1),
   cropType: z.string().min(1),
@@ -36,21 +33,17 @@ const transitionPredictionSchema = z.object({
   longitude: z.number().min(-180).max(180),
   currentStage: z.string().min(1)
 })
-
 // POST /api/crops/stage-detection - Detect current crop stage
 export const POST = apiMiddleware.basic(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json()
       const validation = stageDetectionSchema.safeParse(body)
-      
       if (!validation.success) {
         throw new ValidationError('Invalid request body: ' + validation.error.errors.map(e => e.message).join(', '))
       }
-
       const { fieldId, cropType, latitude, longitude, plantingDate, fieldBounds } = validation.data
       const plantingDateObj = new Date(plantingDate)
-
       const detection = await cropStageDetection.detectCropStage(
         fieldId,
         cropType,
@@ -59,7 +52,6 @@ export const POST = apiMiddleware.basic(
         plantingDateObj,
         fieldBounds
       )
-
       await auditLogger.logML('crop_stage_detection_requested', fieldId, undefined, undefined, {
         fieldId,
         cropType,
@@ -68,68 +60,56 @@ export const POST = apiMiddleware.basic(
         detectedStage: detection.currentStage.stage,
         confidence: detection.stageConfidence
       })
-
       return createSuccessResponse({
         detection,
         message: 'Crop stage detected successfully'
       })
-
     } catch (error) {
       await auditLogger.logML('crop_stage_detection_error', 'unknown', undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
       })
-      
       return handleApiError(error)
     }
   })
 )
-
 // GET /api/crops/stage-detection/history?fieldId=123&cropType=corn&plantingDate=2024-04-15
 export const GET = apiMiddleware.basic(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url)
-      
       const fieldId = searchParams.get('fieldId') || ''
       const cropType = searchParams.get('cropType') || ''
       const plantingDate = searchParams.get('plantingDate') || ''
       const action = searchParams.get('action') || 'history'
-
       if (action === 'history') {
         const validation = stageHistorySchema.safeParse({
           fieldId,
           cropType,
           plantingDate
         })
-
         if (!validation.success) {
           throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '))
         }
-
         const plantingDateObj = new Date(plantingDate)
         const history = await cropStageDetection.getCropStageHistory(
           fieldId,
           cropType,
           plantingDateObj
         )
-
         await auditLogger.logML('crop_stage_history_requested', fieldId, undefined, undefined, {
           fieldId,
           cropType,
           plantingDate,
           stagesFound: history.stageHistory.length
         })
-
         return createSuccessResponse({
           history,
           message: 'Crop stage history retrieved successfully'
         })
-
       } else if (action === 'transition') {
         const latitude = parseFloat(searchParams.get('latitude') || '0')
         const longitude = parseFloat(searchParams.get('longitude') || '0')
         const currentStage = searchParams.get('currentStage') || ''
-
         const validation = transitionPredictionSchema.safeParse({
           fieldId,
           cropType,
@@ -137,11 +117,9 @@ export const GET = apiMiddleware.basic(
           longitude,
           currentStage
         })
-
         if (!validation.success) {
           throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '))
         }
-
         const prediction = await cropStageDetection.predictStageTransition(
           fieldId,
           cropType,
@@ -149,7 +127,6 @@ export const GET = apiMiddleware.basic(
           longitude,
           currentStage
         )
-
         await auditLogger.logML('stage_transition_prediction_requested', fieldId, undefined, undefined, {
           fieldId,
           cropType,
@@ -157,21 +134,17 @@ export const GET = apiMiddleware.basic(
           nextStage: prediction.nextStage,
           transitionProbability: prediction.transitionProbability
         })
-
         return createSuccessResponse({
           prediction,
           message: 'Stage transition prediction generated successfully'
         })
-
       } else {
         throw new ValidationError('Invalid action. Use "history" or "transition"')
       }
-
     } catch (error) {
       await auditLogger.logML('crop_stage_api_error', 'unknown', undefined, undefined, {
         error: error instanceof Error ? error.message : 'Unknown error'
       })
-      
       return handleApiError(error)
     }
   })

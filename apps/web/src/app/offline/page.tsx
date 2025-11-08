@@ -3,16 +3,13 @@
  * Displayed when the user is offline and the requested page is not cached
  */
 'use client'
-
 import { Wifi, WifiOff, RefreshCw } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { ColorCombinations } from '../../lib/design-system/color-standards'
-
 export default function OfflinePage() {
   const handleRefresh = () => {
     window.location.reload()
   }
-
   const handleRetryConnection = async () => {
     if ('serviceWorker' in navigator) {
       try {
@@ -25,11 +22,9 @@ export default function OfflinePage() {
         console.error('Failed to trigger background sync:', error)
       }
     }
-    
     // Attempt to reload
     handleRefresh()
   }
-
   return (
     <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
@@ -42,7 +37,6 @@ export default function OfflinePage() {
             </div>
           </div>
         </div>
-
         {/* Title and Description */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-fk-text mb-4">
@@ -53,7 +47,6 @@ export default function OfflinePage() {
             but you can still view your cached farm data.
           </p>
         </div>
-
         {/* Action Buttons */}
         <div className="space-y-4">
           <Button 
@@ -64,7 +57,6 @@ export default function OfflinePage() {
             <RefreshCw className="h-5 w-5 mr-2" />
             Try Again
           </Button>
-
           <Button 
             onClick={() => window.history.back()}
             variant="outline"
@@ -74,7 +66,6 @@ export default function OfflinePage() {
             Go Back
           </Button>
         </div>
-
         {/* Offline Features */}
         <div className={`mt-12 p-6 rounded-lg ${ColorCombinations.cardDefault}`}>
           <h3 className="text-lg font-semibold text-fk-text mb-4">
@@ -99,7 +90,6 @@ export default function OfflinePage() {
             </li>
           </ul>
         </div>
-
         {/* Connection Status */}
         <div className="mt-6">
           <div className="flex items-center justify-center text-sm text-fk-text-muted">

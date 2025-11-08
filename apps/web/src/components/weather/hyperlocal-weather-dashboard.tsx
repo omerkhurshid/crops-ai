@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -8,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { HyperlocalForecast, WeatherAlert, CropWeatherAdvisory } from '../../lib/weather/hyperlocal-weather'
 import { AlertTriangle, CloudRain, Sun, Thermometer, Wind, Eye, Gauge } from 'lucide-react'
-
 interface HyperlocalWeatherDashboardProps {
   latitude: number
   longitude: number
@@ -18,7 +16,6 @@ interface HyperlocalWeatherDashboardProps {
   growthStage?: string
   className?: string
 }
-
 export function HyperlocalWeatherDashboard({ 
   latitude, 
   longitude, 
@@ -33,31 +30,25 @@ export function HyperlocalWeatherDashboard({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('current')
-
   useEffect(() => {
     if (latitude && longitude) {
       fetchHyperlocalWeather()
     }
   }, [latitude, longitude, elevation, fieldId, cropType, growthStage])
-
   const fetchHyperlocalWeather = async () => {
     setLoading(true)
     setError(null)
-
     try {
       let url = `/api/weather/hyperlocal?latitude=${latitude}&longitude=${longitude}`
       if (elevation) url += `&elevation=${elevation}`
       if (fieldId) url += `&fieldId=${fieldId}`
-
       // Fetch basic hyperlocal forecast
       const response = await fetch(url)
       if (!response.ok) {
         throw new Error(`Weather API error: ${response.status}`)
       }
-      
       const data = await response.json()
       setForecast(data.data)
-
       // If crop data is available, fetch crop-specific advisory
       if (cropType && growthStage) {
         const cropResponse = await fetch('/api/weather/hyperlocal', {
@@ -73,13 +64,11 @@ export function HyperlocalWeatherDashboard({
             fieldId
           })
         })
-
         if (cropResponse.ok) {
           const cropData = await cropResponse.json()
           setCropAdvisory(cropData.data.cropAdvisory)
         }
       }
-
     } catch (err) {
       setError('Failed to fetch hyperlocal weather data')
       console.error('Hyperlocal weather fetch error:', err)
@@ -87,7 +76,6 @@ export function HyperlocalWeatherDashboard({
       setLoading(false)
     }
   }
-
   const getWeatherIcon = (conditions: string) => {
     const iconMap: Record<string, string> = {
       'Clear': '☀️',
@@ -101,7 +89,6 @@ export function HyperlocalWeatherDashboard({
     }
     return iconMap[conditions] || '🌤️'
   }
-
   const getAlertIcon = (alertType: WeatherAlert['type']) => {
     const iconMap: Record<string, React.ReactNode> = {
       frost: <Thermometer className="h-4 w-4" />,
@@ -114,7 +101,6 @@ export function HyperlocalWeatherDashboard({
     }
     return iconMap[alertType] || <AlertTriangle className="h-4 w-4" />
   }
-
   const getSeverityColor = (severity: WeatherAlert['severity']) => {
     const colorMap: Record<string, string> = {
       low: 'text-yellow-600 bg-yellow-50 border-yellow-200',
@@ -124,11 +110,9 @@ export function HyperlocalWeatherDashboard({
     }
     return colorMap[severity] || 'text-gray-600 bg-gray-50 border-gray-200'
   }
-
   const formatConfidence = (confidence: number) => {
     return `${Math.round(confidence * 100)}%`
   }
-
   if (loading) {
     return (
       <div className={`p-6 ${className}`}>
@@ -143,7 +127,6 @@ export function HyperlocalWeatherDashboard({
       </div>
     )
   }
-
   if (error || !forecast) {
     return (
       <div className={`p-6 ${className}`}>
@@ -160,7 +143,6 @@ export function HyperlocalWeatherDashboard({
       </div>
     )
   }
-
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       {/* Header */}
@@ -175,7 +157,6 @@ export function HyperlocalWeatherDashboard({
           Refresh
         </Button>
       </div>
-
       {/* Active Weather Alerts */}
       {forecast.alerts.length > 0 && (
         <div className="space-y-3">
@@ -193,7 +174,6 @@ export function HyperlocalWeatherDashboard({
                   </AlertTitle>
                   <AlertDescription className="mt-2">
                     <p>{alert.description}</p>
-                    
                     {/* Farming Impact */}
                     <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
@@ -228,7 +208,6 @@ export function HyperlocalWeatherDashboard({
           ))}
         </div>
       )}
-
       {/* Crop Advisory */}
       {cropAdvisory && (
         <Card>
@@ -258,7 +237,6 @@ export function HyperlocalWeatherDashboard({
                   )}
                 </ul>
               </div>
-
               {/* Risks */}
               <div>
                 <h4 className="font-semibold text-red-700 mb-2">⚠️ Risks</h4>
@@ -271,7 +249,6 @@ export function HyperlocalWeatherDashboard({
                   )}
                 </ul>
               </div>
-
               {/* Opportunities */}
               <div>
                 <h4 className="font-semibold text-blue-700 mb-2">🌟 Opportunities</h4>
@@ -285,7 +262,6 @@ export function HyperlocalWeatherDashboard({
                 </ul>
               </div>
             </div>
-            
             <div className="mt-4 text-right">
               <Badge variant="secondary">
                 Advisory Confidence: {formatConfidence(cropAdvisory.confidence)}
@@ -294,7 +270,6 @@ export function HyperlocalWeatherDashboard({
           </CardContent>
         </Card>
       )}
-
       {/* Weather Tabs */}
       <Tabs defaultValue="current" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
@@ -302,7 +277,6 @@ export function HyperlocalWeatherDashboard({
           <TabsTrigger value="hourly">48h Hourly</TabsTrigger>
           <TabsTrigger value="daily">7-Day Daily</TabsTrigger>
         </TabsList>
-
         {/* Current Weather */}
         <TabsContent value="current">
           <Card>
@@ -350,7 +324,6 @@ export function HyperlocalWeatherDashboard({
                   </div>
                 </div>
               </div>
-
               {/* Data Sources */}
               <div className="mt-6 pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-2">Data Sources:</p>
@@ -362,7 +335,6 @@ export function HyperlocalWeatherDashboard({
                   ))}
                 </div>
               </div>
-
               {/* Topographical Adjustments */}
               {forecast.metadata.adjustments.length > 0 && (
                 <div className="mt-4">
@@ -379,7 +351,6 @@ export function HyperlocalWeatherDashboard({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Hourly Forecast */}
         <TabsContent value="hourly">
           <Card>
@@ -413,7 +384,6 @@ export function HyperlocalWeatherDashboard({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Daily Forecast */}
         <TabsContent value="daily">
           <Card>
@@ -435,11 +405,9 @@ export function HyperlocalWeatherDashboard({
                       </p>
                       <p className="text-sm text-gray-600">{day.conditions}</p>
                     </div>
-                    
                     <div className="text-2xl">
                       {getWeatherIcon(day.conditions)}
                     </div>
-                    
                     <div className="text-right min-w-[120px]">
                       <p className="font-semibold">
                         {Math.round(day.temperatureMax)}° / {Math.round(day.temperatureMin)}°

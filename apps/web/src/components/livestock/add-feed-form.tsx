@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -7,13 +6,11 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
-
 interface AddFeedFormProps {
   farms: any[]
   animals: any[]
   userId: string
 }
-
 export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -33,7 +30,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
     phosphorus: '',
     notes: ''
   })
-
   const feedTypes = [
     'hay',
     'grain',
@@ -49,13 +45,10 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
     'mineral_supplement',
     'vitamin_supplement'
   ]
-
   const units = ['lbs', 'kg', 'oz', 'tons', 'bales', 'scoops']
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-
     // Auto-calculate total cost when quantity or cost per unit changes
     if (name === 'quantity' || name === 'costPerUnit') {
       const newFormData = { ...formData, [name]: value }
@@ -69,17 +62,14 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
       }
     }
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
       // Validate required fields
       if (!formData.animalId || !formData.feedDate || !formData.feedType || !formData.quantity) {
         throw new Error('Please fill in all required fields')
       }
-
       // Submit feed record
       const response = await fetch('/api/livestock/feed', {
         method: 'POST',
@@ -98,14 +88,11 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
           brand: formData.brand || null
         })
       })
-
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || 'Failed to add feed record')
       }
-
       const newRecord = await response.json()
-      
       toast.success('Feed record added successfully!')
       router.push('/livestock/feed')
     } catch (error) {
@@ -115,7 +102,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
       setIsSubmitting(false)
     }
   }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
@@ -138,7 +124,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="feedDate">Feed Date *</Label>
           <Input
@@ -150,7 +135,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             required
           />
         </div>
-
         <div>
           <Label htmlFor="feedType">Feed Type *</Label>
           <select
@@ -168,7 +152,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="brand">Brand</Label>
           <Input
@@ -180,7 +163,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
           />
         </div>
       </div>
-
       {/* Quantity and Cost */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div>
@@ -196,7 +178,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             required
           />
         </div>
-
         <div>
           <Label htmlFor="unit">Unit</Label>
           <select
@@ -211,7 +192,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="costPerUnit">Cost per {formData.unit} ($)</Label>
           <Input
@@ -224,7 +204,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
             placeholder="0.25"
           />
         </div>
-
         <div>
           <Label htmlFor="totalCost">Total Cost ($)</Label>
           <Input
@@ -238,7 +217,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
           />
         </div>
       </div>
-
       {/* Nutrition Information */}
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Nutrition Information (Optional)</h3>
@@ -255,7 +233,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
               placeholder="18.0"
             />
           </div>
-
           <div>
             <Label htmlFor="fat">Fat (%)</Label>
             <Input
@@ -268,7 +245,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
               placeholder="3.5"
             />
           </div>
-
           <div>
             <Label htmlFor="fiber">Fiber (%)</Label>
             <Input
@@ -281,7 +257,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
               placeholder="25.0"
             />
           </div>
-
           <div>
             <Label htmlFor="calcium">Calcium (%)</Label>
             <Input
@@ -294,7 +269,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
               placeholder="0.75"
             />
           </div>
-
           <div>
             <Label htmlFor="phosphorus">Phosphorus (%)</Label>
             <Input
@@ -309,7 +283,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
           </div>
         </div>
       </div>
-
       {/* Notes */}
       <div>
         <Label htmlFor="notes">Notes</Label>
@@ -322,7 +295,6 @@ export function AddFeedForm({ farms, animals, userId }: AddFeedFormProps) {
           rows={3}
         />
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-end gap-4">
         <Button

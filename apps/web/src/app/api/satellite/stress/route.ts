@@ -5,7 +5,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
 import { prisma } from '../../../../lib/prisma';
-
 const stressSchema = z.object({
   fieldId: z.string(),
   bbox: z.object({
@@ -25,26 +24,21 @@ const stressSchema = z.object({
     analysisDepth: z.enum(['quick', 'standard', 'comprehensive']).optional()
   })
 });
-
 // POST /api/satellite/stress
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       // Validate input
       const validation = stressSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
-      
       // Get field details if bbox not provided
       let bbox = params.bbox;
       if (!bbox) {
@@ -56,11 +50,9 @@ export const POST = apiMiddleware.protected(
             }
           }
         });
-
         if (!field) {
           throw new ValidationError('Field not found or access denied');
         }
-
         // Extract bbox from field boundary or use default
         if (field.area && field.area > 0) {
           // Calculate bbox from field location - simplified for now
@@ -74,9 +66,7 @@ export const POST = apiMiddleware.protected(
           throw new ValidationError('Field boundary not defined. Please detect boundaries first.');
         }
       }
-
       const date = params.date || new Date().toISOString().split('T')[0];
-
       // Perform stress detection
       const result = await stressDetector.detectStress(
         params.fieldId,
@@ -84,7 +74,6 @@ export const POST = apiMiddleware.protected(
         date,
         params.options as any
       );
-
       // Generate actionable summary
       const summary = {
         fieldId: params.fieldId,
@@ -120,7 +109,6 @@ export const POST = apiMiddleware.protected(
           'Consider on-site inspection of affected areas'
         ]
       };
-
       // Save stress detection as satellite data
       await prisma.satelliteData.create({
         data: {
@@ -131,7 +119,6 @@ export const POST = apiMiddleware.protected(
           imageUrl: null
         }
       });
-
       return createSuccessResponse({
         data: result,
         summary,
@@ -144,32 +131,26 @@ export const POST = apiMiddleware.protected(
         },
         message: `Stress detection completed - ${result.overallStress.level} stress detected`
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/satellite/stress?fieldId=123&date=2024-01-15
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const fieldId = searchParams.get('fieldId');
       const date = searchParams.get('date');
       const historicalDays = parseInt(searchParams.get('historicalDays') || '30');
-
       if (!fieldId) {
         throw new ValidationError('fieldId parameter is required');
       }
-
       // Verify field access
       const field = await prisma.field.findFirst({
         where: {
@@ -179,11 +160,9 @@ export const GET = apiMiddleware.protected(
           }
         }
       });
-
       if (!field) {
         throw new ValidationError('Field not found or access denied');
       }
-
       if (date) {
         // Get specific stress analysis from satellite data
         const analysis = await prisma.satelliteData.findFirst({
@@ -198,11 +177,9 @@ export const GET = apiMiddleware.protected(
             captureDate: 'desc'
           }
         });
-
         if (!analysis) {
           throw new ValidationError('No stress analysis found for the specified date');
         }
-
         return createSuccessResponse({
           data: {
             fieldId: analysis.fieldId,
@@ -224,7 +201,6 @@ export const GET = apiMiddleware.protected(
         // Get historical stress analyses from satellite data
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - historicalDays);
-
         const analyses = await prisma.satelliteData.findMany({
           where: {
             fieldId,
@@ -237,7 +213,6 @@ export const GET = apiMiddleware.protected(
           },
           take: 10 // Limit to last 10 analyses
         });
-
         // Extract stress trends
         const stressTrend = analyses.map((a: any) => ({
           date: a.captureDate.toISOString().split('T')[0],
@@ -248,7 +223,6 @@ export const GET = apiMiddleware.protected(
                              a.stressLevel === 'MODERATE' ? 40 :
                              a.stressLevel === 'HIGH' ? 60 : 80
         }));
-
         return createSuccessResponse({
           data: {
             fieldId,
@@ -275,7 +249,6 @@ export const GET = apiMiddleware.protected(
           message: `Retrieved ${analyses.length} stress analyses from the last ${historicalDays} days`
         });
       }
-
     } catch (error) {
       return handleApiError(error);
     }

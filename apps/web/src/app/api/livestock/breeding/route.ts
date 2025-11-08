@@ -1,34 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const animalId = searchParams.get('animalId')
     const farmId = searchParams.get('farmId')
-
     const whereClause: any = {
       animal: { userId: user.id }
     }
-
     if (animalId) {
       whereClause.animalId = animalId
     }
-
     if (farmId) {
       whereClause.animal = {
         ...whereClause.animal,
         farmId: farmId
       }
     }
-
     const breedingRecords = await prisma.breedingRecord.findMany({
       where: whereClause,
       include: {
@@ -51,7 +44,6 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { breedingDate: 'desc' }
     })
-
     return NextResponse.json(breedingRecords)
   } catch (error) {
     console.error('Error fetching breeding records:', error)
@@ -61,17 +53,13 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 export async function POST(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const data = await request.json()
-
     // Validate required fields
     if (!data.animalId || !data.breedingDate || !data.breedingType) {
       return NextResponse.json(
@@ -79,7 +67,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
     // Verify animal ownership
     const animal = await prisma.animal.findFirst({
       where: {
@@ -87,14 +74,12 @@ export async function POST(request: NextRequest) {
         userId: user.id
       }
     })
-
     if (!animal) {
       return NextResponse.json(
         { error: 'Animal not found or not owned by user' },
         { status: 404 }
       )
     }
-
     // If mate is specified, verify mate ownership
     if (data.mateId) {
       const mate = await prisma.animal.findFirst({
@@ -103,7 +88,6 @@ export async function POST(request: NextRequest) {
           userId: user.id
         }
       })
-
       if (!mate) {
         return NextResponse.json(
           { error: 'Mate animal not found or not owned by user' },
@@ -111,7 +95,6 @@ export async function POST(request: NextRequest) {
         )
       }
     }
-
     // Calculate expected due date based on species
     let expectedDueDate = null
     if (data.breedingDate) {
@@ -123,11 +106,9 @@ export async function POST(request: NextRequest) {
         pig: 114,    // 114 days
         horse: 340   // 340 days
       }
-      
       const gestationDays = gestationPeriods[animal.species] || 150
       expectedDueDate = new Date(breedingDate.getTime() + gestationDays * 24 * 60 * 60 * 1000)
     }
-
     const breedingRecord = await prisma.breedingRecord.create({
       data: {
         animalId: data.animalId,
@@ -161,7 +142,6 @@ export async function POST(request: NextRequest) {
         }
       }
     })
-
     return NextResponse.json(breedingRecord, { status: 201 })
   } catch (error) {
     console.error('Error creating breeding record:', error)

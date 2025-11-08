@@ -1,7 +1,6 @@
 import * as React from "react"
 import { cn } from "../../lib/utils"
 import { getAriaAttributes } from "../../lib/accessibility"
-
 export interface AccessibleCardProps extends React.HTMLAttributes<HTMLDivElement> {
   'aria-label'?: string
   'aria-labelledby'?: string
@@ -9,11 +8,9 @@ export interface AccessibleCardProps extends React.HTMLAttributes<HTMLDivElement
   interactive?: boolean
   level?: number
 }
-
 const AccessibleCard = React.forwardRef<HTMLDivElement, AccessibleCardProps>(
   ({ className, interactive = false, level, ...props }, ref) => {
     const role = interactive ? 'button' : level ? 'region' : undefined
-    
     if (interactive) {
       return (
         <button
@@ -29,7 +26,6 @@ const AccessibleCard = React.forwardRef<HTMLDivElement, AccessibleCardProps>(
         />
       )
     }
-    
     return (
       <div
         ref={ref}
@@ -45,7 +41,6 @@ const AccessibleCard = React.forwardRef<HTMLDivElement, AccessibleCardProps>(
   }
 )
 AccessibleCard.displayName = "AccessibleCard"
-
 const AccessibleCardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -57,7 +52,6 @@ const AccessibleCardHeader = React.forwardRef<
   />
 ))
 AccessibleCardHeader.displayName = "AccessibleCardHeader"
-
 const AccessibleCardTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement> & { level?: 1 | 2 | 3 | 4 | 5 | 6 }
@@ -70,7 +64,6 @@ const AccessibleCardTitle = React.forwardRef<
     ),
     ...props
   }
-  
   switch (level) {
     case 1: return <h1 {...HeadingProps} />
     case 2: return <h2 {...HeadingProps} />
@@ -82,7 +75,6 @@ const AccessibleCardTitle = React.forwardRef<
   }
 })
 AccessibleCardTitle.displayName = "AccessibleCardTitle"
-
 const AccessibleCardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -94,7 +86,6 @@ const AccessibleCardDescription = React.forwardRef<
   />
 ))
 AccessibleCardDescription.displayName = "AccessibleCardDescription"
-
 const AccessibleCardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -102,7 +93,6 @@ const AccessibleCardContent = React.forwardRef<
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ))
 AccessibleCardContent.displayName = "AccessibleCardContent"
-
 const AccessibleCardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -114,7 +104,6 @@ const AccessibleCardFooter = React.forwardRef<
   />
 ))
 AccessibleCardFooter.displayName = "AccessibleCardFooter"
-
 export {
   AccessibleCard,
   AccessibleCardHeader,

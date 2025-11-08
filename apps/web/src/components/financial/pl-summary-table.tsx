@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,13 +13,11 @@ import {
   Link2,
   Download
 } from 'lucide-react';
-
 interface CategoryBreakdown {
   category: string;
   amount: number;
   count: number;
 }
-
 interface FinancialSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -31,18 +28,15 @@ interface FinancialSummary {
   profitChange: number;
   transactionCount: number;
 }
-
 interface PLSummaryTableProps {
   summary: FinancialSummary;
   farmId: string;
   dateRange: { start: Date; end: Date };
 }
-
 interface DetailedBreakdown {
   incomeByCategory: CategoryBreakdown[];
   expensesByCategory: CategoryBreakdown[];
 }
-
 const CATEGORY_ICONS: Record<string, string> = {
   // Income
   CROP_SALES: '🌾',
@@ -63,7 +57,6 @@ const CATEGORY_ICONS: Record<string, string> = {
   OVERHEAD: '🏢',
   OTHER_EXPENSE: '📄',
 };
-
 const CATEGORY_LABELS: Record<string, string> = {
   // Income
   CROP_SALES: 'Crop Sales',
@@ -84,12 +77,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   OVERHEAD: 'Overhead',
   OTHER_EXPENSE: 'Other Expenses',
 };
-
 export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTableProps) {
   const [breakdown, setBreakdown] = useState<DetailedBreakdown | null>(null);
   const [loading, setLoading] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['income', 'expenses']));
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -98,20 +89,16 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
       maximumFractionDigits: 0,
     }).format(amount);
   };
-
   const formatPercentage = (percentage: number) => {
     return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`;
   };
-
   const fetchBreakdown = async () => {
     if (breakdown) return; // Already loaded
-    
     try {
       setLoading(true);
       const response = await fetch(
         `/api/financial/summary?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       );
-      
       if (response.ok) {
         const data = await response.json();
         setBreakdown(data.breakdown);
@@ -122,11 +109,9 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchBreakdown();
   }, [farmId, dateRange]);
-
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
     if (newExpanded.has(section)) {
@@ -136,18 +121,15 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
     }
     setExpandedSections(newExpanded);
   };
-
   const getCategoryPercentage = (amount: number, total: number) => {
     return total > 0 ? (amount / total) * 100 : 0;
   };
-
   const handleExport = async () => {
     try {
       const response = await fetch(
         `/api/financial/export?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}&format=pdf`,
         { method: 'POST' }
       );
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -163,7 +145,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
       console.error('Error exporting report:', error);
     }
   };
-
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
@@ -173,7 +154,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
           Export
         </Button>
       </div>
-
       <div className="space-y-4">
         {/* Income Section */}
         <div className="border rounded-lg">
@@ -199,7 +179,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               <TrendingUp className="h-4 w-4 text-green-500" />
             </div>
           </button>
-          
           {expandedSections.has('income') && breakdown && (
             <div className="px-4 pb-4 space-y-2">
               {breakdown.incomeByCategory.map((item) => (
@@ -221,7 +200,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                   </div>
                 </div>
               ))}
-              
               {breakdown.incomeByCategory.length === 0 && (
                 <div className="text-center py-4 text-gray-500">
                   No income recorded for this period
@@ -230,7 +208,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
             </div>
           )}
         </div>
-
         {/* Expenses Section */}
         <div className="border rounded-lg">
           <button
@@ -255,7 +232,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               <TrendingDown className="h-4 w-4 text-red-500" />
             </div>
           </button>
-          
           {expandedSections.has('expenses') && breakdown && (
             <div className="px-4 pb-4 space-y-2">
               {breakdown.expensesByCategory.map((item) => (
@@ -277,7 +253,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                   </div>
                 </div>
               ))}
-              
               {breakdown.expensesByCategory.length === 0 && (
                 <div className="text-center py-4 text-gray-500">
                   No expenses recorded for this period
@@ -286,7 +261,6 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
             </div>
           )}
         </div>
-
         {/* Net Profit Section */}
         <div className="border-2 border-gray-300 rounded-lg bg-gray-50">
           <div className="p-4">
@@ -310,14 +284,12 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                 )}
               </div>
             </div>
-            
             <div className="mt-2 text-sm text-gray-600">
               Profit margin: {formatPercentage(summary.profitMargin)} • 
               Expense ratio: {formatPercentage(summary.totalIncome > 0 ? (summary.totalExpenses / summary.totalIncome) * 100 : 0)}
             </div>
           </div>
         </div>
-
         {/* Loading State */}
         {loading && breakdown === null && (
           <div className="text-center py-8">

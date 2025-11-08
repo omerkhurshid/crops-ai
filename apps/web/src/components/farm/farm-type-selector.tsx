@@ -1,15 +1,12 @@
 'use client'
-
 import { farmTypeOptions, FarmType } from '../../lib/farm-categories'
 import { Card, CardContent } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Check } from 'lucide-react'
-
 interface FarmTypeSelectorProps {
   selectedType?: FarmType
   onSelect: (type: FarmType) => void
 }
-
 export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -37,7 +34,6 @@ export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorPro
               <p className="text-sm text-gray-600 mb-4">
                 {option.description}
               </p>
-              
               <div className="space-y-2">
                 <p className="text-xs font-medium text-gray-700 mb-2">Key Benefits:</p>
                 <div className="flex flex-wrap gap-1 justify-center">

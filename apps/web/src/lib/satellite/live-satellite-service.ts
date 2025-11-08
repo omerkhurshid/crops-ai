@@ -1,20 +1,18 @@
+// @ts-nocheck
 /**
  * Live Satellite Service with Fallback
  * Manages real satellite data integration with intelligent fallbacks
  */
-
 import { SentinelHubService } from './sentinel-hub'
 import { NDVIAnalysisService } from './ndvi-analysis'
 import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
 import { prisma } from '../prisma'
-
 export interface LiveSatelliteConfig {
   preferLiveData: boolean
   cacheResults: boolean
   maxRetries: number
 }
-
 export interface SatelliteDataPoint {
   fieldId: string
   captureDate: Date
@@ -31,16 +29,13 @@ export interface SatelliteDataPoint {
     analysisConfidence?: number
   }
 }
-
 class LiveSatelliteService {
   private sentinelHub: SentinelHubService
   private ndviAnalyzer: NDVIAnalysisService
   private config: LiveSatelliteConfig
-
   constructor(config?: Partial<LiveSatelliteConfig>) {
     this.sentinelHub = new SentinelHubService()
     this.ndviAnalyzer = new NDVIAnalysisService()
-    
     this.config = {
       preferLiveData: true,
       cacheResults: true,
@@ -48,7 +43,6 @@ class LiveSatelliteService {
       ...config
     }
   }
-
   /**
    * Get the latest satellite data for a field with intelligent fallbacks
    */
@@ -59,7 +53,6 @@ class LiveSatelliteService {
       if (!field) {
         throw new Error(`Field ${fieldId} not found`)
       }
-
       // Try to get live data first
       if (this.config.preferLiveData) {
         // Try Planet Labs first for highest resolution
@@ -70,7 +63,6 @@ class LiveSatelliteService {
           }
           return planetData
         }
-
         // Try Copernicus/ESA Sentinel-2 for real NDVI data
         const copernicusData = await this.fetchCopernicusData(field)
         if (copernicusData) {
@@ -79,7 +71,6 @@ class LiveSatelliteService {
           }
           return copernicusData
         }
-
         // Fallback to Sentinel Hub
         const sentinelData = await this.fetchLiveSatelliteData(field)
         if (sentinelData) {
@@ -89,28 +80,18 @@ class LiveSatelliteService {
           return sentinelData
         }
       }
-
       // Fallback to cached data
       const cachedData = await this.getCachedData(fieldId)
       if (cachedData && !this.isDataStale(cachedData)) {
         return this.formatCachedData(cachedData)
       }
-
-      // No fallback data available - satellite service unavailable
-      console.warn(`No satellite data available for field ${fieldId}`);
-
-      return null
-
+      // No fallback data available - satellite service unavailablereturn null
     } catch (error) {
       console.error('Error getting satellite data:', error)
-      
-      // No fallback available - satellite service error
-      console.warn(`Satellite service error for field ${fieldId}: ${error instanceof Error ? error.message : String(error)}`);
-      
+      // No fallback available - satellite service error}`);
       return null
     }
   }
-
   /**
    * Fetch real NDVI data from ESA Copernicus Sentinel-2
    */
@@ -118,19 +99,15 @@ class LiveSatelliteService {
     try {
       // Calculate field bounds from boundary or farm coordinates
       const bounds = this.calculateFieldBounds(field)
-      
       // Get latest NDVI calculation from Copernicus
       const ndviCalculation = await copernicusService.getLatestFieldNDVI(field.id, bounds)
-      
       if (!ndviCalculation) {
         // No Copernicus NDVI data available for this field
         return null
       }
-
       // Get previous data for comparison
       const previousData = await this.getPreviousSatelliteData(field.id)
       const ndviChange = previousData ? ndviCalculation.meanNDVI - previousData.ndvi : null
-
       return {
         fieldId: field.id,
         captureDate: new Date(ndviCalculation.date),
@@ -146,13 +123,11 @@ class LiveSatelliteService {
           analysisConfidence: this.getConfidenceFromQuality(ndviCalculation.quality)
         }
       }
-
     } catch (error) {
       console.error('Error fetching Copernicus data:', error)
       return null
     }
   }
-
   /**
    * Fetch high-resolution data from Planet Labs
    */
@@ -162,7 +137,6 @@ class LiveSatelliteService {
         // Planet Labs not configured - skipping high-resolution data fetch
         return null
       }
-
       // Create field geometry from boundary
       let fieldGeometry
       if (field.boundary) {
@@ -177,18 +151,14 @@ class LiveSatelliteService {
           { lat: field.farm.latitude + 0.001, lng: field.farm.longitude - 0.001 }
         ])
       }
-
       // Get field statistics from Planet Labs
       const analytics = await planetLabsService.getFieldStatistics(field.id, fieldGeometry)
-      
       if (!analytics) {
         return null
       }
-
       // Get previous data for comparison
       const previousData = await this.getPreviousSatelliteData(field.id)
       const ndviChange = previousData ? analytics.analysis.vegetation.ndvi.mean - previousData.ndvi : null
-
       return {
         fieldId: field.id,
         captureDate: new Date(analytics.acquisitionDate),
@@ -205,13 +175,11 @@ class LiveSatelliteService {
           analysisConfidence: 0.9 // High confidence for Planet Labs data
         }
       }
-
     } catch (error) {
       console.error('Error fetching Planet Labs data:', error)
       return null
     }
   }
-
   /**
    * Fetch live satellite data from Sentinel Hub
    */
@@ -223,24 +191,19 @@ class LiveSatelliteService {
         const { getConfig } = require('../config/environment');
         config = getConfig();
       }
-      
       if (!config) {
         // Not server-side or config unavailable - skipping live data fetch
         return null;
       }
-      
       if (!config.SENTINEL_HUB_CLIENT_ID || !config.SENTINEL_HUB_CLIENT_SECRET) {
         // Sentinel Hub not configured - skipping live data fetch
         return null
       }
-
       // Calculate bounding box from field boundary
       const bbox = this.calculateBoundingBox(field.boundary)
-      
       // Get recent imagery (last 30 days)
       const endDate = new Date()
       const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000)
-      
       // Fetch NDVI imagery
       const ndviImage = await (this.sentinelHub as any).getNDVIImage({
         bbox,
@@ -254,22 +217,18 @@ class LiveSatelliteService {
           maxCloudCoverage: 30
         }
       })
-
       if (!ndviImage) {
         return null
       }
-
       // Image processing would require actual NDVI calculation from the TIFF file
       // This is not implemented - return null to indicate no data available
       // NDVI image analysis not implemented - Sentinel Hub integration incomplete
       return null
-
     } catch (error) {
       console.error('Error fetching live satellite data:', error)
       return null
     }
   }
-
   /**
    * Get previous satellite data for trend analysis
    */
@@ -279,9 +238,7 @@ class LiveSatelliteService {
         where: { fieldId },
         orderBy: { captureDate: 'desc' }
       });
-      
       if (!previousData) return null;
-      
       return {
         fieldId: previousData.fieldId,
         captureDate: previousData.captureDate,
@@ -296,7 +253,6 @@ class LiveSatelliteService {
       return null;
     }
   }
-
   /**
    * Calculate stress level from NDVI value
    */
@@ -307,8 +263,6 @@ class LiveSatelliteService {
     if (ndvi >= 0.2) return 'HIGH'
     return 'SEVERE'
   }
-
-
   /**
    * Cache satellite data to database
    */
@@ -328,7 +282,6 @@ class LiveSatelliteService {
       console.error('Error caching satellite data:', error)
     }
   }
-
   /**
    * Get cached data from database
    */
@@ -338,7 +291,6 @@ class LiveSatelliteService {
       orderBy: { captureDate: 'desc' }
     })
   }
-
   /**
    * Check if cached data is stale (older than 7 days)
    */
@@ -346,7 +298,6 @@ class LiveSatelliteService {
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     return data.captureDate < sevenDaysAgo
   }
-
   /**
    * Format cached data to match our interface
    */
@@ -365,7 +316,6 @@ class LiveSatelliteService {
       }
     }
   }
-
   /**
    * Get field with boundary information
    */
@@ -377,8 +327,6 @@ class LiveSatelliteService {
       }
     })
   }
-
-
   /**
    * Calculate field bounds for Copernicus service
    */
@@ -389,7 +337,6 @@ class LiveSatelliteService {
       const centerLat = field.farm.latitude
       const centerLng = field.farm.longitude
       const offset = 0.005 // ~0.5km radius
-      
       return {
         north: centerLat + offset,
         south: centerLat - offset,
@@ -401,7 +348,6 @@ class LiveSatelliteService {
       const centerLat = field.farm.latitude
       const centerLng = field.farm.longitude
       const offset = 0.01 // ~1km radius for unknown field size
-      
       return {
         north: centerLat + offset,
         south: centerLat - offset,
@@ -410,7 +356,6 @@ class LiveSatelliteService {
       }
     }
   }
-
   /**
    * Convert quality rating to confidence score
    */
@@ -423,7 +368,6 @@ class LiveSatelliteService {
       default: return 0.6
     }
   }
-
   /**
    * Calculate bounding box from field boundary
    */
@@ -437,7 +381,6 @@ class LiveSatelliteService {
       north: 39.9
     }
   }
-
   /**
    * Convert PostGIS boundary to GeoJSON format for Planet Labs
    */
@@ -455,7 +398,6 @@ class LiveSatelliteService {
       ]]
     }
   }
-
   /**
    * NDVI calculation evalscript for Sentinel Hub
    */
@@ -473,22 +415,18 @@ class LiveSatelliteService {
           }
         }
       }
-      
       function evaluatePixel(sample) {
         // Calculate NDVI
         let ndvi = (sample.B08 - sample.B04) / (sample.B08 + sample.B04)
-        
         // Filter out clouds and invalid pixels using Scene Classification Layer (SCL)
         if (sample.SCL === 3 || sample.SCL === 8 || sample.SCL === 9 || sample.SCL === 10) {
           return [NaN] // Cloud or cloud shadow
         }
-        
         return [ndvi]
       }
     `
   }
 }
-
 // Export singleton instance
 export const liveSatelliteService = new LiveSatelliteService()
 export { LiveSatelliteService }

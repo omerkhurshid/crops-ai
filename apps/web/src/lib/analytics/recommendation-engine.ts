@@ -11,9 +11,7 @@ import {
   CROP_KNOWLEDGE_BASE,
   LIVESTOCK_KNOWLEDGE_BASE
 } from './agricultural-knowledge-base'
-
 const prisma = new PrismaClient()
-
 export interface RecommendationInput {
   farmId: string
   fieldId?: string
@@ -24,7 +22,6 @@ export interface RecommendationInput {
     sustainabilityFocus: boolean
   }
 }
-
 export interface GeneratedRecommendation {
   type: 'fertilizer' | 'irrigation' | 'pest_control' | 'planting' | 'harvest' | 'financial' | 'equipment'
   priority: 'low' | 'medium' | 'high' | 'urgent'
@@ -39,29 +36,23 @@ export interface GeneratedRecommendation {
   expiresAt?: Date
   supportingData: Record<string, any>
 }
-
 export class RecommendationEngine {
-  
   /**
    * Generate comprehensive recommendations for a farm
    */
   async generateRecommendations(input: RecommendationInput): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-    
     // Get farm and field data
     const farmData = await this.getFarmData(input.farmId, input.fieldId)
-    
     if (!farmData) {
       throw new Error('Farm data not found')
     }
-
     // Generate different types of recommendations
     const fertilityRecs = await this.generateFertilityRecommendations(farmData)
     const irrigationRecs = await this.generateIrrigationRecommendations(farmData)
     const pestRecs = await this.generatePestControlRecommendations(farmData)
     const financialRecs = await this.generateFinancialRecommendations(farmData)
     const timingRecs = await this.generateTimingRecommendations(farmData)
-    
     recommendations.push(
       ...fertilityRecs,
       ...irrigationRecs,
@@ -69,20 +60,16 @@ export class RecommendationEngine {
       ...financialRecs,
       ...timingRecs
     )
-
     // Sort by priority and timing
     return this.prioritizeRecommendations(recommendations)
   }
-
   /**
    * Generate crop-specific fertility and soil health recommendations using agricultural knowledge base
    */
   private async generateFertilityRecommendations(farmData: any): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-
     for (const field of farmData.fields) {
       const crop = field.crops?.find((c: any) => c.status === 'GROWING' || c.status === 'PLANTED')
-      
       if (!crop) {
         // No crop planted - suggest soil testing for next season
         recommendations.push({
@@ -100,24 +87,19 @@ export class RecommendationEngine {
         })
         continue
       }
-
       const cropKnowledge = getCropKnowledge(crop.cropType)
       if (!cropKnowledge) continue
-
       const daysFromPlanting = Math.floor((Date.now() - new Date(crop.plantingDate).getTime()) / (1000 * 60 * 60 * 24))
       const growthStage = getCurrentGrowthStage(crop.cropType, daysFromPlanting)
-
       // Get current nutrition needs based on growth stage
       const currentNutritionNeeds = cropKnowledge.nutritionNeeds.find(n => 
         growthStage.includes(n.stage) || growthStage.toLowerCase().includes(n.stage.toLowerCase())
       )
-
       // Get latest soil analysis
       const soilData = await prisma.soilAnalysis.findFirst({
         where: { fieldId: field.id },
         orderBy: { sampleDate: 'desc' }
       })
-
       if (!soilData) {
         recommendations.push({
           type: 'fertilizer',
@@ -140,17 +122,14 @@ export class RecommendationEngine {
         })
         continue
       }
-
       // Crop-specific pH recommendations
       let optimalPhRange = [6.0, 7.0] // default
       if (crop.cropType.toLowerCase() === 'corn') optimalPhRange = [6.0, 6.8]
       if (crop.cropType.toLowerCase().includes('soybean')) optimalPhRange = [6.0, 7.0]
-
       if (soilData.phLevel && (Number(soilData.phLevel) < optimalPhRange[0] || Number(soilData.phLevel) > optimalPhRange[1])) {
         const impact = crop.cropType.toLowerCase() === 'corn' ? 
           'Corn yields can drop 10-20% with improper pH. Nutrient availability severely affected.' :
           'Soybean nodulation and yield significantly impacted by pH outside optimal range.'
-
         recommendations.push({
           type: 'fertilizer',
           priority: 'high',
@@ -172,11 +151,9 @@ export class RecommendationEngine {
           }
         })
       }
-
       // Growth stage-specific nutrient recommendations
       if (currentNutritionNeeds && currentNutritionNeeds.criticalPeriod) {
         const nitrogenDeficit = Math.max(0, currentNutritionNeeds.nitrogen - (Number(soilData.nitrogenPpm) || 0))
-        
         if (nitrogenDeficit > 20) {
           recommendations.push({
             type: 'fertilizer',
@@ -199,7 +176,6 @@ export class RecommendationEngine {
           })
         }
       }
-
       // Benchmark yield comparison and fertility optimization
       const benchmarkYield = getBenchmarkYield(crop.cropType, farmData.region || farmData.address || 'National')
       if (benchmarkYield && crop.yield) {
@@ -226,28 +202,22 @@ export class RecommendationEngine {
         }
       }
     }
-
     return recommendations
   }
-
   /**
    * Generate irrigation recommendations based on weather and soil moisture
    */
   private async generateIrrigationRecommendations(farmData: any): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-
     // Get weather forecast
     const weatherForecast = await this.getWeatherForecast(farmData.latitude, farmData.longitude)
-    
     for (const field of farmData.fields) {
       const crop = field.crops?.find((c: any) => c.status === 'GROWING')
-      
       if (crop) {
         // Check if irrigation is needed based on precipitation forecast
         const precipitationNext7Days = weatherForecast
           .slice(0, 7)
           .reduce((sum: number, day: any) => sum + (day.precipitation || 0), 0)
-
         if (precipitationNext7Days < 0.5) { // Less than 0.5 inches expected
           recommendations.push({
             type: 'irrigation',
@@ -270,39 +240,30 @@ export class RecommendationEngine {
         }
       }
     }
-
     return recommendations
   }
-
   /**
    * Generate knowledge-based pest and disease control recommendations
    */
   private async generatePestControlRecommendations(farmData: any): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-
     for (const field of farmData.fields) {
       const crop = field.crops?.find((c: any) => c.status === 'GROWING' || c.status === 'PLANTED')
-      
       if (!crop) continue
-
       const cropKnowledge = getCropKnowledge(crop.cropType)
       if (!cropKnowledge) continue
-
       const daysFromPlanting = Math.floor((Date.now() - new Date(crop.plantingDate).getTime()) / (1000 * 60 * 60 * 24))
       const growthStage = getCurrentGrowthStage(crop.cropType, daysFromPlanting)
       const riskLevel = getPestRiskLevel(crop.cropType, daysFromPlanting, farmData.region || farmData.address || 'Midwest')
-
       // Generate specific pest recommendations based on knowledge base
       for (const pestInfo of cropKnowledge.pestCalendar) {
         if (this.isPestRiskPeriod(pestInfo.riskPeriod, daysFromPlanting)) {
           const isRegionMatch = pestInfo.region.some(r => 
             (farmData.region || farmData.address || 'midwest').toLowerCase().includes(r.toLowerCase())
           )
-
           if (isRegionMatch || pestInfo.region.includes('All')) {
             const priority = pestInfo.severity === 'high' ? 'high' : 
                            pestInfo.severity === 'medium' ? 'medium' : 'low'
-
             recommendations.push({
               type: 'pest_control',
               priority: priority as 'low' | 'medium' | 'high',
@@ -327,16 +288,13 @@ export class RecommendationEngine {
           }
         }
       }
-
       // Disease risk recommendations based on weather patterns
       for (const diseaseInfo of cropKnowledge.diseaseRisks) {
         if (diseaseInfo.criticalStage === growthStage || 
             diseaseInfo.criticalStage.includes(growthStage.split('(')[0])) {
-          
           // Get recent weather to assess disease risk
           const recentWeather = await this.getRecentWeather(farmData.latitude, farmData.longitude)
           const conditionsMatch = this.checkDiseaseConditions(diseaseInfo.conditions, recentWeather)
-
           if (conditionsMatch) {
             recommendations.push({
               type: 'pest_control',
@@ -360,18 +318,15 @@ export class RecommendationEngine {
           }
         }
       }
-
       // NDVI-based stress analysis recommendations
       const latestNDVI = await prisma.satelliteAnalytics.findFirst({
         where: { fieldId: field.id },
         orderBy: { captureDate: 'desc' }
       })
-
       if (latestNDVI && latestNDVI.ndviAvg) {
         const ndviValue = Number(latestNDVI.ndviAvg)
         let stressLevel = 'normal'
         let recommendation = null
-
         if (ndviValue < 0.3) {
           stressLevel = 'severe'
           recommendation = {
@@ -412,34 +367,28 @@ export class RecommendationEngine {
             }
           }
         }
-
         if (recommendation) {
           recommendations.push(recommendation)
         }
       }
     }
-
     return recommendations
   }
-
   /**
    * Generate financial optimization recommendations including market timing
    */
   private async generateFinancialRecommendations(farmData: any): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-
     // Analyze recent transactions
     const recentTransactions = await prisma.financialTransaction.findMany({
       where: { farmId: farmData.id },
       orderBy: { transactionDate: 'desc' },
       take: 50
     })
-
     // Check for potential cost savings opportunities
     const inputCosts = recentTransactions
       .filter(t => ['SEEDS', 'FERTILIZER', 'PESTICIDES'].includes(t.category))
       .reduce((sum, t) => sum + Number(t.amount), 0)
-
     if (inputCosts > 500) { // If significant input costs
       recommendations.push({
         type: 'financial',
@@ -458,40 +407,31 @@ export class RecommendationEngine {
         }
       })
     }
-
     // Generate market timing recommendations for crops nearing harvest
     for (const field of farmData.fields) {
       const crops = field.crops || []
-      
       for (const crop of crops) {
         if (crop.status === 'GROWING') {
           const daysUntilHarvest = this.calculateDaysUntilHarvest(crop)
-          
           // Check if harvest is approaching (within 45 days)
           if (daysUntilHarvest <= 45 && daysUntilHarvest > 0) {
             const cropKnowledge = getCropKnowledge(crop.cropType)
-            
             if (cropKnowledge && cropKnowledge.marketPatterns) {
               const currentMonth = new Date().toLocaleString('default', { month: 'long' })
               const harvestMonth = new Date(crop.expectedHarvestDate).toLocaleString('default', { month: 'long' })
               const optimalSellMonth = cropKnowledge.marketPatterns.storageRecommendation.optimalSellMonth
-              
               const currentPattern = cropKnowledge.marketPatterns.pricePatterns.find(p => p.month === harvestMonth)
               const optimalPattern = cropKnowledge.marketPatterns.pricePatterns.find(p => p.month === optimalSellMonth)
-              
               if (currentPattern && optimalPattern) {
                 const priceDifference = optimalPattern.relativePrice - currentPattern.relativePrice
                 const storageCost = cropKnowledge.marketPatterns.storageRecommendation.costPerBushel
-                
                 // Calculate potential financial impact for all scenarios
                 const estimatedYield = crop.estimatedYield || 200 // Default estimate
                 const fieldAcres = field.area || 10
                 const totalBushels = estimatedYield * fieldAcres
                 const potentialGain = totalBushels * Math.abs(priceDifference - 0.05) * 4.50 // ~$4.50/bu corn estimate
-                
                 // Recommend storage if price gain exceeds storage costs + 10% buffer
                 if (priceDifference > 0.10 && optimalSellMonth !== harvestMonth) {
-                  
                   recommendations.push({
                     type: 'financial',
                     priority: daysUntilHarvest <= 14 ? 'high' : 'medium',
@@ -518,7 +458,6 @@ export class RecommendationEngine {
                     }
                   })
                 }
-                
                 // If harvest month is actually optimal, recommend immediate sale
                 else if (harvestMonth === optimalSellMonth || priceDifference < 0.05) {
                   recommendations.push({
@@ -542,7 +481,6 @@ export class RecommendationEngine {
                     }
                   })
                 }
-                
                 // Warn about poor timing if harvesting during low price period
                 else if (priceDifference < -0.05) {
                   recommendations.push({
@@ -573,23 +511,18 @@ export class RecommendationEngine {
         }
       }
     }
-
     return recommendations
   }
-
   /**
    * Generate timing-based recommendations (planting, harvest, rotation planning)
    */
   private async generateTimingRecommendations(farmData: any): Promise<GeneratedRecommendation[]> {
     const recommendations: GeneratedRecommendation[] = []
-
     for (const field of farmData.fields) {
       const crops = field.crops || []
-      
       for (const crop of crops) {
         if (crop.status === 'GROWING') {
           const daysUntilHarvest = this.calculateDaysUntilHarvest(crop)
-          
           if (daysUntilHarvest <= 14 && daysUntilHarvest > 0) {
             recommendations.push({
               type: 'harvest',
@@ -608,23 +541,18 @@ export class RecommendationEngine {
               }
             })
           }
-
           // Generate crop rotation recommendations for upcoming harvest/next season
           if (daysUntilHarvest <= 60 && daysUntilHarvest > 0) {
             const cropKnowledge = getCropKnowledge(crop.cropType)
-            
             if (cropKnowledge && cropKnowledge.rotationBenefits) {
               const rotationBenefits = cropKnowledge.rotationBenefits
-              
               // Check if field has been in continuous cropping
               const fieldHistory = crops.filter((c: any) => c.fieldId === field.id).slice(-3) // Last 3 seasons
               const continuousCropping = fieldHistory.length >= 2 && 
                 fieldHistory.every((c: any) => c.cropType.toLowerCase() === crop.cropType.toLowerCase())
-
               if (continuousCropping) {
                 // Recommend rotation to break disease/pest cycles
                 const recommendedCrops = rotationBenefits.followsWith.slice(0, 2) // Top 2 recommendations
-                
                 recommendations.push({
                   type: 'planting',
                   priority: 'medium',
@@ -646,12 +574,10 @@ export class RecommendationEngine {
                   }
                 })
               }
-
               // Recommend optimal crop sequence if not in continuous cropping
               else if (rotationBenefits.followsWith.length > 0) {
                 const bestFollowCrop = rotationBenefits.followsWith[0] // Top recommendation
                 const followCropKnowledge = getCropKnowledge(bestFollowCrop)
-                
                 if (followCropKnowledge) {
                   recommendations.push({
                     type: 'planting',
@@ -673,11 +599,9 @@ export class RecommendationEngine {
                   })
                 }
               }
-
               // Warn about crops to avoid in rotation
               if (rotationBenefits.avoidAfter.length > 0) {
                 const avoidedCrops = rotationBenefits.avoidAfter.slice(0, 2)
-                
                 recommendations.push({
                   type: 'planting',
                   priority: 'medium',
@@ -700,20 +624,16 @@ export class RecommendationEngine {
           }
         }
       }
-
       // Recommend crops for fallow or idle fields
       if (crops.length === 0 || crops.every((c: any) => c.status === 'HARVESTED' || c.status === 'COMPLETED')) {
         // Get the most recent crop grown in this field
         const lastCrop = crops
           .filter((c: any) => c.fieldId === field.id)
           .sort((a: any, b: any) => new Date(b.plantingDate).getTime() - new Date(a.plantingDate).getTime())[0]
-
         if (lastCrop) {
           const lastCropKnowledge = getCropKnowledge(lastCrop.cropType)
-          
           if (lastCropKnowledge && lastCropKnowledge.rotationBenefits.followsWith.length > 0) {
             const recommendedCrop = lastCropKnowledge.rotationBenefits.followsWith[0]
-            
             recommendations.push({
               type: 'planting',
               priority: 'low',
@@ -752,10 +672,8 @@ export class RecommendationEngine {
         }
       }
     }
-
     return recommendations
   }
-
   /**
    * Save recommendations to database
    */
@@ -768,7 +686,6 @@ export class RecommendationEngine {
       },
       data: { status: 'expired' }
     })
-
     // Save new recommendations
     for (const rec of recommendations) {
       await prisma.recommendation.create({
@@ -791,7 +708,6 @@ export class RecommendationEngine {
       })
     }
   }
-
   // Helper methods
   private async getFarmData(farmId: string, fieldId?: string) {
     return await prisma.farm.findUnique({
@@ -812,7 +728,6 @@ export class RecommendationEngine {
       }
     })
   }
-
   private async getWeatherForecast(lat: number, lng: number) {
     // Placeholder for weather API integration
     // In production, integrate with weather service like OpenWeatherMap
@@ -823,7 +738,6 @@ export class RecommendationEngine {
       humidity: 60 + Math.random() * 30
     }))
   }
-
   private async getRecentWeather(lat: number, lng: number) {
     // Get recent weather data for disease risk assessment
     // In production, integrate with weather API for historical data
@@ -835,7 +749,6 @@ export class RecommendationEngine {
       leafWetness: Math.random() * 12 // hours
     }))
   }
-
   private checkDiseaseConditions(conditions: string[], recentWeather: any[]): boolean {
     // Check if recent weather conditions match disease triggers
     for (const condition of conditions) {
@@ -843,51 +756,41 @@ export class RecommendationEngine {
         const avgHumidity = recentWeather.reduce((sum, day) => sum + day.humidity, 0) / recentWeather.length
         if (avgHumidity < 75) return false
       }
-      
       if (condition.toLowerCase().includes('warm temperatures')) {
         const avgTemp = recentWeather.reduce((sum, day) => sum + day.temperature, 0) / recentWeather.length
         if (avgTemp < 75 || avgTemp > 85) return false
       }
-      
       if (condition.toLowerCase().includes('cool temperatures')) {
         const avgTemp = recentWeather.reduce((sum, day) => sum + day.temperature, 0) / recentWeather.length
         if (avgTemp < 65 || avgTemp > 80) return false
       }
-      
       if (condition.toLowerCase().includes('extended leaf wetness')) {
         const avgWetness = recentWeather.reduce((sum, day) => sum + (day.leafWetness || 0), 0) / recentWeather.length
         if (avgWetness < 6) return false // Less than 6 hours average
       }
-      
       if (condition.toLowerCase().includes('extended dew periods')) {
         const highHumidityDays = recentWeather.filter(day => day.humidity > 80).length
         if (highHumidityDays < 3) return false
       }
     }
-    
     return true // All conditions matched
   }
-
   private isPestRiskPeriod(riskPeriod: string, daysFromPlanting: number): boolean {
     // Parse risk period string and check if current timing matches
     // Examples: "30-60 days after planting", "45-65 days after planting"
-    
     const match = riskPeriod.match(/(\d+)-(\d+)\s*days?\s*after\s*planting/i)
     if (match) {
       const startDay = parseInt(match[1])
       const endDay = parseInt(match[2])
       return daysFromPlanting >= startDay && daysFromPlanting <= endDay
     }
-    
     // Handle other formats like "June-August", "Emergence and late season"
     if (riskPeriod.toLowerCase().includes('emergence')) {
       return daysFromPlanting <= 14
     }
-    
     if (riskPeriod.toLowerCase().includes('late season')) {
       return daysFromPlanting >= 90
     }
-    
     // Month-based risk periods
     const currentMonth = new Date().getMonth() + 1
     if (riskPeriod.toLowerCase().includes('june')) {
@@ -899,27 +802,22 @@ export class RecommendationEngine {
     if (riskPeriod.toLowerCase().includes('august')) {
       return currentMonth === 8
     }
-    
     return false
   }
-
   private calculateOptimalNitrogenTiming(field: any): Date {
     // Simplified timing calculation
     // In production, consider crop type, growth stage, weather, etc.
     return new Date(Date.now() + 10 * 24 * 60 * 60 * 1000) // 10 days from now
   }
-
   private calculateGrowthStage(crop: any): string {
     const plantingDate = new Date(crop.plantingDate)
     const daysFromPlanting = Math.floor((Date.now() - plantingDate.getTime()) / (1000 * 60 * 60 * 24))
-    
     if (daysFromPlanting < 14) return 'seedling'
     if (daysFromPlanting < 45) return 'vegetative'
     if (daysFromPlanting < 75) return 'reproductive'
     if (daysFromPlanting < 120) return 'maturation'
     return 'mature'
   }
-
   private assessPestRisk(cropType: string, growthStage: string, region: string): 'low' | 'medium' | 'high' {
     // Simplified risk assessment
     // In production, use historical data, weather patterns, and pest models
@@ -928,26 +826,21 @@ export class RecommendationEngine {
     }
     return 'medium'
   }
-
   private calculateDaysUntilHarvest(crop: any): number {
     const harvestDate = new Date(crop.expectedHarvestDate)
     return Math.ceil((harvestDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
   }
-
   private prioritizeRecommendations(recommendations: GeneratedRecommendation[]): GeneratedRecommendation[] {
     const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 }
-    
     return recommendations.sort((a, b) => {
       // Sort by priority first
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
         return priorityOrder[b.priority] - priorityOrder[a.priority]
       }
-      
       // Then by optimal timing (sooner first)
       return a.optimalTiming.getTime() - b.optimalTiming.getTime()
     })
   }
 }
-
 // Export singleton instance
 export const recommendationEngine = new RecommendationEngine()

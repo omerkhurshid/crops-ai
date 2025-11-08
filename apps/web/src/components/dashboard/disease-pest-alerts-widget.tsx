@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -16,12 +15,10 @@ import {
   Zap
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface DiseasePestAlertsWidgetProps {
   farmId: string
   className?: string
 }
-
 interface ThreatData {
   name: string
   type: 'disease' | 'pest'
@@ -31,14 +28,12 @@ interface ThreatData {
   timeToAction?: number
   recommendations?: string[]
 }
-
 interface FarmRiskSummary {
   overallRiskLevel: 'low' | 'moderate' | 'high' | 'severe'
   highRiskFields: string[]
   immediateActions: number
   monitoring: number
 }
-
 export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlertsWidgetProps) {
   const [loading, setLoading] = useState(true)
   const [threats, setThreats] = useState<ThreatData[]>([])
@@ -49,15 +44,12 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
     nextSeason: string
   } | null>(null)
   const [showDetails, setShowDetails] = useState(false)
-
   useEffect(() => {
     const fetchDiseasePestData = async () => {
       try {
         const response = await fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`)
-        
         if (response.ok) {
           const data = await response.json()
-          
           if (data.success && data.farmAnalysis) {
             setThreats(data.farmAnalysis.topThreats || [])
             setRiskSummary(data.farmAnalysis.farmRiskSummary)
@@ -70,10 +62,8 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         setLoading(false)
       }
     }
-
     fetchDiseasePestData()
   }, [farmId])
-
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
       case 'very_low': return 'text-green-600 bg-green-50 border-green-200'
@@ -84,7 +74,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       default: return 'text-gray-600 bg-gray-50 border-gray-200'
     }
   }
-
   const getRiskIcon = (riskLevel: string) => {
     switch (riskLevel) {
       case 'severe':
@@ -93,7 +82,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       default: return <Shield className="h-4 w-4" />
     }
   }
-
   if (loading) {
     return (
       <ModernCard variant="soft" className={cn("p-6", className)}>
@@ -107,7 +95,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={cn("overflow-hidden", className)}>
       <ModernCardHeader className="pb-4">
@@ -123,7 +110,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
               AI-powered threat detection and risk assessment
             </p>
           </div>
-          
           {riskSummary && (
             <Badge 
               variant="outline" 
@@ -137,7 +123,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
           )}
         </div>
       </ModernCardHeader>
-
       <ModernCardContent className="space-y-6">
         {riskSummary && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -167,7 +152,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
             </div>
           </div>
         )}
-
         {/* Top Threats */}
         {threats.length > 0 && (
           <div className="space-y-3">
@@ -175,7 +159,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
               <AlertTriangle className="h-4 w-4 text-orange-500" />
               Top Threats This Week
             </h4>
-            
             <div className="space-y-2">
               {threats.slice(0, showDetails ? threats.length : 3).map((threat, index) => (
                 <div 
@@ -196,7 +179,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                         <Bug className="h-4 w-4 text-orange-600" />
                       )}
                     </div>
-                    
                     <div>
                       <div className="font-medium text-sage-800">
                         {threat.name}
@@ -206,7 +188,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                       </div>
                     </div>
                   </div>
-                  
                   <div className="text-right">
                     <Badge 
                       variant="outline" 
@@ -228,7 +209,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                 </div>
               ))}
             </div>
-
             {threats.length > 3 && (
               <Button
                 variant="ghost"
@@ -241,7 +221,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
             )}
           </div>
         )}
-
         {/* Seasonal Outlook */}
         {seasonalOutlook && (
           <div className="space-y-3">
@@ -249,7 +228,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
               <Calendar className="h-4 w-4 text-blue-500" />
               Seasonal Outlook
             </h4>
-            
             <div className="space-y-2 text-sm">
               <div className="flex items-start gap-2">
                 <div className="font-medium text-sage-700 min-w-[80px]">Next Week:</div>
@@ -266,7 +244,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
             </div>
           </div>
         )}
-
         {/* Action Button */}
         <div className="pt-4 border-t border-gray-100">
           <Button 
@@ -278,7 +255,6 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
             View Detailed Crop Health Analysis
           </Button>
         </div>
-
         {/* No Data State */}
         {threats.length === 0 && !loading && (
           <div className="text-center py-8">

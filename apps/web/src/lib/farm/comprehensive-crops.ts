@@ -3,7 +3,6 @@
  * Based on FAO, USDA, and World Crops Database classification systems
  * Organized by botanical families and agricultural categories
  */
-
 export interface ComprehensiveCropOption {
   id: string;
   name: string;
@@ -49,14 +48,11 @@ export interface ComprehensiveCropOption {
   nutritionalValue?: string;
   commonVarieties?: string[];
 }
-
 // Comprehensive crop database organized by botanical families
 export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption> = {
-  
   // ========================================
   // POACEAE FAMILY (GRASSES) - CEREALS
   // ========================================
-  
   'wheat-winter': {
     id: 'wheat-winter',
     name: 'Winter Wheat',
@@ -79,7 +75,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Suppresses weeds', 'Reduces erosion', 'Different pest profile'],
     commonVarieties: ['Hard Red Winter', 'Soft Red Winter']
   },
-
   'wheat-spring': {
     id: 'wheat-spring',
     name: 'Spring Wheat',
@@ -102,7 +97,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Breaks disease cycles', 'Soil structure improvement'],
     commonVarieties: ['Hard Red Spring', 'Durum']
   },
-
   'corn-dent': {
     id: 'corn-dent',
     name: 'Dent Corn (Field Corn)',
@@ -125,7 +119,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Improves soil structure', 'Breaks disease cycles'],
     nutritionalValue: 'High carbohydrate content, moderate protein'
   },
-
   'rice-long-grain': {
     id: 'rice-long-grain',
     name: 'Long Grain Rice',
@@ -148,7 +141,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Soil conditioning', 'Weed suppression'],
     commonVarieties: ['Jasmine', 'Basmati', 'Carolina Gold']
   },
-
   'barley': {
     id: 'barley',
     name: 'Barley',
@@ -171,7 +163,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Early harvest allows cover crops', 'Reduces disease pressure'],
     commonVarieties: ['Six-row', 'Two-row', 'Hulless']
   },
-
   'oats': {
     id: 'oats',
     name: 'Oats',
@@ -193,7 +184,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     companions: ['legumes', 'grass-mixtures'],
     rotationBenefits: ['Soil conditioning', 'Weed suppression', 'Erosion control']
   },
-
   'sorghum': {
     id: 'sorghum',
     name: 'Grain Sorghum',
@@ -215,11 +205,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     companions: ['cotton', 'soybeans'],
     rotationBenefits: ['Deep root system', 'Drought reserve crop']
   },
-
   // ========================================
   // FABACEAE FAMILY (LEGUMES)
   // ========================================
-
   'soybeans': {
     id: 'soybeans',
     name: 'Soybeans',
@@ -242,7 +230,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Adds nitrogen to soil', 'Breaks pest cycles', 'Improves soil biology'],
     nutritionalValue: 'High protein (35-40%), high oil content (18-20%)'
   },
-
   'dry-beans': {
     id: 'dry-beans',
     name: 'Dry Beans',
@@ -265,7 +252,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Soil nitrogen addition', 'Disease break'],
     commonVarieties: ['Navy', 'Pinto', 'Black', 'Kidney']
   },
-
   'peas-field': {
     id: 'peas-field',
     name: 'Field Peas',
@@ -287,7 +273,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     companions: ['barley', 'canola'],
     rotationBenefits: ['Early nitrogen release', 'Soil structure improvement']
   },
-
   'chickpeas': {
     id: 'chickpeas',
     name: 'Chickpeas (Garbanzo Beans)',
@@ -310,7 +295,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Nitrogen addition', 'Deep rooting'],
     nutritionalValue: 'High protein (20-25%), high fiber'
   },
-
   'lentils': {
     id: 'lentils',
     name: 'Lentils',
@@ -333,11 +317,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Soil nitrogen addition', 'Disease break'],
     commonVarieties: ['Red', 'Green', 'Black']
   },
-
   // ========================================
   // SOLANACEAE FAMILY (NIGHTSHADES)
   // ========================================
-
   'potatoes': {
     id: 'potatoes',
     name: 'Potatoes',
@@ -360,7 +342,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Avoid nightshade rotation', 'Heavy feeder'],
     commonVarieties: ['Russet', 'Red', 'Yukon Gold', 'Fingerling']
   },
-
   'tomatoes-processing': {
     id: 'tomatoes-processing',
     name: 'Processing Tomatoes',
@@ -383,11 +364,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Avoid nightshade rotation'],
     commonVarieties: ['Paste', 'Sauce', 'Whole pack']
   },
-
   // ========================================
   // BRASSICACEAE FAMILY (CRUCIFERS)
   // ========================================
-
   'canola': {
     id: 'canola',
     name: 'Canola',
@@ -409,11 +388,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     companions: ['wheat', 'barley'],
     rotationBenefits: ['Disease break', 'Soil conditioning']
   },
-
   // ========================================
   // ASTERACEAE FAMILY (SUNFLOWER FAMILY)
   // ========================================
-
   'sunflowers': {
     id: 'sunflowers',
     name: 'Oil Sunflowers',
@@ -436,11 +413,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Deep root system', 'Scavenges nutrients'],
     commonVarieties: ['Oil type', 'Confection type']
   },
-
   // ========================================
   // ROSACEAE FAMILY (ROSE FAMILY) - FRUITS
   // ========================================
-
   'apples': {
     id: 'apples',
     name: 'Apples',
@@ -463,11 +438,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Perennial system', 'Soil protection'],
     commonVarieties: ['Red Delicious', 'Gala', 'Honeycrisp', 'Granny Smith']
   },
-
   // ========================================
   // VITACEAE FAMILY (GRAPE FAMILY)
   // ========================================
-
   'grapes-wine': {
     id: 'grapes-wine',
     name: 'Wine Grapes',
@@ -490,11 +463,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Perennial system', 'Erosion control'],
     commonVarieties: ['Cabernet Sauvignon', 'Chardonnay', 'Pinot Noir', 'Merlot']
   },
-
   // ========================================
   // MALVACEAE FAMILY - FIBER CROPS
   // ========================================
-
   'cotton': {
     id: 'cotton',
     name: 'Cotton',
@@ -517,11 +488,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Deep rooting', 'Residue management'],
     commonVarieties: ['Upland', 'Pima']
   },
-
   // ========================================
   // CUCURBITACEAE FAMILY (GOURD FAMILY)
   // ========================================
-
   'pumpkins': {
     id: 'pumpkins',
     name: 'Pumpkins',
@@ -544,7 +513,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Heavy feeder', 'Soil coverage'],
     commonVarieties: ['Jack-o-lantern', 'Pie', 'Miniature', 'Giant']
   },
-
   'cucumbers': {
     id: 'cucumbers',
     name: 'Cucumbers',
@@ -567,7 +535,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Quick turnover', 'Good cover crop'],
     commonVarieties: ['Slicing', 'Pickling', 'Burpless', 'Armenian']
   },
-
   'watermelons': {
     id: 'watermelons',
     name: 'Watermelons',
@@ -590,11 +557,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Deep rooting', 'Ground coverage'],
     commonVarieties: ['Seedless', 'Seeded', 'Mini', 'Yellow/Orange']
   },
-
   // ========================================
   // ALLIACEAE FAMILY (ONION FAMILY)
   // ========================================
-
   'onions': {
     id: 'onions',
     name: 'Onions',
@@ -617,7 +582,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Disease suppression', 'Soil improvement'],
     commonVarieties: ['Yellow', 'Red', 'White', 'Sweet']
   },
-
   'garlic': {
     id: 'garlic',
     name: 'Garlic',
@@ -640,11 +604,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Natural pest deterrent', 'Soil health'],
     commonVarieties: ['Hardneck', 'Softneck', 'Elephant']
   },
-
   // ========================================
   // APIACEAE FAMILY (CARROT FAMILY)
   // ========================================
-
   'carrots': {
     id: 'carrots',
     name: 'Carrots',
@@ -667,7 +629,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Deep rooting', 'Soil structure improvement'],
     commonVarieties: ['Nantes', 'Imperator', 'Chantenay', 'Rainbow']
   },
-
   'celery': {
     id: 'celery',
     name: 'Celery',
@@ -690,11 +651,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Heavy feeder rotation'],
     commonVarieties: ['Pascal', 'Utah', 'Golden', 'Cutting celery']
   },
-
   // ========================================
   // ADDITIONAL BRASSICACEAE FAMILY
   // ========================================
-
   'cabbage': {
     id: 'cabbage',
     name: 'Cabbage',
@@ -717,7 +676,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Biofumigation properties', 'Heavy feeder'],
     commonVarieties: ['Green', 'Red', 'Savoy', 'Napa']
   },
-
   'broccoli': {
     id: 'broccoli',
     name: 'Broccoli',
@@ -740,11 +698,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Disease break', 'Soil improvement'],
     commonVarieties: ['Calabrese', 'Sprouting', 'Romanesco', 'Purple']
   },
-
   // ========================================
   // CHENOPODIACEAE FAMILY (GOOSEFOOT FAMILY)
   // ========================================
-
   'spinach': {
     id: 'spinach',
     name: 'Spinach',
@@ -767,7 +723,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Quick turnover', 'Soil coverage'],
     commonVarieties: ['Smooth leaf', 'Savoy', 'Semi-savoy', 'Baby spinach']
   },
-
   'sugar-beets': {
     id: 'sugar-beets',
     name: 'Sugar Beets',
@@ -790,11 +745,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Deep taproot', 'Reduces nematodes'],
     commonVarieties: ['Rhizoctonia resistant', 'High sugar content', 'Early harvest']
   },
-
   // ========================================
   // ASTERACEAE FAMILY (LETTUCE/SUNFLOWER)
   // ========================================
-
   'lettuce': {
     id: 'lettuce',
     name: 'Lettuce',
@@ -817,11 +770,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Fast growing', 'Soil coverage'],
     commonVarieties: ['Romaine', 'Iceberg', 'Butterhead', 'Leaf lettuce']
   },
-
   // ========================================
   // ADDITIONAL SOLANACEAE FAMILY
   // ========================================
-
   'peppers-bell': {
     id: 'peppers-bell',
     name: 'Bell Peppers',
@@ -844,7 +795,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Nightshade rotation'],
     commonVarieties: ['Green', 'Red', 'Yellow', 'Orange', 'Purple']
   },
-
   'peppers-hot': {
     id: 'peppers-hot',
     name: 'Hot Peppers',
@@ -867,7 +817,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Natural pest deterrent'],
     commonVarieties: ['Jalapeño', 'Habanero', 'Cayenne', 'Thai', 'Ghost pepper']
   },
-
   'eggplant': {
     id: 'eggplant',
     name: 'Eggplant',
@@ -890,11 +839,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Nightshade rotation'],
     commonVarieties: ['Black Beauty', 'Japanese', 'Italian', 'White', 'Thai']
   },
-
   // ========================================
   // LINACEAE FAMILY (FLAX FAMILY)
   // ========================================
-
   'flax': {
     id: 'flax',
     name: 'Flax (Linseed)',
@@ -917,11 +864,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Disease break', 'Soil conditioning'],
     commonVarieties: ['Brown seed', 'Golden seed', 'Fiber types']
   },
-
   // ========================================
   // ADDITIONAL GRAIN CROPS
   // ========================================
-
   'rye': {
     id: 'rye',
     name: 'Rye',
@@ -944,7 +889,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Excellent cover crop', 'Weed suppression'],
     commonVarieties: ['Winter rye', 'Spring rye', 'Hybrid rye']
   },
-
   'millet': {
     id: 'millet',
     name: 'Pearl Millet',
@@ -967,7 +911,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Summer annual option', 'Low input'],
     commonVarieties: ['Grain types', 'Forage types', 'Hybrid pearl']
   },
-
   'quinoa': {
     id: 'quinoa',
     name: 'Quinoa',
@@ -990,11 +933,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Different pest profile', 'Soil improvement'],
     commonVarieties: ['White', 'Red', 'Black', 'Rainbow']
   },
-
   // ========================================
   // NUT CROPS
   // ========================================
-
   'almonds': {
     id: 'almonds',
     name: 'Almonds',
@@ -1017,7 +958,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Permanent crop', 'Carbon sequestration'],
     commonVarieties: ['Nonpareil', 'Carmel', 'Monterey', 'Butte']
   },
-
   'walnuts': {
     id: 'walnuts',
     name: 'Walnuts',
@@ -1040,7 +980,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Agroforestry potential', 'Wildlife habitat'],
     commonVarieties: ['Chandler', 'Howard', 'Tulare', 'Serr']
   },
-
   'pecans': {
     id: 'pecans',
     name: 'Pecans',
@@ -1063,11 +1002,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Silvopasture potential', 'Carbon storage'],
     commonVarieties: ['Desirable', 'Pawnee', 'Stuart', 'Kiowa']
   },
-
   // ========================================
   // BERRY CROPS
   // ========================================
-
   'strawberries': {
     id: 'strawberries',
     name: 'Strawberries',
@@ -1090,7 +1027,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Annual rotation possible'],
     commonVarieties: ['June-bearing', 'Everbearing', 'Day-neutral']
   },
-
   'blueberries': {
     id: 'blueberries',
     name: 'Blueberries',
@@ -1113,11 +1049,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Perennial system', 'Pollinator support'],
     commonVarieties: ['Northern highbush', 'Southern highbush', 'Rabbiteye']
   },
-
   // ========================================
   // FORAGE CROPS
   // ========================================
-
   'alfalfa': {
     id: 'alfalfa',
     name: 'Alfalfa',
@@ -1140,7 +1074,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Soil improvement', 'Deep rooting'],
     commonVarieties: ['Fall dormancy 4-5', 'Round-up ready', 'Low lignin']
   },
-
   'timothy': {
     id: 'timothy',
     name: 'Timothy Grass',
@@ -1163,11 +1096,9 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Sod formation', 'Erosion control'],
     commonVarieties: ['Early maturity', 'Late maturity', 'Improved varieties']
   },
-
   // ========================================
   // ADDITIONAL SPECIALTY CROPS
   // ========================================
-
   'hops': {
     id: 'hops',
     name: 'Hops',
@@ -1190,7 +1121,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Vertical growing', 'Unique market'],
     commonVarieties: ['Cascade', 'Centennial', 'Chinook', 'Citra']
   },
-
   'lavender': {
     id: 'lavender',
     name: 'Lavender',
@@ -1213,7 +1143,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     rotationBenefits: ['Pollinator support', 'Deer resistant'],
     commonVarieties: ['English', 'French', 'Spanish', 'Hybrid']
   },
-
   'sugarcane': {
     id: 'sugarcane',
     name: 'Sugarcane',
@@ -1237,7 +1166,6 @@ export const COMPREHENSIVE_CROP_DATABASE: Record<string, ComprehensiveCropOption
     commonVarieties: ['Commercial hybrids', 'Energy cane varieties']
   }
 };
-
 // Category definitions for organization
 export const CROP_CATEGORIES = {
   grain: {
@@ -1307,36 +1235,29 @@ export const CROP_CATEGORIES = {
     families: ['Cannabaceae']
   }
 };
-
 // Helper function to get crops by category
 export function getCropsByCategory() {
   const categorized: Record<string, ComprehensiveCropOption[]> = {};
-  
   Object.values(COMPREHENSIVE_CROP_DATABASE).forEach(crop => {
     if (!categorized[crop.category]) {
       categorized[crop.category] = [];
     }
     categorized[crop.category].push(crop);
   });
-  
   // Sort crops within each category
   Object.keys(categorized).forEach(category => {
     categorized[category].sort((a, b) => a.name.localeCompare(b.name));
   });
-  
   return categorized;
 }
-
 // Helper function to get crops by botanical family
 export function getCropsByFamily() {
   const familyGrouped: Record<string, ComprehensiveCropOption[]> = {};
-  
   Object.values(COMPREHENSIVE_CROP_DATABASE).forEach(crop => {
     if (!familyGrouped[crop.botanicalFamily]) {
       familyGrouped[crop.botanicalFamily] = [];
     }
     familyGrouped[crop.botanicalFamily].push(crop);
   });
-  
   return familyGrouped;
 }

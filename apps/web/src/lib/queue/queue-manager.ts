@@ -2,7 +2,6 @@
  * Mock Queue Manager
  * Temporary implementation until QueueJob model is added to schema
  */
-
 export interface QueueJob {
   id: string
   queueName: string
@@ -19,7 +18,6 @@ export interface QueueJob {
   error?: string
   result?: any
 }
-
 export interface QueueMetrics {
   totalJobs: number
   queued: number
@@ -30,7 +28,6 @@ export interface QueueMetrics {
   successRate: number
   failureRate: number
 }
-
 export interface QueueHealth {
   status: 'healthy' | 'degraded' | 'unhealthy'
   avgWaitTime: number
@@ -40,14 +37,11 @@ export interface QueueHealth {
   errorRate: number
   processingCapacity: number
 }
-
 export class QueueManager {
   private queueName: string
-
   constructor(queueName: string) {
     this.queueName = queueName
   }
-
   async addJob(
     jobType: string,
     data: any,
@@ -58,24 +52,17 @@ export class QueueManager {
     } = {}
   ): Promise<string> {
     const jobId = 'mock-job-' + Date.now()
-
     return jobId
   }
-
   async getNextJob(): Promise<QueueJob | null> {
     return null
   }
-
   async completeJob(jobId: string, result?: any): Promise<boolean> {
-
     return true
   }
-
   async failJob(jobId: string, error: string): Promise<boolean> {
-
     return true
   }
-
   async getMetrics(): Promise<QueueMetrics> {
     return {
       totalJobs: 0,
@@ -88,7 +75,6 @@ export class QueueManager {
       failureRate: 0
     }
   }
-
   async getHealth(): Promise<QueueHealth> {
     return {
       status: 'healthy',
@@ -99,26 +85,18 @@ export class QueueManager {
       processingCapacity: 100
     }
   }
-
   async cleanup(daysToKeep: number = 7): Promise<number> {
-
     return 0
   }
-
   async retryFailedJobs(maxAge?: Date): Promise<number> {
-
     return 0
   }
-
   async enqueue(job: any): Promise<string> {
-
     return 'mock-job-' + Date.now()
   }
-
   private async updateDailyMetrics(): Promise<void> {
     // Mock implementation
   }
 }
-
 // Default export for backwards compatibility
 export default QueueManager

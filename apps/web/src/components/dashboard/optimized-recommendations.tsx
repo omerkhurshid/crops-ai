@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useMemo } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -15,24 +14,19 @@ import {
   Target,
   ChevronRight
 } from 'lucide-react'
-
 interface OptimizedRecommendationsProps {
   className?: string
   limit?: number
 }
-
 export function OptimizedRecommendations({ className, limit = 4 }: OptimizedRecommendationsProps) {
   const recommendations = useRecommendationsData()
   const { loading } = useDashboardData()
-
   const topRecommendations = useMemo(() => {
     if (!recommendations) return []
-    
     return recommendations
       .sort((a: any, b: any) => (b.priority || 0) - (a.priority || 0))
       .slice(0, limit)
   }, [recommendations, limit])
-
   const getRecommendationIcon = (category: string) => {
     const iconMap: { [key: string]: React.ElementType } = {
       irrigation: Droplets,
@@ -44,7 +38,6 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
     const IconComponent = iconMap[category] || Brain
     return <IconComponent className="h-4 w-4" />
   }
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'urgent': return 'bg-red-100 text-red-800 border-red-200'
@@ -53,13 +46,11 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
       default: return 'bg-green-100 text-green-800 border-green-200'
     }
   }
-
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 80) return 'text-green-600'
     if (confidence >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -82,7 +73,6 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
       </ModernCard>
     )
   }
-
   return (
     <ModernCard className={className}>
       <ModernCardHeader>

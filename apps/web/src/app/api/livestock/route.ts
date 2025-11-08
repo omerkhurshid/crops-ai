@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 import { rateLimitWithFallback } from '../../../lib/rate-limit'
-
 const livestockEventSchema = z.object({
   farmId: z.string(),
   livestockType: z.string().min(1, 'Livestock type is required'),
@@ -12,11 +11,9 @@ const livestockEventSchema = z.object({
   notes: z.string().optional(),
   eventDate: z.string().optional().transform(str => str ? new Date(str) : new Date())
 })
-
 export async function GET(request: NextRequest) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -27,25 +24,20 @@ export async function GET(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
-
     // Build where clause
     const where: any = {
       userId: user.id
     }
-
     if (farmId) {
       where.farmId = farmId
     }
-
     const livestockEvents = await prisma.livestockEvent.findMany({
       where,
       include: {
@@ -55,10 +47,8 @@ export async function GET(request: NextRequest) {
       },
       orderBy: { eventDate: 'desc' }
     })
-
     // Calculate total animals from events
     const totalAnimals = livestockEvents.reduce((sum, event) => sum + (event.animalCount || 0), 0)
-
     return NextResponse.json({
       totalAnimals,
       events: livestockEvents
@@ -71,11 +61,9 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
 export async function POST(request: NextRequest) {
   // Apply rate limiting for write operations
   const { success, headers } = await rateLimitWithFallback(request, 'write')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -86,16 +74,13 @@ export async function POST(request: NextRequest) {
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const data = livestockEventSchema.parse(body)
-
     const livestockEvent = await prisma.livestockEvent.create({
       data: {
         ...data,
@@ -107,7 +92,6 @@ export async function POST(request: NextRequest) {
         }
       }
     })
-
     return NextResponse.json(livestockEvent, { status: 201 })
   } catch (error) {
     console.error('Error creating livestock event:', error)

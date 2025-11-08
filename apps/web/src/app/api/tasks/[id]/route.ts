@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
 import { z } from 'zod'
 import { rateLimitWithFallback } from '../../../../lib/rate-limit'
-
 const updateTaskSchema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional(),
@@ -13,14 +12,12 @@ const updateTaskSchema = z.object({
   dueDate: z.string().optional().transform(str => str ? new Date(str) : undefined),
   tags: z.array(z.string()).optional()
 })
-
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   // Apply rate limiting for API endpoints
   const { success, headers } = await rateLimitWithFallback(request, 'api')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -31,13 +28,11 @@ export async function GET(
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const task = await prisma.task.findFirst({
       where: {
         id: params.id,
@@ -55,11 +50,9 @@ export async function GET(
         }
       }
     })
-
     if (!task) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
     }
-
     return NextResponse.json(task)
   } catch (error) {
     console.error('Error fetching task:', error)
@@ -69,14 +62,12 @@ export async function GET(
     )
   }
 }
-
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   // Apply rate limiting for write operations
   const { success, headers } = await rateLimitWithFallback(request, 'write')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -87,16 +78,13 @@ export async function PATCH(
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const data = updateTaskSchema.parse(body)
-
     // Check if task exists and belongs to user
     const existingTask = await prisma.task.findFirst({
       where: {
@@ -104,11 +92,9 @@ export async function PATCH(
         userId: user.id
       }
     })
-
     if (!existingTask) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
     }
-
     // Update completedAt if status changed to completed
     const updateData: any = { ...data }
     if (data.status === 'completed' && existingTask.status !== 'completed') {
@@ -116,7 +102,6 @@ export async function PATCH(
     } else if (data.status !== 'completed') {
       updateData.completedAt = null
     }
-
     const task = await prisma.task.update({
       where: { id: params.id },
       data: updateData,
@@ -132,7 +117,6 @@ export async function PATCH(
         }
       }
     })
-
     return NextResponse.json(task)
   } catch (error) {
     console.error('Error updating task:', error)
@@ -148,14 +132,12 @@ export async function PATCH(
     )
   }
 }
-
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   // Apply rate limiting for write operations
   const { success, headers } = await rateLimitWithFallback(request, 'write')
-  
   if (!success) {
     return new Response('Too Many Requests. Please try again later.', {
       status: 429,
@@ -166,13 +148,11 @@ export async function DELETE(
       },
     })
   }
-
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     // Check if task exists and belongs to user
     const existingTask = await prisma.task.findFirst({
       where: {
@@ -180,15 +160,12 @@ export async function DELETE(
         userId: user.id
       }
     })
-
     if (!existingTask) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
     }
-
     await prisma.task.delete({
       where: { id: params.id }
     })
-
     return NextResponse.json({ message: 'Task deleted successfully' })
   } catch (error) {
     console.error('Error deleting task:', error)

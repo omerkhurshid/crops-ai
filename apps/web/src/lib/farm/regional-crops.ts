@@ -4,7 +4,6 @@
  * Provides structured crop recommendations based on geographic location,
  * climate data, soil types, and regional agricultural patterns.
  */
-
 export interface CropOption {
   id: string;
   name: string;
@@ -46,7 +45,6 @@ export interface CropOption {
   companions: string[]; // Crop IDs that grow well together
   rotationBenefits: string[];
 }
-
 export interface RegionalData {
   region: string;
   state: string;
@@ -71,7 +69,6 @@ export interface RegionalData {
     processingFacilities: string[];
   };
 }
-
 // Comprehensive crop database
 export const CROP_DATABASE: Record<string, CropOption> = {
   // === GRAINS ===
@@ -94,7 +91,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['soybeans', 'winter-wheat'],
     rotationBenefits: ['Improves soil structure', 'Breaks disease cycles']
   },
-
   'soybeans': {
     id: 'soybeans',
     name: 'Soybeans',
@@ -114,7 +110,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['corn-field', 'winter-wheat'],
     rotationBenefits: ['Adds nitrogen to soil', 'Breaks pest cycles', 'Improves soil biology']
   },
-
   'winter-wheat': {
     id: 'winter-wheat',
     name: 'Winter Wheat',
@@ -134,7 +129,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['corn-field', 'soybeans'],
     rotationBenefits: ['Suppresses weeds', 'Reduces erosion', 'Different pest profile']
   },
-
   // === VEGETABLES ===
   'sweet-corn': {
     id: 'sweet-corn',
@@ -155,7 +149,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['beans', 'squash'],
     rotationBenefits: ['Heavy feeder rotation']
   },
-
   'tomatoes': {
     id: 'tomatoes',
     name: 'Processing Tomatoes',
@@ -175,7 +168,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['basil', 'peppers'],
     rotationBenefits: ['Avoid nightshade rotation']
   },
-
   // === SPECIALTY/CASH CROPS ===
   'hemp-industrial': {
     id: 'hemp-industrial',
@@ -196,7 +188,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     companions: ['legumes'],
     rotationBenefits: ['Deep taproot', 'Natural pest deterrent']
   },
-
   'sunflowers': {
     id: 'sunflowers',
     name: 'Sunflowers (Oil)',
@@ -217,7 +208,6 @@ export const CROP_DATABASE: Record<string, CropOption> = {
     rotationBenefits: ['Deep root system', 'Scavenges nutrients']
   }
 };
-
 // Regional recommendations database
 export const REGIONAL_DATABASE: Record<string, RegionalData> = {
   'midwest-corn-belt': {
@@ -244,7 +234,6 @@ export const REGIONAL_DATABASE: Record<string, RegionalData> = {
       processingFacilities: ['ethanol-plants', 'soybean-crushers']
     }
   },
-
   'great-plains-north': {
     region: 'Northern Great Plains',
     state: 'ND, SD, MT',
@@ -269,7 +258,6 @@ export const REGIONAL_DATABASE: Record<string, RegionalData> = {
       processingFacilities: ['grain-elevators', 'oil-crushers']
     }
   },
-
   'california-central-valley': {
     region: 'California Central Valley',
     state: 'CA',
@@ -295,7 +283,6 @@ export const REGIONAL_DATABASE: Record<string, RegionalData> = {
     }
   }
 };
-
 /**
  * Get crop recommendations based on location
  */
@@ -312,7 +299,6 @@ export function getCropRecommendations(
 } {
   // Determine region based on coordinates
   let regionKey = 'midwest-corn-belt'; // default
-  
   // Midwest Corn Belt (rough boundaries)
   if (latitude >= 40 && latitude <= 45 && longitude >= -95 && longitude <= -82) {
     regionKey = 'midwest-corn-belt';
@@ -325,26 +311,20 @@ export function getCropRecommendations(
   else if (latitude >= 35 && latitude <= 40 && longitude >= -122 && longitude <= -119) {
     regionKey = 'california-central-valley';
   }
-
   const regionalData = REGIONAL_DATABASE[regionKey];
-  
   const primary = regionalData.recommendedCrops.primary
     .map(id => CROP_DATABASE[id])
     .filter(Boolean);
-    
   const secondary = regionalData.recommendedCrops.secondary
     .map(id => CROP_DATABASE[id])
     .filter(Boolean);
-    
   const seasonal = Object.entries(regionalData.seasonalPatterns).reduce((acc, [season, cropIds]) => {
     acc[season] = cropIds.map(id => CROP_DATABASE[id]).filter(Boolean);
     return acc;
   }, {} as Record<string, CropOption[]>);
-
   const reasoning = `Based on your location in the ${regionalData.region} (Climate Zone ${regionalData.climateZone}), ` +
     `with ${regionalData.averageRainfall}" annual rainfall and ${regionalData.growingSeason} frost-free days. ` +
     `Primary soil types: ${regionalData.primarySoilTypes.join(', ')}.`;
-
   return {
     region: regionalData.region,
     primary,
@@ -353,7 +333,6 @@ export function getCropRecommendations(
     reasoning
   };
 }
-
 /**
  * Get livestock recommendations (simplified for now)
  */

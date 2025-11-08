@@ -2,7 +2,6 @@
  * Decision Templates for common farm operations
  * These templates provide structured workflows for critical farming decisions
  */
-
 export interface DecisionTemplate {
   id: string
   name: string
@@ -20,7 +19,6 @@ export interface DecisionTemplate {
   commonMistakes: string[]
   regulations?: string[]
 }
-
 export interface DecisionRecommendation {
   shouldProceed: boolean
   confidence: number
@@ -39,7 +37,6 @@ export interface DecisionRecommendation {
     worst: string
   }
 }
-
 export const decisionTemplates: DecisionTemplate[] = [
   {
     id: 'spray-fungicide',
@@ -68,12 +65,10 @@ export const decisionTemplates: DecisionTemplate[] = [
         windSpeed,
         temperature
       } = inputs
-
       const reasons: string[] = []
       const risks: Array<{ factor: string; impact: 'low' | 'medium' | 'high' }> = []
       let shouldSpray = false
       let confidence = 0
-
       // Disease pressure analysis
       if (diseasePresence > 5) {
         shouldSpray = true
@@ -83,7 +78,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         confidence += 15
         reasons.push(`Low disease pressure (${diseasePresence}%) - monitor closely`)
       }
-
       // Environmental conditions for disease
       if (currentHumidity > 70 && temperature > 15 && temperature < 25) {
         shouldSpray = true
@@ -91,14 +85,12 @@ export const decisionTemplates: DecisionTemplate[] = [
         reasons.push('High humidity and optimal temperature create high disease risk')
         risks.push({ factor: 'Disease development conditions optimal', impact: 'high' })
       }
-
       // Growth stage considerations
       const criticalStages = ['Boot', 'Heading', 'Flowering']
       if (criticalStages.includes(growthStage)) {
         confidence += 20
         reasons.push(`${growthStage} is a critical protection period for yield`)
       }
-
       // Spray interval
       if (lastSprayDays > 21) {
         shouldSpray = true
@@ -109,7 +101,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         confidence = 90
         reasons.push('Recent application still providing protection')
       }
-
       // Weather window assessment
       if (windSpeed > 20) {
         risks.push({ factor: 'High wind will reduce spray efficacy', impact: 'high' })
@@ -119,10 +110,8 @@ export const decisionTemplates: DecisionTemplate[] = [
         risks.push({ factor: 'Rain will wash off product', impact: 'high' })
         confidence -= 25
       }
-
       // Ensure confidence is within bounds
       confidence = Math.max(0, Math.min(100, confidence))
-
       return {
         shouldProceed: shouldSpray && confidence > 50,
         confidence,
@@ -176,7 +165,6 @@ export const decisionTemplates: DecisionTemplate[] = [
       'Respect buffer zones near water sources'
     ]
   },
-  
   {
     id: 'harvest-timing',
     name: 'Harvest Timing Decision',
@@ -204,12 +192,10 @@ export const decisionTemplates: DecisionTemplate[] = [
         storageAvailable,
         dryingAvailable
       } = inputs
-
       const reasons: string[] = []
       const risks: Array<{ factor: string; impact: 'low' | 'medium' | 'high' }> = []
       let shouldHarvest = false
       let confidence = 0
-
       // Moisture content analysis
       const idealMoisture: Record<string, { min: number; max: number }> = {
         Wheat: { min: 13, max: 15 },
@@ -217,7 +203,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         Soybeans: { min: 13, max: 15 },
         Barley: { min: 12, max: 14 }
       }
-      
       const ideal = idealMoisture[cropType]
       if (moistureContent >= ideal.min && moistureContent <= ideal.max) {
         shouldHarvest = true
@@ -233,7 +218,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         reasons.push(`Moisture low at ${moistureContent}% - risk of grain damage`)
         risks.push({ factor: 'Brittle grain may crack during handling', impact: 'low' })
       }
-
       // Visual maturity check
       if (maturityVisual === 'Fully Ripe' || maturityVisual === 'Golden') {
         confidence += 20
@@ -244,7 +228,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         reasons.push('Crop over-mature - harvest immediately to prevent losses')
         risks.push({ factor: 'Shattering losses likely', impact: 'high' })
       }
-
       // Weather risk assessment
       if (rainForecast7Day > 50) {
         shouldHarvest = true
@@ -255,7 +238,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         confidence += 10
         reasons.push('Dry weather forecast provides flexible harvest window')
       }
-
       // Market considerations
       if (currentPrice > 250 && priceOutlook === 'Falling') {
         shouldHarvest = true
@@ -265,9 +247,7 @@ export const decisionTemplates: DecisionTemplate[] = [
         confidence -= 10
         reasons.push('Rising prices favor delayed marketing if storage available')
       }
-
       confidence = Math.max(0, Math.min(100, confidence))
-
       return {
         shouldProceed: shouldHarvest && confidence > 40,
         confidence,
@@ -325,7 +305,6 @@ export const decisionTemplates: DecisionTemplate[] = [
       'Ensure proper licensing for equipment operators'
     ]
   },
-  
   {
     id: 'irrigation-scheduling',
     name: 'Irrigation Scheduling Decision',
@@ -354,13 +333,11 @@ export const decisionTemplates: DecisionTemplate[] = [
         temperature5DayAvg,
         waterCost
       } = inputs
-
       const reasons: string[] = []
       const risks: Array<{ factor: string; impact: 'low' | 'medium' | 'high' }> = []
       let shouldIrrigate = false
       let confidence = 0
       let recommendedAmount = 0
-
       // Critical growth stages for water
       const criticalStages: Record<string, string[]> = {
         Corn: ['Tasseling', 'Silking', 'Reproductive'],
@@ -368,11 +345,9 @@ export const decisionTemplates: DecisionTemplate[] = [
         Wheat: ['Jointing', 'Heading', 'Grain Fill'],
         Vegetables: ['Flowering', 'Fruit Development', 'Reproductive']
       }
-
       // Soil moisture thresholds
       const stressThreshold = 50 // % of field capacity
       const refillPoint = 75
-
       // Analyze soil moisture
       if (soilMoisture < stressThreshold) {
         shouldIrrigate = true
@@ -387,14 +362,12 @@ export const decisionTemplates: DecisionTemplate[] = [
       } else {
         reasons.push(`Adequate soil moisture at ${soilMoisture}%`)
       }
-
       // Growth stage importance
       if (growthStage === 'Reproductive' || criticalStages[cropType]?.includes(growthStage)) {
         confidence += 25
         reasons.push(`${growthStage} stage is critical for water needs`)
         if (soilMoisture < 70) shouldIrrigate = true
       }
-
       // ET and water balance
       const projectedDeficit = (evapotranspiration * 5) - lastRainfallAmount - forecastRain5Day
       if (projectedDeficit > 25) {
@@ -402,7 +375,6 @@ export const decisionTemplates: DecisionTemplate[] = [
         confidence += 20
         reasons.push(`Projected ${Math.round(projectedDeficit)}mm water deficit over next 5 days`)
       }
-
       // Weather forecast
       if (forecastRain5Day > 25) {
         shouldIrrigate = false
@@ -413,16 +385,13 @@ export const decisionTemplates: DecisionTemplate[] = [
         reasons.push('High temperatures will increase water demand')
         risks.push({ factor: 'Heat stress combined with water stress', impact: 'high' })
       }
-
       // Economic consideration
       const irrigationCost = recommendedAmount * waterCost
       const potentialLoss = 500 // Simplified potential yield loss value
       if (irrigationCost > potentialLoss * 0.5) {
         risks.push({ factor: 'High irrigation cost vs benefit', impact: 'medium' })
       }
-
       confidence = Math.max(0, Math.min(100, confidence))
-
       return {
         shouldProceed: shouldIrrigate && confidence > 50,
         confidence,
@@ -471,21 +440,18 @@ export const decisionTemplates: DecisionTemplate[] = [
     ]
   }
 ]
-
 /**
  * Get a decision template by ID
  */
 export function getDecisionTemplate(templateId: string): DecisionTemplate | undefined {
   return decisionTemplates.find(t => t.id === templateId)
 }
-
 /**
  * Get all templates for a category
  */
 export function getTemplatesByCategory(category: string): DecisionTemplate[] {
   return decisionTemplates.filter(t => t.category === category)
 }
-
 /**
  * Execute a decision template with inputs
  */
@@ -495,6 +461,5 @@ export function executeDecisionTemplate(
 ): DecisionRecommendation | null {
   const template = getDecisionTemplate(templateId)
   if (!template) return null
-  
   return template.decisionLogic(inputs)
 }

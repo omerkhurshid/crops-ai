@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card';
 import { Button } from '../ui/button';
@@ -12,7 +11,6 @@ import {
 } from 'lucide-react';
 import { cn, ensureArray } from '../../lib/utils';
 import { convertHealthScore, getFarmerTerm } from '../../lib/farmer-language';
-
 interface FarmPerformanceData {
   overallScore: number;
   yieldEfficiency: number;
@@ -37,20 +35,16 @@ interface FarmPerformanceData {
     recommendation: string;
   }>;
 }
-
 interface FarmPerformanceReportProps {
   farmId: string;
 }
-
 export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
   const [data, setData] = useState<FarmPerformanceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-
   useEffect(() => {
     fetchPerformanceData();
   }, [farmId]);
-
   const fetchPerformanceData = async () => {
     setLoading(true);
     try {
@@ -69,7 +63,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       setLoading(false);
     }
   };
-
   const generateReport = async () => {
     setGenerating(true);
     try {
@@ -82,7 +75,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           format: 'pdf'
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -100,9 +92,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       setGenerating(false);
     }
   };
-
   // Removed mock data function - only show real data from API
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -110,20 +100,17 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       minimumFractionDigits: 0
     }).format(amount);
   };
-
   const getScoreStatus = (score: number) => {
     if (score >= 85) return 'excellent';
     if (score >= 70) return 'good';
     if (score >= 50) return 'warning';
     return 'critical';
   };
-
   const getTrendIcon = (change: number) => {
     return change >= 0 ? 
       <TrendingUp className="h-4 w-4 text-green-600" /> : 
       <TrendingDown className="h-4 w-4 text-red-600" />;
   };
-
   const getImpactColor = (impact: string) => {
     switch (impact) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
@@ -132,7 +119,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   if (loading) {
     return (
       <ModernCard variant="soft">
@@ -145,7 +131,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       </ModernCard>
     );
   }
-
   if (!data) {
     return (
       <ModernCard variant="soft">
@@ -164,7 +149,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       </ModernCard>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -190,7 +174,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           {generating ? 'Creating Report...' : 'Download Report'}
         </Button>
       </div>
-
       {/* Overall Performance Score */}
       <ModernCard variant="glow" className="overflow-hidden">
         <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
@@ -223,7 +206,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
               {convertHealthScore(data.overallScore)}
             </p>
           </div>
-          
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FarmerMetricCard
               title="Crop Production"
@@ -232,7 +214,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
               status={getScoreStatus(data.yieldEfficiency)}
               icon={<Leaf className="h-5 w-5 text-green-600" />}
             />
-            
             <FarmerMetricCard
               title="Resource Efficiency"
               value={`${data.resourceUtilization}%`}
@@ -240,7 +221,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
               status={getScoreStatus(data.resourceUtilization)}
               icon={<Tractor className="h-5 w-5 text-earth-600" />}
             />
-            
             <FarmerMetricCard
               title="Profit Margin"
               value={`${data.profitability}%`}
@@ -251,7 +231,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Performance Trends */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -278,7 +257,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                 {data.trends.yield.change >= 0 ? '+' : ''}{data.trends.yield.change.toFixed(1)}% vs last year
               </div>
             </div>
-            
             <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-100">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <DollarSign className="h-5 w-5 text-orange-600" />
@@ -292,7 +270,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                 {data.trends.costs.change >= 0 ? '+' : ''}{data.trends.costs.change.toFixed(1)}% vs last year
               </div>
             </div>
-            
             <div className="text-center p-4 bg-gradient-to-br from-sage-50 to-green-50 rounded-xl border border-sage-100">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <Target className="h-5 w-5 text-sage-600" />
@@ -309,7 +286,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Top Performing Fields */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -339,7 +315,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                     <div className="text-sm text-sage-600">{field.cropType}</div>
                   </div>
                 </div>
-                
                 <div className="text-right">
                   <div className="font-bold text-lg text-sage-800">
                     {formatCurrency(field.profitPerAcre)}<span className="text-sm font-normal">/acre</span>
@@ -351,7 +326,6 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Improvement Areas */}
       <ModernCard variant="soft">
         <ModernCardHeader>

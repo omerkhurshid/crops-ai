@@ -1,10 +1,8 @@
 "use client"
-
 import * as React from "react"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Button } from "./button"
 import { cn } from "../../lib/utils"
-
 interface DatePickerProps {
   date?: Date | null
   onDateChange?: (date: Date | null) => void
@@ -12,7 +10,6 @@ interface DatePickerProps {
   disabled?: boolean
   className?: string
 }
-
 export function DatePicker({ 
   date, 
   onDateChange, 
@@ -21,17 +18,14 @@ export function DatePicker({
   className 
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false)
-  
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = e.target.value ? new Date(e.target.value) : null
     onDateChange?.(newDate)
   }
-
   const formatDate = (date: Date | null | undefined) => {
     if (!date) return ""
     return date.toISOString().split('T')[0]
   }
-
   return (
     <div className={cn("relative", className)}>
       <Button
@@ -46,7 +40,6 @@ export function DatePicker({
         <CalendarIcon className="mr-2 h-4 w-4" />
         {date ? date.toLocaleDateString() : placeholder}
       </Button>
-      
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 z-50">
           <input

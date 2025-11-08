@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -7,13 +6,11 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { toast } from 'sonner'
-
 interface AddBreedingFormProps {
   farms: any[]
   animals: any[]
   userId: string
 }
-
 export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -28,13 +25,11 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
     notes: '',
     status: 'breeding'
   })
-
   const breedingTypes = [
     'natural',
     'artificial_insemination',
     'embryo_transfer'
   ]
-
   const breedingMethods = [
     'live_cover',
     'fresh_ai',
@@ -42,29 +37,24 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
     'cooled_ai',
     'embryo_transfer'
   ]
-
   const statuses = [
     'breeding',
     'pregnant',
     'completed',
     'failed'
   ]
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
       // Validate required fields
       if (!formData.animalId || !formData.breedingDate || !formData.breedingType) {
         throw new Error('Please fill in all required fields')
       }
-
       // Submit breeding record
       const response = await fetch('/api/livestock/breeding', {
         method: 'POST',
@@ -76,14 +66,11 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
           mateId: formData.mateId || null
         })
       })
-
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error.message || 'Failed to add breeding record')
       }
-
       const newRecord = await response.json()
-      
       toast.success('Breeding record added successfully!')
       router.push('/livestock/breeding')
     } catch (error) {
@@ -93,10 +80,8 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
       setIsSubmitting(false)
     }
   }
-
   // Filter animals for the selected animal
   const selectedAnimal = animals.find(animal => animal.id === formData.animalId)
-  
   // Filter potential mates based on selected animal's species and opposite gender
   const potentialMates = selectedAnimal 
     ? animals.filter(animal => 
@@ -105,7 +90,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
         animal.id !== selectedAnimal.id
       )
     : []
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
@@ -128,7 +112,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="mateId">Mate (Optional)</Label>
           <select
@@ -152,7 +135,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             </p>
           )}
         </div>
-
         <div>
           <Label htmlFor="breedingDate">Breeding Date *</Label>
           <Input
@@ -164,7 +146,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             required
           />
         </div>
-
         <div>
           <Label htmlFor="breedingType">Breeding Type *</Label>
           <select
@@ -183,7 +164,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
           </select>
         </div>
       </div>
-
       {/* Additional Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -203,7 +183,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="status">Status</Label>
           <select
@@ -220,7 +199,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             ))}
           </select>
         </div>
-
         <div>
           <Label htmlFor="veterinarian">Veterinarian</Label>
           <Input
@@ -231,7 +209,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             placeholder="Dr. Smith"
           />
         </div>
-
         <div>
           <Label htmlFor="cost">Cost ($)</Label>
           <Input
@@ -245,7 +222,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
           />
         </div>
       </div>
-
       {/* Expected Due Date Display */}
       {selectedAnimal && formData.breedingDate && (
         <div className="bg-blue-50 p-4 rounded-lg">
@@ -269,7 +245,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
           </p>
         </div>
       )}
-
       {/* Notes */}
       <div>
         <Label htmlFor="notes">Notes</Label>
@@ -282,7 +257,6 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
           rows={3}
         />
       </div>
-
       {/* Submit Button */}
       <div className="flex justify-end gap-4">
         <Button

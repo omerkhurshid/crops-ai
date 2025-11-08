@@ -3,7 +3,6 @@ import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
 import { diseasePestPredictionService } from '../../../../lib/crop-health/disease-pest-prediction'
 // Logger replaced with console for local development
-
 /**
  * Disease and Pest Analysis API
  * GET /api/crop-health/disease-pest-analysis?farmId=xxx&fieldId=xxx
@@ -14,17 +13,14 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { searchParams } = new URL(request.url)
     const farmId = searchParams.get('farmId')
     const fieldId = searchParams.get('fieldId')
-
     if (!farmId) {
       return NextResponse.json({ 
         error: 'Farm ID is required' 
       }, { status: 400 })
     }
-
     // Verify user has access to this farm
     const farm = await prisma.farm.findUnique({
       where: { id: farmId },
@@ -38,19 +34,16 @@ export async function GET(request: NextRequest) {
         }
       }
     })
-
     if (!farm) {
       return NextResponse.json({ 
         error: 'Farm not found' 
       }, { status: 404 })
     }
-
     if (farm.ownerId !== user.id) {
       return NextResponse.json({ 
         error: 'Access denied' 
       }, { status: 403 })
     }
-
     if (fieldId) {
       // Single field analysis
       const field = farm.fields.find(f => f.id === fieldId)
@@ -59,7 +52,6 @@ export async function GET(request: NextRequest) {
           error: 'Field not found' 
         }, { status: 404 })
       }
-
       const currentCrop = field.crops[0]
       if (!currentCrop) {
         return NextResponse.json({
@@ -73,7 +65,6 @@ export async function GET(request: NextRequest) {
           }
         })
       }
-
       // Build field context for analysis
       const fieldContext = {
         fieldId: field.id,
@@ -89,9 +80,7 @@ export async function GET(request: NextRequest) {
         soilConditions: await getSoilConditions(field.id),
         historicalOutbreaks: await getHistoricalOutbreaks(field.id)
       }
-
       const analysis = await diseasePestPredictionService.analyzeFieldRisks(fieldContext)
-
       return NextResponse.json({
         success: true,
         fieldAnalysis: analysis,
@@ -103,11 +92,9 @@ export async function GET(request: NextRequest) {
           area: field.area
         }
       })
-
     } else {
       // Farm-wide analysis
       const farmAnalysis = await diseasePestPredictionService.analyzeFarmRisks(farmId)
-
       return NextResponse.json({
         success: true,
         farmAnalysis,
@@ -120,10 +107,8 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-
   } catch (error) {
     console.error('Error in disease/pest analysis:', error)
-    
     return NextResponse.json({
       success: false,
       error: 'Failed to analyze disease and pest risks',
@@ -144,7 +129,6 @@ export async function GET(request: NextRequest) {
     }, { status: 500 })
   }
 }
-
 /**
  * Store disease/pest observation
  * POST /api/crop-health/disease-pest-analysis
@@ -155,28 +139,23 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const { fieldId, observationType, observationData, severity, notes, location } = body
-
     if (!fieldId || !observationType) {
       return NextResponse.json({ 
         error: 'Field ID and observation type are required' 
       }, { status: 400 })
     }
-
     // Verify user has access to this field
     const field = await prisma.field.findUnique({
       where: { id: fieldId },
       include: { farm: true }
     })
-
     if (!field || field.farm.ownerId !== user.id) {
       return NextResponse.json({ 
         error: 'Field not found or access denied' 
       }, { status: 404 })
     }
-
     // Store the observation in the database
     // Note: This would require adding a new model to the schema for pest/disease observations
     // Re-analyze field risks with new observation
@@ -186,7 +165,6 @@ export async function POST(request: NextRequest) {
         status: { in: ['PLANTED', 'GROWING'] }
       }
     })
-
     if (currentCrop) {
       const fieldContext = {
         fieldId: field.id,
@@ -202,31 +180,25 @@ export async function POST(request: NextRequest) {
         soilConditions: await getSoilConditions(field.id),
         historicalOutbreaks: await getHistoricalOutbreaks(field.id)
       }
-
       const updatedAnalysis = await diseasePestPredictionService.analyzeFieldRisks(fieldContext)
-
       return NextResponse.json({
         success: true,
         message: 'Observation recorded successfully',
         updatedAnalysis
       })
     }
-
     return NextResponse.json({
       success: true,
       message: 'Observation recorded successfully'
     })
-
   } catch (error) {
     console.error('Error recording disease/pest observation:', error)
-    
     return NextResponse.json({
       success: false,
       error: 'Failed to record observation'
     }, { status: 500 })
   }
 }
-
 // Helper functions to get real data sources
 async function getCurrentWeather(latitude?: number, longitude?: number) {
   try {
@@ -238,7 +210,6 @@ async function getCurrentWeather(latitude?: number, longitude?: number) {
         windSpeed: 8
       }
     }
-
     // Get current weather from OpenWeather API
     const response = await fetch(`/api/weather/current?lat=${latitude}&lon=${longitude}`)
     if (response.ok) {
@@ -251,9 +222,7 @@ async function getCurrentWeather(latitude?: number, longitude?: number) {
       }
     }
   } catch (error) {
-
   }
-
   return {
     temperature: 75,
     humidity: 65,
@@ -261,21 +230,17 @@ async function getCurrentWeather(latitude?: number, longitude?: number) {
     windSpeed: 8
   }
 }
-
 async function getWeatherForecast(latitude?: number, longitude?: number) {
   try {
     if (!latitude || !longitude) {
       return generateMockForecast()
     }
-
     // Get weather forecast - in production would use real forecast API
     return generateMockForecast()
   } catch (error) {
-
     return generateMockForecast()
   }
 }
-
 async function getSatelliteData(fieldId: string) {
   try {
     // Get latest satellite data from our satellite service
@@ -288,7 +253,6 @@ async function getSatelliteData(fieldId: string) {
         endDate: new Date().toISOString().split('T')[0]
       })
     })
-
     if (response.ok) {
       const data = await response.json()
       return {
@@ -299,9 +263,7 @@ async function getSatelliteData(fieldId: string) {
       }
     }
   } catch (error) {
-
   }
-
   return {
     ndvi: 0.75,
     ndviTrend: 0,
@@ -309,18 +271,14 @@ async function getSatelliteData(fieldId: string) {
     lastCapture: new Date()
   }
 }
-
 async function getSoilConditions(fieldId: string) {
   try {
     // Import soil data service
     const { soilDataService } = await import('../../../../lib/soil/soil-data-service')
-    
     const soilProfile = await soilDataService.getFieldSoilData(fieldId)
     const recentReadings = await soilDataService.getRecentSensorData(fieldId, 24)
-    
     if (soilProfile && soilProfile.layers.length > 0) {
       const topLayer = soilProfile.layers[0]
-      
       return {
         moisture: recentReadings.length > 0 
           ? recentReadings.reduce((sum, r) => sum + r.moisture, 0) / recentReadings.length
@@ -332,32 +290,26 @@ async function getSoilConditions(fieldId: string) {
       }
     }
   } catch (error) {
-
   }
-
   return {
     moisture: 22,
     temperature: 18,
     ph: 6.5
   }
 }
-
 async function getHistoricalOutbreaks(fieldId: string) {
   try {
     // Query historical disease/pest records
     // This would require additional database models for pest/disease history
     return []
   } catch (error) {
-
     return []
   }
 }
-
 function generateMockForecast() {
   return Array.from({ length: 7 }, (_, i) => {
     const date = new Date()
     date.setDate(date.getDate() + i)
-    
     return {
       date,
       temp_min: 65 + Math.random() * 10,

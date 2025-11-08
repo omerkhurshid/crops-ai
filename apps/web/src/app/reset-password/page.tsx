@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -9,7 +8,6 @@ import { Label } from '../../components/ui/label'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { Alert, AlertDescription } from '../../components/ui/alert'
 import { Lock, ArrowLeft, Loader2, CheckCircle2, Eye, EyeOff } from 'lucide-react'
-
 function ResetPasswordContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -23,7 +21,6 @@ function ResetPasswordContent() {
   const [error, setError] = useState('')
   const [validatingToken, setValidatingToken] = useState(true)
   const [tokenValid, setTokenValid] = useState(false)
-
   useEffect(() => {
     const tokenParam = searchParams?.get('token')
     if (tokenParam) {
@@ -34,7 +31,6 @@ function ResetPasswordContent() {
       setError('No reset token provided')
     }
   }, [searchParams])
-
   const validateToken = async (resetToken: string) => {
     try {
       const response = await fetch('/api/user-auth/validate-reset-token', {
@@ -42,7 +38,6 @@ function ResetPasswordContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: resetToken })
       })
-
       if (response.ok) {
         setTokenValid(true)
       } else {
@@ -54,23 +49,18 @@ function ResetPasswordContent() {
       setValidatingToken(false)
     }
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
     if (password.localeCompare(confirmPassword) !== 0) {
       setError('Passwords do not match')
       return
     }
-
     if (password.length < 8) {
       setError('Password must be at least 8 characters long')
       return
     }
-
     setIsLoading(true)
     setError('')
-
     try {
       const response = await fetch('/api/user-auth/reset-password', {
         method: 'POST',
@@ -80,9 +70,7 @@ function ResetPasswordContent() {
           password 
         })
       })
-
       const data = await response.json()
-
       if (response.ok) {
         setIsSuccess(true)
         setTimeout(() => {
@@ -97,7 +85,6 @@ function ResetPasswordContent() {
       setIsLoading(false)
     }
   }
-
   if (validatingToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-agricultural">
@@ -105,7 +92,6 @@ function ResetPasswordContent() {
       </div>
     )
   }
-
   if (isSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-agricultural py-12 px-4 sm:px-6 lg:px-8">
@@ -114,7 +100,6 @@ function ResetPasswordContent() {
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-4">Crops.AI</h1>
           </div>
-          
           <ModernCard variant="floating" className="shadow-2xl">
             <ModernCardContent className="text-center py-8">
               <div className="space-y-4">
@@ -132,7 +117,6 @@ function ResetPasswordContent() {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-agricultural py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 agricultural-overlay"></div>
@@ -141,7 +125,6 @@ function ResetPasswordContent() {
           <h1 className="text-4xl font-bold text-white mb-4">Crops.AI</h1>
           <p className="text-white/80 text-lg font-light">Create your new password</p>
         </div>
-        
         <ModernCard variant="floating" className="shadow-2xl">
           <ModernCardHeader>
             <ModernCardTitle>Reset Password</ModernCardTitle>
@@ -193,7 +176,6 @@ function ResetPasswordContent() {
                     Must be at least 8 characters long
                   </p>
                 </div>
-
                 <div>
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <div className="mt-1 relative">
@@ -217,13 +199,11 @@ function ResetPasswordContent() {
                     </button>
                   </div>
                 </div>
-
                 {error && (
                   <Alert variant="destructive">
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-
                 <InlineFloatingButton
                   icon={isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
                   label={isLoading ? 'Resetting...' : 'Reset Password'}
@@ -233,7 +213,6 @@ function ResetPasswordContent() {
                   className="w-full"
                   type="submit"
                 />
-
                 <div className="text-center pt-4">
                   <Link href="/login" className="text-sm text-sage-600 hover:text-sage-700">
                     <InlineFloatingButton
@@ -252,7 +231,6 @@ function ResetPasswordContent() {
     </div>
   )
 }
-
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={

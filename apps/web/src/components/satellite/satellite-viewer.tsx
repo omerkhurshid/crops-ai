@@ -1,16 +1,13 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Satellite, Eye, Download, RefreshCw, AlertCircle } from 'lucide-react'
-
 interface SatelliteViewerProps {
   fieldId: string
   fieldName: string
 }
-
 interface NDVIData {
   ndvi: number
   ndviClass: string
@@ -30,29 +27,23 @@ interface NDVIData {
   }
   imageUrl?: string
 }
-
 export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [ndviData, setNdviData] = useState<NDVIData | null>(null)
   const [showIndices, setShowIndices] = useState(false)
-
   useEffect(() => {
     fetchNDVIData()
   }, [fieldId])
-
   const fetchNDVIData = async () => {
     setLoading(true)
     setError(null)
-    
     try {
       const response = await fetch(`/api/satellite/live-ndvi?fieldId=${fieldId}`)
-      
       if (!response.ok) {
         const data = await response.json()
         throw new Error(data.error || 'Failed to fetch satellite data')
       }
-      
       const data = await response.json()
       setNdviData(data)
     } catch (err) {
@@ -61,14 +52,12 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       setLoading(false)
     }
   }
-
   const getHealthColor = (ndvi: number) => {
     if (ndvi >= 0.7) return 'text-green-600'
     if (ndvi >= 0.5) return 'text-yellow-600'
     if (ndvi >= 0.3) return 'text-orange-600'
     return 'text-red-600'
   }
-
   const getHealthBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'excellent':
@@ -85,7 +74,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
         return 'bg-gray-100 text-gray-800'
     }
   }
-
   if (loading) {
     return (
       <Card className="border-2">
@@ -98,7 +86,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       </Card>
     )
   }
-
   if (error) {
     return (
       <Card className="border-2">
@@ -116,7 +103,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       </Card>
     )
   }
-
   if (!ndviData) {
     return (
       <Card className="border-2">
@@ -130,7 +116,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       </Card>
     )
   }
-
   return (
     <Card className="border-2">
       <CardHeader>
@@ -169,7 +154,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
           <div className="absolute bottom-2 left-2 text-sm text-gray-700">Poor</div>
           <div className="absolute bottom-2 right-2 text-sm text-gray-700">Excellent</div>
         </div>
-
         {/* Health Summary */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div>
@@ -197,7 +181,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
             </div>
           </div>
         </div>
-
         {/* Vegetation Indices */}
         <div className="mb-4">
           <Button
@@ -209,7 +192,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
             <span>Advanced Vegetation Indices</span>
             <span>{showIndices ? '−' : '+'}</span>
           </Button>
-          
           {showIndices && ndviData.indices && (
             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-50 rounded-lg">
               {Object.entries(ndviData.indices).map(([key, value]) => (
@@ -221,7 +203,6 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
             </div>
           )}
         </div>
-
         {/* Analysis Summary */}
         <div className="bg-blue-50 rounded-lg p-4">
           <h4 className="font-medium text-blue-900 mb-2">Analysis Summary</h4>

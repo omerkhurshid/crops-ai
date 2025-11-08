@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { ensureArray } from '../lib/utils'
-
 export interface NBARecommendation {
   id: string
   type: 'SPRAY' | 'HARVEST' | 'IRRIGATE' | 'LIVESTOCK_HEALTH' | 'MARKET_SELL'
@@ -32,7 +31,6 @@ export interface NBARecommendation {
   updatedAt: Date
   completedAt?: Date
 }
-
 export interface NBAMetadata {
   farmName: string
   totalDecisionsEvaluated: number
@@ -40,14 +38,12 @@ export interface NBAMetadata {
   averageConfidence: number
   generatedAt: string
 }
-
 export interface GenerateRecommendationsParams {
   farmId: string
   includeDecisionTypes?: NBARecommendation['type'][]
   excludeCompletedTasks?: boolean
   maxRecommendations?: number
 }
-
 export interface UpdateRecommendationParams {
   status?: NBARecommendation['status']
   userResponse?: string
@@ -61,13 +57,11 @@ export interface UpdateRecommendationParams {
     wouldRecommendAgain?: boolean
   }
 }
-
 export function useNBARecommendations(farmId?: string) {
   const [recommendations, setRecommendations] = useState<NBARecommendation[]>([])
   const [metadata, setMetadata] = useState<NBAMetadata | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
   // Generate new recommendations
   const generateRecommendations = async (params: GenerateRecommendationsParams) => {
     // Input validation
@@ -76,20 +70,16 @@ export function useNBARecommendations(farmId?: string) {
       setError(error.message)
       throw error
     }
-    
     if (!params.farmId.trim()) {
       const error = new Error('Invalid farm ID provided')
       setError(error.message)
       throw error
     }
-    
     setLoading(true)
     setError(null)
-    
     try {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 30000) // 30s timeout
-      
       const response = await fetch('/api/nba/recommendations', {
         method: 'POST',
         headers: {
@@ -103,12 +93,9 @@ export function useNBARecommendations(farmId?: string) {
         }),
         signal: controller.signal,
       })
-
       clearTimeout(timeoutId)
-
       if (!response.ok) {
         let errorMessage = 'Failed to generate recommendations'
-        
         try {
           const errorData = await response.json()
           errorMessage = errorData.error || errorMessage
@@ -124,17 +111,13 @@ export function useNBARecommendations(farmId?: string) {
             errorMessage = 'Server error. Please try again later'
           }
         }
-        
         throw new Error(errorMessage)
       }
-
       const data = await response.json()
-      
       // Validate response structure
       if (!data.recommendations || !Array.isArray(data.recommendations)) {
         throw new Error('Invalid response format from server')
       }
-
       const processedRecommendations = ensureArray(data.recommendations).map((rec: any) => {
         try {
           return {
@@ -150,7 +133,6 @@ export function useNBARecommendations(farmId?: string) {
             }
           }
         } catch (dateError) {
-
           return {
             ...rec,
             createdAt: new Date(),
@@ -165,13 +147,11 @@ export function useNBARecommendations(farmId?: string) {
           }
         }
       })
-
       setRecommendations(processedRecommendations)
       setMetadata(data.metadata)
       return data
     } catch (err) {
       let message = 'Failed to generate recommendations'
-      
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
           message = 'Request timed out. Please try again'
@@ -179,7 +159,6 @@ export function useNBARecommendations(farmId?: string) {
           message = err.message
         }
       }
-      
       setError(message)
       console.error('Generate recommendations error:', err)
       throw new Error(message)
@@ -187,7 +166,6 @@ export function useNBARecommendations(farmId?: string) {
       setLoading(false)
     }
   }
-
   // Fetch existing recommendations
   const fetchRecommendations = async (
     farmId: string, 
@@ -195,24 +173,19 @@ export function useNBARecommendations(farmId?: string) {
     limit: number = 10
   ) => {
     if (!farmId) throw new Error('Farm ID is required')
-    
     setLoading(true)
     setError(null)
-    
     try {
       const params = new URLSearchParams({
         farmId,
         status,
         limit: limit.toString()
       })
-
       const response = await fetch(`/api/nba/recommendations?${params}`)
-      
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to fetch recommendations')
       }
-
       const data = await response.json()
       const formattedRecs = ensureArray(data.recommendations).map((rec: any) => ({
         ...rec,
@@ -226,7 +199,6 @@ export function useNBARecommendations(farmId?: string) {
           mustCompleteBy: rec.timing.mustCompleteBy ? new Date(rec.timing.mustCompleteBy) : undefined,
         }
       }))
-      
       setRecommendations(formattedRecs)
       return formattedRecs
     } catch (err) {
@@ -237,14 +209,12 @@ export function useNBARecommendations(farmId?: string) {
       setLoading(false)
     }
   }
-
   // Update recommendation status
   const updateRecommendation = async (
     recommendationId: string, 
     updates: UpdateRecommendationParams
   ) => {
     setError(null)
-    
     try {
       const response = await fetch(`/api/nba/recommendations/${recommendationId}`, {
         method: 'PATCH',
@@ -253,14 +223,11 @@ export function useNBARecommendations(farmId?: string) {
         },
         body: JSON.stringify(updates),
       })
-
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to update recommendation')
       }
-
       const data = await response.json()
-      
       // Update local state
       setRecommendations(prev => 
         prev.map(rec => 
@@ -276,7 +243,6 @@ export function useNBARecommendations(farmId?: string) {
             : rec
         )
       )
-      
       return data
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -284,7 +250,6 @@ export function useNBARecommendations(farmId?: string) {
       throw err
     }
   }
-
   // Accept recommendation
   const acceptRecommendation = async (
     recommendationId: string, 
@@ -295,7 +260,6 @@ export function useNBARecommendations(farmId?: string) {
       userResponse: userResponse || 'Accepted by user'
     })
   }
-
   // Reject recommendation
   const rejectRecommendation = async (
     recommendationId: string, 
@@ -306,7 +270,6 @@ export function useNBARecommendations(farmId?: string) {
       userResponse: userResponse || 'Rejected by user'
     })
   }
-
   // Complete recommendation with outcome
   const completeRecommendation = async (
     recommendationId: string, 
@@ -319,24 +282,19 @@ export function useNBARecommendations(farmId?: string) {
       actualOutcome: outcome
     })
   }
-
   // Delete/dismiss recommendation
   const dismissRecommendation = async (recommendationId: string) => {
     setError(null)
-    
     try {
       const response = await fetch(`/api/nba/recommendations/${recommendationId}`, {
         method: 'DELETE'
       })
-
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to dismiss recommendation')
       }
-
       // Remove from local state
       setRecommendations(prev => prev.filter(rec => rec.id !== recommendationId))
-      
       return { success: true }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -344,30 +302,25 @@ export function useNBARecommendations(farmId?: string) {
       throw err
     }
   }
-
   // Auto-fetch recommendations when farmId changes
   useEffect(() => {
     if (farmId) {
       fetchRecommendations(farmId).catch(console.error)
     }
   }, [farmId])
-
   // Helper functions
   const getRecommendationsByStatus = (status: NBARecommendation['status']) => {
     return recommendations.filter(rec => rec.status === status)
   }
-
   const getRecommendationsByPriority = (priority: NBARecommendation['priority']) => {
     return recommendations.filter(rec => rec.priority === priority)
   }
-
   const getUrgentRecommendations = () => {
     return recommendations.filter(rec => 
       rec.priority === 'URGENT' && 
       rec.status === 'PENDING'
     )
   }
-
   const getHighValueRecommendations = (minValue = 1000) => {
     return recommendations.filter(rec => {
       const totalValue = (rec.estimatedImpact.revenue || 0) + 
@@ -375,7 +328,6 @@ export function useNBARecommendations(farmId?: string) {
       return totalValue >= minValue && rec.status === 'PENDING'
     })
   }
-
   return {
     recommendations,
     metadata,

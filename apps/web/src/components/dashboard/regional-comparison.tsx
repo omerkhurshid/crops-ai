@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -21,7 +20,6 @@ import {
   Target
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface RegionalMetric {
   metric: string
   yourValue: number
@@ -33,7 +31,6 @@ interface RegionalMetric {
   trendPercentage: number
   category: 'yield' | 'financial' | 'efficiency' | 'sustainability'
 }
-
 interface RegionalComparison {
   region: string
   farmCount: number
@@ -55,7 +52,6 @@ interface RegionalComparison {
     priority: 'high' | 'medium' | 'low'
   }>
 }
-
 interface RegionalComparisonProps {
   farmData?: {
     latitude?: number
@@ -66,40 +62,32 @@ interface RegionalComparisonProps {
   crops?: any[]
   className?: string
 }
-
 export function RegionalComparison({ farmData, crops, className }: RegionalComparisonProps) {
   const [comparison, setComparison] = useState<RegionalComparison | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [showBenchmarks, setShowBenchmarks] = useState(false)
-
   useEffect(() => {
     generateRegionalComparison()
   }, [farmData, crops])
-
   const generateRegionalComparison = async () => {
     try {
       const region = farmData?.region || determineRegionFromCoordinates(farmData?.latitude, farmData?.longitude)
       const currentYear = new Date().getFullYear()
       const primaryCrop = crops?.[0]?.cropType || 'CORN'
-      
       // Always try to fetch real regional benchmark data first
       try {
         const realBenchmarkData = await fetchRealBenchmarkData(region, primaryCrop, farmData)
         if (realBenchmarkData && realBenchmarkData.metrics.length > 0) {
-
           setComparison(realBenchmarkData)
           setLoading(false)
           return
         } else {
-
         }
       } catch (error) {
         console.error('Error fetching real benchmark data:', error)
       }
-
       // If API fails, fetch from our analytical benchmark service
-
       try {
         // Use our ML-powered analytical service for real benchmarks
         const analyticalResponse = await fetch('/api/ml/benchmarks/analyze', {
@@ -118,10 +106,8 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             }
           })
         })
-
         if (analyticalResponse.ok) {
           const analyticalData = await analyticalResponse.json()
-          
           if (analyticalData.success && analyticalData.benchmarks) {
             const transformedData = transformAnalyticalBenchmarks(analyticalData.benchmarks, region, primaryCrop)
             setComparison(transformedData)
@@ -132,7 +118,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       } catch (error) {
         console.error('Error fetching analytical benchmarks:', error)
       }
-
       // Only if all data sources fail, show no data state
       setComparison(null)
     } catch (error) {
@@ -141,7 +126,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       setLoading(false)
     }
   }
-
   const fetchRealBenchmarkData = async (region: string, cropType: string, farmData: any): Promise<RegionalComparison | null> => {
     const requestData = {
       region,
@@ -154,7 +138,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       farmSize: farmData?.totalArea,
       comparisonType: 'comprehensive'
     }
-
     const response = await fetch('/api/benchmarks/regional-comparison', {
       method: 'POST',
       headers: {
@@ -162,14 +145,11 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       },
       body: JSON.stringify(requestData)
     })
-
     if (response.ok) {
       const result = await response.json()
-      
       // Handle the API response structure properly
       const data = result.data || result
       const benchmarkData = data.benchmarkData || data
-      
       if (benchmarkData && benchmarkData.metrics && benchmarkData.metrics.length > 0) {
         return {
           region: benchmarkData.region || region,
@@ -188,10 +168,8 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         }
       }
     }
-
     return null
   }
-
   const transformBenchmarkMetrics = (benchmarkMetrics: any[], farmData: any): RegionalMetric[] => {
     return benchmarkMetrics.map(metric => ({
       metric: metric.name || metric.metric,
@@ -205,7 +183,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       category: normalizeCategoryName(metric.category || 'yield')
     }))
   }
-
   const transformAnalyticalBenchmarks = (analyticalData: any, region: string, cropType: string): RegionalComparison => {
     // Transform ML analytical service data to our format
     return {
@@ -224,7 +201,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       benchmarkGoals: analyticalData.goals || []
     }
   }
-
   const normalizeCategoryName = (category: string): 'yield' | 'financial' | 'efficiency' | 'sustainability' => {
     const categoryMap: Record<string, 'yield' | 'financial' | 'efficiency' | 'sustainability'> = {
       'production': 'yield',
@@ -237,13 +213,10 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       'environmental': 'sustainability',
       'sustainability': 'sustainability'
     }
-    
     return categoryMap[category.toLowerCase()] || 'yield'
   }
-
   const determineRegionFromCoordinates = (latitude?: number, longitude?: number): string => {
     if (!latitude || !longitude) return 'Midwest Corn Belt'
-    
     // Regional boundaries based on major agricultural regions
     if (latitude >= 40 && latitude <= 45 && longitude >= -105 && longitude <= -80) {
       return 'Midwest Corn Belt'
@@ -261,7 +234,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       return 'Regional Average'
     }
   }
-
   const getCategoryIcon = (category: string) => {
     const icons = {
       yield: Leaf,
@@ -271,24 +243,20 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
     }
     return icons[category as keyof typeof icons] || BarChart3
   }
-
   const getPercentileColor = (percentile: number) => {
     if (percentile >= 75) return 'text-green-600 bg-green-100'
     if (percentile >= 50) return 'text-blue-600 bg-blue-100'
     if (percentile >= 25) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
-
   const getTrendIcon = (trend: string) => {
     if (trend === 'up') return <TrendingUp className="h-3 w-3 text-green-600" />
     if (trend === 'down') return <TrendingDown className="h-3 w-3 text-red-600" />
     return <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
   }
-
   const filteredMetrics = selectedCategory === 'all' 
     ? comparison?.metrics 
     : comparison?.metrics.filter(m => m.category === selectedCategory)
-
   if (loading) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -307,7 +275,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       </ModernCard>
     )
   }
-
   if (!comparison) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -327,7 +294,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -358,7 +324,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             {showBenchmarks ? 'Hide' : 'Show'} Goals
           </Button>
         </div>
-
         {/* Category Filter */}
         <div className="flex gap-2 mt-4">
           {['all', 'yield', 'financial', 'efficiency', 'sustainability'].map((category) => (
@@ -374,7 +339,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
           ))}
         </div>
       </ModernCardHeader>
-
       <ModernCardContent className="space-y-4">
         {/* Performance Overview */}
         <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-lg">
@@ -389,7 +353,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             <div className="text-xs text-gray-600">Avg Percentile</div>
           </div>
         </div>
-
         {/* Metrics Comparison */}
         <div className="space-y-3">
           {filteredMetrics?.map((metric) => {
@@ -398,7 +361,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             const isGoodDiff = metric.metric.includes('Cost') || metric.metric.includes('Carbon') 
               ? performanceDiff < 0  // Lower is better for costs/carbon
               : performanceDiff > 0  // Higher is better for yield/profit
-            
             return (
               <div key={metric.metric} className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center justify-between mb-2">
@@ -411,7 +373,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
                     {metric.percentile}th percentile
                   </Badge>
                 </div>
-                
                 <div className="grid grid-cols-3 gap-3 text-xs">
                   <div>
                     <span className="text-gray-500 block">Your Farm</span>
@@ -436,7 +397,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             )
           })}
         </div>
-
         {/* Benchmark Goals */}
         {showBenchmarks && comparison.benchmarkGoals.length > 0 && (
           <div className="space-y-3 pt-4 border-t">
@@ -467,7 +427,6 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             ))}
           </div>
         )}
-
         {/* Insights */}
         {comparison.insights.length > 0 && (
           <div className="space-y-2 pt-4 border-t">

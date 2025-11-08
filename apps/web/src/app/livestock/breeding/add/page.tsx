@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,22 +7,18 @@ import { AddBreedingForm } from '../../../../components/livestock/add-breeding-f
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-
 export default function AddBreedingPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [userFarms, setUserFarms] = useState<any[]>([])
   const [breedingAnimals, setBreedingAnimals] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -31,13 +26,11 @@ export default function AddBreedingPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=breeding')
             return
           }
-
           // Fetch animals for breeding
           const animalsResponse = await fetch('/api/livestock/animals')
           if (animalsResponse.ok) {
@@ -53,10 +46,8 @@ export default function AddBreedingPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -67,11 +58,9 @@ export default function AddBreedingPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -91,7 +80,6 @@ export default function AddBreedingPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -105,12 +93,10 @@ export default function AddBreedingPage() {
             Back to Breeding Management
           </Link>
         </div>
-
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Add Breeding Record</h1>
           <p className="text-gray-600">Record a new breeding event or pregnancy</p>
         </div>
-
         {/* Add Breeding Form */}
         <ModernCard>
           <ModernCardHeader>

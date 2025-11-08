@@ -1,13 +1,10 @@
 'use client'
-
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Stethoscope, Plus, Activity } from 'lucide-react'
-
 interface HealthLogsProps {
   farmId: string
 }
-
 export function HealthLogs({ farmId }: HealthLogsProps) {
   return (
     <div className="space-y-6">

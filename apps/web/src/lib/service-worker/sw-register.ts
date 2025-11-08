@@ -2,66 +2,53 @@
  * Service Worker Registration and Management
  * Handles offline capabilities and background sync for Crops.AI
  */
-
 // Logger replaced with console for local development
 // Removed getConfig import - using process.env directly for client-side access
-
 export class ServiceWorkerManager {
   private static instance: ServiceWorkerManager
   private registration: ServiceWorkerRegistration | null = null
   private isSupported = false
-
   private constructor() {
     this.isSupported = 'serviceWorker' in navigator
   }
-
   static getInstance(): ServiceWorkerManager {
     if (!ServiceWorkerManager.instance) {
       ServiceWorkerManager.instance = new ServiceWorkerManager()
     }
     return ServiceWorkerManager.instance
   }
-
   /**
    * Register the service worker
    */
   async register(): Promise<boolean> {
     if (!this.isSupported) {
-
       return false
     }
-
     try {
       this.registration = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'imports'
       })
-
       // Listen for updates
       this.registration.addEventListener('updatefound', () => {
         this.handleUpdate()
       })
-
       // Check for existing service worker updates
       if (this.registration.waiting) {
         this.handleUpdate()
       }
-
       return true
     } catch (error) {
       console.error('Service Worker registration failed', error)
       return false
     }
   }
-
   /**
    * Handle service worker updates
    */
   private handleUpdate(): void {
     if (!this.registration?.installing) return
-
     const newWorker = this.registration.installing
-
     newWorker.addEventListener('statechange', () => {
       if (newWorker.state === 'installed') {
         if (navigator.serviceWorker.controller) {
@@ -74,7 +61,6 @@ export class ServiceWorkerManager {
       }
     })
   }
-
   /**
    * Show update notification to user
    */
@@ -88,7 +74,6 @@ export class ServiceWorkerManager {
     })
     window.dispatchEvent(event)
   }
-
   /**
    * Show installation success message
    */
@@ -101,62 +86,48 @@ export class ServiceWorkerManager {
     })
     window.dispatchEvent(event)
   }
-
   /**
    * Skip waiting and activate new service worker
    */
   async skipWaiting(): Promise<void> {
     if (!this.registration?.waiting) return
-
     // Send message to waiting service worker to skip waiting
     this.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
-
     // Listen for controller change
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       window.location.reload()
     })
   }
-
   /**
    * Request push notification permission
    */
   async requestNotificationPermission(): Promise<boolean> {
     if (!('Notification' in window)) {
-
       return false
     }
-
     if (Notification.permission === 'granted') {
       return true
     }
-
     if (Notification.permission === 'denied') {
-
       return false
     }
-
     try {
       const permission = await Notification.requestPermission()
       const granted = permission === 'granted'
-      
       if (granted) {
-
         await this.subscribeToPush()
       }
-      
       return granted
     } catch (error) {
       console.error('Failed to request notification permission', error)
       return false
     }
   }
-
   /**
    * Subscribe to push notifications
    */
   private async subscribeToPush(): Promise<void> {
     if (!this.registration) return
-
     try {
       const subscription = await this.registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -164,7 +135,6 @@ export class ServiceWorkerManager {
           process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
         ) as BufferSource
       })
-
       // Send subscription to server
       await fetch('/api/push/subscribe', {
         method: 'POST',
@@ -173,12 +143,10 @@ export class ServiceWorkerManager {
         },
         body: JSON.stringify(subscription)
       })
-
     } catch (error) {
       console.error('Push subscription failed', error)
     }
   }
-
   /**
    * Convert VAPID key to Uint8Array
    */
@@ -187,37 +155,30 @@ export class ServiceWorkerManager {
     const base64 = (base64String + padding)
       .replace(/-/g, '+')
       .replace(/_/g, '/')
-
     const rawData = window.atob(base64)
     const outputArray = new Uint8Array(rawData.length)
-
     for (let i = 0; i < rawData.length; ++i) {
       outputArray[i] = rawData.charCodeAt(i)
     }
-
     return outputArray
   }
-
   /**
    * Check if app is currently offline
    */
   isOffline(): boolean {
     return !navigator.onLine
   }
-
   /**
    * Get network status information
    */
   getNetworkInfo(): { online: boolean; effectiveType?: string; downlink?: number } {
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection
-
     return {
       online: navigator.onLine,
       effectiveType: connection?.effectiveType,
       downlink: connection?.downlink
     }
   }
-
   /**
    * Queue data for background sync when offline
    */
@@ -229,21 +190,17 @@ export class ServiceWorkerManager {
     id: string
   }): Promise<void> {
     if (!this.registration) return
-
     try {
       // Store data in IndexedDB for sync when online
       await this.storeForSync(data)
-      
       // Register for background sync
       if ('sync' in this.registration) {
         await (this.registration as any).sync.register('background-sync')
       }
-
     } catch (error) {
       console.error('Failed to queue data for sync', error)
     }
   }
-
   /**
    * Store data for background sync using IndexedDB
    */
@@ -252,17 +209,13 @@ export class ServiceWorkerManager {
       const db = await this.openIndexedDB();
       const transaction = db.transaction(['pendingSync'], 'readwrite');
       const store = transaction.objectStore('pendingSync');
-      
       const syncItem = {
         id: Date.now() + Math.random(), // Unique ID
         data,
         timestamp: new Date().toISOString(),
         retryCount: 0
       };
-      
-      await store.add(syncItem);
-      console.log('Data stored for background sync:', syncItem.id);
-    } catch (error) {
+      await store.add(syncItem);} catch (error) {
       console.error('Failed to store data for sync:', error);
       // Fallback to localStorage only if IndexedDB fails
       try {
@@ -274,17 +227,14 @@ export class ServiceWorkerManager {
       }
     }
   }
-
   /**
    * Initialize IndexedDB for background sync storage
    */
   private async openIndexedDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('CropsAISyncDB', 1);
-      
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);
-      
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
         if (!db.objectStoreNames.contains('pendingSync')) {
@@ -295,6 +245,5 @@ export class ServiceWorkerManager {
     });
   }
 }
-
 // Export singleton instance
 export const serviceWorkerManager = ServiceWorkerManager.getInstance()

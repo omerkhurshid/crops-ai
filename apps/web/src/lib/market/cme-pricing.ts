@@ -5,13 +5,11 @@
  * Mercantile Exchange for agricultural commodities including corn, wheat,
  * soybeans, and other crops.
  */
-
 export interface CMEConfig {
   apiKey: string
   baseUrl: string
   marketDataUrl: string
 }
-
 export interface CommodityPrice {
   symbol: string
   name: string
@@ -26,7 +24,6 @@ export interface CommodityPrice {
   lastUpdate: string
   sessionDate: string
 }
-
 export interface PriceHistory {
   symbol: string
   prices: Array<{
@@ -39,7 +36,6 @@ export interface PriceHistory {
     adjustedClose?: number
   }>
 }
-
 export interface MarketSummary {
   date: string
   commodities: {
@@ -57,31 +53,25 @@ export interface MarketSummary {
     }
   }
 }
-
 class CMEPricingService {
   private config: CMEConfig
   private readonly CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
   private priceCache = new Map<string, { data: CommodityPrice; timestamp: number }>()
-
   constructor() {
     this.config = {
       apiKey: process.env.CME_API_KEY || '',
       baseUrl: 'https://www.cmegroup.com/market-data-platform',
       marketDataUrl: 'https://api.cmegroup.com/v1'
     }
-
     if (!this.config.apiKey) {
-
     }
   }
-
   /**
    * Check if CME API is properly configured
    */
   isConfigured(): boolean {
     return Boolean(this.config.apiKey)
   }
-
   /**
    * Get current price for a commodity
    */
@@ -92,11 +82,9 @@ class CMEPricingService {
       if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
         return cached.data
       }
-
       if (!this.isConfigured()) {
         return this.getMockPrice(symbol)
       }
-
       const response = await fetch(`${this.config.marketDataUrl}/quotes/${symbol}`, {
         headers: {
           'Authorization': `Bearer ${this.config.apiKey}`,
@@ -104,29 +92,22 @@ class CMEPricingService {
         },
         signal: AbortSignal.timeout(10000)
       })
-
       if (!response.ok) {
-
         return this.getMockPrice(symbol)
       }
-
       const data = await response.json()
       const price = this.formatPriceData(data)
-      
       // Cache the result
       this.priceCache.set(symbol, {
         data: price,
         timestamp: Date.now()
       })
-
       return price
-
     } catch (error) {
       console.error(`Error fetching CME price for ${symbol}:`, error)
       return this.getMockPrice(symbol)
     }
   }
-
   /**
    * Get multiple commodity prices
    */
@@ -140,7 +121,6 @@ class CMEPricingService {
       return []
     }
   }
-
   /**
    * Get agricultural commodity prices overview
    */
@@ -149,15 +129,12 @@ class CMEPricingService {
       const grainSymbols = ['ZC', 'ZW', 'ZS'] // Corn, Wheat, Soybeans futures
       const livestockSymbols = ['LE', 'HE'] // Live Cattle, Lean Hogs
       const softsSymbols = ['KC', 'SB', 'CC'] // Coffee, Sugar, Cocoa
-
       const [grains, livestock, softs] = await Promise.all([
         this.getMultiplePrices(grainSymbols),
         this.getMultiplePrices(livestockSymbols),
         this.getMultiplePrices(softsSymbols)
       ])
-
       const allCommodities = [...grains, ...livestock, ...softs]
-      
       return {
         date: new Date().toISOString().split('T')[0],
         commodities: {
@@ -171,13 +148,11 @@ class CMEPricingService {
           trends: this.analyzeTrends(allCommodities)
         }
       }
-
     } catch (error) {
       console.error('Error getting agricultural prices overview:', error)
       return this.getMockMarketSummary()
     }
   }
-
   /**
    * Get price history for a commodity
    */
@@ -186,10 +161,8 @@ class CMEPricingService {
       if (!this.isConfigured()) {
         return this.getMockPriceHistory(symbol, days)
       }
-
       const endDate = new Date()
       const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000)
-      
       const response = await fetch(
         `${this.config.marketDataUrl}/historical/${symbol}?start=${startDate.toISOString().split('T')[0]}&end=${endDate.toISOString().split('T')[0]}`,
         {
@@ -200,20 +173,16 @@ class CMEPricingService {
           signal: AbortSignal.timeout(15000)
         }
       )
-
       if (!response.ok) {
         return this.getMockPriceHistory(symbol, days)
       }
-
       const data = await response.json()
       return this.formatHistoricalData(symbol, data)
-
     } catch (error) {
       console.error(`Error fetching price history for ${symbol}:`, error)
       return this.getMockPriceHistory(symbol, days)
     }
   }
-
   /**
    * Calculate price forecast based on trends
    */
@@ -230,17 +199,13 @@ class CMEPricingService {
     try {
       const currentPrice = await this.getCommodityPrice(symbol)
       if (!currentPrice) return null
-
       const history = await this.getPriceHistory(symbol, 90)
       if (!history) return null
-
       // Simple trend-based forecast (in production would use more sophisticated models)
       const recentPrices = (history.prices || []).slice(-30).map(p => p.close)
       const trend = this.calculateTrend(recentPrices)
       const volatility = this.calculateVolatility(recentPrices)
-
       const basePrice = currentPrice.price
-      
       return {
         symbol,
         currentPrice: basePrice,
@@ -260,13 +225,11 @@ class CMEPricingService {
         },
         factors: this.getMarketFactors(symbol)
       }
-
     } catch (error) {
       console.error(`Error generating price forecast for ${symbol}:`, error)
       return null
     }
   }
-
   /**
    * Format raw CME data to our standard format
    */
@@ -286,7 +249,6 @@ class CMEPricingService {
       sessionDate: data.sessionDate || new Date().toISOString().split('T')[0]
     }
   }
-
   /**
    * Generate mock price data for fallback
    */
@@ -295,7 +257,6 @@ class CMEPricingService {
     const variation = (Math.random() - 0.5) * 0.1 // ±5% variation
     const price = basePrice * (1 + variation)
     const change = basePrice * variation
-    
     return {
       symbol,
       name: this.getCommodityName(symbol),
@@ -310,7 +271,6 @@ class CMEPricingService {
       sessionDate: new Date().toISOString().split('T')[0]
     }
   }
-
   /**
    * Get base price for mock data
    */
@@ -327,7 +287,6 @@ class CMEPricingService {
     }
     return basePrices[symbol] || 100
   }
-
   /**
    * Get commodity name from symbol
    */
@@ -344,7 +303,6 @@ class CMEPricingService {
     }
     return names[symbol] || symbol
   }
-
   /**
    * Get commodity unit from symbol
    */
@@ -361,28 +319,23 @@ class CMEPricingService {
     }
     return units[symbol] || 'USD'
   }
-
   /**
    * Calculate grain index from grain prices
    */
   private calculateGrainIndex(grains: CommodityPrice[]): number {
     if (grains.length === 0) return 100
-    
     const totalChange = (grains || []).reduce((sum, grain) => sum + grain.changePercent, 0)
     return 100 + (totalChange / grains.length)
   }
-
   /**
    * Calculate market volatility index
    */
   private calculateVolatilityIndex(commodities: CommodityPrice[]): number {
     if (commodities.length === 0) return 0
-    
     const changes = (commodities || []).map(c => Math.abs(c.changePercent))
     const avgVolatility = changes.reduce((a, b) => a + b, 0) / changes.length
     return Math.round(avgVolatility * 100) / 100
   }
-
   /**
    * Analyze market trends
    */
@@ -390,22 +343,18 @@ class CMEPricingService {
     const bullish = (commodities || []).filter(c => c.changePercent > 2).map(c => c.symbol)
     const bearish = (commodities || []).filter(c => c.changePercent < -2).map(c => c.symbol)
     const neutral = (commodities || []).filter(c => Math.abs(c.changePercent) <= 2).map(c => c.symbol)
-    
     return { bullish, bearish, neutral }
   }
-
   /**
    * Generate mock historical data
    */
   private getMockPriceHistory(symbol: string, days: number): PriceHistory {
     const basePrice = this.getBasePriceForSymbol(symbol)
     const prices = []
-    
     for (let i = days; i >= 0; i--) {
       const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
       const variation = (Math.random() - 0.5) * 0.05 // ±2.5% daily variation
       const price = basePrice * (1 + variation)
-      
       prices.push({
         date: date.toISOString().split('T')[0],
         open: price * 0.995,
@@ -415,10 +364,8 @@ class CMEPricingService {
         volume: Math.floor(Math.random() * 50000) + 10000
       })
     }
-    
     return { symbol, prices }
   }
-
   /**
    * Generate mock market summary
    */
@@ -451,7 +398,6 @@ class CMEPricingService {
       }
     }
   }
-
   // Helper methods for forecast calculations
   private calculateTrend(prices: number[]): number {
     if (prices.length < 2) return 0
@@ -461,7 +407,6 @@ class CMEPricingService {
     const avgSecond = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length
     return (avgSecond - avgFirst) / avgFirst
   }
-
   private calculateVolatility(prices: number[]): number {
     if (prices.length < 2) return 0
     const returns = []
@@ -472,7 +417,6 @@ class CMEPricingService {
     const variance = returns.reduce((sum, ret) => sum + Math.pow(ret - avgReturn, 2), 0) / returns.length
     return Math.sqrt(variance)
   }
-
   private getMarketFactors(symbol: string): string[] {
     const factors: Record<string, string[]> = {
       'ZC': ['Weather conditions', 'Export demand', 'Ethanol production', 'Feed demand'],
@@ -481,7 +425,6 @@ class CMEPricingService {
     }
     return factors[symbol] || ['Supply and demand', 'Weather conditions', 'Economic factors']
   }
-
   private formatHistoricalData(symbol: string, data: any): PriceHistory {
     return {
       symbol,
@@ -497,7 +440,6 @@ class CMEPricingService {
     }
   }
 }
-
 // Export singleton instance
 export const cmePricingService = new CMEPricingService()
 export { CMEPricingService }

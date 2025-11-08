@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -13,7 +12,6 @@ import {
 } from 'lucide-react'
 import { cropCategories } from '../../lib/farm-categories'
 import { LoadingCard } from '../ui/loading'
-
 interface CropHealthData {
   cropId: string
   cropName: string
@@ -44,7 +42,6 @@ interface CropHealthData {
     criticalWindows: string[]
   }
 }
-
 interface KnowledgeDrivenHealthProps {
   farmId: string
   selectedCrops: Array<{
@@ -63,48 +60,37 @@ interface KnowledgeDrivenHealthProps {
     soilType?: string
   }
 }
-
 export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldData }: KnowledgeDrivenHealthProps) {
   const [loading, setLoading] = useState(true)
   const [cropHealthData, setCropHealthData] = useState<CropHealthData[]>([])
   const [selectedCrop, setSelectedCrop] = useState<string | null>(null)
-
   // Generate health data based on crop knowledge base
   const generateCropHealthData = useMemo(async () => {
     if (selectedCrops.length === 0) return []
-
     const healthData: CropHealthData[] = []
-
     for (const crop of selectedCrops) {
       // Find crop details from knowledge base
       const cropDetails = cropCategories
         .flatMap(cat => cat.items)
         .find(item => item.id === crop.id)
-
       if (!cropDetails) continue
-
       // Generate realistic health data based on crop knowledge
       const currentDate = new Date()
       const month = currentDate.getMonth() + 1
-      
       // Determine current growth stage based on season and growing period
       let currentStage = 'vegetative'
       if (cropDetails.growingSeasonDays) {
         const dayOfYear = Math.floor((currentDate.getTime() - new Date(currentDate.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
         const growthProgress = (dayOfYear % cropDetails.growingSeasonDays) / cropDetails.growingSeasonDays
-        
         if (growthProgress < 0.3) currentStage = 'seedling'
         else if (growthProgress < 0.6) currentStage = 'vegetative'
         else if (growthProgress < 0.8) currentStage = 'reproductive'
         else currentStage = 'maturity'
       }
-
       // Generate health score with some randomness
       const baseHealthScore = 75 + Math.random() * 20
-      
       // Create risk factors based on crop type and season
       const riskFactors = generateRiskFactors(crop, currentStage, month)
-      
       // Generate monitoring parameters based on crop knowledge
       const monitoringParameters = cropDetails.monitoringParameters.map(param => ({
         parameter: param,
@@ -113,10 +99,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         status: getParameterStatus(),
         trend: getTrend()
       }))
-
       // Create seasonal guidance
       const seasonalGuidance = generateSeasonalGuidance(crop, currentStage, month)
-
       healthData.push({
         cropId: crop.id,
         cropName: crop.name,
@@ -140,10 +124,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         seasonalGuidance
       })
     }
-
     return healthData
   }, [selectedCrops, farmId])
-
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
@@ -154,14 +136,11 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       }
       setLoading(false)
     }
-    
     loadData()
   }, [generateCropHealthData])
-
   // Helper functions for generating realistic data
   function generateRiskFactors(crop: any, stage: string, month: number) {
     const risks = []
-    
     // Season-based risks
     if (month >= 6 && month <= 8) { // Summer
       risks.push({
@@ -171,7 +150,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         recommendations: ['Increase irrigation frequency', 'Apply mulch to reduce soil temperature']
       })
     }
-    
     if (month >= 7 && month <= 9) { // Late summer/early fall
       risks.push({
         type: 'pest_pressure',
@@ -180,7 +158,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         recommendations: ['Weekly scouting for egg masses', 'Monitor trap counts']
       })
     }
-
     // Crop-specific risks
     if (crop.name.toLowerCase().includes('corn')) {
       risks.push({
@@ -190,10 +167,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         recommendations: ['Soil test for available nitrogen', 'Consider side-dress application']
       })
     }
-
     return risks
   }
-
   function generateParameterValue(param: string): number {
     const valueMap: Record<string, number> = {
       'NDVI': 0.6 + Math.random() * 0.3,
@@ -205,7 +180,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     }
     return Math.round((valueMap[param] || Math.random() * 100) * 10) / 10
   }
-
   function getParameterThreshold(param: string): number {
     const thresholdMap: Record<string, number> = {
       'NDVI': 0.7,
@@ -217,19 +191,16 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     }
     return thresholdMap[param] || 50
   }
-
   function getParameterStatus(): 'good' | 'warning' | 'critical' {
     const rand = Math.random()
     if (rand < 0.7) return 'good'
     if (rand < 0.9) return 'warning'
     return 'critical'
   }
-
   function getTrend(): 'improving' | 'stable' | 'declining' {
     const trends = ['improving', 'stable', 'declining']
     return trends[Math.floor(Math.random() * trends.length)] as any
   }
-
   function getOptimalTemp(cropName: string) {
     const tempMap: Record<string, {min: number, max: number}> = {
       'corn': { min: 60, max: 95 },
@@ -240,19 +211,16 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     const key = Object.keys(tempMap).find(k => cropName.toLowerCase().includes(k))
     return tempMap[key || 'corn']
   }
-
   function getMoistureRequirement(cropName: string): string {
     if (cropName.toLowerCase().includes('corn')) return 'High (25-30 inches/season)'
     if (cropName.toLowerCase().includes('soy')) return 'Moderate (20-25 inches/season)'
     if (cropName.toLowerCase().includes('wheat')) return 'Low-Moderate (15-20 inches/season)'
     return 'Moderate (20-25 inches/season)'
   }
-
   function getCurrentMoisture(): string {
     const levels = ['Adequate', 'Slightly Low', 'Optimal', 'High']
     return levels[Math.floor(Math.random() * levels.length)]
   }
-
   function generateNutrientStatus(cropName: string) {
     return [
       { name: 'Nitrogen', status: 'Adequate', level: 85 + Math.random() * 15 },
@@ -261,14 +229,11 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       { name: 'pH', status: 'Optimal', level: 6.2 + Math.random() * 0.8 }
     ]
   }
-
   function generateSeasonalGuidance(crop: any, stage: string, month: number) {
     const seasonMap = ['Winter', 'Winter', 'Spring', 'Spring', 'Spring', 'Summer', 'Summer', 'Summer', 'Fall', 'Fall', 'Fall', 'Winter']
     const currentSeason = seasonMap[month - 1]
-    
     let upcomingTasks: string[] = []
     let criticalWindows: string[] = []
-
     if (crop.name.toLowerCase().includes('corn')) {
       if (stage === 'vegetative') {
         upcomingTasks = ['Side-dress nitrogen application', 'Weed control', 'Pest scouting']
@@ -283,20 +248,17 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
         criticalWindows = ['Flower initiation (R1)', 'Pod development (R3-R4)']
       }
     }
-
     return {
       currentSeason,
       upcomingTasks,
       criticalWindows
     }
   }
-
   const getHealthScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'good': return <CheckCircle2 className="h-4 w-4 text-green-600" />
@@ -305,9 +267,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       default: return <CheckCircle2 className="h-4 w-4 text-gray-400" />
     }
   }
-
   const selectedCropData = cropHealthData.find(crop => crop.cropId === selectedCrop)
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -316,7 +276,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       </div>
     )
   }
-
   if (cropHealthData.length === 0) {
     return (
       <Card>
@@ -333,7 +292,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       </Card>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Crop Selection Header */}
@@ -356,7 +314,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
           </button>
         ))}
       </div>
-
       {selectedCropData && (
         <div className="space-y-6">
           {/* Health Overview */}
@@ -375,7 +332,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 <Progress value={selectedCropData.healthScore} className="mt-2" />
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -389,7 +345,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -404,7 +359,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
               </CardContent>
             </Card>
           </div>
-
           {/* Detailed Monitoring */}
           <Tabs defaultValue="monitoring">
             <TabsList>
@@ -413,7 +367,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
               <TabsTrigger value="guidance">Seasonal Guidance</TabsTrigger>
               <TabsTrigger value="risks">Risk Management</TabsTrigger>
             </TabsList>
-
             <TabsContent value="monitoring" className="space-y-4">
               <Card>
                 <CardHeader>
@@ -446,7 +399,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 </CardContent>
               </Card>
             </TabsContent>
-
             <TabsContent value="conditions" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
@@ -471,7 +423,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                     </div>
                   </CardContent>
                 </Card>
-
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -493,7 +444,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                   </CardContent>
                 </Card>
               </div>
-
               <Card>
                 <CardHeader>
                   <CardTitle>Nutrient Status</CardTitle>
@@ -511,7 +461,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 </CardContent>
               </Card>
             </TabsContent>
-
             <TabsContent value="guidance" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
@@ -533,7 +482,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                     </ul>
                   </CardContent>
                 </Card>
-
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -555,7 +503,6 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 </Card>
               </div>
             </TabsContent>
-
             <TabsContent value="risks" className="space-y-4">
               {selectedCropData.riskFactors.map((risk, idx) => (
                 <Card key={idx}>

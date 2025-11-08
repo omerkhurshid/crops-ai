@@ -1,11 +1,9 @@
 /**
  * Public health check endpoint - no authentication required
  */
-
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '../../../../lib/prisma';
 import { checkDatabaseHealth, dbMonitor } from '../../../../lib/monitoring';
-
 export async function GET(request: NextRequest) {
   const healthCheck = {
     status: 'healthy' as 'healthy' | 'degraded',
@@ -23,13 +21,11 @@ export async function GET(request: NextRequest) {
       hasSupabaseUrl: !!process.env.SUPABASE_URL
     }
   };
-
   // Test database connection with monitoring
   try {
     const dbHealth = await checkDatabaseHealth();
     healthCheck.services.database = dbHealth.status;
     healthCheck.services.dbResponseTime = dbHealth.responseTime;
-    
     if (dbHealth.status !== 'healthy') {
       healthCheck.status = 'degraded';
     }
@@ -37,7 +33,6 @@ export async function GET(request: NextRequest) {
     healthCheck.services.database = 'error';
     healthCheck.status = 'degraded';
   }
-
   // Test OpenWeather API (if key is configured)
   if (process.env.OPENWEATHER_API_KEY) {
     try {
@@ -47,7 +42,6 @@ export async function GET(request: NextRequest) {
           signal: AbortSignal.timeout(5000)
         }
       );
-      
       if (weatherResponse.ok) {
         healthCheck.services.weather = 'healthy';
       } else if (weatherResponse.status === 401) {
@@ -64,7 +58,6 @@ export async function GET(request: NextRequest) {
   } else {
     healthCheck.services.weather = 'not_configured';
   }
-
   return NextResponse.json(healthCheck, { 
     status: healthCheck.status === 'healthy' ? 200 : 503 
   });

@@ -1,5 +1,4 @@
 'use client'
-
 import { Badge } from '../ui/badge'
 import { 
   Scissors, 
@@ -8,7 +7,6 @@ import {
   Clock,
   CheckCircle
 } from 'lucide-react'
-
 interface CropAction {
   id: string
   cropName: string
@@ -19,7 +17,6 @@ interface CropAction {
   daysUntil: number
   icon: React.ReactNode
 }
-
 const mockNextActions: CropAction[] = [
   {
     id: '1',
@@ -62,7 +59,6 @@ const mockNextActions: CropAction[] = [
     icon: <Clock className="h-4 w-4" />
   }
 ]
-
 const priorityConfig = {
   urgent: {
     color: 'bg-fk-danger/10 text-fk-danger border-fk-danger/30',
@@ -80,11 +76,9 @@ const priorityConfig = {
     iconBg: 'bg-fk-info/10'
   }
 }
-
 interface FarmerFriendlyActionsListProps {
   farmId: string
 }
-
 export function FarmerFriendlyActionsList({ farmId }: FarmerFriendlyActionsListProps) {
   const getDaysText = (days: number) => {
     if (days === 0) return 'Today!'
@@ -93,7 +87,6 @@ export function FarmerFriendlyActionsList({ farmId }: FarmerFriendlyActionsListP
     const weeks = Math.floor(days / 7)
     return weeks === 1 ? '1 week' : `${weeks} weeks`
   }
-
   return (
     <div className="space-y-3">
       {mockNextActions.map((action) => (
@@ -124,7 +117,6 @@ export function FarmerFriendlyActionsList({ farmId }: FarmerFriendlyActionsListP
           </div>
         </div>
       ))}
-      
       {/* View All Link */}
       <button className="w-full text-center py-3 text-sm text-fk-accent-sky hover:text-fk-primary font-semibold transition-colors duration-micro">
         View all tasks →

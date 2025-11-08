@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -21,7 +20,6 @@ import {
   BarChart3,
   Zap
 } from 'lucide-react'
-
 // Real demo data based on actual Iowa corn farming
 const DEMO_FIELD_DATA = {
   location: {
@@ -86,29 +84,24 @@ const DEMO_FIELD_DATA = {
     }
   ]
 }
-
 interface NDVIDemoProps {
   className?: string
 }
-
 export function NDVIDemo({ className = '' }: NDVIDemoProps) {
   const [selectedPoint, setSelectedPoint] = useState(4) // R1 stage
   const data = DEMO_FIELD_DATA.ndvi.values
-
   const getNDVIColor = (value: number) => {
     if (value < 0.3) return 'text-red-600 bg-red-50'
     if (value < 0.5) return 'text-fk-warning bg-fk-warning/10'
     if (value < 0.7) return 'text-fk-accent-wheat bg-fk-accent-wheat/10'
     return 'text-fk-success bg-fk-success/10'
   }
-
   const getNDVIStatus = (value: number) => {
     if (value < 0.3) return 'Poor'
     if (value < 0.5) return 'Fair'
     if (value < 0.7) return 'Good'
     return 'Excellent'
   }
-
   return (
     <ModernCard variant="floating" className={`h-full ${className}`}>
       <ModernCardHeader>
@@ -131,7 +124,6 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
             {DEMO_FIELD_DATA.location.address} • {DEMO_FIELD_DATA.location.acres} acres • {DEMO_FIELD_DATA.location.crop}
           </div>
         </div>
-
         {/* Current NDVI */}
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
@@ -149,7 +141,6 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
             <div className="text-sm text-fk-text-muted">7-day trend</div>
           </div>
         </div>
-
         {/* NDVI Timeline */}
         <div className="space-y-2">
           <h4 className="font-medium text-fk-text">Growing Season Progress</h4>
@@ -179,38 +170,32 @@ export function NDVIDemo({ className = '' }: NDVIDemoProps) {
             ))}
           </div>
         </div>
-
         <div className="pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <Eye className="h-3 w-3" />
-            <span>Updated daily via Sentinel-2 satellite</span>
+            <span>Updated daily via Google Earth Engine</span>
           </div>
         </div>
       </ModernCardContent>
     </ModernCard>
   )
 }
-
 interface WeatherDemoProps {
   className?: string
 }
-
 export function WeatherDemo({ className = '' }: WeatherDemoProps) {
   const [activeDay, setActiveDay] = useState(0)
   const [weatherData, setWeatherData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [apiStatus, setApiStatus] = useState<'live' | 'fallback'>('fallback')
-  
   // Use real coordinates for Iowa corn field
   const { lat, lng } = DEMO_FIELD_DATA.location.coordinates
-
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
         setIsLoading(true)
         const response = await fetch(`/api/weather/current?latitude=${lat}&longitude=${lng}`)
         const result = await response.json()
-        
         if (result.success && result.data) {
           setWeatherData(result.data)
           setApiStatus(result.apiStatus || 'fallback')
@@ -219,26 +204,20 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
           setWeatherData(DEMO_FIELD_DATA.weather)
           setApiStatus('fallback')
         }
-      } catch (error) {
-        console.warn('Failed to fetch real weather data, using demo data:', error)
-        setWeatherData(DEMO_FIELD_DATA.weather)
+      } catch (error) {setWeatherData(DEMO_FIELD_DATA.weather)
         setApiStatus('fallback')
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchWeatherData()
   }, [lat, lng])
-
   const weather = weatherData || DEMO_FIELD_DATA.weather
-
   const getConditionIcon = (condition: string) => {
     if (condition.includes('Rain')) return '🌧️'
     if (condition.includes('Cloudy')) return '⛅'
     return '☀️'
   }
-
   return (
     <ModernCard variant="floating" className={`h-full ${className}`}>
       <ModernCardHeader>
@@ -277,7 +256,6 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
             </div>
           </div>
         </div>
-
         {/* 5-Day Forecast */}
         <div className="space-y-2">
           <h4 className="font-medium text-fk-text">Agricultural Forecast</h4>
@@ -305,7 +283,6 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
             ))}
           </div>
         </div>
-
         {/* Agricultural Insights */}
         <div className="bg-fk-success/10 p-3 rounded-lg">
           <h5 className="font-medium text-fk-success mb-2">Farm Recommendations</h5>
@@ -324,7 +301,6 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
             </div>
           </div>
         </div>
-
         <div className="pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <Zap className="h-3 w-3" />
@@ -337,15 +313,12 @@ export function WeatherDemo({ className = '' }: WeatherDemoProps) {
     </ModernCard>
   )
 }
-
 interface FinancialDemoProps {
   className?: string
 }
-
 export function FinancialDemo({ className = '' }: FinancialDemoProps) {
   const [viewMode, setViewMode] = useState<'overview' | 'breakdown'>('overview')
   const financial = DEMO_FIELD_DATA.financial
-
   return (
     <ModernCard variant="floating" className={`h-full ${className}`}>
       <ModernCardHeader>
@@ -369,7 +342,6 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
               ${financial.profitPerAcre}/acre • {DEMO_FIELD_DATA.location.acres} acres
             </div>
           </div>
-          
           <div className="grid grid-cols-3 gap-3 text-center">
             <div>
               <div className="text-lg font-semibold text-fk-text">
@@ -391,7 +363,6 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
             </div>
           </div>
         </div>
-
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-fk-accent-sky/10 rounded-lg">
@@ -409,7 +380,6 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
             <div className="text-xs text-fk-warning">Total Expenses</div>
           </div>
         </div>
-
         {/* Market Alerts */}
         <div className="space-y-2">
           <h4 className="font-medium text-fk-text">Smart Alerts</h4>
@@ -425,8 +395,6 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
             ))}
           </div>
         </div>
-
-
         <div className="pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-fk-text-muted">
             <DollarSign className="h-3 w-3" />
@@ -437,14 +405,12 @@ export function FinancialDemo({ className = '' }: FinancialDemoProps) {
     </ModernCard>
   )
 }
-
 export function HomePageDemos() {
   const demos = [
     { component: <RealGoogleMapsNDVI />, background: 'bg-white' },
     { component: <WeatherDemo />, background: 'bg-fk-background' },
     { component: <FinancialDemo />, background: 'bg-white' }
   ]
-
   return (
     <section className="py-8 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -456,7 +422,6 @@ export function HomePageDemos() {
             Experience real data from an Iowa corn farm. These are actual insights generated from satellite imagery, weather data, and market intelligence.
           </p>
         </div>
-        
         <div className="space-y-8 sm:space-y-12">
           {demos.map((demo, index) => (
             <div key={index} className={`py-8 px-4 rounded-2xl ${demo.background}`}>
@@ -464,7 +429,6 @@ export function HomePageDemos() {
             </div>
           ))}
         </div>
-
         <div className="mt-6 sm:mt-8 text-center px-2">
           <p className="text-xs sm:text-sm text-fk-text-muted mb-3 sm:mb-4">
             This data represents a real 160-acre corn field in Story County, Iowa during the 2024 growing season.

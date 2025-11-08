@@ -1,11 +1,9 @@
 import { gql } from 'graphql-tag'
-
 export const typeDefs = gql`
   # Scalars
   scalar DateTime
   scalar JSON
   scalar Upload
-
   # Enums
   enum UserRole {
     FARM_OWNER
@@ -13,7 +11,6 @@ export const typeDefs = gql`
     AGRONOMIST
     ADMIN
   }
-
   enum CropStatus {
     PLANNED
     PLANTED
@@ -22,7 +19,6 @@ export const typeDefs = gql`
     HARVESTED
     FAILED
   }
-
   enum StressLevel {
     NONE
     LOW
@@ -30,7 +26,6 @@ export const typeDefs = gql`
     HIGH
     SEVERE
   }
-
   enum ProduceCategory {
     CROPS
     VEGETABLES
@@ -39,7 +34,6 @@ export const typeDefs = gql`
     HERBS
     NUTS
   }
-
   enum ClimateZone {
     TROPICAL
     SUBTROPICAL
@@ -49,7 +43,6 @@ export const typeDefs = gql`
     ARID
     MEDITERRANEAN
   }
-
   enum SoilType {
     CLAY
     SANDY
@@ -61,7 +54,6 @@ export const typeDefs = gql`
     CLAY_LOAM
     SILT_LOAM
   }
-
   enum WaterRequirement {
     VERY_LOW
     LOW
@@ -69,14 +61,12 @@ export const typeDefs = gql`
     HIGH
     VERY_HIGH
   }
-
   enum SunRequirement {
     FULL_SHADE
     PARTIAL_SHADE
     PARTIAL_SUN
     FULL_SUN
   }
-
   enum GrowthHabit {
     ANNUAL
     BIENNIAL
@@ -84,7 +74,6 @@ export const typeDefs = gql`
     DECIDUOUS
     EVERGREEN
   }
-
   # Types
   type User {
     id: ID!
@@ -96,7 +85,6 @@ export const typeDefs = gql`
     ownedFarms: [Farm!]!
     managedFarms: [Farm!]!
   }
-
   type Farm {
     id: ID!
     name: String!
@@ -112,7 +100,6 @@ export const typeDefs = gql`
     managers: [User!]!
     fields: [Field!]!
   }
-
   type Field {
     id: ID!
     name: String!
@@ -127,7 +114,6 @@ export const typeDefs = gql`
     weatherData: [WeatherData!]!
     satelliteData: [SatelliteData!]!
   }
-
   type Crop {
     id: ID!
     cropType: String!
@@ -141,7 +127,6 @@ export const typeDefs = gql`
     updatedAt: DateTime!
     field: Field!
   }
-
   type WeatherData {
     id: ID!
     timestamp: DateTime!
@@ -154,7 +139,6 @@ export const typeDefs = gql`
     cloudCover: Float!
     field: Field!
   }
-
   type WeatherForecast {
     date: DateTime!
     minTemp: Float!
@@ -163,7 +147,6 @@ export const typeDefs = gql`
     precipitationAmount: Float
     conditions: String!
   }
-
   type SatelliteData {
     id: ID!
     captureDate: DateTime!
@@ -173,7 +156,6 @@ export const typeDefs = gql`
     imageUrl: String
     field: Field!
   }
-
   type ProduceType {
     id: ID!
     name: String!
@@ -205,7 +187,6 @@ export const typeDefs = gql`
     varieties: [ProduceVariety!]!
     nutritionalData: NutritionalData
   }
-
   type ProduceVariety {
     id: ID!
     name: String!
@@ -226,7 +207,6 @@ export const typeDefs = gql`
     updatedAt: DateTime!
     produceType: ProduceType!
   }
-
   type NutritionalData {
     id: ID!
     calories: Float
@@ -254,7 +234,6 @@ export const typeDefs = gql`
     updatedAt: DateTime!
     produceType: ProduceType!
   }
-
   type PlantingCalendar {
     id: ID!
     region: String!
@@ -269,19 +248,16 @@ export const typeDefs = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
   }
-
   # Input Types
   input CreateUserInput {
     email: String!
     name: String!
     role: UserRole = FARM_OWNER
   }
-
   input UpdateUserInput {
     name: String
     role: UserRole
   }
-
   input CreateFarmInput {
     name: String!
     latitude: Float!
@@ -291,7 +267,6 @@ export const typeDefs = gql`
     country: String!
     totalArea: Float!
   }
-
   input UpdateFarmInput {
     name: String
     latitude: Float
@@ -301,7 +276,6 @@ export const typeDefs = gql`
     country: String
     totalArea: Float
   }
-
   input CreateFieldInput {
     farmId: ID!
     name: String!
@@ -309,14 +283,12 @@ export const typeDefs = gql`
     boundary: JSON
     soilType: String
   }
-
   input UpdateFieldInput {
     name: String
     area: Float
     boundary: JSON
     soilType: String
   }
-
   input CreateCropInput {
     fieldId: ID!
     cropType: String!
@@ -325,7 +297,6 @@ export const typeDefs = gql`
     expectedHarvestDate: DateTime!
     status: CropStatus = PLANNED
   }
-
   input UpdateCropInput {
     cropType: String
     variety: String
@@ -335,28 +306,24 @@ export const typeDefs = gql`
     status: CropStatus
     yield: Float
   }
-
   input PaginationInput {
     page: Int = 1
     limit: Int = 10
     sortBy: String
     sortOrder: String = "desc"
   }
-
   input FarmFiltersInput {
     ownerId: ID
     managerId: ID
     country: String
     region: String
   }
-
   input FieldFiltersInput {
     farmId: ID
     soilType: String
     minArea: Float
     maxArea: Float
   }
-
   input CropFiltersInput {
     fieldId: ID
     status: CropStatus
@@ -364,7 +331,6 @@ export const typeDefs = gql`
     plantingDateFrom: DateTime
     plantingDateTo: DateTime
   }
-
   # Produce Input Types
   input CreateProduceTypeInput {
     name: String!
@@ -392,7 +358,6 @@ export const typeDefs = gql`
     commonPests: [String!]
     commonDiseases: [String!]
   }
-
   input UpdateProduceTypeInput {
     name: String
     scientificName: String
@@ -419,7 +384,6 @@ export const typeDefs = gql`
     commonPests: [String!]
     commonDiseases: [String!]
   }
-
   input CreateProduceVarietyInput {
     produceTypeId: ID!
     name: String!
@@ -437,7 +401,6 @@ export const typeDefs = gql`
     size: String
     shape: String
   }
-
   input NutritionalDataInput {
     calories: Float
     protein: Float
@@ -461,7 +424,6 @@ export const typeDefs = gql`
     sodium: Float
     zinc: Float
   }
-
   input PlantingCalendarInput {
     produceTypeId: ID!
     region: String!
@@ -474,7 +436,6 @@ export const typeDefs = gql`
     indoorStartWeeks: Int
     notes: String
   }
-
   # Pagination Types
   type PageInfo {
     hasNextPage: Boolean!
@@ -485,70 +446,56 @@ export const typeDefs = gql`
     totalPages: Int!
     currentPage: Int!
   }
-
   type FarmConnection {
     edges: [FarmEdge!]!
     pageInfo: PageInfo!
   }
-
   type FarmEdge {
     node: Farm!
     cursor: String!
   }
-
   type FieldConnection {
     edges: [FieldEdge!]!
     pageInfo: PageInfo!
   }
-
   type FieldEdge {
     node: Field!
     cursor: String!
   }
-
   type CropConnection {
     edges: [CropEdge!]!
     pageInfo: PageInfo!
   }
-
   type CropEdge {
     node: Crop!
     cursor: String!
   }
-
   # Queries
   type Query {
     # User queries
     me: User
     user(id: ID!): User
     users(pagination: PaginationInput): [User!]!
-
     # Farm queries
     farm(id: ID!): Farm
     farms(pagination: PaginationInput, filters: FarmFiltersInput): FarmConnection!
     myFarms(pagination: PaginationInput): FarmConnection!
-
     # Field queries
     field(id: ID!): Field
     fields(pagination: PaginationInput, filters: FieldFiltersInput): FieldConnection!
-
     # Crop queries
     crop(id: ID!): Crop
     crops(pagination: PaginationInput, filters: CropFiltersInput): CropConnection!
-
     # Weather queries
     weatherForecast(fieldId: ID!, days: Int = 7): [WeatherForecast!]!
     weatherHistory(fieldId: ID!, from: DateTime!, to: DateTime!): [WeatherData!]!
-
     # Satellite queries
     satelliteHistory(fieldId: ID!, from: DateTime!, to: DateTime!): [SatelliteData!]!
     latestSatelliteData(fieldId: ID!): SatelliteData
-
     # Analytics queries
     farmAnalytics(farmId: ID!, from: DateTime!, to: DateTime!): JSON!
     fieldAnalytics(fieldId: ID!, from: DateTime!, to: DateTime!): JSON!
     cropAnalytics(cropId: ID!): JSON!
-
     # Produce Database queries
     produceType(id: ID!): ProduceType
     produceTypes(category: ProduceCategory, search: String): [ProduceType!]!
@@ -557,40 +504,33 @@ export const typeDefs = gql`
     plantingCalendar(produceTypeId: ID!, region: String): PlantingCalendar
     recommendedCrops(latitude: Float!, longitude: Float!, season: String): [ProduceType!]!
   }
-
   # Mutations
   type Mutation {
     # User mutations
     createUser(input: CreateUserInput!): User!
     updateUser(id: ID!, input: UpdateUserInput!): User!
     deleteUser(id: ID!): Boolean!
-
     # Farm mutations
     createFarm(input: CreateFarmInput!): Farm!
     updateFarm(id: ID!, input: UpdateFarmInput!): Farm!
     deleteFarm(id: ID!): Boolean!
     addFarmManager(farmId: ID!, userId: ID!): Farm!
     removeFarmManager(farmId: ID!, userId: ID!): Farm!
-
     # Field mutations
     createField(input: CreateFieldInput!): Field!
     updateField(id: ID!, input: UpdateFieldInput!): Field!
     deleteField(id: ID!): Boolean!
-
     # Crop mutations
     createCrop(input: CreateCropInput!): Crop!
     updateCrop(id: ID!, input: UpdateCropInput!): Crop!
     deleteCrop(id: ID!): Boolean!
     harvestCrop(id: ID!, yield: Float!): Crop!
-
     # Data ingestion mutations
     ingestWeatherData(fieldId: ID!): [WeatherData!]!
     ingestSatelliteData(fieldId: ID!): SatelliteData!
-    
     # File upload mutations
     uploadFieldImage(fieldId: ID!, file: Upload!): String!
     uploadCropImage(cropId: ID!, file: Upload!): String!
-    
     # Produce mutations
     createProduceType(input: CreateProduceTypeInput!): ProduceType!
     updateProduceType(id: ID!, input: UpdateProduceTypeInput!): ProduceType!
@@ -599,7 +539,6 @@ export const typeDefs = gql`
     updateNutritionalData(produceTypeId: ID!, input: NutritionalDataInput!): NutritionalData!
     updatePlantingCalendar(input: PlantingCalendarInput!): PlantingCalendar!
   }
-
   # Subscriptions for real-time updates
   type Subscription {
     weatherDataUpdated(fieldId: ID!): WeatherData!

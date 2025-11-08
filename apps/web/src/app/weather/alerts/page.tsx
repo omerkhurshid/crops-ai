@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { Button } from '../../../components/ui/button'
@@ -18,7 +17,6 @@ import {
   TrendingUp,
   Settings
 } from 'lucide-react'
-
 interface WeatherAlert {
   id: string
   alertType: 'frost' | 'storm' | 'drought' | 'heat' | 'wind' | 'hail' | 'flood' | 'fire_risk'
@@ -48,7 +46,6 @@ interface WeatherAlert {
     monitoring: string[]
   }
 }
-
 interface AlertSummary {
   totalAlerts: number
   activeAlertsCount: number
@@ -61,7 +58,6 @@ interface AlertSummary {
   alertTypeBreakdown: Record<string, number>
   highestPriority: number
 }
-
 export default function WeatherAlertsPage() {
   const [alerts, setAlerts] = useState<WeatherAlert[]>([])
   const [summary, setSummary] = useState<AlertSummary | null>(null)
@@ -73,38 +69,29 @@ export default function WeatherAlertsPage() {
     longitude: -74.0060,
     name: 'Demo Location'
   })
-
   useEffect(() => {
     fetchWeatherAlerts()
   }, [alertType, selectedLocation])
-
   const fetchWeatherAlerts = async () => {
     try {
       setLoading(true)
       setError(null)
-
       const params = new URLSearchParams({
         latitude: selectedLocation.latitude.toString(),
         longitude: selectedLocation.longitude.toString(),
         type: alertType
       })
-
       const response = await fetch(`/api/weather/alerts?${params}`)
-      
       if (!response.ok) throw new Error('Failed to fetch weather alerts')
-      
       const data = await response.json()
-      
       setAlerts(data.alerts || [])
       setSummary(data.summary || null)
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load alerts')
     } finally {
       setLoading(false)
     }
   }
-
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'frost': return <Snowflake className="h-5 w-5" />
@@ -116,7 +103,6 @@ export default function WeatherAlertsPage() {
       default: return <AlertTriangle className="h-5 w-5" />
     }
   }
-
   const getAlertColor = (severity: string) => {
     switch (severity) {
       case 'minor': return 'bg-blue-100 text-blue-800 border-blue-200'
@@ -126,7 +112,6 @@ export default function WeatherAlertsPage() {
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
-
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case 'watch': return 'text-blue-600'
@@ -135,11 +120,9 @@ export default function WeatherAlertsPage() {
       default: return 'text-gray-600'
     }
   }
-
   const formatTime = (isoString: string) => {
     return new Date(isoString).toLocaleString()
   }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -152,11 +135,9 @@ export default function WeatherAlertsPage() {
       </div>
     )
   }
-
   return (
     <div className="minimal-page">
       <Navbar />
-      
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Header */}
@@ -164,7 +145,6 @@ export default function WeatherAlertsPage() {
             <h1 className="text-3xl font-bold text-gray-900">Weather Alerts</h1>
             <p className="text-gray-600">Advanced weather monitoring and extreme event alerts</p>
           </div>
-
           {/* Controls */}
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <div className="flex items-center space-x-2">
@@ -187,7 +167,6 @@ export default function WeatherAlertsPage() {
                 <option value="37.7749,-122.4194">San Francisco, CA</option>
               </select>
             </div>
-
             <div className="flex items-center space-x-2">
               <Settings className="h-4 w-4 text-gray-500" />
               <select
@@ -200,12 +179,10 @@ export default function WeatherAlertsPage() {
                 <option value="field">Field-Specific</option>
               </select>
             </div>
-
             <Button onClick={fetchWeatherAlerts} disabled={loading}>
               {loading ? 'Refreshing...' : 'Refresh Alerts'}
             </Button>
           </div>
-
           {error && (
             <ModernCard className="mb-6 border-red-200 bg-red-50">
               <ModernCardContent className="pt-6">
@@ -216,7 +193,6 @@ export default function WeatherAlertsPage() {
               </ModernCardContent>
             </ModernCard>
           )}
-
           {/* Summary Statistics */}
           {summary && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -231,7 +207,6 @@ export default function WeatherAlertsPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
@@ -243,7 +218,6 @@ export default function WeatherAlertsPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
@@ -255,7 +229,6 @@ export default function WeatherAlertsPage() {
                   </div>
                 </ModernCardContent>
               </ModernCard>
-
               <ModernCard>
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
@@ -271,7 +244,6 @@ export default function WeatherAlertsPage() {
               </ModernCard>
             </div>
           )}
-
           {/* Alert ModernCards */}
           {alerts.length === 0 ? (
             <ModernCard>
@@ -364,11 +336,9 @@ export default function WeatherAlertsPage() {
                           )}
                         </div>
                       </div>
-
                       {/* Action Required */}
                       <div>
                         <h4 className="font-medium text-gray-900 mb-3">Required Actions</h4>
-                        
                         {alert.actionRequired.immediate.length > 0 && (
                           <div className="mb-3">
                             <h5 className="text-sm font-medium text-red-600 mb-1">🚨 Immediate</h5>
@@ -382,7 +352,6 @@ export default function WeatherAlertsPage() {
                             </ul>
                           </div>
                         )}
-
                         {alert.actionRequired.shortTerm.length > 0 && (
                           <div className="mb-3">
                             <h5 className="text-sm font-medium text-orange-600 mb-1">⏰ Short-term</h5>
@@ -396,7 +365,6 @@ export default function WeatherAlertsPage() {
                             </ul>
                           </div>
                         )}
-
                         {alert.actionRequired.monitoring.length > 0 && (
                           <div>
                             <h5 className="text-sm font-medium text-blue-600 mb-1">👁️ Monitor</h5>
@@ -412,7 +380,6 @@ export default function WeatherAlertsPage() {
                         )}
                       </div>
                     </div>
-
                     {/* Recommendations */}
                     {alert.recommendations.length > 0 && (
                       <div className="mt-4 pt-4 border-t">

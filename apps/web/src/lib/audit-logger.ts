@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server';
 import { prisma } from './prisma';
-
 interface AuditLogEntry {
   userId: string | null;
   action: string;
@@ -12,7 +11,6 @@ interface AuditLogEntry {
   userAgent?: string;
   timestamp: Date;
 }
-
 export class AuditLogger {
   /**
    * Log an audit event to the database
@@ -35,10 +33,8 @@ export class AuditLogger {
     } catch (error) {
       console.error('Failed to write audit log to database:', error);
       // Fallback to console logging
-
     }
   }
-
   /**
    * Log authentication events
    */
@@ -60,7 +56,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Log farm management operations
    */
@@ -83,7 +78,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Log financial transactions
    */
@@ -107,7 +101,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Log data access events
    */
@@ -129,7 +122,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Log system administration events
    */
@@ -151,7 +143,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Log security events
    */
@@ -174,7 +165,6 @@ export class AuditLogger {
       userAgent: request?.headers.get('user-agent') || 'unknown'
     });
   }
-
   /**
    * Get audit logs for a user
    */
@@ -186,26 +176,22 @@ export class AuditLogger {
   ): Promise<any[]> {
     try {
       const where: any = { userId };
-      
       if (startDate || endDate) {
         where.timestamp = {};
         if (startDate) where.timestamp.gte = startDate;
         if (endDate) where.timestamp.lte = endDate;
       }
-
       const logs = await prisma.auditLog.findMany({
         where,
         orderBy: { timestamp: 'desc' },
         take: limit
       });
-
       return logs;
     } catch (error) {
       console.error('Error fetching user audit logs:', error);
       return [];
     }
   }
-
   /**
    * Get audit logs for a resource
    */
@@ -223,14 +209,12 @@ export class AuditLogger {
         orderBy: { timestamp: 'desc' },
         take: limit
       });
-
       return logs;
     } catch (error) {
       console.error('Error fetching resource audit logs:', error);
       return [];
     }
   }
-
   /**
    * Search audit logs
    */
@@ -246,30 +230,25 @@ export class AuditLogger {
   ): Promise<any[]> {
     try {
       const where: any = {};
-      
       if (filters.userId) where.userId = filters.userId;
       if (filters.action) where.action = { contains: filters.action };
       if (filters.resource) where.resource = filters.resource;
-      
       if (filters.startDate || filters.endDate) {
         where.timestamp = {};
         if (filters.startDate) where.timestamp.gte = filters.startDate;
         if (filters.endDate) where.timestamp.lte = filters.endDate;
       }
-
       const logs = await prisma.auditLog.findMany({
         where,
         orderBy: { timestamp: 'desc' },
         take: limit
       });
-
       return logs;
     } catch (error) {
       console.error('Error searching audit logs:', error);
       return [];
     }
   }
-
   /**
    * Clean up old audit logs
    */
@@ -277,13 +256,11 @@ export class AuditLogger {
     try {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
-
       const result = await prisma.auditLog.deleteMany({
         where: {
           timestamp: { lt: cutoffDate }
         }
       });
-
       return result.count;
     } catch (error) {
       console.error('Error cleaning up audit logs:', error);
@@ -291,19 +268,16 @@ export class AuditLogger {
     }
   }
 }
-
 export async function logAuditEvent(
   entry: Omit<AuditLogEntry, 'timestamp'>
 ): Promise<void> {
   await AuditLogger.logEvent(entry);
 }
-
 export function createAuditLogger(request: NextRequest) {
   const ipAddress = request.headers.get('x-forwarded-for') || 
                    request.headers.get('x-real-ip') || 
                    'unknown';
   const userAgent = request.headers.get('user-agent') || 'unknown';
-
   return {
     log: (entry: Omit<AuditLogEntry, 'ipAddress' | 'userAgent' | 'timestamp'>) =>
       AuditLogger.logEvent({
@@ -311,19 +285,14 @@ export function createAuditLogger(request: NextRequest) {
         ipAddress,
         userAgent,
       }),
-    
     logAuth: (action: any, userId: string | null, metadata?: any) =>
       AuditLogger.logAuth(action, userId, metadata, request),
-      
     logFarmOperation: (action: any, userId: string, farmId: string, oldValues?: any, newValues?: any) =>
       AuditLogger.logFarmOperation(action, userId, farmId, oldValues, newValues, request),
-      
     logFinancialTransaction: (action: any, userId: string, transactionId: string, transactionData: any) =>
       AuditLogger.logFinancialTransaction(action, userId, transactionId, transactionData, request),
-      
     logDataAccess: (resource: string, resourceId: string | null, userId: string | null, action: any, metadata?: any) =>
       AuditLogger.logDataAccess(resource, resourceId, userId, action, metadata, request),
-      
     logSecurityEvent: (action: any, userId: string | null, details: any) =>
       AuditLogger.logSecurityEvent(action, userId, details, request)
   };

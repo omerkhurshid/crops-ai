@@ -2,11 +2,9 @@
  * Next Best Action (NBA) Decision Engine
  * Core algorithm for generating farm operation recommendations
  */
-
 import { prisma } from '../prisma'
 import { WeatherService, WeatherConditions, WeatherForecast } from '../services/weather'
 import { FinancialCalculator, FinancialImpact, FieldEconomics } from './financial-calculator'
-
 export interface FarmContext {
   farmId: string
   userId: string
@@ -42,7 +40,6 @@ export interface FarmContext {
     }>
   }
 }
-
 export interface Decision {
   id: string
   type: 'SPRAY' | 'HARVEST' | 'IRRIGATE' | 'PLANT' | 'FERTILIZE' | 'LIVESTOCK_HEALTH' | 'MARKET_SELL' | 'EQUIPMENT_MAINTAIN'
@@ -77,18 +74,15 @@ export interface Decision {
   targetField?: string
   relatedDecisions?: string[]
 }
-
 export interface DecisionScore {
   urgency: number    // 0-100 based on timing windows
   roi: number        // 0-100 based on financial impact
   feasibility: number // 0-100 based on weather/resources
   total: number      // weighted combination
 }
-
 export class NBAEngine {
   private weatherService: WeatherService
   private financialCalculator: FinancialCalculator
-
   constructor(weatherApiKey?: string) {
     this.weatherService = new WeatherService(weatherApiKey)
     this.financialCalculator = new FinancialCalculator()
@@ -98,67 +92,53 @@ export class NBAEngine {
    */
   async generateDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     // 1. Check spray decisions
     const sprayDecisions = await this.evaluateSprayDecisions(context)
     decisions.push(...sprayDecisions)
-    
     // 2. Check harvest decisions
     const harvestDecisions = await this.evaluateHarvestDecisions(context)
     decisions.push(...harvestDecisions)
-    
     // 3. Check irrigation decisions
     const irrigationDecisions = await this.evaluateIrrigationDecisions(context)
     decisions.push(...irrigationDecisions)
-    
     // 4. Check livestock health decisions
     if (context.livestock) {
       const livestockDecisions = await this.evaluateLivestockDecisions(context)
       decisions.push(...livestockDecisions)
     }
-    
     // 5. Check market timing decisions
     const marketDecisions = await this.evaluateMarketDecisions(context)
     decisions.push(...marketDecisions)
-    
     // Score and sort decisions
     const scoredDecisions = decisions.map(decision => ({
       decision,
       score: this.scoreDecision(decision, context)
     }))
-    
     // Sort by total score descending
     scoredDecisions.sort((a, b) => b.score.total - a.score.total)
-    
     return scoredDecisions.map(s => s.decision)
   }
-  
   /**
    * Evaluate spray timing decisions based on pest pressure, weather windows, and crop stage
    */
   private async evaluateSprayDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     // Get spray windows using weather service
     const sprayWindows = await this.weatherService.findSprayWindows(
       context.location.latitude,
       context.location.longitude,
       7
     )
-    
     for (const field of context.fields) {
       // Check if spray window is approaching
       const daysSinceLastSpray = field.lastSprayDate 
         ? Math.floor((Date.now() - field.lastSprayDate.getTime()) / (1000 * 60 * 60 * 24))
         : 999
-        
       const needsFungicide = daysSinceLastSpray > 14 && context.weather.current.humidity > 70
       const needsInsecticide = daysSinceLastSpray > 21
-      
       if ((needsFungicide || needsInsecticide) && sprayWindows.length > 0) {
         const window = sprayWindows[0]
         const sprayType = needsFungicide ? 'fungicide' : 'insecticide'
-        
         // Calculate financial impact
         const fieldEconomics: FieldEconomics = {
           fieldArea: field.area,
@@ -168,14 +148,12 @@ export class NBAEngine {
           insuranceValue: field.area * this.getAverageYield(field.cropType) * 250, // Simplified insurance value
           landValue: field.area * 10000 // Simplified land value
         }
-        
         const financialImpact = this.financialCalculator.calculateSprayImpact(
           fieldEconomics,
           sprayType,
           100, // Full application rate
           window.confidence // Expected efficacy based on weather conditions
         )
-        
         decisions.push({
           id: `spray-${field.id}-${Date.now()}`,
           type: 'SPRAY',
@@ -216,35 +194,28 @@ export class NBAEngine {
         })
       }
     }
-    
     return decisions
   }
-  
   /**
    * Evaluate harvest timing based on crop maturity, weather, and market prices
    */
   private async evaluateHarvestDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     // Get harvest windows using weather service
     const harvestWindows = await this.weatherService.findHarvestWindows(
       context.location.latitude,
       context.location.longitude,
       10
     )
-    
     for (const field of context.fields) {
       if (!field.plantingDate) continue
-      
       // Calculate days to maturity
       const daysSincePlanting = Math.floor((Date.now() - field.plantingDate.getTime()) / (1000 * 60 * 60 * 24))
       const expectedMaturity = this.getCropMaturityDays(field.cropType)
       const maturityProgress = (daysSincePlanting / expectedMaturity) * 100
-      
       if (maturityProgress >= 90 && harvestWindows.length > 0) {
         const window = harvestWindows[0]
         const urgency = maturityProgress >= 100 ? 'URGENT' : 'HIGH'
-        
         // Calculate financial impact
         const fieldEconomics: FieldEconomics = {
           fieldArea: field.area,
@@ -254,20 +225,16 @@ export class NBAEngine {
           insuranceValue: field.area * this.getAverageYield(field.cropType) * 250,
           landValue: field.area * 10000
         }
-        
         // Estimate moisture content based on maturity
         const estimatedMoisture = maturityProgress > 100 ? 14 : 18
-        
         // Calculate weather risk percentage
         const weatherRisk = Math.max(0, 100 - window.qualityScore)
-        
         const financialImpact = this.financialCalculator.calculateHarvestImpact(
           fieldEconomics,
           estimatedMoisture,
           'IMMEDIATE',
           weatherRisk
         )
-        
         decisions.push({
           id: `harvest-${field.id}-${Date.now()}`,
           type: 'HARVEST',
@@ -308,24 +275,19 @@ export class NBAEngine {
         })
       }
     }
-    
     return decisions
   }
-  
   /**
    * Evaluate irrigation needs based on soil moisture, weather, and crop stage
    */
   private async evaluateIrrigationDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     for (const field of context.fields) {
       // Simulate soil moisture based on recent precipitation
       const recentRainfall = context.weather.forecast
         .slice(0, 7)
         .reduce((sum, day) => sum + day.precipitation, 0)
-      
       const needsIrrigation = recentRainfall < 10 && context.weather.forecast[0].temperature > 25
-      
       if (needsIrrigation) {
         // Calculate financial impact
         const fieldEconomics: FieldEconomics = {
@@ -336,12 +298,10 @@ export class NBAEngine {
           insuranceValue: field.area * this.getAverageYield(field.cropType) * 250,
           landValue: field.area * 10000
         }
-        
         const waterAmount = 25 // mm
         const waterCostPerMm = 2 // $ per hectare per mm
         const stressLevel = Math.max(0, 100 - (recentRainfall * 10)) // Convert rainfall to stress level
         const yieldResponseCurve = 0.05 // tons per hectare per mm
-        
         const financialImpact = this.financialCalculator.calculateIrrigationImpact(
           fieldEconomics,
           waterAmount,
@@ -349,7 +309,6 @@ export class NBAEngine {
           stressLevel,
           yieldResponseCurve
         )
-        
         decisions.push({
           id: `irrigate-${field.id}-${Date.now()}`,
           type: 'IRRIGATE',
@@ -381,30 +340,24 @@ export class NBAEngine {
         })
       }
     }
-    
     return decisions
   }
-  
   /**
    * Evaluate livestock health and management decisions
    */
   private async evaluateLivestockDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     if (!context.livestock) return decisions
-    
     for (const species of context.livestock.species) {
       // Check vaccination schedules
       if (species.lastVaccination) {
         const daysSinceVaccination = Math.floor(
           (Date.now() - species.lastVaccination.getTime()) / (1000 * 60 * 60 * 24)
         )
-        
         if (daysSinceVaccination > 365) {
           const costPerAnimal = 25 // Cost per animal for vaccination
           const preventedLossValue = 500 // Value of prevented losses per animal
           const effectivenessRate = 90 // 90% effectiveness
-          
           const financialImpact = this.financialCalculator.calculateLivestockImpact(
             species.count,
             'vaccination',
@@ -412,7 +365,6 @@ export class NBAEngine {
             effectivenessRate,
             preventedLossValue
           )
-          
           decisions.push({
             id: `vaccinate-${species.type}-${Date.now()}`,
             type: 'LIVESTOCK_HEALTH',
@@ -444,16 +396,13 @@ export class NBAEngine {
         }
       }
     }
-    
     return decisions
   }
-  
   /**
    * Evaluate market timing decisions for selling crops
    */
   private async evaluateMarketDecisions(context: FarmContext): Promise<Decision[]> {
     const decisions: Decision[] = []
-    
     // Check for stored grain and market opportunities
     // This is simplified - real implementation would check actual storage
     const marketOpportunities = [
@@ -472,7 +421,6 @@ export class NBAEngine {
         recommendation: 'HOLD'
       }
     ]
-    
     for (const opportunity of marketOpportunities) {
       if (opportunity.recommendation === 'SELL') {
         decisions.push({
@@ -503,10 +451,8 @@ export class NBAEngine {
         })
       }
     }
-    
     return decisions
   }
-  
   /**
    * Score a decision based on urgency, ROI, and feasibility
    */
@@ -517,18 +463,14 @@ export class NBAEngine {
     else if (decision.priority === 'HIGH') urgency = 75
     else if (decision.priority === 'MEDIUM') urgency = 50
     else urgency = 25
-    
     // ROI score based on financial impact
     const totalImpact = 
       (decision.estimatedImpact.revenue || 0) +
       (decision.estimatedImpact.costSavings || 0) +
       ((decision.estimatedImpact.yieldIncrease || 0) * 1000) // Simplified yield value
-    
     const roi = Math.min(100, (totalImpact / 10000) * 100) // Normalize to 0-100
-    
     // Feasibility based on weather and resource requirements
     let feasibility = decision.confidence
-    
     // Reduce feasibility if weather requirements not met
     if (decision.requirements?.weather) {
       const currentWeather = context.weather.current
@@ -536,13 +478,10 @@ export class NBAEngine {
         feasibility *= 0.5
       }
     }
-    
     // Calculate weighted total
     const total = (urgency * 0.4) + (roi * 0.4) + (feasibility * 0.2)
-    
     return { urgency, roi, feasibility, total }
   }
-
   /**
    * Get expected days to maturity for crop type
    */
@@ -556,7 +495,6 @@ export class NBAEngine {
     }
     return maturityDays[cropType.toLowerCase()] || 120
   }
-  
   /**
    * Get average yield for crop type (tons per hectare)
    */
@@ -570,7 +508,6 @@ export class NBAEngine {
     }
     return yields[cropType.toLowerCase()] || 3.0
   }
-  
   /**
    * Get current market price for crop ($ per ton)
    */

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { fieldAnalysisPipeline } from '../../../../lib/satellite/field-analysis-pipeline'
-
 export async function POST(request: NextRequest) {
   try {
     const { fieldIds, farmId, analysisDate, analysisType } = await request.json()
-
     // Validate required parameters
     if (!fieldIds && !farmId) {
       return NextResponse.json(
@@ -12,19 +10,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
     let results = []
-
     if (farmId) {
       // Analyze all fields for a farm
-
       results = await fieldAnalysisPipeline.analyzeFarmFields(farmId, analysisDate)
     } else if (fieldIds && Array.isArray(fieldIds)) {
       // Analyze specific fields
-
       // For individual fields, we need to get field data from database first
       const { prisma } = await import('../../../../lib/prisma')
-      
       for (const fieldId of fieldIds) {
         const field = await prisma.field.findUnique({
           where: { id: fieldId },
@@ -34,12 +27,9 @@ export async function POST(request: NextRequest) {
             area: true
           }
         })
-
         if (!field) {
-
           continue
         }
-
         // For now, use mock boundary data since PostGIS boundary needs special handling
         const fieldBoundary = {
           id: field.id,
@@ -54,12 +44,10 @@ export async function POST(request: NextRequest) {
           centerLat: 40.7128,
           centerLng: -74.0060
         }
-
         const result = await fieldAnalysisPipeline.analyzeField(fieldBoundary, analysisDate)
         results.push(result)
       }
     }
-
     // Calculate summary statistics
     const summary = {
       totalFields: results.length,
@@ -78,7 +66,6 @@ export async function POST(request: NextRequest) {
         poor: results.filter(r => r.vegetationHealth.healthScore < 40).length
       }
     }
-
     return NextResponse.json({
       success: true,
       results,
@@ -90,7 +77,6 @@ export async function POST(request: NextRequest) {
         analysisMethod: 'NDVI + Vegetation Health Index'
       }
     })
-
   } catch (error) {
     console.error('Error in field analysis:', error)
     return NextResponse.json(
@@ -102,7 +88,6 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -110,18 +95,15 @@ export async function GET(request: NextRequest) {
     const farmId = searchParams.get('farmId')
     const startDate = searchParams.get('startDate')
     const endDate = searchParams.get('endDate')
-
     if (!fieldId && !farmId) {
       return NextResponse.json(
         { error: 'Either fieldId or farmId must be provided' },
         { status: 400 }
       )
     }
-
     if (fieldId && startDate && endDate) {
       // Get analysis trends for a specific field
       const trends = await fieldAnalysisPipeline.getAnalysisTrends(fieldId, startDate, endDate)
-      
       return NextResponse.json({
         success: true,
         trends,
@@ -133,11 +115,9 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-
     if (farmId) {
       // Get latest analysis results for all fields in a farm
       const { prisma } = await import('../../../../lib/prisma')
-      
       const fields = await prisma.field.findMany({
         where: { farmId },
         select: {
@@ -146,7 +126,6 @@ export async function GET(request: NextRequest) {
           area: true
         }
       })
-
       // For demo purposes, return mock recent analysis data
       const mockResults = fields.map((field: any) => ({
         fieldId: field.id,
@@ -157,7 +136,6 @@ export async function GET(request: NextRequest) {
         alertCount: Math.floor(Math.random() * 3),
         trend: Math.random() > 0.5 ? 'improving' : Math.random() > 0.5 ? 'declining' : 'stable'
       }))
-
       return NextResponse.json({
         success: true,
         recentAnalyses: mockResults,
@@ -168,12 +146,10 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-
     return NextResponse.json(
       { error: 'Invalid request parameters' },
       { status: 400 }
     )
-
   } catch (error) {
     console.error('Error retrieving field analysis:', error)
     return NextResponse.json(

@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, MetricCard } from '../ui/modern-card'
 import { TrafficLightStatus } from '../ui/traffic-light-status'
@@ -14,13 +13,11 @@ import {
   AlertCircle,
   CheckCircle
 } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
   totalArea: number
 }
-
 interface SimplifiedMetrics {
   profitPerAcre: number
   revenuePerAcre: number
@@ -33,26 +30,20 @@ interface SimplifiedMetrics {
   totalRevenue: number
   totalCosts: number
 }
-
 interface SimplifiedFinancialMetricsProps {
   farm: Farm
 }
-
 export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsProps) {
   const [metrics, setMetrics] = useState<SimplifiedMetrics | null>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     fetchSimplifiedMetrics()
   }, [farm.id])
-
   const fetchSimplifiedMetrics = async () => {
     try {
       setLoading(true)
-      
       // Fetch real financial data from API
       const response = await fetch(`/api/financial/metrics?farmId=${farm.id}`)
-      
       if (response.ok) {
         const data = await response.json()
         setMetrics(data)
@@ -67,7 +58,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       setLoading(false)
     }
   }
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -76,7 +66,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   const formatPrice = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -85,7 +74,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       maximumFractionDigits: 2,
     }).format(amount)
   }
-
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
@@ -95,9 +83,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       </div>
     )
   }
-
   const acreage = farm.totalArea * 2.47105
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -110,7 +96,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       </div>
     )
   }
-
   if (!metrics) {
     return (
       <div className="space-y-6">
@@ -124,7 +109,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -140,7 +124,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
                 <p className="text-sm text-sage-600 mt-1">Simple metrics that matter to your bottom line</p>
               </div>
             </div>
-            
             {/* Overall Health Status */}
             <TrafficLightStatus 
               status={metrics.isAboveBreakeven && metrics.profitPerAcre > 50 ? 'excellent' : 
@@ -152,10 +135,8 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           </div>
         </ModernCardHeader>
       </ModernCard>
-
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        
         {/* Profit Per Acre */}
         <MetricCard
           title="Profit per acre"
@@ -168,7 +149,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
             description: "This is how much money you make per acre after all costs. Higher is better!"
           }}
         />
-
         {/* Break-Even Price */}
         <MetricCard
           title="Break-even price"
@@ -182,7 +162,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
             description: "The minimum price you need to sell your crop to cover all costs. Current market price should be above this."
           }}
         />
-
         {/* Revenue Per Acre */}
         <MetricCard
           title="Revenue per acre"
@@ -195,7 +174,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
             description: "Total income generated per acre before costs are subtracted."
           }}
         />
-
         {/* Cost Per Acre */}
         <MetricCard
           title="Cost per acre"
@@ -209,7 +187,6 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           }}
         />
       </div>
-
       {/* Quick Insights */}
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">
@@ -231,14 +208,12 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
                     <span>Warning: Current market prices are below your break-even point. Consider reducing costs or waiting for better prices.</span>
                   </p>
                 )}
-                
                 <p>
                   • Your profit margin is <strong>{metrics.profitMargin.toFixed(1)}%</strong>
                   {metrics.profitMargin > 20 ? " - Excellent!" : 
                    metrics.profitMargin > 10 ? " - Good" : 
                    metrics.profitMargin > 0 ? " - Break-even territory" : " - Needs improvement"}
                 </p>
-                
                 <p>
                   • To increase profitability: Focus on reducing cost per acre or increasing yield per acre
                 </p>

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useUserPreferences } from '../../contexts/user-preferences-context'
 import { formatCurrency, formatArea } from '../../lib/user-preferences'
@@ -16,7 +15,6 @@ import {
   DollarSign, TrendingUp, TrendingDown, MapPin, BarChart3, 
   Plus, Calendar, Users, Activity, ArrowRight, Building2 
 } from 'lucide-react'
-
 interface UserFinancialSummary {
   totalIncome: number
   totalExpenses: number
@@ -28,7 +26,6 @@ interface UserFinancialSummary {
   transactionCount: number
   profitChange: number
 }
-
 interface FarmBreakdown {
   id: string
   name: string
@@ -42,24 +39,20 @@ interface FarmBreakdown {
   profitPerArea: number
   transactionCount: number
 }
-
 interface MonthlyTrend {
   month: string
   income: number
   expenses: number
   profit: number
 }
-
 interface CategoryBreakdown {
   income: Array<{ category: string; amount: number; count: number }>
   expenses: Array<{ category: string; amount: number; count: number }>
 }
-
 interface UserFinancialDashboardProps {
   onFarmSelect: (farmId: string) => void
   onAddTransaction: () => void
 }
-
 export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserFinancialDashboardProps) {
   const [summary, setSummary] = useState<UserFinancialSummary | null>(null)
   const [farmBreakdown, setFarmBreakdown] = useState<FarmBreakdown[]>([])
@@ -71,16 +64,13 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
     start: new Date(new Date().getFullYear(), 0, 1),
     end: new Date(),
   })
-  
   const { preferences } = useUserPreferences()
-
   const fetchUserSummary = async () => {
     try {
       setLoading(true)
       const response = await fetch(
         `/api/financial/user-summary?startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       )
-      
       if (response.ok) {
         const data = await response.json()
         setSummary(data.summary)
@@ -94,20 +84,16 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchUserSummary()
   }, [dateRange])
-
   // Currency formatting now uses user preferences
   const formatCurrencyAmount = (amount: number) => {
     return formatCurrency(amount, preferences)
   }
-
   const formatPercentage = (percentage: number) => {
     return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -122,7 +108,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       </div>
     )
   }
-
   if (!summary) {
     return (
       <div className="text-center py-12">
@@ -130,7 +115,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       </div>
     )
   }
-
   // Show farm detail view if a farm is selected
   if (selectedFarmId) {
     return (
@@ -140,7 +124,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       />
     )
   }
-
   return (
     <div className="space-y-8">
       {/* Header with Add Transaction */}
@@ -156,7 +139,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           onClick={onAddTransaction}
         />
       </div>
-
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Profit */}
@@ -169,7 +151,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           description="vs. previous period"
           variant="glass"
         />
-
         {/* Total Revenue */}
         <MetricCard
           title="Total Revenue"
@@ -178,7 +159,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           description={`${formatCurrencyAmount(summary.totalExpenses)} expenses`}
           variant="floating"
         />
-
         {/* Profit per Hectare */}
         <MetricCard
           title={`Profit per ${preferences.landUnit === 'hectares' ? 'ha' : preferences.landUnit === 'acres' ? 'acre' : 'm²'}`}
@@ -187,7 +167,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           description={`Across ${formatArea(summary.totalArea, preferences)}`}
           variant="glow"
         />
-
         {/* Transactions */}
         <MetricCard
           title="Transactions"
@@ -197,7 +176,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           variant="soft"
         />
       </div>
-
       {/* Main Content Grid with Transaction List on RHS */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Farm Table (2/3 width) */}
@@ -207,7 +185,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
             onFarmSelect={setSelectedFarmId}
           />
         </div>
-        
         {/* Right Column - Transaction List (1/3 width) */}
         <div className="lg:col-span-1">
           <ColoredTransactionList 
@@ -217,7 +194,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           />
         </div>
       </div>
-
       {/* Monthly Trends Chart */}
       {monthlyTrends.length > 0 && (
         <ModernCard variant="floating">
@@ -237,7 +213,6 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Profit Calculator */}
       <ProfitCalculator farmId={farmBreakdown[0]?.id} />
     </div>

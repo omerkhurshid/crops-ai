@@ -4,7 +4,6 @@
  * Defines data structures for ML models, predictions, and training data
  * used across the agricultural AI system.
  */
-
 export interface MLModelConfig {
   id: string;
   name: string;
@@ -22,7 +21,6 @@ export interface MLModelConfig {
     dataRequirements: string[];
   };
 }
-
 export interface TrainingData {
   id: string;
   farmId: string;
@@ -34,13 +32,11 @@ export interface TrainingData {
     weather: WeatherFeatures;
     soil: SoilFeatures;
     satellite: SatelliteFeatures;
-    
     // Management practices
     planting: PlantingFeatures;
     irrigation: IrrigationFeatures;
     fertilization: FertilizationFeatures;
     pestControl: PestControlFeatures;
-    
     // Historical data
     historical: HistoricalFeatures;
   };
@@ -57,7 +53,6 @@ export interface TrainingData {
     verified: boolean;
   };
 }
-
 export interface WeatherFeatures {
   avgTemperature: number;
   maxTemperature: number;
@@ -71,7 +66,6 @@ export interface WeatherFeatures {
   heatStressDays: number;
   droughtStressDays: number;
 }
-
 export interface SoilFeatures {
   ph: number;
   organicMatter: number;
@@ -85,7 +79,6 @@ export interface SoilFeatures {
   texture: 'clay' | 'loam' | 'sand' | 'silt';
   drainage: 'poor' | 'moderate' | 'good' | 'excessive';
 }
-
 export interface SatelliteFeatures {
   avgNDVI: number;
   maxNDVI: number;
@@ -99,7 +92,6 @@ export interface SatelliteFeatures {
   greenupDate: string;
   maturityDate: string;
 }
-
 export interface PlantingFeatures {
   plantingDate: Date;
   variety: string;
@@ -109,7 +101,6 @@ export interface PlantingFeatures {
   depth: number;
   population: number;
 }
-
 export interface IrrigationFeatures {
   totalWater: number;
   irrigationEvents: number;
@@ -118,7 +109,6 @@ export interface IrrigationFeatures {
   timing: 'scheduled' | 'sensor_based' | 'manual';
   waterQuality: QualityMetrics;
 }
-
 export interface FertilizationFeatures {
   totalNitrogen: number;
   totalPhosphorus: number;
@@ -129,7 +119,6 @@ export interface FertilizationFeatures {
   timing: string[];
   cost: number;
 }
-
 export interface PestControlFeatures {
   pesticide_applications: number;
   herbicide_applications: number;
@@ -140,7 +129,6 @@ export interface PestControlFeatures {
   disease_incidents: number;
   weed_pressure: 'low' | 'moderate' | 'high' | 'severe';
 }
-
 export interface HistoricalFeatures {
   previous_yields: number[];
   yield_trend: 'increasing' | 'stable' | 'decreasing';
@@ -150,7 +138,6 @@ export interface HistoricalFeatures {
   field_age: number;
   previous_issues: string[];
 }
-
 export interface QualityMetrics {
   protein_content?: number;
   moisture_content: number;
@@ -159,7 +146,6 @@ export interface QualityMetrics {
   defects: number;
   marketability: 'excellent' | 'good' | 'fair' | 'poor';
 }
-
 export interface SustainabilityMetrics {
   carbon_sequestration: number;
   water_use_efficiency: number;
@@ -168,7 +154,6 @@ export interface SustainabilityMetrics {
   soil_health_score: number;
   environmental_impact: number;
 }
-
 export interface YieldPrediction {
   id: string;
   fieldId: string;
@@ -190,7 +175,6 @@ export interface YieldPrediction {
   createdAt: Date;
   validUntil: Date;
 }
-
 export interface PredictionRecommendation {
   type: 'irrigation' | 'fertilization' | 'pest_control' | 'harvest_timing' | 'variety_selection';
   action: string;
@@ -201,7 +185,6 @@ export interface PredictionRecommendation {
   cost: number;
   sustainability_impact: number;
 }
-
 export interface ModelPerformance {
   modelId: string;
   version: string;
@@ -225,7 +208,6 @@ export interface ModelPerformance {
   };
   lastEvaluation: Date;
 }
-
 export interface MLPipeline {
   id: string;
   name: string;
@@ -252,7 +234,6 @@ export interface MLPipeline {
     dashboard: string;
   };
 }
-
 export interface PipelineStage {
   id: string;
   name: string;
@@ -267,7 +248,6 @@ export interface PipelineStage {
     gpu?: boolean;
   };
 }
-
 export interface AlertConfig {
   metric: string;
   threshold: number;
@@ -275,7 +255,6 @@ export interface AlertConfig {
   severity: 'info' | 'warning' | 'error' | 'critical';
   channels: ('email' | 'slack' | 'webhook')[];
 }
-
 export interface DataQuality {
   completeness: number; // 0-1
   accuracy: number; // 0-1
@@ -286,7 +265,6 @@ export interface DataQuality {
   issues: DataQualityIssue[];
   score: number; // overall score 0-100
 }
-
 export interface DataQualityIssue {
   type: 'missing' | 'invalid' | 'duplicate' | 'outlier' | 'stale';
   field: string;
@@ -295,14 +273,12 @@ export interface DataQualityIssue {
   affectedRecords: number;
   suggestedFix: string;
 }
-
 export interface FeatureEngineering {
   transformations: FeatureTransformation[];
   selections: FeatureSelection[];
   encodings: FeatureEncoding[];
   scalings: FeatureScaling[];
 }
-
 export interface FeatureTransformation {
   name: string;
   type: 'polynomial' | 'log' | 'sqrt' | 'interaction' | 'temporal' | 'spatial';
@@ -310,27 +286,23 @@ export interface FeatureTransformation {
   outputFeature: string;
   parameters: Record<string, any>;
 }
-
 export interface FeatureSelection {
   method: 'correlation' | 'mutual_info' | 'chi2' | 'f_test' | 'rfe' | 'lasso';
   threshold: number;
   maxFeatures: number;
   selectedFeatures: string[];
 }
-
 export interface FeatureEncoding {
   feature: string;
   method: 'one_hot' | 'label' | 'target' | 'ordinal' | 'frequency';
   categories: string[];
   parameters: Record<string, any>;
 }
-
 export interface FeatureScaling {
   features: string[];
   method: 'standard' | 'minmax' | 'robust' | 'quantile' | 'power';
   parameters: Record<string, any>;
 }
-
 export interface ModelExperiment {
   id: string;
   name: string;

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -12,7 +11,6 @@ import {
   User, Lock, Globe, Ruler, Thermometer, 
   DollarSign, Save, CheckCircle, AlertCircle 
 } from 'lucide-react'
-
 interface UserPreferences {
   currency: string
   landUnit: string
@@ -20,7 +18,6 @@ interface UserPreferences {
   timezone: string
   language: string
 }
-
 interface SettingsFormProps {
   user: {
     id: string
@@ -33,7 +30,6 @@ interface SettingsFormProps {
     language?: string | null
   }
 }
-
 export function SettingsForm({ user }: SettingsFormProps) {
   const [loading, setLoading] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -49,7 +45,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
     timezone: user.timezone || 'UTC',
     language: user.language || 'en'
   })
-
   // Load user preferences on component mount
   useEffect(() => {
     const loadPreferences = async () => {
@@ -73,10 +68,8 @@ export function SettingsForm({ user }: SettingsFormProps) {
         })
       }
     }
-    
     loadPreferences()
   }, [user])
-
   const currencies = [
     { value: 'USD', label: 'US Dollar ($)', symbol: '$' },
     { value: 'EUR', label: 'Euro (€)', symbol: '€' },
@@ -117,26 +110,21 @@ export function SettingsForm({ user }: SettingsFormProps) {
     { value: 'MYR', label: 'Malaysian Ringgit (RM)', symbol: 'RM' },
     { value: 'PHP', label: 'Philippine Peso (₱)', symbol: '₱' }
   ]
-
   const landUnits = [
     { value: 'hectares', label: 'Hectares (ha)', description: 'Most common globally, 1 ha = 2.47 acres' },
     { value: 'acres', label: 'Acres (ac)', description: 'Common in US/UK, 1 ac = 0.405 ha' },
     { value: 'square_meters', label: 'Square Meters (m²)', description: 'For smaller areas' },
   ]
-
   const temperatureUnits = [
     { value: 'celsius', label: 'Celsius (°C)', description: 'Most common globally' },
     { value: 'fahrenheit', label: 'Fahrenheit (°F)', description: 'Common in US' },
   ]
-
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()
-    
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       setSaveStatus('error')
       return
     }
-
     setLoading(true)
     try {
       const response = await fetch('/api/user-auth/change-password', {
@@ -147,9 +135,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           newPassword: passwordForm.newPassword
         })
       })
-
       if (!response.ok) throw new Error('Failed to change password')
-      
       setSaveStatus('success')
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
       setTimeout(() => setSaveStatus('idle'), 3000)
@@ -160,7 +146,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
       setLoading(false)
     }
   }
-
   const handlePreferencesChange = async () => {
     setLoading(true)
     try {
@@ -169,9 +154,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(preferences)
       })
-
       if (!response.ok) throw new Error('Failed to save preferences')
-      
       setSaveStatus('success')
       setTimeout(() => setSaveStatus('idle'), 3000)
     } catch (error) {
@@ -181,7 +164,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
       setLoading(false)
     }
   }
-
   return (
     <div className="space-y-6">
       {/* Account Information */}
@@ -222,7 +204,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Change Password */}
       <ModernCard variant="floating">
         <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
@@ -281,7 +262,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
           </form>
         </ModernCardContent>
       </ModernCard>
-
       {/* System Preferences */}
       <ModernCard variant="floating">
         <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
@@ -324,7 +304,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
               Selected: {currencies.find(c => c.value === preferences.currency)?.label}
             </p>
           </div>
-
           {/* Land Units */}
           <div>
             <Label className="flex items-center gap-2 mb-3">
@@ -358,7 +337,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
               {landUnits.find(u => u.value === preferences.landUnit)?.description}
             </p>
           </div>
-
           {/* Temperature Units */}
           <div>
             <Label className="flex items-center gap-2 mb-3">
@@ -389,7 +367,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
               </SelectContent>
             </Select>
           </div>
-
           <div className="flex justify-end">
             <Button onClick={handlePreferencesChange} disabled={loading}>
               <Save className="h-4 w-4 mr-2" />
@@ -398,7 +375,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Current Settings Summary */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -425,7 +401,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Status Messages */}
       {saveStatus === 'success' && (
         <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -433,7 +408,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
           <span className="text-green-800">Settings saved successfully!</span>
         </div>
       )}
-
       {saveStatus === 'error' && (
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="h-5 w-5 text-red-600" />

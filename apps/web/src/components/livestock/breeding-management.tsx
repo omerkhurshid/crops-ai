@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -16,32 +15,26 @@ import {
   AlertCircle
 } from 'lucide-react'
 import Link from 'next/link'
-
 interface BreedingManagementProps {
   breedingRecords: any[]
   farms: any[]
   animals: any[]
 }
-
 export function BreedingManagement({ breedingRecords, farms, animals }: BreedingManagementProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFarm, setSelectedFarm] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedSpecies, setSelectedSpecies] = useState('all')
-
   // Filter breeding records
   const filteredRecords = breedingRecords.filter(record => {
     const matchesSearch = record.animal.tagNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (record.animal.name && record.animal.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          (record.mate?.tagNumber && record.mate.tagNumber.toLowerCase().includes(searchTerm.toLowerCase()))
-    
     const matchesFarm = selectedFarm === 'all' || record.animal.farm?.name === selectedFarm
     const matchesStatus = selectedStatus === 'all' || record.status === selectedStatus
     const matchesSpecies = selectedSpecies === 'all' || record.animal.species === selectedSpecies
-    
     return matchesSearch && matchesFarm && matchesStatus && matchesSpecies
   })
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'breeding': return 'bg-blue-100 text-blue-800'
@@ -51,7 +44,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   const getDaysUntilDue = (expectedDueDate: string) => {
     if (!expectedDueDate) return null
     const due = new Date(expectedDueDate)
@@ -60,19 +52,16 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     return diffDays
   }
-
   const isOverdue = (expectedDueDate: string, actualBirthDate: string | null) => {
     if (!expectedDueDate || actualBirthDate) return false
     const due = new Date(expectedDueDate)
     const now = new Date()
     return now > due
   }
-
   // Get unique values for filters
   const uniqueStatuses = Array.from(new Set(breedingRecords.map(record => record.status)))
   const uniqueSpecies = Array.from(new Set(breedingRecords.map(record => record.animal.species)))
   const uniqueFarms = Array.from(new Set(breedingRecords.map(record => record.animal.farm?.name).filter(Boolean)))
-
   if (breedingRecords.length === 0) {
     return (
       <div className="text-center py-12">
@@ -87,7 +76,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -101,7 +89,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
             className="pl-10"
           />
         </div>
-        
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
@@ -112,7 +99,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
             <option key={farm} value={farm}>{farm}</option>
           ))}
         </select>
-
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
@@ -125,7 +111,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
             </option>
           ))}
         </select>
-
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
@@ -139,7 +124,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
           ))}
         </select>
       </div>
-
       {/* Breeding Records Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -169,7 +153,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
             {filteredRecords.map((record) => {
               const daysUntilDue = getDaysUntilDue(record.expectedDueDate)
               const overdue = isOverdue(record.expectedDueDate, record.actualBirthDate)
-              
               return (
                 <tr key={record.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -187,7 +170,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                       </div>
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     {record.mate ? (
                       <div>
@@ -202,7 +184,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                       <span className="text-sm text-gray-400">No mate specified</span>
                     )}
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                       {new Date(record.breedingDate).toLocaleDateString()}
@@ -211,7 +192,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                       {record.breedingType}
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     {record.expectedDueDate ? (
                       <div>
@@ -235,7 +215,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                       <span className="text-sm text-gray-400">Not calculated</span>
                     )}
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Badge 
                       className={`capitalize ${getStatusColor(record.status)}`}
@@ -253,7 +232,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                       </div>
                     )}
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="sm">
@@ -273,7 +251,6 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
           </tbody>
         </table>
       </div>
-
       {filteredRecords.length === 0 && searchTerm && (
         <div className="text-center py-8">
           <p className="text-gray-500">No breeding records found matching your search criteria.</p>

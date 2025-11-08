@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,7 +21,6 @@ import {
   RefreshCw,
   AlertTriangle
 } from 'lucide-react';
-
 interface Forecast {
   id: string;
   forecastDate: string;
@@ -34,28 +32,23 @@ interface Forecast {
   confidenceScore: number;
   assumptions?: any;
 }
-
 interface ForecastViewProps {
   farmId: string;
   onRefresh: () => void;
 }
-
 export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
   const [forecasts, setForecasts] = useState<Record<string, Forecast[]>>({});
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [scenario, setScenario] = useState<'optimistic' | 'realistic' | 'pessimistic'>('realistic');
   const [summary, setSummary] = useState<any>(null);
-
   useEffect(() => {
     fetchForecasts();
   }, [farmId]);
-
   const fetchForecasts = async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/financial/forecast?farmId=${farmId}&forecastHorizon=3`);
-      
       if (response.ok) {
         const data = await response.json();
         setForecasts(data.forecasts || {});
@@ -67,7 +60,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       setLoading(false);
     }
   };
-
   const generateForecast = async () => {
     try {
       setGenerating(true);
@@ -83,7 +75,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           },
         }),
       });
-
       if (response.ok) {
         const data = await response.json();
         await fetchForecasts(); // Refresh forecasts
@@ -98,7 +89,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       setGenerating(false);
     }
   };
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -107,14 +97,12 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       maximumFractionDigits: 0,
     }).format(amount);
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       year: 'numeric',
     });
   };
-
   const getScenarioColor = (scenario: string) => {
     switch (scenario) {
       case 'optimistic':
@@ -125,16 +113,13 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
         return 'bg-blue-100 text-blue-800 border-blue-200';
     }
   };
-
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 80) return 'text-green-600';
     if (confidence >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
-
   const revenueForecasts = forecasts.revenue || [];
   const costForecasts = forecasts.cost || [];
-
   const totalPredictedRevenue = revenueForecasts.reduce(
     (sum, f) => sum + (f.predictedRevenue || 0), 0
   );
@@ -142,7 +127,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
     (sum, f) => sum + (f.predictedCost || 0), 0
   );
   const predictedProfit = totalPredictedRevenue - totalPredictedCost;
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -157,7 +141,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header & Controls */}
@@ -169,7 +152,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
               AI-powered predictions based on satellite data, weather patterns, and market trends
             </p>
           </div>
-          
           <div className="flex items-center space-x-3">
             <Select value={scenario} onValueChange={(value: any) => setScenario(value)}>
               <SelectTrigger className="w-40">
@@ -196,7 +178,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                 </SelectItem>
               </SelectContent>
             </Select>
-            
             <Button
               onClick={generateForecast}
               disabled={generating}
@@ -217,7 +198,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           </div>
         </div>
       </Card>
-
       {/* Forecast Summary */}
       {(revenueForecasts.length > 0 || costForecasts.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -233,7 +213,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
             </div>
             <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
           </Card>
-          
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -246,7 +225,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
             </div>
             <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
           </Card>
-          
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -265,7 +243,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           </Card>
         </div>
       )}
-
       {/* Detailed Forecasts */}
       {revenueForecasts.length > 0 && (
         <Card className="p-6">
@@ -273,7 +250,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
             <DollarSign className="h-5 w-5 mr-2 text-green-600" />
             Revenue Forecasts
           </h4>
-          
           <div className="space-y-3">
             {revenueForecasts.map((forecast) => (
               <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -284,19 +260,16 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                       {forecast.assumptions?.scenario || 'Realistic'}
                     </Badge>
                   </div>
-                  
                   <div className="flex items-center space-x-4 text-sm text-gray-600">
                     <span className={getConfidenceColor(forecast.confidenceScore)}>
                       {forecast.confidenceScore.toFixed(0)}% confidence
                     </span>
-                    
                     {forecast.assumptions?.avgNDVI && (
                       <span className="flex items-center space-x-1">
                         <span>🛰️</span>
                         <span>NDVI: {(forecast.assumptions.avgNDVI * 100).toFixed(0)}%</span>
                       </span>
                     )}
-                    
                     {forecast.assumptions?.weatherImpact && (
                       <span className="flex items-center space-x-1">
                         <Cloud className="h-3 w-3" />
@@ -305,12 +278,10 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                     )}
                   </div>
                 </div>
-                
                 <div className="text-right">
                   <p className="text-lg font-semibold text-green-600">
                     {formatCurrency(forecast.predictedRevenue || 0)}
                   </p>
-                  
                   {forecast.predictedYield && (
                     <p className="text-xs text-gray-500">
                       Est. yield: {forecast.predictedYield.toFixed(1)} t/ha
@@ -322,7 +293,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           </div>
         </Card>
       )}
-
       {/* Cost Forecasts */}
       {costForecasts.length > 0 && (
         <Card className="p-6">
@@ -330,7 +300,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
             <TrendingDown className="h-5 w-5 mr-2 text-red-600" />
             Cost Forecasts
           </h4>
-          
           <div className="space-y-3">
             {costForecasts.map((forecast) => (
               <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -341,18 +310,15 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                       {forecast.assumptions?.scenario || 'Realistic'}
                     </Badge>
                   </div>
-                  
                   <div className="flex items-center space-x-4 text-sm text-gray-600">
                     <span className={getConfidenceColor(forecast.confidenceScore)}>
                       {forecast.confidenceScore.toFixed(0)}% confidence
                     </span>
-                    
                     <span>
                       Based on {forecast.assumptions?.historicalMonths || 12} months of data
                     </span>
                   </div>
                 </div>
-                
                 <div className="text-right">
                   <p className="text-lg font-semibold text-red-600">
                     {formatCurrency(forecast.predictedCost || 0)}
@@ -363,7 +329,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           </div>
         </Card>
       )}
-
       {/* No Forecasts State */}
       {revenueForecasts.length === 0 && costForecasts.length === 0 && (
         <Card className="p-12 text-center">
@@ -372,7 +337,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           <p className="text-gray-600 mb-6">
             Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.
           </p>
-          
           <Button
             onClick={generateForecast}
             disabled={generating}
@@ -392,7 +356,6 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           </Button>
         </Card>
       )}
-
       {/* Disclaimer */}
       <Card className="p-4 bg-amber-50 border-amber-200">
         <div className="flex items-start space-x-3">

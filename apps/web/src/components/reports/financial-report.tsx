@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -11,7 +10,6 @@ import {
   AlertTriangle, PieChart, BarChart3, Target, Calculator,
   CreditCard, Receipt, Wallet, LineChart
 } from 'lucide-react';
-
 interface FinancialData {
   summary: {
     totalRevenue: number;
@@ -44,21 +42,17 @@ interface FinancialData {
     yearEnd: { revenue: number; expenses: number; profit: number };
   };
 }
-
 interface FinancialReportProps {
   farmId: string;
 }
-
 export function FinancialReport({ farmId }: FinancialReportProps) {
   const [data, setData] = useState<FinancialData | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     fetchFinancialData();
   }, [farmId]);
-
   const fetchFinancialData = async () => {
     setLoading(true);
     try {
@@ -76,9 +70,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       setLoading(false);
     }
   };
-
   // Mock function removed for production
-
   const generateReport = async () => {
     setGenerating(true);
     try {
@@ -91,7 +83,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           format: 'pdf'
         })
       });
-      
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -109,7 +100,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       setGenerating(false);
     }
   };
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -117,11 +107,9 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       minimumFractionDigits: 0
     }).format(amount);
   };
-
   const formatPercentage = (value: number) => {
     return `${value >= 0 ? '+' : ''}${value.toFixed(1)}%`;
   };
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -131,7 +119,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       </div>
     );
   }
-
   if (!data) {
     return (
       <div className="text-center py-8">
@@ -140,7 +127,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -154,7 +140,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           {generating ? 'Generating...' : 'Download Report'}
         </Button>
       </div>
-
       {/* Key Metrics Summary */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <div className="text-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
@@ -188,7 +173,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           <p className="text-xs text-gray-600">Cash Flow</p>
         </div>
       </div>
-
       {/* Detailed Analysis Tabs */}
       <Tabs defaultValue="breakdown" className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
@@ -197,7 +181,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           <TabsTrigger value="cashflow">Cash Flow</TabsTrigger>
           <TabsTrigger value="projections">Projections</TabsTrigger>
         </TabsList>
-
         <TabsContent value="breakdown" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -224,7 +207,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-red-600 flex items-center gap-2">
@@ -251,7 +233,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="profitability" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -278,7 +259,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Crop Performance</CardTitle>
@@ -302,7 +282,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="cashflow">
           <Card>
             <CardHeader>
@@ -330,7 +309,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   <p className="text-sm text-gray-600">Net Cash Flow</p>
                 </div>
               </div>
-              
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-700 mb-2">
                   <strong>Cash Flow Summary:</strong> Strong operational cash flow indicates healthy day-to-day operations. 
@@ -341,7 +319,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="projections">
           <Card>
             <CardHeader>
@@ -369,7 +346,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     </div>
                   </div>
                 </div>
-
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h4 className="font-semibold mb-3 text-center">Year-End Projection</h4>
                   <div className="space-y-2">
@@ -388,7 +364,6 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   </div>
                 </div>
               </div>
-              
               <div className="mt-4 p-4 bg-green-50 rounded-lg">
                 <p className="text-sm text-gray-700">
                   <strong>Projection Summary:</strong> Based on current trends and seasonal patterns, 

@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -15,13 +14,11 @@ import {
   TrendingUp,
   Clock
 } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
   totalArea?: number
 }
-
 export default function TasksPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -29,31 +26,23 @@ export default function TasksPage() {
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchUserData() {
       try {
         setLoading(true)
-        
         // Fetch user's farms to determine the appropriate farmId for TaskBoard
         const farmsResponse = await fetch('/api/farms')
-        
         if (!farmsResponse.ok) {
           throw new Error('Failed to fetch farms')
         }
-
         const farmsData = await farmsResponse.json()
         const userFarms = farmsData.farms || []
-        
         setFarms(userFarms)
-        
         // Auto-select first farm if available
         if (userFarms.length > 0) {
           setSelectedFarm(userFarms[0])
@@ -65,10 +54,8 @@ export default function TasksPage() {
         setLoading(false)
       }
     }
-
     fetchUserData()
   }, [session, status, router])
-
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
@@ -93,11 +80,9 @@ export default function TasksPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   if (error) {
     return (
       <DashboardLayout>
@@ -115,7 +100,6 @@ export default function TasksPage() {
       </DashboardLayout>
     )
   }
-
   // No farms state
   if (farms.length === 0) {
     return (
@@ -127,22 +111,18 @@ export default function TasksPage() {
               Organize and track your daily farm operations
             </p>
           </div>
-
           <ModernCard variant="floating">
             <ModernCardContent className="p-8 text-center">
               <div className="w-20 h-20 bg-gradient-to-br from-sage-100 to-sage-200 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckSquare className="h-10 w-10 text-sage-600" />
               </div>
-              
               <h3 className="text-xl font-semibold text-sage-800 mb-4">
                 No Farms Found
               </h3>
-              
               <p className="text-sage-600 mb-6">
                 You need to create a farm before you can start managing tasks. 
                 Tasks help you organize and track your daily farm operations.
               </p>
-              
               <button
                 onClick={() => router.push('/farms/create')}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sage-600 hover:bg-sage-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sage-500"
@@ -156,7 +136,6 @@ export default function TasksPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -165,7 +144,6 @@ export default function TasksPage() {
         label="New Task"
         variant="primary"
       />
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -174,9 +152,7 @@ export default function TasksPage() {
             Organize and track your daily farm operations
           </p>
         </div>
-
         {/* Overview Cards - will be populated by TaskBoard component */}
-
         {/* Task Board */}
         <ModernCard variant="floating">
           <ModernCardContent className="p-6">
@@ -186,7 +162,6 @@ export default function TasksPage() {
             />
           </ModernCardContent>
         </ModernCard>
-
         {/* Quick Actions - will show when user has tasks or team members */}
       </main>
     </DashboardLayout>

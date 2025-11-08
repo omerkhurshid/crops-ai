@@ -4,7 +4,6 @@
  * Provides comprehensive vegetation health monitoring using NDVI and other
  * spectral indices, including trend analysis, stress detection, and yield prediction.
  */
-
 export interface SpectralBands {
   red: number;     // Band 4 (Sentinel-2)
   nir: number;     // Band 8 (Sentinel-2)
@@ -14,7 +13,6 @@ export interface SpectralBands {
   swir1: number;   // Band 11 (Sentinel-2)
   swir2: number;   // Band 12 (Sentinel-2)
 }
-
 export interface VegetationIndices {
   ndvi: number;    // Normalized Difference Vegetation Index
   evi: number;     // Enhanced Vegetation Index
@@ -25,7 +23,6 @@ export interface VegetationIndices {
   msavi: number;   // Modified Soil Adjusted Vegetation Index
   gci: number;     // Green Chlorophyll Index
 }
-
 export interface VegetationHealthReport {
   fieldId: string;
   analysisDate: string;
@@ -61,7 +58,6 @@ export interface VegetationHealthReport {
     };
   };
 }
-
 export interface NDVITrendAnalysis {
   fieldId: string;
   timeRange: { start: string; end: string };
@@ -95,7 +91,6 @@ export interface NDVITrendAnalysis {
     warnings: string[];
   };
 }
-
 export interface FieldComparisonReport {
   baselineField: string;
   comparisonFields: string[];
@@ -126,42 +121,31 @@ export interface FieldComparisonReport {
     general: string[];
   };
 }
-
 class NDVIAnalysisService {
   private readonly CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
   private readonly CACHE_PREFIX = 'ndvi_analysis_';
-
   /**
    * Calculate vegetation indices from spectral bands
    */
   calculateVegetationIndices(bands: SpectralBands): VegetationIndices {
     const { red, nir, redEdge, green, blue, swir1, swir2 } = bands;
-
     // NDVI = (NIR - Red) / (NIR + Red)
     const ndvi = (nir - red) / (nir + red);
-
     // EVI = 2.5 * ((NIR - Red) / (NIR + 6 * Red - 7.5 * Blue + 1))
     const evi = 2.5 * ((nir - red) / (nir + 6 * red - 7.5 * blue + 1));
-
     // SAVI = ((NIR - Red) / (NIR + Red + L)) * (1 + L), where L = 0.5
     const L = 0.5;
     const savi = ((nir - red) / (nir + red + L)) * (1 + L);
-
     // NDRE = (NIR - RedEdge) / (NIR + RedEdge)
     const ndre = (nir - redEdge) / (nir + redEdge);
-
     // GNDVI = (NIR - Green) / (NIR + Green)
     const gndvi = (nir - green) / (nir + green);
-
     // NDWI = (Green - NIR) / (Green + NIR)
     const ndwi = (green - nir) / (green + nir);
-
     // MSAVI = (2 * NIR + 1 - sqrt((2 * NIR + 1)² - 8 * (NIR - Red))) / 2
     const msavi = (2 * nir + 1 - Math.sqrt(Math.pow(2 * nir + 1, 2) - 8 * (nir - red))) / 2;
-
     // GCI = (NIR / Green) - 1
     const gci = (nir / green) - 1;
-
     return {
       ndvi: Math.max(-1, Math.min(1, ndvi)),
       evi: Math.max(-1, Math.min(1, evi)),
@@ -173,7 +157,6 @@ class NDVIAnalysisService {
       gci: Math.max(0, Math.min(5, gci))
     };
   }
-
   /**
    * Generate comprehensive vegetation health report
    */
@@ -192,7 +175,6 @@ class NDVIAnalysisService {
       const yieldPrediction = this.predictYield(indices, biomassEstimate, cropType, fieldArea);
       const recommendations = this.generateRecommendations(indices, stressLevel, phenologyStage);
       const spatialAnalysis = this.performSpatialAnalysis(indices, fieldArea);
-
       return {
         fieldId,
         analysisDate: new Date().toISOString(),
@@ -211,7 +193,6 @@ class NDVIAnalysisService {
       throw error;
     }
   }
-
   /**
    * Analyze NDVI trends over time
    */
@@ -225,11 +206,9 @@ class NDVIAnalysisService {
         ...point,
         quality: this.assessDataQuality(point.cloudCover, point.ndvi)
       }));
-
       const trend = this.calculateTrend(dataPoints);
       const anomalies = this.detectAnomalies(dataPoints);
       const forecast = this.generateForecast(dataPoints, forecastDays);
-
       return {
         fieldId,
         timeRange: {
@@ -246,7 +225,6 @@ class NDVIAnalysisService {
       throw error;
     }
   }
-
   /**
    * Compare multiple fields
    */
@@ -259,12 +237,10 @@ class NDVIAnalysisService {
         { fieldId: baselineField, area: 100, indices: this.generateSampleIndices() }, // Baseline
         ...comparisonFields
       ];
-
       const metrics = allFields.map(field => {
         const healthScore = this.calculateHealthScore(field.indices);
         const stressLevel = this.determineStressLevel(healthScore);
         const yieldPrediction = this.predictYield(field.indices, 5000, 'general', field.area).estimated;
-
         return {
           fieldId: field.fieldId,
           name: field.name,
@@ -276,16 +252,13 @@ class NDVIAnalysisService {
           rank: 0 // Will be set after sorting
         };
       });
-
       // Rank fields by health score
       metrics.sort((a, b) => b.healthScore - a.healthScore);
       metrics.forEach((metric, index) => {
         metric.rank = index + 1;
       });
-
       const insights = this.generateFieldInsights(metrics);
       const recommendations = this.generateFieldRecommendations(metrics);
-
       return {
         baselineField,
         comparisonFields: comparisonFields.map(f => f.fieldId),
@@ -299,7 +272,6 @@ class NDVIAnalysisService {
       throw error;
     }
   }
-
   /**
    * Detect crop stress using multiple indices
    */
@@ -314,20 +286,16 @@ class NDVIAnalysisService {
     const waterStress = this.assessWaterStress(indices);
     const nitrogenStress = this.assessNitrogenStress(indices);
     const chlorophyllStress = this.assessChlorophyllStress(indices);
-
     const stressLevels = [waterStress.level, nitrogenStress.level, chlorophyllStress.level];
     const stressScores: number[] = stressLevels.map(level => 
       level === 'severe' ? 4 : level === 'high' ? 3 : level === 'moderate' ? 2 : level === 'low' ? 1 : 0
     );
-    
     const avgStress = stressScores.reduce((a, b) => a + b, 0) / stressScores.length;
     const overall = avgStress >= 3.5 ? 'severe' :
                    avgStress >= 2.5 ? 'high' :
                    avgStress >= 1.5 ? 'moderate' :
                    avgStress >= 0.5 ? 'low' : 'none';
-
     const confidence = Math.min(waterStress.confidence, nitrogenStress.confidence, chlorophyllStress.confidence);
-
     const recommendations = [];
     if (waterStress.level !== 'none') {
       recommendations.push(`Water stress detected: ${waterStress.recommendation}`);
@@ -338,7 +306,6 @@ class NDVIAnalysisService {
     if (chlorophyllStress.level !== 'none') {
       recommendations.push(`Chlorophyll stress detected: ${chlorophyllStress.recommendation}`);
     }
-
     return {
       overall,
       water: waterStress.level,
@@ -348,7 +315,6 @@ class NDVIAnalysisService {
       recommendations
     };
   }
-
   // Private helper methods
   private calculateHealthScore(indices: VegetationIndices): number {
     // Weighted average of key indices
@@ -359,14 +325,12 @@ class NDVIAnalysisService {
       ndre: 0.15,
       gndvi: 0.1
     };
-
     // Normalize indices to 0-1 scale
     const normalizedNDVI = Math.max(0, (indices.ndvi + 1) / 2);
     const normalizedEVI = Math.max(0, (indices.evi + 1) / 2);
     const normalizedSAVI = Math.max(0, (indices.savi + 1) / 2);
     const normalizedNDRE = Math.max(0, (indices.ndre + 1) / 2);
     const normalizedGNDVI = Math.max(0, (indices.gndvi + 1) / 2);
-
     const score = (
       normalizedNDVI * weights.ndvi +
       normalizedEVI * weights.evi +
@@ -374,10 +338,8 @@ class NDVIAnalysisService {
       normalizedNDRE * weights.ndre +
       normalizedGNDVI * weights.gndvi
     ) * 100;
-
     return Math.max(0, Math.min(100, score));
   }
-
   private determineStressLevel(healthScore: number): 'none' | 'low' | 'moderate' | 'high' | 'severe' {
     if (healthScore >= 80) return 'none';
     if (healthScore >= 60) return 'low';
@@ -385,7 +347,6 @@ class NDVIAnalysisService {
     if (healthScore >= 20) return 'high';
     return 'severe';
   }
-
   private analyzeStressIndicators(indices: VegetationIndices): VegetationHealthReport['stressIndicators'] {
     return {
       drought: {
@@ -406,10 +367,8 @@ class NDVIAnalysisService {
       }
     };
   }
-
   private determinePhenologyStage(indices: VegetationIndices, cropType: string): VegetationHealthReport['phenologyStage'] {
     const { ndvi, ndre } = indices;
-
     if (ndvi < 0.3) return 'emergence';
     if (ndvi < 0.5) return 'vegetative';
     if (ndvi > 0.7 && ndre > 0.2) return 'flowering';
@@ -417,35 +376,29 @@ class NDVIAnalysisService {
     if (ndvi > 0.4) return 'maturity';
     return 'senescence';
   }
-
   private estimateBiomass(indices: VegetationIndices, cropType: string): number {
     // Simplified biomass estimation using NDVI
     // In production, this would use crop-specific models
     const baseBiomass = 2000; // kg/ha
     const ndviFactor = Math.max(0, indices.ndvi) * 3;
     const eviFactor = Math.max(0, indices.evi) * 2;
-    
     return Math.round(baseBiomass * (1 + ndviFactor + eviFactor));
   }
-
   private predictYield(indices: VegetationIndices, biomass: number, cropType: string, area: number): VegetationHealthReport['yieldPrediction'] {
     // Simplified yield prediction
     const harvestIndex = 0.4; // Typical harvest index
     const yieldPerHa = (biomass * harvestIndex) / 1000; // tons/ha
     const totalYield = yieldPerHa * area;
-
     const factors = [];
     if (indices.ndvi < 0.5) factors.push('Low vegetation vigor');
     if (indices.ndwi < 0) factors.push('Water stress');
     if (indices.ndre < 0.2) factors.push('Nutrient deficiency');
-
     return {
       estimated: Math.round(totalYield * 100) / 100,
       confidence: Math.max(0.3, Math.min(0.9, indices.ndvi + 0.2)),
       factors
     };
   }
-
   private generateRecommendations(
     indices: VegetationIndices,
     stressLevel: string,
@@ -454,30 +407,24 @@ class NDVIAnalysisService {
     const immediate = [];
     const shortTerm = [];
     const seasonal = [];
-
     if (stressLevel === 'high' || stressLevel === 'severe') {
       immediate.push('Urgent attention required - investigate stress causes');
       if (indices.ndwi < -0.3) immediate.push('Increase irrigation immediately');
       if (indices.ndre < 0.1) immediate.push('Apply foliar nutrients');
     }
-
     if (indices.ndvi < 0.5) {
       shortTerm.push('Monitor crop development closely');
       shortTerm.push('Consider supplemental nutrition');
     }
-
     if (phenologyStage === 'flowering' || phenologyStage === 'fruiting') {
       seasonal.push('Critical growth stage - maintain optimal conditions');
       seasonal.push('Monitor for pest and disease pressure');
     }
-
     return { immediate, shortTerm, seasonal };
   }
-
   private performSpatialAnalysis(indices: VegetationIndices, fieldArea: number): VegetationHealthReport['spatialAnalysis'] {
     // Simulate spatial variability
     const uniformity = 0.7 + Math.random() * 0.3; // 0.7-1.0
-    
     const hotspots = [];
     const numHotspots = Math.floor(Math.random() * 5) + 1;
     for (let i = 0; i < numHotspots; i++) {
@@ -487,30 +434,24 @@ class NDVIAnalysisService {
         severity: Math.random()
       });
     }
-
     const zones = {
       excellent: { percentage: 25, area: fieldArea * 0.25 },
       good: { percentage: 35, area: fieldArea * 0.35 },
       moderate: { percentage: 25, area: fieldArea * 0.25 },
       poor: { percentage: 15, area: fieldArea * 0.15 }
     };
-
     return { uniformity, hotspots, zones };
   }
-
   private calculateTrend(dataPoints: any[]): NDVITrendAnalysis['trend'] {
     const values = dataPoints.map(p => p.ndvi);
     const dates = dataPoints.map(p => new Date(p.date).getTime());
-    
     // Simple linear regression
     const n = values.length;
     const sumX = dates.reduce((a, b) => a + b, 0);
     const sumY = values.reduce((a, b) => a + b, 0);
     const sumXY = dates.reduce((sum, x, i) => sum + x * values[i], 0);
     const sumXX = dates.reduce((sum, x) => sum + x * x, 0);
-    
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    
     // Calculate R²
     const meanY = sumY / n;
     const ssRes = values.reduce((sum, y, i) => {
@@ -519,16 +460,13 @@ class NDVIAnalysisService {
     }, 0);
     const ssTot = values.reduce((sum, y) => sum + Math.pow(y - meanY, 2), 0);
     const rSquared = 1 - (ssRes / ssTot);
-
     const direction = Math.abs(slope) < 1e-10 ? 'stable' :
                      slope > 0 ? 'increasing' : 'decreasing';
-
     // Detect seasonality (simplified)
     const maxNDVI = Math.max(...values);
     const minNDVI = Math.min(...values);
     const maxIndex = values.indexOf(maxNDVI);
     const minIndex = values.indexOf(minNDVI);
-
     return {
       direction,
       slope: slope * (24 * 60 * 60 * 1000), // Convert to per-day
@@ -540,13 +478,11 @@ class NDVIAnalysisService {
       }
     };
   }
-
   private detectAnomalies(dataPoints: any[]): NDVITrendAnalysis['anomalies'] {
     // Simple anomaly detection using standard deviation
     const values = dataPoints.map(p => p.ndvi);
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const std = Math.sqrt(values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length);
-    
     const anomalies: NDVITrendAnalysis['anomalies'] = [];
     dataPoints.forEach(point => {
       const deviation = Math.abs(point.ndvi - mean);
@@ -561,29 +497,24 @@ class NDVIAnalysisService {
         });
       }
     });
-
     return anomalies;
   }
-
   private generateForecast(dataPoints: any[], forecastDays: number): NDVITrendAnalysis['forecast'] {
     // Simple forecast based on trend
     const trend = this.calculateTrend(dataPoints);
     const lastPoint = dataPoints[dataPoints.length - 1];
     const lastDate = new Date(lastPoint.date);
-    
     const predictedValues = [];
     for (let i = 1; i <= forecastDays; i++) {
       const forecastDate = new Date(lastDate.getTime() + i * 24 * 60 * 60 * 1000);
       const predictedNDVI = lastPoint.ndvi + trend.slope * i;
       const confidence = Math.max(0.1, 0.9 - (i / forecastDays) * 0.6); // Decreasing confidence
-      
       predictedValues.push({
         date: forecastDate.toISOString().split('T')[0],
         ndvi: Math.max(-1, Math.min(1, predictedNDVI)),
         confidence
       });
     }
-
     const warnings = [];
     if (trend.direction === 'decreasing' && trend.slope < -0.01) {
       warnings.push('Declining vegetation health trend detected');
@@ -591,24 +522,20 @@ class NDVIAnalysisService {
     if (predictedValues.some(p => p.ndvi < 0.3)) {
       warnings.push('Predicted vegetation stress in forecast period');
     }
-
     return {
       nextPeriod: forecastDays,
       predictedValues,
       warnings
     };
   }
-
   private assessDataQuality(cloudCover: number, ndvi: number): 'excellent' | 'good' | 'fair' | 'poor' {
     if (cloudCover < 5 && ndvi >= -1 && ndvi <= 1) return 'excellent';
     if (cloudCover < 15 && ndvi >= -1 && ndvi <= 1) return 'good';
     if (cloudCover < 30) return 'fair';
     return 'poor';
   }
-
   private assessWaterStress(indices: VegetationIndices): { level: 'none' | 'low' | 'moderate' | 'high' | 'severe'; confidence: number; recommendation: string } {
     const waterStress = Math.max(0, -indices.ndwi);
-    
     let level: 'none' | 'low' | 'moderate' | 'high' | 'severe', recommendation;
     if (waterStress > 0.5) {
       level = 'severe';
@@ -626,13 +553,10 @@ class NDVIAnalysisService {
       level = 'none';
       recommendation = 'Water levels adequate';
     }
-
     return { level, confidence: 0.8, recommendation };
   }
-
   private assessNitrogenStress(indices: VegetationIndices): { level: 'none' | 'low' | 'moderate' | 'high' | 'severe'; confidence: number; recommendation: string } {
     const nitrogenStress = Math.max(0, 0.7 - indices.ndre);
-    
     let level: 'none' | 'low' | 'moderate' | 'high' | 'severe', recommendation;
     if (nitrogenStress > 0.4) {
       level = 'severe';
@@ -650,13 +574,10 @@ class NDVIAnalysisService {
       level = 'none';
       recommendation = 'Nitrogen levels adequate';
     }
-
     return { level, confidence: 0.7, recommendation };
   }
-
   private assessChlorophyllStress(indices: VegetationIndices): { level: 'none' | 'low' | 'moderate' | 'high' | 'severe'; confidence: number; recommendation: string } {
     const chlorophyllStress = Math.max(0, 1.5 - indices.gci);
-    
     let level: 'none' | 'low' | 'moderate' | 'high' | 'severe', recommendation;
     if (chlorophyllStress > 1.2) {
       level = 'severe';
@@ -674,10 +595,8 @@ class NDVIAnalysisService {
       level = 'none';
       recommendation = 'Chlorophyll levels normal';
     }
-
     return { level, confidence: 0.75, recommendation };
   }
-
   private generateSampleIndices(): VegetationIndices {
     return {
       ndvi: 0.5 + Math.random() * 0.3,
@@ -690,13 +609,11 @@ class NDVIAnalysisService {
       gci: 1.0 + Math.random() * 1.0
     };
   }
-
   private generateFieldInsights(metrics: any[]): FieldComparisonReport['insights'] {
     const healthScores = metrics.map(m => m.healthScore);
     const avgHealthScore = healthScores.reduce((a, b) => a + b, 0) / healthScores.length;
     const variance = healthScores.reduce((sum, score) => sum + Math.pow(score - avgHealthScore, 2), 0) / healthScores.length;
     const variability = Math.sqrt(variance) / avgHealthScore;
-
     return {
       bestPerforming: metrics[0].fieldId,
       mostStressed: metrics[metrics.length - 1].fieldId,
@@ -709,7 +626,6 @@ class NDVIAnalysisService {
       }
     };
   }
-
   private generateFieldRecommendations(metrics: any[]): FieldComparisonReport['recommendations'] {
     const fieldSpecific = metrics.map(metric => ({
       fieldId: metric.fieldId,
@@ -719,17 +635,14 @@ class NDVIAnalysisService {
         ? ['Monitor closely', 'Optimize nutrition', 'Check drainage']
         : ['Maintain current practices', 'Continue monitoring']
     }));
-
     const general = [
       'Implement precision agriculture techniques',
       'Regular soil testing and amendments',
       'Optimize irrigation scheduling',
       'Integrated pest management'
     ];
-
     return { fieldSpecific, general };
   }
 }
-
 export const ndviAnalysis = new NDVIAnalysisService();
 export { NDVIAnalysisService };

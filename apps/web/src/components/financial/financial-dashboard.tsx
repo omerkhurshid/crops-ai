@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
@@ -30,13 +29,11 @@ import { ForecastView } from './forecast-view';
 import { AnalyticsView } from './analytics-view';
 import { SimplifiedFinancialMetrics } from './simplified-metrics';
 import { SimpleCashFlowForecast } from './simple-cashflow-forecast';
-
 interface Farm {
   id: string;
   name: string;
   totalArea: number;
 }
-
 interface FinancialSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -47,12 +44,10 @@ interface FinancialSummary {
   profitChange: number;
   transactionCount: number;
 }
-
 interface FinancialDashboardProps {
   farm: Farm;
   initialData?: FinancialSummary;
 }
-
 export function FinancialDashboard({ farm, initialData }: FinancialDashboardProps) {
   const [summary, setSummary] = useState<FinancialSummary | null>(initialData || null);
   const [loading, setLoading] = useState(!initialData);
@@ -65,7 +60,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [transactionType, setTransactionType] = useState<'INCOME' | 'EXPENSE'>('INCOME');
   const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
-
   const currencies = [
     { code: 'USD', name: 'US Dollar', symbol: '$' },
     { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
@@ -73,7 +67,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
     { code: 'GBP', name: 'British Pound', symbol: '£' },
     { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
   ];
-
   // Format currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -81,12 +74,10 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       currency: selectedCurrency,
     }).format(amount);
   };
-
   // Format percentage
   const formatPercentage = (percentage: number) => {
     return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`;
   };
-
   // Fetch financial summary
   const fetchSummary = async () => {
     try {
@@ -94,7 +85,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       const response = await fetch(
         `/api/financial/summary?farmId=${farm.id}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       );
-      
       if (response.ok) {
         const data = await response.json();
         setSummary(data.summary);
@@ -105,21 +95,17 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchSummary();
   }, [farm.id, dateRange]);
-
   const handleAddTransaction = (type: 'INCOME' | 'EXPENSE') => {
     setTransactionType(type);
     setShowTransactionModal(true);
   };
-
   const handleTransactionAdded = () => {
     setShowTransactionModal(false);
     fetchSummary(); // Refresh summary
   };
-
   const handleFieldSelect = async (fieldId: string) => {
     try {
       // Fetch field details
@@ -136,12 +122,10 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       console.error('Error fetching field details:', error);
     }
   };
-
   const handleBackToFarmOverview = () => {
     setSelectedFieldId(null);
     setSelectedField(null);
   };
-
   if (loading && !summary) {
     return (
       <div className="p-6">
@@ -156,7 +140,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       </div>
     );
   }
-
   // Show field-level dashboard if a field is selected
   if (selectedFieldId && selectedField) {
     return (
@@ -166,7 +149,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
       />
     );
   }
-
   // Show farm-level overview by default
   return (
     <div className="space-y-6">
@@ -175,7 +157,6 @@ export function FinancialDashboard({ farm, initialData }: FinancialDashboardProp
         onFieldSelect={handleFieldSelect}
         onAddTransaction={() => handleAddTransaction('INCOME')}
       />
-
       {/* Transaction Modal */}
       <TransactionModal
         isOpen={showTransactionModal}

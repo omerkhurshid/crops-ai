@@ -2,7 +2,6 @@
  * Financial Impact Calculator for NBA Decision Engine
  * Calculates ROI, cost-benefit analysis, and financial risk assessment
  */
-
 export interface FinancialImpact {
   totalCost: number
   estimatedRevenue: number
@@ -14,7 +13,6 @@ export interface FinancialImpact {
   breakdownCosts: CostBreakdown
   revenueBreakdown: RevenueBreakdown
 }
-
 export interface CostBreakdown {
   materials: number
   labor: number
@@ -23,14 +21,12 @@ export interface CostBreakdown {
   overhead: number
   opportunity: number // opportunity cost
 }
-
 export interface RevenueBreakdown {
   yieldIncrease: number
   qualityPremium: number
   lossAvoidance: number
   timeValue: number
 }
-
 export interface CropPricing {
   currentPrice: number // per ton
   historicalAverage: number
@@ -38,7 +34,6 @@ export interface CropPricing {
   seasonalTrend: 'RISING' | 'STABLE' | 'FALLING'
   marketOutlook: 'BULLISH' | 'NEUTRAL' | 'BEARISH'
 }
-
 export interface FieldEconomics {
   fieldArea: number // hectares
   cropType: string
@@ -47,18 +42,15 @@ export interface FieldEconomics {
   insuranceValue: number
   landValue: number
 }
-
 export class FinancialCalculator {
   private cropPrices: Map<string, CropPricing> = new Map()
   private laborRates: Map<string, number> = new Map()
   private equipmentCosts: Map<string, number> = new Map()
-
   constructor() {
     this.initializeDefaultPrices()
     this.initializeLaborRates()
     this.initializeEquipmentCosts()
   }
-
   /**
    * Calculate financial impact of spray decision
    */
@@ -70,10 +62,8 @@ export class FinancialCalculator {
   ): FinancialImpact {
     const costs = this.calculateSprayCosts(field, sprayType, applicationRate)
     const benefits = this.calculateSprayBenefits(field, sprayType, expectedEfficacy)
-    
     return this.buildFinancialImpact(costs, benefits, field, 'SPRAY')
   }
-
   /**
    * Calculate financial impact of harvest decision
    */
@@ -85,10 +75,8 @@ export class FinancialCalculator {
   ): FinancialImpact {
     const costs = this.calculateHarvestCosts(field, currentMoisture, marketTiming)
     const benefits = this.calculateHarvestBenefits(field, marketTiming, weatherRisk)
-    
     return this.buildFinancialImpact(costs, benefits, field, 'HARVEST')
   }
-
   /**
    * Calculate financial impact of irrigation decision
    */
@@ -101,10 +89,8 @@ export class FinancialCalculator {
   ): FinancialImpact {
     const costs = this.calculateIrrigationCosts(field, waterAmount, waterCostPerMm)
     const benefits = this.calculateIrrigationBenefits(field, waterAmount, yieldResponseCurve, stressLevel)
-    
     return this.buildFinancialImpact(costs, benefits, field, 'IRRIGATION')
   }
-
   /**
    * Calculate financial impact of livestock management decision
    */
@@ -117,7 +103,6 @@ export class FinancialCalculator {
   ): FinancialImpact {
     const totalCost = animalCount * costPerAnimal
     const totalBenefit = animalCount * preventedLossValue * (effectivenessRate / 100)
-    
     const costs: CostBreakdown = {
       materials: totalCost * 0.7, // vaccines/medicines
       labor: totalCost * 0.2,
@@ -126,14 +111,12 @@ export class FinancialCalculator {
       overhead: totalCost * 0.02,
       opportunity: 0
     }
-
     const benefits: RevenueBreakdown = {
       yieldIncrease: 0,
       qualityPremium: 0,
       lossAvoidance: totalBenefit,
       timeValue: 0
     }
-
     return {
       totalCost,
       estimatedRevenue: totalBenefit,
@@ -146,7 +129,6 @@ export class FinancialCalculator {
       revenueBreakdown: benefits
     }
   }
-
   /**
    * Calculate spray application costs
    */
@@ -160,13 +142,11 @@ export class FinancialCalculator {
       insecticide: 25,
       herbicide: 20
     }
-
     const materialCost = field.fieldArea * productCosts[sprayType] * (applicationRate / 100)
     const laborCost = field.fieldArea * (this.laborRates.get('spraying') || 15)
     const equipmentCost = field.fieldArea * (this.equipmentCosts.get('sprayer') || 8)
     const fuelCost = field.fieldArea * 3 // fuel per hectare
     const overheadCost = (materialCost + laborCost + equipmentCost) * 0.1
-
     return {
       materials: materialCost,
       labor: laborCost,
@@ -176,7 +156,6 @@ export class FinancialCalculator {
       opportunity: 0
     }
   }
-
   /**
    * Calculate spray application benefits
    */
@@ -190,11 +169,9 @@ export class FinancialCalculator {
       insecticide: 0.10, // 10% yield protection
       herbicide: 0.08   // 8% yield protection
     }
-
     const cropPrice = this.cropPrices.get(field.cropType.toLowerCase())?.currentPrice || 250
     const protectedYield = field.fieldArea * field.averageYield * yieldProtection[sprayType] * (expectedEfficacy / 100)
     const lossAvoidance = protectedYield * cropPrice
-
     return {
       yieldIncrease: 0,
       qualityPremium: lossAvoidance * 0.1, // 10% quality bonus
@@ -202,7 +179,6 @@ export class FinancialCalculator {
       timeValue: 0
     }
   }
-
   /**
    * Calculate harvest costs
    */
@@ -214,13 +190,10 @@ export class FinancialCalculator {
     const baseLaborCost = field.fieldArea * (this.laborRates.get('harvest') || 25)
     const baseEquipmentCost = field.fieldArea * (this.equipmentCosts.get('combine') || 40)
     const fuelCost = field.fieldArea * 8
-    
     // Drying costs if moisture is high
     const dryingCost = currentMoisture > 16 ? field.fieldArea * field.averageYield * 2 : 0
-    
     // Storage costs for delayed marketing
     const storageCost = marketTiming === 'STORAGE' ? field.fieldArea * field.averageYield * 5 : 0
-
     return {
       materials: dryingCost,
       labor: baseLaborCost,
@@ -230,7 +203,6 @@ export class FinancialCalculator {
       opportunity: marketTiming === 'STORAGE' ? field.fieldArea * field.averageYield * 10 : 0 // opportunity cost of storage
     }
   }
-
   /**
    * Calculate harvest benefits
    */
@@ -242,18 +214,14 @@ export class FinancialCalculator {
     const cropPrice = this.cropPrices.get(field.cropType.toLowerCase())?.currentPrice || 250
     const totalYield = field.fieldArea * field.averageYield
     const baseRevenue = totalYield * cropPrice
-
     // Quality premium for optimal timing
     const qualityPremium = marketTiming === 'IMMEDIATE' ? baseRevenue * 0.02 : 0
-
     // Price benefit from storage (if markets are rising)
     const pricingData = this.cropPrices.get(field.cropType.toLowerCase())
     const storagePremium = marketTiming === 'STORAGE' && pricingData?.seasonalTrend === 'RISING' 
       ? baseRevenue * 0.05 : 0
-
     // Weather risk avoidance
     const weatherProtection = baseRevenue * (weatherRisk / 100) * 0.1 // 10% of weather risk value
-
     return {
       yieldIncrease: baseRevenue,
       qualityPremium: qualityPremium,
@@ -261,7 +229,6 @@ export class FinancialCalculator {
       timeValue: storagePremium
     }
   }
-
   /**
    * Calculate irrigation costs
    */
@@ -274,7 +241,6 @@ export class FinancialCalculator {
     const laborCost = field.fieldArea * (this.laborRates.get('irrigation') || 12)
     const equipmentCost = field.fieldArea * (this.equipmentCosts.get('irrigation') || 5)
     const energyCost = waterCost * 0.3 // pumping energy
-
     return {
       materials: waterCost,
       labor: laborCost,
@@ -284,7 +250,6 @@ export class FinancialCalculator {
       opportunity: 0
     }
   }
-
   /**
    * Calculate irrigation benefits
    */
@@ -297,10 +262,8 @@ export class FinancialCalculator {
     const yieldIncrease = field.fieldArea * waterAmount * yieldResponseCurve * (stressLevel / 100)
     const cropPrice = this.cropPrices.get(field.cropType.toLowerCase())?.currentPrice || 250
     const yieldValue = yieldIncrease * cropPrice
-
     // Quality benefit from stress relief
     const qualityImprovement = yieldValue * 0.15 // 15% quality improvement
-
     return {
       yieldIncrease: yieldValue,
       qualityPremium: qualityImprovement,
@@ -308,7 +271,6 @@ export class FinancialCalculator {
       timeValue: 0
     }
   }
-
   /**
    * Build complete financial impact analysis
    */
@@ -321,7 +283,6 @@ export class FinancialCalculator {
     const totalCost = Object.values(costs).reduce((sum, cost) => sum + cost, 0)
     const totalRevenue = Object.values(benefits).reduce((sum, benefit) => sum + benefit, 0)
     const netBenefit = totalRevenue - totalCost
-    
     return {
       totalCost,
       estimatedRevenue: totalRevenue,
@@ -334,7 +295,6 @@ export class FinancialCalculator {
       revenueBreakdown: benefits
     }
   }
-
   /**
    * Calculate risk score based on cost/benefit ratio
    */
@@ -342,20 +302,16 @@ export class FinancialCalculator {
     const costRiskWeight = totalCost / 10000 // Higher costs = higher risk
     const benefitCertainty = (successRate / 100) * (totalBenefit / totalCost || 0)
     const volatilityRisk = 20 // base volatility
-    
     return Math.min(100, costRiskWeight + volatilityRisk - benefitCertainty * 10)
   }
-
   /**
    * Calculate confidence level based on field data and decision type
    */
   private calculateConfidenceLevel(field: FieldEconomics, decisionType: string): number {
     let baseConfidence = 70
-    
     // Adjust based on field size (larger fields = more predictable)
     if (field.fieldArea > 50) baseConfidence += 10
     else if (field.fieldArea < 10) baseConfidence -= 10
-    
     // Adjust based on decision type complexity
     const complexityAdjustment: Record<string, number> = {
       'SPRAY': 5,
@@ -363,12 +319,9 @@ export class FinancialCalculator {
       'IRRIGATION': 0,
       'LIVESTOCK': -5
     }
-    
     baseConfidence += complexityAdjustment[decisionType] || 0
-    
     return Math.min(95, Math.max(50, baseConfidence))
   }
-
   /**
    * Initialize default crop prices
    */
@@ -380,7 +333,6 @@ export class FinancialCalculator {
       seasonalTrend: 'RISING',
       marketOutlook: 'NEUTRAL'
     })
-
     this.cropPrices.set('corn', {
       currentPrice: 220,
       historicalAverage: 210,
@@ -388,7 +340,6 @@ export class FinancialCalculator {
       seasonalTrend: 'STABLE',
       marketOutlook: 'BULLISH'
     })
-
     this.cropPrices.set('soybeans', {
       currentPrice: 450,
       historicalAverage: 420,
@@ -396,7 +347,6 @@ export class FinancialCalculator {
       seasonalTrend: 'RISING',
       marketOutlook: 'BULLISH'
     })
-
     this.cropPrices.set('barley', {
       currentPrice: 250,
       historicalAverage: 240,
@@ -405,7 +355,6 @@ export class FinancialCalculator {
       marketOutlook: 'NEUTRAL'
     })
   }
-
   /**
    * Initialize labor rates per hectare
    */
@@ -415,7 +364,6 @@ export class FinancialCalculator {
     this.laborRates.set('irrigation', 12)
     this.laborRates.set('planting', 20)
   }
-
   /**
    * Initialize equipment costs per hectare
    */
@@ -425,14 +373,12 @@ export class FinancialCalculator {
     this.equipmentCosts.set('irrigation', 5)
     this.equipmentCosts.set('planter', 15)
   }
-
   /**
    * Update crop pricing data
    */
   updateCropPrice(cropType: string, pricing: CropPricing): void {
     this.cropPrices.set(cropType.toLowerCase(), pricing)
   }
-
   /**
    * Get current crop pricing
    */

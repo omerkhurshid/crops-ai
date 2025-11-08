@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -11,20 +10,16 @@ import {
 } from '../ui/dialog'
 import { Plus, DollarSign, Sprout, Cat, CalendarDays } from 'lucide-react'
 import { Badge } from '../ui/badge'
-
 interface QuickActionsProps {
   farms: Array<{ id: string; name: string }>
 }
-
 export function QuickActions({ farms }: QuickActionsProps) {
   const [expenseDialog, setExpenseDialog] = useState(false)
   const [harvestDialog, setHarvestDialog] = useState(false)
   const [livestockDialog, setLivestockDialog] = useState(false)
-
   const handleExpenseSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const formData = new FormData(e.target as HTMLFormElement)
-    
     try {
       const response = await fetch('/api/quick-actions/expense', {
         method: 'POST',
@@ -36,7 +31,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
           description: formData.get('description')
         })
       })
-      
       if (response.ok) {
         setExpenseDialog(false)
         // Dashboard refresh functionality pending
@@ -46,11 +40,9 @@ export function QuickActions({ farms }: QuickActionsProps) {
       console.error('Failed to log expense:', error)
     }
   }
-
   const handleHarvestSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const formData = new FormData(e.target as HTMLFormElement)
-    
     try {
       const response = await fetch('/api/quick-actions/harvest', {
         method: 'POST',
@@ -63,7 +55,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
           qualityNotes: formData.get('qualityNotes')
         })
       })
-      
       if (response.ok) {
         setHarvestDialog(false)
         window.location.reload()
@@ -72,11 +63,9 @@ export function QuickActions({ farms }: QuickActionsProps) {
       console.error('Failed to log harvest:', error)
     }
   }
-
   const handleLivestockSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const formData = new FormData(e.target as HTMLFormElement)
-    
     try {
       const response = await fetch('/api/quick-actions/livestock', {
         method: 'POST',
@@ -89,7 +78,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
           notes: formData.get('notes')
         })
       })
-      
       if (response.ok) {
         setLivestockDialog(false)
         window.location.reload()
@@ -98,7 +86,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
       console.error('Failed to log livestock event:', error)
     }
   }
-
   return (
     <div className="flex items-center gap-2">
       {/* Add Expense */}
@@ -170,7 +157,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
           </form>
         </DialogContent>
       </Dialog>
-
       {/* Log Harvest */}
       <Dialog open={harvestDialog} onOpenChange={setHarvestDialog}>
         <DialogTrigger asChild>
@@ -243,7 +229,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
           </form>
         </DialogContent>
       </Dialog>
-
       {/* Livestock Event */}
       <Dialog open={livestockDialog} onOpenChange={setLivestockDialog}>
         <DialogTrigger asChild>
@@ -334,7 +319,6 @@ export function QuickActions({ farms }: QuickActionsProps) {
     </div>
   )
 }
-
 export function QuickActionButtons({ farms }: QuickActionsProps) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
@@ -343,7 +327,6 @@ export function QuickActionButtons({ farms }: QuickActionsProps) {
         <CalendarDays className="h-3 w-3 mr-1" />
         3 Tasks Due
       </Badge>
-      
       {/* Quick Actions */}
       <QuickActions farms={farms} />
     </div>

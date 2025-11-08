@@ -5,12 +5,10 @@
  * constellation of CubeSats. Ideal for detailed field monitoring and
  * precise crop health analysis.
  */
-
 export interface PlanetLabsConfig {
   apiKey: string
   baseUrl: string
 }
-
 export interface PlanetImageRequest {
   geometry: any
   itemTypes: string[]
@@ -19,7 +17,6 @@ export interface PlanetImageRequest {
   cloudCover: number
   limit?: number
 }
-
 export interface PlanetImageItem {
   id: string
   itemType: string
@@ -42,7 +39,6 @@ export interface PlanetImageItem {
     }
   }
 }
-
 export interface PlanetAnalytics {
   fieldId: string
   imageId: string
@@ -74,38 +70,30 @@ export interface PlanetAnalytics {
     }
   }
 }
-
 class PlanetLabsService {
   private config: PlanetLabsConfig
   private readonly REQUEST_TIMEOUT = 30000 // 30 seconds
-
   constructor() {
     this.config = {
       apiKey: process.env.PLANET_LABS_API_KEY || '',
       baseUrl: 'https://api.planet.com'
     }
-
     if (!this.config.apiKey) {
-
     }
   }
-
   /**
    * Check if Planet Labs is properly configured
    */
   isConfigured(): boolean {
     return Boolean(this.config.apiKey)
   }
-
   /**
    * Search for available images for a field
    */
   async searchImages(request: PlanetImageRequest): Promise<PlanetImageItem[]> {
     if (!this.isConfigured()) {
-
       return []
     }
-
     try {
       const searchRequest = {
         item_types: request.itemTypes,
@@ -135,7 +123,6 @@ class PlanetLabsService {
           ]
         }
       }
-
       const response = await fetch(`${this.config.baseUrl}/data/v1/quick-search`, {
         method: 'POST',
         headers: {
@@ -145,20 +132,16 @@ class PlanetLabsService {
         body: JSON.stringify(searchRequest),
         signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
       })
-
       if (!response.ok) {
         throw new Error(`Planet Labs API error: ${response.status} ${response.statusText}`)
       }
-
       const data = await response.json()
       return data.features || []
-
     } catch (error) {
       console.error('Error searching Planet Labs images:', error)
       return []
     }
   }
-
   /**
    * Get the latest high-resolution image for a field
    */
@@ -167,7 +150,6 @@ class PlanetLabsService {
       // Search for images from the last 30 days
       const endDate = new Date()
       const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000)
-
       const images = await this.searchImages({
         geometry: fieldGeometry,
         itemTypes: ['PSScene'], // PlanetScope imagery
@@ -176,25 +158,19 @@ class PlanetLabsService {
         cloudCover: 20, // Max 20% cloud cover
         limit: 10
       })
-
       if (images.length === 0) {
-
         return null
       }
-
       // Sort by acquisition date and return the most recent
       const sortedImages = images.sort((a, b) => 
         new Date(b.acquisitionDate).getTime() - new Date(a.acquisitionDate).getTime()
       )
-
       return sortedImages[0]
-
     } catch (error) {
       console.error('Error getting latest Planet Labs image:', error)
       return null
     }
   }
-
   /**
    * Download and analyze image for NDVI calculation
    */
@@ -202,7 +178,6 @@ class PlanetLabsService {
     if (!this.isConfigured()) {
       return null
     }
-
     try {
       // Get image metadata and download links
       const imageResponse = await fetch(
@@ -214,13 +189,10 @@ class PlanetLabsService {
           signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
         }
       )
-
       if (!imageResponse.ok) {
         throw new Error(`Failed to get image metadata: ${imageResponse.statusText}`)
       }
-
       const imageData = await imageResponse.json()
-      
       // For now, return simulated analytics based on real metadata
       // In production, this would process the actual imagery
       return {
@@ -256,13 +228,11 @@ class PlanetLabsService {
           }
         }
       }
-
     } catch (error) {
       console.error('Error analyzing Planet Labs image:', error)
       return null
     }
   }
-
   /**
    * Get available image assets for download
    */
@@ -270,7 +240,6 @@ class PlanetLabsService {
     if (!this.isConfigured()) {
       return {}
     }
-
     try {
       const response = await fetch(
         `${this.config.baseUrl}/data/v1/item-types/${itemType}/items/${imageId}/assets`,
@@ -281,19 +250,15 @@ class PlanetLabsService {
           signal: AbortSignal.timeout(this.REQUEST_TIMEOUT)
         }
       )
-
       if (!response.ok) {
         throw new Error(`Failed to get image assets: ${response.statusText}`)
       }
-
       return await response.json()
-
     } catch (error) {
       console.error('Error getting Planet Labs assets:', error)
       return {}
     }
   }
-
   /**
    * Create field geometry from boundary coordinates
    */
@@ -304,13 +269,11 @@ class PlanetLabsService {
         coords[0].lng !== coords[coords.length - 1].lng) {
       coords.push(coords[0])
     }
-
     return {
       type: 'Polygon',
       coordinates: [coords.map(coord => [coord.lng, coord.lat])]
     }
   }
-
   /**
    * Calculate field statistics from Planet Labs imagery
    */
@@ -320,27 +283,20 @@ class PlanetLabsService {
   ): Promise<PlanetAnalytics | null> {
     try {
       const latestImage = await this.getLatestImage(fieldGeometry)
-      
       if (!latestImage) {
-
         return null
       }
-
       const analytics = await this.analyzeImage(latestImage.id, latestImage.itemType)
-      
       if (analytics) {
         analytics.fieldId = fieldId
       }
-
       return analytics
-
     } catch (error) {
       console.error('Error getting field statistics from Planet Labs:', error)
       return null
     }
   }
 }
-
 // Export singleton instance
 export const planetLabsService = new PlanetLabsService()
 export { PlanetLabsService }

@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -8,8 +7,6 @@ import { BreedingManagement } from '../../../components/livestock/breeding-manag
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../../components/ui/client-floating-button'
 import { Plus, Heart, Calendar, Users, TrendingUp } from 'lucide-react'
-
-
 export default function BreedingPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -23,15 +20,12 @@ export default function BreedingPage() {
     successRate: 0 
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -39,19 +33,16 @@ export default function BreedingPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=breeding')
             return
           }
-
           // Fetch breeding records
           const breedingResponse = await fetch('/api/livestock/breeding')
           if (breedingResponse.ok) {
             const records = await breedingResponse.json()
             setBreedingRecords(records)
-
             // Calculate stats on client side
             const calculatedStats = {
               total: records.length,
@@ -61,7 +52,6 @@ export default function BreedingPage() {
               upcomingBirths: 0, // Will calculate below
               successRate: 0 // Will calculate below
             }
-
             // Upcoming births in next 30 days
             const thirtyDaysFromNow = new Date()
             thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30)
@@ -71,7 +61,6 @@ export default function BreedingPage() {
               new Date(record.expectedDueDate) >= new Date() &&
               !record.actualBirthDate
             ).length
-
             // Success rate calculation
             const completedBreedings = records.filter((record: any) => 
               record.status === 'completed' || record.actualBirthDate
@@ -82,10 +71,8 @@ export default function BreedingPage() {
             calculatedStats.successRate = completedBreedings.length > 0 
               ? (successfulBreedings.length / completedBreedings.length) * 100 
               : 0
-
             setStats(calculatedStats)
           }
-
           // Fetch animals for breeding
           const animalsResponse = await fetch('/api/livestock/animals')
           if (animalsResponse.ok) {
@@ -100,10 +87,8 @@ export default function BreedingPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -114,11 +99,9 @@ export default function BreedingPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -138,7 +121,6 @@ export default function BreedingPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -156,7 +138,6 @@ export default function BreedingPage() {
             />
           </div>
         </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -170,7 +151,6 @@ export default function BreedingPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -182,7 +162,6 @@ export default function BreedingPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -194,7 +173,6 @@ export default function BreedingPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -207,7 +185,6 @@ export default function BreedingPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Breeding Management */}
         <ModernCard>
           <ModernCardHeader>

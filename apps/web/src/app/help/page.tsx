@@ -10,8 +10,6 @@ import {
   Leaf, Satellite, Target, Settings, Users, ExternalLink,
   ChevronRight, Search, Phone, Clock
 } from 'lucide-react'
-
-
 const helpSections = [
   {
     id: 'getting-started',
@@ -206,7 +204,6 @@ const helpSections = [
     ]
   }
 ]
-
 const quickActions = [
   {
     title: 'Video Tutorials',
@@ -237,12 +234,9 @@ const quickActions = [
     external: true
   }
 ]
-
 export default function HelpPage() {
-
   return (
     <DashboardLayout>
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header - Consistent with other pages */}
         <div className="mb-8">
@@ -250,13 +244,11 @@ export default function HelpPage() {
           <p className="text-lg text-sage-600 mb-6">
             Find guides and support for using your farm management platform
           </p>
-          
           {/* Search Bar */}
           <div className="max-w-2xl">
             <HelpSearch placeholder="Search help articles, guides, and tutorials..." />
           </div>
         </div>
-
         {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-sage-800 mb-6">Quick Actions</h2>
@@ -280,7 +272,6 @@ export default function HelpPage() {
             ))}
           </div>
         </div>
-
         {/* Support Contact Info */}
         <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
@@ -323,7 +314,6 @@ export default function HelpPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Help Sections */}
         <div className="space-y-12">
           {helpSections.map((section) => (
@@ -337,7 +327,6 @@ export default function HelpPage() {
                   <p className="text-sage-600">{section.description}</p>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {section.articles.map((article, index) => (
                   <ModernCard key={index} variant="soft" className="group hover:shadow-soft transition-all duration-300">
@@ -368,7 +357,6 @@ export default function HelpPage() {
             </div>
           ))}
         </div>
-
         {/* Additional Help */}
         <div className="mt-16 text-center">
           <Alert className="max-w-2xl mx-auto">

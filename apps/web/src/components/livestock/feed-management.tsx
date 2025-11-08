@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -15,31 +14,26 @@ import {
   DollarSign
 } from 'lucide-react'
 import Link from 'next/link'
-
 interface FeedManagementProps {
   feedRecords: any[]
   farms: any[]
   animals: any[]
 }
-
 export function FeedManagement({ feedRecords, farms, animals }: FeedManagementProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFarm, setSelectedFarm] = useState('all')
   const [selectedAnimal, setSelectedAnimal] = useState('all')
   const [selectedFeedType, setSelectedFeedType] = useState('all')
   const [dateRange, setDateRange] = useState('30') // days
-
   // Filter feed records
   const filteredRecords = feedRecords.filter(record => {
     const matchesSearch = record.animal.tagNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (record.animal.name && record.animal.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          record.feedType.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (record.brand && record.brand.toLowerCase().includes(searchTerm.toLowerCase()))
-    
     const matchesFarm = selectedFarm === 'all' || record.animal.farm?.name === selectedFarm
     const matchesAnimal = selectedAnimal === 'all' || record.animalId === selectedAnimal
     const matchesFeedType = selectedFeedType === 'all' || record.feedType === selectedFeedType
-    
     // Date range filter
     let matchesDate = true
     if (dateRange !== 'all') {
@@ -48,19 +42,15 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
       cutoffDate.setDate(cutoffDate.getDate() - daysAgo)
       matchesDate = new Date(record.feedDate) >= cutoffDate
     }
-    
     return matchesSearch && matchesFarm && matchesAnimal && matchesFeedType && matchesDate
   })
-
   // Calculate summary stats for filtered records
   const totalCost = filteredRecords.reduce((sum, record) => sum + (record.totalCost || 0), 0)
   const totalQuantity = filteredRecords.reduce((sum, record) => sum + record.quantity, 0)
   const avgCostPerPound = totalQuantity > 0 ? totalCost / totalQuantity : 0
-
   // Get unique values for filters
   const uniqueFarms = Array.from(new Set(feedRecords.map(record => record.animal.farm?.name).filter(Boolean)))
   const uniqueFeedTypes = Array.from(new Set(feedRecords.map(record => record.feedType)))
-
   if (feedRecords.length === 0) {
     return (
       <div className="text-center py-12">
@@ -75,7 +65,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -89,7 +78,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
             className="pl-10"
           />
         </div>
-        
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
@@ -100,7 +88,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
             <option key={farm} value={farm}>{farm}</option>
           ))}
         </select>
-
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
@@ -113,7 +100,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
             </option>
           ))}
         </select>
-
         <select
           value={selectedFeedType}
           onChange={(e) => setSelectedFeedType(e.target.value)}
@@ -126,7 +112,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
             </option>
           ))}
         </select>
-
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
@@ -139,7 +124,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
           <option value="all">All time</option>
         </select>
       </div>
-
       {/* Summary Stats */}
       {filteredRecords.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
@@ -165,7 +149,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
           </div>
         </div>
       )}
-
       {/* Feed Records Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -212,7 +195,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                     </div>
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     <div className="text-sm font-medium text-gray-900 capitalize">
@@ -223,13 +205,11 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                     )}
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
                     {record.quantity} {record.unit}
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     {record.totalCost && (
@@ -244,7 +224,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                     )}
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-xs space-y-1">
                     {record.protein && (
@@ -258,13 +237,11 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                     )}
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
                     {new Date(record.feedDate).toLocaleDateString()}
                   </div>
                 </td>
-                
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="sm">
@@ -283,7 +260,6 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
           </tbody>
         </table>
       </div>
-
       {filteredRecords.length === 0 && searchTerm && (
         <div className="text-center py-8">
           <p className="text-gray-500">No feed records found matching your search criteria.</p>

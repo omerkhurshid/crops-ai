@@ -1,5 +1,4 @@
 'use client'
-
 import { useSession } from '../../lib/auth-unified'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -15,7 +14,6 @@ import { ClientFloatingButton } from '../../components/ui/client-floating-button
 import { NoHealthDataEmptyState, EmptyState } from '../../components/ui/empty-states'
 import { FarmSelector } from '../../components/weather/farm-selector'
 import { Leaf, Satellite, Brain, Activity, Settings, Zap, BarChart3, Eye, TrendingUp } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
@@ -27,53 +25,43 @@ interface Farm {
     area: number
   }>
 }
-
 export default function CropHealthPage({ searchParams }: { searchParams: { farmId?: string; view?: string } }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farms, setFarms] = useState<Farm[]>([])
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Fetch farms data
     const fetchData = async () => {
       try {
         const farmsResponse = await fetch('/api/farms')
         let farmsData: Farm[] = []
-        
         if (farmsResponse.ok) {
           farmsData = await farmsResponse.json()
           setFarms(farmsData)
         }
-
         if (farmsData.length === 0) {
           router.push('/farms/create-unified')
           return
         }
-
         // Select farm
         const targetFarmId = searchParams.farmId || farmsData[0]?.id
         const farm = farmsData.find(f => f.id === targetFarmId) || farmsData[0]
         setSelectedFarm(farm)
-
       } catch (error) {
         console.error('Error fetching farms data:', error)
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router, searchParams])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -84,13 +72,10 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   const view = searchParams.view || 'farmer-focused'
-
   return (
     <DashboardLayout>
       <ClientFloatingButton
@@ -98,7 +83,6 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
         label="Health Settings"
         variant="secondary"
       />
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -112,7 +96,6 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
                 Monitor crop health, detect diseases early, and optimize field management
               </p>
             </div>
-
             {farms.length > 0 && (
               <div className="w-64">
                 <FarmSelector 
@@ -123,7 +106,6 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
             )}
           </div>
         </div>
-
         {/* View Toggle */}
         <div className="mb-8">
           <div className="flex space-x-4">
@@ -161,21 +143,18 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
             </button>
           </div>
         </div>
-
         {/* Main Content */}
         {selectedFarm ? (
           <div className="space-y-8">
             {view === 'farmer-focused' && (
               <FarmerFocusedDashboard farmId={selectedFarm.id} />
             )}
-            
             {view === 'advanced' && (
               <>
                 <HealthDashboard farmId={selectedFarm.id} />
                 <AdvancedVisualizations farmId={selectedFarm.id} />
               </>
             )}
-
             {view === 'satellite' && selectedFarm.latitude && selectedFarm.longitude && (
               <NDVIMap 
                 farmId={selectedFarm.id}

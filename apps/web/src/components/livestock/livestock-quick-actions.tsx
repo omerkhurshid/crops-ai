@@ -1,14 +1,10 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-
 interface LivestockQuickActionsProps {
   className?: string
 }
-
 export function LivestockQuickActions({ className = "" }: LivestockQuickActionsProps) {
   const router = useRouter()
-
   return (
     <div className={`mt-4 pt-3 border-t border-earth-200 flex flex-wrap gap-2 ${className}`}>
       <button

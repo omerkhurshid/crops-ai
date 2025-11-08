@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -11,7 +10,6 @@ import {
   MapPin, Calendar, Plus, Filter, FileText, Activity
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface Transaction {
   id: string
   type: 'INCOME' | 'EXPENSE'
@@ -30,7 +28,6 @@ interface Transaction {
     cropType: string
   }
 }
-
 interface FarmFinancialData {
   id: string
   name: string
@@ -49,12 +46,10 @@ interface FarmFinancialData {
     profit: number
   }>
 }
-
 interface FarmFinancialDetailProps {
   farmId: string
   onBack: () => void
 }
-
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   // Income categories
   CROP_SALES: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
@@ -62,7 +57,6 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   SUBSIDIES: { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
   LEASE_INCOME: { bg: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-300' },
   OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' },
-  
   // Expense categories
   SEEDS: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300' },
   FERTILIZER: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
@@ -75,18 +69,15 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   INSURANCE: { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-300' },
   OTHER_EXPENSE: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-300' },
 }
-
 export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps) {
   const [farmData, setFarmData] = useState<FarmFinancialData | null>(null)
   const [loading, setLoading] = useState(true)
   const [showTransactionModal, setShowTransactionModal] = useState(false)
   const [transactionType, setTransactionType] = useState<'INCOME' | 'EXPENSE'>('INCOME')
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all')
-
   useEffect(() => {
     fetchFarmData()
   }, [farmId])
-
   const fetchFarmData = async () => {
     try {
       setLoading(true)
@@ -104,7 +95,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
       setLoading(false)
     }
   }
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -113,17 +103,14 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }
-
   const handleAddTransaction = (type: 'INCOME' | 'EXPENSE') => {
     setTransactionType(type)
     setShowTransactionModal(true)
   }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -131,7 +118,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
       </div>
     )
   }
-
   if (!farmData) {
     return (
       <div className="text-center py-12">
@@ -149,14 +135,12 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
       </div>
     )
   }
-
   const filteredTransactions = farmData.transactions.filter(t => {
     if (filter === 'all') return true
     if (filter === 'income') return t.type === 'INCOME'
     if (filter === 'expense') return t.type === 'EXPENSE'
     return true
   })
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -182,7 +166,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
           </Button>
         </div>
       </div>
-
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <ModernCard>
@@ -200,7 +183,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard>
           <ModernCardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -216,7 +198,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard>
           <ModernCardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -241,7 +222,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard>
           <ModernCardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -258,7 +238,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
           </ModernCardContent>
         </ModernCard>
       </div>
-
       {/* Monthly Trend Chart */}
       <ModernCard>
         <ModernCardHeader>
@@ -271,7 +250,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
               const maxValue = Math.max(...farmData.monthlyData.map(m => Math.max(m.income, m.expenses)))
               const incomeHeight = (month.income / maxValue) * 100
               const expenseHeight = (month.expenses / maxValue) * 100
-
               return (
                 <div key={month.month} className="flex-1 flex flex-col items-center gap-1">
                   <div className="relative w-full h-48 flex items-end gap-1">
@@ -301,7 +279,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Recent Transactions */}
       <ModernCard>
         <ModernCardHeader>
@@ -331,7 +308,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             <div className="p-6 space-y-3">
               {filteredTransactions.map((transaction) => {
                 const categoryStyle = CATEGORY_COLORS[transaction.category] || CATEGORY_COLORS.OTHER_EXPENSE
-
                 return (
                   <div
                     key={transaction.id}
@@ -360,13 +336,11 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                             {formatDate(transaction.transactionDate)}
                           </span>
                         </div>
-                        
                         {transaction.notes && (
                           <p className="text-sm text-gray-700">
                             {transaction.notes}
                           </p>
                         )}
-                        
                         <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                           {transaction.field && (
                             <span className="flex items-center gap-1">
@@ -382,7 +356,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                           )}
                         </div>
                       </div>
-                      
                       <div className={cn(
                         "text-lg font-bold",
                         transaction.type === 'INCOME' ? "text-green-700" : "text-red-700"
@@ -397,7 +370,6 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
           </ScrollArea>
         </ModernCardContent>
       </ModernCard>
-
       {/* Transaction Modal */}
       {showTransactionModal && (
         <TransactionModal

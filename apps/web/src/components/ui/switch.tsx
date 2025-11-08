@@ -1,7 +1,5 @@
 'use client'
-
 import { forwardRef } from 'react'
-
 interface SwitchProps {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
@@ -12,7 +10,6 @@ interface SwitchProps {
   'aria-label'?: string
   'aria-describedby'?: string
 }
-
 export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
   ({ checked = false, onCheckedChange, disabled = false, size = 'md', className = '', id, ...props }, ref) => {
     const handleClick = () => {
@@ -20,7 +17,6 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         onCheckedChange(!checked)
       }
     }
-
     const sizeClasses = {
       sm: {
         track: 'w-8 h-4',
@@ -38,9 +34,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         translate: checked ? 'translate-x-7' : 'translate-x-0.5'
       }
     }
-
     const { track, thumb, translate } = sizeClasses[size]
-
     return (
       <button
         ref={ref}
@@ -79,5 +73,4 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     )
   }
 )
-
 Switch.displayName = 'Switch'

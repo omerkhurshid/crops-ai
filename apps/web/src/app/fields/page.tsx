@@ -9,29 +9,23 @@ import { Navbar } from '../../components/navigation/navbar'
 import { FieldsQuickActions, FieldsNavigateButton } from '../../components/fields/fields-quick-actions'
 import { FieldsHeaderActions } from '../../components/fields/fields-header-actions'
 import { Leaf, MapPin, Plus } from 'lucide-react'
-
-
 export default function FieldsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [allFields, setAllFields] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Fetch farms and fields data
     const fetchFieldsData = async () => {
       try {
         const response = await fetch('/api/farms')
         if (response.ok) {
           const farms = await response.json()
-          
           // Flatten all fields from all farms
           const fields = farms.flatMap((farm: any) => 
             (farm.fields || []).map((field: any) => ({
@@ -52,7 +46,6 @@ export default function FieldsPage() {
               soilType: field.soilType || 'Unknown'
             }))
           )
-          
           setAllFields(fields)
         }
       } catch (error) {
@@ -61,10 +54,8 @@ export default function FieldsPage() {
         setIsLoading(false)
       }
     }
-
     fetchFieldsData()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -73,11 +64,9 @@ export default function FieldsPage() {
       </div>
     )
   }
-
   if (!session) {
     return null
   }
-
   function getHealthStatus(ndvi?: number) {
     if (!ndvi) return 'Unknown'
     if (ndvi >= 0.8) return 'Excellent'
@@ -85,13 +74,11 @@ export default function FieldsPage() {
     if (ndvi >= 0.5) return 'Fair'
     return 'Poor'
   }
-
   function getRelativeTime(date: Date) {
     const now = new Date()
     const diff = now.getTime() - date.getTime()
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(hours / 24)
-    
     if (days > 0) {
       return `${days} day${days > 1 ? 's' : ''} ago`
     } else if (hours > 0) {
@@ -100,7 +87,6 @@ export default function FieldsPage() {
       return 'Recently'
     }
   }
-
   const getHealthColor = (health: string) => {
     switch (health) {
       case 'Excellent': return 'bg-green-100 text-green-800'
@@ -110,11 +96,9 @@ export default function FieldsPage() {
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   return (
     <div className="minimal-page">
       <Navbar />
-      
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           {/* Header */}
@@ -125,7 +109,6 @@ export default function FieldsPage() {
             </div>
             <FieldsHeaderActions />
           </div>
-
           {/* Summary Stats */}
           {allFields.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -135,7 +118,6 @@ export default function FieldsPage() {
                   <div className="text-2xl font-bold text-green-600">{allFields.length}</div>
                 </div>
               </ModernCard>
-
               <ModernCard>
                 <div className="p-6">
                   <h3 className="text-sm font-medium text-gray-600 mb-2">Total Area</h3>
@@ -144,7 +126,6 @@ export default function FieldsPage() {
                   </div>
                 </div>
               </ModernCard>
-
               <ModernCard>
                 <div className="p-6">
                   <h3 className="text-sm font-medium text-gray-600 mb-2">Avg NDVI</h3>
@@ -156,7 +137,6 @@ export default function FieldsPage() {
                   </div>
                 </div>
               </ModernCard>
-
               <ModernCard>
                 <div className="p-6">
                   <h3 className="text-sm font-medium text-gray-600 mb-2">Healthy Fields</h3>
@@ -167,7 +147,6 @@ export default function FieldsPage() {
               </ModernCard>
             </div>
           )}
-
           {/* Fields List */}
           {allFields.length === 0 ? (
             <ModernCard className="border-2 border-yellow-200 bg-yellow-50">
@@ -227,7 +206,6 @@ export default function FieldsPage() {
                         </div>
                       </div>
                     </div>
-
                     {/* Health Metrics */}
                     <div>
                       <h4 className="font-medium text-gray-900 mb-2">Health Metrics</h4>
@@ -250,7 +228,6 @@ export default function FieldsPage() {
                         </div>
                       </div>
                     </div>
-
                     {/* Progress Bar */}
                     <div>
                       <h4 className="font-medium text-gray-900 mb-2">Growing Season</h4>
@@ -263,7 +240,6 @@ export default function FieldsPage() {
                           const daysElapsed = Math.floor((today.getTime() - planted.getTime()) / (1000 * 60 * 60 * 24))
                           const daysRemaining = Math.floor((harvest.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
                           const progress = Math.min(100, Math.max(0, Math.round((daysElapsed / totalDays) * 100)))
-                          
                           return (
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
@@ -283,7 +259,6 @@ export default function FieldsPage() {
                         <p className="text-sm text-gray-500">No planting schedule set</p>
                       )}
                     </div>
-
                     {/* Actions */}
                     <div className="flex flex-col space-y-2">
                       <Button variant="outline" size="sm">
@@ -302,7 +277,6 @@ export default function FieldsPage() {
               ))}
             </div>
           )}
-
           {/* Quick Actions */}
           <div className="mt-8">
             <ModernCard>
@@ -314,17 +288,14 @@ export default function FieldsPage() {
                     <div className="font-medium">NDVI Analysis</div>
                     <div className="text-sm text-gray-500 mt-1">Monitor vegetation health</div>
                   </Button>
-                  
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Stress Detection</div>
                     <div className="text-sm text-gray-500 mt-1">Identify crop stress patterns</div>
                   </Button>
-                  
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Yield Prediction</div>
                     <div className="text-sm text-gray-500 mt-1">AI-powered yield forecasts</div>
                   </Button>
-
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Field Comparison</div>
                     <div className="text-sm text-gray-500 mt-1">Compare field performance</div>

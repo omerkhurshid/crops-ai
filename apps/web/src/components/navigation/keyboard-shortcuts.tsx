@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -9,7 +8,6 @@ import {
   CloudRain, DollarSign, BarChart3, Settings, HelpCircle,
   RefreshCw, ArrowUp, ArrowDown
 } from 'lucide-react'
-
 interface ShortcutAction {
   id: string
   key: string
@@ -20,16 +18,13 @@ interface ShortcutAction {
   icon: React.ReactNode
   disabled?: boolean
 }
-
 interface KeyboardShortcutsProps {
   customShortcuts?: ShortcutAction[]
   onShortcutExecuted?: (shortcutId: string) => void
 }
-
 export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: KeyboardShortcutsProps) {
   const [showModal, setShowModal] = useState(false)
   const [executedShortcut, setExecutedShortcut] = useState<string | null>(null)
-
   // Default shortcuts
   const defaultShortcuts: ShortcutAction[] = [
     // Navigation
@@ -78,7 +73,6 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       category: 'navigation',
       icon: <BarChart3 className="h-4 w-4" />
     },
-
     // Search
     {
       id: 'search',
@@ -94,7 +88,6 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       category: 'search',
       icon: <Search className="h-4 w-4" />
     },
-
     // Actions
     {
       id: 'new-farm',
@@ -114,7 +107,6 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       category: 'actions',
       icon: <RefreshCw className="h-4 w-4" />
     },
-
     // General
     {
       id: 'help',
@@ -144,9 +136,7 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       icon: <HelpCircle className="h-4 w-4" />
     }
   ]
-
   const allShortcuts = [...defaultShortcuts, ...customShortcuts]
-
   // Handle keyboard events
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -161,10 +151,8 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
           return
         }
       }
-
       const matchingShortcut = allShortcuts.find(shortcut => {
         if (shortcut.disabled) return false
-
         const keyMatches = shortcut.key.toLowerCase() === event.key.toLowerCase()
         const modifiersMatch = shortcut.modifiers.every(modifier => {
           switch (modifier) {
@@ -185,30 +173,23 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
           event.altKey && 'alt', 
           event.shiftKey && 'shift'
         ].filter(Boolean).length
-
         return keyMatches && modifiersMatch
       })
-
       if (matchingShortcut) {
         event.preventDefault()
         event.stopPropagation()
-        
         matchingShortcut.action()
         setExecutedShortcut(matchingShortcut.id)
-        
         if (onShortcutExecuted) {
           onShortcutExecuted(matchingShortcut.id)
         }
-
         // Clear executed indicator after animation
         setTimeout(() => setExecutedShortcut(null), 1000)
       }
     }
-
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [allShortcuts, onShortcutExecuted])
-
   // Close modal on escape
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -216,11 +197,9 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
         setShowModal(false)
       }
     }
-
     document.addEventListener('keydown', handleEscape)
     return () => document.removeEventListener('keydown', handleEscape)
   }, [showModal])
-
   const getModifierSymbol = (modifier: string) => {
     switch (modifier) {
       case 'cmd': return '⌘'
@@ -230,13 +209,11 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       default: return modifier
     }
   }
-
   const formatShortcut = (shortcut: ShortcutAction) => {
     const modifiers = shortcut.modifiers.map(getModifierSymbol)
     const key = shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase()
     return [...modifiers, key].join(' + ')
   }
-
   const groupedShortcuts = allShortcuts.reduce((groups, shortcut) => {
     if (!groups[shortcut.category]) {
       groups[shortcut.category] = []
@@ -244,21 +221,18 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
     groups[shortcut.category].push(shortcut)
     return groups
   }, {} as Record<string, ShortcutAction[]>)
-
   const categoryLabels = {
     navigation: 'Navigation',
     actions: 'Actions',
     search: 'Search & Filters',
     general: 'General'
   }
-
   const categoryIcons = {
     navigation: <Home className="h-4 w-4" />,
     actions: <Plus className="h-4 w-4" />,
     search: <Search className="h-4 w-4" />,
     general: <Settings className="h-4 w-4" />
   }
-
   return (
     <>
       {/* Keyboard Shortcuts Modal */}
@@ -327,7 +301,6 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                   </div>
                 ))}
               </div>
-
               <div className="mt-8 pt-6 border-t border-sage-200">
                 <div className="flex items-center justify-between">
                   <div className="text-sm text-sage-600">
@@ -344,7 +317,6 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
           </ModernCard>
         </div>
       )}
-
       {/* Executed Shortcut Indicator */}
       {executedShortcut && (
         <div className="fixed bottom-4 right-4 z-40 animate-in fade-in slide-in-from-right-2 duration-300">
@@ -361,20 +333,16 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
     </>
   )
 }
-
 // Hook to add the keyboard shortcuts system to any component
 export function useKeyboardShortcuts(shortcuts: ShortcutAction[] = []) {
   const [shortcutsComponent, setShortcutsComponent] = useState<React.ReactElement | null>(null)
-
   useEffect(() => {
     setShortcutsComponent(
       <KeyboardShortcuts customShortcuts={shortcuts} />
     )
   }, [shortcuts])
-
   return shortcutsComponent
 }
-
 // Predefined shortcut sets for different pages
 export const farmPageShortcuts: ShortcutAction[] = [
   {
@@ -390,7 +358,6 @@ export const farmPageShortcuts: ShortcutAction[] = [
     icon: <Plus className="h-4 w-4" />
   }
 ]
-
 export const weatherPageShortcuts: ShortcutAction[] = [
   {
     id: 'refresh-weather',

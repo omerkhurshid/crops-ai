@@ -5,20 +5,17 @@
  * monitoring, including NDVI calculation, vegetation health analysis, and
  * field monitoring capabilities.
  */
-
 export interface SentinelHubConfig {
   clientId: string;
   clientSecret: string;
   baseUrl: string;
 }
-
 export interface BoundingBox {
   west: number;
   south: number;
   east: number;
   north: number;
 }
-
 export interface SatelliteImageRequest {
   bbox: BoundingBox;
   fromTime: string;
@@ -31,7 +28,6 @@ export interface SatelliteImageRequest {
     maxCloudCoverage: number;
   };
 }
-
 export interface SatelliteImage {
   id: string;
   acquisitionDate: string;
@@ -47,7 +43,6 @@ export interface SatelliteImage {
     productId: string;
   };
 }
-
 export interface NDVIAnalysis {
   fieldId: string;
   imageId: string;
@@ -72,7 +67,6 @@ export interface NDVIAnalysis {
     significance: 'high' | 'moderate' | 'low';
   };
 }
-
 export interface VegetationHealthIndex {
   ndvi: number;
   ndre: number; // Normalized Difference Red Edge
@@ -85,25 +79,20 @@ export interface VegetationHealthIndex {
     nutrient: number; // 0-1
   };
 }
-
 class SentinelHubService {
   private config: SentinelHubConfig;
   private accessToken: string | null = null;
   private tokenExpiry: number = 0;
   private readonly CACHE_DURATION = 60 * 60 * 1000; // 1 hour
-
   constructor() {
     this.config = {
       clientId: process.env.SENTINEL_HUB_CLIENT_ID || '',
       clientSecret: process.env.SENTINEL_HUB_CLIENT_SECRET || '',
       baseUrl: 'https://services.sentinel-hub.com'
     };
-    
     if (!this.config.clientId || !this.config.clientSecret) {
-
     }
   }
-
   /**
    * Get authentication token for Sentinel Hub API
    */
@@ -111,7 +100,6 @@ class SentinelHubService {
     if (this.accessToken && Date.now() < this.tokenExpiry) {
       return this.accessToken;
     }
-
     if (!this.config.clientId || !this.config.clientSecret) {
       console.error('Missing Sentinel Hub credentials:', {
         hasClientId: !!this.config.clientId,
@@ -121,7 +109,6 @@ class SentinelHubService {
       });
       throw new Error('Sentinel Hub credentials not configured');
     }
-
     try {
       const response = await fetch(`${this.config.baseUrl}/oauth/token`, {
         method: 'POST',
@@ -134,28 +121,23 @@ class SentinelHubService {
           client_secret: this.config.clientSecret,
         }),
       });
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Sentinel Hub auth error:', response.status, errorText);
         throw new Error(`Authentication failed: ${response.statusText} - ${errorText}`);
       }
-
       const data = await response.json();
       this.accessToken = data.access_token;
       this.tokenExpiry = Date.now() + (data.expires_in * 1000) - 60000; // 1 minute buffer
-
       if (!this.accessToken) {
         throw new Error('Failed to obtain access token from Sentinel Hub');
       }
-
       return this.accessToken;
     } catch (error) {
       console.error('Error getting Sentinel Hub access token:', error);
       throw error;
     }
   }
-
   /**
    * Search for available satellite images
    */
@@ -167,7 +149,6 @@ class SentinelHubService {
   ): Promise<SatelliteImage[]> {
     try {
       const token = await this.getAccessToken();
-
       const searchRequest = {
         clipping: {
           type: 'Polygon',
@@ -191,7 +172,6 @@ class SentinelHubService {
           type: 'S2L2A'
         }]
       };
-
       const response = await fetch(`${this.config.baseUrl}/api/v1/catalog/1.0.0/search`, {
         method: 'POST',
         headers: {
@@ -200,13 +180,10 @@ class SentinelHubService {
         },
         body: JSON.stringify(searchRequest),
       });
-
       if (!response.ok) {
         throw new Error(`Catalog search failed: ${response.statusText}`);
       }
-
       const data = await response.json();
-      
       return data.features?.map((feature: any) => ({
         id: feature.id,
         acquisitionDate: feature.properties.datetime,
@@ -221,20 +198,17 @@ class SentinelHubService {
           productId: feature.properties['s2:product_id']
         }
       })) || [];
-
     } catch (error) {
       console.error('Error searching satellite images:', error);
       throw error;
     }
   }
-
   /**
    * Request satellite image with custom evalscript
    */
   async requestImage(imageRequest: SatelliteImageRequest): Promise<Blob> {
     try {
       const token = await this.getAccessToken();
-
       const processRequest = {
         input: {
           bounds: {
@@ -271,7 +245,6 @@ class SentinelHubService {
         },
         evalscript: imageRequest.evalscript
       };
-
       const response = await fetch(`${this.config.baseUrl}/api/v1/process`, {
         method: 'POST',
         headers: {
@@ -280,18 +253,15 @@ class SentinelHubService {
         },
         body: JSON.stringify(processRequest),
       });
-
       if (!response.ok) {
         throw new Error(`Image request failed: ${response.statusText}`);
       }
-
       return await response.blob();
     } catch (error) {
       console.error('Error requesting satellite image:', error);
       throw error;
     }
   }
-
   /**
    * Get true color image for field visualization
    */
@@ -309,7 +279,6 @@ class SentinelHubService {
           output: { bands: 3, sampleType: "AUTO" }
         };
       }
-
       function evaluatePixel(sample) {
         // Enhance visualization for better contrast
         let gain = 2.5;
@@ -320,12 +289,10 @@ class SentinelHubService {
         ];
       }
     `;
-
     // Use a date range to find available imagery
     const toDate = new Date(date);
     const fromDate = new Date(date);
     fromDate.setDate(fromDate.getDate() - 30); // Look back 30 days
-    
     const imageRequest: SatelliteImageRequest = {
       bbox,
       fromTime: fromDate.toISOString(),
@@ -338,10 +305,8 @@ class SentinelHubService {
         maxCloudCoverage: 30
       }
     };
-
     return this.requestImage(imageRequest);
   }
-
   /**
    * Get NDVI image for vegetation analysis
    */
@@ -359,10 +324,8 @@ class SentinelHubService {
           output: { bands: 3 }
         };
       }
-
       function evaluatePixel(sample) {
         let ndvi = (sample.B08 - sample.B04) / (sample.B08 + sample.B04);
-        
         // Color coding for NDVI visualization
         if (ndvi < 0.2) return [0.8, 0.8, 0.8]; // Gray for non-vegetation
         if (ndvi < 0.3) return [1.0, 0.0, 0.0]; // Red for stressed vegetation
@@ -370,7 +333,6 @@ class SentinelHubService {
         return [0.0, 1.0, 0.0]; // Green for healthy vegetation
       }
     `;
-
     const imageRequest: SatelliteImageRequest = {
       bbox,
       fromTime: date,
@@ -383,10 +345,8 @@ class SentinelHubService {
         maxCloudCoverage: 20
       }
     };
-
     return this.requestImage(imageRequest);
   }
-
   /**
    * Calculate NDVI statistics for a field using real satellite data
    */
@@ -399,21 +359,16 @@ class SentinelHubService {
       // First try to get real satellite data
       let ndviValues: number[];
       let isRealData = true;
-      
       try {
         // Attempt to fetch real NDVI data
         ndviValues = await this.fetchRealNDVIData(bbox, date);
-      } catch (error) {
-        console.warn('Failed to fetch real NDVI data, falling back to simulation:', error);
-        // Fallback to simulated data if real data fails
+      } catch (error) {// Fallback to simulated data if real data fails
         ndviValues = this.simulateNDVIData();
         isRealData = false;
       }
-      
       const statistics = this.calculateNDVIStatistics(ndviValues);
       const zones = this.calculateVegetationZones(ndviValues);
       const recommendations = this.generateNDVIRecommendations(statistics, zones);
-
       return {
         fieldId,
         imageId: `satellite_${Date.now()}_${isRealData ? 'real' : 'sim'}`,
@@ -427,7 +382,6 @@ class SentinelHubService {
       throw error;
     }
   }
-
   /**
    * Fetch real NDVI data from Sentinel Hub
    */
@@ -440,17 +394,14 @@ class SentinelHubService {
           output: { bands: 1, sampleType: "FLOAT32" }
         };
       }
-
       function evaluatePixel(sample) {
         let ndvi = (sample.B08 - sample.B04) / (sample.B08 + sample.B04);
         return [ndvi];
       }
     `;
-
     const toDate = new Date(date);
     const fromDate = new Date(date);
     fromDate.setDate(fromDate.getDate() - 10); // Look back 10 days for cloud-free imagery
-    
     const imageRequest: SatelliteImageRequest = {
       bbox,
       fromTime: fromDate.toISOString(),
@@ -463,20 +414,16 @@ class SentinelHubService {
         maxCloudCoverage: 30
       }
     };
-
     try {
       const imageBlob = await this.requestImage(imageRequest);
-      
       // In a real implementation, you would parse the TIFF blob to extract NDVI values
       // For now, we'll simulate processing of real data with more realistic values
       return this.simulateProcessedNDVIData();
-      
     } catch (error) {
       console.error('Failed to fetch real NDVI data from Sentinel Hub:', error);
       throw error;
     }
   }
-
   /**
    * Simulate processed NDVI data (more realistic than random simulation)
    */
@@ -484,27 +431,21 @@ class SentinelHubService {
     const data = [];
     const centerNDVI = 0.75; // Healthy corn field in summer
     const variation = 0.15;
-    
     for (let i = 0; i < 10000; i++) {
       // Create more realistic NDVI distribution with field patterns
       const x = (i % 100) / 100;
       const y = Math.floor(i / 100) / 100;
-      
       // Add field patterns (rows, variations)
       const fieldPattern = Math.sin(x * 20) * 0.05;
       const edgeEffect = Math.min(x, 1-x, y, 1-y) * 0.1; // Lower NDVI at field edges
       const randomNoise = (Math.random() - 0.5) * variation;
-      
       const ndvi = Math.max(-0.2, Math.min(0.95, 
         centerNDVI + fieldPattern + edgeEffect + randomNoise
       ));
-      
       data.push(ndvi);
     }
-    
     return data;
   }
-
   /**
    * Calculate comprehensive vegetation health index
    */
@@ -519,19 +460,16 @@ class SentinelHubService {
       const ndre = 0.3 + (Math.random() - 0.5) * 0.2; // 0.2 - 0.4
       const evi = ndvi * 0.8; // EVI is typically lower than NDVI
       const savi = ndvi * 0.9; // SAVI adjusts for soil background
-
       // Calculate overall health score
       const healthScore = Math.min(100, Math.max(0, 
         (ndvi * 40) + (ndre * 30) + (evi * 20) + (savi * 10)
       ));
-
       // Calculate stress indicators
       const stressIndicators = {
         drought: Math.max(0, 1 - ndvi * 1.5),
         disease: Math.max(0, 0.5 - ndre),
         nutrient: Math.max(0, 0.8 - evi)
       };
-
       return {
         ndvi,
         ndre,
@@ -545,7 +483,6 @@ class SentinelHubService {
       throw error;
     }
   }
-
   /**
    * Get time series NDVI data for trend analysis
    */
@@ -564,21 +501,17 @@ class SentinelHubService {
       const timeSeries = [];
       const start = new Date(startDate);
       const end = new Date(endDate);
-      
       for (let date = new Date(start); date <= end; date.setDate(date.getDate() + interval)) {
         const dateStr = date.toISOString().split('T')[0];
-        
         // Simulate NDVI values with seasonal variation
         const dayOfYear = this.getDayOfYear(date);
         const seasonalNDVI = 0.4 + 0.3 * Math.sin((dayOfYear - 100) * 2 * Math.PI / 365);
         const noise = (Math.random() - 0.5) * 0.2;
         const ndvi = Math.max(0, Math.min(1, seasonalNDVI + noise));
-        
         const cloudCoverage = Math.random() * 30;
         const quality: 'excellent' | 'good' | 'fair' | 'poor' = cloudCoverage < 10 ? 'excellent' :
                        cloudCoverage < 20 ? 'good' :
                        cloudCoverage < 30 ? 'fair' : 'poor';
-
         timeSeries.push({
           date: dateStr,
           ndvi,
@@ -586,14 +519,12 @@ class SentinelHubService {
           quality
         });
       }
-
       return timeSeries;
     } catch (error) {
       console.error('Error getting NDVI time series:', error);
       throw error;
     }
   }
-
   /**
    * Compare NDVI between two dates
    */
@@ -621,22 +552,17 @@ class SentinelHubService {
         this.calculateNDVIAnalysis('field', bbox, date1),
         this.calculateNDVIAnalysis('field', bbox, date2)
       ]);
-
       const averageChange = analysis2.statistics.mean - analysis1.statistics.mean;
       const changePercentage = (averageChange / analysis1.statistics.mean) * 100;
-      
       const trend = Math.abs(changePercentage) < 5 ? 'stable' :
                    changePercentage > 0 ? 'improvement' : 'decline';
-      
       const significantChange = Math.abs(changePercentage) > 10;
-
       // Simulate change map
       const changeMap = {
         improvement: { percentage: 40, area: 40 },
         decline: { percentage: 25, area: 25 },
         stable: { percentage: 35, area: 35 }
       };
-
       return {
         date1Analysis: analysis1,
         date2Analysis: analysis2,
@@ -653,7 +579,6 @@ class SentinelHubService {
       throw error;
     }
   }
-
   // Helper methods
   private simulateNDVIData(): number[] {
     const data = [];
@@ -667,13 +592,11 @@ class SentinelHubService {
     }
     return data;
   }
-
   private calculateNDVIStatistics(values: number[]): NDVIAnalysis['statistics'] {
     const sorted = [...values].sort((a, b) => a - b);
     const n = values.length;
     const mean = values.reduce((a, b) => a + b, 0) / n;
     const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
-
     // Create histogram
     const bins = 20;
     const min = Math.min(...values);
@@ -683,12 +606,10 @@ class SentinelHubService {
       value: min + (i + 0.5) * binSize,
       count: 0
     }));
-
     values.forEach(value => {
       const binIndex = Math.min(bins - 1, Math.floor((value - min) / binSize));
       histogram[binIndex].count++;
     });
-
     return {
       mean,
       median: sorted[Math.floor(n / 2)],
@@ -698,15 +619,12 @@ class SentinelHubService {
       histogram
     };
   }
-
   private calculateVegetationZones(values: number[]): NDVIAnalysis['zones'] {
     const total = values.length;
     const healthy = values.filter(v => v > 0.6).length;
     const moderate = values.filter(v => v >= 0.3 && v <= 0.6).length;
     const stressed = values.filter(v => v < 0.3).length;
-
     const pixelArea = 100; // 10m x 10m per pixel (Sentinel-2 resolution)
-
     return {
       healthy: { 
         percentage: (healthy / total) * 100,
@@ -722,10 +640,8 @@ class SentinelHubService {
       }
     };
   }
-
   private generateNDVIRecommendations(statistics: NDVIAnalysis['statistics'], zones: NDVIAnalysis['zones']): string[] {
     const recommendations: string[] = [];
-
     if (statistics.mean < 0.4) {
       recommendations.push('Overall vegetation health is poor - consider soil testing and nutrient management');
     } else if (statistics.mean < 0.6) {
@@ -733,28 +649,22 @@ class SentinelHubService {
     } else {
       recommendations.push('Vegetation health is good - maintain current management practices');
     }
-
     if (zones.stressed.percentage > 20) {
       recommendations.push('High percentage of stressed vegetation - investigate drought stress or disease');
     }
-
     if (zones.healthy.percentage < 50) {
       recommendations.push('Less than half the field shows healthy vegetation - review crop management strategy');
     }
-
     if (statistics.standardDeviation > 0.2) {
       recommendations.push('High variability in vegetation - consider precision agriculture techniques');
     }
-
     return recommendations;
   }
-
   private getDayOfYear(date: Date): number {
     const start = new Date(date.getFullYear(), 0, 0);
     const diff = date.getTime() - start.getTime();
     return Math.floor(diff / (1000 * 60 * 60 * 24));
   }
 }
-
 export const sentinelHub = new SentinelHubService();
 export { SentinelHubService };

@@ -2,17 +2,14 @@ import { NextRequest } from 'next/server'
 import { prisma } from '../../../../../lib/prisma'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../../lib/api/errors'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../../lib/api/middleware'
-
 // GET /api/farms/[id]/map-data - Get farm boundaries and field data for map visualization
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest, { params }: { params: { id: string } }) => {
     try {
       const farmId = params.id
-
       if (!farmId) {
         throw new ValidationError('Farm ID is required')
       }
-
       // Find farm and verify ownership
       const farm = await prisma.farm.findFirst({
         where: {
@@ -35,11 +32,9 @@ export const GET = apiMiddleware.protected(
           }
         }
       })
-
       if (!farm) {
         throw new ValidationError('Farm not found or access denied')
       }
-
       // Get farm boundary from PostGIS
       let farmBoundary = null
       try {
@@ -48,7 +43,6 @@ export const GET = apiMiddleware.protected(
           FROM farms 
           WHERE id = ${farmId} AND boundary IS NOT NULL
         ` as any[]
-        
         if (boundaryResult.length > 0 && boundaryResult[0].boundary_geojson) {
           const geoJson = JSON.parse(boundaryResult[0].boundary_geojson)
           // Convert GeoJSON coordinates to lat/lng format
@@ -60,14 +54,11 @@ export const GET = apiMiddleware.protected(
           }
         }
       } catch (error) {
-
       }
-
       // Process fields with boundaries
       const fieldsWithBoundaries = await Promise.all(
         farm.fields.map(async (field) => {
           let fieldBoundary = null
-          
           // Get field boundary from PostGIS
           try {
             const fieldBoundaryResult = await prisma.$queryRaw`
@@ -75,7 +66,6 @@ export const GET = apiMiddleware.protected(
               FROM fields 
               WHERE id = ${field.id} AND boundary IS NOT NULL
             ` as any[]
-            
             if (fieldBoundaryResult.length > 0 && fieldBoundaryResult[0].boundary_geojson) {
               const geoJson = JSON.parse(fieldBoundaryResult[0].boundary_geojson)
               if (geoJson.type === 'Polygon' && geoJson.coordinates && geoJson.coordinates[0]) {
@@ -86,9 +76,7 @@ export const GET = apiMiddleware.protected(
               }
             }
           } catch (error) {
-
           }
-
           return {
             id: field.id,
             name: field.name,
@@ -106,7 +94,6 @@ export const GET = apiMiddleware.protected(
           }
         })
       )
-
       // Farm data for map
       const farmData = {
         id: farm.id,
@@ -117,7 +104,6 @@ export const GET = apiMiddleware.protected(
         address: farm.address,
         boundary: farmBoundary
       }
-
       return createSuccessResponse({
         farm: farmData,
         fields: fieldsWithBoundaries,

@@ -4,7 +4,6 @@ import { prisma } from '../../../../../lib/prisma';
 import { z } from 'zod';
 import { TransactionType, FinancialCategory, Prisma } from '@prisma/client';
 import { AuditLogger } from '../../../../../lib/audit-logger';
-
 // Validation schema for transaction update
 const updateTransactionSchema = z.object({
   type: z.nativeEnum(TransactionType).optional(),
@@ -20,7 +19,6 @@ const updateTransactionSchema = z.object({
   tags: z.array(z.string()).optional(),
   attachments: z.any().optional(),
 });
-
 // GET /api/financial/transactions/[id]
 export async function GET(
   request: NextRequest,
@@ -31,7 +29,6 @@ export async function GET(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     const transaction = await prisma.financialTransaction.findUnique({
       where: { id: params.id },
       include: {
@@ -41,11 +38,9 @@ export async function GET(
         farm: true,
       },
     });
-
     if (!transaction) {
       return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
-
     // Verify user has access to the farm
     const hasAccess = transaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
@@ -54,18 +49,15 @@ export async function GET(
           userId: user.id,
         },
       });
-
     if (!hasAccess) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
-
     return NextResponse.json(transaction);
   } catch (error) {
     console.error('Error fetching transaction:', error);
     return NextResponse.json({ error: 'Failed to fetch transaction' }, { status: 500 });
   }
 }
-
 // PUT /api/financial/transactions/[id]
 export async function PUT(
   request: NextRequest,
@@ -76,20 +68,16 @@ export async function PUT(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     const body = await request.json();
     const validatedData = updateTransactionSchema.parse(body);
-
     // Fetch existing transaction
     const existingTransaction = await prisma.financialTransaction.findUnique({
       where: { id: params.id },
       include: { farm: true },
     });
-
     if (!existingTransaction) {
       return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
-
     // Verify user has access to the farm
     const hasAccess = existingTransaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
@@ -98,11 +86,9 @@ export async function PUT(
           userId: user.id,
         },
       });
-
     if (!hasAccess) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
-
     // Update transaction
     const updatedTransaction = await prisma.financialTransaction.update({
       where: { id: params.id },
@@ -120,7 +106,6 @@ export async function PUT(
         marketPrice: true,
       },
     });
-
     // Log the action
     await AuditLogger.logFinancialTransaction(
       'update',
@@ -132,19 +117,15 @@ export async function PUT(
       },
       request
     );
-
     return NextResponse.json(updatedTransaction);
   } catch (error) {
     console.error('Error updating transaction:', error);
-    
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data', details: error.errors }, { status: 400 });
     }
-    
     return NextResponse.json({ error: 'Failed to update transaction' }, { status: 500 });
   }
 }
-
 // DELETE /api/financial/transactions/[id]
 export async function DELETE(
   request: NextRequest,
@@ -155,17 +136,14 @@ export async function DELETE(
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // Fetch existing transaction
     const existingTransaction = await prisma.financialTransaction.findUnique({
       where: { id: params.id },
       include: { farm: true },
     });
-
     if (!existingTransaction) {
       return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
-
     // Verify user has access to the farm
     const hasAccess = existingTransaction.farm.ownerId === user.id ||
       await prisma.farmManager.findFirst({
@@ -174,16 +152,13 @@ export async function DELETE(
           userId: user.id,
         },
       });
-
     if (!hasAccess) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
-
     // Delete transaction
     await prisma.financialTransaction.delete({
       where: { id: params.id },
     });
-
     // Update budget actuals if applicable
     const budgetDate = new Date(existingTransaction.transactionDate);
     await prisma.financialBudget.updateMany({
@@ -201,7 +176,6 @@ export async function DELETE(
         },
       },
     });
-
     // Log the action
     await AuditLogger.logFinancialTransaction(
       'delete',
@@ -215,7 +189,6 @@ export async function DELETE(
       },
       request
     );
-
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Error deleting transaction:', error);

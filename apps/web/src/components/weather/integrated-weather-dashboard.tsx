@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -10,7 +9,6 @@ import {
   Umbrella, RefreshCw, Target, CheckCircle2
 } from 'lucide-react'
 import { InfoTooltip } from '../ui/info-tooltip'
-
 interface WeatherAction {
   id: string
   action: string
@@ -19,7 +17,6 @@ interface WeatherAction {
   impact: string
   timeWindow?: string
 }
-
 interface WeatherData {
   current: {
     temperature: number
@@ -57,33 +54,25 @@ interface WeatherData {
   }>
   farmingActions: WeatherAction[]
 }
-
 interface IntegratedWeatherDashboardProps {
   latitude?: number
   longitude?: number
   className?: string
 }
-
 export function IntegratedWeatherDashboard({ latitude, longitude, className }: IntegratedWeatherDashboardProps) {
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     fetchWeatherData()
   }, [latitude, longitude])
-
   const fetchWeatherData = async () => {
     try {
       setLoading(true)
-      
       const response = await fetch(`/api/weather?lat=${latitude}&lng=${longitude}`)
-      
       if (!response.ok) {
         throw new Error('Failed to fetch weather data')
       }
-      
       const data = await response.json()
-      
       if (data.success && data.weather) {
         setWeather(data.weather)
       } else {
@@ -95,7 +84,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       setLoading(false)
     }
   }
-
   const getConditionIcon = (condition: string) => {
     const icons: Record<string, string> = {
       'Sunny': '☀️',
@@ -107,7 +95,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
     }
     return icons[condition] || '🌤️'
   }
-
   const getSeverityColor = (severity: string) => {
     const colors: Record<string, string> = {
       minor: 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -117,7 +104,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
     }
     return colors[severity] || 'bg-gray-100 text-gray-800 border-gray-200'
   }
-
   const getUrgencyColor = (urgency: string) => {
     const colors: Record<string, string> = {
       now: 'bg-red-100 text-red-800',
@@ -126,7 +112,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
     }
     return colors[urgency] || 'bg-gray-100 text-gray-800'
   }
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -143,9 +128,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       </ModernCard>
     )
   }
-
   if (!weather) return null
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -163,9 +146,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
           </Button>
         </div>
       </ModernCardHeader>
-      
       <ModernCardContent className="space-y-6">
-        
         {/* Weather Alerts - Integrated at top */}
         {weather.alerts.length > 0 && (
           <div className="space-y-2">
@@ -182,10 +163,8 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
             ))}
           </div>
         )}
-
         {/* Current Conditions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
           {/* Left: Current Weather */}
           <div className="space-y-4">
             <div className="text-center bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-6">
@@ -196,7 +175,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
                 High {weather.today.high}° • Low {weather.today.low}°
               </div>
             </div>
-
             {/* Detailed Conditions */}
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
@@ -227,14 +205,12 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
               </div>
             </div>
           </div>
-
           {/* Right: Farming Actions */}
           <div className="space-y-4">
             <h4 className="font-semibold text-sage-800 flex items-center gap-2">
               <Target className="h-4 w-4 text-green-600" />
               Weather-Based Actions
             </h4>
-            
             {weather.farmingActions.map((action) => (
               <div key={action.id} className="bg-white border border-sage-200 rounded-lg p-3">
                 <div className="flex items-start gap-2 mb-2">
@@ -257,7 +233,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
             ))}
           </div>
         </div>
-
         {/* 4-Day Forecast */}
         <div>
           <h4 className="font-semibold text-sage-800 mb-3 flex items-center gap-2">
@@ -283,7 +258,6 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
             ))}
           </div>
         </div>
-
       </ModernCardContent>
     </ModernCard>
   )

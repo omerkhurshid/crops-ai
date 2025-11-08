@@ -1,13 +1,10 @@
 'use client'
-
 import { Navbar } from '../components/navigation/navbar'
 import Link from 'next/link'
 import { Badge } from '../components/ui/badge'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-
 // Interactive demo removed for production
-
 import { 
   Sprout, CloudRain, Satellite, Brain, TrendingUp, Shield, 
   BarChart, Users, ArrowRight, Target, Eye, DollarSign
@@ -15,26 +12,21 @@ import {
 import { useRouter } from 'next/navigation'
 import { useSession } from '../lib/auth-unified'
 import { HomePageDemos } from '../components/demos/home-page-demos'
-
 export default function Home() {
   const { data: session, status } = useSession()
   const router = useRouter()
-
   useEffect(() => {
     // Check if user is logged in and redirect to dashboard
     if (status !== 'loading' && session) {
       router.push('/dashboard')
     }
   }, [session, status, router])
-  
   return (
     <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
       <Navbar />
-      
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          
           {/* Professional Header */}
           <div className="text-center mb-8">
             <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-4 py-2 text-sm font-medium">
@@ -42,19 +34,15 @@ export default function Home() {
               Smart Farming Made Simple
             </Badge>
           </div>
-
           {/* Main Hero */}
           <div className="text-center mb-8 sm:mb-16 p-4 sm:p-8 md:p-12 bg-white rounded-2xl shadow-xl border border-sage-100">
-            
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-sage-800 leading-tight">
               Increase Your Farm Profits<br />
               <span className="text-sage-600">by 20% This Season</span>
             </h1>
-            
             <p className="text-lg sm:text-xl md:text-2xl text-sage-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
               Make better timing decisions with AI-powered recommendations. Farmers using our platform average $15,000 more profit per season.
             </p>
-            
             {/* Outcome-Focused Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">
               <div className="bg-green-50 p-4 sm:p-6 rounded-lg border border-green-200">
@@ -73,7 +61,6 @@ export default function Home() {
                 <p className="text-sm sm:text-base text-amber-600">Sell at peak prices with market timing alerts</p>
               </div>
             </div>
-            
             {/* CTA */}
             <div className="mb-6">
               <Link href="/register">
@@ -90,12 +77,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
           </div>
-          
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 px-2">
-            
             {/* Crop Monitoring */}
             <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
               <div className="p-2 sm:p-3 bg-sage-100 rounded-full w-fit mb-3 sm:mb-4">
@@ -107,7 +91,6 @@ export default function Home() {
                 Spot problems with your crops before they hurt your harvest.
               </p>
             </div>
-            
             {/* Weather Intelligence */}
             <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
               <div className="p-2 sm:p-3 bg-earth-100 rounded-full w-fit mb-3 sm:mb-4">
@@ -119,7 +102,6 @@ export default function Home() {
                 Know the best times to spray, water, and harvest.
               </p>
             </div>
-            
             {/* Data Analytics */}
             <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
               <div className="p-2 sm:p-3 bg-cream-100 rounded-full w-fit mb-3 sm:mb-4">
@@ -131,14 +113,11 @@ export default function Home() {
                 and tips to improve your results.
               </p>
             </div>
-            
           </div>
         </div>
       </section>
-
       {/* Interactive Demos Section */}
       <HomePageDemos />
-
       {/* Trust & Security */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50">
         <div className="max-w-4xl mx-auto text-center">
@@ -164,7 +143,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Footer CTA */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
         <div className="max-w-4xl mx-auto text-center">
@@ -183,7 +161,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
     </div>
   )
 }

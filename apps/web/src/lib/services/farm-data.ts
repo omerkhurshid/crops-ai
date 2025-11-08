@@ -2,10 +2,8 @@
  * Real Farm Data Service
  * Provides actual farm data from database and API integrations
  */
-
 import { prisma } from '../prisma'
 import { WeatherService } from './weather'
-
 export interface FarmMetrics {
   totalAcres: number
   overallHealth: number
@@ -22,7 +20,6 @@ export interface FarmMetrics {
     windSpeed: number
   }
 }
-
 export interface CropHealthData {
   fieldId: string
   fieldName: string
@@ -33,7 +30,6 @@ export interface CropHealthData {
   lastChecked: Date
   recommendations: string[]
 }
-
 export interface LivestockData {
   totalAnimals: number
   healthyAnimals: number
@@ -46,10 +42,8 @@ export interface LivestockData {
     notes?: string
   }>
 }
-
 export class FarmDataService {
   private static weatherService = new WeatherService()
-
   /**
    * Get comprehensive farm metrics for dashboard
    */
@@ -66,25 +60,18 @@ export class FarmDataService {
           }
         }
       })
-
       if (farms.length === 0) {
         return this.getEmptyMetrics()
       }
-
       const farm = farmId ? farms.find(f => f.id === farmId) || farms[0] : farms[0]
-      
       // Calculate total acres
       const totalAcres = farm.fields.reduce((sum, field) => sum + (field.area || 0), 0)
-      
       // Get field health data
       const healthData = await this.calculateFieldHealth(farm.fields)
-      
       // Get livestock count
       const livestockCount = await this.getLivestockCount(userId, farm.id)
-      
       // Get weather data
       const weather = await this.getCurrentWeather(farm.latitude, farm.longitude)
-      
       return {
         totalAcres,
         overallHealth: healthData.averageHealth,
@@ -101,7 +88,6 @@ export class FarmDataService {
       return this.getEmptyMetrics()
     }
   }
-
   /**
    * Get detailed crop health data for all fields
    */
@@ -117,20 +103,14 @@ export class FarmDataService {
           }
         }
       })
-
       if (farms.length === 0) return []
-
       const farm = farmId ? farms.find(f => f.id === farmId) || farms[0] : farms[0]
-      
       const healthData: CropHealthData[] = []
-      
       for (const field of farm.fields) {
         const latestCrop = field.crops[0] // Most recent crop
         if (!latestCrop) continue
-
         // Calculate health score based on growth stage and conditions
         const healthScore = await this.calculateFieldHealthScore(field.id)
-        
         healthData.push({
           fieldId: field.id,
           fieldName: field.name,
@@ -142,14 +122,12 @@ export class FarmDataService {
           recommendations: await this.getFieldRecommendations(field.id, healthScore)
         })
       }
-
       return healthData
     } catch (error) {
       console.error('Error fetching crop health data:', error)
       return []
     }
   }
-
   /**
    * Get livestock data for dashboard
    */
@@ -157,14 +135,12 @@ export class FarmDataService {
     try {
       const whereClause: any = { userId }
       if (farmId) whereClause.farmId = farmId
-
       const [totalAnimals, recentEvents] = await Promise.all([
         // Calculate total animals from recent events
         prisma.livestockEvent.aggregate({
           where: whereClause,
           _sum: { animalCount: true }
         }),
-        
         // Get recent events
         prisma.livestockEvent.findMany({
           where: whereClause,
@@ -177,17 +153,13 @@ export class FarmDataService {
           }
         })
       ])
-
       const totalCount = totalAnimals._sum.animalCount || 0
-      
       // Calculate health status based on recent health events
       const healthEvents = recentEvents.filter(event => 
         ['vaccination', 'treatment', 'health_check'].includes(event.eventType)
       )
-      
       const healthyAnimals = Math.floor(totalCount * 0.85) // Assume 85% healthy
       const needingAttention = totalCount - healthyAnimals
-
       return {
         totalAnimals: totalCount,
         healthyAnimals,
@@ -210,7 +182,6 @@ export class FarmDataService {
       }
     }
   }
-
   // Private helper methods
   private static getEmptyMetrics(): FarmMetrics {
     return {
@@ -230,7 +201,6 @@ export class FarmDataService {
       }
     }
   }
-
   private static async calculateFieldHealth(fields: any[]): Promise<{
     averageHealth: number
     healthTrend: number
@@ -247,19 +217,15 @@ export class FarmDataService {
         harvestableFields: 0
       }
     }
-
     let totalHealth = 0
     let stressedCount = 0
     let harvestableCount = 0
-
     for (const field of fields) {
       const healthScore = await this.calculateFieldHealthScore(field.id)
       totalHealth += healthScore
-      
       if (healthScore < 60) stressedCount++
       if (healthScore > 80) harvestableCount++
     }
-
     return {
       averageHealth: Math.round(totalHealth / fields.length),
       healthTrend: Math.floor(Math.random() * 10) - 5, // Placeholder trend
@@ -268,30 +234,25 @@ export class FarmDataService {
       harvestableFields: harvestableCount
     }
   }
-
   private static async calculateFieldHealthScore(fieldId: string): Promise<number> {
     try {
       // Get latest NDVI data if available
       const ndvi = await this.getLatestNDVI(fieldId)
-      
       // Convert NDVI to health score (NDVI range 0-1, health score 0-100)
       if (ndvi > 0) {
         return Math.round(ndvi * 100)
       }
-      
       // Fallback: random but realistic health score
       return Math.floor(Math.random() * 40) + 60 // 60-100 range
     } catch (error) {
       return Math.floor(Math.random() * 40) + 60
     }
   }
-
   private static calculateStressLevel(healthScore: number): number {
     if (healthScore >= 80) return 10 // Low stress
     if (healthScore >= 60) return 50 // Medium stress
     return 90 // High stress
   }
-
   private static async getLatestNDVI(fieldId: string): Promise<number> {
     try {
       // Try to get NDVI from satellite data
@@ -305,26 +266,20 @@ export class FarmDataService {
       return 0.7 // Default NDVI value
     }
   }
-
   private static async getFieldRecommendations(fieldId: string, healthScore: number): Promise<string[]> {
     const recommendations: string[] = []
-    
     if (healthScore < 60) {
       recommendations.push('Consider soil testing for nutrient deficiencies')
       recommendations.push('Check irrigation system for optimal water delivery')
     }
-    
     if (healthScore < 40) {
       recommendations.push('Immediate pest and disease inspection recommended')
     }
-    
     if (healthScore > 80) {
       recommendations.push('Field showing excellent health - maintain current practices')
     }
-    
     return recommendations
   }
-
   private static async getLivestockCount(userId: string, farmId: string): Promise<number> {
     try {
       const result = await prisma.livestockEvent.aggregate({
@@ -336,7 +291,6 @@ export class FarmDataService {
       return 0
     }
   }
-
   private static async getCurrentWeather(latitude?: number, longitude?: number): Promise<{
     temperature: number
     condition: string
@@ -356,7 +310,6 @@ export class FarmDataService {
     } catch (error) {
       // Fall back to default weather
     }
-    
     return {
       temperature: 22,
       condition: 'Clear',

@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -9,27 +8,22 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from
 import { ArrowLeft, Edit, Heart, TrendingUp, DollarSign } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../../../../components/ui/button'
-
 interface PageProps {
   params: {
     id: string
   }
 }
-
 export default function AnimalProfilePage({ params }: PageProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [animal, setAnimal] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Fetch animal data
     const fetchAnimal = async () => {
       try {
@@ -47,10 +41,8 @@ export default function AnimalProfilePage({ params }: PageProps) {
         setIsLoading(false)
       }
     }
-
     fetchAnimal()
   }, [session, status, router, params.id])
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -61,31 +53,24 @@ export default function AnimalProfilePage({ params }: PageProps) {
       </DashboardLayout>
     )
   }
-
   if (!session || !animal) {
     return null
   }
-
   // Calculate basic stats
   const healthRecords = animal.healthRecords || []
   const weightRecords = animal.weightRecords || []
   const feedRecords = animal.feedRecords || []
-
   const recentHealthIssues = healthRecords.filter((record: any) => 
     ['illness', 'injury'].includes(record.recordType) && 
     new Date(record.recordDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   ).length
-
   const weightGain = weightRecords.length >= 2 
     ? weightRecords[0].weight - weightRecords[1].weight 
     : 0
-
   const feedCostLast30Days = feedRecords
     .filter((record: any) => new Date(record.feedDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000))
     .reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0)
-
   const currentValue = animal.currentValue || animal.purchasePrice || 0
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -105,7 +90,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
             Edit Animal
           </Button>
         </div>
-
         {/* Animal Header */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
@@ -115,7 +99,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
             {animal.breed} • {animal.gender} • Born {animal.birthDate ? new Date(animal.birthDate).toLocaleDateString() : 'Unknown'}
           </p>
         </div>
-
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -131,7 +114,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -145,7 +127,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -159,7 +140,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -176,7 +156,6 @@ export default function AnimalProfilePage({ params }: PageProps) {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Animal Profile Component */}
         <AnimalProfile animal={animal} />
       </div>

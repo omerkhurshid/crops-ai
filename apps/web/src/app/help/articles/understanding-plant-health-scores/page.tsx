@@ -20,10 +20,7 @@ import {
   Calculator,
   Lightbulb,
 } from "lucide-react";
-
-
 export default function UnderstandingPlantHealthScoresPage() {
-
   return (
     <DashboardLayout>
       <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -33,18 +30,15 @@ export default function UnderstandingPlantHealthScoresPage() {
             <Activity className="h-6 w-6 text-sage-700" />
             <span className="text-sage-600">Crop Health Monitoring</span>
           </div>
-
           <h1 className="text-3xl font-bold text-sage-800 mb-4">
             Understanding Plant Health Scores
           </h1>
-
           <div className="flex items-center gap-4 text-sm text-sage-600">
             <Badge variant="outline">8 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
           </div>
         </div>
-
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
@@ -54,7 +48,6 @@ export default function UnderstandingPlantHealthScoresPage() {
               system translates complex satellite data into simple health scores
               that any farmer can understand and act upon.
             </p>
-
             <Alert>
               <Lightbulb className="h-4 w-4" />
               <AlertDescription>
@@ -65,7 +58,6 @@ export default function UnderstandingPlantHealthScoresPage() {
             </Alert>
           </ModernCardContent>
         </ModernCard>
-
         {/* How We Calculate Health Scores */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -86,7 +78,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   Our satellites detect these differences and convert them into
                   a score.
                 </p>
-
                 <div className="bg-sage-50 p-4 rounded-lg">
                   <p className="text-sm font-mono text-sage-700">
                     NDVI = (Near Infrared - Red Light) / (Near Infrared + Red
@@ -97,7 +88,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   </p>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-2">
                   2. Score Interpretation
@@ -115,7 +105,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                       </p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
                     <div>
@@ -127,7 +116,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                       </p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
                     <div>
@@ -140,7 +128,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                       </p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
                     <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
                     <div>
@@ -155,7 +142,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   </div>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-2">
                   3. Factors We Consider
@@ -194,7 +180,6 @@ export default function UnderstandingPlantHealthScoresPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Understanding Trends */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -209,7 +194,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                 More important than a single score is how your crop health
                 changes over time:
               </p>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-green-50 p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
@@ -223,7 +207,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                     are responding well to conditions or treatments.
                   </p>
                 </div>
-
                 <div className="bg-red-50 p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingDown className="h-5 w-5 text-red-600" />
@@ -240,7 +223,6 @@ export default function UnderstandingPlantHealthScoresPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Common Causes of Score Changes */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -267,7 +249,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                       <li>• Hail or wind damage</li>
                     </ul>
                   </div>
-
                   <div className="space-y-2">
                     <h4 className="font-medium text-sage-700">
                       Biological Issues
@@ -281,7 +262,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   </div>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-3">
                   Normal Score Variations:
@@ -313,7 +293,6 @@ export default function UnderstandingPlantHealthScoresPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Action Guide */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -333,7 +312,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   immediate action needed.
                 </p>
               </div>
-
               <div className="border-l-4 border-yellow-500 pl-4">
                 <h4 className="font-semibold text-sage-800 mb-2">
                   Score 60-79 (Good)
@@ -343,7 +321,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   of stress or uneven growth.
                 </p>
               </div>
-
               <div className="border-l-4 border-orange-500 pl-4">
                 <h4 className="font-semibold text-sage-800 mb-2">
                   Score 40-59 (Moderate Stress)
@@ -353,7 +330,6 @@ export default function UnderstandingPlantHealthScoresPage() {
                   water stress, or nutrient issues.
                 </p>
               </div>
-
               <div className="border-l-4 border-red-500 pl-4">
                 <h4 className="font-semibold text-sage-800 mb-2">
                   Score 0-39 (Severe Stress)
@@ -366,7 +342,6 @@ export default function UnderstandingPlantHealthScoresPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Tips */}
         <Alert>
           <Lightbulb className="h-4 w-4" />

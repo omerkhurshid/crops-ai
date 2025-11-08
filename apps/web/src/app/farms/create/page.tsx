@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../../components/ui/button'
@@ -9,7 +8,6 @@ import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { GoogleMapsFieldEditor } from '../../../components/farm/google-maps-field-editor'
 import { MapPin, Plus, Trash2, Save, Loader2, Navigation } from 'lucide-react'
-
 interface Field {
   id: string
   name: string
@@ -18,7 +16,6 @@ interface Field {
   centerLat: number
   centerLng: number
 }
-
 interface SimpleFarm {
   name: string
   location: string
@@ -26,7 +23,6 @@ interface SimpleFarm {
   totalArea: number
   fields: Field[]
 }
-
 export default function CreateFarmPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +33,6 @@ export default function CreateFarmPage() {
     totalArea: 0,
     fields: []
   })
-
   const addField = () => {
     const newField: Field = {
       id: `field-${Date.now()}`,
@@ -52,7 +47,6 @@ export default function CreateFarmPage() {
       fields: [...prev.fields, newField]
     }))
   }
-
   const updateField = (fieldId: string, updates: Partial<Field>) => {
     setFarm(prev => ({
       ...prev,
@@ -61,19 +55,16 @@ export default function CreateFarmPage() {
       )
     }))
   }
-
   const removeField = (fieldId: string) => {
     setFarm(prev => ({
       ...prev,
       fields: prev.fields.filter(field => field.id !== fieldId)
     }))
   }
-
   const calculateTotalArea = () => {
     const total = farm.fields.reduce((sum, field) => sum + (field.area || 0), 0)
     setFarm(prev => ({ ...prev, totalArea: total }))
   }
-
   const getCurrentLocation = async () => {
     if ('geolocation' in navigator) {
       try {
@@ -84,7 +75,6 @@ export default function CreateFarmPage() {
             maximumAge: 60000
           })
         })
-        
         const { latitude, longitude } = position.coords
         setFarm(prev => ({
           ...prev,
@@ -99,15 +89,12 @@ export default function CreateFarmPage() {
       alert('Geolocation is not supported by your browser.')
     }
   }
-
   const handleLocationSearch = async () => {
     if (!farm.location.trim()) return
-    
     // Simple geocoding with Google Maps API would go here
     // For now, just show the map editor
     setShowMapEditor(true)
   }
-
   const handleFieldsDetected = (fields: Field[]) => {
     setFarm(prev => ({
       ...prev,
@@ -116,13 +103,11 @@ export default function CreateFarmPage() {
     }))
     setShowMapEditor(false)
   }
-
   const saveFarm = async () => {
     if (!farm.name || !farm.location) {
       alert('Please fill in farm name and location.')
       return
     }
-
     setIsLoading(true)
     try {
       const response = await fetch('/api/farms', {
@@ -143,7 +128,6 @@ export default function CreateFarmPage() {
           }))
         })
       })
-
       if (response.ok) {
         router.push('/farms')
       } else {
@@ -156,7 +140,6 @@ export default function CreateFarmPage() {
       setIsLoading(false)
     }
   }
-
   if (showMapEditor) {
     return (
       <DashboardLayout>
@@ -172,7 +155,6 @@ export default function CreateFarmPage() {
             <h1 className="text-3xl font-bold text-sage-800 mb-2">Map Your Fields</h1>
             <p className="text-sage-600">Draw field boundaries and customize your farm layout</p>
           </div>
-
           <GoogleMapsFieldEditor
             farmLocation={farm.coordinates || { lat: 40.7128, lng: -74.0060 }}
             onFieldsDetected={handleFieldsDetected}
@@ -182,7 +164,6 @@ export default function CreateFarmPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto p-6">
@@ -190,7 +171,6 @@ export default function CreateFarmPage() {
           <h1 className="text-3xl font-bold text-sage-800 mb-2">Create New Farm</h1>
           <p className="text-sage-600">Simple setup to get your farm up and running</p>
         </div>
-
         <div className="space-y-6">
           {/* Step 1: Farm Name */}
           <ModernCard variant="soft">
@@ -208,7 +188,6 @@ export default function CreateFarmPage() {
               />
             </ModernCardContent>
           </ModernCard>
-
           {/* Step 2: Location */}
           <ModernCard variant="soft">
             <ModernCardHeader>
@@ -241,7 +220,6 @@ export default function CreateFarmPage() {
                   Find & Map
                 </Button>
               </div>
-              
               <div className="mt-3">
                 <Button
                   variant="ghost"
@@ -254,7 +232,6 @@ export default function CreateFarmPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Step 3: Basic Field Setup (if no map) */}
           {!showMapEditor && (
             <ModernCard variant="soft">
@@ -292,7 +269,6 @@ export default function CreateFarmPage() {
                       </Button>
                     </div>
                   ))}
-
                   <Button
                     onClick={addField}
                     variant="outline"
@@ -301,7 +277,6 @@ export default function CreateFarmPage() {
                     <Plus className="h-4 w-4 mr-2" />
                     Add Field
                   </Button>
-
                   {farm.fields.length > 0 && (
                     <div className="bg-sage-100 p-3 rounded-lg">
                       <p className="text-sm font-medium text-sage-800">
@@ -313,7 +288,6 @@ export default function CreateFarmPage() {
               </ModernCardContent>
             </ModernCard>
           )}
-
           {/* Save Button */}
           <div className="flex justify-end">
             <Button

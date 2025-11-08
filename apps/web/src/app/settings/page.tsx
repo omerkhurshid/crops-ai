@@ -1,11 +1,9 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { SettingsForm } from '../../components/settings/settings-form'
-
 interface UserPreferences {
   id: string
   name: string
@@ -16,35 +14,27 @@ interface UserPreferences {
   timezone: string
   language: string
 }
-
 export default function SettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [user, setUser] = useState<UserPreferences | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     async function fetchUserPreferences() {
       try {
         setLoading(true)
-        
         // Fetch user preferences from the API
         const response = await fetch('/api/users/preferences')
-        
         if (!response.ok) {
           throw new Error('Failed to fetch user preferences')
         }
-
         const data = await response.json()
-        
         // Combine session user data with preferences
         const fullUser: UserPreferences = {
           id: session?.user?.id || '',
@@ -56,12 +46,10 @@ export default function SettingsPage() {
           timezone: data.preferences?.timezone || 'UTC',
           language: data.preferences?.language || 'en'
         }
-
         setUser(fullUser)
       } catch (error) {
         console.error('Error fetching user preferences:', error)
         setError('Failed to load user preferences')
-        
         // Use basic session data as fallback
         const fallbackUser: UserPreferences = {
           id: session?.user?.id || '',
@@ -78,10 +66,8 @@ export default function SettingsPage() {
         setLoading(false)
       }
     }
-
     fetchUserPreferences()
   }, [session, status, router])
-
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
@@ -106,11 +92,9 @@ export default function SettingsPage() {
       </DashboardLayout>
     )
   }
-
   if (!session || !user) {
     return null
   }
-
   if (error && !user) {
     return (
       <DashboardLayout>
@@ -128,7 +112,6 @@ export default function SettingsPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -138,7 +121,6 @@ export default function SettingsPage() {
             Manage your account preferences and system settings
           </p>
         </div>
-
         <div className="bg-white rounded-lg shadow-sm border border-sage-200">
           <SettingsForm user={user} />
         </div>

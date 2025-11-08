@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -13,12 +12,10 @@ import {
 } from 'lucide-react'
 import { LivestockAnalytics, LIVESTOCK_DATABASE, type LivestockData } from '../../lib/agriculture/livestock-knowledge-base'
 import { cn } from '../../lib/utils'
-
 interface LivestockAnalyticsDashboardProps {
   farmId: string
   selectedLivestock?: string
 }
-
 interface LivestockPerformanceData {
   livestockId: string
   animalCount: number
@@ -39,13 +36,11 @@ interface LivestockPerformanceData {
     cost: number
   }>
 }
-
 export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: LivestockAnalyticsDashboardProps) {
   const [selectedLivestockId, setSelectedLivestockId] = useState(selectedLivestock || 'dairy_cattle')
   const [timeframe, setTimeframe] = useState<'current' | 'month' | 'quarter' | 'year'>('current')
   const [performanceData, setPerformanceData] = useState<LivestockPerformanceData[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     // Mock data - in production, this would fetch from your database
     const mockPerformanceData: LivestockPerformanceData[] = [
@@ -97,25 +92,20 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
         ]
       }
     ]
-
     setPerformanceData(mockPerformanceData)
     setLoading(false)
   }, [farmId])
-
   const selectedLivestockData = LivestockAnalytics.getLivestockById(selectedLivestockId)
   const currentLivestockPerformance = performanceData.find(p => p.livestockId === selectedLivestockId)
-
   if (!selectedLivestockData) {
     return <div>Livestock data not found</div>
   }
-
   const getHealthStatusColor = (score: number) => {
     if (score >= 90) return 'text-green-600 bg-green-100'
     if (score >= 80) return 'text-yellow-600 bg-yellow-100'
     if (score >= 70) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
-
   const getRiskSeverityColor = (severity: 'low' | 'moderate' | 'high') => {
     switch (severity) {
       case 'low': return 'text-green-600 bg-green-100'
@@ -123,7 +113,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
       case 'high': return 'text-red-600 bg-red-100'
     }
   }
-
   const getProductIcon = (primaryProduct: string) => {
     switch (primaryProduct) {
       case 'milk': return <Milk className="h-6 w-6 text-blue-600" />
@@ -132,7 +121,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
       default: return <Activity className="h-6 w-6 text-sage-600" />
     }
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -147,7 +135,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header and Controls */}
@@ -156,7 +143,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
           <h1 className="text-3xl font-bold text-sage-800 mb-2">Livestock Analytics Dashboard</h1>
           <p className="text-sage-600">Comprehensive livestock performance analysis and production forecasting</p>
         </div>
-        
         <div className="flex items-center gap-3">
           <Select value={selectedLivestockId} onValueChange={setSelectedLivestockId}>
             <SelectTrigger className="w-48">
@@ -170,7 +156,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               ))}
             </SelectContent>
           </Select>
-          
           <Select value={timeframe} onValueChange={(value: any) => setTimeframe(value)}>
             <SelectTrigger className="w-32">
               <SelectValue />
@@ -182,14 +167,12 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               <SelectItem value="year">Year</SelectItem>
             </SelectContent>
           </Select>
-          
           <Button size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
         </div>
       </div>
-
       {/* Livestock Overview Card */}
       <ModernCard variant="glow">
         <ModernCardHeader>
@@ -238,7 +221,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Performance Metrics */}
       {currentLivestockPerformance && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -268,7 +250,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Production Forecast */}
           <ModernCard>
             <ModernCardHeader>
@@ -325,7 +306,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Risk Assessment */}
           <ModernCard>
             <ModernCardHeader>
@@ -361,7 +341,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
           </ModernCard>
         </div>
       )}
-
       {/* Detailed Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Breeding Calendar */}
@@ -393,7 +372,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Economic Analysis */}
         <ModernCard>
           <ModernCardHeader>
@@ -420,7 +398,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   <div className="text-xs text-sage-500">per animal</div>
                 </div>
               </div>
-              
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-sm text-sage-600">Feed:</span>
@@ -439,7 +416,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   <span className="text-sm font-medium">${selectedLivestockData.economics.operatingCosts.utilities}</span>
                 </div>
               </div>
-              
               <div className="pt-3 border-t">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-sm text-sage-600">Profitability Index:</span>
@@ -469,7 +445,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
           </ModernCardContent>
         </ModernCard>
       </div>
-
       {/* Recent Treatments and Interventions */}
       {currentLivestockPerformance && currentLivestockPerformance.recentTreatments.length > 0 && (
         <ModernCard>
@@ -503,7 +478,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   </div>
                 </div>
               ))}
-              
               <div className="pt-3 border-t">
                 <div className="flex justify-between items-center">
                   <span className="text-sage-600">Total Treatment Costs:</span>
@@ -516,7 +490,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Environmental and Housing Requirements */}
       <ModernCard>
         <ModernCardHeader>
@@ -547,7 +520,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                 </div>
               </div>
             </div>
-            
             <div className="space-y-3">
               <h4 className="font-medium text-sage-800 flex items-center gap-2">
                 <Users className="h-4 w-4" />
@@ -564,7 +536,6 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                 </div>
               </div>
             </div>
-            
             <div className="space-y-3">
               <h4 className="font-medium text-sage-800 flex items-center gap-2">
                 <Activity className="h-4 w-4" />

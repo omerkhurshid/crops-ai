@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -17,7 +16,6 @@ import {
   Target,
   ChevronRight
 } from 'lucide-react'
-
 interface Recommendation {
   id: string
   type: 'fertilizer' | 'irrigation' | 'pest_control' | 'planting' | 'harvest' | 'financial' | 'equipment'
@@ -36,21 +34,18 @@ interface Recommendation {
   cropType?: string
   createdAt: string
 }
-
 interface RecommendationsWidgetProps {
   farmId: string
   limit?: number
   showHeader?: boolean
   className?: string
 }
-
 const priorityColors = {
   low: 'bg-blue-50 text-blue-700 border-blue-200',
   medium: 'bg-yellow-50 text-yellow-700 border-yellow-200',
   high: 'bg-orange-50 text-orange-700 border-orange-200',
   urgent: 'bg-red-50 text-red-700 border-red-200'
 }
-
 const typeIcons = {
   fertilizer: '🌱',
   irrigation: '💧',
@@ -60,13 +55,11 @@ const typeIcons = {
   financial: '💰',
   equipment: '🔧'
 }
-
 const confidenceColors = {
   low: 'text-gray-500',
   medium: 'text-blue-500',
   high: 'text-green-500'
 }
-
 export function RecommendationsWidget({ 
   farmId, 
   limit = 5, 
@@ -77,21 +70,17 @@ export function RecommendationsWidget({
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
     fetchRecommendations()
   }, [farmId])
-
   const fetchRecommendations = async () => {
     try {
       setLoading(true)
       setError(null)
       const response = await fetch(`/api/recommendations?farmId=${farmId}&limit=${limit}`)
-      
       if (!response.ok) {
         throw new Error('Failed to fetch recommendations')
       }
-      
       const data = await response.json()
       setRecommendations(data.recommendations || [])
     } catch (err) {
@@ -100,16 +89,13 @@ export function RecommendationsWidget({
       setLoading(false)
     }
   }
-
   const generateNewRecommendations = async () => {
     try {
       setGenerating(true)
       const response = await fetch(`/api/recommendations?farmId=${farmId}&generateNew=true`)
-      
       if (!response.ok) {
         throw new Error('Failed to generate recommendations')
       }
-      
       const data = await response.json()
       setRecommendations(data.recommendations || [])
     } catch (err) {
@@ -118,7 +104,6 @@ export function RecommendationsWidget({
       setGenerating(false)
     }
   }
-
   const updateRecommendation = async (recommendationId: string, action: 'complete' | 'dismiss') => {
     try {
       const response = await fetch('/api/recommendations', {
@@ -126,18 +111,15 @@ export function RecommendationsWidget({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recommendationId, action })
       })
-
       if (!response.ok) {
         throw new Error('Failed to update recommendation')
       }
-
       // Remove from list
       setRecommendations(prev => prev.filter(r => r.id !== recommendationId))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update recommendation')
     }
   }
-
   const formatCurrency = (amount?: number) => {
     if (!amount) return null
     return new Intl.NumberFormat('en-US', {
@@ -147,20 +129,16 @@ export function RecommendationsWidget({
       maximumFractionDigits: 0
     }).format(amount)
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
     const diffDays = Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-    
     if (diffDays === 0) return 'Today'
     if (diffDays === 1) return 'Tomorrow'
     if (diffDays < 7) return `In ${diffDays} days`
     if (diffDays < 30) return `In ${Math.ceil(diffDays / 7)} weeks`
-    
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
-
   if (loading) {
     return (
       <ModernCard className={className}>
@@ -185,7 +163,6 @@ export function RecommendationsWidget({
       </ModernCard>
     )
   }
-
   return (
     <ModernCard className={className}>
       {showHeader && (
@@ -215,7 +192,6 @@ export function RecommendationsWidget({
           </div>
         </ModernCardHeader>
       )}
-      
       <ModernCardContent>
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
@@ -225,7 +201,6 @@ export function RecommendationsWidget({
             </div>
           </div>
         )}
-
         {recommendations.length === 0 && !error && (
           <div className="text-center py-8">
             <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -243,7 +218,6 @@ export function RecommendationsWidget({
             </Button>
           </div>
         )}
-
         <div className="space-y-4">
           {recommendations.map((rec) => (
             <div 
@@ -270,7 +244,6 @@ export function RecommendationsWidget({
                     )}
                   </div>
                 </div>
-                
                 <div className="flex items-center gap-1">
                   <Button
                     variant="ghost"
@@ -292,13 +265,11 @@ export function RecommendationsWidget({
                   </Button>
                 </div>
               </div>
-
               {/* Content */}
               <div className="space-y-2">
                 <p className="text-sm text-gray-700">
                   {rec.description}
                 </p>
-                
                 <div className="bg-sage-50 border border-sage-200 rounded p-2">
                   <p className="text-sm font-medium text-sage-800 mb-1">
                     Action Required:
@@ -307,7 +278,6 @@ export function RecommendationsWidget({
                     {rec.actionRequired}
                   </p>
                 </div>
-
                 {rec.potentialImpact && (
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-3 w-3 text-green-600" />
@@ -317,7 +287,6 @@ export function RecommendationsWidget({
                   </div>
                 )}
               </div>
-
               {/* Footer */}
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
                 <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -325,14 +294,12 @@ export function RecommendationsWidget({
                     <Calendar className="h-3 w-3" />
                     {formatDate(rec.optimalTiming)}
                   </div>
-                  
                   {rec.estimatedCost && (
                     <div className="flex items-center gap-1">
                       <DollarSign className="h-3 w-3" />
                       {formatCurrency(rec.estimatedCost)} cost
                     </div>
                   )}
-                  
                   {rec.estimatedRoi && (
                     <div className="flex items-center gap-1">
                       <TrendingUp className="h-3 w-3 text-green-500" />
@@ -340,7 +307,6 @@ export function RecommendationsWidget({
                     </div>
                   )}
                 </div>
-
                 <div className="flex items-center gap-2">
                   <span className={`text-xs font-medium ${confidenceColors[rec.confidenceLevel]}`}>
                     {rec.confidenceLevel} confidence

@@ -1,16 +1,13 @@
 /**
  * Additional Jest setup for Crops.AI tests
  */
-
 // Global test utilities and additional mocks
-
 // Mock ResizeObserver for components that use it
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }))
-
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
@@ -20,7 +17,6 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   rootMargin: '',
   thresholds: [],
 }))
-
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -35,7 +31,6 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 })
-
 // Mock Google Maps API
 global.google = {
   maps: {
@@ -82,7 +77,6 @@ global.google = {
     },
   },
 } as any
-
 // Mock localStorage
 const localStorageMock = {
   getItem: jest.fn(),
@@ -93,7 +87,6 @@ const localStorageMock = {
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock
 })
-
 // Mock sessionStorage
 const sessionStorageMock = {
   getItem: jest.fn(),
@@ -104,25 +97,21 @@ const sessionStorageMock = {
 Object.defineProperty(window, 'sessionStorage', {
   value: sessionStorageMock
 })
-
 // Mock URL.createObjectURL
 Object.defineProperty(URL, 'createObjectURL', {
   writable: true,
   value: jest.fn(() => 'mock-url')
 })
-
 // Mock document.elementFromPoint
 Object.defineProperty(document, 'elementFromPoint', {
   writable: true,
   value: jest.fn(() => null)
 })
-
 // Mock scrollTo
 Object.defineProperty(window, 'scrollTo', {
   writable: true,
   value: jest.fn()
 })
-
 // Helper function to create mock user session
 export const createMockSession = (overrides = {}) => ({
   user: {
@@ -134,7 +123,6 @@ export const createMockSession = (overrides = {}) => ({
   },
   expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
 })
-
 // Helper function to create mock farm data
 export const createMockFarm = (overrides = {}) => ({
   id: 'test-farm-id',
@@ -149,7 +137,6 @@ export const createMockFarm = (overrides = {}) => ({
   updatedAt: new Date(),
   ...overrides
 })
-
 // Helper function to create mock field data
 export const createMockField = (overrides = {}) => ({
   id: 'test-field-id',
@@ -164,7 +151,6 @@ export const createMockField = (overrides = {}) => ({
   updatedAt: new Date(),
   ...overrides
 })
-
 // Helper function to create mock weather data
 export const createMockWeatherData = (overrides = {}) => ({
   temperature: 25,
@@ -188,7 +174,6 @@ export const createMockWeatherData = (overrides = {}) => ({
   ],
   ...overrides
 })
-
 // Helper function to create mock NDVI data
 export const createMockNDVIData = (overrides = {}) => ({
   fieldId: 'test-field-id',
@@ -198,10 +183,8 @@ export const createMockNDVIData = (overrides = {}) => ({
   imageUrl: 'https://crops-ai.com/image.jpg',
   ...overrides
 })
-
 // Test utility to wait for async operations
 export const waitForAsync = () => new Promise(resolve => setTimeout(resolve, 0))
-
 // Export common testing utilities
 export {
   localStorageMock,

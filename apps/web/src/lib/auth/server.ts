@@ -4,16 +4,13 @@
  * This module provides server-side authentication helpers for API routes
  * using Supabase Auth with JWT token validation.
  */
-
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest } from 'next/server'
-
 // Server-side Supabase client for authentication
 function createSupabaseServerClient(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return null
   }
-
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -32,14 +29,12 @@ function createSupabaseServerClient(request: NextRequest) {
     }
   )
 }
-
 export interface AuthenticatedUser {
   id: string
   email: string
   name: string
   role: 'FARM_OWNER' | 'FARM_MANAGER' | 'AGRONOMIST' | 'ADMIN'
 }
-
 /**
  * Get the authenticated user from the request
  * Returns null if not authenticated
@@ -47,18 +42,14 @@ export interface AuthenticatedUser {
 export async function getAuthenticatedUser(request: NextRequest): Promise<AuthenticatedUser | null> {
   try {
     const supabase = createSupabaseServerClient(request)
-    
     if (!supabase) {
       // Supabase not configured, return null
       return null
     }
-
     const { data: { user }, error } = await supabase.auth.getUser()
-    
     if (error || !user) {
       return null
     }
-
     return {
       id: user.id,
       email: user.email || '',
@@ -70,21 +61,17 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
     return null
   }
 }
-
 /**
  * Require authentication for an API route
  * Returns the authenticated user or throws an error
  */
 export async function requireAuth(request: NextRequest): Promise<AuthenticatedUser> {
   const user = await getAuthenticatedUser(request)
-  
   if (!user) {
     throw new Error('Unauthorized')
   }
-  
   return user
 }
-
 /**
  * Check if user has required role
  */
@@ -95,10 +82,8 @@ export function hasRole(user: AuthenticatedUser, requiredRole: AuthenticatedUser
     'AGRONOMIST': 3,
     'ADMIN': 4
   }
-  
   return roleHierarchy[user.role] >= roleHierarchy[requiredRole]
 }
-
 /**
  * Require specific role for an API route
  */
@@ -107,10 +92,8 @@ export async function requireRole(
   requiredRole: AuthenticatedUser['role']
 ): Promise<AuthenticatedUser> {
   const user = await requireAuth(request)
-  
   if (!hasRole(user, requiredRole)) {
     throw new Error('Insufficient permissions')
   }
-  
   return user
 }

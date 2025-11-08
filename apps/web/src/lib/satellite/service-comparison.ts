@@ -3,7 +3,6 @@
  * 
  * Detailed analysis of area limits, costs, and practical constraints
  */
-
 export interface ServiceLimits {
   name: string
   freeAreaLimit: number // hectares
@@ -15,7 +14,6 @@ export interface ServiceLimits {
   costStructure: string
   realWorldLimit: string
 }
-
 export const satelliteServiceComparison: ServiceLimits[] = [
   {
     name: 'AgroMonitoring (OpenWeather)',
@@ -62,7 +60,6 @@ export const satelliteServiceComparison: ServiceLimits[] = [
     realWorldLimit: 'Unlimited, but poor resolution for small farms'
   }
 ]
-
 /**
  * Calculate if a service can handle your expected farm portfolio
  */
@@ -79,12 +76,9 @@ export function canServiceHandleFarms(
 } {
   const totalAcres = farms.reduce((sum, farm) => sum + farm.acres, 0)
   const totalHectares = totalAcres * 0.404686 // acres to hectares
-  
   const areaLimit = isPaid ? service.paidAreaLimit : service.freeAreaLimit
   const limitExceeded = totalHectares > areaLimit
-  
   let recommendation = ''
-  
   if (limitExceeded && service.name === 'AgroMonitoring (OpenWeather)') {
     recommendation = `❌ AgroMonitoring cannot handle ${totalAcres.toFixed(0)} acres (${totalHectares.toFixed(0)} ha). Limit: ${areaLimit} ha. Consider Google Earth Engine.`
   } else if (service.name === 'Google Earth Engine') {
@@ -92,7 +86,6 @@ export function canServiceHandleFarms(
   } else if (!limitExceeded) {
     recommendation = `✅ ${service.name} can handle your ${totalAcres.toFixed(0)} acres comfortably.`
   }
-  
   return {
     canHandle: !limitExceeded,
     totalAcres,
@@ -101,7 +94,6 @@ export function canServiceHandleFarms(
     recommendation
   }
 }
-
 /**
  * Typical farm portfolio analysis
  */
@@ -109,29 +101,23 @@ export const farmPortfolioExamples = {
   smallFarmApp: [
     { acres: 100 }, { acres: 150 }, { acres: 80 }, { acres: 200 }, { acres: 120 }
   ], // 5 farms, 650 total acres = 263 hectares ✅ AgroMonitoring OK
-  
   mediumFarmApp: [
     { acres: 500 }, { acres: 800 }, { acres: 600 }, { acres: 400 }, { acres: 1200 },
     { acres: 300 }, { acres: 700 }, { acres: 900 }, { acres: 450 }, { acres: 350 }
   ], // 10 farms, 6,200 total acres = 2,509 hectares ✅ AgroMonitoring OK
-  
   largeFarmApp: Array.from({ length: 50 }, (_, i) => ({ acres: 400 + i * 100 })),
   // 50 farms, 27,500 total acres = 11,128 hectares ❌ AgroMonitoring EXCEEDED
-  
   enterpriseFarmApp: Array.from({ length: 200 }, (_, i) => ({ acres: 500 + i * 50 })),
   // 200 farms, 600,000 total acres ❌ AgroMonitoring WAY EXCEEDED
 }
-
 /**
  * Business model impact analysis
  */
 export function analyzeBusinessModel(expectedFarms: number, avgFarmSize: number) {
   const totalAcres = expectedFarms * avgFarmSize
   const totalHectares = totalAcres * 0.404686
-  
   const agroMonitoringLimit = 4000 // hectares (paid tier)
   const googleEarthEngineComplexity = 'High - requires GIS developers'
-  
   if (totalHectares <= 1000) {
     return {
       phase: 'MVP/Startup',

@@ -1,6 +1,5 @@
 import { GraphQLScalarType, Kind } from 'graphql'
 import { GraphQLJSON } from 'graphql-type-json'
-
 const DateTimeType = new GraphQLScalarType({
   name: 'DateTime',
   description: 'DateTime custom scalar type',
@@ -20,7 +19,6 @@ const DateTimeType = new GraphQLScalarType({
     return null
   },
 })
-
 const UploadType = new GraphQLScalarType({
   name: 'Upload',
   description: 'The `Upload` scalar type represents a file upload.',
@@ -34,7 +32,6 @@ const UploadType = new GraphQLScalarType({
     throw new Error('Upload literal parsing is not supported')
   },
 })
-
 export const scalarResolvers = {
   DateTime: DateTimeType,
   JSON: GraphQLJSON,

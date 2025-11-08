@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -14,7 +13,6 @@ import {
   MapPin,
   BarChart3
 } from 'lucide-react'
-
 interface BenchmarkData {
   metric: string
   yourValue: number
@@ -24,22 +22,18 @@ interface BenchmarkData {
   category: 'yield' | 'cost' | 'profit' | 'efficiency'
   higherIsBetter: boolean
 }
-
 interface Farm {
   id: string
   name: string
   totalArea: number
   region?: string
 }
-
 interface BenchmarkingSectionProps {
   farm: Farm
 }
-
 export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
   const [benchmarks, setBenchmarks] = React.useState<BenchmarkData[]>([])
   const [loading, setLoading] = React.useState(true)
-
   React.useEffect(() => {
     const fetchBenchmarkData = async () => {
       try {
@@ -48,7 +42,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           const data = await response.json()
           // Transform API data to benchmark format
           const farmBenchmarks: BenchmarkData[] = []
-          
           if (data.yieldComparison) {
             farmBenchmarks.push({
               metric: 'Crop Yield',
@@ -60,7 +53,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               higherIsBetter: true
             })
           }
-
           if (data.costComparison) {
             farmBenchmarks.push({
               metric: 'Cost Per Acre',
@@ -72,7 +64,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               higherIsBetter: false
             })
           }
-
           if (data.profitComparison) {
             farmBenchmarks.push({
               metric: 'Profit Per Acre',
@@ -84,7 +75,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               higherIsBetter: true
             })
           }
-
           setBenchmarks(farmBenchmarks)
         }
       } catch (error) {
@@ -93,13 +83,10 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
         setLoading(false)
       }
     }
-
     fetchBenchmarkData()
   }, [farm.id])
-
   const getPerformanceStatus = (benchmark: BenchmarkData): 'excellent' | 'good' | 'warning' | 'critical' => {
     const { yourValue, regionAverage, topQuartile, higherIsBetter } = benchmark
-    
     if (higherIsBetter) {
       if (yourValue >= topQuartile) return 'excellent'
       if (yourValue >= regionAverage) return 'good'
@@ -112,10 +99,8 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       return 'critical'
     }
   }
-
   const getPercentilRanking = (benchmark: BenchmarkData): number => {
     const { yourValue, regionAverage, topQuartile, higherIsBetter } = benchmark
-    
     if (higherIsBetter) {
       if (yourValue >= topQuartile) return 85 // Top quartile
       if (yourValue >= regionAverage) return 65 // Above average
@@ -128,18 +113,15 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       return 20
     }
   }
-
   const formatValue = (value: number, unit: string): string => {
     if (unit.includes('$')) {
       return `$${value.toLocaleString()}`
     }
     return `${value.toLocaleString()} ${unit}`
   }
-
   const getComparisonText = (benchmark: BenchmarkData): string => {
     const { yourValue, regionAverage, higherIsBetter } = benchmark
     const percentDiff = Math.abs(((yourValue - regionAverage) / regionAverage) * 100)
-    
     if (higherIsBetter) {
       if (yourValue > regionAverage) {
         return `${percentDiff.toFixed(0)}% better than average`
@@ -154,7 +136,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       }
     }
   }
-
   const getCategoryColor = (category: string): string => {
     switch (category) {
       case 'yield': return 'text-green-600'
@@ -164,7 +145,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       default: return 'text-sage-600'
     }
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -188,7 +168,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       </div>
     )
   }
-
   if (benchmarks.length === 0) {
     return (
       <ModernCard variant="floating">
@@ -217,7 +196,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       </ModernCard>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -240,7 +218,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           </div>
         </ModernCardHeader>
       </ModernCard>
-
       {/* Overall Performance Summary */}
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">
@@ -252,7 +229,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                 <p className="text-sage-600">of farms in your region</p>
               </div>
             </div>
-            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <div className="text-center">
                 <div className="text-xl font-bold text-green-600 mb-1">4/6</div>
@@ -274,7 +250,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Detailed Benchmarks */}
       <ModernCard variant="floating">
         <ModernCardHeader>
@@ -289,7 +264,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               const status = getPerformanceStatus(benchmark)
               const percentile = getPercentilRanking(benchmark)
               const comparisonText = getComparisonText(benchmark)
-              
               return (
                 <div key={index} className="border border-sage-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
@@ -315,7 +289,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                       </Badge>
                     </div>
                   </div>
-
                   {/* Visual comparison bar */}
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs text-sage-600">
@@ -327,7 +300,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                         />
                       </span>
                     </div>
-                    
                     <div className="relative">
                       {/* Background bar */}
                       <div className="w-full bg-gray-200 rounded-full h-3">
@@ -338,7 +310,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                             Avg
                           </div>
                         </div>
-                        
                         {/* Top quartile area (green) */}
                         <div 
                           className="bg-green-200 h-3 rounded-full absolute top-0"
@@ -347,7 +318,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                             width: '25%'
                           }}
                         ></div>
-                        
                         {/* Your position */}
                         <div 
                           className={`absolute top-0 h-3 w-1 rounded-full ${
@@ -361,14 +331,12 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                           }}
                         ></div>
                       </div>
-                      
                       {/* Labels */}
                       <div className="flex justify-between text-xs text-sage-600 mt-1">
                         <span>{benchmark.higherIsBetter ? 'Low' : 'Best'}</span>
                         <span>{benchmark.higherIsBetter ? 'Best' : 'High'}</span>
                       </div>
                     </div>
-
                     {/* Comparison values */}
                     <div className="grid grid-cols-3 gap-2 text-xs text-center mt-3">
                       <div>
@@ -397,7 +365,6 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Action Items Based on Benchmarking */}
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">

@@ -4,11 +4,9 @@
  * Handles the 5 calls/minute and 500 calls/day limits intelligently
  * using caching, queuing, and smart data management.
  */
-
 // CacheService replaced with simple Map-based cache for local development
 class SimpleCacheService {
   private cache = new Map<string, { data: any; expiry: number }>()
-
   async get<T>(key: string): Promise<T | null> {
     const entry = this.cache.get(key)
     if (!entry || Date.now() > entry.expiry) {
@@ -17,22 +15,18 @@ class SimpleCacheService {
     }
     return entry.data
   }
-
   async set<T>(key: string, data: T, ttlSeconds: number): Promise<void> {
     this.cache.set(key, {
       data,
       expiry: Date.now() + (ttlSeconds * 1000)
     })
   }
-
   async delete(key: string): Promise<void> {
     this.cache.delete(key)
   }
 }
-
 const CacheService = new SimpleCacheService()
 import { prisma } from '../prisma'
-
 interface AlphaVantageConfig {
   apiKey: string
   baseUrl: string
@@ -41,7 +35,6 @@ interface AlphaVantageConfig {
     perDay: number
   }
 }
-
 interface MarketPrice {
   symbol: string
   name: string
@@ -51,19 +44,16 @@ interface MarketPrice {
   timestamp: Date
   source: 'live' | 'cached'
 }
-
 class AlphaVantageService {
   private config: AlphaVantageConfig
   private callsThisMinute: number = 0
   private callsToday: number = 0
   private lastMinuteReset: Date = new Date()
   private lastDayReset: Date = new Date()
-  
   // Cache durations
   private readonly PRICE_CACHE_DURATION = 15 * 60 // 15 minutes
   private readonly HISTORY_CACHE_DURATION = 60 * 60 // 1 hour
   private readonly STATIC_DATA_CACHE_DURATION = 24 * 60 * 60 // 24 hours
-
   constructor() {
     this.config = {
       apiKey: process.env.ALPHA_VANTAGE_API_KEY || '',
@@ -74,23 +64,19 @@ class AlphaVantageService {
       }
     }
   }
-
   /**
    * Get commodity prices with intelligent caching
    */
   async getCommodityPrices(symbols: string[]): Promise<MarketPrice[]> {
     const prices: MarketPrice[] = []
-    
     for (const symbol of symbols) {
       // Step 1: Check Redis cache first (15 min)
       const cacheKey = `market:price:${symbol}`
       const cached = await CacheService.get<MarketPrice>(cacheKey)
-      
       if (cached) {
         prices.push({ ...cached, source: 'cached' })
         continue
       }
-
       // Step 2: Check database for recent prices (< 30 min old)
       const dbPrice = await this.getRecentPriceFromDB(symbol)
       if (dbPrice) {
@@ -99,7 +85,6 @@ class AlphaVantageService {
         await CacheService.set(cacheKey, dbPrice, this.PRICE_CACHE_DURATION)
         continue
       }
-
       // Step 3: Fetch from API if within rate limits
       if (this.canMakeApiCall()) {
         try {
@@ -125,48 +110,37 @@ class AlphaVantageService {
         }
       }
     }
-    
     return prices
   }
-
   /**
    * Check if we can make an API call without hitting rate limits
    */
   private canMakeApiCall(): boolean {
     this.updateRateLimitCounters()
-    
     if (this.callsThisMinute >= this.config.rateLimit.perMinute) {
-
       return false
     }
-    
     if (this.callsToday >= this.config.rateLimit.perDay) {
-
       return false
     }
-    
     return true
   }
-
   /**
    * Update rate limit counters
    */
   private updateRateLimitCounters() {
     const now = new Date()
-    
     // Reset minute counter
     if (now.getTime() - this.lastMinuteReset.getTime() >= 60000) {
       this.callsThisMinute = 0
       this.lastMinuteReset = now
     }
-    
     // Reset daily counter at midnight
     if (now.getDate() !== this.lastDayReset.getDate()) {
       this.callsToday = 0
       this.lastDayReset = now
     }
   }
-
   /**
    * Fetch live price from Alpha Vantage
    */
@@ -174,7 +148,6 @@ class AlphaVantageService {
     // Increment counters
     this.callsThisMinute++
     this.callsToday++
-    
     const commodityMap: { [key: string]: string } = {
       'ZC': 'CORN',
       'ZW': 'WHEAT', 
@@ -183,17 +156,13 @@ class AlphaVantageService {
       'WHEAT': 'WHEAT',
       'SOYBEANS': 'SOYBEANS'
     }
-
     const alphaSymbol = commodityMap[symbol] || symbol
-    
     try {
       const response = await fetch(
         `${this.config.baseUrl}?function=GLOBAL_QUOTE&symbol=${alphaSymbol}&apikey=${this.config.apiKey}`,
         { signal: AbortSignal.timeout(10000) }
       )
-      
       const data = await response.json()
-      
       if (data['Global Quote']) {
         const quote = data['Global Quote']
         return {
@@ -206,20 +175,17 @@ class AlphaVantageService {
           source: 'live'
         }
       }
-      
       return null
     } catch (error) {
       console.error('Alpha Vantage API error:', error)
       throw error
     }
   }
-
   /**
    * Get recent price from database (< 30 min old)
    */
   private async getRecentPriceFromDB(symbol: string): Promise<MarketPrice | null> {
     const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000)
-    
     const recentPrice = await prisma.marketPrice.findFirst({
       where: {
         commodity: symbol,
@@ -227,13 +193,11 @@ class AlphaVantageService {
       },
       orderBy: { date: 'desc' }
     })
-    
     if (recentPrice) {
       // Calculate change from previous day
       const previousPrice = await this.getPreviousDayPrice(symbol)
       const change = previousPrice ? recentPrice.price - previousPrice : 0
       const changePercent = previousPrice ? (change / previousPrice) * 100 : 0
-      
       return {
         symbol,
         name: this.getCommodityName(symbol),
@@ -244,17 +208,14 @@ class AlphaVantageService {
         source: 'cached'
       }
     }
-    
     return null
   }
-
   /**
    * Get stale price (any price from today)
    */
   private async getStalePrice(symbol: string): Promise<MarketPrice | null> {
     const todayStart = new Date()
     todayStart.setHours(0, 0, 0, 0)
-    
     const stalePrice = await prisma.marketPrice.findFirst({
       where: {
         commodity: symbol,
@@ -262,7 +223,6 @@ class AlphaVantageService {
       },
       orderBy: { date: 'desc' }
     })
-    
     if (stalePrice) {
       return {
         symbol,
@@ -274,13 +234,11 @@ class AlphaVantageService {
         source: 'cached'
       }
     }
-    
     // Last resort: get most recent price regardless of date
     const anyPrice = await prisma.marketPrice.findFirst({
       where: { commodity: symbol },
       orderBy: { date: 'desc' }
     })
-    
     if (anyPrice) {
       return {
         symbol,
@@ -292,10 +250,8 @@ class AlphaVantageService {
         source: 'cached'
       }
     }
-    
     return null
   }
-
   /**
    * Cache price in both Redis and database
    */
@@ -303,7 +259,6 @@ class AlphaVantageService {
     // Cache in Redis
     const cacheKey = `market:price:${symbol}`
     await CacheService.set(cacheKey, price, this.PRICE_CACHE_DURATION)
-    
     // Store in database
     try {
       // Check if record already exists for today
@@ -313,7 +268,6 @@ class AlphaVantageService {
           date: price.timestamp
         }
       })
-
       if (existingPrice) {
         // Update existing record
         await prisma.marketPrice.update({
@@ -339,7 +293,6 @@ class AlphaVantageService {
       console.error('Error caching to database:', error)
     }
   }
-
   /**
    * Get previous trading day price for change calculation
    */
@@ -347,7 +300,6 @@ class AlphaVantageService {
     const yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - 1)
     yesterday.setHours(23, 59, 59, 999)
-    
     const previousPrice = await prisma.marketPrice.findFirst({
       where: {
         commodity: symbol,
@@ -355,10 +307,8 @@ class AlphaVantageService {
       },
       orderBy: { date: 'desc' }
     })
-    
     return previousPrice?.price || null
   }
-
   /**
    * Smart batch fetching for dashboard
    * Optimizes API calls by fetching only what's needed
@@ -370,18 +320,14 @@ class AlphaVantageService {
   }> {
     const mainCommodities = ['CORN', 'WHEAT', 'SOYBEANS']
     const prices = await this.getCommodityPrices(mainCommodities)
-    
     // Determine data freshness
     const now = new Date()
     const oldestPrice = prices.reduce((oldest, p) => 
       p.timestamp < oldest.timestamp ? p : oldest
     )
-    
     const ageInMinutes = (now.getTime() - oldestPrice.timestamp.getTime()) / 60000
-    
     let dataFreshness: 'live' | 'recent' | 'stale'
     let nextUpdateIn: number
-    
     if (ageInMinutes < 15) {
       dataFreshness = 'live'
       nextUpdateIn = 15 - ageInMinutes
@@ -392,14 +338,12 @@ class AlphaVantageService {
       dataFreshness = 'stale'
       nextUpdateIn = 1 // Try again soon
     }
-    
     return {
       prices,
       nextUpdateIn: Math.ceil(nextUpdateIn),
       dataFreshness
     }
   }
-
   /**
    * Get remaining API calls for today
    */
@@ -409,18 +353,15 @@ class AlphaVantageService {
     resetsAt: Date
   } {
     this.updateRateLimitCounters()
-    
     const resetsAt = new Date()
     resetsAt.setDate(resetsAt.getDate() + 1)
     resetsAt.setHours(0, 0, 0, 0)
-    
     return {
       callsToday: this.callsToday,
       callsRemaining: this.config.rateLimit.perDay - this.callsToday,
       resetsAt
     }
   }
-
   /**
    * Helper methods
    */
@@ -438,7 +379,6 @@ class AlphaVantageService {
     }
     return names[symbol] || symbol
   }
-
   private getCommodityUnit(symbol: string): string {
     const units: { [key: string]: string } = {
       'ZC': 'bushel',
@@ -454,6 +394,5 @@ class AlphaVantageService {
     return units[symbol] || 'unit'
   }
 }
-
 // Export singleton instance
 export const alphaVantageService = new AlphaVantageService()

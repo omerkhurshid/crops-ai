@@ -4,7 +4,6 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../../lib/auth/server';
 import { mlOpsPipeline } from '../../../../../lib/ml/mlops-pipeline';
-
 const weatherAlertPredictionSchema = z.object({
   modelId: z.string().default('weather-alert-generator'),
   input: z.object({
@@ -77,7 +76,6 @@ const weatherAlertPredictionSchema = z.object({
     timeWindow: z.number().min(1).max(168).default(72) // hours
   }).optional()
 });
-
 // Weather alert prediction service
 class WeatherAlertPredictor {
   async predictAlerts(input: any, options: any = {}) {
@@ -91,7 +89,6 @@ class WeatherAlertPredictor {
           options: options
         }
       });
-
       if (modelResponse.prediction) {
         return {
           alerts: modelResponse.prediction.alerts || [],
@@ -104,16 +101,13 @@ class WeatherAlertPredictor {
     } catch (error) {
       // ML model not available - using intelligent alert generation fallback
     }
-
     // Intelligent fallback with sophisticated weather analysis
     return this.generateIntelligentAlerts(input, options);
   }
-
   private generateIntelligentAlerts(input: any, options: any) {
     const { current, forecast, historical, location, thresholds, season } = input;
     const alerts = [];
     const currentTime = new Date();
-
     // Frost risk analysis with multiple factors
     if (current.temperature <= thresholds.frost.temperature + 3) {
       const frostRisk = this.analyzeFrostRisk(current, forecast, thresholds.frost);
@@ -140,7 +134,6 @@ class WeatherAlertPredictor {
         });
       }
     }
-
     // Heat stress analysis
     const heatStress = this.analyzeHeatStress(current, forecast, thresholds.heat, season);
     if (heatStress.shouldAlert) {
@@ -165,7 +158,6 @@ class WeatherAlertPredictor {
         isRecommended: true
       });
     }
-
     // Wind damage risk
     if (current.windSpeed > thresholds.wind.speed * 0.8) {
       const windRisk = this.analyzeWindRisk(current, forecast, thresholds.wind);
@@ -192,7 +184,6 @@ class WeatherAlertPredictor {
         });
       }
     }
-
     // Precipitation and flooding risk
     const precipitationRisk = this.analyzePrecipitationRisk(current, forecast, thresholds.precipitation);
     if (precipitationRisk.shouldAlert) {
@@ -217,7 +208,6 @@ class WeatherAlertPredictor {
         isRecommended: true
       });
     }
-
     // Drought conditions analysis
     if (historical && historical.dryDays > thresholds.drought.precipitationDays / 2) {
       const droughtRisk = this.analyzeDroughtRisk(historical, current, thresholds.drought);
@@ -243,7 +233,6 @@ class WeatherAlertPredictor {
         });
       }
     }
-
     // Fire risk analysis (especially important for dry conditions)
     if (historical && season === 'summer' || season === 'fall') {
       const fireRisk = this.analyzeFireRisk(current, historical, season);
@@ -270,7 +259,6 @@ class WeatherAlertPredictor {
         });
       }
     }
-
     // Filter and sort alerts
     const filteredAlerts = alerts
       .filter(alert => (alert.confidence || 0.8) >= (options.confidenceThreshold || 0.6))
@@ -282,7 +270,6 @@ class WeatherAlertPredictor {
       })
       .sort((a, b) => b.priority - a.priority)
       .slice(0, options.maxAlerts || 10);
-
     return {
       alerts: filteredAlerts,
       confidence: 0.85,
@@ -306,21 +293,17 @@ class WeatherAlertPredictor {
       }
     };
   }
-
   // Sophisticated risk analysis methods
   private analyzeFrostRisk(current: any, forecast: any[], thresholds: any) {
     const frostTemp = thresholds.temperature;
     const currentRisk = current.temperature <= frostTemp;
     const forecastRisk = forecast.some(f => f.temperature.min <= frostTemp);
-    
     if (!currentRisk && !forecastRisk) {
       return { shouldAlert: false };
     }
-
     const tempDiff = frostTemp - Math.min(current.temperature, ...forecast.map(f => f.temperature.min));
     let severity = 'moderate';
     let confidence = 0.7;
-
     if (tempDiff > 5) {
       severity = 'extreme';
       confidence = 0.95;
@@ -328,12 +311,10 @@ class WeatherAlertPredictor {
       severity = 'severe';
       confidence = 0.9;
     }
-
     // Additional risk factors
     if (current.humidity > 80) confidence += 0.05;
     if (current.windSpeed < 3) confidence += 0.05;
     if (current.cloudCover < 30) confidence += 0.05;
-
     return {
       shouldAlert: true,
       severity,
@@ -342,19 +323,15 @@ class WeatherAlertPredictor {
       duration: currentRisk ? 8 : 12
     };
   }
-
   private analyzeHeatStress(current: any, forecast: any[], thresholds: any, season: string) {
     const heatTemp = thresholds.temperature;
     const maxTemp = Math.max(current.temperature, ...forecast.slice(0, 3).map(f => f.temperature.max));
-    
     if (maxTemp < heatTemp) {
       return { shouldAlert: false };
     }
-
     const tempExcess = maxTemp - heatTemp;
     let severity = 'moderate';
     let confidence = 0.8;
-
     if (tempExcess > 10) {
       severity = 'extreme';
       confidence = 0.95;
@@ -362,11 +339,9 @@ class WeatherAlertPredictor {
       severity = 'severe';
       confidence = 0.9;
     }
-
     // Season and humidity adjustments
     if (season === 'summer' && current.humidity > 70) confidence += 0.1;
     if (forecast.filter(f => f.temperature.max > heatTemp).length > 2) confidence += 0.05;
-
     return {
       shouldAlert: true,
       severity,
@@ -375,19 +350,15 @@ class WeatherAlertPredictor {
       duration: 48
     };
   }
-
   private analyzeWindRisk(current: any, forecast: any[], thresholds: any) {
     const windThreshold = thresholds.speed;
     const maxWind = Math.max(current.windSpeed, ...forecast.slice(0, 2).map(f => f.windSpeed));
-    
     if (maxWind < windThreshold) {
       return { shouldAlert: false };
     }
-
     const windRatio = maxWind / windThreshold;
     let severity = 'moderate';
     let confidence = 0.8;
-
     if (windRatio > 2) {
       severity = 'extreme';
       confidence = 0.95;
@@ -395,7 +366,6 @@ class WeatherAlertPredictor {
       severity = 'severe';
       confidence = 0.9;
     }
-
     return {
       shouldAlert: true,
       severity,
@@ -404,25 +374,19 @@ class WeatherAlertPredictor {
       duration: 12
     };
   }
-
   private analyzePrecipitationRisk(current: any, forecast: any[], thresholds: any) {
     const highPrecipRisk = forecast.some(f => f.precipitationProbability > 80);
     const severeRisk = forecast.some(f => f.precipitationProbability > 95);
-    
     if (!highPrecipRisk) {
       return { shouldAlert: false };
     }
-
     const maxPrecipProb = Math.max(...forecast.slice(0, 3).map(f => f.precipitationProbability));
     let severity = maxPrecipProb > 95 ? 'extreme' : maxPrecipProb > 85 ? 'severe' : 'moderate';
     let confidence = 0.75;
-
     const stormConditions = forecast.some(f => f.condition.toLowerCase().includes('storm'));
     const type = stormConditions ? 'storm' : 'flood';
     const title = stormConditions ? 'Severe Storm Warning' : 'Heavy Rainfall Alert';
-
     if (severeRisk) confidence = 0.9;
-
     return {
       shouldAlert: true,
       type,
@@ -436,19 +400,15 @@ class WeatherAlertPredictor {
       shortTermActions: ['Monitor water levels', 'Check for flooding', 'Assess damage']
     };
   }
-
   private analyzeDroughtRisk(historical: any, current: any, thresholds: any) {
     const dryDays = historical.dryDays;
     const threshold = thresholds.precipitationDays;
-    
     if (dryDays < threshold) {
       return { shouldAlert: false };
     }
-
     const dryRatio = dryDays / threshold;
     let severity = 'moderate';
     let confidence = 0.8;
-
     if (dryRatio > 2) {
       severity = 'extreme';
       confidence = 0.95;
@@ -456,11 +416,9 @@ class WeatherAlertPredictor {
       severity = 'severe';
       confidence = 0.9;
     }
-
     // Temperature and irrigation factors
     if (current.temperature > thresholds.temperature) confidence += 0.05;
     if (historical.irrigationNeeded) confidence += 0.1;
-
     return {
       shouldAlert: true,
       severity,
@@ -468,26 +426,21 @@ class WeatherAlertPredictor {
       description: `Drought conditions persist with ${dryDays} consecutive dry days. Water stress affecting crops.`
     };
   }
-
   private analyzeFireRisk(current: any, historical: any, season: string) {
     // Fire Weather Index calculation
     const temperature = current.temperature;
     const humidity = current.humidity;
     const windSpeed = current.windSpeed;
     const dryDays = historical.dryDays || 0;
-
     const fireIndex = (temperature - 10) * 2 + 
                      (100 - humidity) * 1.5 + 
                      windSpeed * 4 + 
                      dryDays * 3;
-
     if (fireIndex < 100) {
       return { shouldAlert: false };
     }
-
     let severity = 'moderate';
     let confidence = 0.7;
-
     if (fireIndex > 250) {
       severity = 'extreme';
       confidence = 0.95;
@@ -495,10 +448,8 @@ class WeatherAlertPredictor {
       severity = 'severe';
       confidence = 0.85;
     }
-
     // Seasonal adjustments
     if (season === 'summer' || season === 'fall') confidence += 0.1;
-
     return {
       shouldAlert: true,
       severity,
@@ -507,29 +458,22 @@ class WeatherAlertPredictor {
     };
   }
 }
-
 const weatherAlertPredictor = new WeatherAlertPredictor();
-
 // POST /api/ml/weather-alerts/predict
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = weatherAlertPredictionSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const { modelId, input, options } = validation.data;
-      
       const prediction = await weatherAlertPredictor.predictAlerts(input, options);
-
       const summary = {
         modelId,
         alertsGenerated: prediction.alerts.length,
@@ -542,7 +486,6 @@ export const POST = apiMiddleware.protected(
         usingRealModel: prediction.isRealModel,
         location: `${input.location.latitude.toFixed(2)}, ${input.location.longitude.toFixed(2)}`
       };
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -554,29 +497,24 @@ export const POST = apiMiddleware.protected(
         message: `Generated ${prediction.alerts.length} weather alerts`,
         action: 'weather_alert_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/weather-alerts/predict?temperature=35&humidity=30&windSpeed=15
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       // Extract weather parameters from query string
       const temperature = parseFloat(searchParams.get('temperature') || '25');
       const humidity = parseFloat(searchParams.get('humidity') || '60');
       const windSpeed = parseFloat(searchParams.get('windSpeed') || '5');
-
       // Simple prediction with default thresholds
       const input = {
         current: {
@@ -618,14 +556,11 @@ export const GET = apiMiddleware.protected(
         date: new Date().toISOString(),
         season: getCurrentSeason()
       };
-
       const options = {
         maxAlerts: parseInt(searchParams.get('maxAlerts') || '5'),
         confidenceThreshold: parseFloat(searchParams.get('confidenceThreshold') || '0.7')
       };
-
       const prediction = await weatherAlertPredictor.predictAlerts(input, options);
-
       return createSuccessResponse({
         data: {
           prediction: {
@@ -636,13 +571,11 @@ export const GET = apiMiddleware.protected(
         message: `Generated ${prediction.alerts.length} weather alerts for current conditions`,
         action: 'simple_weather_alert_prediction'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 function getCurrentSeason(): string {
   const month = new Date().getMonth();
   if (month >= 2 && month <= 4) return 'spring';

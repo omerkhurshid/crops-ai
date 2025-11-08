@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useMemo } from 'react'
 import { Badge } from '../ui/badge'
 import { Input } from '../ui/input'
@@ -12,7 +11,6 @@ import {
 } from 'lucide-react'
 import { cropCategories, livestockCategories, farmTypeOptions } from '../../lib/farm-categories'
 import { cn } from '../../lib/utils'
-
 interface SelectedItem {
   id: string
   name: string
@@ -27,14 +25,12 @@ interface SelectedItem {
     typicalHerdSize?: string
   }
 }
-
 interface SmartAgricultureSelectorProps {
   selectedFarmType: string
   onSelectionChange: (items: SelectedItem[]) => void
   className?: string
   showRecommendations?: boolean
 }
-
 export function SmartAgricultureSelector({ 
   selectedFarmType, 
   onSelectionChange, 
@@ -46,11 +42,9 @@ export function SmartAgricultureSelector({
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [showCropDetails, setShowCropDetails] = useState<Record<string, boolean>>({})
   const [showRecommendationPanel, setShowRecommendationPanel] = useState(false)
-
   // Filter items based on farm type
   const availableItems = useMemo(() => {
     let items: SelectedItem[] = []
-
     // Add crops if relevant
     if (selectedFarmType === 'crops' || selectedFarmType === 'mixed') {
       cropCategories.forEach(category => {
@@ -70,7 +64,6 @@ export function SmartAgricultureSelector({
         })
       })
     }
-
     // Add livestock if relevant
     if (selectedFarmType === 'livestock' || selectedFarmType === 'mixed') {
       livestockCategories.forEach(category => {
@@ -90,21 +83,17 @@ export function SmartAgricultureSelector({
         })
       })
     }
-
     return items
   }, [selectedFarmType])
-
   // Filter and search logic
   const filteredItems = useMemo(() => {
     let filtered = availableItems
-
     // Filter by category
     if (activeCategory !== 'all') {
       filtered = filtered.filter(item => 
         item.category.toLowerCase().includes(activeCategory.toLowerCase())
       )
     }
-
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(item =>
@@ -113,16 +102,13 @@ export function SmartAgricultureSelector({
         item.category.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
-
     return filtered
   }, [availableItems, activeCategory, searchTerm])
-
   // Get unique categories for filter
   const availableCategories = useMemo(() => {
     const categories = new Set(availableItems.map(item => item.category))
     return Array.from(categories)
   }, [availableItems])
-
   // Smart recommendations based on farm type and location
   const getRecommendations = () => {
     // This would ideally use location data and ML models
@@ -135,31 +121,25 @@ export function SmartAgricultureSelector({
       forestry: [],
       greenhouse: ['tomatoes', 'lettuce']
     }
-
     return recommendations[selectedFarmType as keyof typeof recommendations] || []
   }
-
   const toggleItemSelection = (item: SelectedItem) => {
     const isSelected = selectedItems.some(selected => selected.id === item.id)
-    
     let newSelection: SelectedItem[]
     if (isSelected) {
       newSelection = selectedItems.filter(selected => selected.id !== item.id)
     } else {
       newSelection = [...selectedItems, item]
     }
-    
     setSelectedItems(newSelection)
     onSelectionChange(newSelection)
   }
-
   const toggleDetails = (itemId: string) => {
     setShowCropDetails(prev => ({
       ...prev,
       [itemId]: !prev[itemId]
     }))
   }
-
   const getItemIcon = (item: SelectedItem) => {
     if (item.type === 'crop') {
       return <Sprout className="h-4 w-4 text-green-600" />
@@ -167,11 +147,8 @@ export function SmartAgricultureSelector({
       return <Users className="h-4 w-4 text-blue-600" />
     }
   }
-
   const isSelected = (itemId: string) => selectedItems.some(item => item.id === itemId)
-
   const recommendations = getRecommendations()
-
   return (
     <div className={cn("space-y-6", className)}>
       {/* Header with recommendations toggle */}
@@ -195,7 +172,6 @@ export function SmartAgricultureSelector({
           </Button>
         )}
       </div>
-
       {/* Recommendations Panel */}
       {showRecommendationPanel && recommendations.length > 0 && (
         <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -207,7 +183,6 @@ export function SmartAgricultureSelector({
             {recommendations.map(recId => {
               const item = availableItems.find(i => i.id === recId)
               if (!item) return null
-              
               return (
                 <Button
                   key={recId}
@@ -224,7 +199,6 @@ export function SmartAgricultureSelector({
           </div>
         </div>
       )}
-
       {/* Search and Filter Controls */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
@@ -253,7 +227,6 @@ export function SmartAgricultureSelector({
           </select>
         </div>
       </div>
-
       {/* Selected Items Summary */}
       {selectedItems.length > 0 && (
         <div className="p-4 bg-green-50 rounded-lg border border-green-200">
@@ -282,7 +255,6 @@ export function SmartAgricultureSelector({
           </div>
         </div>
       )}
-
       {/* Items Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredItems.map(item => (
@@ -322,13 +294,11 @@ export function SmartAgricultureSelector({
                 )}
               </Button>
             </div>
-
             <div className="mb-3">
               <Badge variant="outline" className="text-xs">
                 {item.category}
               </Badge>
             </div>
-
             {/* Quick Info */}
             <div className="space-y-1 text-xs text-gray-600">
               {item.additionalInfo?.growingSeasonDays && (
@@ -350,7 +320,6 @@ export function SmartAgricultureSelector({
                 </div>
               )}
             </div>
-
             {/* Expandable Details */}
             {showCropDetails[item.id] && (
               <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
@@ -369,7 +338,6 @@ export function SmartAgricultureSelector({
                     )}
                   </div>
                 </div>
-
                 {item.additionalInfo?.primaryHarvestSeason && (
                   <div>
                     <h5 className="text-xs font-medium text-gray-700 mb-1">Harvest Season:</h5>
@@ -383,7 +351,6 @@ export function SmartAgricultureSelector({
           </div>
         ))}
       </div>
-
       {filteredItems.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />

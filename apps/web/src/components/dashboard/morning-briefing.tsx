@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { useUserPreferences } from '../../contexts/user-preferences-context'
 import { formatTemperature, formatCurrency } from '../../lib/user-preferences'
@@ -12,7 +11,6 @@ import {
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import Link from 'next/link'
-
 interface MorningBriefingProps {
   farmName: string
   userName?: string
@@ -61,14 +59,12 @@ interface MorningBriefingProps {
   livestockHealthStatus?: 'good' | 'warning' | 'critical'
   lastSatelliteUpdate?: Date
 }
-
 const weatherIcons = {
   sun: Sun,
   cloud: CloudRain,
   rain: CloudRain,
   storm: CloudRain
 }
-
 export function MorningBriefing({
   farmName,
   userName,
@@ -92,22 +88,18 @@ export function MorningBriefing({
   const { preferences } = useUserPreferences()
   const WeatherIcon = weatherIcons[weather.current.icon]
   const healthStatus = getHealthStatus(overallHealth)
-  
   const greeting = () => {
     const hour = new Date().getHours()
     const firstName = userName ? userName.split(' ')[0] : ''
     const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-    
     return firstName ? `${timeGreeting}, ${firstName}` : `${timeGreeting}`
   }
-
   const getHealthExplanation = (health: number) => {
     if (health >= 85) return 'Excellent (your crops are thriving)'
     if (health >= 70) return 'Good (crops are healthy)'  
     if (health >= 55) return 'Fair (some areas could improve)'
     return 'Needs Attention (crops need immediate care)'
   }
-
   const getLivestockHealthExplanation = (status: 'good' | 'warning' | 'critical') => {
     switch (status) {
       case 'good': return 'Good (most animals are healthy)'
@@ -116,7 +108,6 @@ export function MorningBriefing({
       default: return 'Good'
     }
   }
-
   return (
     <ModernCard variant="glow" className={cn('overflow-hidden', className)}>
       <ModernCardContent className="p-0">
@@ -136,11 +127,9 @@ export function MorningBriefing({
             </div>
           </div>
         </div>
-
         {/* Main Content Grid */}
         <div className="p-6 pt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-            
             {/* Farm Status */}
             <div className="pb-6 md:pb-0 md:pr-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
@@ -153,7 +142,6 @@ export function MorningBriefing({
                     <span className="text-sm font-medium text-gray-700">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
-                  
                   {/* Simplified Progress Display */}
                   <div className="flex items-center gap-4">
                     <div className="relative w-14 h-14">
@@ -194,7 +182,6 @@ export function MorningBriefing({
                         </span>
                       </div>
                     </div>
-                    
                     <div className="flex-1">
                       <div className={cn(
                         'text-base font-medium mb-1',
@@ -212,7 +199,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 </div>
-
                 {/* Livestock Health */}
                 {livestockCount > 0 && (
                   <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -235,7 +221,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 )}
-
                 {/* Crop Stats - Clean Professional Layout */}
                 <div className="grid grid-cols-3 gap-2">
                   <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
@@ -251,7 +236,6 @@ export function MorningBriefing({
                     <div className="text-xs text-gray-600 font-medium">Ready</div>
                   </div>
                 </div>
-
                 {/* Fields Needing Attention */}
                 {fieldsNeedingAttention.length > 0 && (
                   <div className="mt-2">
@@ -270,7 +254,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 )}
-
                 {/* Livestock Status */}
                 {livestockCount > 0 && (
                   <div className="flex items-center justify-between pt-2 border-t border-sage-200">
@@ -289,7 +272,6 @@ export function MorningBriefing({
                 )}
               </div>
             </div>
-
             {/* Weather Conditions */}
             <div className="py-6 md:py-0 md:px-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
@@ -315,7 +297,6 @@ export function MorningBriefing({
                       <div className="text-sm text-gray-700 font-medium">L: {weather.today.low}°</div>
                     </div>
                   </div>
-                  
                   {/* Weather Metrics */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex items-center gap-2">
@@ -328,7 +309,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 </div>
-
                 {/* 3-Day Forecast */}
                 {weather.forecast && weather.forecast.length > 0 && (
                   <div>
@@ -349,7 +329,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 )}
-
                 {weather.alerts.length > 0 && (
                   <div className={cn(
                     'mt-3 p-3 rounded-lg border',
@@ -368,7 +347,6 @@ export function MorningBriefing({
                 )}
               </div>
             </div>
-
             {/* Financial Performance */}
             <div className="pt-6 md:pt-0 md:pl-6">
               <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
@@ -381,7 +359,6 @@ export function MorningBriefing({
                     <span className="text-sm text-gray-700 font-medium">Net Profit YTD</span>
                     <TrendIndicator value={financials.trend} size="sm" />
                   </div>
-                  
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       'p-2 rounded-lg',
@@ -404,7 +381,6 @@ export function MorningBriefing({
                       </div>
                     </div>
                   </div>
-                  
                   {/* Yearly Progress */}
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-xs mb-1">
@@ -419,7 +395,6 @@ export function MorningBriefing({
                     </div>
                   </div>
                 </div>
-
                 <div className="pt-2">
                   <Link href="/financial">
                     <button className="w-full text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors flex items-center justify-center gap-2">
@@ -431,7 +406,6 @@ export function MorningBriefing({
               </div>
             </div>
           </div>
-
           {/* Action Bar */}
           <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-end">
@@ -447,7 +421,6 @@ export function MorningBriefing({
     </ModernCard>
   )
 }
-
 // Helper component for trend indicators
 function TrendIndicator({ 
   value, 
@@ -457,12 +430,10 @@ function TrendIndicator({
   size?: 'sm' | 'md' 
 }) {
   if (value === 0) return null
-  
   const Icon = value > 0 ? TrendingUp : TrendingDown
   const color = value > 0 ? 'text-green-600' : 'text-red-600'
   const iconSize = size === 'sm' ? 'h-3 w-3' : 'h-4 w-4'
   const textSize = size === 'sm' ? 'text-xs' : 'text-sm'
-  
   return (
     <div className={cn('flex items-center gap-0.5', color)}>
       <Icon className={iconSize} />
@@ -472,14 +443,12 @@ function TrendIndicator({
     </div>
   )
 }
-
 // Helper function to get time ago
 function getTimeAgo(date: Date): string {
   const now = new Date()
   const diffInMs = now.getTime() - date.getTime()
   const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60))
   const diffInDays = Math.floor(diffInHours / 24)
-  
   if (diffInDays > 0) {
     return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
   } else if (diffInHours > 0) {

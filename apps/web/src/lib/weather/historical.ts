@@ -4,10 +4,8 @@
  * Provides comprehensive historical weather data analysis for agricultural
  * planning, crop selection, and climate trend monitoring.
  */
-
 import { weatherService, CurrentWeather, WeatherForecast } from './service';
 import { weatherAggregator, AggregatedWeatherData } from './aggregator';
-
 export interface HistoricalWeatherData {
   location: {
     latitude: number;
@@ -34,7 +32,6 @@ export interface HistoricalWeatherData {
   climateSummary: ClimateSummary;
   agricultureInsights: AgricultureInsights;
 }
-
 export interface HistoricalStatistics {
   mean: number;
   median: number;
@@ -50,7 +47,6 @@ export interface HistoricalStatistics {
   monthlyAverages: MonthlyData[];
   yearlyAverages: YearlyData[];
 }
-
 export interface TrendAnalysis {
   slope: number; // Change per year
   correlation: number; // -1 to 1
@@ -58,7 +54,6 @@ export interface TrendAnalysis {
   direction: 'increasing' | 'decreasing' | 'stable';
   description: string;
 }
-
 export interface SeasonalPattern {
   season: 'spring' | 'summer' | 'autumn' | 'winter';
   averageTemperature: number;
@@ -66,7 +61,6 @@ export interface SeasonalPattern {
   typicalWeatherPattern: string;
   agriculturalRecommendations: string[];
 }
-
 export interface ExtremeEvent {
   date: string;
   type: 'heatwave' | 'coldsnap' | 'drought' | 'flood' | 'storm';
@@ -76,7 +70,6 @@ export interface ExtremeEvent {
   impact: string;
   returnPeriod: number; // years (estimated)
 }
-
 export interface ClimateSummary {
   climateZone: string;
   averageAnnualTemperature: number;
@@ -96,7 +89,6 @@ export interface ClimateSummary {
     coolingDegreeDays: number; // base 18°C
   };
 }
-
 export interface AgricultureInsights {
   suitableCrops: string[];
   plantingRecommendations: {
@@ -113,22 +105,18 @@ export interface AgricultureInsights {
   climateChallenges: string[];
   adaptationStrategies: string[];
 }
-
 export interface MonthlyData {
   month: number;
   value: number;
   standardDeviation?: number;
 }
-
 export interface YearlyData {
   year: number;
   value: number;
 }
-
 class HistoricalWeatherService {
   private readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
   private readonly CACHE_PREFIX = 'historical_weather_';
-
   /**
    * Get comprehensive historical weather analysis
    */
@@ -145,13 +133,10 @@ class HistoricalWeatherService {
         weatherService.getCurrentWeather(latitude, longitude),
         weatherService.getWeatherForecast(latitude, longitude, 30) // Extended forecast
       ]);
-
       if (!currentWeather || !forecast.length) {
         return null;
       }
-
       const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-      
       // Generate simulated historical data based on current patterns
       const historicalData = this.generateSimulatedHistoricalData(
         currentWeather,
@@ -160,14 +145,12 @@ class HistoricalWeatherService {
         endDate,
         totalDays
       );
-
       // Analyze the data
       const statistics = this.calculateHistoricalStatistics(historicalData);
       const trends = this.analyzeTrends(historicalData, totalDays);
       const extremeEvents = this.identifyExtremeEvents(historicalData);
       const climateSummary = this.generateClimateSummary(statistics, latitude);
       const agricultureInsights = this.generateAgricultureInsights(statistics, climateSummary, latitude);
-
       return {
         location: {
           latitude,
@@ -185,13 +168,11 @@ class HistoricalWeatherService {
         climateSummary,
         agricultureInsights
       };
-
     } catch (error) {
       console.error('Error getting historical analysis:', error);
       return null;
     }
   }
-
   /**
    * Get climate normals (30-year averages)
    */
@@ -208,26 +189,21 @@ class HistoricalWeatherService {
       // Simulate 30-year climate normals
       const endDate = new Date();
       const startDate = new Date(endDate.getFullYear() - 30, 0, 1);
-      
       const analysis = await this.getHistoricalAnalysis(latitude, longitude, startDate, endDate);
-      
       if (!analysis) {
         return null;
       }
-
       return {
         temperature: analysis.statistics.temperature.monthlyAverages,
         precipitation: analysis.statistics.precipitation.monthlyAverages,
         growingSeason: analysis.climateSummary.growingSeason,
         frostDates: analysis.climateSummary.frostDates
       };
-
     } catch (error) {
       console.error('Error getting climate normals:', error);
       return null;
     }
   }
-
   /**
    * Compare current year with historical averages
    */
@@ -257,23 +233,18 @@ class HistoricalWeatherService {
       // Get current year data
       const currentYearStart = new Date(year, 0, 1);
       const currentYearEnd = new Date(year, 11, 31);
-      
       // Get historical baseline (previous 30 years)
       const historicalStart = new Date(year - 30, 0, 1);
       const historicalEnd = new Date(year - 1, 11, 31);
-
       const [currentAnalysis, historicalAnalysis] = await Promise.all([
         this.getHistoricalAnalysis(latitude, longitude, currentYearStart, currentYearEnd),
         this.getHistoricalAnalysis(latitude, longitude, historicalStart, historicalEnd)
       ]);
-
       if (!currentAnalysis || !historicalAnalysis) {
         return null;
       }
-
       const tempDiff = currentAnalysis.statistics.temperature.mean - historicalAnalysis.statistics.temperature.mean;
       const precipDiff = currentAnalysis.statistics.precipitation.mean - historicalAnalysis.statistics.precipitation.mean;
-
       // Calculate percentile rankings
       const tempPercentile = this.calculatePercentileRanking(
         currentAnalysis.statistics.temperature.mean,
@@ -283,22 +254,18 @@ class HistoricalWeatherService {
         currentAnalysis.statistics.precipitation.mean,
         historicalAnalysis.statistics.precipitation
       );
-
       const assessment = this.assessClimateDeviation(tempPercentile, precipPercentile);
-
       // Monthly comparison
       const monthlyComparison = currentAnalysis.statistics.temperature.monthlyAverages.map((current, index) => {
         const historical = historicalAnalysis.statistics.temperature.monthlyAverages[index];
         const historicalPrecip = historicalAnalysis.statistics.precipitation.monthlyAverages[index];
         const currentPrecip = currentAnalysis.statistics.precipitation.monthlyAverages[index];
-        
         return {
           month: current.month,
           temperatureDifference: current.value - historical.value,
           precipitationDifference: currentPrecip.value - historicalPrecip.value
         };
       });
-
       return {
         currentYear: {
           year,
@@ -319,13 +286,11 @@ class HistoricalWeatherService {
         },
         monthlyComparison
       };
-
     } catch (error) {
       console.error('Error comparing with historical data:', error);
       return null;
     }
   }
-
   private generateSimulatedHistoricalData(
     current: CurrentWeather,
     forecast: WeatherForecast[],
@@ -334,23 +299,18 @@ class HistoricalWeatherService {
     totalDays: number
   ): any[] {
     const data = [];
-    
     for (let i = 0; i < totalDays; i++) {
       const date = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
       const dayOfYear = this.getDayOfYear(date);
-      
       // Simulate seasonal temperature variation
       const seasonalTemp = 15 + 10 * Math.sin((dayOfYear - 80) * 2 * Math.PI / 365);
       const randomVariation = (Math.random() - 0.5) * 10;
       const temperature = seasonalTemp + randomVariation;
-      
       // Simulate precipitation patterns
       const precipitation = Math.random() < 0.3 ? Math.random() * 20 : 0;
-      
       // Simulate other variables
       const humidity = 50 + Math.random() * 30;
       const windSpeed = 2 + Math.random() * 8;
-      
       data.push({
         date: date.toISOString(),
         temperature,
@@ -359,16 +319,13 @@ class HistoricalWeatherService {
         windSpeed
       });
     }
-    
     return data;
   }
-
   private calculateHistoricalStatistics(data: any[]): any {
     const temperatures = data.map(d => d.temperature);
     const precipitations = data.map(d => d.precipitation);
     const humidities = data.map(d => d.humidity);
     const windSpeeds = data.map(d => d.windSpeed);
-
     return {
       temperature: this.calculateStatistics(temperatures),
       precipitation: this.calculateStatistics(precipitations),
@@ -376,14 +333,12 @@ class HistoricalWeatherService {
       windSpeed: this.calculateStatistics(windSpeeds)
     };
   }
-
   private calculateStatistics(values: number[]): HistoricalStatistics {
     const sorted = [...values].sort((a, b) => a - b);
     const n = values.length;
     const sum = values.reduce((a, b) => a + b, 0);
     const mean = sum / n;
     const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
-    
     // Calculate monthly averages (simplified)
     const monthlyAverages: MonthlyData[] = [];
     for (let month = 1; month <= 12; month++) {
@@ -391,7 +346,6 @@ class HistoricalWeatherService {
       const monthMean = monthValues.reduce((a, b) => a + b, 0) / monthValues.length;
       monthlyAverages.push({ month, value: monthMean });
     }
-
     // Calculate yearly averages (simplified)
     const yearlyAverages: YearlyData[] = [];
     const years = Math.ceil(n / 365);
@@ -402,7 +356,6 @@ class HistoricalWeatherService {
         yearlyAverages.push({ year: 2020 + i, value: yearMean });
       }
     }
-
     return {
       mean,
       median: sorted[Math.floor(n / 2)],
@@ -419,48 +372,35 @@ class HistoricalWeatherService {
       yearlyAverages
     };
   }
-
   private analyzeTrends(data: any[], totalDays: number): any {
     const temperatures = data.map(d => d.temperature);
     const precipitations = data.map(d => d.precipitation);
-    
     const tempTrend = this.calculateTrend(temperatures);
     const precipTrend = this.calculateTrend(precipitations);
-    
     const seasonalPatterns = this.analyzeSeasonalPatterns(data);
-
     return {
       temperatureTrend: tempTrend,
       precipitationTrend: precipTrend,
       seasonalPatterns
     };
   }
-
   private calculateTrend(values: number[]): TrendAnalysis {
     const n = values.length;
     const x = Array.from({ length: n }, (_, i) => i);
     const y = values;
-    
     const xMean = x.reduce((a, b) => a + b, 0) / n;
     const yMean = y.reduce((a, b) => a + b, 0) / n;
-    
     const numerator = x.reduce((sum, xi, i) => sum + (xi - xMean) * (y[i] - yMean), 0);
     const denominator = x.reduce((sum, xi) => sum + Math.pow(xi - xMean, 2), 0);
-    
     const slope = denominator === 0 ? 0 : numerator / denominator;
-    
     // Calculate correlation coefficient
     const correlation = this.calculateCorrelation(x, y);
-    
     const significance = Math.abs(correlation) > 0.7 ? 'high' :
                        Math.abs(correlation) > 0.5 ? 'moderate' :
                        Math.abs(correlation) > 0.3 ? 'low' : 'none';
-    
     const direction = slope > 0.1 ? 'increasing' :
                      slope < -0.1 ? 'decreasing' : 'stable';
-    
     const description = `${direction} trend with ${significance} statistical significance`;
-
     return {
       slope: slope * 365, // Convert to per-year change
       correlation,
@@ -469,21 +409,16 @@ class HistoricalWeatherService {
       description
     };
   }
-
   private calculateCorrelation(x: number[], y: number[]): number {
     const n = x.length;
     const xMean = x.reduce((a, b) => a + b, 0) / n;
     const yMean = y.reduce((a, b) => a + b, 0) / n;
-    
     const numerator = x.reduce((sum, xi, i) => sum + (xi - xMean) * (y[i] - yMean), 0);
     const xVariance = x.reduce((sum, xi) => sum + Math.pow(xi - xMean, 2), 0);
     const yVariance = y.reduce((sum, yi) => sum + Math.pow(yi - yMean, 2), 0);
-    
     const denominator = Math.sqrt(xVariance * yVariance);
-    
     return denominator === 0 ? 0 : numerator / denominator;
   }
-
   private analyzeSeasonalPatterns(data: any[]): SeasonalPattern[] {
     const seasons = [
       { name: 'spring', months: [3, 4, 5] },
@@ -491,16 +426,13 @@ class HistoricalWeatherService {
       { name: 'autumn', months: [9, 10, 11] },
       { name: 'winter', months: [12, 1, 2] }
     ];
-
     return seasons.map(season => {
       const seasonData = data.filter(d => {
         const month = new Date(d.date).getMonth() + 1;
         return season.months.includes(month);
       });
-
       const avgTemp = seasonData.reduce((sum, d) => sum + d.temperature, 0) / seasonData.length;
       const totalPrecip = seasonData.reduce((sum, d) => sum + d.precipitation, 0);
-
       return {
         season: season.name as 'spring' | 'summer' | 'autumn' | 'winter',
         averageTemperature: avgTemp,
@@ -510,14 +442,11 @@ class HistoricalWeatherService {
       };
     });
   }
-
   private identifyExtremeEvents(data: any[]): ExtremeEvent[] {
     const events: ExtremeEvent[] = [];
-    
     // Identify heatwaves (5+ consecutive days above 35°C)
     let heatwaveDays = 0;
     let heatwaveStart = '';
-    
     data.forEach((day, index) => {
       if (day.temperature > 35) {
         if (heatwaveDays === 0) {
@@ -539,11 +468,9 @@ class HistoricalWeatherService {
         heatwaveDays = 0;
       }
     });
-
     // Identify drought periods (14+ consecutive days without precipitation)
     let droughtDays = 0;
     let droughtStart = '';
-    
     data.forEach(day => {
       if (day.precipitation < 1) {
         if (droughtDays === 0) {
@@ -565,13 +492,10 @@ class HistoricalWeatherService {
         droughtDays = 0;
       }
     });
-
     return events.slice(0, 10); // Return top 10 events
   }
-
   private generateClimateSummary(statistics: any, latitude: number): ClimateSummary {
     const climateZone = this.determineClimateZone(statistics.temperature.mean, latitude);
-    
     return {
       climateZone,
       averageAnnualTemperature: statistics.temperature.mean,
@@ -592,14 +516,12 @@ class HistoricalWeatherService {
       }
     };
   }
-
   private generateAgricultureInsights(statistics: any, climate: ClimateSummary, latitude: number): AgricultureInsights {
     const suitableCrops = this.determineSuitableCrops(climate, latitude);
     const plantingRecommendations = this.generatePlantingRecommendations(suitableCrops, climate);
     const irrigationNeeds = this.calculateIrrigationNeeds(statistics);
     const climateChallenges = this.identifyClimateChallenges(statistics, climate);
     const adaptationStrategies = this.suggestAdaptationStrategies(climateChallenges);
-
     return {
       suitableCrops,
       plantingRecommendations,
@@ -608,14 +530,12 @@ class HistoricalWeatherService {
       adaptationStrategies
     };
   }
-
   // Helper methods
   private getDayOfYear(date: Date): number {
     const start = new Date(date.getFullYear(), 0, 0);
     const diff = date.getTime() - start.getTime();
     return Math.floor(diff / (1000 * 60 * 60 * 24));
   }
-
   private calculatePercentileRanking(value: number, statistics: HistoricalStatistics): number {
     // Simplified percentile calculation
     if (value <= statistics.percentiles.p10) return 10;
@@ -625,24 +545,20 @@ class HistoricalWeatherService {
     if (value <= statistics.percentiles.p90) return 90;
     return 95;
   }
-
   private assessClimateDeviation(tempPercentile: number, precipPercentile: number): any {
     const avgPercentile = (tempPercentile + precipPercentile) / 2;
-    
     if (avgPercentile >= 90) return 'much_above';
     if (avgPercentile >= 75) return 'above';
     if (avgPercentile >= 25) return 'near_normal';
     if (avgPercentile >= 10) return 'below';
     return 'much_below';
   }
-
   private describeSeasonalPattern(season: string, temp: number, precip: number): string {
     if (season === 'summer' && temp > 30) return 'Hot and dry summer';
     if (season === 'winter' && temp < 5) return 'Cold winter with moderate precipitation';
     if (season === 'spring' && precip > 100) return 'Wet spring with moderate temperatures';
     return `Typical ${season} weather patterns`;
   }
-
   private getSeasonalRecommendations(season: 'spring' | 'summer' | 'autumn' | 'winter', temp: number, precip: number): string[] {
     const recommendations: Record<string, string[]> = {
       spring: ['Prepare seedbeds', 'Plant cool-season crops', 'Monitor for late frosts'],
@@ -650,29 +566,23 @@ class HistoricalWeatherService {
       autumn: ['Harvest summer crops', 'Plant cover crops', 'Prepare for winter'],
       winter: ['Protect plants from frost', 'Plan next season', 'Maintain equipment']
     };
-    
     return recommendations[season] || [];
   }
-
   private estimateReturnPeriod(eventType: string, duration: number): number {
     // Simplified return period estimation
     const basePeriods = {
       heatwave: { 5: 2, 7: 5, 10: 10, 15: 25 },
       drought: { 14: 2, 30: 5, 60: 10, 90: 25 }
     };
-    
     const periods = basePeriods[eventType as keyof typeof basePeriods];
     const durations = Object.keys(periods).map(Number).sort((a, b) => a - b);
-    
     for (const d of durations) {
       if (duration <= d) {
         return periods[d as keyof typeof periods];
       }
     }
-    
     return 50; // Very rare event
   }
-
   private determineClimateZone(avgTemp: number, latitude: number): string {
     if (Math.abs(latitude) < 23.5) return 'Tropical';
     if (Math.abs(latitude) < 35) return 'Subtropical';
@@ -680,22 +590,18 @@ class HistoricalWeatherService {
     if (avgTemp > 10) return 'Cool temperate';
     return 'Cold temperate';
   }
-
   private calculateHeatingDegreeDays(monthlyTemps: MonthlyData[]): number {
     return monthlyTemps.reduce((sum, month) => {
       return sum + Math.max(0, 18 - month.value) * 30; // Approximate days per month
     }, 0);
   }
-
   private calculateCoolingDegreeDays(monthlyTemps: MonthlyData[]): number {
     return monthlyTemps.reduce((sum, month) => {
       return sum + Math.max(0, month.value - 18) * 30; // Approximate days per month
     }, 0);
   }
-
   private determineSuitableCrops(climate: ClimateSummary, latitude: number): string[] {
     const crops: string[] = [];
-    
     if (climate.averageAnnualTemperature > 20) {
       crops.push('tomatoes', 'peppers', 'corn', 'beans');
     }
@@ -708,10 +614,8 @@ class HistoricalWeatherService {
     if (climate.averageAnnualPrecipitation > 500) {
       crops.push('rice', 'leafy greens');
     }
-    
     return crops;
   }
-
   private generatePlantingRecommendations(crops: string[], climate: ClimateSummary): any[] {
     return crops.slice(0, 5).map(crop => ({
       crop,
@@ -720,7 +624,6 @@ class HistoricalWeatherService {
       riskFactors: this.getCropRiskFactors(crop, climate)
     }));
   }
-
   private getPlantingWindow(crop: string, climate: ClimateSummary): string {
     const plantingWindows: Record<string, string> = {
       tomatoes: 'Late spring after last frost',
@@ -729,10 +632,8 @@ class HistoricalWeatherService {
       potatoes: 'Early spring',
       rice: 'Late spring'
     };
-    
     return plantingWindows[crop] || 'Spring to early summer';
   }
-
   private getHarvestWindow(crop: string, climate: ClimateSummary): string {
     const harvestWindows: Record<string, string> = {
       tomatoes: 'Mid to late summer',
@@ -741,10 +642,8 @@ class HistoricalWeatherService {
       potatoes: 'Late summer',
       rice: 'Autumn'
     };
-    
     return harvestWindows[crop] || 'Late summer to autumn';
   }
-
   private getCropRiskFactors(crop: string, climate: ClimateSummary): string[] {
     const riskFactors: Record<string, string[]> = {
       tomatoes: ['Late frost', 'Heat waves', 'Fungal diseases'],
@@ -753,10 +652,8 @@ class HistoricalWeatherService {
       potatoes: ['Late blight', 'Frost damage', 'Excessive moisture'],
       rice: ['Flooding', 'Drought', 'Disease pressure']
     };
-    
     return riskFactors[crop] || ['Weather variability', 'Pest pressure'];
   }
-
   private calculateIrrigationNeeds(statistics: any): any[] {
     return [
       { season: 'Spring', averageNeed: 50, peakMonth: 'May' },
@@ -765,10 +662,8 @@ class HistoricalWeatherService {
       { season: 'Winter', averageNeed: 10, peakMonth: 'December' }
     ];
   }
-
   private identifyClimateChallenges(statistics: any, climate: ClimateSummary): string[] {
     const challenges: string[] = [];
-    
     if (climate.averageAnnualPrecipitation < 400) {
       challenges.push('Water scarcity requiring efficient irrigation');
     }
@@ -778,13 +673,10 @@ class HistoricalWeatherService {
     if (climate.frostDates.frostFreeDays < 180) {
       challenges.push('Short growing season limiting crop selection');
     }
-    
     return challenges;
   }
-
   private suggestAdaptationStrategies(challenges: string[]): string[] {
     const strategies: string[] = [];
-    
     if (challenges.some(c => c.includes('water'))) {
       strategies.push('Implement drip irrigation systems', 'Select drought-resistant varieties');
     }
@@ -794,9 +686,7 @@ class HistoricalWeatherService {
     if (challenges.some(c => c.includes('growing season'))) {
       strategies.push('Use season extension techniques', 'Select early-maturing varieties');
     }
-    
     return strategies;
   }
 }
-
 export const historicalWeather = new HistoricalWeatherService();

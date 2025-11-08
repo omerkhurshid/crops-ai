@@ -1,6 +1,5 @@
 // Tooltip content definitions for agricultural terms
 // This file is kept separate to avoid React Server Component bundler issues
-
 export const TOOLTIP_CONTENT = {
   // Farm & Field Related
   farm: {
@@ -23,7 +22,6 @@ export const TOOLTIP_CONTENT = {
     title: "Crop Type",
     description: "The specific agricultural plant variety grown in this field, determining growth requirements and management practices."
   },
-
   // Satellite & Health Metrics
   ndvi: {
     title: "NDVI (Vegetation Index)",
@@ -61,7 +59,6 @@ export const TOOLTIP_CONTENT = {
     title: "Crop Health Score",
     description: "AI-calculated overall health rating (0-100%) based on vegetation indices, weather conditions, and growth stage analysis."
   },
-
   // Weather Related  
   temperature: {
     title: "Temperature",
@@ -83,7 +80,6 @@ export const TOOLTIP_CONTENT = {
     title: "Growing Degree Days",
     description: "Accumulated heat units above base temperature, used to predict crop development stages and optimal timing for field operations."
   },
-
   // Market & Financial
   commodityPrice: {
     title: "Commodity Price",
@@ -97,7 +93,6 @@ export const TOOLTIP_CONTENT = {
     title: "Trading Volume",
     description: "Number of contracts traded, indicating market activity and liquidity for price discovery."
   },
-  
   // AI & Predictions
   confidence: {
     title: "Confidence Level",
@@ -115,7 +110,6 @@ export const TOOLTIP_CONTENT = {
     title: "Risk Assessment",
     description: "Probability of adverse conditions affecting crop development, including weather, disease, and pest threats."
   },
-  
   // Health Analysis
   zones: {
     title: "Health Zones",
@@ -145,7 +139,6 @@ export const TOOLTIP_CONTENT = {
     title: "Pest Pressure",
     description: "Insect and pest activity levels determined by weather patterns, crop stage, and regional pest monitoring data."
   },
-  
   // Yield Predictions
   currentYield: {
     title: "Current Projection",

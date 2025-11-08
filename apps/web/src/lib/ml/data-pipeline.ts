@@ -5,7 +5,6 @@
  * agricultural data for machine learning models. Handles data from multiple sources
  * including weather APIs, satellite imagery, IoT sensors, and farm management systems.
  */
-
 import { redis } from '../redis';
 import { prisma } from '../prisma';
 import { historicalWeather } from '../weather/historical';
@@ -22,7 +21,6 @@ import type {
   DataQuality,
   DataQualityIssue
 } from './types';
-
 export interface DataExtractionConfig {
   sources: {
     weather: boolean;
@@ -47,7 +45,6 @@ export interface DataExtractionConfig {
     timeliness: number;
   };
 }
-
 export interface TransformationConfig {
   normalization: boolean;
   featureEngineering: boolean;
@@ -55,7 +52,6 @@ export interface TransformationConfig {
   missingValueHandling: 'drop' | 'interpolate' | 'mean' | 'median' | 'forward_fill';
   aggregationPeriod: 'daily' | 'weekly' | 'monthly' | 'seasonal';
 }
-
 export interface DataPipelineResult {
   trainingData: TrainingData[];
   validationData: TrainingData[];
@@ -74,12 +70,10 @@ export interface DataPipelineResult {
     features: string[];
   };
 }
-
 class AgricultureDataPipeline {
   private readonly CACHE_PREFIX = 'ml_pipeline_';
   private readonly BATCH_SIZE = 1000;
   private readonly MAX_RETRIES = 3;
-
   /**
    * Execute complete data pipeline for ML training
    */
@@ -88,28 +82,22 @@ class AgricultureDataPipeline {
     transformation: TransformationConfig
   ): Promise<DataPipelineResult> {
     const startTime = Date.now();
-    
     try {
       // Stage 1: Extract data from multiple sources
       const extractedData = await this.extractData(config);
       const extractionTime = Date.now() - startTime;
-
       // Stage 2: Transform and clean data
       const transformStart = Date.now();
       const transformedData = await this.transformData(extractedData, transformation);
       const transformationTime = Date.now() - transformStart;
-
       // Stage 3: Validate data quality
       const quality = await this.validateDataQuality(transformedData);
-
       // Stage 4: Split data for training/validation
       const loadStart = Date.now();
       const { trainingData, validationData } = await this.splitData(transformedData);
       const loadTime = Date.now() - loadStart;
-
       // Stage 5: Cache processed data
       await this.cacheProcessedData(trainingData, validationData);
-
       const result: DataPipelineResult = {
         trainingData,
         validationData,
@@ -128,42 +116,34 @@ class AgricultureDataPipeline {
           features: this.getFeatureList(transformedData[0] || {} as TrainingData)
         }
       };
-
       return result;
-
     } catch (error) {
       console.error('ML data pipeline failed', error);
       throw error;
     }
   }
-
   /**
    * Extract raw data from multiple agricultural data sources
    */
   private async extractData(config: DataExtractionConfig): Promise<Partial<TrainingData>[]> {
     const extractedData: Partial<TrainingData>[] = [];
-
     try {
       // Get all fields matching criteria
       const whereClause: any = {};
-      
       if (config.fieldFilters.minArea || config.fieldFilters.maxArea) {
         whereClause.area = {};
         if (config.fieldFilters.minArea) whereClause.area.gte = config.fieldFilters.minArea;
         if (config.fieldFilters.maxArea) whereClause.area.lte = config.fieldFilters.maxArea;
       }
-
       const fields = await prisma.field.findMany({
         where: whereClause,
         include: {
           farm: true
         }
       });
-
       // Process fields in batches
       for (let i = 0; i < fields.length; i += this.BATCH_SIZE) {
         const batch = fields.slice(i, i + this.BATCH_SIZE);
-        
         const batchPromises = batch.map(async (field: any) => {
           try {
             const data: Partial<TrainingData> = {
@@ -179,7 +159,6 @@ class AgricultureDataPipeline {
                 verified: false
               }
             };
-
             // Extract weather data
             if (config.sources.weather) {
               data.features!.weather = await this.extractWeatherFeatures(
@@ -187,7 +166,6 @@ class AgricultureDataPipeline {
                 config.timeRange
               );
             }
-
             // Extract satellite data
             if (config.sources.satellite) {
               data.features!.satellite = await this.extractSatelliteFeatures(
@@ -195,12 +173,10 @@ class AgricultureDataPipeline {
                 config.timeRange
               );
             }
-
             // Extract soil data
             if (config.sources.soil) {
               data.features!.soil = await this.extractSoilFeatures(field.id);
             }
-
             // Extract management data
             if (config.sources.management) {
               data.features!.planting = await this.extractPlantingFeatures(field.id);
@@ -208,39 +184,29 @@ class AgricultureDataPipeline {
               data.features!.fertilization = await this.extractFertilizationFeatures(field.id);
               data.features!.pestControl = await this.extractPestControlFeatures(field.id);
             }
-
             // Extract historical data
             if (config.sources.historical) {
               data.features!.historical = await this.extractHistoricalFeatures(field.id);
             }
-
             // Extract target variables (yield, quality, etc.)
             data.target = await this.extractTargetVariables(field.id, config.timeRange);
-
             return data;
-
           } catch (error) {
-
             return null;
           }
         });
-
         const batchResults = await Promise.allSettled(batchPromises);
         const validResults = batchResults
           .filter(result => result.status === 'fulfilled' && result.value !== null)
           .map(result => (result as PromiseFulfilledResult<TrainingData>).value);
-
         extractedData.push(...validResults);
       }
-
       return extractedData;
-
     } catch (error) {
       console.error('Data extraction failed', error);
       throw error;
     }
   }
-
   /**
    * Extract weather features for a field
    */
@@ -253,15 +219,12 @@ class AgricultureDataPipeline {
       const field = await prisma.field.findUnique({
         where: { id: fieldId }
       });
-
       if (!field || !field.area) {
         throw new Error(`Field ${fieldId} not found or missing location`);
       }
-
       // Use default coordinates for now - in production would use actual field boundaries
       const lat = 40.7589; // Default NYC coordinates
       const lon = -73.9851;
-
       // Get historical weather data
       const weatherData = await historicalWeather.getHistoricalAnalysis(
         lat,
@@ -269,7 +232,6 @@ class AgricultureDataPipeline {
         timeRange.start,
         timeRange.end
       );
-
       // Extract features from historical weather analysis
       if (weatherData) {
         return {
@@ -286,7 +248,6 @@ class AgricultureDataPipeline {
           droughtStressDays: weatherData.extremeEvents.filter(event => event.type === 'drought').reduce((sum, event) => sum + event.duration, 0)
         };
       }
-
       // Return default values if weatherData is null
       return {
         avgTemperature: 20,
@@ -301,9 +262,7 @@ class AgricultureDataPipeline {
         heatStressDays: 5,
         droughtStressDays: 10
       };
-
     } catch (error) {
-
       // Return default values
       return {
         avgTemperature: 20,
@@ -320,7 +279,6 @@ class AgricultureDataPipeline {
       };
     }
   }
-
   /**
    * Extract satellite-derived features
    */
@@ -336,14 +294,12 @@ class AgricultureDataPipeline {
         south: 40.7,
         north: 40.8
       };
-
       // Get NDVI analysis for the time period
       const ndviResult = await sentinelHub.calculateNDVIAnalysis(
         fieldId,
         bbox,
         timeRange.start.toISOString().split('T')[0]
       );
-
       // Calculate vegetation indices
       const indices = ndviAnalysis.calculateVegetationIndices({
         red: 0.1,
@@ -354,7 +310,6 @@ class AgricultureDataPipeline {
         swir1: 0.15,
         swir2: 0.1
       });
-
       return {
         avgNDVI: indices.ndvi,
         maxNDVI: indices.ndvi * 1.2,
@@ -368,9 +323,7 @@ class AgricultureDataPipeline {
         greenupDate: timeRange.start.toISOString().split('T')[0],
         maturityDate: timeRange.end.toISOString().split('T')[0]
       };
-
     } catch (error) {
-
       // Return default values
       return {
         avgNDVI: 0.7,
@@ -387,7 +340,6 @@ class AgricultureDataPipeline {
       };
     }
   }
-
   /**
    * Extract soil features from real data sources
    */
@@ -395,26 +347,20 @@ class AgricultureDataPipeline {
     try {
       // Import soil data service
       const { soilDataService } = await import('../soil/soil-data-service')
-      
       // Get comprehensive soil profile
       const soilProfile = await soilDataService.getFieldSoilData(fieldId)
-      
       if (soilProfile && soilProfile.layers.length > 0) {
         // Use topmost layer for field-level analysis
         const topLayer = soilProfile.layers[0]
-        
         // Get recent sensor readings for dynamic properties
         const recentReadings = await soilDataService.getRecentSensorData(fieldId, 24)
-        
         // Combine profile data with recent sensor readings
         const avgMoisture = recentReadings.length > 0 
           ? recentReadings.reduce((sum, r) => sum + r.moisture, 0) / recentReadings.length
           : topLayer.field_capacity * 0.8 // Estimate as 80% of field capacity
-          
         const avgTemperature = recentReadings.length > 0
           ? recentReadings.reduce((sum, r) => sum + r.temperature, 0) / recentReadings.length
           : 20 // Default soil temperature
-        
         return {
           ph: topLayer.ph,
           organicMatter: topLayer.organic_matter,
@@ -430,11 +376,8 @@ class AgricultureDataPipeline {
         }
       }
     } catch (error) {
-
     }
-    
     // Fallback to estimated data based on regional characteristics
-
     return {
       ph: 6.5 + Math.random() * 1.0, // 6.5-7.5
       organicMatter: 2.5 + Math.random() * 2.0, // 2.5-4.5%
@@ -449,7 +392,6 @@ class AgricultureDataPipeline {
       drainage: ['moderate', 'well', 'well', 'moderate'][Math.floor(Math.random() * 4)] as any
     }
   }
-
   /**
    * Map texture class from soil service to ML types
    */
@@ -459,7 +401,6 @@ class AgricultureDataPipeline {
     if (textureClass.includes('silt')) return 'silt'
     return 'loam'
   }
-
   /**
    * Map drainage class from soil service to ML types
    */
@@ -479,7 +420,6 @@ class AgricultureDataPipeline {
         return 'moderate'
     }
   }
-
   // Additional feature extraction methods (simplified implementations)
   private async extractPlantingFeatures(fieldId: string) {
     return {
@@ -492,7 +432,6 @@ class AgricultureDataPipeline {
       population: 40000 + Math.random() * 20000
     };
   }
-
   private async extractIrrigationFeatures(fieldId: string) {
     return {
       totalWater: 300 + Math.random() * 200,
@@ -510,7 +449,6 @@ class AgricultureDataPipeline {
       }
     };
   }
-
   private async extractFertilizationFeatures(fieldId: string) {
     return {
       totalNitrogen: 100 + Math.random() * 100,
@@ -523,7 +461,6 @@ class AgricultureDataPipeline {
       cost: 200 + Math.random() * 300
     };
   }
-
   private async extractPestControlFeatures(fieldId: string) {
     return {
       pesticide_applications: Math.floor(Math.random() * 3),
@@ -536,7 +473,6 @@ class AgricultureDataPipeline {
       weed_pressure: ['low', 'moderate', 'high', 'severe'][Math.floor(Math.random() * 4)] as any
     };
   }
-
   private async extractHistoricalFeatures(fieldId: string) {
     return {
       previous_yields: [8.5, 9.2, 8.8, 9.5, 8.9],
@@ -548,7 +484,6 @@ class AgricultureDataPipeline {
       previous_issues: ['drought_stress', 'pest_outbreak']
     };
   }
-
   private async extractTargetVariables(fieldId: string, timeRange: { start: Date; end: Date }) {
     return {
       yield: 8 + Math.random() * 4, // 8-12 tons/ha
@@ -571,7 +506,6 @@ class AgricultureDataPipeline {
       }
     };
   }
-
   /**
    * Transform and clean extracted data
    */
@@ -582,36 +516,29 @@ class AgricultureDataPipeline {
     let transformedData = rawData.filter(data => 
       data.features && data.target && this.isDataComplete(data)
     ) as TrainingData[];
-
     // Handle missing values
     if (config.missingValueHandling !== 'drop') {
       transformedData = await this.handleMissingValues(transformedData, config.missingValueHandling);
     }
-
     // Detect and handle outliers
     if (config.outlierDetection) {
       transformedData = await this.detectOutliers(transformedData);
     }
-
     // Feature engineering
     if (config.featureEngineering) {
       transformedData = await this.engineerFeatures(transformedData);
     }
-
     // Normalize data
     if (config.normalization) {
       transformedData = await this.normalizeData(transformedData);
     }
-
     return transformedData;
   }
-
   /**
    * Validate data quality
    */
   private async validateDataQuality(data: TrainingData[]): Promise<DataQuality> {
     const issues: DataQualityIssue[] = [];
-    
     // Check completeness
     const completeness = this.calculateCompleteness(data);
     if (completeness < 0.9) {
@@ -624,7 +551,6 @@ class AgricultureDataPipeline {
         suggestedFix: 'Improve data collection processes'
       });
     }
-
     // Check for duplicates
     const uniqueness = this.calculateUniqueness(data);
     if (uniqueness < 0.95) {
@@ -637,9 +563,7 @@ class AgricultureDataPipeline {
         suggestedFix: 'Remove duplicate records'
       });
     }
-
     const score = Math.floor((completeness + uniqueness + 0.9 + 0.9 + 0.9 + 0.9) / 6 * 100);
-
     return {
       completeness,
       accuracy: 0.9, // Simplified
@@ -651,7 +575,6 @@ class AgricultureDataPipeline {
       score
     };
   }
-
   /**
    * Split data into training and validation sets
    */
@@ -661,16 +584,13 @@ class AgricultureDataPipeline {
   }> {
     // Shuffle data
     const shuffled = data.sort(() => Math.random() - 0.5);
-    
     // 80/20 split
     const splitIndex = Math.floor(shuffled.length * 0.8);
-    
     return {
       trainingData: shuffled.slice(0, splitIndex),
       validationData: shuffled.slice(splitIndex)
     };
   }
-
   // Helper methods (simplified implementations)
   private calculateGrowingDegreeDays(dailyData: any[]): number {
     return dailyData.reduce((sum, day) => {
@@ -678,7 +598,6 @@ class AgricultureDataPipeline {
       return sum + Math.max(0, avg - 10); // Base temperature 10°C
     }, 0);
   }
-
   private isDataComplete(data: Partial<TrainingData>): boolean {
     return !!(
       data.features?.weather &&
@@ -686,29 +605,23 @@ class AgricultureDataPipeline {
       data.target?.yield
     );
   }
-
   private calculateCompleteness(data: TrainingData[]): number {
     let totalFields = 0;
     let completeFields = 0;
-
     data.forEach(record => {
       const fields = this.flattenObject(record);
       totalFields += Object.keys(fields).length;
       completeFields += Object.values(fields).filter(value => value !== null && value !== undefined).length;
     });
-
     return totalFields > 0 ? completeFields / totalFields : 0;
   }
-
   private calculateUniqueness(data: TrainingData[]): number {
     const ids = data.map(record => record.id);
     const uniqueIds = new Set(ids);
     return uniqueIds.size / ids.length;
   }
-
   private flattenObject(obj: any, prefix = ''): Record<string, any> {
     const flattened: Record<string, any> = {};
-    
     for (const key in obj) {
       if (obj[key] !== null && typeof obj[key] === 'object' && !Array.isArray(obj[key]) && !(obj[key] instanceof Date)) {
         Object.assign(flattened, this.flattenObject(obj[key], `${prefix}${key}.`));
@@ -716,40 +629,32 @@ class AgricultureDataPipeline {
         flattened[`${prefix}${key}`] = obj[key];
       }
     }
-    
     return flattened;
   }
-
   private getFeatureList(sample: TrainingData): string[] {
     if (!sample.features) return [];
     return Object.keys(this.flattenObject(sample.features));
   }
-
   private async handleMissingValues(data: TrainingData[], method: string): Promise<TrainingData[]> {
     // Simplified implementation - in production would use proper imputation
     return data;
   }
-
   private async detectOutliers(data: TrainingData[]): Promise<TrainingData[]> {
     // Simplified implementation - in production would use statistical methods
     return data;
   }
-
   private async engineerFeatures(data: TrainingData[]): Promise<TrainingData[]> {
     // Simplified implementation - in production would create derived features
     return data;
   }
-
   private async normalizeData(data: TrainingData[]): Promise<TrainingData[]> {
     // Simplified implementation - in production would apply scaling
     return data;
   }
-
   private async cacheProcessedData(trainingData: TrainingData[], validationData: TrainingData[]): Promise<void> {
     if (!redis) {
       return;
     }
-    
     try {
       const cacheKey = `${this.CACHE_PREFIX}processed_${Date.now()}`;
       await redis.set(cacheKey, {
@@ -762,5 +667,4 @@ class AgricultureDataPipeline {
     }
   }
 }
-
 export const dataPipeline = new AgricultureDataPipeline();

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -8,13 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Alert, AlertDescription } from '../ui/alert'
 import { Thermometer, TrendingUp, Droplets, Sprout } from 'lucide-react'
 import { AggregatedWeatherData, HourlyWeatherData } from '../../lib/weather/aggregator'
-
 interface WeatherAnalyticsProps {
   latitude: number
   longitude: number
   className?: string
 }
-
 interface IrrigationRecommendation {
   recommendation: 'immediate' | 'soon' | 'monitor' | 'delay'
   reasonCode: string
@@ -22,7 +19,6 @@ interface IrrigationRecommendation {
   nextCheckHours: number
   irrigationAmount?: number
 }
-
 interface FieldAnalysis {
   centerPoint: AggregatedWeatherData | null
   variations: {
@@ -31,7 +27,6 @@ interface FieldAnalysis {
     microclimateRisk: 'low' | 'moderate' | 'high'
   }
 }
-
 export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnalyticsProps) {
   const [aggregatedData, setAggregatedData] = useState<AggregatedWeatherData | null>(null)
   const [hourlyData, setHourlyData] = useState<HourlyWeatherData | null>(null)
@@ -40,17 +35,14 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('overview')
-
   useEffect(() => {
     if (latitude && longitude) {
       fetchAnalyticsData()
     }
   }, [latitude, longitude])
-
   const fetchAnalyticsData = async () => {
     setLoading(true)
     setError(null)
-
     try {
       // Fetch different types of analytics data
       const [aggregatedResponse, hourlyResponse, irrigationResponse] = await Promise.allSettled([
@@ -58,25 +50,21 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
         fetch(`/api/weather/aggregate?latitude=${latitude}&longitude=${longitude}&type=hourly`),
         fetch(`/api/weather/aggregate?latitude=${latitude}&longitude=${longitude}&type=irrigation`)
       ])
-
       // Process aggregated data
       if (aggregatedResponse.status === 'fulfilled' && aggregatedResponse.value.ok) {
         const data = await aggregatedResponse.value.json()
         setAggregatedData(data.data)
       }
-
       // Process hourly data
       if (hourlyResponse.status === 'fulfilled' && hourlyResponse.value.ok) {
         const data = await hourlyResponse.value.json()
         setHourlyData(data.data)
       }
-
       // Process irrigation recommendations
       if (irrigationResponse.status === 'fulfilled' && irrigationResponse.value.ok) {
         const data = await irrigationResponse.value.json()
         setIrrigationRec(data.data)
       }
-
     } catch (err) {
       setError('Failed to fetch weather analytics data')
       console.error('Weather analytics fetch error:', err)
@@ -84,7 +72,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       setLoading(false)
     }
   }
-
   const getRecommendationColor = (recommendation: string) => {
     switch (recommendation) {
       case 'immediate': return 'bg-red-100 text-red-800 border-red-200'
@@ -94,7 +81,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
-
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case 'high': return 'text-red-600'
@@ -103,11 +89,9 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       default: return 'text-gray-600'
     }
   }
-
   const formatStatistic = (value: number, unit: string = '') => {
     return `${value.toFixed(1)}${unit}`
   }
-
   if (loading) {
     return (
       <div className={`p-6 ${className}`}>
@@ -122,7 +106,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       </div>
     )
   }
-
   if (error) {
     return (
       <div className={`p-6 ${className}`}>
@@ -137,7 +120,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       </div>
     )
   }
-
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       <div className="flex justify-between items-center">
@@ -146,7 +128,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           Refresh Data
         </Button>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -154,7 +135,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           <TabsTrigger value="agriculture">Agriculture</TabsTrigger>
           <TabsTrigger value="irrigation">Irrigation</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="space-y-4">
           {aggregatedData ? (
             <>
@@ -183,7 +163,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                     </div>
                   </CardContent>
                 </Card>
-
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg">Humidity</CardTitle>
@@ -203,7 +182,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                     </div>
                   </CardContent>
                 </Card>
-
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg">Precipitation</CardTitle>
@@ -222,7 +200,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </CardContent>
                 </Card>
               </div>
-
               {/* Data Quality */}
               {hourlyData && (
                 <Card>
@@ -279,7 +256,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
             </div>
           )}
         </TabsContent>
-
         <TabsContent value="trends" className="space-y-4">
           {aggregatedData ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -299,7 +275,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Precipitation Trend</CardTitle>
@@ -316,7 +291,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Pressure Trend</CardTitle>
@@ -348,7 +322,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
             </div>
           )}
         </TabsContent>
-
         <TabsContent value="agriculture" className="space-y-4">
           {aggregatedData ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -370,7 +343,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Chill Hours</CardTitle>
@@ -389,7 +361,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Heat Stress Hours</CardTitle>
@@ -408,7 +379,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Precipitation Patterns</CardTitle>
@@ -433,7 +403,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Soil Moisture Status</CardTitle>
@@ -465,7 +434,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   </div>
                 </CardContent>
               </Card>
-
               {/* Additional practical advice card */}
               <Card className="md:col-span-2 lg:col-span-3">
                 <CardHeader>
@@ -484,7 +452,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                         <li>• Choose varieties based on your typical GDD totals</li>
                       </ul>
                     </div>
-                    
                     <div className="bg-blue-50 p-4 rounded border border-blue-200">
                       <h4 className="font-medium text-blue-800 mb-2">💧 For Water Management:</h4>
                       <ul className="text-sm text-blue-700 space-y-1">
@@ -493,7 +460,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                         <li>• Adjust irrigation based on recent precipitation</li>
                       </ul>
                     </div>
-                    
                     <div className="bg-orange-50 p-4 rounded border border-orange-200">
                       <h4 className="font-medium text-orange-800 mb-2">🌡️ For Heat Management:</h4>
                       <ul className="text-sm text-orange-700 space-y-1">
@@ -502,7 +468,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                         <li>• Plan harvest for cooler parts of the day</li>
                       </ul>
                     </div>
-                    
                     <div className="bg-purple-50 p-4 rounded border border-purple-200">
                       <h4 className="font-medium text-purple-800 mb-2">📅 For Timing Operations:</h4>
                       <ul className="text-sm text-purple-700 space-y-1">
@@ -532,7 +497,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
             </div>
           )}
         </TabsContent>
-
         <TabsContent value="irrigation" className="space-y-4">
           {irrigationRec ? (
             <Card>
@@ -549,12 +513,10 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                     Next check in {irrigationRec.nextCheckHours} hours
                   </span>
                 </div>
-
                 <div>
                   <h4 className="font-semibold mb-2">Description</h4>
                   <p className="text-gray-700">{irrigationRec.description}</p>
                 </div>
-
                 {irrigationRec.irrigationAmount && (
                   <div>
                     <h4 className="font-semibold mb-2">Recommended Amount</h4>
@@ -563,7 +525,6 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                     </p>
                   </div>
                 )}
-
                 <div>
                   <h4 className="font-semibold mb-2">Reason Code</h4>
                   <code className="bg-gray-100 px-2 py-1 rounded text-sm">

@@ -6,7 +6,6 @@ import { weatherResolvers } from './weather'
 import { satelliteResolvers } from './satellite'
 import { produceResolvers } from './produce'
 import { scalarResolvers } from './scalars'
-
 export const resolvers = {
   ...scalarResolvers,
   Query: {

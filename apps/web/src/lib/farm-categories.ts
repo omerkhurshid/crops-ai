@@ -5,7 +5,6 @@ export interface CropCategory {
   description: string
   items: CropItem[]
 }
-
 export interface CropItem {
   id: string
   name: string
@@ -15,7 +14,6 @@ export interface CropItem {
   commonVarieties?: string[]
   monitoringParameters: string[]
 }
-
 export interface LivestockCategory {
   id: string
   name: string
@@ -23,7 +21,6 @@ export interface LivestockCategory {
   description: string
   items: LivestockItem[]
 }
-
 export interface LivestockItem {
   id: string
   name: string
@@ -33,7 +30,6 @@ export interface LivestockItem {
   housingRequirements?: string
   monitoringParameters: string[]
 }
-
 export const cropCategories: CropCategory[] = [
   {
     id: 'grains-cereals',
@@ -226,7 +222,6 @@ export const cropCategories: CropCategory[] = [
     ]
   }
 ]
-
 export const livestockCategories: LivestockCategory[] = [
   {
     id: 'dairy-cattle',
@@ -420,9 +415,7 @@ export const livestockCategories: LivestockCategory[] = [
     ]
   }
 ]
-
 export type FarmType = 'crops' | 'livestock' | 'mixed'
-
 export const farmTypeOptions = [
   {
     id: 'crops' as FarmType,

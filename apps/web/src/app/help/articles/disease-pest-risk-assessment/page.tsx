@@ -1,5 +1,4 @@
 'use client'
-
 import { DashboardLayout } from '../../../../components/layout/dashboard-layout'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../../components/ui/modern-card'
 import { Badge } from '../../../../components/ui/badge'
@@ -8,9 +7,7 @@ import {
   Bug, Shield, AlertTriangle, Thermometer, Droplets,
   Eye, TrendingUp, CheckCircle, Clock, Lightbulb, Target
 } from 'lucide-react'
-
 export default function DiseasePestRiskAssessmentPage() {
-
   return (
     <DashboardLayout>
       <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -20,18 +17,15 @@ export default function DiseasePestRiskAssessmentPage() {
             <Bug className="h-6 w-6 text-sage-700" />
             <span className="text-sage-600">Disease & Pest Management</span>
           </div>
-          
           <h1 className="text-3xl font-bold text-sage-800 mb-4">
             Disease & Pest Risk Assessment Logic
           </h1>
-          
           <div className="flex items-center gap-4 text-sm text-sage-600">
             <Badge variant="outline">14 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
           </div>
         </div>
-
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
@@ -40,7 +34,6 @@ export default function DiseasePestRiskAssessmentPage() {
               disease and pest pressure before problems become visible. This gives you time to take preventive action 
               or prepare targeted treatments.
             </p>
-            
             <Alert>
               <Lightbulb className="h-4 w-4" />
               <AlertDescription>
@@ -50,7 +43,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </Alert>
           </ModernCardContent>
         </ModernCard>
-
         {/* How Risk Assessment Works */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -64,7 +56,6 @@ export default function DiseasePestRiskAssessmentPage() {
               <p className="text-sage-700">
                 Every 6 hours, our AI analyzes multiple factors to calculate disease and pest risk for each field:
               </p>
-
               <div className="space-y-4">
                 <div className="bg-sage-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-sage-800 mb-3">1. Weather Pattern Analysis</h4>
@@ -89,7 +80,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </div>
                   </div>
                 </div>
-
                 <div className="bg-earth-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-earth-800 mb-3">2. Crop Growth Stage Assessment</h4>
                   <p className="text-earth-700 mb-2">
@@ -102,7 +92,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <li>• <strong>Grain fill:</strong> Risk of late-season diseases, armyworms</li>
                   </ul>
                 </div>
-
                 <div className="bg-green-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-green-800 mb-3">3. Historical Pattern Matching</h4>
                   <p className="text-green-700 mb-2">
@@ -115,7 +104,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <li>• Your field's specific history of pest/disease issues</li>
                   </ul>
                 </div>
-
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-blue-800 mb-3">4. Satellite Health Monitoring</h4>
                   <p className="text-blue-700 mb-2">
@@ -132,7 +120,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Risk Scoring System */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -146,7 +133,6 @@ export default function DiseasePestRiskAssessmentPage() {
               <p className="text-sage-700">
                 Each potential threat is scored from 0-100 based on multiple risk factors:
               </p>
-
               <div className="space-y-4">
                 <div className="border-l-4 border-red-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -161,7 +147,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <p><strong>Example:</strong> "Fusarium head blight risk: 85/100. Warm, humid conditions during flowering stage."</p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-yellow-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="h-5 w-5 text-yellow-600" />
@@ -175,7 +160,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <p><strong>Example:</strong> "Aphid pressure: 55/100. Temperature rising, beneficial insects present but declining."</p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-green-500 pl-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -193,7 +177,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Major Disease Categories */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -217,7 +200,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Bacterial Diseases</h4>
                   <div className="bg-red-50 p-4 rounded-lg">
@@ -230,7 +212,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Viral Diseases</h4>
                   <div className="bg-purple-50 p-4 rounded-lg">
@@ -243,7 +224,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Soil-Borne Diseases</h4>
                   <div className="bg-yellow-50 p-4 rounded-lg">
@@ -260,7 +240,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Pest Categories */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -284,7 +263,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Sucking Insects</h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
@@ -297,7 +275,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Soil-Dwelling Pests</h4>
                   <div className="bg-earth-50 p-4 rounded-lg">
@@ -310,7 +287,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     </ul>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-sage-800 mb-3">Disease Vectors</h4>
                   <div className="bg-red-50 p-4 rounded-lg">
@@ -327,7 +303,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Weather Thresholds */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -341,7 +316,6 @@ export default function DiseasePestRiskAssessmentPage() {
               <p className="text-sage-700 mb-4">
                 Our AI uses research-based weather thresholds to trigger risk alerts:
               </p>
-
               <div className="space-y-4">
                 <div className="bg-red-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-red-800 mb-2">High Disease Risk Conditions</h4>
@@ -352,7 +326,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <li>• <strong>Rainfall:</strong> {'>'}0.1" daily for 3+ consecutive days</li>
                   </ul>
                 </div>
-
                 <div className="bg-yellow-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-yellow-800 mb-2">Pest Development Triggers</h4>
                   <ul className="text-sm text-yellow-700 space-y-1">
@@ -362,7 +335,6 @@ export default function DiseasePestRiskAssessmentPage() {
                     <li>• <strong>Wind Patterns:</strong> Migration and dispersal events</li>
                   </ul>
                 </div>
-
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-blue-800 mb-2">Protective Conditions</h4>
                   <ul className="text-sm text-blue-700 space-y-1">
@@ -376,7 +348,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Action Recommendations */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -397,7 +368,6 @@ export default function DiseasePestRiskAssessmentPage() {
                   <li>• Alert neighbors about potential regional outbreak</li>
                 </ul>
               </div>
-              
               <div className="border-l-4 border-yellow-500 pl-4">
                 <h4 className="font-semibold text-yellow-800 mb-2">Moderate Risk (40-69): Prepare & Monitor</h4>
                 <ul className="text-sm text-yellow-700 space-y-1">
@@ -408,7 +378,6 @@ export default function DiseasePestRiskAssessmentPage() {
                   <li>• Review and update spray schedules</li>
                 </ul>
               </div>
-              
               <div className="border-l-4 border-green-500 pl-4">
                 <h4 className="font-semibold text-green-800 mb-2">Low Risk (0-39): Normal Operations</h4>
                 <ul className="text-sm text-green-700 space-y-1">
@@ -422,7 +391,6 @@ export default function DiseasePestRiskAssessmentPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Final Tips */}
         <Alert>
           <Bug className="h-4 w-4" />

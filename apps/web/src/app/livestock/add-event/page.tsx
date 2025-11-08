@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
@@ -9,7 +8,6 @@ import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { ArrowLeft, Users } from 'lucide-react'
 import toast from 'react-hot-toast'
-
 export default function AddLivestockEventPage() {
   const router = useRouter()
   const [farms, setFarms] = useState<any[]>([])
@@ -22,11 +20,9 @@ export default function AddLivestockEventPage() {
     notes: '',
     eventDate: new Date().toISOString().split('T')[0]
   })
-
   useEffect(() => {
     fetchFarms()
   }, [])
-
   const fetchFarms = async () => {
     try {
       const response = await fetch('/api/farms')
@@ -39,7 +35,6 @@ export default function AddLivestockEventPage() {
           setFormData(prev => ({ ...prev, farmId: farmsArray[0].id }))
         }
       } else {
-
         setFarms([]) // Set empty array on error
       }
     } catch (error) {
@@ -47,11 +42,9 @@ export default function AddLivestockEventPage() {
       setFarms([]) // Set empty array on error
     }
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
     try {
       const response = await fetch('/api/livestock', {
         method: 'POST',
@@ -62,7 +55,6 @@ export default function AddLivestockEventPage() {
           eventDate: new Date(formData.eventDate)
         })
       })
-
       if (response.ok) {
         toast.success('Livestock event added successfully!')
         router.push('/livestock')
@@ -77,7 +69,6 @@ export default function AddLivestockEventPage() {
       setLoading(false)
     }
   }
-
   const livestockTypes = [
     { value: 'cattle', label: 'Cattle' },
     { value: 'sheep', label: 'Sheep' },
@@ -87,7 +78,6 @@ export default function AddLivestockEventPage() {
     { value: 'horses', label: 'Horses' },
     { value: 'other', label: 'Other' }
   ]
-
   const eventTypes = [
     { value: 'health_check', label: 'Health Check' },
     { value: 'vaccination', label: 'Vaccination' },
@@ -98,7 +88,6 @@ export default function AddLivestockEventPage() {
     { value: 'feeding', label: 'Feeding' },
     { value: 'other', label: 'Other' }
   ]
-
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -110,11 +99,9 @@ export default function AddLivestockEventPage() {
             <ArrowLeft className="h-4 w-4" />
             Back to Livestock
           </button>
-          
           <h1 className="text-4xl font-light text-sage-800 mb-2">Add Livestock Event</h1>
           <p className="text-lg text-sage-600">Record a new livestock event or activity</p>
         </div>
-
         <ModernCard variant="floating">
           <ModernCardHeader>
             <div className="flex items-center gap-3">
@@ -124,7 +111,6 @@ export default function AddLivestockEventPage() {
               <ModernCardTitle>Livestock Event Details</ModernCardTitle>
             </div>
           </ModernCardHeader>
-          
           <ModernCardContent className="p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -147,7 +133,6 @@ export default function AddLivestockEventPage() {
                     )}
                   </select>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="eventDate">Event Date</Label>
                   <Input
@@ -158,7 +143,6 @@ export default function AddLivestockEventPage() {
                     required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="livestockType">Livestock Type</Label>
                   <select
@@ -173,7 +157,6 @@ export default function AddLivestockEventPage() {
                     ))}
                   </select>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="eventType">Event Type</Label>
                   <select
@@ -188,7 +171,6 @@ export default function AddLivestockEventPage() {
                     ))}
                   </select>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="animalCount">Number of Animals</Label>
                   <Input
@@ -201,7 +183,6 @@ export default function AddLivestockEventPage() {
                   />
                 </div>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="notes">Notes (Optional)</Label>
                 <textarea
@@ -213,7 +194,6 @@ export default function AddLivestockEventPage() {
                   placeholder="Add any additional details about this event..."
                 />
               </div>
-
               <div className="flex gap-4">
                 <Button 
                   type="submit" 

@@ -1,5 +1,4 @@
 import { prisma } from '../../prisma'
-
 export const produceResolvers = {
   Query: {
     // Get a single produce type by ID
@@ -12,18 +11,15 @@ export const produceResolvers = {
         },
       })
     },
-
     // Get all produce types with optional filtering
     produceTypes: async (
       _: any,
       { category, search }: { category?: string; search?: string }
     ) => {
       const where: any = {}
-
       if (category) {
         where.category = category
       }
-
       if (search) {
         where.OR = [
           { name: { contains: search, mode: 'insensitive' } },
@@ -31,7 +27,6 @@ export const produceResolvers = {
           { description: { contains: search, mode: 'insensitive' } },
         ]
       }
-
       return await prisma.produceType.findMany({
         where,
         include: {
@@ -41,7 +36,6 @@ export const produceResolvers = {
         orderBy: { name: 'asc' },
       })
     },
-
     // Get varieties for a specific produce type
     produceVarieties: async (_: any, { produceTypeId }: { produceTypeId: string }) => {
       return await prisma.produceVariety.findMany({
@@ -50,7 +44,6 @@ export const produceResolvers = {
         orderBy: { name: 'asc' },
       })
     },
-
     // Get nutritional data for a produce type
     nutritionalData: async (_: any, { produceTypeId }: { produceTypeId: string }) => {
       return await prisma.nutritionalData.findUnique({
@@ -58,7 +51,6 @@ export const produceResolvers = {
         include: { produceType: true },
       })
     },
-
     // Get planting calendar for a produce type and region
     plantingCalendar: async (
       _: any,
@@ -71,7 +63,6 @@ export const produceResolvers = {
         },
       })
     },
-
     // Get recommended crops based on location and season
     recommendedCrops: async (
       _: any,
@@ -79,7 +70,6 @@ export const produceResolvers = {
     ) => {
       // Determine climate zone based on latitude (simplified)
       let climateZones: string[] = []
-      
       if (latitude >= 23.5) {
         climateZones = ['TEMPERATE', 'CONTINENTAL']
       } else if (latitude >= 0) {
@@ -89,15 +79,12 @@ export const produceResolvers = {
       } else {
         climateZones = ['TEMPERATE', 'CONTINENTAL']
       }
-
       // Add Mediterranean for specific longitude ranges
       if (latitude >= 30 && latitude <= 45) {
         climateZones.push('MEDITERRANEAN')
       }
-
       const currentMonth = new Date().getMonth() + 1
       let seasonalFilter: any = {}
-
       // Filter based on season and current month for planting recommendations
       if (season.toLowerCase() === 'spring') {
         seasonalFilter = {
@@ -114,7 +101,6 @@ export const produceResolvers = {
           ]
         }
       }
-
       return await prisma.produceType.findMany({
         where: {
           climateZones: {
@@ -134,7 +120,6 @@ export const produceResolvers = {
       })
     },
   },
-
   // Resolvers for nested fields
   ProduceType: {
     varieties: async (parent: any) => {
@@ -143,14 +128,12 @@ export const produceResolvers = {
         orderBy: { name: 'asc' },
       })
     },
-
     nutritionalData: async (parent: any) => {
       return await prisma.nutritionalData.findUnique({
         where: { produceTypeId: parent.id },
       })
     },
   },
-
   ProduceVariety: {
     produceType: async (parent: any) => {
       return await prisma.produceType.findUnique({
@@ -158,7 +141,6 @@ export const produceResolvers = {
       })
     },
   },
-
   NutritionalData: {
     produceType: async (parent: any) => {
       return await prisma.produceType.findUnique({
@@ -166,7 +148,6 @@ export const produceResolvers = {
       })
     },
   },
-
   Mutation: {
     // Create a new produce type (admin only)
     createProduceType: async (_: any, { input }: { input: any }, context: any) => {
@@ -174,7 +155,6 @@ export const produceResolvers = {
       // if (!context.user || context.user.role !== 'ADMIN') {
       //   throw new Error('Unauthorized')
       // }
-
       return await prisma.produceType.create({
         data: {
           ...input,
@@ -191,11 +171,9 @@ export const produceResolvers = {
         },
       })
     },
-
     // Update a produce type
     updateProduceType: async (_: any, { id, input }: { id: string; input: any }, context: any) => {
       // Add authentication/authorization check here
-      
       return await prisma.produceType.update({
         where: { id },
         data: input,
@@ -205,18 +183,14 @@ export const produceResolvers = {
         },
       })
     },
-
     // Delete a produce type
     deleteProduceType: async (_: any, { id }: { id: string }, context: any) => {
       // Add authentication/authorization check here
-      
       await prisma.produceType.delete({
         where: { id },
       })
-      
       return true
     },
-
     // Create a new variety for a produce type
     createProduceVariety: async (_: any, { input }: { input: any }, context: any) => {
       return await prisma.produceVariety.create({
@@ -224,7 +198,6 @@ export const produceResolvers = {
         include: { produceType: true },
       })
     },
-
     // Update nutritional data
     updateNutritionalData: async (_: any, { produceTypeId, input }: { produceTypeId: string; input: any }, context: any) => {
       return await prisma.nutritionalData.upsert({
@@ -237,16 +210,13 @@ export const produceResolvers = {
         include: { produceType: true },
       })
     },
-
     // Create or update planting calendar
     updatePlantingCalendar: async (_: any, { input }: { input: any }, context: any) => {
       const { produceTypeId, region, ...calendarData } = input
-      
       // Find existing calendar entry
       const existing = await prisma.plantingCalendar.findFirst({
         where: { produceTypeId, region }
       })
-      
       if (existing) {
         return await prisma.plantingCalendar.update({
           where: { id: existing.id },

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { prisma } from '../../../../lib/prisma'
 import { z } from 'zod'
-
 const livestockEventSchema = z.object({
   farmId: z.string(),
   livestockType: z.enum(['cattle', 'sheep', 'goats', 'pigs', 'poultry', 'other']),
@@ -11,28 +10,23 @@ const livestockEventSchema = z.object({
   notes: z.string().optional(),
   date: z.string().optional()
 })
-
 export async function POST(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const body = await request.json()
     const validatedData = livestockEventSchema.parse(body)
-
     const farm = await prisma.farm.findFirst({
       where: {
         id: validatedData.farmId,
         ownerId: user.id
       }
     })
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found' }, { status: 404 })
     }
-
     const livestockEvent = await prisma.livestockEvent.create({
       data: {
         farmId: validatedData.farmId,
@@ -44,15 +38,12 @@ export async function POST(request: NextRequest) {
         userId: user.id
       }
     })
-
     if (['sale', 'treatment'].includes(validatedData.eventType)) {
       const estimatedCosts = {
         treatment: 50 * validatedData.animalCount,
         sale: -500 * validatedData.animalCount
       }
-      
       const amount = estimatedCosts[validatedData.eventType as keyof typeof estimatedCosts] || 0
-      
       if (amount !== 0) {
         await prisma.financialTransaction.create({
           data: {
@@ -68,7 +59,6 @@ export async function POST(request: NextRequest) {
         })
       }
     }
-
     return NextResponse.json({
       success: true,
       event: {
@@ -88,14 +78,12 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const events = await prisma.livestockEvent.findMany({
       where: {
         userId: user.id
@@ -108,7 +96,6 @@ export async function GET(request: NextRequest) {
       orderBy: { eventDate: 'desc' },
       take: 20
     })
-
     const summary = {
       totalEvents: events.length,
       recentVaccinations: events.filter(e => e.eventType === 'VACCINATION' && 
@@ -118,7 +105,6 @@ export async function GET(request: NextRequest) {
         new Date(e.eventDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
       ).length
     }
-
     return NextResponse.json({ events, summary })
   } catch (error) {
     console.error('Error fetching livestock events:', error)

@@ -3,35 +3,28 @@ import { getAuthenticatedUser } from '../../../lib/auth/server'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../lib/api/errors'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
 import { prisma } from '../../../lib/prisma'
-
 // GET /api/fields - Get user's fields
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const user = await getAuthenticatedUser(request)
-      
       if (!user) {
         throw new ValidationError('User authentication required')
       }
-
       const { searchParams } = new URL(request.url)
       const farmId = searchParams.get('farmId')
       const includeInactive = searchParams.get('includeInactive') === 'true'
-
       // Build query conditions
       const whereConditions: any = {
         farm: { ownerId: user.id }
       }
-
       if (farmId) {
         whereConditions.farmId = farmId
       }
-
       // Filter by active status unless explicitly including inactive fields
       if (!includeInactive) {
         whereConditions.isActive = true
       }
-
       // Fetch fields with farm information
       const fields = await prisma.field.findMany({
         where: whereConditions,
@@ -57,7 +50,6 @@ export const GET = apiMiddleware.protected(
           { name: 'asc' }
         ]
       })
-
       // Transform data for frontend use
       const transformedFields = fields.map(field => ({
         id: field.id,
@@ -75,7 +67,6 @@ export const GET = apiMiddleware.protected(
           stressLevel: field.satelliteData[0].stressLevel?.toLowerCase()
         } : null
       }))
-
       // Group by farm for better organization
       const fieldsByFarm = transformedFields.reduce((acc: any, field) => {
         const farmName = field.farmName
@@ -85,7 +76,6 @@ export const GET = apiMiddleware.protected(
         acc[farmName].push(field)
         return acc
       }, {})
-
       return createSuccessResponse({
         fields: transformedFields,
         fieldsByFarm,
@@ -97,22 +87,17 @@ export const GET = apiMiddleware.protected(
         },
         message: `Retrieved ${transformedFields.length} fields`
       })
-
     } catch (error) {
       return handleApiError(error)
     }
   })
 )
-
 // POST /api/fields - Create new field
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: any) => {
     try {
-
       const body = await request.json()
-
       const { farmId, name, area, soilType, cropType, description, latitude, longitude, boundary, color } = body
-
       // Basic validation
       if (!farmId) {
         throw new ValidationError('Farm ID is required')
@@ -123,23 +108,17 @@ export const POST = apiMiddleware.protected(
       if (!area || isNaN(parseFloat(area)) || parseFloat(area) <= 0) {
         throw new ValidationError('Valid area is required')
       }
-
       // Verify farm ownership
-
       const farm = await prisma.farm.findFirst({
         where: {
           id: farmId,
           ownerId: request.user.id
         }
       })
-
       if (!farm) {
-
         throw new ValidationError('Farm not found or access denied')
       }
-
       // Create new field
-
       // Create field using Prisma, omitting the boundary field
       const fieldData: any = {
         farmId,
@@ -151,7 +130,6 @@ export const POST = apiMiddleware.protected(
         status: 'active',
         isActive: true  // Fields are auto-default as active
       };
-      
       const field = await prisma.field.create({
         data: fieldData,
         include: {
@@ -163,30 +141,24 @@ export const POST = apiMiddleware.protected(
           }
         }
       })
-      
       // If boundary coordinates are provided, update with PostGIS geography using raw SQL
       if (boundary && Array.isArray(boundary) && boundary.length >= 3) {
         try {
           // Convert boundary array to WKT polygon format
           const wktCoordinates = boundary.map((point: any) => `${point.lng} ${point.lat}`).join(', ');
           const wktPolygon = `POLYGON((${wktCoordinates}, ${boundary[0].lng} ${boundary[0].lat}))`; // Close the polygon
-          
           await prisma.$executeRaw`
             UPDATE fields 
             SET boundary = ST_GeogFromText(${wktPolygon})
             WHERE id = ${field.id}
           `;
-
         } catch (boundaryError) {
-
           // Continue without boundary - field was created successfully
         }
       }
-
       if (!field) {
         throw new Error('Failed to create field');
       }
-
       // Create crop if cropType was provided
       let crop = null
       if (cropType) {
@@ -194,7 +166,6 @@ export const POST = apiMiddleware.protected(
           const currentYear = new Date().getFullYear()
           const defaultPlantingDate = new Date(currentYear, 3, 1) // April 1st
           const defaultHarvestDate = new Date(currentYear, 8, 15) // September 15th
-
           crop = await prisma.crop.create({
             data: {
               fieldId: field.id,
@@ -205,11 +176,9 @@ export const POST = apiMiddleware.protected(
             }
           })
         } catch (cropError) {
-
           // Field creation succeeded, so we don't throw here
         }
       }
-
       return createSuccessResponse({
         field: {
           id: field.id,
@@ -223,28 +192,23 @@ export const POST = apiMiddleware.protected(
         },
         message: 'Field created successfully' + (crop ? ' with crop plan' : '')
       })
-
     } catch (error) {
       return handleApiError(error)
     }
   })
 )
-
 // PATCH /api/fields - Update field (toggle active status)
 export const PATCH = apiMiddleware.protected(
   withMethods(['PATCH'], async (request: AuthenticatedRequest) => {
     try {
       const body = await request.json()
       const { fieldId, isActive } = body
-
       if (!fieldId) {
         throw new ValidationError('Field ID is required')
       }
-
       if (typeof isActive !== 'boolean') {
         throw new ValidationError('isActive must be a boolean value')
       }
-
       // Verify field ownership through farm ownership
       const field = await prisma.field.findFirst({
         where: {
@@ -261,11 +225,9 @@ export const PATCH = apiMiddleware.protected(
           }
         }
       })
-
       if (!field) {
         throw new ValidationError('Field not found or access denied')
       }
-
       // Update field active status
       const updatedField = await prisma.field.update({
         where: { id: fieldId },
@@ -278,7 +240,6 @@ export const PATCH = apiMiddleware.protected(
           }
         }
       })
-
       return createSuccessResponse({
         field: {
           id: updatedField.id,
@@ -288,7 +249,6 @@ export const PATCH = apiMiddleware.protected(
         },
         message: `Field ${isActive ? 'activated' : 'deactivated'} successfully`
       })
-
     } catch (error) {
       return handleApiError(error)
     }

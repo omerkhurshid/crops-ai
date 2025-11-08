@@ -1,24 +1,19 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 import { cn, ensureArray } from '../../lib/utils'
-
 interface MarketPrice {
   commodity: string
   price: number
   change: number
   unit: string
 }
-
 interface MarketTickerProps {
   className?: string
 }
-
 export function MarketTicker({ className }: MarketTickerProps) {
   const [prices, setPrices] = useState<MarketPrice[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     async function fetchMarketPrices() {
       try {
@@ -50,14 +45,11 @@ export function MarketTicker({ className }: MarketTickerProps) {
         setLoading(false)
       }
     }
-
     fetchMarketPrices()
-    
     // Refresh prices every 5 minutes
     const interval = setInterval(fetchMarketPrices, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
-
   if (loading) {
     return (
       <div className={cn('bg-sage-50 border-b border-sage-200 px-4 py-2', className)}>
@@ -69,7 +61,6 @@ export function MarketTicker({ className }: MarketTickerProps) {
       </div>
     )
   }
-
   if (prices.length === 0) {
     return (
       <div className={cn('bg-sage-50 border-b border-sage-200 px-4 py-2 text-center', className)}>
@@ -77,7 +68,6 @@ export function MarketTicker({ className }: MarketTickerProps) {
       </div>
     )
   }
-
   return (
     <div className={cn(
       'bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200',
@@ -105,17 +95,14 @@ export function MarketTicker({ className }: MarketTickerProps) {
             </span>
           </div>
         ))}
-        
       </div>
     </div>
   )
 }
-
 // Mobile-optimized version
 export function MobileMarketTicker({ className }: MarketTickerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [prices, setPrices] = useState<MarketPrice[]>([])
-
   useEffect(() => {
     async function fetchPrices() {
       try {
@@ -136,20 +123,15 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
         console.error('Failed to fetch market prices for mobile:', error)
       }
     }
-    
     fetchPrices()
   }, [])
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % prices.length)
     }, 3000)
-    
     return () => clearInterval(timer)
   }, [prices.length])
-
   const currentPrice = prices[currentIndex]
-
   return (
     <div className={cn(
       'bg-gradient-to-r from-sage-50 to-cream-50 px-3 py-1.5',
@@ -169,7 +151,6 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
           {Math.abs(currentPrice.change).toFixed(1)}%
         </span>
       </div>
-      
     </div>
   )
 }

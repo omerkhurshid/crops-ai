@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { cropCategories, CropCategory, CropItem } from '../../lib/farm-categories'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -8,13 +7,11 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Search, Info } from 'lucide-react'
 import { InfoTooltip } from '../ui/info-tooltip'
-
 interface CropCategorySelectorProps {
   selectedCrop?: string
   onSelect: (crop: CropItem, category: CropCategory) => void
   useComprehensiveDB?: boolean // Flag to use comprehensive database
 }
-
 interface ComprehensiveCrop {
   id: string;
   name: string;
@@ -30,13 +27,11 @@ interface ComprehensiveCrop {
     disease_resistance: string[];
   }[];
 }
-
 export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveDB = false }: CropCategorySelectorProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [comprehensiveCrops, setComprehensiveCrops] = useState<ComprehensiveCrop[]>([])
   const [loading, setLoading] = useState(false)
-
   // Fetch comprehensive crop data when useComprehensiveDB is enabled
   useEffect(() => {
     if (useComprehensiveDB && searchTerm.length > 2) {
@@ -48,14 +43,12 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
           setLoading(false)
         })
         .catch(err => {
-
           setLoading(false)
         })
     } else if (!useComprehensiveDB) {
       setComprehensiveCrops([])
     }
   }, [searchTerm, useComprehensiveDB])
-
   const filteredCategories = cropCategories.map(category => ({
     ...category,
     items: category.items.filter(item =>
@@ -66,7 +59,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
       )
     )
   })).filter(category => category.items.length > 0)
-
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -79,7 +71,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
           className="pl-10"
         />
       </div>
-
       {/* Categories */}
       <div className="space-y-4">
         {filteredCategories.map((category) => (
@@ -112,7 +103,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                 </div>
               </div>
             </CardHeader>
-            
             {selectedCategory === category.id && (
               <CardContent className="pt-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -133,13 +123,11 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                           description={`${crop.scientificName ? `Scientific: ${crop.scientificName}. ` : ''}${crop.growingSeasonDays ? `Growing season: ${crop.growingSeasonDays} days. ` : ''}${crop.primaryHarvestSeason ? `Harvest: ${crop.primaryHarvestSeason.join(', ')}. ` : ''}${crop.commonVarieties ? `Varieties: ${crop.commonVarieties.slice(0, 3).join(', ')}` : ''}`}
                         />
                       </div>
-                      
                       {crop.scientificName && (
                         <p className="text-xs text-gray-500 italic mb-2">
                           {crop.scientificName}
                         </p>
                       )}
-                      
                       <div className="flex flex-wrap gap-1 mb-2">
                         {crop.primaryHarvestSeason?.slice(0, 2).map((season) => (
                           <Badge key={season} variant="secondary" className="text-xs px-2 py-0">
@@ -152,7 +140,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                           </Badge>
                         )}
                       </div>
-                      
                       <div className="text-xs text-gray-600">
                         <p className="mb-1"><strong>Monitors:</strong></p>
                         <p>{crop.monitoringParameters.slice(0, 3).join(', ')}</p>
@@ -168,7 +155,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
           </Card>
         ))}
       </div>
-
       {/* Comprehensive Database Results */}
       {useComprehensiveDB && comprehensiveCrops.length > 0 && (
         <Card className="overflow-hidden">
@@ -222,11 +208,9 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                       description={`Scientific: ${crop.scientific_name}. Type: ${crop.crop_type}. Maturity: ${crop.days_to_maturity_min}-${crop.days_to_maturity_max} days. ${crop.varieties?.length ? `${crop.varieties.length} varieties available.` : ''}`}
                     />
                   </div>
-                  
                   <p className="text-xs text-gray-500 italic mb-2">
                     {crop.scientific_name}
                   </p>
-                  
                   <div className="flex flex-wrap gap-1 mb-2">
                     <Badge variant="secondary" className="text-xs px-2 py-0">
                       {crop.crop_type}
@@ -242,7 +226,6 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                       </Badge>
                     )}
                   </div>
-                  
                   <div className="text-xs text-gray-600">
                     <p className="mb-1"><strong>Climate zones:</strong></p>
                     <p>{crop.climate_zones.slice(0, 2).join(', ')}</p>
@@ -256,14 +239,12 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
           </CardContent>
         </Card>
       )}
-
       {loading && (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600 mx-auto"></div>
           <p className="text-gray-500 mt-2">Searching comprehensive database...</p>
         </div>
       )}
-
       {filteredCategories.length === 0 && comprehensiveCrops.length === 0 && !loading && (
         <div className="text-center py-12 text-gray-500">
           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />

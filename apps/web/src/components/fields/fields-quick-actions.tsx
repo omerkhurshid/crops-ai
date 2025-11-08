@@ -1,16 +1,12 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 import { MapPin } from 'lucide-react'
-
 interface FieldsQuickActionsProps {
   isQuickMode?: boolean
 }
-
 export function FieldsQuickActions({ isQuickMode = false }: FieldsQuickActionsProps) {
   const router = useRouter()
-
   return (
     <div className="space-y-3">
       <button
@@ -33,10 +29,8 @@ export function FieldsQuickActions({ isQuickMode = false }: FieldsQuickActionsPr
     </div>
   )
 }
-
 export function FieldsNavigateButton() {
   const router = useRouter()
-
   return (
     <Button
       onClick={() => router.push('/farms')}

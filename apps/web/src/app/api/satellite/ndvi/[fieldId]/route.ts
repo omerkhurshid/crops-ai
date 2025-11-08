@@ -4,7 +4,6 @@ import { liveSatelliteService } from '../../../../../lib/satellite/live-satellit
 import { copernicusService } from '../../../../../lib/satellite/copernicus-service'
 import { auditLogger } from '../../../../../lib/logging/audit-logger'
 import { prisma } from '../../../../../lib/prisma'
-
 /**
  * Get real NDVI data for a specific field
  * GET /api/satellite/ndvi/[fieldId]
@@ -14,18 +13,15 @@ export async function GET(
   { params }: { params: { fieldId: string } }
 ) {
   const startTime = Date.now()
-  
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { fieldId } = params
     if (!fieldId) {
       return NextResponse.json({ error: 'Field ID required' }, { status: 400 })
     }
-
     await auditLogger.logDataAccess(
       'read',
       'satellite_ndvi',
@@ -34,19 +30,15 @@ export async function GET(
       { source: 'copernicus_api' },
       request
     )
-
     // Get real NDVI data using our integrated service
     const satelliteData = await liveSatelliteService.getLatestFieldData(fieldId)
-    
     if (!satelliteData) {
       return NextResponse.json(
         { error: 'No satellite data available for this field' },
         { status: 404 }
       )
     }
-
     const duration = Date.now() - startTime
-    
     await auditLogger.logPerformance(
       `/api/satellite/ndvi/${fieldId}`,
       'GET',
@@ -60,7 +52,6 @@ export async function GET(
         cloudCoverage: satelliteData.metadata.cloudCoverage
       }
     )
-
     return NextResponse.json({
       success: true,
       data: {
@@ -80,10 +71,8 @@ export async function GET(
         imageUrl: satelliteData.imageUrl
       }
     })
-
   } catch (error) {
     const duration = Date.now() - startTime
-    
     await auditLogger.logSystem(
       'satellite_ndvi_api_error',
       false,
@@ -94,9 +83,7 @@ export async function GET(
       },
       'error'
     )
-
     console.error('Error fetching NDVI data:', error)
-
     return NextResponse.json(
       {
         error: 'Failed to fetch NDVI data',
@@ -106,7 +93,6 @@ export async function GET(
     )
   }
 }
-
 /**
  * Get detailed NDVI analysis for a field with historical comparison
  * POST /api/satellite/ndvi/[fieldId]
@@ -116,17 +102,14 @@ export async function POST(
   { params }: { params: { fieldId: string } }
 ) {
   const startTime = Date.now()
-  
   try {
     const user = await getAuthenticatedUser(request)
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const { fieldId } = params
     const body = await request.json()
     const { targetDate, analysisType = 'current' } = body
-
     await auditLogger.logDataAccess(
       'read',
       'satellite_ndvi_analysis',
@@ -135,11 +118,9 @@ export async function POST(
       { targetDate, analysisType },
       request
     )
-
     if (analysisType === 'historical') {
       // Get historical NDVI trend
       const historicalData = await getHistoricalNDVI(fieldId, targetDate)
-      
       return NextResponse.json({
         success: true,
         data: {
@@ -157,23 +138,19 @@ export async function POST(
           { status: 404 }
         )
       }
-
       const bounds = calculateFieldBounds(field)
       const detailedNDVI = await copernicusService.calculateFieldIndices(
         fieldId,
         bounds,
         targetDate || new Date().toISOString().split('T')[0]
       )
-
       if (!detailedNDVI) {
         return NextResponse.json(
           { error: 'No detailed NDVI analysis available' },
           { status: 404 }
         )
       }
-
       const duration = Date.now() - startTime
-      
       await auditLogger.logPerformance(
         `/api/satellite/ndvi/${fieldId}`,
         'POST',
@@ -187,7 +164,6 @@ export async function POST(
           quality: detailedNDVI.quality
         }
       )
-
       return NextResponse.json({
         success: true,
         data: {
@@ -206,10 +182,8 @@ export async function POST(
         }
       })
     }
-
   } catch (error) {
     const duration = Date.now() - startTime
-    
     await auditLogger.logSystem(
       'satellite_ndvi_analysis_error',
       false,
@@ -220,9 +194,7 @@ export async function POST(
       },
       'error'
     )
-
     console.error('Error in NDVI analysis:', error)
-
     return NextResponse.json(
       {
         error: 'Failed to perform NDVI analysis',
@@ -232,7 +204,6 @@ export async function POST(
     )
   }
 }
-
 /**
  * Helper function to get field information
  */
@@ -249,11 +220,9 @@ async function getFieldInfo(fieldId: string) {
         }
       }
     })
-
     if (!field) {
       return null
     }
-
     return {
       id: field.id,
       farm: {
@@ -267,7 +236,6 @@ async function getFieldInfo(fieldId: string) {
     return null
   }
 }
-
 /**
  * Helper function to calculate field bounds
  */
@@ -275,7 +243,6 @@ function calculateFieldBounds(field: any): { north: number; south: number; east:
   const centerLat = field.farm.latitude
   const centerLng = field.farm.longitude
   const offset = 0.005 // ~0.5km radius
-  
   return {
     north: centerLat + offset,
     south: centerLat - offset,
@@ -283,7 +250,6 @@ function calculateFieldBounds(field: any): { north: number; south: number; east:
     west: centerLng - offset
   }
 }
-
 /**
  * Helper function to get historical NDVI data
  */
@@ -295,7 +261,6 @@ async function getHistoricalNDVI(fieldId: string, targetDate: string) {
       orderBy: { captureDate: 'desc' },
       take: 12
     })
-
     return historicalData.map(data => ({
       date: data.captureDate.toISOString().split('T')[0],
       ndvi: data.ndvi,

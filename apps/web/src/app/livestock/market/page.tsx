@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -7,8 +6,6 @@ import { DashboardLayout } from '../../../components/layout/dashboard-layout'
 import { MarketAnalysis } from '../../../components/livestock/market-analysis'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../../../components/ui/modern-card'
 import { TrendingUp, DollarSign, Calendar, Target, AlertTriangle } from 'lucide-react'
-
-
 export default function LivestockMarketPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -21,15 +18,12 @@ export default function LivestockMarketPage() {
     marketOpportunities: [] as any[]
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -37,51 +31,43 @@ export default function LivestockMarketPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=market')
             return
           }
-
           // Fetch animals and related records
           const [animalsResponse, weightResponse, feedResponse] = await Promise.all([
             fetch('/api/livestock/animals'),
             fetch('/api/livestock/weight'),
             fetch('/api/livestock/feed')
           ])
-
           if (animalsResponse.ok && weightResponse.ok && feedResponse.ok) {
             const animals = await animalsResponse.json()
             const weightRecords = await weightResponse.json()
             const feedRecords = await feedResponse.json()
-
             // Group records by animal ID
             const animalWeightMap = weightRecords.reduce((acc: any, record: any) => {
               if (!acc[record.animalId]) acc[record.animalId] = []
               acc[record.animalId].push(record)
               return acc
             }, {})
-
             const animalFeedMap = feedRecords.reduce((acc: any, record: any) => {
               if (!acc[record.animalId]) acc[record.animalId] = []
               acc[record.animalId].push(record)
               return acc
             }, {})
-
             // Sort and limit records per animal
             Object.keys(animalWeightMap).forEach(animalId => {
               animalWeightMap[animalId] = animalWeightMap[animalId]
                 .sort((a: any, b: any) => new Date(b.weighDate).getTime() - new Date(a.weighDate).getTime())
                 .slice(0, 5)
             })
-
             Object.keys(animalFeedMap).forEach(animalId => {
               animalFeedMap[animalId] = animalFeedMap[animalId]
                 .sort((a: any, b: any) => new Date(b.feedDate).getTime() - new Date(a.feedDate).getTime())
                 .slice(0, 10)
             })
-
             // Filter for active animals and enrich with records
             const activeAnimals = animals
               .filter((animal: any) => animal.status === 'active')
@@ -90,7 +76,6 @@ export default function LivestockMarketPage() {
                 weightRecords: animalWeightMap[animal.id] || [],
                 feedRecords: animalFeedMap[animal.id] || []
               }))
-
             // Perform market analysis calculations
             calculateMarketData(activeAnimals)
           }
@@ -101,12 +86,9 @@ export default function LivestockMarketPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   const calculateMarketData = (animals: any[]) => {
-
     // Market weight targets by species
     const marketWeightTargets: { [key: string]: { min: number, max: number, optimal: number } } = {
       cattle: { min: 1000, max: 1400, optimal: 1200 },
@@ -115,12 +97,10 @@ export default function LivestockMarketPage() {
       goat: { min: 60, max: 90, optimal: 75 },
       chicken: { min: 4, max: 6, optimal: 5 }
     }
-
     // Analyze each animal for market readiness
     const marketOpportunities = animals.map(animal => {
       const target = marketWeightTargets[animal.species] || { min: 0, max: 0, optimal: 0 }
       const currentWeight = animal.currentWeight || 0
-      
       // Calculate growth rate
       let growthRate = 0
       if (animal.weightRecords.length >= 2) {
@@ -130,32 +110,26 @@ export default function LivestockMarketPage() {
           new Date(recentRecords[0].weighDate).getTime() - 
           new Date(recentRecords[1].weighDate).getTime()
         ) / (1000 * 60 * 60 * 24)
-        
         if (daysDiff > 0) {
           growthRate = weightChange / daysDiff // lbs per day
         }
       }
-
       // Calculate days to optimal weight
       let daysToOptimal = 0
       if (growthRate > 0 && currentWeight < target.optimal) {
         daysToOptimal = Math.ceil((target.optimal - currentWeight) / growthRate)
       }
-
       // Calculate market readiness score
       let readinessScore = 0
       let readinessStatus = 'not_ready'
-      
       if (currentWeight >= target.min) {
         readinessScore = Math.min(100, ((currentWeight - target.min) / (target.optimal - target.min)) * 100)
-        
         if (currentWeight >= target.optimal) {
           readinessStatus = 'ready'
         } else if (currentWeight >= target.min) {
           readinessStatus = 'approaching'
         }
       }
-
       // Calculate projected sale value (simplified)
       const basePrice = {
         cattle: 1.50, // per lb
@@ -164,10 +138,8 @@ export default function LivestockMarketPage() {
         goat: 2.50,
         chicken: 3.00
       }
-      
       const pricePerLb = basePrice[animal.species as keyof typeof basePrice] || 1.00
       const projectedValue = currentWeight * pricePerLb
-
       return {
         ...animal,
         marketTarget: target,
@@ -179,7 +151,6 @@ export default function LivestockMarketPage() {
         pricePerLb: pricePerLb
       }
     })
-
     // Calculate summary stats
     const newMarketData = {
       readyForSale: marketOpportunities.filter(
@@ -194,17 +165,14 @@ export default function LivestockMarketPage() {
       avgDaysToMarket: 0,
       marketOpportunities: marketOpportunities
     }
-
     const readyAnimals = marketOpportunities.filter(
       animal => animal.readinessStatus === 'approaching'
     )
     newMarketData.avgDaysToMarket = readyAnimals.length > 0 
       ? readyAnimals.reduce((sum, animal) => sum + animal.daysToOptimal, 0) / readyAnimals.length
       : 0
-
     setMarketData(newMarketData)
   }
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -215,11 +183,9 @@ export default function LivestockMarketPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -239,7 +205,6 @@ export default function LivestockMarketPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -250,7 +215,6 @@ export default function LivestockMarketPage() {
             <p className="text-gray-600">Optimize timing for livestock sales and market performance</p>
           </div>
         </div>
-
         {/* Market Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard>
@@ -264,7 +228,6 @@ export default function LivestockMarketPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -276,7 +239,6 @@ export default function LivestockMarketPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -288,7 +250,6 @@ export default function LivestockMarketPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
@@ -301,7 +262,6 @@ export default function LivestockMarketPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Market Alerts */}
         {marketData.readyForSale > 0 && (
           <ModernCard>
@@ -319,7 +279,6 @@ export default function LivestockMarketPage() {
             </ModernCardContent>
           </ModernCard>
         )}
-
         {/* Market Analysis Table */}
         <ModernCard>
           <ModernCardHeader>

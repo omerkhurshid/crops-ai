@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, memo } from 'react'
 import { Button } from '../ui/button'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
@@ -13,18 +12,15 @@ import {
   AlertCircle
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface QuickActionsProps {
   farmId: string
   className?: string
 }
-
 interface QuickExpense {
   amount: number
   category: string
   description?: string
 }
-
 interface QuickHarvest {
   fieldName: string
   cropType: string
@@ -32,7 +28,6 @@ interface QuickHarvest {
   unit: string
   qualityNotes?: string
 }
-
 export const QuickActions = memo(function QuickActions({ farmId, className }: QuickActionsProps) {
   const [expenseForm, setExpenseForm] = useState<QuickExpense>({
     amount: 0,
@@ -46,13 +41,10 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
     unit: 'tons',
     qualityNotes: ''
   })
-  
   const [loading, setLoading] = useState<'expense' | 'harvest' | null>(null)
   const [success, setSuccess] = useState<'expense' | 'harvest' | null>(null)
-
   const handleExpenseSubmit = async () => {
     if (expenseForm.amount <= 0) return
-    
     setLoading('expense')
     try {
       const response = await fetch('/api/quick-actions/expense', {
@@ -65,13 +57,11 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
           description: expenseForm.description
         })
       })
-
       if (response.ok) {
         setSuccess('expense')
         setExpenseForm({ amount: 0, category: 'fuel', description: '' })
         setTimeout(() => setSuccess(null), 3000)
       } else {
-
       }
     } catch (error) {
       console.error('Error creating expense:', error)
@@ -79,10 +69,8 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
       setLoading(null)
     }
   }
-
   const handleHarvestSubmit = async () => {
     if (!harvestForm.fieldName || harvestForm.quantity <= 0) return
-    
     setLoading('harvest')
     try {
       const response = await fetch('/api/quick-actions/harvest', {
@@ -97,7 +85,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
           qualityNotes: harvestForm.qualityNotes
         })
       })
-
       if (response.ok) {
         setSuccess('harvest')
         setHarvestForm({
@@ -109,7 +96,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
         })
         setTimeout(() => setSuccess(null), 3000)
       } else {
-
       }
     } catch (error) {
       console.error('Error creating harvest record:', error)
@@ -117,7 +103,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
       setLoading(null)
     }
   }
-
   return (
     <div className={cn('grid grid-cols-1 lg:grid-cols-2 gap-6', className)}>
       {/* Quick Expense Entry */}
@@ -135,7 +120,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               <span className="text-sm font-medium">Expense recorded successfully!</span>
             </div>
           )}
-
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
@@ -152,7 +136,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 />
               </div>
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
               <select
@@ -170,7 +153,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               </select>
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
             <input
@@ -181,7 +163,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               placeholder="e.g., Diesel for harvester"
             />
           </div>
-
           <div className="flex items-center gap-2">
             <Button 
               onClick={handleExpenseSubmit}
@@ -200,14 +181,12 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 </>
               )}
             </Button>
-            
             <Button variant="outline" size="icon" title="Add Receipt Photo">
               <Camera className="h-4 w-4" />
             </Button>
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Quick Harvest Entry */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -223,7 +202,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               <span className="text-sm font-medium">Harvest recorded successfully!</span>
             </div>
           )}
-
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Field Name</label>
@@ -235,7 +213,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 placeholder="e.g., North Field"
               />
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Crop Type</label>
               <select
@@ -252,7 +229,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               </select>
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
@@ -266,7 +242,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 step="0.1"
               />
             </div>
-            
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
               <select
@@ -281,7 +256,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               </select>
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Quality Notes (optional)</label>
             <input
@@ -292,7 +266,6 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               placeholder="e.g., Excellent quality, 14% moisture"
             />
           </div>
-
           <Button 
             onClick={handleHarvestSubmit}
             disabled={loading === 'harvest' || !harvestForm.fieldName || harvestForm.quantity <= 0}

@@ -1,5 +1,4 @@
 'use client'
-
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from './modern-card'
 import { InlineFloatingButton } from './floating-button'
 import Link from 'next/link'
@@ -8,7 +7,6 @@ import {
   DollarSign, FileText, Settings, Plus, ArrowRight,
   Target, Lightbulb, Users, Calendar, Satellite
 } from 'lucide-react'
-
 interface EmptyStateProps {
   title: string
   description: string
@@ -27,7 +25,6 @@ interface EmptyStateProps {
   suggestions?: string[]
   className?: string
 }
-
 export function EmptyState({
   title,
   description,
@@ -47,10 +44,8 @@ export function EmptyState({
         </div>
         <div className="absolute inset-0 bg-sage-100 rounded-2xl opacity-20 animate-pulse"></div>
       </div>
-      
       <h3 className="text-xl font-semibold text-sage-800 mb-3">{title}</h3>
       <p className="text-sage-600 max-w-md mx-auto leading-relaxed mb-6">{description}</p>
-      
       {suggestions && (
         <div className="mb-6">
           <p className="text-sm font-medium text-sage-700 mb-3">What you can do:</p>
@@ -64,7 +59,6 @@ export function EmptyState({
           </ul>
         </div>
       )}
-      
       <div className="flex flex-col sm:flex-row gap-3">
         {action && (
           action.href ? (
@@ -88,7 +82,6 @@ export function EmptyState({
             />
           )
         )}
-        
         {secondaryAction && (
           secondaryAction.href ? (
             <Link href={secondaryAction.href}>
@@ -115,7 +108,6 @@ export function EmptyState({
     </div>
   )
 }
-
 // Pre-configured empty states for common scenarios
 export function NoFarmsEmptyState() {
   return (
@@ -141,7 +133,6 @@ export function NoFarmsEmptyState() {
     />
   )
 }
-
 export function NoFieldsEmptyState({ farmId }: { farmId: string }) {
   return (
     <EmptyState
@@ -166,7 +157,6 @@ export function NoFieldsEmptyState({ farmId }: { farmId: string }) {
     />
   )
 }
-
 export function NoHealthDataEmptyState() {
   return (
     <EmptyState
@@ -191,7 +181,6 @@ export function NoHealthDataEmptyState() {
     />
   )
 }
-
 export function NoRecommendationsEmptyState() {
   return (
     <EmptyState
@@ -216,7 +205,6 @@ export function NoRecommendationsEmptyState() {
     />
   )
 }
-
 export function NoWeatherDataEmptyState() {
   return (
     <EmptyState
@@ -241,7 +229,6 @@ export function NoWeatherDataEmptyState() {
     />
   )
 }
-
 export function NoFinancialDataEmptyState() {
   return (
     <EmptyState
@@ -266,7 +253,6 @@ export function NoFinancialDataEmptyState() {
     />
   )
 }
-
 export function NoReportsEmptyState() {
   return (
     <EmptyState
@@ -291,7 +277,6 @@ export function NoReportsEmptyState() {
     />
   )
 }
-
 // Empty state card wrapper for consistent layouts
 export function EmptyStateCard({ 
   children, 

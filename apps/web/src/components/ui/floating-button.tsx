@@ -1,15 +1,12 @@
 'use client'
-
 import React from 'react'
 import { cn } from '../../lib/utils'
-
 interface FloatingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'success' | 'warning'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   children: React.ReactNode
   isFloating?: boolean
 }
-
 const variants = {
   primary: 'bg-sage-500 hover:bg-sage-600 text-white shadow-glow hover:shadow-soft-lg',
   secondary: 'bg-cream-200 hover:bg-cream-300 text-sage-800 shadow-soft hover:shadow-floating',
@@ -17,14 +14,12 @@ const variants = {
   success: 'bg-crops-green-500 hover:bg-crops-green-600 text-white shadow-glow',
   warning: 'bg-earth-500 hover:bg-earth-600 text-white shadow-soft'
 }
-
 const sizes = {
   sm: 'h-10 w-10 text-sm',
   md: 'h-12 w-12 text-base',
   lg: 'h-14 w-14 text-lg',
   xl: 'h-16 w-16 text-xl'
 }
-
 export function FloatingButton({
   className,
   variant = 'primary',
@@ -51,14 +46,12 @@ export function FloatingButton({
     </button>
   )
 }
-
 // Specialized floating action buttons for common actions
 interface ActionButtonProps extends Omit<FloatingButtonProps, 'children'> {
   icon: React.ReactNode
   label?: string
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
 }
-
 export function FloatingActionButton({
   icon,
   label,
@@ -72,7 +65,6 @@ export function FloatingActionButton({
     'top-right': 'fixed top-6 right-6 z-50',
     'top-left': 'fixed top-6 left-6 z-50'
   }
-
   return (
     <div className={positions[position]}>
       <FloatingButton
@@ -89,7 +81,6 @@ export function FloatingActionButton({
     </div>
   )
 }
-
 // Inline floating button for use within layouts
 export function InlineFloatingButton({
   icon,

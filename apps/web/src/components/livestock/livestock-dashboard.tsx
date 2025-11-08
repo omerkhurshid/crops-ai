@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -20,19 +19,15 @@ import {
 import { HerdRegistry } from './herd-registry'
 import { HealthLogs } from './health-logs'
 import { LivestockStats } from './livestock-stats'
-
 interface LivestockDashboardProps {
   farmId: string
   showAddButtons?: boolean
 }
-
 export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview')
-
   return (
     <div className="space-y-6">
       {/* Note: Stats are now calculated from real data in the parent component */}
-
       {/* Main Content */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -94,19 +89,15 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
                 </div>
               </TabsTrigger>
             </TabsList>
-
             <TabsContent value="overview" className="space-y-6 mt-6">
               <LivestockStats farmId={farmId} />
             </TabsContent>
-
             <TabsContent value="herd" className="space-y-6 mt-6">
               <HerdRegistry farmId={farmId} />
             </TabsContent>
-
             <TabsContent value="health" className="space-y-6 mt-6">
               <HealthLogs farmId={farmId} />
             </TabsContent>
-
             <TabsContent value="breeding" className="space-y-6 mt-6">
               <div className="text-center py-12">
                 <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />

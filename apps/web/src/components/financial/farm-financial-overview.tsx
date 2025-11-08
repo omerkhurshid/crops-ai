@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -17,13 +16,11 @@ import {
   Eye,
   ArrowRight
 } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
   totalArea: number
 }
-
 interface Field {
   id: string
   name: string
@@ -38,7 +35,6 @@ interface Field {
   transactionCount: number
   lastActivity?: string
 }
-
 interface FarmFinancialSummary {
   totalRevenue: number
   totalExpenses: number
@@ -49,47 +45,37 @@ interface FarmFinancialSummary {
   transactionCount: number
   fieldsCount: number
 }
-
 interface FarmFinancialOverviewProps {
   farm: Farm
   onFieldSelect: (fieldId: string) => void
   onAddTransaction: () => void
 }
-
 export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }: FarmFinancialOverviewProps) {
   const [summary, setSummary] = useState<FarmFinancialSummary | null>(null)
   const [fields, setFields] = useState<Field[]>([])
   const [loading, setLoading] = useState(true)
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(amount)
   }
-
   const formatPercentage = (percentage: number) => {
     return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`
   }
-
   const fetchFarmSummary = async () => {
     try {
       setLoading(true)
-      
       // Fetch farm financial summary
       const summaryResponse = await fetch(`/api/financial/summary?farmId=${farm.id}`)
-      
       if (summaryResponse.ok) {
         const summaryData = await summaryResponse.json()
         setSummary(summaryData.summary)
       }
-
       // Fetch fields with financial data
       const fieldsResponse = await fetch(`/api/fields?farmId=${farm.id}`)
-      
       if (fieldsResponse.ok) {
         const fieldsData = await fieldsResponse.json()
-        
         // Get financial data for each field
         const fieldsWithFinancials = await Promise.all(
           fieldsData.fields.map(async (field: any) => {
@@ -97,11 +83,9 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
               const fieldFinancialResponse = await fetch(
                 `/api/financial/summary?farmId=${farm.id}&fieldId=${field.id}`
               )
-              
               if (fieldFinancialResponse.ok) {
                 const fieldFinancialData = await fieldFinancialResponse.json()
                 const fieldSummary = fieldFinancialData.summary
-                
                 return {
                   ...field,
                   totalRevenue: fieldSummary?.totalIncome || 0,
@@ -112,7 +96,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                   lastActivity: fieldSummary?.lastTransactionDate || null
                 }
               }
-              
               return {
                 ...field,
                 totalRevenue: 0,
@@ -134,7 +117,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
             }
           })
         )
-        
         setFields(fieldsWithFinancials)
       }
     } catch (error) {
@@ -143,11 +125,9 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchFarmSummary()
   }, [farm.id])
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -164,7 +144,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Farm Financial Summary Header */}
@@ -188,7 +167,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
             </div>
           </div>
         </ModernCardHeader>
-        
         {summary && (
           <ModernCardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -215,7 +193,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                   </div>
                 )}
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-orange-600" />
@@ -225,7 +202,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                   {formatCurrency(summary.totalExpenses)}
                 </p>
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-blue-600" />
@@ -240,7 +216,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                   {formatCurrency(summary.profitPerAcre)}/acre
                 </div>
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-purple-600" />
@@ -255,7 +230,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
           </ModernCardContent>
         )}
       </ModernCard>
-
       {/* Fields Financial Breakdown */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -303,7 +277,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                             <Badge variant="outline">No Transactions</Badge>
                           )}
                         </div>
-                        
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                           <div>
                             <span className="text-gray-500">Area:</span>
@@ -330,7 +303,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                             </p>
                           </div>
                         </div>
-                        
                         <div className="mt-2 text-xs text-gray-500 flex items-center gap-4">
                           <span>{field.transactionCount} transactions</span>
                           {field.soilType && <span>Soil: {field.soilType}</span>}
@@ -339,7 +311,6 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                           )}
                         </div>
                       </div>
-                      
                       <div className="flex items-center gap-2 ml-4">
                         <Button variant="outline" size="sm">
                           <Eye className="h-4 w-4 mr-1" />

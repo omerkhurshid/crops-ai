@@ -5,7 +5,6 @@ import { UserRole } from '@prisma/client'
 import { z } from 'zod'
 import { validateRequest } from './validation-schemas'
 import { getConfig } from '../config/environment'
-
 export interface AuthenticatedRequest extends NextRequest {
   user: {
     id: string
@@ -14,13 +13,11 @@ export interface AuthenticatedRequest extends NextRequest {
     role: UserRole
   }
 }
-
 // Request ID middleware
 export function withRequestId(handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     const requestId = generateRequestId()
     // Logger.setContext({ requestId }) - removed for local development
-    
     try {
       if (context) {
         return await handler(request, context, requestId)
@@ -32,13 +29,11 @@ export function withRequestId(handler: any) {
     }
   }
 }
-
 // Performance monitoring middleware
 export function withPerformanceMonitoring(handler: any, metricName?: string) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     const metric = metricName || `${request.method} ${request.nextUrl.pathname}`
     const startTime = Date.now()
-    
     try {
       const result = await (async () => {
         if (context) {
@@ -48,7 +43,6 @@ export function withPerformanceMonitoring(handler: any, metricName?: string) {
         }
       })()
       const duration = Date.now() - startTime
-
       return result
     } catch (error) {
       const duration = Date.now() - startTime
@@ -57,7 +51,6 @@ export function withPerformanceMonitoring(handler: any, metricName?: string) {
     }
   }
 }
-
 // Error handling middleware
 export function withErrorHandling(handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
@@ -73,7 +66,6 @@ export function withErrorHandling(handler: any) {
     }
   }
 }
-
 // Rate limiting middleware using Upstash Redis
 export function withRateLimit(
   handler: any,
@@ -83,11 +75,9 @@ export function withRateLimit(
     try {
       const { rateLimitWithFallback } = await import('../rate-limit')
       const { success, headers } = await rateLimitWithFallback(request, type)
-      
       if (!success) {
         throw new RateLimitError('Rate limit exceeded')
       }
-      
       // Execute handler and add rate limit headers
       let response: Response
       if (context) {
@@ -95,12 +85,10 @@ export function withRateLimit(
       } else {
         response = await handler(request)
       }
-      
       // Add rate limit headers to response
       Object.entries(headers).forEach(([key, value]) => {
         response.headers.set(key, value)
       })
-      
       return response
     } catch (error) {
       if (error instanceof RateLimitError) {
@@ -116,19 +104,15 @@ export function withRateLimit(
     }
   }
 }
-
 // Authentication middleware
 export function withAuth(handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     const user = await authenticateRequest(request)
-    
     if (!user) {
       throw new AuthenticationError()
     }
-    
     const authenticatedRequest = request as AuthenticatedRequest
     authenticatedRequest.user = user
-    
     if (context) {
       return handler(authenticatedRequest, context)
     } else {
@@ -136,14 +120,12 @@ export function withAuth(handler: any) {
     }
   }
 }
-
 // Authorization middleware
 export function withRoles(allowedRoles: UserRole[], handler: any) {
   return withAuth(async (request: AuthenticatedRequest, context?: any) => {
     if (!allowedRoles.includes(request.user.role)) {
       throw new AuthorizationError(`Access denied. Required roles: ${allowedRoles.join(', ')}`)
     }
-    
     if (context) {
       return handler(request, context)
     } else {
@@ -151,7 +133,6 @@ export function withRoles(allowedRoles: UserRole[], handler: any) {
     }
   })
 }
-
 // Method validation middleware
 export function withMethods(allowedMethods: string[], handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
@@ -167,7 +148,6 @@ export function withMethods(allowedMethods: string[], handler: any) {
         }
       )
     }
-    
     if (context) {
       return handler(request, context)
     } else {
@@ -175,14 +155,12 @@ export function withMethods(allowedMethods: string[], handler: any) {
     }
   }
 }
-
 // Input validation middleware
 export function withValidation<T>(schema: z.ZodSchema<T>, handler: any) {
   return async (request: NextRequest, context?: any): Promise<Response> => {
     try {
       // Parse request body or query params based on method
       let data: unknown
-      
       if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
         try {
           data = await request.json()
@@ -194,13 +172,10 @@ export function withValidation<T>(schema: z.ZodSchema<T>, handler: any) {
         const searchParams = request.nextUrl.searchParams
         data = Object.fromEntries(searchParams.entries())
       }
-      
       // Validate the data
       const validatedData = await validateRequest(schema, data)
-      
       // Attach validated data to request
       ;(request as any).validatedData = validatedData
-      
       if (context) {
         return handler(request, context)
       } else {
@@ -212,7 +187,6 @@ export function withValidation<T>(schema: z.ZodSchema<T>, handler: any) {
     }
   }
 }
-
 // Combine multiple middlewares
 export function withMiddleware<T>(
   ...middlewares: Array<(handler: any) => any>
@@ -221,16 +195,13 @@ export function withMiddleware<T>(
     return middlewares.reduceRight((acc, middleware) => middleware(acc), handler)
   }
 }
-
 // Generic middleware type
 type MiddlewareHandler<T = unknown> = (request: NextRequest, context: T) => Promise<Response>
 type AuthenticatedMiddlewareHandler<T = unknown> = (request: AuthenticatedRequest, context: T) => Promise<Response>
-
 // Helper functions
 function generateRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 }
-
 function getClientId(request: NextRequest): string {
   // In production, you might want to use a more sophisticated approach
   const forwarded = request.headers.get('x-forwarded-for')
@@ -239,7 +210,6 @@ function getClientId(request: NextRequest): string {
              'unknown'
   return ip
 }
-
 async function authenticateRequest(request: NextRequest): Promise<{
   id: string
   email: string
@@ -255,33 +225,26 @@ async function authenticateRequest(request: NextRequest): Promise<{
     return null
   }
 }
-
 // Common API patterns
 export const apiMiddleware = {
   // Basic API with error handling and performance monitoring
   basic: (handler: any) => 
     withRequestId(withErrorHandling(withPerformanceMonitoring(handler))),
-  
   // Public API with rate limiting
   public: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(handler, 'api')))),
-  
   // Protected API requiring authentication with standard rate limits
   protected: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'api')))),
-  
   // Admin-only API with relaxed rate limits
   admin: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withRoles([UserRole.ADMIN], handler), 'heavy')))),
-  
   // Auth endpoints with strict rate limits
   auth: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(handler, 'auth')))),
-  
   // Write operations with moderate rate limits
   write: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'write')))),
-  
   // Heavy operations (ML, satellite) with permissive rate limits
   heavy: (handler: any) =>
     withRequestId(withErrorHandling(withPerformanceMonitoring(withRateLimit(withAuth(handler), 'heavy'))))

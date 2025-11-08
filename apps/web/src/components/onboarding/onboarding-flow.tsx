@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { InlineFloatingButton } from '../ui/floating-button'
@@ -11,7 +10,6 @@ import {
   ArrowRight, Lightbulb, Target, Activity, CloudRain,
   BarChart3, Users, HelpCircle
 } from 'lucide-react'
-
 interface OnboardingStep {
   id: string
   title: string
@@ -27,7 +25,6 @@ interface OnboardingStep {
   estimatedTime?: string
   benefits?: string[]
 }
-
 interface OnboardingFlowProps {
   userStats?: {
     totalFarms?: number
@@ -37,11 +34,9 @@ interface OnboardingFlowProps {
   }
   onStepComplete?: (stepId: string) => void
 }
-
 export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
-
   // Define onboarding steps based on user progress
   const steps: OnboardingStep[] = [
     {
@@ -123,12 +118,10 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       ]
     }
   ]
-
   // Calculate progress
   const totalSteps = steps.length
   const completedCount = steps.filter(step => step.status === 'completed').length
   const progress = (completedCount / totalSteps) * 100
-
   // Update current step based on progress
   useEffect(() => {
     const nextIncompleteStep = steps.findIndex(step => step.status !== 'completed')
@@ -136,7 +129,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       setCurrentStep(nextIncompleteStep)
     }
   }, [userStats])
-
   const handleStepAction = (step: OnboardingStep) => {
     if (step.action.onClick) {
       step.action.onClick()
@@ -145,7 +137,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       onStepComplete(step.id)
     }
   }
-
   return (
     <div className="space-y-8">
       {/* Progress Overview */}
@@ -165,7 +156,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
               <div className="text-sm text-sage-600">Steps Complete</div>
             </div>
           </div>
-          
           {/* Progress Bar */}
           <div className="mt-6">
             <div className="flex justify-between items-center mb-2">
@@ -176,7 +166,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
           </div>
         </ModernCardHeader>
       </ModernCard>
-
       {/* Step Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {steps.map((step, index) => (
@@ -212,7 +201,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
                   <ModernCardDescription className="leading-relaxed">
                     {step.description}
                   </ModernCardDescription>
-                  
                   {step.estimatedTime && (
                     <div className="flex items-center gap-1 mt-2 text-xs text-sage-500">
                       <Clock className="h-3 w-3" />
@@ -222,7 +210,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
                 </div>
               </div>
             </ModernCardHeader>
-            
             {step.benefits && (
               <ModernCardContent className="pt-0">
                 <div className="mb-4">
@@ -239,7 +226,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
                     ))}
                   </ul>
                 </div>
-                
                 <div className="flex justify-end">
                   {step.action.href ? (
                     <Link href={step.action.href}>
@@ -267,7 +253,6 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
           </ModernCard>
         ))}
       </div>
-
       {/* Help & Support */}
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">

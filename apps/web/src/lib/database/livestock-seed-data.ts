@@ -2,7 +2,6 @@
  * Comprehensive livestock database seed data
  * Production-ready livestock information for agricultural management
  */
-
 export interface LivestockSeedData {
   name: string
   scientificName: string
@@ -37,7 +36,6 @@ export interface LivestockSeedData {
     marketPremium: boolean
   }[]
 }
-
 export const livestockSeedData: LivestockSeedData[] = [
   // DAIRY CATTLE
   {

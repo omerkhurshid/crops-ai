@@ -1,24 +1,19 @@
 'use client'
-
 import { useSession } from '../../../../lib/auth-unified'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { UnifiedFarmDashboard } from '../../../../components/precision/unified-farm-dashboard'
-
 export default function PrecisionDashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [farm, setFarm] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     // Fetch user's first farm
     const fetchFarm = async () => {
       try {
@@ -35,10 +30,8 @@ export default function PrecisionDashboardPage() {
         setIsLoading(false)
       }
     }
-
     fetchFarm()
   }, [session, status, router])
-
   if (status === 'loading' || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -46,11 +39,9 @@ export default function PrecisionDashboardPage() {
       </div>
     )
   }
-
   if (!session) {
     return null // Will redirect
   }
-
   // Default demo farm if no farm exists  
   const defaultFarm = {
     id: 'precision-dashboard-farm',
@@ -58,13 +49,11 @@ export default function PrecisionDashboardPage() {
     latitude: 36.7783,
     longitude: -119.4179
   }
-
   const farmData = farm || defaultFarm
   const farmLocation = {
     lat: farmData.latitude || 36.7783,
     lng: farmData.longitude || -119.4179
   }
-
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
@@ -73,7 +62,6 @@ export default function PrecisionDashboardPage() {
           Role: {session.user.role} | Farm: {farmData.name}
         </p>
       </div>
-      
       <UnifiedFarmDashboard 
         farmId={farmData.id}
         farmLocation={farmLocation}

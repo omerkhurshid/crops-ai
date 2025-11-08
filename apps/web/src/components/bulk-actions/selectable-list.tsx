@@ -1,16 +1,13 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
 import { BulkActionsToolbar, useBulkSelection, BulkAction } from './bulk-actions-toolbar'
 import { CheckSquare, Square } from 'lucide-react'
-
 interface SelectableItem {
   id: string
   [key: string]: any
 }
-
 interface SelectableListProps<T extends SelectableItem> {
   items: T[]
   renderItem: (item: T, isSelected: boolean, onToggle: () => void) => React.ReactNode
@@ -21,7 +18,6 @@ interface SelectableListProps<T extends SelectableItem> {
   emptyMessage?: string
   listClassName?: string
 }
-
 export function SelectableList<T extends SelectableItem>({
   items,
   renderItem,
@@ -41,7 +37,6 @@ export function SelectableList<T extends SelectableItem>({
     isSelected,
     hasSelection
   } = useBulkSelection(items)
-
   return (
     <div className={className}>
       {/* Bulk Actions Toolbar */}
@@ -57,7 +52,6 @@ export function SelectableList<T extends SelectableItem>({
           />
         </div>
       )}
-
       {/* Items List */}
       <div className={`space-y-4 ${listClassName}`}>
         {items.length === 0 ? (
@@ -75,7 +69,6 @@ export function SelectableList<T extends SelectableItem>({
     </div>
   )
 }
-
 // Wrapper component for individual selectable items
 interface SelectableItemWrapperProps {
   isSelected: boolean
@@ -84,7 +77,6 @@ interface SelectableItemWrapperProps {
   className?: string
   showCheckbox?: boolean
 }
-
 export function SelectableItemWrapper({
   isSelected,
   onToggle,
@@ -122,7 +114,6 @@ export function SelectableItemWrapper({
           </button>
         </div>
       )}
-
       {/* Item Content */}
       <div
         onClick={onToggle}
@@ -130,7 +121,6 @@ export function SelectableItemWrapper({
       >
         {children}
       </div>
-
       {/* Selection Indicator */}
       {isSelected && (
         <div className="absolute top-0 left-0 w-1 h-full bg-sage-500 rounded-l-lg" />
@@ -138,7 +128,6 @@ export function SelectableItemWrapper({
     </div>
   )
 }
-
 // Pre-built selectable list items for common data types
 interface FarmItemProps {
   farm: {
@@ -153,7 +142,6 @@ interface FarmItemProps {
   isSelected: boolean
   onToggle: () => void
 }
-
 export function SelectableFarmItem({ farm, isSelected, onToggle }: FarmItemProps) {
   return (
     <SelectableItemWrapper isSelected={isSelected} onToggle={onToggle}>
@@ -188,7 +176,6 @@ export function SelectableFarmItem({ farm, isSelected, onToggle }: FarmItemProps
     </SelectableItemWrapper>
   )
 }
-
 interface FieldItemProps {
   field: {
     id: string
@@ -202,7 +189,6 @@ interface FieldItemProps {
   isSelected: boolean
   onToggle: () => void
 }
-
 export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemProps) {
   const getHealthScoreColor = (score?: number) => {
     if (!score) return 'text-sage-500'
@@ -210,7 +196,6 @@ export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemPr
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
-
   return (
     <SelectableItemWrapper isSelected={isSelected} onToggle={onToggle}>
       <ModernCard variant="soft" className="border-none shadow-none">
@@ -253,7 +238,6 @@ export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemPr
     </SelectableItemWrapper>
   )
 }
-
 interface TransactionItemProps {
   transaction: {
     id: string
@@ -267,7 +251,6 @@ interface TransactionItemProps {
   isSelected: boolean
   onToggle: () => void
 }
-
 export function SelectableTransactionItem({ transaction, isSelected, onToggle }: TransactionItemProps) {
   return (
     <SelectableItemWrapper isSelected={isSelected} onToggle={onToggle}>

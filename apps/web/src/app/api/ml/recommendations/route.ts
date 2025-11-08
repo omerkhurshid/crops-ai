@@ -4,7 +4,6 @@ import { recommendationEngine } from '../../../../lib/ml/recommendation-engine';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const recommendationRequestSchema = z.object({
   farmId: z.string().min(1, 'Farm ID is required'),
   fieldId: z.string().optional(),
@@ -29,13 +28,11 @@ const recommendationRequestSchema = z.object({
     laborConstraints: z.boolean().optional()
   }).optional()
 });
-
 const plantingRecommendationSchema = z.object({
   farmId: z.string().min(1, 'Farm ID is required'),
   fieldId: z.string().min(1, 'Field ID is required'),
   targetCrop: z.string().optional()
 });
-
 const feedbackSchema = z.object({
   recommendationId: z.string().min(1, 'Recommendation ID is required'),
   implemented: z.boolean(),
@@ -48,25 +45,20 @@ const feedbackSchema = z.object({
   }).optional(),
   comments: z.string().optional()
 });
-
 // POST /api/ml/recommendations
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = recommendationRequestSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
-      
       const plan = await recommendationEngine.generateRecommendations({
         farmId: params.farmId,
         fieldId: params.fieldId,
@@ -76,7 +68,6 @@ export const POST = apiMiddleware.protected(
         priority: params.priority,
         constraints: params.constraints
       });
-
       const summary = {
         farmId: params.farmId,
         fieldId: params.fieldId,
@@ -90,51 +81,41 @@ export const POST = apiMiddleware.protected(
         alternativePlans: plan.alternatives.length,
         highPriorityItems: plan.recommendations.filter(r => r.priority === 'high' || r.priority === 'critical').length
       };
-
       return createSuccessResponse({
         data: plan,
         summary,
         message: `Generated ${plan.recommendations.length} recommendations for farm ${params.farmId}`,
         action: 'generate_recommendations'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/ml/recommendations?farmId=123&type=planting
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const farmId = searchParams.get('farmId');
       const type = searchParams.get('type');
       const fieldId = searchParams.get('fieldId');
-
       if (!farmId) {
         throw new ValidationError('farmId parameter is required');
       }
-
       let result;
-
       if (type === 'planting' && fieldId) {
         // Get specific planting recommendations
         const targetCrop = searchParams.get('targetCrop') || undefined;
-        
         const recommendations = await recommendationEngine.getPlantingRecommendations(
           farmId,
           fieldId,
           targetCrop
         );
-
         result = {
           recommendations,
           summary: {
@@ -147,16 +128,13 @@ export const GET = apiMiddleware.protected(
             expectedYieldIncrease: recommendations.reduce((sum, r) => sum + r.impact.yield, 0)
           }
         };
-
       } else if (type === 'analytics') {
         // Get recommendation analytics
         const timeRange = searchParams.get('startDate') && searchParams.get('endDate') ? {
           start: new Date(searchParams.get('startDate')!),
           end: new Date(searchParams.get('endDate')!)
         } : undefined;
-
         const analytics = await recommendationEngine.getRecommendationAnalytics(farmId, timeRange);
-        
         result = {
           analytics,
           summary: {
@@ -168,17 +146,14 @@ export const GET = apiMiddleware.protected(
             yieldImprovement: analytics.yieldImprovement
           }
         };
-
       } else {
         throw new ValidationError('Invalid type parameter. Supported types: planting, analytics');
       }
-
       return createSuccessResponse({
         data: result,
         message: `Retrieved ${type} recommendations for farm ${farmId}`,
         action: `get_${type}_recommendations`
       });
-
     } catch (error) {
       return handleApiError(error);
     }

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -9,28 +8,23 @@ import { Label } from '../../components/ui/label'
 import { InlineFloatingButton } from '../../components/ui/floating-button'
 import { Alert, AlertDescription } from '../../components/ui/alert'
 import { Mail, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react'
-
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
-
     try {
       const response = await fetch('/api/user-auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       })
-
       const data = await response.json()
-
       if (response.ok) {
         setIsSuccess(true)
       } else {
@@ -42,7 +36,6 @@ export default function ForgotPasswordPage() {
       setIsLoading(false)
     }
   }
-
   if (isSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-agricultural py-12 px-4 sm:px-6 lg:px-8">
@@ -51,7 +44,6 @@ export default function ForgotPasswordPage() {
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-4">Crops.AI</h1>
           </div>
-          
           <ModernCard variant="floating" className="shadow-2xl">
             <ModernCardContent className="text-center py-8">
               <div className="space-y-4">
@@ -83,7 +75,6 @@ export default function ForgotPasswordPage() {
       </div>
     )
   }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-agricultural py-12 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 agricultural-overlay"></div>
@@ -92,7 +83,6 @@ export default function ForgotPasswordPage() {
           <h1 className="text-4xl font-bold text-white mb-4">Crops.AI</h1>
           <p className="text-white/80 text-lg font-light">Reset your password</p>
         </div>
-        
         <ModernCard variant="floating" className="shadow-2xl">
           <ModernCardHeader>
             <ModernCardTitle>Forgot Password?</ModernCardTitle>
@@ -119,13 +109,11 @@ export default function ForgotPasswordPage() {
                   />
                 </div>
               </div>
-
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-
               <InlineFloatingButton
                 icon={isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
                 label={isLoading ? 'Sending...' : 'Send Reset Link'}
@@ -135,7 +123,6 @@ export default function ForgotPasswordPage() {
                 className="w-full"
                 type="submit"
               />
-
               <div className="text-center pt-4">
                 <Link href="/login" className="text-sm text-sage-600 hover:text-sage-700">
                   <InlineFloatingButton

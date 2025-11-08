@@ -7,10 +7,7 @@ import {
   DollarSign, Calculator, TrendingUp, PieChart, AlertTriangle,
   CheckCircle, BarChart3, Target, Info, Lightbulb
 } from 'lucide-react'
-
-
 export default function FinancialCalculationsPage() {
-
   return (
     <DashboardLayout>
       <main className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -20,18 +17,15 @@ export default function FinancialCalculationsPage() {
             <DollarSign className="h-6 w-6 text-sage-700" />
             <span className="text-sage-600">Financial Management</span>
           </div>
-          
           <h1 className="text-3xl font-bold text-sage-800 mb-4">
             Understanding Financial Calculations & ROI Analysis
           </h1>
-          
           <div className="flex items-center gap-4 text-sm text-sage-600">
             <Badge variant="outline">12 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
           </div>
         </div>
-
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
@@ -39,7 +33,6 @@ export default function FinancialCalculationsPage() {
               Crops.AI automatically calculates key financial metrics to help you understand which parts of your farm 
               are most profitable and where you can improve your returns. No spreadsheets required!
             </p>
-            
             <Alert>
               <Lightbulb className="h-4 w-4" />
               <AlertDescription>
@@ -49,7 +42,6 @@ export default function FinancialCalculationsPage() {
             </Alert>
           </ModernCardContent>
         </ModernCard>
-
         {/* Core Financial Metrics */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -71,7 +63,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-3">2. Cost per Hectare</h3>
                 <div className="bg-earth-50 p-4 rounded-lg">
@@ -83,7 +74,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-3">3. Profit Margin</h3>
                 <div className="bg-green-50 p-4 rounded-lg">
@@ -95,7 +85,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold text-sage-800 mb-3">4. Return on Investment (ROI)</h3>
                 <div className="bg-blue-50 p-4 rounded-lg">
@@ -110,7 +99,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Cost Categories */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -131,7 +119,6 @@ export default function FinancialCalculationsPage() {
                   <li>• <strong>Labor:</strong> Field work, harvest labor</li>
                 </ul>
               </div>
-
               <div>
                 <h4 className="font-semibold text-sage-800 mb-3">Overhead Costs</h4>
                 <ul className="text-sm text-sage-700 space-y-2">
@@ -145,7 +132,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* ROI Analysis Examples */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -159,7 +145,6 @@ export default function FinancialCalculationsPage() {
               <p className="text-sage-700">
                 Here's how different farming decisions impact your ROI:
               </p>
-
               <div className="space-y-4">
                 <div className="border-l-4 border-green-500 pl-4">
                   <h4 className="font-semibold text-sage-800 mb-2">High ROI Example: Precision Application</h4>
@@ -170,7 +155,6 @@ export default function FinancialCalculationsPage() {
                     <p>• <strong>ROI:</strong> (200 - 50) / 50 = 300%</p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-yellow-500 pl-4">
                   <h4 className="font-semibold text-sage-800 mb-2">Medium ROI Example: Preventive Fungicide</h4>
                   <div className="text-sm text-sage-700 space-y-1">
@@ -180,7 +164,6 @@ export default function FinancialCalculationsPage() {
                     <p>• <strong>ROI:</strong> (150 - 80) / 80 = 87.5%</p>
                   </div>
                 </div>
-
                 <div className="border-l-4 border-red-500 pl-4">
                   <h4 className="font-semibold text-sage-800 mb-2">Low ROI Example: Excessive Nitrogen</h4>
                   <div className="text-sm text-sage-700 space-y-1">
@@ -194,7 +177,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Break-Even Analysis */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -208,7 +190,6 @@ export default function FinancialCalculationsPage() {
               <p className="text-sage-700">
                 Your break-even point is the minimum yield or price needed to cover all costs:
               </p>
-
               <div className="bg-sage-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-sage-800 mb-3">Break-Even Yield</h4>
                 <p className="text-sm font-mono text-sage-700 mb-2">
@@ -219,7 +200,6 @@ export default function FinancialCalculationsPage() {
                   <p>Break-even = 1,200 ÷ 300 = 4.0 tonnes/ha needed to break even</p>
                 </div>
               </div>
-
               <div className="bg-earth-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-earth-800 mb-3">Break-Even Price</h4>
                 <p className="text-sm font-mono text-earth-700 mb-2">
@@ -233,7 +213,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Profit Optimization Tips */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -253,7 +232,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">2.</span>
                 <div>
@@ -263,7 +241,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">3.</span>
                 <div>
@@ -273,7 +250,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">4.</span>
                 <div>
@@ -283,7 +259,6 @@ export default function FinancialCalculationsPage() {
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start gap-3">
                 <span className="text-sage-400">5.</span>
                 <div>
@@ -296,7 +271,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Reading Your Financial Dashboard */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardHeader>
@@ -317,7 +291,6 @@ export default function FinancialCalculationsPage() {
                   Consider expanding successful practices to other fields.
                 </p>
               </div>
-
               <div className="border-l-4 border-yellow-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle className="h-5 w-5 text-yellow-600" />
@@ -328,7 +301,6 @@ export default function FinancialCalculationsPage() {
                   Look for cost reduction opportunities.
                 </p>
               </div>
-
               <div className="border-l-4 border-red-500 pl-4">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -342,7 +314,6 @@ export default function FinancialCalculationsPage() {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Final Tips */}
         <Alert>
           <DollarSign className="h-4 w-4" />

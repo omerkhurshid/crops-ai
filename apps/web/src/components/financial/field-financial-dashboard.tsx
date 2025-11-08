@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -26,7 +25,6 @@ import { TransactionList } from './transaction-list'
 import { TransactionModal } from './transaction-modal'
 import { TrendChart } from './trend-chart'
 import { PLSummaryTable } from './pl-summary-table'
-
 interface Field {
   id: string
   name: string
@@ -35,7 +33,6 @@ interface Field {
   area: number
   soilType?: string
 }
-
 interface FieldFinancialSummary {
   totalIncome: number
   totalExpenses: number
@@ -47,12 +44,10 @@ interface FieldFinancialSummary {
   transactionCount: number
   lastTransactionDate?: string
 }
-
 interface FieldFinancialDashboardProps {
   field: Field
   onBack: () => void
 }
-
 export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboardProps) {
   const [summary, setSummary] = useState<FieldFinancialSummary | null>(null)
   const [loading, setLoading] = useState(true)
@@ -62,25 +57,21 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
     start: new Date(new Date().getFullYear(), 0, 1), // Start of current year
     end: new Date(),
   })
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(amount)
   }
-
   const formatPercentage = (percentage: number) => {
     return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(1)}%`
   }
-
   const fetchFieldSummary = async () => {
     try {
       setLoading(true)
       const response = await fetch(
         `/api/financial/summary?farmId=${field.farmId}&fieldId=${field.id}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       )
-      
       if (response.ok) {
         const data = await response.json()
         setSummary(data.summary)
@@ -91,21 +82,17 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchFieldSummary()
   }, [field.id, dateRange])
-
   const handleAddTransaction = (type: 'INCOME' | 'EXPENSE') => {
     setTransactionType(type)
     setShowTransactionModal(true)
   }
-
   const handleTransactionAdded = () => {
     setShowTransactionModal(false)
     fetchFieldSummary() // Refresh summary
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -123,7 +110,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Field Header with Back Button */}
@@ -140,7 +126,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
           </p>
         </div>
       </div>
-
       {/* Field Financial Summary */}
       <ModernCard variant="floating" className="overflow-hidden">
         <ModernCardHeader className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80">
@@ -166,7 +151,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             </div>
           </div>
         </ModernCardHeader>
-        
         {summary && (
           <ModernCardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -182,7 +166,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   {formatCurrency(summary.totalIncome / field.area)}/acre
                 </div>
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-orange-600" />
@@ -195,7 +178,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   {formatCurrency(summary.totalExpenses / field.area)}/acre
                 </div>
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-blue-600" />
@@ -226,7 +208,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   )}
                 </div>
               </div>
-
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Activity className="h-5 w-5 text-purple-600" />
@@ -242,7 +223,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                 )}
               </div>
             </div>
-
             {/* Profit Margin Badge */}
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="flex items-center justify-between">
@@ -267,7 +247,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
           </ModernCardContent>
         )}
       </ModernCard>
-
       {/* Field Financial Details Tabs */}
       <Tabs defaultValue="transactions" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
@@ -288,7 +267,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             P&L Summary
           </TabsTrigger>
         </TabsList>
-
         <TabsContent value="transactions">
           <TransactionList
             farmId={field.farmId}
@@ -296,7 +274,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             onRefresh={fetchFieldSummary}
           />
         </TabsContent>
-
         <TabsContent value="analysis">
           <ModernCard>
             <ModernCardHeader>
@@ -318,7 +295,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             </ModernCardContent>
           </ModernCard>
         </TabsContent>
-
         <TabsContent value="trends">
           <ModernCard>
             <ModernCardHeader>
@@ -340,7 +316,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             </ModernCardContent>
           </ModernCard>
         </TabsContent>
-
         <TabsContent value="summary">
           <ModernCard>
             <ModernCardHeader>
@@ -392,7 +367,6 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
           </ModernCard>
         </TabsContent>
       </Tabs>
-
       {/* Transaction Modal */}
       <TransactionModal
         isOpen={showTransactionModal}

@@ -4,14 +4,12 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { AuditLogger } from '../../../../lib/audit-logger';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const forecastQuerySchema = z.object({
   farmId: z.string().cuid(),
   fieldId: z.string().cuid().optional(),
   cropId: z.string().cuid().optional(),
   forecastHorizon: z.coerce.number().min(1).max(12).default(3), // months
 });
-
 const createForecastSchema = z.object({
   farmId: z.string().cuid(),
   fieldId: z.string().cuid().optional(),
@@ -22,7 +20,6 @@ const createForecastSchema = z.object({
     scenarioType: z.enum(['optimistic', 'realistic', 'pessimistic']).default('realistic'),
   }).optional(),
 });
-
 // GET /api/financial/forecast
 export async function GET(request: NextRequest) {
   try {
@@ -31,11 +28,9 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     const { searchParams } = new URL(request.url);
     const params = Object.fromEntries(searchParams.entries());
     const query = forecastQuerySchema.parse(params);
-
     // Verify user has access to the farm
     const farm = await prisma.farm.findFirst({
       where: {
@@ -43,14 +38,11 @@ export async function GET(request: NextRequest) {
         ownerId: user.id,
       },
     });
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 });
     }
-
     // Fetch existing forecasts with graceful handling
     let forecasts: any[] = [];
-
     try {
       forecasts = await prisma.financialForecast.findMany({
         where: {
@@ -77,7 +69,6 @@ export async function GET(request: NextRequest) {
         throw error;
       }
     }
-
     // If no forecasts exist, generate them
     if (forecasts.length === 0) {
       return NextResponse.json({
@@ -85,7 +76,6 @@ export async function GET(request: NextRequest) {
         message: 'No forecasts available. Use POST to generate new forecasts.',
       });
     }
-
     // Group forecasts by type
     const groupedForecasts = forecasts.reduce((acc, forecast) => {
       if (!acc[forecast.forecastType]) {
@@ -94,7 +84,6 @@ export async function GET(request: NextRequest) {
       acc[forecast.forecastType].push(forecast);
       return acc;
     }, {} as Record<string, typeof forecasts>);
-
     return NextResponse.json({
       forecasts: groupedForecasts,
       summary: {
@@ -107,15 +96,12 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching forecasts:', error);
-    
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data', details: error.errors }, { status: 400 });
     }
-    
     return NextResponse.json({ error: 'Failed to fetch forecasts' }, { status: 500 });
   }
 }
-
 // POST /api/financial/forecast
 export async function POST(request: NextRequest) {
   try {
@@ -124,10 +110,8 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     const body = await request.json();
     const validatedData = createForecastSchema.parse(body);
-
     // Verify user has access to the farm
     const farm = await prisma.farm.findFirst({
       where: {
@@ -148,14 +132,11 @@ export async function POST(request: NextRequest) {
         },
       },
     });
-
     if (!farm) {
       return NextResponse.json({ error: 'Farm not found or access denied' }, { status: 404 });
     }
-
     // Fetch historical data for analysis with graceful handling
     let historicalData: any[] = [];
-
     try {
       historicalData = await prisma.financialTransaction.findMany({
         where: {
@@ -174,20 +155,17 @@ export async function POST(request: NextRequest) {
         throw error;
       }
     }
-
     // Fetch weather forecasts
     const weatherResponse = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/weather/forecast?` +
       `latitude=${farm.latitude}&longitude=${farm.longitude}&days=90`
     );
     const weatherData = weatherResponse.ok ? await weatherResponse.json() : null;
-
     // Fetch market prices
     const marketResponse = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/market/live-prices`
     );
     const marketData = marketResponse.ok ? await marketResponse.json() : null;
-
     // Generate forecasts for the next 3 months
     const forecasts = [];
     const scenarioMultipliers = {
@@ -195,46 +173,35 @@ export async function POST(request: NextRequest) {
       realistic: 1.0,
       pessimistic: 0.8,
     };
-
     const scenario = validatedData.options?.scenarioType || 'realistic';
     const multiplier = scenarioMultipliers[scenario];
-
     // Calculate baseline from historical data
     const monthlyAvgRevenue = historicalData
       .filter(t => t.type === 'INCOME')
       .reduce((sum, t) => sum + Number(t.amount), 0) / 12;
-
     const monthlyAvgCost = historicalData
       .filter(t => t.type === 'EXPENSE')
       .reduce((sum, t) => sum + Number(t.amount), 0) / 12;
-
     for (let monthOffset = 1; monthOffset <= 3; monthOffset++) {
       const forecastDate = new Date();
       forecastDate.setMonth(forecastDate.getMonth() + monthOffset);
-
       // Yield forecast based on NDVI and weather
       const avgNDVI = farm.fields
         .flatMap(f => f.satelliteData)
         .reduce((sum, s) => sum + s.ndvi, 0) / farm.fields.length || 0.7;
-
       const yieldMultiplier = avgNDVI > 0.8 ? 1.1 : avgNDVI > 0.6 ? 1.0 : 0.9;
-      
       // Weather impact
       const weatherImpact = validatedData.options?.includeWeatherImpact && weatherData
         ? weatherData.forecast?.[monthOffset * 30]?.precipitationProbability > 0.7 ? 0.95 : 1.0
         : 1.0;
-
       // Market trend impact
       const marketTrendImpact = validatedData.options?.includeMarketTrends && marketData
         ? 1.0 + (marketData.trends?.monthly || 0) / 100
         : 1.0;
-
       // Revenue forecast
       const forecastedRevenue = monthlyAvgRevenue * multiplier * yieldMultiplier * weatherImpact * marketTrendImpact;
-      
       // Cost forecast
       const forecastedCost = monthlyAvgCost * (multiplier > 1 ? 0.95 : multiplier < 1 ? 1.05 : 1.0);
-
       // Create forecast records
       forecasts.push({
         farmId: validatedData.farmId,
@@ -254,7 +221,6 @@ export async function POST(request: NextRequest) {
           historicalMonths: 12,
         },
       });
-
       forecasts.push({
         farmId: validatedData.farmId,
         fieldId: validatedData.fieldId,
@@ -271,16 +237,13 @@ export async function POST(request: NextRequest) {
         },
       });
     }
-
     // Save forecasts with graceful handling
     let createdForecasts: any;
     let newForecasts: any[] = [];
-
     try {
       createdForecasts = await prisma.financialForecast.createMany({
         data: forecasts,
       });
-
       // Log the action
       await AuditLogger.logEvent({
         userId: user.id,
@@ -295,7 +258,6 @@ export async function POST(request: NextRequest) {
         ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown'
       });
-
       // Fetch and return the created forecasts
       newForecasts = await prisma.financialForecast.findMany({
         where: {
@@ -320,7 +282,6 @@ export async function POST(request: NextRequest) {
         throw error;
       }
     }
-
     return NextResponse.json({
       forecasts: newForecasts,
       summary: {
@@ -341,11 +302,9 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
   } catch (error) {
     console.error('Error generating forecast:', error);
-    
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data', details: error.errors }, { status: 400 });
     }
-    
     return NextResponse.json({ error: 'Failed to generate forecast' }, { status: 500 });
   }
 }

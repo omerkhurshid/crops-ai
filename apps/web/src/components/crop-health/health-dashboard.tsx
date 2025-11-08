@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -14,11 +13,9 @@ import { InfoTooltip } from '../ui/info-tooltip'
 import { TOOLTIP_CONTENT } from '../../lib/tooltip-content'
 import { LoadingState, LoadingCard, LoadingButton } from '../ui/loading'
 import { ErrorBoundary, ErrorState } from '../ui/error-boundary'
-
 interface HealthDashboardProps {
   farmId: string
 }
-
 interface FieldHealth {
   fieldId: string
   fieldName: string
@@ -56,7 +53,6 @@ interface FieldHealth {
     confidence: number
   }
 }
-
 const stressLevelColors = {
   none: 'bg-green-100 text-green-800',
   low: 'bg-yellow-100 text-yellow-800',
@@ -64,29 +60,24 @@ const stressLevelColors = {
   high: 'bg-red-100 text-red-800',
   severe: 'bg-red-200 text-red-900'
 }
-
 const stressIcons = {
   drought: Droplets,
   disease: Bug,
   nutrient: Zap,
   pest: Target
 }
-
 export function HealthDashboard({ farmId }: HealthDashboardProps) {
   const [fields, setFields] = useState<FieldHealth[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedField, setSelectedField] = useState<string | null>(null)
   const [dataStatus, setDataStatus] = useState<'real' | 'mock' | 'error'>('mock')
-
   useEffect(() => {
     fetchHealthData()
   }, [farmId])
-
   const fetchHealthData = async () => {
     setLoading(true)
     try {
       const response = await fetch(`/api/satellite/farm-health?farmId=${farmId}`)
-      
       if (response.ok) {
         const data = await response.json()
         // Transform API data to match our interface
@@ -105,7 +96,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       setLoading(false)
     }
   }
-
   const getMockHealthData = (): FieldHealth[] => {
     // Generate dynamic field IDs based on farm ID and timestamp to avoid conflicts
     const timestamp = Date.now()
@@ -194,22 +184,18 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       }
     ]
   }
-
   const getHealthColor = (score: number) => {
     if (score >= 85) return 'text-green-600'
     if (score >= 70) return 'text-yellow-600'
     if (score >= 50) return 'text-orange-600'
     return 'text-red-600'
   }
-
   const getStressIcon = (severity: number) => {
     if (severity <= 10) return <CheckCircle2 className="h-4 w-4 text-green-600" />
     if (severity <= 30) return <MinusCircle className="h-4 w-4 text-yellow-600" />
     return <XCircle className="h-4 w-4 text-red-600" />
   }
-
   const selectedFieldData = fields.find(f => f.fieldId === selectedField) || fields[0]
-
   if (loading) {
     return (
       <LoadingCard 
@@ -219,7 +205,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       />
     )
   }
-
   // Empty state when no fields are available
   if (!fields || fields.length === 0) {
     return (
@@ -264,7 +249,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
       </ErrorBoundary>
     )
   }
-
   return (
     <ErrorBoundary>
       <div className="space-y-6">
@@ -297,7 +281,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardContent>
         </Card>
       )}
-
       {/* Overview Stats - Mobile Optimized */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <Card className="border-2">
@@ -316,7 +299,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             </p>
           </CardContent>
         </Card>
-
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
@@ -333,7 +315,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             </p>
           </CardContent>
         </Card>
-
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
@@ -350,7 +331,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             </p>
           </CardContent>
         </Card>
-
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
@@ -368,7 +348,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </CardContent>
         </Card>
       </div>
-
       {/* Field Selection */}
       <Card className="border-2">
         <CardHeader>
@@ -407,7 +386,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
           </div>
         </CardContent>
       </Card>
-
       {selectedFieldData && (
         <>
           {/* Detailed Field Analysis - Mobile Optimized */}
@@ -445,7 +423,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                 </div>
               </CardContent>
             </Card>
-
             {/* Vegetation Indices */}
             <Card className="border-2">
               <CardHeader>
@@ -460,7 +437,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   {Object.entries(selectedFieldData.indices).map(([index, value]) => {
                     const tooltipKey = index as keyof typeof TOOLTIP_CONTENT
                     const tooltipData = TOOLTIP_CONTENT[tooltipKey]
-                    
                     return (
                       <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
                         <div className="text-lg font-bold">{value.toFixed(3)}</div>
@@ -475,7 +451,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
               </CardContent>
             </Card>
           </div>
-
           {/* Stress Analysis */}
           <Card className="border-2">
             <CardHeader>
@@ -491,7 +466,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   const Icon = stressIcons[type as keyof typeof stressIcons]
                   const tooltipKey = type as keyof typeof TOOLTIP_CONTENT
                   const tooltipData = TOOLTIP_CONTENT[tooltipKey]
-                  
                   return (
                     <div key={type} className="p-4 border-2 rounded-lg">
                       <div className="flex items-center gap-2 mb-3">
@@ -500,7 +474,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                         {tooltipData && <InfoTooltip {...tooltipData} size="sm" />}
                         {getStressIcon(data.severity)}
                       </div>
-                      
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span>Severity:</span>
@@ -512,7 +485,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                             {data.severity}%
                           </span>
                         </div>
-                        
                         <Progress 
                           value={data.severity} 
                           className={`h-2 ${
@@ -521,11 +493,9 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                             '[&>div]:bg-red-500'
                           }`}
                         />
-                        
                         <div className="text-xs text-gray-600">
                           Confidence: {data.confidence}%
                         </div>
-                        
                         <p className="text-xs text-gray-700 mt-2">
                           {data.description}
                         </p>
@@ -536,7 +506,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
               </div>
             </CardContent>
           </Card>
-
           {/* Yield Prediction */}
           <Card className="border-2">
             <CardHeader>
@@ -561,7 +530,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                      selectedFieldData.cropType === 'Soybeans' ? 'bushels/acre' : 'units/acre'}
                   </div>
                 </div>
-                
                 <div className="text-center p-4 bg-green-50 rounded-lg">
                   <div className="text-2xl font-bold text-green-800">
                     {selectedFieldData.yieldPrediction.potential}
@@ -574,7 +542,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     With optimization
                   </div>
                 </div>
-                
                 <div className="text-center p-4 bg-orange-50 rounded-lg">
                   <div className="text-2xl font-bold text-orange-800">
                     {selectedFieldData.yieldPrediction.confidence}%
@@ -588,7 +555,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   </div>
                 </div>
               </div>
-              
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Target className="h-4 w-4 text-blue-600" />
@@ -601,7 +567,6 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
               </div>
             </CardContent>
           </Card>
-
           {/* Recommendations */}
           <Card className="border-2">
             <CardHeader>

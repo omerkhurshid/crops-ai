@@ -48,19 +48,20 @@
 
 ---
 
-### 3. Sentinel Hub (Satellite Data)
-**Current Status**: ⚠️ Credentials exist but need testing
+### 3. Google Earth Engine (Satellite Data)
+**Current Status**: ✅ **CONFIGURED**
 
 **Steps:**
-1. Verify account at [Sentinel Hub](https://www.sentinel-hub.com/)
-2. Test credentials in `.env`:
+1. Google Cloud project with Earth Engine API enabled
+2. Service account configured in `.env.production`:
    ```bash
-   SENTINEL_HUB_CLIENT_ID=51c4b312-1fd8-4db7-83f8-d8d8a44f7307
-   SENTINEL_HUB_CLIENT_SECRET=9YObbAxUoKMAe5lCHG90z6MmnrnlVsno
+   GEE_SERVICE_ACCOUNT_EMAIL="cropple-gee-service@rational-hydra-471914-t3.iam.gserviceaccount.com"
+   GEE_PRIVATE_KEY="[CONFIGURED]"
+   GEE_PROJECT_ID="rational-hydra-471914-t3"
    ```
-3. Test API call: `npm run test:satellite`
+3. Authentication tested and working
 
-**Cost**: ~$100/month for satellite imagery processing
+**Cost**: FREE for first 250,000 requests/month, then $0.006/request
 
 ---
 
@@ -105,8 +106,10 @@ Replace all placeholder values in `.env.production`:
 # Required for production
 OPENWEATHER_API_KEY=your_real_key
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_real_key
-SENTINEL_HUB_CLIENT_ID=your_real_id
-SENTINEL_HUB_CLIENT_SECRET=your_real_secret
+# Google Earth Engine - Already configured ✅
+GEE_SERVICE_ACCOUNT_EMAIL=cropple-gee-service@rational-hydra-471914-t3.iam.gserviceaccount.com
+GEE_PRIVATE_KEY="[CONFIGURED]"
+GEE_PROJECT_ID=rational-hydra-471914-t3
 UPSTASH_REDIS_REST_URL=your_real_url
 UPSTASH_REDIS_REST_TOKEN=your_real_token
 CLOUDINARY_CLOUD_NAME=your_real_name
@@ -145,7 +148,7 @@ npm run test:upload
 ### After (Real Google Maps + NDVI)
 - ✅ Real Google Maps satellite view
 - ✅ Actual Iowa corn field (41.5868, -93.6250)
-- ✅ Real NDVI data from Sentinel Hub
+- ✅ Real NDVI data from Google Earth Engine
 - ✅ Interactive field boundary overlay
 - ✅ Live satellite analysis
 
@@ -189,7 +192,7 @@ npm run test:upload
 |---------|-------|------|
 | Google Maps | 100k loads | $200 |
 | OpenWeather | 30k calls | $50 |
-| Sentinel Hub | Satellite processing | $100 |
+| Google Earth Engine | Satellite processing | FREE (250k/mo) |
 | Upstash Redis | Caching | $25 |
 | Cloudinary | File storage | $89 |
 | Vercel | Hosting | $20 |

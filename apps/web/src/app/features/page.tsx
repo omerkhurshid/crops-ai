@@ -9,7 +9,6 @@ import {
   Zap, Target, Layers, TreePine, AlertTriangle, Calendar,
   Smartphone, Globe, Lock, Headphones
 } from 'lucide-react'
-
 export default function FeaturesPage() {
   const coreFeatures = [
     {
@@ -37,7 +36,6 @@ export default function FeaturesPage() {
       features: ["Track income & expenses", "Profit per acre reports", "Budget planning", "Money forecasts"]
     }
   ]
-
   const advancedFeatures = [
     {
       icon: <Activity className="h-6 w-6" />,
@@ -70,7 +68,6 @@ export default function FeaturesPage() {
       description: "Crop rotation planning and multi-year optimization strategies"
     }
   ]
-
   const platformFeatures = [
     {
       icon: <Smartphone className="h-6 w-6" />,
@@ -93,11 +90,9 @@ export default function FeaturesPage() {
       description: "24/7 technical support with agricultural expertise"
     }
   ]
-
   return (
     <div className="minimal-page">
       <Navbar />
-      
       {/* Animated Background */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
         <Layers className="h-8 w-8 text-sage-600" />
@@ -105,7 +100,6 @@ export default function FeaturesPage() {
       <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
         <Target className="h-8 w-8 text-sage-600" />
       </div>
-      
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-20">
@@ -113,18 +107,15 @@ export default function FeaturesPage() {
             <Zap className="h-4 w-4 mr-2" />
             Comprehensive Feature Set
           </Badge>
-          
           <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-8 tracking-tight">
             Everything You Need for
             <br />
             <span className="text-sage-500">Smart Farming</span>
           </h1>
-          
           <p className="text-xl text-sage-600 font-light leading-relaxed mb-12 max-w-3xl mx-auto">
             From real-time crop monitoring to financial forecasting, Crops.AI provides a complete 
             suite of AI-powered tools for modern agriculture.
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/register">
               <InlineFloatingButton
@@ -148,7 +139,6 @@ export default function FeaturesPage() {
             </Link>
           </div>
         </div>
-
         {/* Core Features Grid */}
         <div className="mb-20">
           <div className="text-center mb-12">
@@ -157,7 +147,6 @@ export default function FeaturesPage() {
               Four pillars of intelligent farm management working together to optimize your operations
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {coreFeatures.map((feature, index) => (
               <ModernCard key={index} variant="floating" className="hover:scale-105 transition-all duration-300">
@@ -188,7 +177,6 @@ export default function FeaturesPage() {
             ))}
           </div>
         </div>
-
         {/* Advanced Features */}
         <div className="mb-20">
           <div className="text-center mb-12">
@@ -197,7 +185,6 @@ export default function FeaturesPage() {
               Sophisticated tools for precision agriculture and data-driven decision making
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {advancedFeatures.map((feature, index) => (
               <ModernCard key={index} variant="soft" className="hover:variant-floating transition-all duration-300">
@@ -216,7 +203,6 @@ export default function FeaturesPage() {
             ))}
           </div>
         </div>
-
         {/* Platform Features */}
         <div className="mb-20">
           <ModernCard variant="glow" className="overflow-hidden">
@@ -243,7 +229,6 @@ export default function FeaturesPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Technology Stack */}
         <div className="mb-20">
           <div className="text-center mb-12">
@@ -252,7 +237,6 @@ export default function FeaturesPage() {
               Cutting-edge infrastructure ensuring reliability, accuracy, and scalability
             </p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <ModernCard variant="soft" className="text-center">
               <ModernCardContent className="p-8">
@@ -268,7 +252,6 @@ export default function FeaturesPage() {
                 </ul>
               </ModernCardContent>
             </ModernCard>
-            
             <ModernCard variant="glass" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
@@ -283,7 +266,6 @@ export default function FeaturesPage() {
                 </ul>
               </ModernCardContent>
             </ModernCard>
-            
             <ModernCard variant="glow" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
@@ -300,7 +282,6 @@ export default function FeaturesPage() {
             </ModernCard>
           </div>
         </div>
-
         {/* CTA Section */}
         <ModernCard variant="floating" className="overflow-hidden max-w-4xl mx-auto">
           <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center py-12">

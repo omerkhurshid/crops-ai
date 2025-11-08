@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
@@ -17,29 +16,24 @@ import {
   Minus
 } from 'lucide-react'
 import Link from 'next/link'
-
 interface WeightTrackingProps {
   weightRecords: any[]
   farms: any[]
   animals: any[]
 }
-
 export function WeightTracking({ weightRecords, farms, animals }: WeightTrackingProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFarm, setSelectedFarm] = useState('all')
   const [selectedAnimal, setSelectedAnimal] = useState('all')
   const [selectedSpecies, setSelectedSpecies] = useState('all')
   const [dateRange, setDateRange] = useState('90') // days
-
   // Filter weight records
   const filteredRecords = weightRecords.filter(record => {
     const matchesSearch = record.animal.tagNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (record.animal.name && record.animal.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    
     const matchesFarm = selectedFarm === 'all' || record.animal.farm?.name === selectedFarm
     const matchesAnimal = selectedAnimal === 'all' || record.animalId === selectedAnimal
     const matchesSpecies = selectedSpecies === 'all' || record.animal.species === selectedSpecies
-    
     // Date range filter
     let matchesDate = true
     if (dateRange !== 'all') {
@@ -48,47 +42,36 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
       cutoffDate.setDate(cutoffDate.getDate() - daysAgo)
       matchesDate = new Date(record.weighDate) >= cutoffDate
     }
-    
     return matchesSearch && matchesFarm && matchesAnimal && matchesSpecies && matchesDate
   })
-
   // Calculate weight trends for each animal
   const getWeightTrend = (animalId: string) => {
     const animalRecords = weightRecords
       .filter(record => record.animalId === animalId)
       .sort((a, b) => new Date(b.weighDate).getTime() - new Date(a.weighDate).getTime())
-    
     if (animalRecords.length < 2) return { trend: 'stable', change: 0, percentage: 0 }
-    
     const latest = animalRecords[0]
     const previous = animalRecords[1]
     const change = latest.weight - previous.weight
     const percentage = ((change / previous.weight) * 100)
-    
     if (change > 5) return { trend: 'up', change, percentage }
     if (change < -5) return { trend: 'down', change, percentage }
     return { trend: 'stable', change, percentage }
   }
-
   const calculateAge = (birthDate: string) => {
     if (!birthDate) return 'Unknown'
-    
     const birth = new Date(birthDate)
     const now = new Date()
     const monthsDiff = (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth()
-    
     if (monthsDiff < 12) return `${monthsDiff}m`
     const years = Math.floor(monthsDiff / 12)
     const remainingMonths = monthsDiff % 12
-    
     if (remainingMonths === 0) return `${years}y`
     return `${years}y ${remainingMonths}m`
   }
-
   // Get unique values for filters
   const uniqueFarms = Array.from(new Set(weightRecords.map(record => record.animal.farm?.name).filter(Boolean)))
   const uniqueSpecies = Array.from(new Set(weightRecords.map(record => record.animal.species)))
-
   if (weightRecords.length === 0) {
     return (
       <div className="text-center py-12">
@@ -103,7 +86,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
@@ -117,7 +99,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
             className="pl-10"
           />
         </div>
-        
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
@@ -128,7 +109,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
             <option key={farm} value={farm}>{farm}</option>
           ))}
         </select>
-
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
@@ -141,7 +121,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
             </option>
           ))}
         </select>
-
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
@@ -154,7 +133,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
             </option>
           ))}
         </select>
-
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
@@ -167,7 +145,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
           <option value="all">All time</option>
         </select>
       </div>
-
       {/* Weight Records Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -199,7 +176,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredRecords.map((record) => {
               const trend = getWeightTrend(record.animalId)
-              
               return (
                 <tr key={record.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -217,13 +193,11 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       </div>
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {record.weight} lbs
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       {trend.trend === 'up' && (
@@ -250,7 +224,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       )}
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     {record.bodyConditionScore ? (
                       <div className="flex items-center">
@@ -268,13 +241,11 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       <span className="text-sm text-gray-400">Not recorded</span>
                     )}
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                       {calculateAge(record.animal.birthDate)}
                     </div>
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                       {new Date(record.weighDate).toLocaleDateString()}
@@ -285,7 +256,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       </div>
                     )}
                   </td>
-                  
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="sm">
@@ -305,7 +275,6 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
           </tbody>
         </table>
       </div>
-
       {filteredRecords.length === 0 && searchTerm && (
         <div className="text-center py-8">
           <p className="text-gray-500">No weight records found matching your search criteria.</p>

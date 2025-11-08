@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -21,7 +20,6 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface WeatherTask {
   id: string
   title: string
@@ -36,7 +34,6 @@ interface WeatherTask {
   farmImpact: string
   isRecommended: boolean
 }
-
 interface WeatherData {
   temperature: number
   humidity: number
@@ -50,7 +47,6 @@ interface WeatherData {
     windSpeed: number
   }>
 }
-
 interface WeatherTasksGeneratorProps {
   farmData?: {
     latitude?: number
@@ -59,17 +55,14 @@ interface WeatherTasksGeneratorProps {
   crops?: any[]
   className?: string
 }
-
 export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTasksGeneratorProps) {
   const [tasks, setTasks] = useState<WeatherTask[]>([])
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
-
   useEffect(() => {
     generateWeatherTasks()
   }, [farmData, crops])
-
   const generateWeatherTasks = async () => {
     try {
       // Only proceed if we have location data
@@ -78,9 +71,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         setLoading(false)
         return
       }
-
       let weather: WeatherData | null = null
-
       try {
         const response = await fetch(`/api/weather/current?latitude=${farmData.latitude}&longitude=${farmData.longitude}`)
         if (response.ok) {
@@ -104,13 +95,10 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         setLoading(false)
         return
       }
-
       setWeatherData(weather)
-      
       // Generate tasks based on weather conditions using analytical model
       const generatedTasks = await generateTasksFromWeather(weather, crops || [])
       setTasks(generatedTasks)
-      
     } catch (error) {
       console.error('Error generating weather tasks:', error)
       setTasks([])
@@ -118,7 +106,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       setLoading(false)
     }
   }
-
   const generateTasksFromWeather = async (weather: WeatherData, cropsList: any[]): Promise<WeatherTask[]> => {
     try {
       // Try to use the real analytical model first
@@ -144,7 +131,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
           longitude: farmData?.longitude || -98.5795
         }
       }
-
       // Call the weather task prediction model
       const response = await fetch('/api/ml/weather-tasks/predict', {
         method: 'POST',
@@ -156,14 +142,11 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
           input: modelInput
         })
       })
-
       if (response.ok) {
         const data = await response.json()
-        
         if (data.success && data.prediction) {
           // Transform model output to our WeatherTask format
           const modelTasks = data.prediction.tasks || []
-          
           return modelTasks.map((task: any, index: number) => ({
             id: task.id || `model-task-${index}`,
             title: task.title || 'Model Generated Task',
@@ -188,12 +171,10 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
     } catch (error) {
       console.error('Error calling weather task model:', error)
     }
-
     // Return empty array if model is not available - show proper "no data" state
     // Weather task model not available - showing no data state instead of fallback tasks
     return []
   }
-
   const getSeason = (): string => {
     const month = new Date().getMonth()
     if (month >= 2 && month <= 4) return 'spring'
@@ -201,15 +182,12 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
     if (month >= 8 && month <= 10) return 'fall'
     return 'winter'
   }
-
   const formatWeatherConditions = (weather: WeatherData): string => {
     return `${weather.temperature}°F, ${weather.humidity}% humidity, ${weather.windSpeed}mph wind, ${weather.precipitation}in rain`
   }
-
   const generateFallbackTasks = (weather: WeatherData, cropsList: any[]): WeatherTask[] => {
     const tasks: WeatherTask[] = []
     const today = new Date()
-    
     // Current conditions tasks
     if (weather.windSpeed < 10 && weather.precipitation === 0) {
       tasks.push({
@@ -227,7 +205,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     if (weather.windSpeed > 15) {
       tasks.push({
         id: 'secure-equipment',
@@ -244,7 +221,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     // Temperature-based tasks
     if (weather.temperature > 85) {
       tasks.push({
@@ -262,7 +238,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     if (weather.temperature < 40) {
       tasks.push({
         id: 'frost-protection',
@@ -279,7 +254,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     // Forecast-based tasks
     const rainComingSoon = weather.forecast3Day.some(day => day.precipitation > 50)
     if (rainComingSoon && weather.precipitation === 0) {
@@ -298,7 +272,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     // Humidity-based tasks
     if (weather.humidity > 80) {
       tasks.push({
@@ -316,7 +289,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     // Seasonal tasks based on current conditions
     const month = today.getMonth()
     if (month >= 8 && month <= 10 && weather.windSpeed < 12) { // Fall harvest season
@@ -335,7 +307,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     if (month >= 3 && month <= 5 && weather.temperature > 50) { // Spring planting
       tasks.push({
         id: 'soil-preparation',
@@ -352,7 +323,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: weather.temperature > 55 && weather.precipitation < 20
       })
     }
-
     // Equipment maintenance during poor weather
     if (weather.precipitation > 50 || weather.windSpeed > 20) {
       tasks.push({
@@ -370,13 +340,11 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         isRecommended: true
       })
     }
-
     return tasks.sort((a, b) => {
       const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 }
       return priorityOrder[b.priority] - priorityOrder[a.priority]
     })
   }
-
   const getCategoryIcon = (category: string) => {
     const iconMap = {
       planting: Leaf,
@@ -387,7 +355,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
     }
     return iconMap[category as keyof typeof iconMap] || CheckSquare
   }
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'urgent': return 'bg-red-100 border-red-200 text-red-800'
@@ -396,7 +363,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       default: return 'bg-blue-100 border-blue-200 text-blue-800'
     }
   }
-
   const toggleTaskComplete = (taskId: string) => {
     const newCompleted = new Set(completedTasks)
     if (newCompleted.has(taskId)) {
@@ -406,9 +372,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
     }
     setCompletedTasks(newCompleted)
   }
-
   const recommendedTasks = tasks.filter(t => t.isRecommended && !completedTasks.has(t.id))
-
   if (loading) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -427,7 +391,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       </ModernCard>
     )
   }
-
   return (
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
@@ -487,7 +450,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
           tasks.slice(0, 5).map((task) => {
             const Icon = getCategoryIcon(task.category)
             const isCompleted = completedTasks.has(task.id)
-            
             return (
               <div
                 key={task.id}
@@ -510,7 +472,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                     >
                       {isCompleted && <CheckSquare className="h-3 w-3" />}
                     </button>
-                    
                     <div className="flex-1">
                       <h4 className={cn(
                         'font-semibold text-sm mb-1',
@@ -519,7 +480,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                         {task.title}
                       </h4>
                       <p className="text-xs text-gray-700 mb-2">{task.description}</p>
-                      
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline" className="text-xs">
                           {task.timeframe}
@@ -528,7 +488,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                           {task.estimatedTime}
                         </Badge>
                       </div>
-                      
                       <div className="text-xs text-gray-600">
                         <div className="flex items-center gap-1 mb-1">
                           <Icon className="h-3 w-3" />
@@ -540,7 +499,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                       </div>
                     </div>
                   </div>
-                  
                   <div className="flex items-center gap-1 ml-2">
                     {task.priority === 'urgent' && (
                       <AlertTriangle className="h-4 w-4 text-red-600" />
@@ -554,7 +512,6 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
             )
           })
         )}
-        
         {tasks.length > 5 && (
           <div className="text-center pt-2">
             <Button variant="ghost" size="sm">

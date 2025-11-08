@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAuthenticatedUser } from '../../../../../lib/auth/server'
 import { prisma } from '../../../../../lib/prisma'
-
 interface RouteParams {
   params: {
     id: string
   }
 }
-
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const weightRecord = await prisma.weightRecord.findFirst({
       where: {
         id: params.id,
@@ -33,11 +29,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         }
       }
     })
-
     if (!weightRecord) {
       return NextResponse.json({ error: 'Weight record not found' }, { status: 404 })
     }
-
     return NextResponse.json(weightRecord)
   } catch (error) {
     console.error('Error fetching weight record:', error)
@@ -47,17 +41,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     )
   }
 }
-
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     const data = await request.json()
-
     // Verify weight record ownership
     const existingRecord = await prisma.weightRecord.findFirst({
       where: {
@@ -65,18 +55,14 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         animal: { userId: user.id }
       }
     })
-
     if (!existingRecord) {
       return NextResponse.json({ error: 'Weight record not found' }, { status: 404 })
     }
-
     const updateData: any = {}
-    
     if (data.weighDate !== undefined) updateData.weighDate = new Date(data.weighDate)
     if (data.weight !== undefined) updateData.weight = parseFloat(data.weight)
     if (data.bodyConditionScore !== undefined) updateData.bodyConditionScore = data.bodyConditionScore ? parseFloat(data.bodyConditionScore) : null
     if (data.notes !== undefined) updateData.notes = data.notes || null
-
     const weightRecord = await prisma.weightRecord.update({
       where: { id: params.id },
       data: updateData,
@@ -91,14 +77,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         }
       }
     })
-
     // If weight was updated, update the animal's current weight if this is the most recent record
     if (data.weight !== undefined) {
       const mostRecentRecord = await prisma.weightRecord.findFirst({
         where: { animalId: existingRecord.animalId },
         orderBy: { weighDate: 'desc' }
       })
-
       if (mostRecentRecord && mostRecentRecord.id === params.id) {
         await prisma.animal.update({
           where: { id: existingRecord.animalId },
@@ -106,7 +90,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         })
       }
     }
-
     return NextResponse.json(weightRecord)
   } catch (error) {
     console.error('Error updating weight record:', error)
@@ -116,15 +99,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     )
   }
 }
-
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const user = await getAuthenticatedUser(request)
-    
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     // Verify weight record ownership
     const weightRecord = await prisma.weightRecord.findFirst({
       where: {
@@ -132,28 +112,23 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
         animal: { userId: user.id }
       }
     })
-
     if (!weightRecord) {
       return NextResponse.json({ error: 'Weight record not found' }, { status: 404 })
     }
-
     await prisma.weightRecord.delete({
       where: { id: params.id }
     })
-
     // Update animal's current weight to the most recent remaining record
     const mostRecentRecord = await prisma.weightRecord.findFirst({
       where: { animalId: weightRecord.animalId },
       orderBy: { weighDate: 'desc' }
     })
-
     if (mostRecentRecord) {
       await prisma.animal.update({
         where: { id: weightRecord.animalId },
         data: { currentWeight: mostRecentRecord.weight }
       })
     }
-
     return NextResponse.json({ message: 'Weight record deleted successfully' })
   } catch (error) {
     console.error('Error deleting weight record:', error)

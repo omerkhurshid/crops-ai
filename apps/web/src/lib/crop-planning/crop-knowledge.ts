@@ -1,25 +1,21 @@
 // Crop Knowledge Database
 // Built from USDA data, extension service recommendations, and agricultural research
-
 export interface CropInfo {
   id: string
   name: string
   scientificName: string
   family: CropFamily
   variety?: string
-  
   // Planting information
   plantingDepth: number // inches
   spacing: {
     betweenPlants: number // inches
     betweenRows: number // inches
   }
-  
   // Timing (days)
   daysToGermination: number
   daysToMaturity: number
   harvestWindow: number // days harvest can be delayed
-  
   // Climate requirements
   climate: {
     minSoilTemp: number // °F
@@ -29,7 +25,6 @@ export interface CropInfo {
     frostTolerance: 'none' | 'light' | 'moderate' | 'heavy'
     chillHours?: number // for fruit trees
   }
-  
   // Soil requirements
   soil: {
     phRange: [number, number] // [min, max]
@@ -37,14 +32,12 @@ export interface CropInfo {
     fertilityNeeds: 'low' | 'moderate' | 'high'
     organicMatterPreference: 'low' | 'moderate' | 'high'
   }
-  
   // Water needs
   water: {
     weeklyNeeds: number // inches per week
     criticalStages: string[] // when water is most important
     droughtTolerance: 'poor' | 'moderate' | 'good' | 'excellent'
   }
-  
   // Nutrition (NPK impact on soil)
   nutrition: {
     nitrogenDemand: 'low' | 'moderate' | 'high'
@@ -52,7 +45,6 @@ export interface CropInfo {
     potassiumDemand: 'low' | 'moderate' | 'high'
     nitrogenContribution: number // for legumes, lbs N per acre
   }
-  
   // Rotation characteristics
   rotation: {
     family: CropFamily
@@ -61,25 +53,21 @@ export interface CropInfo {
     goodAfter: CropFamily[] // families that work well before this crop
     restPeriod: number // years before replanting same family in field
   }
-  
   // Companion planting
   companions: {
     beneficial: string[] // crop IDs that grow well together
     antagonistic: string[] // crop IDs to avoid nearby
     trapCrops: string[] // crops that can be used to lure pests away
   }
-  
   // Common issues
   pests: {
     common: string[]
     organic_controls: string[]
   }
-  
   diseases: {
     common: string[]
     prevention: string[]
   }
-  
   // Harvest info
   harvest: {
     indicators: string[] // visual/physical signs of readiness
@@ -88,7 +76,6 @@ export interface CropInfo {
     storageLife: number // days under optimal conditions
   }
 }
-
 export enum CropFamily {
   BRASSICAS = 'brassicas', // Cabbage, broccoli, kale, radish
   LEGUMES = 'legumes', // Beans, peas, lentils
@@ -102,7 +89,6 @@ export enum CropFamily {
   AMARANTHS = 'amaranths', // Amaranth, quinoa
   COVER_CROPS = 'cover_crops' // Clover, rye grass, buckwheat
 }
-
 // Climate zone mapping based on USDA hardiness zones and last frost dates
 export interface ClimateZone {
   zone: string
@@ -112,7 +98,6 @@ export interface ClimateZone {
   growingDegreeThreshold: number // base temperature for GDD calculation
   averageAnnualMinTemp: [number, number] // [min, max] °F
 }
-
 export const CLIMATE_ZONES: ClimateZone[] = [
   {
     zone: '3a',
@@ -171,7 +156,6 @@ export const CLIMATE_ZONES: ClimateZone[] = [
     averageAnnualMinTemp: [20, 25]
   }
 ]
-
 // Core crop database - start with most common crops
 export const CROP_DATABASE: CropInfo[] = [
   {
@@ -238,7 +222,6 @@ export const CROP_DATABASE: CropInfo[] = [
       storageLife: 7
     }
   },
-  
   {
     id: 'corn-sweet',
     name: 'Sweet Corn',
@@ -303,7 +286,6 @@ export const CROP_DATABASE: CropInfo[] = [
       storageLife: 3
     }
   },
-
   {
     id: 'soybean',
     name: 'Soybean',
@@ -368,7 +350,6 @@ export const CROP_DATABASE: CropInfo[] = [
       storageLife: 365
     }
   },
-
   {
     id: 'wheat-winter',
     name: 'Winter Wheat',
@@ -435,17 +416,13 @@ export const CROP_DATABASE: CropInfo[] = [
     }
   }
 ]
-
 // Helper functions for crop planning
-
 export function getCropById(id: string): CropInfo | undefined {
   return CROP_DATABASE.find(crop => crop.id === id)
 }
-
 export function getCropsByFamily(family: CropFamily): CropInfo[] {
   return CROP_DATABASE.filter(crop => crop.family === family)
 }
-
 export function getRotationCompatibility(previousCrop: CropInfo, nextCrop: CropInfo): {
   compatible: boolean
   reason: string
@@ -459,7 +436,6 @@ export function getRotationCompatibility(previousCrop: CropInfo, nextCrop: CropI
       score: 0
     }
   }
-  
   // Check if same family (usually problematic)
   if (previousCrop.family === nextCrop.family) {
     return {
@@ -468,25 +444,21 @@ export function getRotationCompatibility(previousCrop: CropInfo, nextCrop: CropI
       score: 2
     }
   }
-  
   // Check if next crop benefits from previous crop
   if (nextCrop.rotation.goodAfter.includes(previousCrop.family)) {
     let reason = `${nextCrop.name} benefits from following ${previousCrop.family} crops`
     let score = 8
-    
     // Extra bonus for nitrogen-fixing crops
     if (previousCrop.nutrition.nitrogenContribution > 0 && nextCrop.nutrition.nitrogenDemand === 'high') {
       reason += ` (nitrogen benefit: ${previousCrop.nutrition.nitrogenContribution} lbs/acre)`
       score = 10
     }
-    
     return {
       compatible: true,
       reason,
       score
     }
   }
-  
   // Neutral - no specific benefits or problems
   return {
     compatible: true,
@@ -494,7 +466,6 @@ export function getRotationCompatibility(previousCrop: CropInfo, nextCrop: CropI
     score: 6
   }
 }
-
 export function calculatePlantingWindow(
   crop: CropInfo, 
   climateZone: ClimateZone,
@@ -508,9 +479,7 @@ export function calculatePlantingWindow(
   const currentYear = new Date().getFullYear()
   const lastFrost = new Date(`${currentYear}-${climateZone.lastFrostDate}`)
   const firstFrost = new Date(`${currentYear}-${climateZone.firstFrostDate}`)
-  
   const notes: string[] = []
-  
   // Calculate earliest safe planting date
   let earliestPlanting = new Date(lastFrost)
   if (crop.climate.frostTolerance === 'none') {
@@ -523,26 +492,21 @@ export function calculatePlantingWindow(
     earliestPlanting.setDate(lastFrost.getDate() - 14) // 2 weeks before last frost
     notes.push('Cold-hardy crop can be planted 2 weeks before last frost')
   }
-  
   // Calculate latest planting date based on maturity and first frost
   let latestPlanting = new Date(firstFrost)
   latestPlanting.setDate(firstFrost.getDate() - crop.daysToMaturity - 7) // 1 week buffer
-  
   // If we have a target harvest date, work backwards
   if (targetHarvestDate) {
     const targetPlanting = new Date(targetHarvestDate)
     targetPlanting.setDate(targetHarvestDate.getDate() - crop.daysToMaturity)
-    
     if (targetPlanting > earliestPlanting && targetPlanting < latestPlanting) {
       latestPlanting = targetPlanting
       notes.push(`Planting calculated for target harvest date: ${targetHarvestDate.toDateString()}`)
     }
   }
-  
   // Optimal planting is usually 1-2 weeks after earliest safe date
   const optimalPlanting = new Date(earliestPlanting)
   optimalPlanting.setDate(earliestPlanting.getDate() + 10)
-  
   return {
     earliestPlanting,
     latestPlanting,
@@ -550,7 +514,6 @@ export function calculatePlantingWindow(
     notes
   }
 }
-
 // Generate planting recommendations based on weather and crop requirements
 export function generatePlantingRecommendations(
   crop: CropInfo,
@@ -565,7 +528,6 @@ export function generatePlantingRecommendations(
 } {
   const reasons: string[] = []
   let confidence = 80
-  
   // Check soil temperature (if available)
   if (weatherData.soilTemperature) {
     if (weatherData.soilTemperature < crop.climate.minSoilTemp) {
@@ -576,19 +538,16 @@ export function generatePlantingRecommendations(
         nextCheckDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Check again in 1 week
       }
     }
-    
     if (weatherData.soilTemperature >= crop.climate.optimalSoilTemp[0] && 
         weatherData.soilTemperature <= crop.climate.optimalSoilTemp[1]) {
       reasons.push(`Optimal soil temperature: ${weatherData.soilTemperature}°F`)
       confidence += 10
     }
   }
-  
   // Check upcoming weather forecast
   if (weatherData.forecast && weatherData.forecast.length > 0) {
     const nextWeekTemps = weatherData.forecast.slice(0, 7).map((day: any) => day.temperature || day.temp)
     const minTemp = Math.min(...nextWeekTemps)
-    
     if (crop.climate.frostTolerance === 'none' && minTemp < 32) {
       return {
         recommendation: 'wait',
@@ -598,7 +557,6 @@ export function generatePlantingRecommendations(
       }
     }
   }
-  
   // Check soil moisture (if recent rainfall data available)
   if (weatherData.precipitation && weatherData.precipitation > 2) {
     reasons.push('Recent heavy rainfall - ensure good drainage before planting')
@@ -607,11 +565,9 @@ export function generatePlantingRecommendations(
     reasons.push('Dry conditions - plan for immediate irrigation after planting')
     confidence -= 5
   }
-  
   // Seasonal timing check
   const currentDate = new Date()
   const currentMonth = currentDate.getMonth()
-  
   // Very basic seasonal recommendations (would be enhanced with climate zone data)
   if (crop.family === CropFamily.NIGHTSHADES && currentMonth < 3) {
     return {
@@ -620,7 +576,6 @@ export function generatePlantingRecommendations(
       reasons: ['Too early for warm-season crops. Start seeds indoors if desired.']
     }
   }
-  
   return {
     recommendation: 'plant_now',
     confidence,

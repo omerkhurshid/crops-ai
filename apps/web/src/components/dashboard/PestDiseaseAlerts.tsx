@@ -4,7 +4,6 @@
  * Displays comprehensive pest and disease outbreak predictions,
  * risk assessments, and management recommendations for farmers.
  */
-
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -34,7 +33,6 @@ import {
   Eye
 } from 'lucide-react'
 import { ensureArray } from '../../lib/utils'
-
 interface PestThreat {
   name: string
   type: 'insect' | 'fungal' | 'bacterial' | 'viral' | 'nematode' | 'weed'
@@ -58,7 +56,6 @@ interface PestThreat {
     indicators: string[]
   }[]
 }
-
 interface PestPrediction {
   fieldId: string
   cropType: string
@@ -79,7 +76,6 @@ interface PestPrediction {
   }
   regionalThreatLevel: number
 }
-
 interface PestDiseaseAlertsProps {
   fieldId?: string
   cropType?: string
@@ -88,7 +84,6 @@ interface PestDiseaseAlertsProps {
   plantingDate?: Date
   className?: string
 }
-
 export default function PestDiseaseAlerts({
   fieldId,
   cropType,
@@ -102,22 +97,18 @@ export default function PestDiseaseAlerts({
   const [error, setError] = useState<string | null>(null)
   const [selectedThreat, setSelectedThreat] = useState<PestThreat | null>(null)
   const [activeTab, setActiveTab] = useState('overview')
-
   useEffect(() => {
     fetchPestPrediction()
   }, [fieldId, cropType, latitude, longitude, plantingDate])
-
   const fetchPestPrediction = async () => {
     try {
       setLoading(true)
       setError(null)
-
       // Skip if required data is missing
       if (!fieldId || !cropType || !latitude || !longitude || !plantingDate) {
         setLoading(false)
         return
       }
-
       const response = await fetch('/api/crops/pest-prediction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -130,25 +121,20 @@ export default function PestDiseaseAlerts({
           action: 'predict'
         })
       })
-
       const data = await response.json()
-      
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch pest predictions')
       }
-
       setPrediction({
         ...data.data,
         analysisDate: new Date(data.data.analysisDate)
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred')
-
     } finally {
       setLoading(false)
     }
   }
-
   const getRiskLevelColor = (level: string) => {
     switch (level) {
       case 'low': return 'text-green-600 bg-green-100'
@@ -158,7 +144,6 @@ export default function PestDiseaseAlerts({
       default: return 'text-gray-600 bg-gray-100'
     }
   }
-
   const getRiskIcon = (level: string) => {
     switch (level) {
       case 'low': return <CheckCircle className="h-4 w-4" />
@@ -168,7 +153,6 @@ export default function PestDiseaseAlerts({
       default: return <Info className="h-4 w-4" />
     }
   }
-
   const getThreatTypeIcon = (type: string) => {
     switch (type) {
       case 'insect': return <Bug className="h-4 w-4" />
@@ -180,9 +164,7 @@ export default function PestDiseaseAlerts({
       default: return <AlertTriangle className="h-4 w-4" />
     }
   }
-
   const formatPercentage = (value: number) => `${(value * 100).toFixed(1)}%`
-
   if (loading) {
     return (
       <Card className={className}>
@@ -203,7 +185,6 @@ export default function PestDiseaseAlerts({
       </Card>
     )
   }
-
   if (error) {
     return (
       <Card className={className}>
@@ -226,12 +207,9 @@ export default function PestDiseaseAlerts({
       </Card>
     )
   }
-
   if (!prediction) return null
-
   const highRiskThreats = prediction.threats.filter(t => t.riskLevel === 'high' || t.riskLevel === 'extreme')
   const avgConfidence = prediction.threats.reduce((sum, t) => sum + t.confidence, 0) / prediction.threats.length
-
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Overview Header */}
@@ -294,7 +272,6 @@ export default function PestDiseaseAlerts({
           </div>
         </CardContent>
       </Card>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -302,7 +279,6 @@ export default function PestDiseaseAlerts({
           <TabsTrigger value="environment">Environment</TabsTrigger>
           <TabsTrigger value="recommendations">Actions</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview" className="space-y-4">
           {/* High Priority Alerts */}
           {highRiskThreats.length > 0 && (
@@ -315,7 +291,6 @@ export default function PestDiseaseAlerts({
               </AlertDescription>
             </Alert>
           )}
-
           {/* Threat Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {ensureArray(prediction.threats).slice(0, 4).map((threat, index) => (
@@ -349,7 +324,6 @@ export default function PestDiseaseAlerts({
             ))}
           </div>
         </TabsContent>
-
         <TabsContent value="threats" className="space-y-4">
           <div className="space-y-3">
             {prediction.threats.map((threat, index) => (
@@ -390,7 +364,6 @@ export default function PestDiseaseAlerts({
                           </div>
                         </div>
                       </div>
-                      
                       <div>
                         <h4 className="font-medium text-sm mb-2">Environmental Factors</h4>
                         <div className="flex flex-wrap gap-1">
@@ -402,7 +375,6 @@ export default function PestDiseaseAlerts({
                         </div>
                       </div>
                     </div>
-
                     <div className="space-y-3">
                       <div>
                         <h4 className="font-medium text-sm mb-2">Available Treatments</h4>
@@ -417,7 +389,6 @@ export default function PestDiseaseAlerts({
                           ))}
                         </div>
                       </div>
-
                       <div>
                         <h4 className="font-medium text-sm mb-2">Prevention</h4>
                         <div className="space-y-1">
@@ -436,7 +407,6 @@ export default function PestDiseaseAlerts({
             ))}
           </div>
         </TabsContent>
-
         <TabsContent value="environment" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
@@ -489,7 +459,6 @@ export default function PestDiseaseAlerts({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
@@ -509,7 +478,6 @@ export default function PestDiseaseAlerts({
                   </div>
                   <Progress value={prediction.cropStageRisk.stageVulnerability * 100} className="h-2" />
                 </div>
-
                 <div>
                   <h4 className="font-medium text-sm mb-2">Critical Periods</h4>
                   <div className="flex flex-wrap gap-1">
@@ -520,7 +488,6 @@ export default function PestDiseaseAlerts({
                     ))}
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-medium text-sm mb-2">Stage Actions</h4>
                   <div className="space-y-1">
@@ -536,7 +503,6 @@ export default function PestDiseaseAlerts({
             </Card>
           </div>
         </TabsContent>
-
         <TabsContent value="recommendations" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
@@ -581,7 +547,6 @@ export default function PestDiseaseAlerts({
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
@@ -601,7 +566,6 @@ export default function PestDiseaseAlerts({
                       </div>
                     ))}
                   </div>
-
                   {/* High risk threat actions */}
                   {highRiskThreats.length > 0 && (
                     <div className="space-y-2">
@@ -628,7 +592,6 @@ export default function PestDiseaseAlerts({
               </CardContent>
             </Card>
           </div>
-
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Analysis Summary</CardTitle>

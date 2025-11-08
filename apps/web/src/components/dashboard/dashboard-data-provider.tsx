@@ -1,5 +1,4 @@
 'use client'
-
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 // Logger replaced with console for local development
 import { DashboardData, DashboardDataContextType, CropData } from '../../types/dashboard'
@@ -10,9 +9,7 @@ import {
   useCachedTaskData,
   usePrefetchFarmData
 } from '../../hooks/useAPICache'
-
 const DashboardDataContext = createContext<DashboardDataContextType | null>(null)
-
 interface DashboardDataProviderProps {
   children: React.ReactNode
   farmId: string
@@ -23,7 +20,6 @@ interface DashboardDataProviderProps {
   }
   crops?: CropData[]
 }
-
 export function DashboardDataProvider({ 
   children, 
   farmId, 
@@ -35,7 +31,6 @@ export function DashboardDataProvider({
   const cropData = useCachedCropData(farmId)
   const taskData = useCachedTaskData(farmId)
   const { prefetchAll } = usePrefetchFarmData(farmId)
-
   const [additionalData, setAdditionalData] = useState({
     recommendations: [],
     regionalData: null,
@@ -43,12 +38,10 @@ export function DashboardDataProvider({
     queueStatus: null,
     budgetData: null
   })
-
   // Aggregate all data from cached sources
   const data = useMemo((): DashboardData => {
     const loading = weatherData.loading || cropData.loading || taskData.loading
     const error = weatherData.error || cropData.error || taskData.error
-    
     return {
       weather: weatherData.data,
       crops: cropData.data || initialCrops,
@@ -65,10 +58,8 @@ export function DashboardDataProvider({
     additionalData,
     initialCrops
   ])
-
   const fetchAllData = useCallback(async () => {
     if (!farmId) return
-
     try {
       // Refetch all cached data
       await Promise.allSettled([
@@ -76,7 +67,6 @@ export function DashboardDataProvider({
         cropData.refetch(), 
         taskData.refetch()
       ])
-
       // Fetch additional non-cached data in parallel
       const additionalPromises = [
         fetch(`/api/nba/recommendations?farmId=${farmId}&maxRecommendations=4`).then(res => res.ok ? res.json() : { recommendations: [] }),
@@ -84,7 +74,6 @@ export function DashboardDataProvider({
         fetch(`/api/satellite/queue?action=status`).then(res => res.ok ? res.json() : null),
         fetch(`/api/financial/budget?farmId=${farmId}`).then(res => res.ok ? res.json() : null)
       ]
-
       // Regional data (if coordinates available)
       if (farmData?.latitude && farmData?.longitude) {
         additionalPromises.push(
@@ -93,7 +82,6 @@ export function DashboardDataProvider({
       } else {
         additionalPromises.push(Promise.resolve(null))
       }
-
       const [
         recommendationsResponse,
         diseaseResponse,
@@ -101,7 +89,6 @@ export function DashboardDataProvider({
         budgetResponse,
         regionalResponse
       ] = await Promise.all(additionalPromises)
-
       // Update additional data state
       setAdditionalData({
         recommendations: recommendationsResponse?.recommendations || [],
@@ -110,12 +97,10 @@ export function DashboardDataProvider({
         budgetData: budgetResponse,
         regionalData: regionalResponse
       })
-
     } catch (error) {
       console.error('Dashboard data fetch error', error, { farmId })
     }
   }, [farmId, farmData?.latitude, farmData?.longitude, weatherData, cropData, taskData])
-
   const updateData = useCallback(<K extends keyof DashboardData>(key: K, newData: DashboardData[K]) => {
     // For cached data, invalidate cache and refetch
     if (key === 'weather') {
@@ -135,31 +120,26 @@ export function DashboardDataProvider({
       }))
     }
   }, [weatherData, cropData, taskData])
-
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     ...data,
     refetch: fetchAllData,
     updateData
   }), [data, fetchAllData, updateData])
-
   useEffect(() => {
     fetchAllData()
   }, [fetchAllData])
-
   // Auto-refresh every 5 minutes
   useEffect(() => {
     const interval = setInterval(fetchAllData, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [fetchAllData])
-
   return (
     <DashboardDataContext.Provider value={contextValue}>
       {children}
     </DashboardDataContext.Provider>
   )
 }
-
 export function useDashboardData() {
   const context = useContext(DashboardDataContext)
   if (!context) {
@@ -167,33 +147,27 @@ export function useDashboardData() {
   }
   return context
 }
-
 // Convenience hooks for specific data
 export function useWeatherData() {
   const { weather } = useDashboardData()
   return weather
 }
-
 export function useTasksData() {
   const { tasks } = useDashboardData()
   return tasks
 }
-
 export function useRecommendationsData() {
   const { recommendations } = useDashboardData()
   return recommendations
 }
-
 export function useHarvestAlerts() {
   const { harvestAlerts } = useDashboardData()
   return harvestAlerts
 }
-
 export function useQueueStatus() {
   const { queueStatus } = useDashboardData()
   return queueStatus
 }
-
 export function useBudgetData() {
   const { budgetData } = useDashboardData()
   return budgetData

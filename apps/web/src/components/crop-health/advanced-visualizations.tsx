@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -10,7 +9,6 @@ import {
   Satellite, TrendingUp, TrendingDown, Calendar, MapPin,
   BarChart3, Activity, Zap, Target, Eye, RefreshCw, Download
 } from 'lucide-react';
-
 interface VisualizationData {
   ndviTrends: Array<{
     date: string;
@@ -51,20 +49,16 @@ interface VisualizationData {
     resolved: boolean;
   }>;
 }
-
 interface AdvancedVisualizationsProps {
   farmId: string;
 }
-
 export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) {
   const [data, setData] = useState<VisualizationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTimeframe, setSelectedTimeframe] = useState<'1m' | '3m' | '6m' | '1y'>('3m');
-
   useEffect(() => {
     fetchVisualizationData();
   }, [farmId, selectedTimeframe]);
-
   const fetchVisualizationData = async () => {
     setLoading(true);
     try {
@@ -82,9 +76,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       setLoading(false);
     }
   };
-
   // Removed mock data function - only show real data from API
-
   const getStressColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-red-500';
@@ -94,7 +86,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       default: return 'bg-gray-400';
     }
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -104,7 +95,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'stress_detected': return <Zap className="h-4 w-4 text-orange-600" />;
@@ -114,11 +104,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       default: return <Activity className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const exportData = () => {
-
   };
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -133,7 +120,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       </div>
     );
   }
-
   if (!data) {
     return (
       <div className="text-center py-12">
@@ -143,7 +129,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Controls */}
@@ -168,7 +153,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                 ))}
               </div>
             </div>
-            
             <Button onClick={exportData} variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
               Export
@@ -176,7 +160,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
           </div>
         </CardContent>
       </Card>
-
       {/* Advanced Visualizations */}
       <Tabs defaultValue="trends" className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
@@ -185,7 +168,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
           <TabsTrigger value="comparison">Year Comparison</TabsTrigger>
           <TabsTrigger value="alerts">Alert History</TabsTrigger>
         </TabsList>
-
         <TabsContent value="trends">
           <Card>
             <CardHeader>
@@ -216,7 +198,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                       <MapPin className="h-4 w-4" />
                       {field.fieldName}
                     </h4>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {['ndvi', 'evi', 'savi'].map((index) => (
                         <div key={index} className="p-3 bg-gray-50 rounded-lg">
@@ -226,12 +207,10 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                             </div>
                             <div className="text-xs text-gray-600 uppercase">{index}</div>
                           </div>
-                          
                           <div className="space-y-1">
                             {field.data.map((point: any, idx: number) => {
                               const prevValue = idx > 0 ? field.data[idx - 1][index] : point[index];
                               const change = ((point[index] - prevValue) / prevValue) * 100;
-                              
                               return (
                                 <div key={idx} className="flex justify-between items-center text-xs">
                                   <span>{new Date(point.date).toLocaleDateString()}</span>
@@ -256,7 +235,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="heatmap">
           <Card>
             <CardHeader>
@@ -271,10 +249,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                 {data.stressHeatmap.map((field) => (
                   <div key={field.fieldId} className="space-y-3">
                     <h4 className="font-semibold">{field.fieldName}</h4>
-                    
                     <div className="relative bg-green-100 rounded-lg p-6 min-h-[200px]">
                       <div className="text-sm text-gray-600 mb-4">Field Visualization</div>
-                      
                       {/* Stress Zone Markers */}
                       {field.zones.map((zone) => (
                         <div
@@ -291,7 +267,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                         </div>
                       ))}
                     </div>
-                    
                     {/* Legend */}
                     <div className="flex flex-wrap gap-3 mt-4">
                       {field.zones.map((zone) => (
@@ -310,7 +285,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="comparison">
           <Card>
             <CardHeader>
@@ -340,13 +314,11 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                     <p className="text-sm text-gray-600">Industry Benchmark</p>
                   </div>
                 </div>
-
                 <div className="space-y-3">
                   <h4 className="font-semibold">Monthly Progress</h4>
                   {data.comparisonData.thisYear.map((month, index) => {
                     const lastYearValue = data.comparisonData.lastYear[index]?.health || 0;
                     const change = ((month.health - lastYearValue) / lastYearValue) * 100;
-                    
                     return (
                       <div key={month.month} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                         <span className="font-medium">{month.month}</span>
@@ -369,7 +341,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="alerts">
           <Card>
             <CardHeader>
@@ -410,7 +381,6 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
           </Card>
         </TabsContent>
       </Tabs>
-
       {/* Seasonal Patterns */}
       <Card>
         <CardHeader>

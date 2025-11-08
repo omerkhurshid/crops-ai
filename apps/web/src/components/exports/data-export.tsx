@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -10,7 +9,6 @@ import {
   Filter, Settings, CheckCircle2, AlertCircle, Clock,
   BarChart3, TrendingUp, DollarSign, Activity
 } from 'lucide-react'
-
 interface ExportFormat {
   id: string
   label: string
@@ -21,7 +19,6 @@ interface ExportFormat {
   supportsCharts?: boolean
   fileSize?: string
 }
-
 interface ExportOptions {
   format: string
   dateRange?: {
@@ -33,7 +30,6 @@ interface ExportOptions {
   includeRawData?: boolean
   filters?: string[]
 }
-
 interface DataExportProps {
   dataType: 'financial' | 'health' | 'weather' | 'farms' | 'reports'
   data: any[]
@@ -42,7 +38,6 @@ interface DataExportProps {
   customFormats?: ExportFormat[]
   className?: string
 }
-
 const defaultFormats: ExportFormat[] = [
   {
     id: 'xlsx',
@@ -85,7 +80,6 @@ const defaultFormats: ExportFormat[] = [
     fileSize: '100-500 KB'
   }
 ]
-
 export function DataExport({
   dataType,
   data,
@@ -107,9 +101,7 @@ export function DataExport({
   })
   const [isExporting, setIsExporting] = useState(false)
   const [exportStatus, setExportStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
   const formats = [...defaultFormats, ...customFormats]
-
   const handleFormatSelect = (format: ExportFormat) => {
     setSelectedFormat(format)
     setExportOptions(prev => ({
@@ -118,17 +110,14 @@ export function DataExport({
       includeCharts: format.supportsCharts ? prev.includeCharts : false
     }))
   }
-
   const handleExport = async () => {
     if (!onExport) {
       // Default export implementation
       await downloadData()
       return
     }
-
     setIsExporting(true)
     setExportStatus('idle')
-
     try {
       await onExport(exportOptions)
       setExportStatus('success')
@@ -139,16 +128,13 @@ export function DataExport({
       setIsExporting(false)
     }
   }
-
   const downloadData = async () => {
     // Default implementation for client-side export
     setIsExporting(true)
-    
     try {
       let content: string
       let filename: string
       let mimeType: string
-
       switch (selectedFormat.id) {
         case 'csv':
           content = convertToCSV(data)
@@ -169,7 +155,6 @@ export function DataExport({
         default:
           throw new Error(`Format ${selectedFormat.id} requires server-side processing`)
       }
-
       // Create and download file
       const blob = new Blob([content], { type: mimeType })
       const url = URL.createObjectURL(blob)
@@ -180,7 +165,6 @@ export function DataExport({
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-
       setExportStatus('success')
     } catch (error) {
       console.error('Export failed:', error)
@@ -189,10 +173,8 @@ export function DataExport({
       setIsExporting(false)
     }
   }
-
   const convertToCSV = (data: any[]): string => {
     if (!data || data.length === 0) return ''
-    
     const headers = Object.keys(data[0])
     const csvHeaders = headers.join(',')
     const csvRows = data.map(row => 
@@ -205,10 +187,8 @@ export function DataExport({
         return value
       }).join(',')
     )
-    
     return [csvHeaders, ...csvRows].join('\n')
   }
-
   const getDataTypeIcon = () => {
     switch (dataType) {
       case 'financial': return <DollarSign className="h-5 w-5" />
@@ -218,7 +198,6 @@ export function DataExport({
       default: return <Download className="h-5 w-5" />
     }
   }
-
   return (
     <div className={className}>
       <ModernCard variant="soft">
@@ -267,7 +246,6 @@ export function DataExport({
                 ))}
               </div>
             </div>
-
             {/* Export Options */}
             <div>
               <h3 className="text-sm font-medium text-sage-800 mb-3">Export Options</h3>
@@ -297,7 +275,6 @@ export function DataExport({
                     />
                   </div>
                 </div>
-
                 {/* Include Options */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
@@ -315,7 +292,6 @@ export function DataExport({
                       <div className="text-xs text-sage-600">Export date, filters, etc.</div>
                     </div>
                   </label>
-
                   {selectedFormat.supportsCharts && (
                     <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
                       <input
@@ -333,7 +309,6 @@ export function DataExport({
                       </div>
                     </label>
                   )}
-
                   <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
                     <input
                       type="checkbox"
@@ -352,7 +327,6 @@ export function DataExport({
                 </div>
               </div>
             </div>
-
             {/* Export Status */}
             {exportStatus !== 'idle' && (
               <div className="mt-4">
@@ -374,7 +348,6 @@ export function DataExport({
                 )}
               </div>
             )}
-
             {/* Export Button */}
             <div className="flex items-center justify-between pt-4 border-t border-sage-200">
               <div className="text-sm text-sage-600">
@@ -395,7 +368,6 @@ export function DataExport({
     </div>
   )
 }
-
 // Hook for easy export functionality
 export function useDataExport() {
   const exportData = async (
@@ -406,7 +378,6 @@ export function useDataExport() {
     let content: string
     let mimeType: string
     let fileExtension: string
-
     switch (format) {
       case 'csv':
         content = convertArrayToCSV(data)
@@ -421,7 +392,6 @@ export function useDataExport() {
       default:
         throw new Error(`Format ${format} not supported in client-side export`)
     }
-
     const blob = new Blob([content], { type: mimeType })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -432,13 +402,10 @@ export function useDataExport() {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
-
   return { exportData }
 }
-
 function convertArrayToCSV(data: any[]): string {
   if (!data || data.length === 0) return ''
-  
   const headers = Object.keys(data[0])
   const csvHeaders = headers.join(',')
   const csvRows = data.map(row => 
@@ -450,6 +417,5 @@ function convertArrayToCSV(data: any[]): string {
       return value
     }).join(',')
   )
-  
   return [csvHeaders, ...csvRows].join('\n')
 }

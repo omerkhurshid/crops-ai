@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, MetricCard } from '../ui/modern-card'
 import { Badge } from '../ui/badge'
@@ -13,13 +12,11 @@ import {
   DollarSign,
   Clock
 } from 'lucide-react'
-
 interface Farm {
   id: string
   name: string
   totalArea: number
 }
-
 interface CashFlowProjection {
   period: '30_days' | '60_days'
   expectedIncome: number
@@ -34,11 +31,9 @@ interface CashFlowProjection {
     amount: number
   }[]
 }
-
 interface SimpleCashFlowForecastProps {
   farm: Farm
 }
-
 export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
   const [forecasts, setForecasts] = useState<{
     thirtyDay: CashFlowProjection | null
@@ -49,18 +44,14 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
   })
   const [loading, setLoading] = useState(true)
   const [selectedPeriod, setSelectedPeriod] = useState<'30_days' | '60_days'>('30_days')
-
   useEffect(() => {
     fetchCashFlowForecasts()
   }, [farm.id])
-
   const fetchCashFlowForecasts = async () => {
     try {
       setLoading(true)
-      
       // Fetch real cashflow forecast from API
       const response = await fetch(`/api/financial/cashflow-forecast?farmId=${farm.id}`)
-      
       if (response.ok) {
         const result = await response.json()
         if (result.success && result.data) {
@@ -71,7 +62,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           return
         }
       }
-      
       // No data available
       setForecasts({
         thirtyDay: null,
@@ -83,7 +73,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       setLoading(false)
     }
   }
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -92,7 +81,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       maximumFractionDigits: 0,
     }).format(amount)
   }
-
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -101,13 +89,10 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       </div>
     )
   }
-
   const currentForecast = selectedPeriod === '30_days' ? forecasts.thirtyDay : forecasts.sixtyDay
   if (!currentForecast) return null
-
   const isPositiveCashFlow = currentForecast.netCashFlow > 0
   const cashFlowHealthy = currentForecast.endingBalance > 10000 // $10k minimum threshold
-
   return (
     <div className="space-y-6">
       {/* Header with Period Selector */}
@@ -123,7 +108,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 <p className="text-sm text-sage-600 mt-1">Projected income and expenses for your farm</p>
               </div>
             </div>
-            
             <div className="flex gap-2">
               <button
                 onClick={() => setSelectedPeriod('30_days')}
@@ -149,10 +133,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           </div>
         </ModernCardHeader>
       </ModernCard>
-
       {/* Cash Flow Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
         {/* Expected Income */}
         <MetricCard
           title="Expected Income"
@@ -165,7 +147,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
             description: `Money you expect to receive in the next ${selectedPeriod === '30_days' ? '30' : '60'} days from crop sales, insurance, etc.`
           }}
         />
-
         {/* Expected Expenses */}
         <MetricCard
           title="Expected Expenses"
@@ -178,7 +159,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
             description: "Money you'll need to pay out for fertilizer, fuel, labor, equipment, and other costs."
           }}
         />
-
         {/* Net Cash Flow */}
         <MetricCard
           title="Net Cash Flow"
@@ -193,7 +173,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           }}
         />
       </div>
-
       {/* Balance Projection */}
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">
@@ -221,7 +200,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                   </p>
                 </div>
               </div>
-              
               {!cashFlowHealthy && (
                 <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <div className="flex items-center gap-2 text-red-800">
@@ -237,7 +215,6 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Key Upcoming Events */}
       <ModernCard variant="floating">
         <ModernCardHeader>

@@ -3,10 +3,8 @@
  * Integrates with multiple soil data sources including USDA SSURGO, 
  * IoT sensors, and laboratory analysis systems
  */
-
 import { prisma } from '../prisma'
 // Logger replaced with console for local development
-
 export interface SoilProfile {
   fieldId: string
   location: {
@@ -23,7 +21,6 @@ export interface SoilProfile {
     confidence: number
   }
 }
-
 export interface SoilLayer {
   depth_top: number // cm
   depth_bottom: number // cm
@@ -45,7 +42,6 @@ export interface SoilLayer {
   texture_class: string
   drainage_class: 'very_poor' | 'poor' | 'somewhat_poor' | 'moderate' | 'well' | 'excessive'
 }
-
 export interface SoilReading {
   fieldId: string
   sensor_id?: string
@@ -64,7 +60,6 @@ export interface SoilReading {
   }
   quality: 'high' | 'medium' | 'low'
 }
-
 export interface USDASSURGOData {
   mukey: string // Map Unit Key
   musym: string // Map Unit Symbol
@@ -126,11 +121,9 @@ export interface USDASSURGOData {
     wfifteenbar_h: number // Water Content Fifteen Bar High
   }>
 }
-
 class SoilDataService {
   private readonly USDA_WEB_SOIL_SURVEY_URL = 'https://sdmdataaccess.sc.egov.usda.gov'
   private readonly CACHE_TTL = 24 * 60 * 60 // 24 hours
-
   /**
    * Get comprehensive soil data for a field
    */
@@ -141,45 +134,36 @@ class SoilDataService {
         where: { id: fieldId },
         include: { farm: true }
       })
-
       if (!field || !field.farm.latitude || !field.farm.longitude) {
-
         return null
       }
-
       const location = {
         latitude: field.farm.latitude,
         longitude: field.farm.longitude
       }
-
       // Try to get recent soil sensor data first
       const sensorData = await this.getRecentSensorData(fieldId)
       if (sensorData && sensorData.length > 0) {
         return await this.buildProfileFromSensorData(fieldId, location, sensorData)
       }
-
       // Try to get USDA SSURGO data
       const ssurgoData = await this.getSSURGOData(location.latitude, location.longitude)
       if (ssurgoData) {
         return await this.buildProfileFromSSURGO(fieldId, location, ssurgoData)
       }
-
       // Fallback to estimated data based on regional soil characteristics
       return await this.buildEstimatedProfile(fieldId, location)
-
     } catch (error) {
       console.error(`Error getting soil data for field ${fieldId}:`, error)
       return null
     }
   }
-
   /**
    * Get real-time soil sensor readings
    */
   async getRecentSensorData(fieldId: string, hours: number = 24): Promise<SoilReading[]> {
     try {
       const since = new Date(Date.now() - hours * 60 * 60 * 1000)
-      
       const readings = await prisma.soilReading.findMany({
         where: {
           fieldId,
@@ -190,7 +174,6 @@ class SoilDataService {
         orderBy: { timestamp: 'desc' },
         take: 100
       })
-
       return readings.map(reading => ({
         fieldId: reading.fieldId,
         sensor_id: reading.sensorId || undefined,
@@ -214,7 +197,6 @@ class SoilDataService {
       return []
     }
   }
-
   /**
    * Get USDA SSURGO soil data from Web Soil Survey
    */
@@ -222,10 +204,8 @@ class SoilDataService {
     try {
       // Check if USDA API access is configured
       if (!process.env.USDA_WSS_API_KEY) {
-
         return null
       }
-
       // Query USDA Web Soil Survey for map unit data
       const query = `
         SELECT TOP 1 
@@ -237,7 +217,6 @@ class SoilDataService {
         INNER JOIN mapunit AS mu ON i.mukey = mu.mukey
         INNER JOIN component AS co ON mu.mukey = co.mukey AND co.majcompflag = 'Yes'
       `
-
       const response = await fetch(`${this.USDA_WEB_SOIL_SURVEY_URL}/Tabular/post.rest`, {
         method: 'POST',
         headers: {
@@ -249,21 +228,14 @@ class SoilDataService {
           format: 'JSON'
         })
       })
-
       if (!response.ok) {
-
         return null
       }
-
       const data = await response.json()
-      
       if (!data.Table || data.Table.length === 0) {
-
         return null
       }
-
       const mapUnit = data.Table[0]
-      
       // Get horizon data for the component
       const horizonQuery = `
         SELECT 
@@ -282,7 +254,6 @@ class SoilDataService {
         WHERE co.mukey = '${mapUnit[0]}'
         ORDER BY ch.hzdept_r
       `
-
       const horizonResponse = await fetch(`${this.USDA_WEB_SOIL_SURVEY_URL}/Tabular/post.rest`, {
         method: 'POST',
         headers: {
@@ -294,9 +265,7 @@ class SoilDataService {
           format: 'JSON'
         })
       })
-
       const horizonData = horizonResponse.ok ? await horizonResponse.json() : { Table: [] }
-
       return {
         mukey: mapUnit[0],
         musym: mapUnit[1],
@@ -363,7 +332,6 @@ class SoilDataService {
       return null
     }
   }
-
   /**
    * Build soil profile from sensor data
    */
@@ -374,7 +342,6 @@ class SoilDataService {
   ): Promise<SoilProfile> {
     // Group readings by depth to create layers
     const depthGroups = new Map<number, SoilReading[]>()
-    
     sensorData.forEach(reading => {
       const depth = Math.round(reading.depth / 10) * 10 // Round to nearest 10cm
       if (!depthGroups.has(depth)) {
@@ -382,14 +349,11 @@ class SoilDataService {
       }
       depthGroups.get(depth)!.push(reading)
     })
-
     const layers: SoilLayer[] = []
     const sortedDepths = Array.from(depthGroups.keys()).sort((a, b) => a - b)
-
     sortedDepths.forEach((depth, index) => {
       const readings = depthGroups.get(depth)!
       const avgReading = this.averageSensorReadings(readings)
-      
       layers.push({
         depth_top: depth,
         depth_bottom: sortedDepths[index + 1] || depth + 30,
@@ -412,7 +376,6 @@ class SoilDataService {
         drainage_class: 'well'
       })
     })
-
     return {
       fieldId,
       location,
@@ -427,7 +390,6 @@ class SoilDataService {
       }
     }
   }
-
   /**
    * Build soil profile from USDA SSURGO data
    */
@@ -461,7 +423,6 @@ class SoilDataService {
       ),
       drainage_class: this.mapHydrologicGroup(ssurgoData.component.hydgrp)
     }))
-
     return {
       fieldId,
       location,
@@ -476,7 +437,6 @@ class SoilDataService {
       }
     }
   }
-
   /**
    * Build estimated soil profile based on regional characteristics
    */
@@ -487,7 +447,6 @@ class SoilDataService {
     // Use climate zone and regional soil data to estimate characteristics
     const climateZone = this.determineClimateZone(location.latitude)
     const soilCharacteristics = this.getRegionalSoilCharacteristics(climateZone)
-
     const layers: SoilLayer[] = [
       {
         depth_top: 0,
@@ -500,7 +459,6 @@ class SoilDataService {
         ...soilCharacteristics.subsoil
       }
     ]
-
     return {
       fieldId,
       location,
@@ -515,7 +473,6 @@ class SoilDataService {
       }
     }
   }
-
   // Helper methods
   private averageSensorReadings(readings: SoilReading[]) {
     const count = readings.length
@@ -529,7 +486,6 @@ class SoilDataService {
       potassium: readings.reduce((sum, r) => sum + r.potassium, 0) / count
     }
   }
-
   private determineTextureClass(sand: number, silt: number, clay: number): string {
     if (clay >= 40) return 'clay'
     if (clay >= 27 && sand <= 20) return 'clay_loam'
@@ -541,7 +497,6 @@ class SoilDataService {
     if (clay < 7 && silt >= 50 && sand < 50) return 'silt_loam'
     return 'loam'
   }
-
   private mapHydrologicGroup(hydgrp: string): SoilLayer['drainage_class'] {
     switch (hydgrp) {
       case 'A': return 'excessive'
@@ -551,14 +506,12 @@ class SoilDataService {
       default: return 'moderate'
     }
   }
-
   private determineClimateZone(latitude: number): string {
     if (latitude > 45) return 'northern_temperate'
     if (latitude > 35) return 'temperate'
     if (latitude > 25) return 'subtropical'
     return 'tropical'
   }
-
   private getRegionalSoilCharacteristics(zone: string) {
     const characteristics = {
       northern_temperate: {
@@ -620,7 +573,6 @@ class SoilDataService {
     }
     return characteristics[zone as keyof typeof characteristics] || characteristics.temperate
   }
-
   /**
    * Store soil sensor reading in database
    */
@@ -650,6 +602,5 @@ class SoilDataService {
     }
   }
 }
-
 export const soilDataService = new SoilDataService()
 export { SoilDataService }

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
@@ -12,7 +11,6 @@ import {
   MapPin, Plus, Save, AlertCircle, Map, Loader2, 
   ChevronRight, CheckCircle, MousePointer2 
 } from 'lucide-react'
-
 interface FieldFormWithMapProps {
   farmId: string
   farmName: string
@@ -21,7 +19,6 @@ interface FieldFormWithMapProps {
   farmTotalArea?: number
   existingFields?: Array<{ id: string; name: string; area: number }>
 }
-
 interface DetectedField {
   id: string
   area: number
@@ -29,17 +26,14 @@ interface DetectedField {
   confidence: number
   selected?: boolean
 }
-
 const cropTypes = [
   'Corn', 'Soybean', 'Wheat', 'Cotton', 'Rice', 'Barley', 'Oats', 'Canola', 
   'Sunflower', 'Potato', 'Tomato', 'Lettuce', 'Carrot', 'Onion', 'Other'
 ]
-
 const soilTypes = [
   'Clay', 'Sandy', 'Loam', 'Silt', 'Sandy Loam', 'Clay Loam', 'Silty Clay', 
   'Silty Clay Loam', 'Sandy Clay', 'Sandy Clay Loam', 'Unknown'
 ]
-
 export function FieldFormWithMap({ 
   farmId, 
   farmName, 
@@ -56,11 +50,9 @@ export function FieldFormWithMap({
   const [selectedFields, setSelectedFields] = useState<DetectedField[]>([])
   const [manualBoundary, setManualBoundary] = useState<Array<{ lat: number; lng: number }>>([])
   const [fieldDetails, setFieldDetails] = useState<Record<string, { name: string; cropType: string; soilType: string }>>({})
-
   // Calculate remaining area
   const usedArea = existingFields.reduce((sum, field) => sum + field.area, 0)
   const remainingArea = farmTotalArea ? farmTotalArea - usedArea : 0
-
   // Handle field detection from satellite
   const handleFieldsDetected = useCallback((fields: any[]) => {
     const newDetectedFields = fields.map((field, index) => ({
@@ -70,7 +62,6 @@ export function FieldFormWithMap({
     }))
     setDetectedFields(newDetectedFields)
   }, [])
-
   // Handle manual boundary drawing
   const handleBoundarySet = useCallback((boundaries: Array<{ lat: number; lng: number }>) => {
     setManualBoundary(boundaries)
@@ -87,28 +78,22 @@ export function FieldFormWithMap({
       setSelectedFields([manualField])
     }
   }, [])
-
   // Calculate polygon area in hectares
   const calculatePolygonArea = (coordinates: Array<{ lat: number; lng: number }>): number => {
     if (coordinates.length < 3) return 0
-    
     const R = 6371000 // Earth's radius in meters
     let area = 0
-    
     for (let i = 0; i < coordinates.length; i++) {
       const j = (i + 1) % coordinates.length
       const lat1 = coordinates[i].lat * Math.PI / 180
       const lat2 = coordinates[j].lat * Math.PI / 180
       const lng1 = coordinates[i].lng * Math.PI / 180
       const lng2 = coordinates[j].lng * Math.PI / 180
-      
       area += (lng2 - lng1) * (2 + Math.sin(lat1) + Math.sin(lat2))
     }
-    
     area = Math.abs(area * R * R / 2)
     return area / 10000 // Convert to hectares
   }
-
   // Toggle field selection
   const toggleFieldSelection = (field: DetectedField) => {
     if (selectedFields.find(f => f.id === field.id)) {
@@ -123,7 +108,6 @@ export function FieldFormWithMap({
       })
     }
   }
-
   // Update field details
   const updateFieldDetail = (fieldId: string, key: string, value: string) => {
     setFieldDetails({
@@ -134,37 +118,30 @@ export function FieldFormWithMap({
       }
     })
   }
-
   // Validate form
   const validateForm = () => {
     if (selectedFields.length === 0) return 'Please select or draw at least one field'
-    
     for (const field of selectedFields) {
       const details = fieldDetails[field.id]
       if (!details?.name?.trim()) return 'All fields must have a name'
       if (!details?.cropType) return 'All fields must have a crop type'
     }
-    
     return null
   }
-
   // Handle submit
   const handleSubmit = async () => {
     setError(null)
     setLoading(true)
-
     const validationError = validateForm()
     if (validationError) {
       setError(validationError)
       setLoading(false)
       return
     }
-
     try {
       // Create each selected field
       for (const field of selectedFields) {
         const details = fieldDetails[field.id]
-        
         const response = await fetch('/api/fields', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -177,13 +154,11 @@ export function FieldFormWithMap({
             boundary: field.boundaries
           })
         })
-
         if (!response.ok) {
           const data = await response.json()
           throw new Error(data.error?.message || 'Failed to create field')
         }
       }
-
       router.push(`/farms/${farmId}`)
       router.refresh()
     } catch (err) {
@@ -193,7 +168,6 @@ export function FieldFormWithMap({
       setLoading(false)
     }
   }
-
   return (
     <div className="space-y-6">
       {/* Progress Indicator */}
@@ -220,7 +194,6 @@ export function FieldFormWithMap({
           {currentStep === 1 ? 'Select Fields' : 'Field Details'}
         </div>
       </div>
-
       {/* Step 1: Map Selection */}
       {currentStep === 1 && (
         <Card className="shadow-soft">
@@ -250,7 +223,6 @@ export function FieldFormWithMap({
                 </div>
               </div>
             </div>
-
             {/* Satellite Map */}
             {farmLatitude && farmLongitude && (
               <div className="border rounded-lg overflow-hidden">
@@ -264,7 +236,6 @@ export function FieldFormWithMap({
                 />
               </div>
             )}
-
             {/* Instructions */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-2">How to select fields:</h4>
@@ -275,7 +246,6 @@ export function FieldFormWithMap({
                 <li>• You can select multiple fields to create at once</li>
               </ul>
             </div>
-
             {/* Detected Fields List */}
             {detectedFields.length > 0 && (
               <div>
@@ -301,7 +271,6 @@ export function FieldFormWithMap({
                 </div>
               </div>
             )}
-
             {/* Manual Field */}
             {manualBoundary.length >= 3 && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -321,7 +290,6 @@ export function FieldFormWithMap({
                 </div>
               </div>
             )}
-
             {/* Error Message */}
             {error && currentStep === 1 && (
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -329,7 +297,6 @@ export function FieldFormWithMap({
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
-
             {/* Navigation */}
             <div className="flex justify-between pt-4">
               <Button
@@ -350,7 +317,6 @@ export function FieldFormWithMap({
           </CardContent>
         </Card>
       )}
-
       {/* Step 2: Field Details */}
       {currentStep === 2 && (
         <Card className="shadow-soft">
@@ -361,7 +327,6 @@ export function FieldFormWithMap({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            
             {/* Bulk Actions for Multiple Fields */}
             {selectedFields.length > 1 && (
               <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
@@ -433,10 +398,8 @@ export function FieldFormWithMap({
                 </p>
               </div>
             )}
-
             {selectedFields.map((field, index) => (
               <div key={field.id} className="p-4 border-2 border-sage-200 rounded-xl space-y-6 bg-gradient-to-br from-sage-50 to-cream-50">
-                
                 {/* Field Header with Visual Card */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -467,7 +430,6 @@ export function FieldFormWithMap({
                     {field.area.toFixed(1)} ha
                   </Badge>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor={`name-${field.id}`}>Field Name *</Label>
@@ -481,7 +443,6 @@ export function FieldFormWithMap({
                       disabled={loading}
                     />
                   </div>
-                  
                   <div>
                     <Label htmlFor={`crop-${field.id}`}>Crop Type *</Label>
                     <select
@@ -498,7 +459,6 @@ export function FieldFormWithMap({
                       ))}
                     </select>
                   </div>
-                  
                   <div>
                     <Label htmlFor={`soil-${field.id}`}>Soil Type (Optional)</Label>
                     <select
@@ -517,7 +477,6 @@ export function FieldFormWithMap({
                 </div>
               </div>
             ))}
-
             {/* Error Message */}
             {error && (
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
@@ -525,7 +484,6 @@ export function FieldFormWithMap({
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
-
             {/* Navigation */}
             <div className="flex justify-between pt-4">
               <Button

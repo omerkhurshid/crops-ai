@@ -1,5 +1,4 @@
 'use client';
-
 import { useSession } from '../../lib/auth-unified';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -13,16 +12,13 @@ import { Button } from '../../components/ui/button';
 import { TransactionModal } from '../../components/financial/transaction-modal';
 import { AlertCircle, Plus, DollarSign, TrendingUp, BarChart, MapPin, ArrowLeft } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/dashboard-layout';
-
 interface Farm {
   id: string;
   name: string;
   totalArea: number;
   location?: string;
 }
-
 type ViewLevel = 'user' | 'farm' | 'field'
-
 export default function FinancialPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -32,31 +28,24 @@ export default function FinancialPage() {
   const [loading, setLoading] = useState(true);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [transactionType, setTransactionType] = useState<'INCOME' | 'EXPENSE'>('INCOME');
-
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
       return;
     }
-
     if (status === 'authenticated' && session?.user) {
       fetchFarms();
     }
   }, [status, router, session]);
-
   const fetchFarms = async () => {
     try {
       const response = await fetch('/api/farms');
-
       if (!response.ok) {
-
         const errorText = await response.text();
         console.error('Error response:', errorText);
       } else {
         const data = await response.json();
-
         setFarms(data.farms || []);
-        
         // Auto-select first farm if only one exists
         if (data.farms?.length === 1) {
           setSelectedFarm(data.farms[0]);
@@ -68,11 +57,9 @@ export default function FinancialPage() {
       setLoading(false);
     }
   };
-
   const handleCreateFarm = () => {
     router.push('/farms/create');
   };
-
   const handleFarmSelect = async (farmId: string) => {
     const farm = farms.find(f => f.id === farmId);
     if (farm) {
@@ -80,23 +67,19 @@ export default function FinancialPage() {
       setViewLevel('farm');
     }
   };
-
   const handleBackToUserView = () => {
     setSelectedFarm(null);
     setViewLevel('user');
   };
-
   const handleAddTransaction = (type: 'INCOME' | 'EXPENSE' = 'INCOME') => {
     setTransactionType(type);
     setShowTransactionModal(true);
   };
-
   const handleTransactionAdded = () => {
     setShowTransactionModal(false);
     // Refresh data by updating component state
     fetchFarms();
   };
-
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
@@ -114,11 +97,9 @@ export default function FinancialPage() {
       </DashboardLayout>
     );
   }
-
   if (!session) {
     return null; // Will redirect to login
   }
-
   // No farms state
   if (farms.length === 0) {
     return (
@@ -130,16 +111,13 @@ export default function FinancialPage() {
                 <div className="w-20 h-20 bg-gradient-to-br from-golden/20 to-wheat/20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <DollarSign className="h-10 w-10 text-earth-700" />
                 </div>
-                
                 <ModernCardTitle className="text-3xl mb-4 text-sage-800">
                   Welcome to Financial Management
                 </ModernCardTitle>
-                
                 <ModernCardDescription className="text-lg max-w-lg mx-auto">
                   Track your farm's income and expenses, and get insights into profitability.
                 </ModernCardDescription>
               </ModernCardHeader>
-              
               <ModernCardContent className="p-8">
                 <ModernCard variant="soft" className="mb-8">
                   <ModernCardContent className="p-6">
@@ -155,7 +133,6 @@ export default function FinancialPage() {
                     </div>
                   </ModernCardContent>
                 </ModernCard>
-                
                 <InlineFloatingButton
                   onClick={handleCreateFarm}
                   icon={<Plus className="h-5 w-5" />}
@@ -172,7 +149,6 @@ export default function FinancialPage() {
       </DashboardLayout>
     );
   }
-
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
@@ -189,7 +165,6 @@ export default function FinancialPage() {
             </Button>
           </div>
         )}
-
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
@@ -200,7 +175,6 @@ export default function FinancialPage() {
             }
           </p>
         </div>
-
         {/* Content based on view level */}
         {viewLevel === 'user' && (
           <UserFinancialDashboard 
@@ -208,11 +182,9 @@ export default function FinancialPage() {
             onAddTransaction={() => handleAddTransaction('INCOME')}
           />
         )}
-
         {viewLevel === 'farm' && selectedFarm && (
           <FinancialDashboard farm={selectedFarm} />
         )}
-
         {/* Global Transaction Modal */}
         <TransactionModal
           isOpen={showTransactionModal}

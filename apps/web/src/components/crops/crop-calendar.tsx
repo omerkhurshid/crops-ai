@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -25,7 +24,6 @@ import { ensureArray } from '../../lib/utils'
 import { CropInfo, CropFamily, CROP_DATABASE, getCropById, getRotationCompatibility, calculatePlantingWindow, generatePlantingRecommendations } from '../../lib/crop-planning/crop-knowledge'
 import { analyzeWeatherForPlanting, generateIrrigationSchedule } from '../../lib/crop-planning/weather-integration'
 import { SuccessionPlanning } from './succession-planting'
-
 interface CropPlanning {
   id: string
   cropName: string
@@ -45,19 +43,15 @@ interface CropPlanning {
   weatherRecommendation?: any
   rotationScore?: number
 }
-
 interface CropCalendarProps {
   farmId: string
   year?: number
 }
-
 // Removed mock data - will fetch from database
-
 const months = [
   'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
   'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
 ]
-
 const statusColors = {
   planned: 'bg-sage-300',
   planted: 'bg-blue-500',
@@ -65,7 +59,6 @@ const statusColors = {
   harvesting: 'bg-earth-500',
   completed: 'bg-sage-500'
 }
-
 const statusIcons = {
   planned: <Calendar className="h-4 w-4" />,
   planted: <Circle className="h-4 w-4" />,
@@ -73,7 +66,6 @@ const statusIcons = {
   harvesting: <Scissors className="h-4 w-4" />,
   completed: <TrendingUp className="h-4 w-4" />
 }
-
 export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
   const [currentYear, setCurrentYear] = useState(year)
   const [selectedCrop, setSelectedCrop] = useState<string>('all')
@@ -92,7 +84,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
   const [weatherData, setWeatherData] = useState<any>(null)
   const [availableFields, setAvailableFields] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState<'timeline' | 'succession'>('timeline')
-
   // Fetch crop planning data and related information from API
   useEffect(() => {
     async function fetchData() {
@@ -103,7 +94,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           const cropsData = await cropsResponse.json()
           setPlannings(cropsData)
         }
-        
         // Fetch available fields for the farm
         const fieldsResponse = await fetch(`/api/farms?farmId=${farmId}`)
         if (fieldsResponse.ok) {
@@ -111,62 +101,50 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           const farm = Array.isArray(farmsData) ? farmsData.find(f => f.id === farmId) : farmsData
           setAvailableFields(farm?.fields || [])
         }
-        
         // Fetch current weather data for recommendations
         const weatherResponse = await fetch('/api/weather/current')
         if (weatherResponse.ok) {
           const weather = await weatherResponse.json()
           setWeatherData(weather)
         }
-        
       } catch (error) {
         console.error('Failed to fetch data:', error)
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [farmId, currentYear])
-
   // Filter plannings by year
   const yearPlannings = plannings.filter(planning => {
     const startYear = new Date(planning.startDate).getFullYear()
     const endYear = new Date(planning.harvestDate).getFullYear()
     return startYear === currentYear || endYear === currentYear
   })
-
   // Get unique crops and locations for filtering
   const uniqueCrops = Array.from(new Set(ensureArray(plannings).map(p => p.cropName)))
   const uniqueLocations = Array.from(new Set(ensureArray(plannings).map(p => p.location)))
-
   // Filter plannings based on selected filters
   const filteredPlannings = yearPlannings.filter(planning => {
     const matchesCrop = selectedCrop === 'all' || planning.cropName === selectedCrop
     const matchesLocation = selectedLocation === 'all' || planning.location === selectedLocation
     return matchesCrop && matchesLocation
   })
-
   const getTimelinePosition = (planning: CropPlanning) => {
     const startDate = new Date(planning.startDate)
     const endDate = new Date(planning.harvestDate)
-    
     // Calculate position within the year
     const yearStart = new Date(currentYear, 0, 1)
     const yearEnd = new Date(currentYear, 11, 31)
-    
     const startPos = Math.max(0, (startDate.getTime() - yearStart.getTime()) / (yearEnd.getTime() - yearStart.getTime())) * 100
     const endPos = Math.min(100, (endDate.getTime() - yearStart.getTime()) / (yearEnd.getTime() - yearStart.getTime())) * 100
     const width = Math.max(2, endPos - startPos)
-    
     return { left: startPos, width }
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
-
   const formatQuantity = (quantity: number, unit: string) => {
     if (quantity >= 1000000) {
       return `${(quantity / 1000000).toFixed(1)}M ${unit}`
@@ -175,21 +153,16 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
     }
     return `${quantity} ${unit}`
   }
-
   const getSeasonProgress = (planning: CropPlanning) => {
     const today = new Date()
     const startDate = new Date(planning.plantDate)
     const endDate = new Date(planning.harvestDate)
-    
     if (today < startDate) return 0
     if (today > endDate) return 100
-    
     const totalDuration = endDate.getTime() - startDate.getTime()
     const elapsedDuration = today.getTime() - startDate.getTime()
-    
     return Math.max(0, Math.min(100, Math.round((elapsedDuration / totalDuration) * 100)))
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -200,7 +173,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header Controls */}
@@ -232,7 +204,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </div>
           )}
         </div>
-
         <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
           {activeTab === 'timeline' && (
             <div className="flex flex-col sm:flex-row gap-2">
@@ -247,7 +218,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 ))}
               </SelectContent>
             </Select>
-
             <Select value={selectedLocation} onValueChange={setSelectedLocation}>
               <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="All Locations" />
@@ -261,7 +231,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </Select>
             </div>
           )}
-
           <div className="flex gap-2">
             {activeTab === 'timeline' && (
               <Button 
@@ -273,7 +242,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 <span className="sm:hidden">Add</span>
               </Button>
             )}
-
             {activeTab === 'timeline' && (
               <Button variant="outline" className="flex-1 sm:flex-none">
                 <Download className="h-4 w-4 mr-2" />
@@ -284,7 +252,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           </div>
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-sage-100 p-1 rounded-lg w-fit">
         <Button
@@ -306,7 +273,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           Succession Planning
         </Button>
       </div>
-
       {/* Conditional Content */}
       {activeTab === 'timeline' ? (
         <>
@@ -335,12 +301,10 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   </div>
                 </div>
               </div>
-
               {/* Planning Rows */}
               <div className="divide-y">
                 {filteredPlannings.length > 0 ? filteredPlannings.map((planning) => {
                   const timeline = getTimelinePosition(planning)
-                  
                   return (
                     <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-sage-50 transition-colors min-h-[80px]">
                       {/* Left Info Panel */}
@@ -355,7 +319,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                               {formatQuantity(planning.plantedQuantity, planning.unit)}
                             </p>
                           </div>
-
                           {/* Location */}
                           <div className="min-w-0">
                             <p className="text-xs font-semibold text-sage-700 truncate">{planning.location}</p>
@@ -363,7 +326,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                               <p className="text-xs text-sage-500 truncate">{planning.bedNumber}</p>
                             )}
                           </div>
-
                           {/* Key Dates */}
                           <div className="min-w-0">
                             <div className="text-xs text-sage-600 space-y-1">
@@ -373,7 +335,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                           </div>
                         </div>
                       </div>
-
                       {/* Timeline Section */}
                       <div className="col-span-7 p-2 relative">
                         <div className="relative h-16 bg-sage-50/30">
@@ -383,7 +344,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                               <div key={index} className="border-r border-sage-200/20"></div>
                             ))}
                           </div>
-                          
                           {/* Timeline Bar - FieldKit Enhanced */}
                           <div
                             className={`absolute top-2 h-12 rounded-lg ${statusColors[planning.status]} shadow-soft flex items-center px-2 text-white text-xs font-semibold transition-all hover:shadow-soft-lg cursor-pointer`}
@@ -417,7 +377,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               </div>
             </div>
           </div>
-
           {/* Mobile View */}
           <div className="md:hidden">
             {filteredPlannings.length > 0 ? (
@@ -437,7 +396,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         <span className="capitalize">{planning.status}</span>
                       </div>
                     </div>
-                    
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <div>
                         <span className="text-sage-500">Planted:</span>
@@ -469,7 +427,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <ModernCard variant="soft">
@@ -483,7 +440,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard variant="soft">
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
@@ -497,7 +453,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard variant="soft">
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
@@ -511,7 +466,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </div>
           </ModernCardContent>
         </ModernCard>
-
         <ModernCard variant="soft">
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
@@ -526,7 +480,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           </ModernCardContent>
         </ModernCard>
       </div>
-
       {/* Legend */}
       <ModernCard variant="soft">
         <ModernCardHeader>
@@ -543,7 +496,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Add Planting Form Modal */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -582,7 +534,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   </SelectContent>
                 </Select>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-sage-700 mb-1">
                   Variety
@@ -592,7 +543,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   className="w-full"
                 />
               </div>
-              
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-sage-700 mb-1">
@@ -623,7 +573,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   />
                 </div>
               </div>
-              
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-sage-700 mb-1">
@@ -660,7 +609,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   />
                 </div>
               </div>
-              
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-medium text-sage-700 mb-1">
@@ -691,7 +639,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   </Select>
                 </div>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-sage-700 mb-1">
                   Notes (Optional)
@@ -703,7 +650,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   onChange={(e) => setNotes(e.target.value)}
                 />
               </div>
-              
               {/* Weather-based recommendations */}
               {selectedCropId && weatherData && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -712,13 +658,11 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                     {(() => {
                       const crop = getCropById(selectedCropId)
                       if (!crop) return 'Select a crop to see recommendations'
-                      
                       const recommendation = generatePlantingRecommendations(
                         crop,
                         { latitude: 41.8781, longitude: -87.6298 }, // Default coordinates
                         weatherData
                       )
-                      
                       return (
                         <div>
                           <div className={`inline-flex px-2 py-1 rounded text-xs font-medium mb-2 ${
@@ -739,7 +683,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   </div>
                 </div>
               )}
-              
               <div className="flex gap-3 pt-4">
                 <Button 
                   variant="outline" 
@@ -755,7 +698,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                       alert('Please fill in all required fields')
                       return
                     }
-                    
                     try {
                       // Create crop planning entry
                       const cropData = {
@@ -769,7 +711,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         notes,
                         farmId
                       }
-                      
                       const response = await fetch('/api/crops', {
                         method: 'POST',
                         headers: {
@@ -777,11 +718,9 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         },
                         body: JSON.stringify(cropData)
                       })
-                      
                       if (response.ok) {
                         const result = await response.json()
                         alert(`Successfully planned ${getCropById(selectedCropId)?.name} planting in ${result.location}!`)
-                        
                         // Refresh the planning data
                         const cropsResponse = await fetch(`/api/crops?farmId=${farmId}&year=${currentYear}`)
                         if (cropsResponse.ok) {
@@ -792,7 +731,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         const error = await response.json()
                         throw new Error(error.error || 'Failed to create crop plan')
                       }
-                      
                       // Reset form
                       setSelectedCropId('')
                       setSelectedFieldId('')
@@ -802,7 +740,6 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                       setVariety('')
                       setNotes('')
                       setShowAddForm(false)
-                      
                     } catch (error) {
                       console.error('Error creating crop plan:', error)
                       alert('Error creating crop plan: ' + (error as Error).message)

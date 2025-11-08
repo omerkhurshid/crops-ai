@@ -1,11 +1,9 @@
 'use client'
-
 import React from 'react'
 import { cn } from '../../lib/utils'
 import { ModernCard, ModernCardContent } from './modern-card'
 import { TrafficLightStatus, getHealthStatus, getStressStatus } from './traffic-light-status'
 import { ChevronRight, TrendingUp, TrendingDown, Minus } from 'lucide-react'
-
 interface FarmerMetricCardProps {
   title: string
   value: string | number
@@ -23,7 +21,6 @@ interface FarmerMetricCardProps {
   className?: string
   variant?: 'default' | 'glass' | 'floating' | 'soft' | 'glow'
 }
-
 const trendConfig = {
   up: {
     icon: TrendingUp,
@@ -38,7 +35,6 @@ const trendConfig = {
     color: 'text-gray-500'
   }
 }
-
 export function FarmerMetricCard({
   title,
   value,
@@ -53,7 +49,6 @@ export function FarmerMetricCard({
   variant = 'floating'
 }: FarmerMetricCardProps) {
   const TrendIcon = trend ? trendConfig[trend.direction].icon : null
-
   return (
     <ModernCard 
       variant={variant} 
@@ -87,12 +82,10 @@ export function FarmerMetricCard({
               )}
             </div>
           </div>
-          
           {showMore && (
             <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-sage-600 transition-colors" />
           )}
         </div>
-
         {/* Main Value */}
         <div className="mb-4">
           <div className="flex items-baseline gap-2 mb-2">
@@ -105,14 +98,12 @@ export function FarmerMetricCard({
               </span>
             )}
           </div>
-          
           {subtitle && (
             <p className="text-sm text-sage-600 leading-relaxed">
               {subtitle}
             </p>
           )}
         </div>
-
         {/* Trend Indicator */}
         {trend && (
           <div className="flex items-center gap-2 pt-3 border-t border-sage-200/30">
@@ -138,7 +129,6 @@ export function FarmerMetricCard({
     </ModernCard>
   )
 }
-
 // Preset cards for common farming metrics
 export function CropHealthCard({
   healthScore,
@@ -154,7 +144,6 @@ export function CropHealthCard({
   className?: string
 }) {
   const status = getHealthStatus(healthScore)
-  
   return (
     <FarmerMetricCard
       title="Crop Health"
@@ -175,7 +164,6 @@ export function CropHealthCard({
     />
   )
 }
-
 export function StressLevelCard({
   stressPercentage,
   stressTrend = 0,
@@ -190,7 +178,6 @@ export function StressLevelCard({
   className?: string
 }) {
   const status = getStressStatus(stressPercentage)
-  
   return (
     <FarmerMetricCard
       title="Stress Level"
@@ -211,7 +198,6 @@ export function StressLevelCard({
     />
   )
 }
-
 export function YieldPotentialCard({
   currentYield,
   potentialYield,
@@ -229,7 +215,6 @@ export function YieldPotentialCard({
 }) {
   const gapPercentage = ((potentialYield - currentYield) / currentYield * 100)
   const status = gapPercentage <= 10 ? 'excellent' : gapPercentage <= 25 ? 'good' : 'warning'
-  
   return (
     <FarmerMetricCard
       title="Yield Potential"

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -19,15 +18,12 @@ import {
   AlertTriangle,
   Lock
 } from 'lucide-react'
-
 interface PremiumFeaturesProps {
   userTier?: 'free' | 'premium' | 'pro'
   onUpgrade?: (tier: string) => void
 }
-
 export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeaturesProps) {
   const [selectedTier, setSelectedTier] = useState<'premium' | 'pro'>('premium')
-
   const features = {
     free: [
       'Basic weather forecasts',
@@ -55,7 +51,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       'White-label options'
     ]
   }
-
   const benefits = [
     {
       icon: <Brain className="h-6 w-6 text-blue-600" />,
@@ -100,7 +95,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       tier: 'premium'
     }
   ]
-
   const pricing = {
     premium: {
       monthly: 8.99,
@@ -113,7 +107,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       savings: 17
     }
   }
-
   return (
     <div className="space-y-8">
       {/* Value Proposition Header */}
@@ -126,7 +119,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           Take your farming to the next level with AI-powered insights, advanced analytics, and personalized recommendations.
         </p>
       </div>
-
       {/* ROI Calculator */}
       <Alert className="bg-green-50 border-green-200">
         <TrendingUp className="h-4 w-4 text-green-600" />
@@ -135,7 +127,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           paying for the subscription 10x over in the first season.
         </AlertDescription>
       </Alert>
-
       {/* Feature Benefits Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {benefits.map((benefit, index) => (
@@ -165,7 +156,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           </ModernCard>
         ))}
       </div>
-
       {/* Pricing Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {/* Premium Tier */}
@@ -200,7 +190,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
                 </li>
               ))}
             </ul>
-            
             <Button 
               className="w-full mt-6 bg-sage-600 hover:bg-sage-700"
               onClick={() => {
@@ -213,7 +202,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
             </Button>
           </ModernCardContent>
         </ModernCard>
-
         {/* Pro Tier */}
         <ModernCard 
           variant={selectedTier === 'pro' ? 'floating' : 'soft'}
@@ -241,7 +229,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
                 </li>
               ))}
             </ul>
-            
             <Button 
               className="w-full mt-6 bg-purple-600 hover:bg-purple-700"
               onClick={() => {
@@ -255,7 +242,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           </ModernCardContent>
         </ModernCard>
       </div>
-
       {/* Current Free Limitations */}
       {userTier === 'free' && (
         <ModernCard variant="soft" className="border-yellow-200 bg-yellow-50">
@@ -287,7 +273,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Testimonials */}
       <div className="bg-sage-50 rounded-xl p-6">
         <h3 className="text-xl font-semibold text-sage-800 mb-4 text-center">What Farmers Are Saying</h3>
@@ -306,7 +291,6 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           </div>
         </div>
       </div>
-
       {/* Money Back Guarantee */}
       <div className="text-center">
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 inline-block">

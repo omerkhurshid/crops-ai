@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { getAuthenticatedUser } from '../../../../lib/auth/server';
-
 const regionalComparisonSchema = z.object({
   region: z.string(),
   cropType: z.string(),
@@ -15,7 +14,6 @@ const regionalComparisonSchema = z.object({
   farmSize: z.number().positive().optional(),
   comparisonType: z.enum(['basic', 'comprehensive']).default('basic')
 });
-
 interface RegionalBenchmarkData {
   region: string;
   farmCount: number;
@@ -47,7 +45,6 @@ interface RegionalBenchmarkData {
     priority: 'high' | 'medium' | 'low';
   }>;
 }
-
 // Regional benchmark data service
 class RegionalBenchmarkService {
   async getRegionalBenchmarks(params: any): Promise<RegionalBenchmarkData | null> {
@@ -57,76 +54,58 @@ class RegionalBenchmarkService {
       if (externalData) {
         return externalData;
       }
-
       // Try to fetch from USDA/NASS data
       const usdaData = await this.fetchUSDABenchmarkData(params);
       if (usdaData) {
         return usdaData;
       }
-
       // Try to fetch from agricultural extension services
       const extensionData = await this.fetchExtensionServiceData(params);
       if (extensionData) {
         return extensionData;
       }
-
     } catch (error) {
-
     }
-
     // Intelligent fallback using regional agricultural statistics
     return this.generateIntelligentRegionalBenchmarks(params);
   }
-
   private async fetchExternalBenchmarkData(params: any): Promise<RegionalBenchmarkData | null> {
     // In production, this would connect to services like:
     // - Farm Financial Database
     // - Commodity marketing cooperatives
     // - Agricultural analytics platforms
-    
     // For now, return null to trigger fallback
     return null;
   }
-
   private async fetchUSDABenchmarkData(params: any): Promise<RegionalBenchmarkData | null> {
     try {
       // USDA NASS API integration would go here
       // https://quickstats.nass.usda.gov/api
-      
       // For demonstration, simulate API unavailability
       return null;
     } catch (error) {
-
       return null;
     }
   }
-
   private async fetchExtensionServiceData(params: any): Promise<RegionalBenchmarkData | null> {
     try {
       // Agricultural extension service APIs would go here
       // - Land grant university data
       // - State agricultural departments
-      
       return null;
     } catch (error) {
-
       return null;
     }
   }
-
   private generateIntelligentRegionalBenchmarks(params: any): RegionalBenchmarkData {
     const { region, cropType, year, farmLocation, farmSize } = params;
-    
     // Use real agricultural statistics and regional data
     const regionalStats = this.getRegionalAgriculturalStats(region, cropType);
     const cropBenchmarks = this.getCropSpecificBenchmarks(cropType, region);
-    
     // Calculate farm-specific metrics based on size and location
     const farmMetrics = this.calculateFarmSpecificMetrics(farmSize, farmLocation, regionalStats, cropBenchmarks);
-    
     // Generate realistic percentile rankings
     const percentileRankings = this.calculateRealisticPercentiles(farmMetrics, regionalStats);
-    
     return {
       region,
       farmCount: regionalStats.totalFarms,
@@ -210,7 +189,6 @@ class RegionalBenchmarkService {
       benchmarkGoals: this.generateBenchmarkGoals(farmMetrics, cropBenchmarks, percentileRankings)
     };
   }
-
   private getRegionalAgriculturalStats(region: string, cropType: string) {
     // Real regional agricultural statistics
     const regionalData: Record<string, any> = {
@@ -257,10 +235,8 @@ class RegionalBenchmarkService {
         climateZone: 'humid_continental'
       }
     };
-
     return regionalData[region] || regionalData['Midwest Corn Belt'];
   }
-
   private getCropSpecificBenchmarks(cropType: string, region: string) {
     // Real crop benchmarks based on USDA and agricultural extension data
     const cropBenchmarks: Record<string, any> = {
@@ -310,15 +286,12 @@ class RegionalBenchmarkService {
         medianEnvironmental: 69.8
       }
     };
-
     return cropBenchmarks[cropType.toUpperCase()] || cropBenchmarks['CORN'];
   }
-
   private calculateFarmSpecificMetrics(farmSize: number = 250, farmLocation: any, regionalStats: any, cropBenchmarks: any) {
     // Calculate realistic farm metrics based on size and regional factors
     const sizeMultiplier = this.getFarmSizeMultiplier(farmSize, regionalStats.averageFarmSize);
     const locationMultiplier = this.getLocationMultiplier(farmLocation);
-    
     return {
       yield: cropBenchmarks.averageYield * sizeMultiplier * locationMultiplier * (0.85 + Math.random() * 0.3),
       revenuePerAcre: cropBenchmarks.averageRevenue * sizeMultiplier * (0.9 + Math.random() * 0.2),
@@ -328,7 +301,6 @@ class RegionalBenchmarkService {
       environmentalScore: cropBenchmarks.averageEnvironmental * (0.85 + Math.random() * 0.3)
     };
   }
-
   private getFarmSizeMultiplier(farmSize: number, averageSize: number): number {
     // Larger farms tend to have economies of scale
     const ratio = farmSize / averageSize;
@@ -337,13 +309,11 @@ class RegionalBenchmarkService {
     if (ratio < 0.5) return 0.90; // Small farms - 10% penalty
     return 1.0; // Average farms
   }
-
   private getLocationMultiplier(farmLocation: any): number {
     // Simplified location-based yield multiplier
     // In production, this would use detailed soil maps, climate data, etc.
     return 0.95 + Math.random() * 0.1; // ±5% variation
   }
-
   private calculateRealisticPercentiles(farmMetrics: any, regionalStats: any) {
     // Calculate realistic percentile rankings based on performance
     return {
@@ -355,21 +325,18 @@ class RegionalBenchmarkService {
       environmental: Math.max(25, Math.min(80, 50 + (Math.random() - 0.5) * 40))
     };
   }
-
   private calculateYieldTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     if (difference > 0.05) return 'up';
     if (difference < -0.05) return 'down';
     return 'stable';
   }
-
   private calculateRevenueTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     if (difference > 0.03) return 'up';
     if (difference < -0.03) return 'down';
     return 'stable';
   }
-
   private calculateCostTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     // For costs, lower is better, so invert the logic
@@ -377,37 +344,31 @@ class RegionalBenchmarkService {
     if (difference > 0.03) return 'down'; // Higher costs = negative trend
     return 'stable';
   }
-
   private calculateMarginTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     if (difference > 0.1) return 'up';
     if (difference < -0.1) return 'down';
     return 'stable';
   }
-
   private calculateEfficiencyTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     if (difference > 0.05) return 'up';
     if (difference < -0.05) return 'down';
     return 'stable';
   }
-
   private calculateEnvironmentalTrend(farmValue: number, regionAverage: number): 'up' | 'down' | 'stable' {
     const difference = (farmValue - regionAverage) / regionAverage;
     if (difference > 0.08) return 'up';
     if (difference < -0.08) return 'down';
     return 'stable';
   }
-
   private calculateTrendPercentage(farmValue: number, regionAverage: number): number {
     return Math.abs(((farmValue - regionAverage) / regionAverage) * 100);
   }
-
   private calculateOverallRanking(percentiles: any, totalFarms: number): number {
     const avgPercentile = Object.values(percentiles).reduce((sum: number, p: any) => sum + p, 0) / Object.keys(percentiles).length;
     return Math.max(1, Math.floor(totalFarms * (1 - avgPercentile / 100)));
   }
-
   private getPerformanceCategory(percentiles: any): string {
     const avgPercentile = Object.values(percentiles).reduce((sum: number, p: any) => sum + p, 0) / Object.keys(percentiles).length;
     if (avgPercentile >= 75) return 'Top Performer';
@@ -416,42 +377,34 @@ class RegionalBenchmarkService {
     if (avgPercentile >= 25) return 'Below Average';
     return 'Needs Improvement';
   }
-
   private generateRegionalInsights(farmMetrics: any, cropBenchmarks: any, percentiles: any, region: string): string[] {
     const insights: string[] = [];
-
     // Yield insights
     if (percentiles.yield > 70) {
       insights.push(`Your yield performance is excellent for the ${region} region - ranking in top 30%`);
     } else if (percentiles.yield < 40) {
       insights.push(`Yield improvement opportunity exists - consider soil testing and precision nutrient management`);
     }
-
     // Cost insights
     if (percentiles.cost > 60) { // Remember: lower cost percentile is better
       insights.push(`Your production costs are well-controlled compared to regional peers`);
     } else if (percentiles.cost < 40) {
       insights.push(`Production costs above regional average - review input pricing and application rates`);
     }
-
     // Margin insights
     if (percentiles.margin > 65) {
       insights.push(`Strong profitability performance - your operation is financially efficient`);
     } else if (percentiles.margin < 35) {
       insights.push(`Profit margins below regional average - focus on cost optimization and yield improvement`);
     }
-
     // Efficiency insights
     if (percentiles.efficiency < 50) {
       insights.push(`Input use efficiency could be improved with precision agriculture technologies`);
     }
-
     return insights.slice(0, 4);
   }
-
   private generateBenchmarkGoals(farmMetrics: any, cropBenchmarks: any, percentiles: any): Array<any> {
     const goals: Array<any> = [];
-
     // Only create goals for metrics below 75th percentile
     const metricsToImprove = [
       { name: 'Crop Yield', value: farmMetrics.yield, target: cropBenchmarks.averageYield * 1.1, percentile: percentiles.yield, unit: 'bu/acre' },
@@ -460,7 +413,6 @@ class RegionalBenchmarkService {
       { name: 'Net Profit Margin', value: farmMetrics.profitMargin, target: cropBenchmarks.averageMargin * 1.15, percentile: percentiles.margin, unit: '%' },
       { name: 'Input Use Efficiency', value: farmMetrics.inputEfficiency, target: cropBenchmarks.averageEfficiency * 1.08, percentile: percentiles.efficiency, unit: 'score' }
     ];
-
     return metricsToImprove
       .filter(m => m.percentile < 75)
       .slice(0, 3)
@@ -468,9 +420,7 @@ class RegionalBenchmarkService {
         const improvement = metric.isLowerBetter 
           ? metric.value - metric.target  // Cost reduction
           : metric.target - metric.value; // Value increase
-        
         const priority: 'high' | 'medium' | 'low' = metric.percentile < 25 ? 'high' : metric.percentile < 50 ? 'medium' : 'low';
-        
         return {
           metric: metric.name,
           currentValue: metric.value,
@@ -483,33 +433,25 @@ class RegionalBenchmarkService {
       });
   }
 }
-
 const regionalBenchmarkService = new RegionalBenchmarkService();
-
 // POST /api/benchmarks/regional-comparison
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const validation = regionalComparisonSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const params = validation.data;
-      
       const benchmarkData = await regionalBenchmarkService.getRegionalBenchmarks(params);
-
       if (!benchmarkData) {
         throw new ValidationError('Unable to generate regional benchmark data');
       }
-
       return createSuccessResponse({
         data: {
           success: true,
@@ -527,24 +469,20 @@ export const POST = apiMiddleware.protected(
         message: `Regional benchmark data generated for ${params.cropType} in ${params.region}`,
         action: 'regional_benchmark_analysis'
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/benchmarks/regional-comparison?region=Midwest&crop=corn&year=2024
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const user = await getAuthenticatedUser(request);
-      
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const params = {
         region: searchParams.get('region') || 'Midwest Corn Belt',
         cropType: searchParams.get('crop') || 'CORN',
@@ -556,14 +494,11 @@ export const GET = apiMiddleware.protected(
         farmSize: searchParams.get('size') ? parseFloat(searchParams.get('size')!) : undefined,
         comparisonType: (searchParams.get('type') as any) || 'basic'
       };
-
       const validation = regionalComparisonSchema.safeParse(params);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const benchmarkData = await regionalBenchmarkService.getRegionalBenchmarks(validation.data);
-
       return createSuccessResponse({
         data: {
           success: true,
@@ -572,7 +507,6 @@ export const GET = apiMiddleware.protected(
         message: `Regional benchmark data retrieved for ${params.cropType} in ${params.region}`,
         action: 'regional_benchmark_query'
       });
-
     } catch (error) {
       return handleApiError(error);
     }

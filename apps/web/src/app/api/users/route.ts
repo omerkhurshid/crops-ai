@@ -3,7 +3,6 @@ import { prisma } from '../../../lib/prisma'
 import { createSuccessResponse } from '../../../lib/api/errors'
 import { validateRequestBody, validateQueryParams, createUserSchema, paginationSchema } from '../../../lib/api/validation'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
-
 // GET /api/users - List users with pagination
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
@@ -13,10 +12,8 @@ export const GET = apiMiddleware.protected(
       Object.fromEntries(searchParams)
     )
     const { page = 1, limit = 10, sortBy, sortOrder = 'desc' } = pagination
-
     const skip = (page - 1) * limit
     const orderBy = sortBy ? { [sortBy]: sortOrder as 'asc' | 'desc' } : { createdAt: 'desc' as const }
-
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         skip,
@@ -39,7 +36,6 @@ export const GET = apiMiddleware.protected(
       }),
       prisma.user.count()
     ])
-
     return createSuccessResponse({
       data: users,
       pagination: {
@@ -51,13 +47,11 @@ export const GET = apiMiddleware.protected(
     })
   })
 )
-
 // POST /api/users - Create new user
 export const POST = apiMiddleware.admin(
   withMethods(['POST'], async (request: AuthenticatedRequest) => {
     const body = await request.json()
     const userData = validateRequestBody(createUserSchema, body)
-
     const user = await prisma.user.create({
       data: userData,
       select: {
@@ -69,7 +63,6 @@ export const POST = apiMiddleware.admin(
         updatedAt: true
       }
     })
-
     return createSuccessResponse(user, 201)
   })
 )

@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -14,7 +13,6 @@ import {
   Milk, Egg, ShieldCheck, AlertTriangle
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
 interface LivestockLogEntry {
   id: string
   date: string
@@ -36,13 +34,11 @@ interface LivestockLogEntry {
   tags: string[]
   createdBy: string
 }
-
 interface LivestockLoggingModuleProps {
   farmId: string
   livestockType?: string
   animalId?: string
 }
-
 const LOG_TYPES = [
   { id: 'health', label: 'Health Check', icon: Heart, color: 'bg-red-100 text-red-800' },
   { id: 'vaccination', label: 'Vaccination', icon: Syringe, color: 'bg-blue-100 text-blue-800' },
@@ -52,7 +48,6 @@ const LOG_TYPES = [
   { id: 'production', label: 'Production', icon: Milk, color: 'bg-yellow-100 text-yellow-800' },
   { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-gray-100 text-gray-800' }
 ]
-
 export function LivestockLoggingModule({ farmId, livestockType, animalId }: LivestockLoggingModuleProps) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [selectedLogType, setSelectedLogType] = useState<string>('')
@@ -101,7 +96,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
       createdBy: 'Maria Rodriguez'
     }
   ])
-
   const [newLogEntry, setNewLogEntry] = useState<Partial<LivestockLogEntry>>({
     date: new Date().toISOString().split('T')[0],
     type: 'observation',
@@ -110,10 +104,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
     animalIds: [],
     tags: []
   })
-
   const handleAddLogEntry = () => {
     if (!newLogEntry.title || !newLogEntry.description) return
-
     const entry: LivestockLogEntry = {
       id: Date.now().toString(),
       date: newLogEntry.date || new Date().toISOString().split('T')[0],
@@ -130,7 +122,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
       tags: newLogEntry.tags || [],
       createdBy: 'Current User'
     }
-
     setLogEntries([entry, ...logEntries])
     setNewLogEntry({
       date: new Date().toISOString().split('T')[0],
@@ -142,15 +133,12 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
     })
     setShowAddForm(false)
   }
-
   const getLogTypeConfig = (type: string) => {
     return LOG_TYPES.find(t => t.id === type) || LOG_TYPES[6]
   }
-
   const formatCost = (cost?: number) => {
     return cost ? `$${cost.toLocaleString()}` : 'N/A'
   }
-
   const getActivityTemplate = (type: string) => {
     const templates = {
       health: {
@@ -184,20 +172,17 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
         suggestions: ['production', 'output', 'quality']
       }
     }
-    
     return templates[type as keyof typeof templates] || {
       title: 'Livestock Activity',
       description: '',
       suggestions: ['general', 'livestock-care']
     }
   }
-
   const filteredEntries = logEntries.filter(entry => {
     if (livestockType && entry.livestockId !== livestockType) return false
     if (animalId && !entry.animalIds.includes(animalId)) return false
     return true
   })
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -206,7 +191,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           <h2 className="text-2xl font-bold text-sage-800 mb-2">Livestock Activity Log</h2>
           <p className="text-sage-600">Track health, breeding, feeding, and production activities</p>
         </div>
-        
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
@@ -218,7 +202,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           </Button>
         </div>
       </div>
-
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {LOG_TYPES.slice(0, 4).map(type => {
@@ -226,7 +209,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           const totalCost = filteredEntries
             .filter(e => e.type === type.id && e.cost)
             .reduce((sum, e) => sum + (e.cost || 0), 0)
-          
           return (
             <ModernCard key={type.id} className="p-4">
               <div className="flex items-center justify-between mb-2">
@@ -241,7 +223,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           )
         })}
       </div>
-
       {/* Add Entry Form */}
       {showAddForm && (
         <ModernCard>
@@ -258,7 +239,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                   onChange={(e) => setNewLogEntry({...newLogEntry, date: e.target.value})}
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Activity Type</label>
                 <Select 
@@ -290,7 +270,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 </Select>
               </div>
             </div>
-            
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Title</label>
               <Input
@@ -299,7 +278,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 placeholder="Brief description of the activity"
               />
             </div>
-            
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Description</label>
               <Textarea
@@ -309,7 +287,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 rows={4}
               />
             </div>
-
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Animal IDs (comma-separated)</label>
               <Input
@@ -321,7 +298,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 placeholder="e.g., cow_001, cow_023"
               />
             </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Quantity</label>
@@ -332,7 +308,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                   placeholder="Amount"
                 />
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Unit</label>
                 <Select 
@@ -353,7 +328,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                   </SelectContent>
                 </Select>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium mb-2">Cost ($)</label>
                 <Input
@@ -364,7 +338,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 />
               </div>
             </div>
-
             {/* Vitals Section */}
             {(newLogEntry.type === 'health' || newLogEntry.type === 'treatment') && (
               <div className="mb-4 p-4 bg-sage-50 rounded-lg">
@@ -423,7 +396,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 </div>
               </div>
             )}
-            
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setShowAddForm(false)}>
                 Cancel
@@ -436,19 +408,16 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Log Entries */}
       <div className="space-y-4">
         {filteredEntries.map((entry) => {
           const typeConfig = getLogTypeConfig(entry.type)
-          
           return (
             <ModernCard key={entry.id} className="overflow-hidden">
               <ModernCardContent className="p-0">
                 <div className="flex">
                   {/* Timeline indicator */}
                   <div className={cn('w-1 flex-shrink-0', typeConfig.color.split(' ')[0])}></div>
-                  
                   <div className="flex-1 p-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
                       <div className="flex items-start gap-3">
@@ -474,7 +443,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                           </div>
                         </div>
                       </div>
-                      
                       <div className="flex items-center gap-2">
                         <Badge className={typeConfig.color}>{typeConfig.label}</Badge>
                         {entry.animalIds.length > 0 && (
@@ -485,10 +453,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                         </Button>
                       </div>
                     </div>
-                    
                     <div className="ml-11">
                       <p className="text-sage-700 mb-3 whitespace-pre-wrap">{entry.description}</p>
-                      
                       {(entry.quantity || entry.vitals) && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
                           {entry.quantity && (
@@ -521,14 +487,12 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                           )}
                         </div>
                       )}
-
                       {entry.animalIds.length > 0 && (
                         <div className="mb-3">
                           <span className="text-sm text-sage-500">Animals: </span>
                           <span className="text-sm font-medium">{entry.animalIds.join(', ')}</span>
                         </div>
                       )}
-                      
                       {entry.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {entry.tags.map((tag, index) => (
@@ -545,7 +509,6 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
             </ModernCard>
           )
         })}
-        
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
             <FileText className="h-12 w-12 text-sage-300 mx-auto mb-4" />

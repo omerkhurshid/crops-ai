@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -27,13 +26,11 @@ import {
   SuccessionPlan,
   SuccessionPlanting
 } from '../../lib/crop-planning/succession-planting'
-
 interface SuccessionPlanningProps {
   farmId: string
   availableFields: any[]
   weatherData?: any
 }
-
 export function SuccessionPlanning({ farmId, availableFields, weatherData }: SuccessionPlanningProps) {
   const [selectedCrop, setSelectedCrop] = useState<string>('')
   const [selectedField, setSelectedField] = useState<string>('')
@@ -41,25 +38,19 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
   const [successionPlan, setSuccessionPlan] = useState<SuccessionPlan | null>(null)
   const [showRecommendations, setShowRecommendations] = useState(false)
   const [loading, setLoading] = useState(false)
-
   // Get succession-suitable crops from our database
   const successionCrops = CROP_DATABASE.filter(crop => 
     SUCCESSION_SUITABLE_CROPS.includes(crop.id)
   )
-
   const handleGeneratePlan = async () => {
     if (!selectedCrop || !selectedField || !harvestWeeks) return
-
     setLoading(true)
     try {
       const crop = getCropById(selectedCrop)
       const field = availableFields.find(f => f.id === selectedField)
-      
       if (!crop || !field) return
-
       // Use a default climate zone (would be determined by farm location)
       const climateZone: ClimateZone = CLIMATE_ZONES.find(z => z.zone === '6a') || CLIMATE_ZONES[0]
-      
       const plan = calculateSuccessionSchedule(
         crop,
         field.area, // Use field area in hectares
@@ -67,11 +58,9 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
         climateZone,
         weatherData
       )
-
       plan.fieldId = selectedField
       setSuccessionPlan(plan)
       setShowRecommendations(true)
-      
     } catch (error) {
       console.error('Error generating succession plan:', error)
       alert('Error generating plan: ' + (error as Error).message)
@@ -79,7 +68,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
       setLoading(false)
     }
   }
-
   const getStatusColor = (status: SuccessionPlanting['status']) => {
     switch (status) {
       case 'planned': return 'bg-blue-100 text-blue-800'
@@ -90,7 +78,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
       default: return 'bg-gray-100 text-gray-800'
     }
   }
-
   const getRiskColor = (risk: 'low' | 'moderate' | 'high') => {
     switch (risk) {
       case 'low': return 'text-green-600'
@@ -99,18 +86,15 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
       default: return 'text-gray-600'
     }
   }
-
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric'
     })
   }
-
   const formatArea = (area: number) => {
     return area < 1 ? `${(area * 10000).toFixed(0)} m²` : `${area.toFixed(2)} ha`
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -123,7 +107,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
           <p className="text-sage-600 mt-1">Plan continuous harvests with automated scheduling</p>
         </div>
       </div>
-
       {/* Planning Form */}
       <ModernCard variant="floating">
         <ModernCardHeader>
@@ -151,7 +134,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-sage-700 mb-1">
                 Field
@@ -169,7 +151,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-sage-700 mb-1">
                 Harvest Duration (weeks)
@@ -184,7 +165,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
               />
             </div>
           </div>
-
           <Button 
             className="w-full bg-sage-600 hover:bg-sage-700"
             onClick={handleGeneratePlan}
@@ -194,7 +174,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
           </Button>
         </ModernCardContent>
       </ModernCard>
-
       {/* Recommendations */}
       {showRecommendations && selectedCrop && (
         <ModernCard variant="soft">
@@ -208,14 +187,12 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
             {(() => {
               const field = availableFields.find(f => f.id === selectedField)
               if (!field) return null
-
               const recommendations = generateSuccessionRecommendations(
                 selectedCrop,
                 { latitude: 41.8781, longitude: -87.6298 }, // Default coordinates
                 field.area,
                 parseInt(harvestWeeks)
               )
-
               return (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {recommendations.recommendations.map((rec, index) => (
@@ -235,7 +212,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                           <Badge className="bg-sage-600 text-white">Recommended</Badge>
                         )}
                       </div>
-                      
                       <div className="space-y-2 text-sm">
                         <div className="text-sage-700">
                           <span className="font-medium">Interval:</span> Every {rec.interval} days
@@ -246,7 +222,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                         <div className="text-sage-700">
                           <span className="font-medium">Area each:</span> {formatArea(rec.areaPerPlanting)}
                         </div>
-                        
                         <div className="mt-3">
                           <h5 className="font-medium text-green-700 mb-1">Benefits:</h5>
                           <ul className="space-y-1">
@@ -255,7 +230,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                             ))}
                           </ul>
                         </div>
-                        
                         <div className="mt-3">
                           <h5 className="font-medium text-orange-700 mb-1">Considerations:</h5>
                           <ul className="space-y-1">
@@ -273,7 +247,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Generated Plan */}
       {successionPlan && (
         <div className="space-y-6">
@@ -314,7 +287,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Planting Schedule */}
           <ModernCard variant="floating">
             <ModernCardHeader>
@@ -341,7 +313,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                           </p>
                         </div>
                       </div>
-                      
                       <div className="flex items-center gap-2">
                         <Badge className={getStatusColor(planting.status)}>
                           {planting.status}
@@ -353,7 +324,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                         )}
                       </div>
                     </div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3 text-sm">
                       <div>
                         <span className="text-sage-500">Plant Date:</span>
@@ -377,7 +347,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Resource Requirements */}
           <ModernCard variant="soft">
             <ModernCardHeader>
@@ -402,7 +371,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                     <Clock className="h-6 w-6 text-green-600" />
@@ -417,7 +385,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                     <Droplets className="h-6 w-6 text-blue-600" />
@@ -435,7 +402,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Harvest Timeline */}
           <ModernCard variant="floating">
             <ModernCardHeader>
@@ -452,7 +418,6 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                   .map((week, index) => {
                     const isPeak = successionPlan.harvestSchedule.peakHarvestWeeks
                       .some(peakDate => peakDate.getTime() === week.week.getTime())
-                    
                     return (
                       <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
                         <div className="flex items-center gap-3">

@@ -4,15 +4,12 @@
  * Unlimited area, free tier with 250k requests/month, 10m resolution
  * More complex but infinitely scalable
  */
-
 // Logger replaced with console for local development
-
 export interface GEEConfig {
   serviceAccountEmail: string
   privateKey: string
   projectId: string
 }
-
 export interface FieldAnalysisRequest {
   fieldId: string
   geometry: {
@@ -24,7 +21,6 @@ export interface FieldAnalysisRequest {
   cropType?: string
   plantingDate?: string
 }
-
 export interface GEEAnalysisResult {
   fieldId: string
   analysisDate: Date
@@ -80,15 +76,12 @@ export interface GEEAnalysisResult {
     evi: string
   }
 }
-
 export class GoogleEarthEngineService {
   private config: GEEConfig
   private readonly GEE_API_ENDPOINT = 'https://earthengine.googleapis.com'
-
   constructor(config: GEEConfig) {
     this.config = config
   }
-
   /**
    * Analyze field health using Google Earth Engine
    * This is the main function farmers will use
@@ -97,26 +90,20 @@ export class GoogleEarthEngineService {
     try {
       // 1. Generate Earth Engine JavaScript code
       const eeScript = this.generateEEScript(request)
-      
       // 2. Execute the script on Google's servers
       const rawResults = await this.executeEEScript(eeScript)
-      
       // 3. Process results and generate insights
       const analysis = this.processEEResults(rawResults, request)
-      
       // 4. Generate farmer-friendly recommendations
       const recommendations = this.generateFarmerRecommendations(analysis, request)
-      
       // Validate that we have real satellite data
       if (!analysis.satelliteData || !analysis.healthAssessment) {
         throw new Error('Google Earth Engine analysis failed: No satellite data returned. Check GEE API configuration and field coordinates.')
       }
-
       // Validate essential NDVI data 
       if (!analysis.satelliteData.ndvi || analysis.satelliteData.ndvi.mean === 0) {
         throw new Error('Invalid NDVI data received from Google Earth Engine. Field may be outside satellite coverage area.')
       }
-
       return {
         fieldId: request.fieldId || 'unknown',
         analysisDate: new Date(),
@@ -142,13 +129,11 @@ export class GoogleEarthEngineService {
         },
         recommendations
       }
-      
     } catch (error) {
       console.error('GEE analysis failed', error)
       throw new Error(`Satellite analysis failed: ${error}`)
     }
   }
-
   /**
    * Generate Earth Engine JavaScript for field analysis
    * This runs on Google's servers, not locally
@@ -157,19 +142,16 @@ export class GoogleEarthEngineService {
     return `
       // Define field geometry
       var fieldGeometry = ee.Geometry.Polygon(${JSON.stringify(request.geometry.coordinates)});
-      
       // Load Sentinel-2 collection
       var sentinel2 = ee.ImageCollection('COPERNICUS/S2_SR')
         .filterDate('${request.startDate}', '${request.endDate}')
         .filterBounds(fieldGeometry)
         .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
         .sort('system:time_start', false);
-      
       // Function to calculate vegetation indices
       var addIndices = function(image) {
         // NDVI = (NIR - Red) / (NIR + Red)
         var ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI');
-        
         // EVI = 2.5 * (NIR - Red) / (NIR + 6 * Red - 7.5 * Blue + 1)
         var evi = image.expression(
           '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
@@ -179,7 +161,6 @@ export class GoogleEarthEngineService {
             'BLUE': image.select('B2')
           }
         ).rename('EVI');
-        
         // SAVI = (NIR - Red) / (NIR + Red + L) * (1 + L), L = 0.5
         var savi = image.expression(
           '((NIR - RED) / (NIR + RED + 0.5)) * 1.5',
@@ -188,19 +169,14 @@ export class GoogleEarthEngineService {
             'RED': image.select('B4')
           }
         ).rename('SAVI');
-        
         // NDWI = (Green - NIR) / (Green + NIR) - moisture content
         var ndwi = image.normalizedDifference(['B3', 'B8']).rename('NDWI');
-        
         return image.addBands([ndvi, evi, savi, ndwi]);
       };
-      
       // Apply indices to collection
       var withIndices = sentinel2.map(addIndices);
-      
       // Get the most recent clear image
       var latestImage = withIndices.first();
-      
       // Calculate statistics for the field
       var stats = latestImage.select(['NDVI', 'EVI', 'SAVI', 'NDWI']).reduceRegion({
         reducer: ee.Reducer.mean()
@@ -212,7 +188,6 @@ export class GoogleEarthEngineService {
         scale: 10,
         maxPixels: 1e9
       });
-      
       // Get image metadata
       var metadata = {
         acquisitionDate: latestImage.date().format('YYYY-MM-dd'),
@@ -225,7 +200,6 @@ export class GoogleEarthEngineService {
           maxPixels: 1e9
         }).get('NDVI')
       };
-      
       // Calculate historical comparison (same time last year)
       var lastYear = ee.ImageCollection('COPERNICUS/S2_SR')
         .filterDate(ee.Date('${request.startDate}').advance(-1, 'year'), 
@@ -233,14 +207,12 @@ export class GoogleEarthEngineService {
         .filterBounds(fieldGeometry)
         .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30))
         .map(addIndices);
-      
       var lastYearNDVI = lastYear.select('NDVI').mean().reduceRegion({
         reducer: ee.Reducer.mean(),
         geometry: fieldGeometry,
         scale: 10,
         maxPixels: 1e9
       });
-      
       // Export results
       var results = {
         stats: stats,
@@ -249,12 +221,10 @@ export class GoogleEarthEngineService {
         fieldArea: fieldGeometry.area().divide(10000), // hectares
         processingDate: ee.Date(Date.now()).format('YYYY-MM-dd HH:mm:ss')
       };
-      
       // Return as JSON
       print(JSON.stringify(results));
     `
   }
-
   /**
    * Execute Earth Engine script using REST API
    */
@@ -262,7 +232,6 @@ export class GoogleEarthEngineService {
     try {
       // Get OAuth token
       const token = await this.getGEEAccessToken()
-      
       // Execute script
       const response = await fetch(`${this.GEE_API_ENDPOINT}/v1alpha/projects/${this.config.projectId}:run`, {
         method: 'POST',
@@ -275,25 +244,20 @@ export class GoogleEarthEngineService {
           returnValue: true
         })
       })
-
       if (!response.ok) {
         throw new Error(`GEE API error: ${response.statusText}`)
       }
-
       return await response.json()
-      
     } catch (error) {
       console.error('GEE script execution failed', error)
       throw error
     }
   }
-
   /**
    * Process raw GEE results into farmer-friendly data
    */
   private processEEResults(rawResults: any, request: FieldAnalysisRequest): Partial<GEEAnalysisResult> {
     const stats = rawResults.stats
-    
     // Extract NDVI statistics
     const ndviStats = {
       mean: stats.NDVI_mean || 0,
@@ -304,7 +268,6 @@ export class GoogleEarthEngineService {
       percentile25: stats.NDVI_p25 || 0,
       percentile75: stats.NDVI_p75 || 0
     }
-
     // Calculate health score (0-100)
     let healthScore = 0
     if (ndviStats.mean > 0.8) healthScore = 95
@@ -312,7 +275,6 @@ export class GoogleEarthEngineService {
     else if (ndviStats.mean > 0.4) healthScore = 65
     else if (ndviStats.mean > 0.2) healthScore = 40
     else healthScore = 20
-
     // Determine stress level
     let stressLevel: 'none' | 'low' | 'moderate' | 'high' | 'severe'
     if (healthScore > 85) stressLevel = 'none'
@@ -320,11 +282,9 @@ export class GoogleEarthEngineService {
     else if (healthScore > 50) stressLevel = 'moderate'
     else if (healthScore > 30) stressLevel = 'high'
     else stressLevel = 'severe'
-
     // Calculate trend vs historical
     const historicalNDVI = rawResults.historicalNDVI || ndviStats.mean
     const ndviChange = ndviStats.mean - historicalNDVI
-
     return {
       fieldId: request.fieldId,
       satelliteData: {
@@ -365,7 +325,6 @@ export class GoogleEarthEngineService {
       }
     }
   }
-
   /**
    * Generate actionable recommendations for farmers
    */
@@ -374,9 +333,7 @@ export class GoogleEarthEngineService {
     const ndvi = analysis.satelliteData?.ndvi
     const health = analysis.healthAssessment
     const trends = analysis.trends
-
     if (!ndvi || !health) return ['Unable to generate recommendations - insufficient data']
-
     // Health-based recommendations
     if (health.stressLevel === 'severe') {
       recommendations.push('🚨 Severe stress detected - immediate field inspection recommended')
@@ -386,27 +343,22 @@ export class GoogleEarthEngineService {
     } else if (health.stressLevel === 'low' || health.stressLevel === 'none') {
       recommendations.push('✅ Crop health looks good - maintain current management practices')
     }
-
     // Variability recommendations
     if (ndvi.std > 0.15) {
       recommendations.push('📊 High variability detected - scout for pest, disease, or nutrient issues')
     }
-
     // Trend recommendations  
     if (trends?.seasonalTrend === 'declining') {
       recommendations.push('📉 Declining trend detected - investigate potential causes')
     } else if (trends?.seasonalTrend === 'improving') {
       recommendations.push('📈 Positive trend - current practices are working well')
     }
-
     // Timing recommendations based on NDVI
     if (ndvi.mean > 0.7) {
       recommendations.push('🌱 Peak growing season - optimal time for monitoring and management')
     }
-
     return recommendations
   }
-
   private getHealthCategory(score: number): 'excellent' | 'good' | 'fair' | 'poor' | 'critical' {
     if (score > 90) return 'excellent'
     if (score > 75) return 'good'
@@ -414,17 +366,13 @@ export class GoogleEarthEngineService {
     if (score > 25) return 'poor'
     return 'critical'
   }
-
   private calculateConfidence(results: any): number {
     // Base confidence on data quality factors
     let confidence = 100
-    
     if (results.metadata.cloudCoverage > 10) confidence -= 20
     if (results.metadata.cloudCoverage > 25) confidence -= 30
-    
     return Math.max(50, confidence)
   }
-
   private calculatePercentile(current: number, historical: number): number {
     // Simplified percentile calculation
     if (current > historical * 1.2) return 90
@@ -433,7 +381,6 @@ export class GoogleEarthEngineService {
     if (current > historical * 0.8) return 25
     return 10
   }
-
   /**
    * Get Google OAuth token for Earth Engine API
    */
@@ -443,7 +390,6 @@ export class GoogleEarthEngineService {
     throw new Error('OAuth implementation required - see Google Earth Engine authentication docs')
   }
 }
-
 /**
  * Example usage for Cropple.ai
  */
@@ -458,20 +404,16 @@ export async function analyzeCroppleField(
     const { getConfig } = require('../config/environment');
     config = getConfig();
   }
-  
   if (!config) {
     throw new Error('Google Earth Engine service can only be used server-side');
   }
-  
   const geeService = new GoogleEarthEngineService({
     serviceAccountEmail: config.GEE_SERVICE_ACCOUNT_EMAIL!,
     privateKey: config.GEE_PRIVATE_KEY!,
     projectId: config.GEE_PROJECT_ID!
   })
-
   const endDate = new Date()
   const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
-
   return await geeService.analyzeFieldHealth({
     fieldId,
     geometry: {

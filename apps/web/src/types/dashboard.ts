@@ -2,7 +2,6 @@
  * Dashboard Data Types
  * Properly typed interfaces for dashboard components
  */
-
 export interface WeatherConditions {
   temperature: number
   condition: string
@@ -11,7 +10,6 @@ export interface WeatherConditions {
   precipitation: number
   icon?: string
 }
-
 export interface WeatherAlert {
   id: string
   type: 'warning' | 'watch' | 'advisory'
@@ -22,7 +20,6 @@ export interface WeatherAlert {
   endTime: Date
   affectedArea?: string
 }
-
 export interface WeatherForecast {
   date: Date
   high: number
@@ -31,13 +28,11 @@ export interface WeatherForecast {
   precipitation: number
   icon?: string
 }
-
 export interface WeatherData {
   current: WeatherConditions
   alerts: WeatherAlert[]
   forecast: WeatherForecast[]
 }
-
 export interface CropData {
   id: string
   farmId: string
@@ -56,7 +51,6 @@ export interface CropData {
   createdAt: Date
   updatedAt: Date
 }
-
 export interface TaskData {
   id: string
   title: string
@@ -84,7 +78,6 @@ export interface TaskData {
     variety?: string
   }
 }
-
 export interface RecommendationData {
   id: string
   type: 'SPRAY' | 'HARVEST' | 'IRRIGATE' | 'PLANT' | 'FERTILIZE' | 'LIVESTOCK_HEALTH' | 'MARKET_SELL' | 'EQUIPMENT_MAINTAIN'
@@ -103,7 +96,6 @@ export interface RecommendationData {
   createdAt: Date
   validUntil?: Date
 }
-
 export interface RegionalData {
   region: string
   averageYield: number
@@ -126,7 +118,6 @@ export interface RegionalData {
     sustainability: number
   }
 }
-
 export interface HarvestAlert {
   id: string
   fieldId: string
@@ -142,7 +133,6 @@ export interface HarvestAlert {
   recommendations: string[]
   imageUrl?: string
 }
-
 export interface QueueStatus {
   queued: number
   processing: number
@@ -152,7 +142,6 @@ export interface QueueStatus {
   healthStatus: 'healthy' | 'degraded' | 'unhealthy'
   lastProcessedAt?: Date
 }
-
 export interface BudgetData {
   id: string
   farmId: string
@@ -171,7 +160,6 @@ export interface BudgetData {
   actualROI?: number
   lastUpdated: Date
 }
-
 export interface DashboardData {
   weather: WeatherData | null
   crops: CropData[]
@@ -185,7 +173,6 @@ export interface DashboardData {
   error: string | null
   lastUpdated: Date | null
 }
-
 export interface DashboardDataContextType extends DashboardData {
   refetch: () => Promise<void>
   updateData: <K extends keyof DashboardData>(key: K, data: DashboardData[K]) => void

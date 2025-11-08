@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
@@ -12,12 +11,10 @@ import {
 } from 'lucide-react'
 import { CropAnalytics, CROP_DATABASE, type CropData } from '../../lib/agriculture/crop-knowledge-base'
 import { cn } from '../../lib/utils'
-
 interface CropAnalyticsDashboardProps {
   farmId: string
   selectedCrop?: string
 }
-
 interface CropPerformanceData {
   cropId: string
   plantedArea: number
@@ -38,13 +35,11 @@ interface CropPerformanceData {
     cost: number
   }>
 }
-
 export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDashboardProps) {
   const [selectedCropId, setSelectedCropId] = useState(selectedCrop || 'corn')
   const [timeframe, setTimeframe] = useState<'current' | 'season' | 'year'>('current')
   const [performanceData, setPerformanceData] = useState<CropPerformanceData[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     // Fetch real crop performance data from API
     const fetchPerformanceData = async () => {
@@ -63,24 +58,19 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
         setLoading(false)
       }
     }
-    
     fetchPerformanceData()
   }, [farmId])
-
   const selectedCropData = CropAnalytics.getCropById(selectedCropId)
   const currentCropPerformance = performanceData.find(p => p.cropId === selectedCropId)
-
   if (!selectedCropData) {
     return <div>Crop data not found</div>
   }
-
   const getHealthStatusColor = (score: number) => {
     if (score >= 90) return 'text-green-600 bg-green-100'
     if (score >= 75) return 'text-yellow-600 bg-yellow-100'
     if (score >= 60) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
-
   const getRiskSeverityColor = (severity: 'low' | 'moderate' | 'high') => {
     switch (severity) {
       case 'low': return 'text-green-600 bg-green-100'
@@ -88,7 +78,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
       case 'high': return 'text-red-600 bg-red-100'
     }
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -103,7 +92,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header and Controls */}
@@ -112,7 +100,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           <h1 className="text-3xl font-bold text-sage-800 mb-2">Crop Analytics Dashboard</h1>
           <p className="text-sage-600">Comprehensive crop performance analysis and yield forecasting</p>
         </div>
-        
         <div className="flex items-center gap-3">
           <Select value={selectedCropId} onValueChange={setSelectedCropId}>
             <SelectTrigger className="w-48">
@@ -126,7 +113,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               ))}
             </SelectContent>
           </Select>
-          
           <Select value={timeframe} onValueChange={(value: any) => setTimeframe(value)}>
             <SelectTrigger className="w-32">
               <SelectValue />
@@ -139,7 +125,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           </Select>
         </div>
       </div>
-
       {/* Crop Overview Card */}
       <ModernCard variant="glow">
         <ModernCardHeader>
@@ -177,7 +162,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           </div>
         </ModernCardContent>
       </ModernCard>
-
       {/* Performance Metrics */}
       {currentCropPerformance && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -204,7 +188,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Yield Forecast */}
           <ModernCard>
             <ModernCardHeader>
@@ -244,7 +227,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               </div>
             </ModernCardContent>
           </ModernCard>
-
           {/* Risk Assessment */}
           <ModernCard>
             <ModernCardHeader>
@@ -278,7 +260,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           </ModernCard>
         </div>
       )}
-
       {/* Detailed Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Growing Calendar */}
@@ -310,7 +291,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
             </div>
           </ModernCardContent>
         </ModernCard>
-
         {/* Economic Analysis */}
         <ModernCard>
           <ModernCardHeader>
@@ -335,7 +315,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                   </div>
                 </div>
               </div>
-              
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-sm text-sage-600">Seed:</span>
@@ -354,7 +333,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                   <span className="text-sm font-medium">${selectedCropData.economics.cost_per_hectare.labor}</span>
                 </div>
               </div>
-              
               <div className="pt-3 border-t">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-sage-600">Profitability Index:</span>
@@ -380,7 +358,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           </ModernCardContent>
         </ModernCard>
       </div>
-
       {/* Interventions and Treatments */}
       {currentCropPerformance && currentCropPerformance.interventions.length > 0 && (
         <ModernCard>
@@ -414,7 +391,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                   </div>
                 </div>
               ))}
-              
               <div className="pt-3 border-t">
                 <div className="flex justify-between items-center">
                   <span className="text-sage-600">Total Interventions Cost:</span>
@@ -427,7 +403,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           </ModernCardContent>
         </ModernCard>
       )}
-
       {/* Environmental Requirements */}
       <ModernCard>
         <ModernCardHeader>
@@ -458,7 +433,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 </div>
               </div>
             </div>
-            
             <div className="space-y-3">
               <h4 className="font-medium text-sage-800 flex items-center gap-2">
                 <Droplets className="h-4 w-4" />
@@ -477,7 +451,6 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 </div>
               </div>
             </div>
-            
             <div className="space-y-3">
               <h4 className="font-medium text-sage-800 flex items-center gap-2">
                 <Scale className="h-4 w-4" />

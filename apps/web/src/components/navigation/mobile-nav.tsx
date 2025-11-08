@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -18,7 +17,6 @@ import {
   Search,
   Brain
 } from 'lucide-react'
-
 interface MobileNavProps {
   user?: {
     name?: string | null
@@ -26,16 +24,13 @@ interface MobileNavProps {
   }
   onSignOut?: () => void
 }
-
 export function MobileNav({ user, onSignOut }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
-
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
-
   // Prevent body scroll when menu is open
   useEffect(() => {
     if (isOpen) {
@@ -43,12 +38,10 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
     } else {
       document.body.style.overflow = 'unset'
     }
-
     return () => {
       document.body.style.overflow = 'unset'
     }
   }, [isOpen])
-
   const navItems = [
     { href: '/dashboard', icon: Home, label: 'Dashboard' },
     { href: '/farms', icon: MapPin, label: 'Farms' },
@@ -58,9 +51,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
     { href: '/reports', icon: TrendingUp, label: 'Reports' },
     { href: '/settings', icon: Settings, label: 'Settings' },
   ]
-
   const toggleMenu = () => setIsOpen(!isOpen)
-
   return (
     <>
       {/* Mobile Header */}
@@ -77,7 +68,6 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
             Cropple.ai
           </Link>
         </div>
-        
         <div className="flex items-center space-x-2">
           <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
             <Search className="h-5 w-5" />
@@ -88,7 +78,6 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
           </button>
         </div>
       </div>
-
       {/* Overlay */}
       {isOpen && (
         <div 
@@ -97,7 +86,6 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
           aria-hidden="true"
         />
       )}
-
       {/* Mobile Menu */}
       <div className={`
         lg:hidden fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out
@@ -128,13 +116,11 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
             <X className="h-6 w-6" />
           </button>
         </div>
-
         {/* Menu Items */}
         <nav className="flex-1 px-4 py-4 space-y-1">
           {navItems.map((item) => {
             const isActive = pathname?.startsWith(item.href) ?? false
             const Icon = item.icon
-            
             return (
               <Link
                 key={item.href}
@@ -156,7 +142,6 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
             )
           })}
         </nav>
-
         {/* Quick Actions */}
         <div className="border-t border-gray-200 px-4 py-4">
           <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
@@ -177,7 +162,6 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
             </button>
           </div>
         </div>
-
         {/* Menu Footer */}
         <div className="border-t border-gray-200 px-4 py-4">
           <div className="space-y-2">
@@ -206,5 +190,4 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
     </>
   )
 }
-
 export default MobileNav

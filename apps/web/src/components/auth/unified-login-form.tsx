@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -8,11 +7,9 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { useAuth } from '../providers/unified-auth-provider'
-
 interface UnifiedLoginFormProps {
   callbackUrl?: string
 }
-
 function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,20 +19,8 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
   const router = useRouter()
   const searchParams = useSearchParams()
   const { signIn, isUsingSupabase } = useAuth()
-
-  // Immediate console logs to track component lifecycle
-  console.log('🎯 UnifiedLoginForm component rendering...', {
-    timestamp: new Date().toISOString(),
-    authSystem: isUsingSupabase ? 'Supabase' : 'NextAuth',
-    isServer: typeof window === 'undefined',
-    location: typeof window !== 'undefined' ? window.location.href : 'server-side'
-  })
-
+  
   useEffect(() => {
-    console.log('🚀 UnifiedLoginForm React component mounted successfully!')
-    console.log('🔍 Auth system:', isUsingSupabase ? 'Supabase Auth' : 'NextAuth')
-    
-    // Add a visible indicator showing which auth system is active
     const indicator = document.createElement('div')
     indicator.id = 'auth-system-indicator'
     indicator.style.cssText = `
@@ -52,14 +37,12 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
     `
     indicator.textContent = `🔐 ${isUsingSupabase ? 'Supabase' : 'NextAuth'} Auth`
     document.body.appendChild(indicator)
-    
     // Remove after 5 seconds
     setTimeout(() => {
       const el = document.getElementById('auth-system-indicator')
       if (el) el.remove()
     }, 5000)
   }, [isUsingSupabase])
-
   useEffect(() => {
     // Check for registration success and other URL parameters
     const registered = searchParams?.get('registered')
@@ -67,22 +50,18 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
     const verified = searchParams?.get('verified')
     const errorParam = searchParams?.get('error')
     const passwordReset = searchParams?.get('password-reset')
-    
     if (registered === 'true') {
       setSuccessMessage('Account created successfully! Please sign in with your credentials.')
       if (emailParam) {
         setEmail(decodeURIComponent(emailParam))
       }
     }
-    
     if (verified === 'true') {
       setSuccessMessage('Email verified successfully! You can now sign in.')
     }
-    
     if (passwordReset === 'true') {
       setSuccessMessage('Password reset successfully! You can now sign in with your new password.')
     }
-    
     if (errorParam) {
       switch (errorParam) {
         case 'missing-token':
@@ -108,33 +87,18 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
       }
     }
   }, [searchParams])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('🔥 UNIFIED FORM SUBMIT!', { 
-      email, 
-      password: password ? '***' : 'empty',
-      authSystem: isUsingSupabase ? 'Supabase' : 'NextAuth'
-    })
-    
     setIsLoading(true)
     setError('')
-
     try {
-      console.log(`📧 Starting ${isUsingSupabase ? 'Supabase' : 'NextAuth'} signin for:`, email)
-      
       // Use unified auth system
       const result = await signIn(email, password)
-
-      console.log('🔐 Unified Auth Result:', result)
-
       if (result.error) {
         setError(result.error)
       } else if (result.ok) {
-        console.log('✅ Login successful, redirecting to dashboard')
         setError('')
         setSuccessMessage('Login successful! Redirecting...')
-        
         // Small delay to show success message then redirect
         setTimeout(() => {
           window.location.href = callbackUrl
@@ -149,7 +113,6 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
       setIsLoading(false)
     }
   }
-
   return (
     <Card className="w-full border-0 shadow-none">
       <CardHeader className="px-0 pb-4">
@@ -222,10 +185,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
     </Card>
   )
 }
-
 export function UnifiedLoginForm({ callbackUrl }: UnifiedLoginFormProps) {
-  console.log('🚀 UnifiedLoginForm component rendering at top level!')
-  
   return (
     <Suspense fallback={
       <Card className="w-full border-0 shadow-none">

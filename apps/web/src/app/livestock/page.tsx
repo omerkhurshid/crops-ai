@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../lib/auth-unified'
 import { useEffect, useState } from 'react'
@@ -9,8 +8,6 @@ import { LivestockQuickActions } from '../../components/livestock/livestock-quic
 import { ModernCard, ModernCardContent, ModernCardHeader, ModernCardTitle, ModernCardDescription } from '../../components/ui/modern-card'
 import { ClientFloatingButton } from '../../components/ui/client-floating-button'
 import { Users, Plus, Stethoscope, Heart, Activity, TrendingUp } from 'lucide-react'
-
-
 export default function LivestockPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -23,15 +20,12 @@ export default function LivestockPage() {
     avgDailyGain: 0
   })
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     if (status === 'loading') return
-
     if (!session) {
       router.push('/login')
       return
     }
-
     const fetchData = async () => {
       try {
         // Fetch farms
@@ -39,13 +33,11 @@ export default function LivestockPage() {
         if (farmsResponse.ok) {
           const farms = await farmsResponse.json()
           setUserFarms(farms)
-
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
             router.push('/farms/create?from=livestock')
             return
           }
-
           // Fetch livestock events
           const eventsResponse = await fetch('/api/livestock/events')
           if (eventsResponse.ok) {
@@ -60,10 +52,8 @@ export default function LivestockPage() {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [session, status, router])
-
   const calculateStats = (events: any[]) => {
     // Calculate real statistics from livestockEvent data
     const totalAnimals = events.reduce((sum, event) => sum + (event.animalCount || 0), 0)
@@ -77,7 +67,6 @@ export default function LivestockPage() {
       event.notes?.toLowerCase().includes('sick') ||
       event.notes?.toLowerCase().includes('urgent')
     ).length
-    
     // Calculate health score based on recent events
     const recentHealthEvents = healthEvents.filter(event => {
       const eventDate = new Date(event.eventDate)
@@ -85,10 +74,8 @@ export default function LivestockPage() {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
       return eventDate >= thirtyDaysAgo
     })
-    
     const healthScore = totalAnimals > 0 ? 
       Math.max(1, 10 - (healthAlerts / totalAnimals) * 2) : 0
-    
     // Calculate average daily gain from weight/growth related events
     const weightEvents = events.filter(event => 
       event.eventType?.toLowerCase().includes('weight') ||
@@ -100,7 +87,6 @@ export default function LivestockPage() {
         const weight = parseFloat(event.notes?.match(/(\d+\.?\d*)/)?.[1] || '0')
         return sum + (isNaN(weight) ? 0 : weight)
       }, 0) / weightEvents.length : 0
-
     setStats({
       totalAnimals,
       healthScore,
@@ -108,7 +94,6 @@ export default function LivestockPage() {
       avgDailyGain
     })
   }
-
   if (status === 'loading' || isLoading) {
     return (
       <DashboardLayout>
@@ -119,11 +104,9 @@ export default function LivestockPage() {
       </DashboardLayout>
     )
   }
-
   if (!session) {
     return null
   }
-
   // If no farms, show empty state (this is also handled in useEffect)
   if (userFarms.length === 0) {
     return (
@@ -143,7 +126,6 @@ export default function LivestockPage() {
       </DashboardLayout>
     )
   }
-
   return (
     <DashboardLayout>
       {/* Floating Action Button */}
@@ -152,7 +134,6 @@ export default function LivestockPage() {
         label="Add Animal"
         variant="primary"
       />
-
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
@@ -160,7 +141,6 @@ export default function LivestockPage() {
           <p className="text-lg text-sage-600 mb-6">
             Monitor herd health and track animal performance
           </p>
-          
           {/* Getting Started Guide for Livestock */}
           <div className="bg-gradient-to-r from-earth-50 to-sage-50 rounded-xl p-4 mb-6 border border-earth-200">
             <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
@@ -190,12 +170,10 @@ export default function LivestockPage() {
                 </div>
               </div>
             </div>
-            
             {/* Quick Actions for beginners */}
             <LivestockQuickActions />
           </div>
         </div>
-
         {/* Quick Stats Overview */}
         <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
@@ -217,7 +195,6 @@ export default function LivestockPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -237,7 +214,6 @@ export default function LivestockPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -257,7 +233,6 @@ export default function LivestockPage() {
               </div>
             </ModernCardContent>
           </ModernCard>
-
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
@@ -278,7 +253,6 @@ export default function LivestockPage() {
             </ModernCardContent>
           </ModernCard>
         </div>
-
         {/* Main Livestock Dashboard */}
         <ModernCard variant="floating">
           <ModernCardContent className="p-6">

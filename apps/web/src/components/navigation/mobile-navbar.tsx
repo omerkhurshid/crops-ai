@@ -1,10 +1,8 @@
 'use client'
-
 import { Menu, Bell, User } from 'lucide-react'
 import { CroppleLogo } from '../ui/cropple-logo'
 import { Button } from '../ui/button'
 import { ColorCombinations } from '../../lib/design-system/color-standards'
-
 interface MobileNavbarProps {
   onMenuClick: () => void
   user?: {
@@ -13,7 +11,6 @@ interface MobileNavbarProps {
     image?: string | null
   }
 }
-
 export function MobileNavbar({ onMenuClick, user }: MobileNavbarProps) {
   return (
     <div className={`${ColorCombinations.cardDefault} border-b`}>
@@ -31,7 +28,6 @@ export function MobileNavbar({ onMenuClick, user }: MobileNavbarProps) {
           </Button>
           <CroppleLogo size="sm" />
         </div>
-
         {/* Right side - User info and notifications */}
         <div className="flex items-center space-x-2">
           {/* Notifications */}
@@ -43,7 +39,6 @@ export function MobileNavbar({ onMenuClick, user }: MobileNavbarProps) {
           >
             <Bell className="h-5 w-5" />
           </Button>
-
           {/* User avatar/name */}
           <div className="flex items-center space-x-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-fk-primary text-white text-sm font-medium">

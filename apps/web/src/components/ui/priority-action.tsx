@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { cn } from '../../lib/utils'
 import { ModernCard, ModernCardContent } from './modern-card'
@@ -14,7 +13,6 @@ import {
   Bug,
   Thermometer
 } from 'lucide-react'
-
 interface PriorityAction {
   id: string
   title: string
@@ -25,21 +23,18 @@ interface PriorityAction {
   status: 'pending' | 'in_progress' | 'completed'
   confidence: number
 }
-
 interface PriorityActionCardProps {
   action: PriorityAction
   onMarkComplete?: (actionId: string) => void
   onStartAction?: (actionId: string) => void
   className?: string
 }
-
 interface PriorityActionsListProps {
   actions: PriorityAction[]
   maxActions?: number
   onActionUpdate?: (actionId: string, status: 'pending' | 'in_progress' | 'completed') => void
   className?: string
 }
-
 const urgencyConfig = {
   high: {
     status: 'critical' as const,
@@ -60,7 +55,6 @@ const urgencyConfig = {
     borderColor: 'border-blue-200'
   }
 }
-
 const categoryIcons = {
   watering: Droplets,
   nutrition: Zap,
@@ -68,7 +62,6 @@ const categoryIcons = {
   weather: Thermometer,
   general: CheckCircle2
 }
-
 const statusConfig = {
   pending: {
     icon: Clock,
@@ -89,7 +82,6 @@ const statusConfig = {
     bgColor: 'bg-green-100'
   }
 }
-
 export function PriorityActionCard({
   action,
   onMarkComplete,
@@ -100,7 +92,6 @@ export function PriorityActionCard({
   const CategoryIcon = categoryIcons[action.category]
   const statusInfo = statusConfig[action.status]
   const StatusIcon = statusInfo.icon
-
   const handleActionClick = () => {
     if (action.status === 'pending' && onStartAction) {
       onStartAction(action.id)
@@ -108,7 +99,6 @@ export function PriorityActionCard({
       onMarkComplete(action.id)
     }
   }
-
   return (
     <ModernCard 
       variant="soft"
@@ -135,13 +125,11 @@ export function PriorityActionCard({
               />
             </div>
           </div>
-          
           <div className="flex items-center gap-2 text-sm text-sage-600">
             <StatusIcon className={cn('h-4 w-4', statusInfo.color)} />
             <span className={statusInfo.color}>{statusInfo.label}</span>
           </div>
         </div>
-
         {/* Content */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-sage-800 mb-2">
@@ -150,13 +138,11 @@ export function PriorityActionCard({
           <p className="text-sm text-sage-700 leading-relaxed mb-3">
             {action.description}
           </p>
-          
           <div className="flex items-center justify-between text-xs text-sage-600">
             <span>Complete within: {action.timeframe}</span>
             <span>{action.confidence}% confidence</span>
           </div>
         </div>
-
         {/* Action Button */}
         {action.status !== 'completed' && (
           <button
@@ -183,7 +169,6 @@ export function PriorityActionCard({
             )}
           </button>
         )}
-
         {action.status === 'completed' && (
           <div className="w-full py-3 px-4 rounded-xl bg-green-100 text-green-800 font-medium text-center">
             ✓ Action Completed
@@ -193,7 +178,6 @@ export function PriorityActionCard({
     </ModernCard>
   )
 }
-
 export function PriorityActionsList({
   actions,
   maxActions = 2,
@@ -207,19 +191,16 @@ export function PriorityActionsList({
       return urgencyOrder[b.urgency] - urgencyOrder[a.urgency]
     })
     .slice(0, maxActions)
-
   const handleStartAction = (actionId: string) => {
     if (onActionUpdate) {
       onActionUpdate(actionId, 'in_progress')
     }
   }
-
   const handleCompleteAction = (actionId: string) => {
     if (onActionUpdate) {
       onActionUpdate(actionId, 'completed')
     }
   }
-
   if (prioritizedActions.length === 0) {
     return (
       <ModernCard variant="soft" className={className}>
@@ -235,7 +216,6 @@ export function PriorityActionsList({
       </ModernCard>
     )
   }
-
   return (
     <div className={cn('space-y-4', className)}>
       {prioritizedActions.map((action) => (
@@ -246,7 +226,6 @@ export function PriorityActionsList({
           onMarkComplete={handleCompleteAction}
         />
       ))}
-      
       {actions.length > maxActions && (
         <div className="text-center pt-4">
           <p className="text-sm text-sage-600">
@@ -260,5 +239,4 @@ export function PriorityActionsList({
     </div>
   )
 }
-
 // Note: createSampleActions removed - use real data only in production

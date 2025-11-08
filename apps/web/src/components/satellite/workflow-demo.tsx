@@ -1,5 +1,4 @@
 'use client'
-
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
@@ -8,24 +7,20 @@ import { GoogleMapsFieldEditor } from '../farm/google-maps-field-editor'
 import { FieldHealthMonitor } from './field-health-monitor'
 import { Alert, AlertDescription } from '../ui/alert'
 import { Progress } from '../ui/progress'
-
 type WorkflowDemoProps = {
   farmLocation: { lat: number; lng: number }
   onComplete?: (fields: any[]) => void
 }
-
 const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete }) => {
   const [currentStep, setCurrentStep] = React.useState(1)
   const [definedFields, setDefinedFields] = React.useState<any[]>([])
   const [isAnalyzing, setIsAnalyzing] = React.useState(false)
   const [analysisComplete, setAnalysisComplete] = React.useState(false)
-
   const handleFieldsDetected = async (fields: any[]) => {
     setDefinedFields(fields)
     if (fields.length > 0) {
       setCurrentStep(2)
       setIsAnalyzing(true)
-
       try {
         const response = await fetch('/api/satellite/field-analysis', {
           method: 'POST',
@@ -35,10 +30,8 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
             analysisType: 'comprehensive'
           })
         })
-
         if (response.ok) {
           const data = await response.json()
-
           setAnalysisComplete(true)
           setCurrentStep(3)
         }
@@ -47,13 +40,11 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
       } finally {
         setIsAnalyzing(false)
       }
-      
       if (onComplete) {
         onComplete(fields)
       }
     }
   }
-
   return (
     <div className="space-y-6">
       {/* Progress Indicator */}
@@ -84,7 +75,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
           </p>
         </CardContent>
       </Card>
-
       {/* Step 1: Field Drawing */}
       {currentStep === 1 && (
         <Card>
@@ -97,7 +87,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                 farmLocation={farmLocation}
                 onFieldsDetected={handleFieldsDetected}
               />
-              
               <div className="pt-4 border-t">
                 <p className="text-sm text-gray-600 mb-3">
                   Or try the quick demo with pre-defined fields:
@@ -140,7 +129,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
           </CardContent>
         </Card>
       )}
-
       {/* Step 2: Analysis Progress */}
       {currentStep === 2 && (
         <Card>
@@ -171,7 +159,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
           </CardContent>
         </Card>
       )}
-
       {/* Step 3: Results */}
       {currentStep === 3 && analysisComplete && (
         <div className="space-y-6">
@@ -186,7 +173,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                   <strong>Success!</strong> Your {definedFields.length} fields are now being monitored with AI-powered satellite analysis.
                 </AlertDescription>
               </Alert>
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {definedFields.map((field) => (
                   <div key={field.id} className="p-4 border rounded-lg">
@@ -201,7 +187,6 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
               </div>
             </CardContent>
           </Card>
-
           <FieldHealthMonitor 
             fieldIds={definedFields.map(f => f.id)}
             autoRefresh={true}
@@ -212,5 +197,4 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
     </div>
   )
 }
-
 export { WorkflowDemo }

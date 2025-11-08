@@ -4,7 +4,6 @@ import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { TransactionType } from '@prisma/client';
-
 // GET /api/financial/user-summary - Get user-level financial summary across all farms
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
@@ -13,14 +12,11 @@ export const GET = apiMiddleware.protected(
       if (!user) {
         throw new ValidationError('User authentication required');
       }
-
       const { searchParams } = new URL(request.url);
       const startDate = searchParams.get('startDate') || new Date(new Date().getFullYear(), 0, 1).toISOString();
       const endDate = searchParams.get('endDate') || new Date().toISOString();
-
       const start = new Date(startDate);
       const end = new Date(endDate);
-
       // Get all user's farms
       const userFarms = await prisma.farm.findMany({
         where: { ownerId: user.id },
@@ -32,7 +28,6 @@ export const GET = apiMiddleware.protected(
           location: true,
         }
       });
-
       if (userFarms.length === 0) {
         return createSuccessResponse({
           summary: {
@@ -51,9 +46,7 @@ export const GET = apiMiddleware.protected(
           categoryBreakdown: { income: [], expenses: [] }
         });
       }
-
       const farmIds = userFarms.map(farm => farm.id);
-
       // Base where clause for transactions
       const baseWhere = {
         farmId: { in: farmIds },
@@ -62,12 +55,10 @@ export const GET = apiMiddleware.protected(
           lte: end,
         },
       };
-
       // Aggregate financial data across all farms
       let totalIncome: { _sum: { amount: any } } = { _sum: { amount: null } };
       let totalExpenses: { _sum: { amount: any } } = { _sum: { amount: null } };
       let transactionCount = 0;
-
       try {
         [totalIncome, totalExpenses, transactionCount] = await Promise.all([
           prisma.financialTransaction.aggregate({
@@ -83,7 +74,6 @@ export const GET = apiMiddleware.protected(
       } catch (error: any) {
         // Handle missing financial transactions table
         if (error.code === 'P2021' || error.code === 'P2010') {
-
           totalIncome = { _sum: { amount: null } };
           totalExpenses = { _sum: { amount: null } };
           transactionCount = 0;
@@ -91,17 +81,14 @@ export const GET = apiMiddleware.protected(
           throw error;
         }
       }
-
       const income = Number(totalIncome._sum.amount || 0);
       const expenses = Number(totalExpenses._sum.amount || 0);
       const netProfit = income - expenses;
       const profitMargin = income > 0 ? (netProfit / income) * 100 : 0;
       const totalArea = userFarms.reduce((sum, farm) => sum + farm.totalArea, 0);
       const profitPerArea = totalArea > 0 ? netProfit / totalArea : 0;
-
       // Farm-level breakdown
       let farmBreakdown: any[] = [];
-      
       try {
         farmBreakdown = await Promise.all(
           userFarms.map(async (farm) => {
@@ -129,11 +116,9 @@ export const GET = apiMiddleware.protected(
                 }
               })
             ]);
-
             const farmIncomeAmount = Number(farmIncome._sum.amount || 0);
             const farmExpenseAmount = Number(farmExpenses._sum.amount || 0);
             const farmNetProfit = farmIncomeAmount - farmExpenseAmount;
-
             return {
               id: farm.id,
               name: farm.name,
@@ -168,14 +153,12 @@ export const GET = apiMiddleware.protected(
           throw error;
         }
       }
-
       // Monthly trends across all farms
       let monthlyTrends: any[] = [];
       let categoryBreakdown: {
         income: Array<{ category: string; amount: number; count: number }>;
         expenses: Array<{ category: string; amount: number; count: number }>;
       } = { income: [], expenses: [] };
-
       try {
         const transactions = await prisma.financialTransaction.findMany({
           where: baseWhere,
@@ -187,28 +170,21 @@ export const GET = apiMiddleware.protected(
             category: true
           }
         });
-
         // Process monthly trends
         const monthlyData = transactions.reduce((acc, transaction) => {
           const monthKey = `${transaction.transactionDate.getFullYear()}-${String(transaction.transactionDate.getMonth() + 1).padStart(2, '0')}`;
-          
           if (!acc[monthKey]) {
             acc[monthKey] = { month: monthKey, income: 0, expenses: 0, profit: 0 };
           }
-          
           if (transaction.type === TransactionType.INCOME) {
             acc[monthKey].income += Number(transaction.amount);
           } else {
             acc[monthKey].expenses += Number(transaction.amount);
           }
-          
           acc[monthKey].profit = acc[monthKey].income - acc[monthKey].expenses;
-          
           return acc;
         }, {} as Record<string, { month: string; income: number; expenses: number; profit: number }>);
-
         monthlyTrends = Object.values(monthlyData);
-
         // Process category breakdown
         const incomeByCategory = await prisma.financialTransaction.groupBy({
           by: ['category'],
@@ -216,14 +192,12 @@ export const GET = apiMiddleware.protected(
           _sum: { amount: true },
           _count: true,
         });
-
         const expensesByCategory = await prisma.financialTransaction.groupBy({
           by: ['category'],
           where: { ...baseWhere, type: TransactionType.EXPENSE },
           _sum: { amount: true },
           _count: true,
         });
-
         categoryBreakdown = {
           income: incomeByCategory.map(item => ({
             category: item.category,
@@ -244,12 +218,10 @@ export const GET = apiMiddleware.protected(
           throw error;
         }
       }
-
       // Calculate profit change compared to previous period
       const periodLength = end.getTime() - start.getTime();
       const previousStart = new Date(start.getTime() - periodLength);
       const previousEnd = new Date(start.getTime() - 1);
-
       let profitChange = 0;
       try {
         const [previousIncome, previousExpenses] = await Promise.all([
@@ -270,9 +242,7 @@ export const GET = apiMiddleware.protected(
             _sum: { amount: true },
           })
         ]);
-
         const previousNetProfit = Number(previousIncome._sum.amount || 0) - Number(previousExpenses._sum.amount || 0);
-        
         if (previousNetProfit !== 0) {
           profitChange = ((netProfit - previousNetProfit) / Math.abs(previousNetProfit)) * 100;
         }
@@ -281,7 +251,6 @@ export const GET = apiMiddleware.protected(
           throw error;
         }
       }
-
       return createSuccessResponse({
         summary: {
           totalIncome: income,
@@ -302,7 +271,6 @@ export const GET = apiMiddleware.protected(
           end
         }
       });
-
     } catch (error) {
       return handleApiError(error);
     }

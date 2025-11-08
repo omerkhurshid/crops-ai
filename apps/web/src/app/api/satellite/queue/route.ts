@@ -4,40 +4,33 @@ import { createSuccessResponse, handleApiError, ValidationError } from '../../..
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware';
 import { QueueManager } from '../../../../lib/queue/queue-manager';
 const satelliteQueue = new QueueManager('satellite-processing');
-
 const queueActionSchema = z.object({
   action: z.enum(['status', 'metrics', 'add', 'process', 'detailed', 'health', 'cleanup', 'retry']),
   jobType: z.string().optional(),
   data: z.any().optional(),
   jobId: z.string().optional()
 });
-
 // POST /api/satellite/queue
 export const POST = apiMiddleware.basic(
   withMethods(['POST'], async (request: NextRequest) => {
     try {
       const body = await request.json();
-      
       const validation = queueActionSchema.safeParse(body);
       if (!validation.success) {
         throw new ValidationError('Invalid parameters: ' + validation.error.errors.map(e => e.message).join(', '));
       }
-
       const { action, jobType, data, jobId } = validation.data;
       let result: any;
-
       switch (action) {
         case 'add':
           {
             if (!jobType || !data) {
               throw new ValidationError('jobType and data are required for add action');
             }
-            
             const newJobId = await satelliteQueue.addJob(jobType, data, {
               priority: data.priority || 0,
               maxAttempts: 3
             });
-            
             result = {
               action: 'add',
               jobId: newJobId,
@@ -47,7 +40,6 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'process':
           {
             const nextJob = await satelliteQueue.getNextJob();
@@ -85,7 +77,6 @@ export const POST = apiMiddleware.basic(
             }
           }
           break;
-
         case 'status':
           {
             const metrics = await satelliteQueue.getMetrics();
@@ -99,7 +90,6 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'metrics':
           {
             const metrics = await satelliteQueue.getMetrics();
@@ -118,12 +108,10 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'detailed':
           {
             const metrics = await satelliteQueue.getMetrics();
             const health = await satelliteQueue.getHealth();
-            
             result = {
               queueStatus: health.status,
               metrics,
@@ -145,7 +133,6 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'health':
           {
             const health = await satelliteQueue.getHealth();
@@ -156,7 +143,6 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'cleanup':
           {
             const cleaned = await satelliteQueue.cleanup(7); // Keep 7 days of completed jobs
@@ -167,7 +153,6 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         case 'retry':
           {
             const retried = await satelliteQueue.retryFailedJobs();
@@ -178,13 +163,10 @@ export const POST = apiMiddleware.basic(
             };
           }
           break;
-
         default:
           throw new ValidationError('Invalid action specified');
       }
-
       const health = await satelliteQueue.getHealth();
-
       return createSuccessResponse({
         data: result,
         summary: {
@@ -195,22 +177,18 @@ export const POST = apiMiddleware.basic(
         },
         message: `Queue ${action} completed successfully`
       });
-
     } catch (error) {
       return handleApiError(error);
     }
   })
 );
-
 // GET /api/satellite/queue?action=status
 export const GET = apiMiddleware.basic(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const { searchParams } = new URL(request.url);
       const action = searchParams.get('action') || 'status';
-
       let result: any;
-
       switch (action) {
         case 'status':
           {
@@ -224,7 +202,6 @@ export const GET = apiMiddleware.basic(
             };
           }
           break;
-
         case 'health':
           {
             const health = await satelliteQueue.getHealth();
@@ -234,7 +211,6 @@ export const GET = apiMiddleware.basic(
             };
           }
           break;
-
         default:
           {
             const metrics = await satelliteQueue.getMetrics();
@@ -244,12 +220,10 @@ export const GET = apiMiddleware.basic(
             };
           }
       }
-
       return createSuccessResponse({
         data: result,
         message: `Queue ${action} retrieved successfully`
       });
-
     } catch (error) {
       return handleApiError(error);
     }

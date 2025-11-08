@@ -3,17 +3,14 @@ import { getAuthenticatedUser } from '../../../../lib/auth/server'
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors'
 import { apiMiddleware, withMethods } from '../../../../lib/api/middleware'
 import { prisma } from '../../../../lib/prisma'
-
 // GET /api/dashboard/stats
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: NextRequest) => {
     try {
       const user = await getAuthenticatedUser(request)
-      
       if (!user) {
         throw new ValidationError('User authentication required')
       }
-
       // Get user's farms and fields data
       const [farms, fields, , weatherAlerts] = await Promise.all([
         // Get farms count and basic info
@@ -38,26 +35,21 @@ export const GET = apiMiddleware.protected(
             }
           }
         }),
-        
         // Get active fields count
         prisma.field.count({
           where: {
             farm: { ownerId: user.id }
           }
         }),
-
         // Placeholder for recent activity (data already included in farms query above)
         Promise.resolve(null),
-
         // Simulate weather alerts count (would be real API call)
         Promise.resolve(Math.floor(Math.random() * 3)) // 0-2 alerts
       ])
-
       // Calculate statistics
       const totalFarms = farms.length
       const activeFields = fields
       const totalFields = farms.reduce((sum, farm) => sum + farm.fields.length, 0)
-      
       // Generate recent activity from satellite data and farm operations
       const activityItems: Array<{
         id: string
@@ -70,7 +62,6 @@ export const GET = apiMiddleware.protected(
         fieldId?: string
         fieldName?: string
       }> = []
-      
       // Add farm creation activities
       farms.forEach(farm => {
         if (farm.createdAt && farm.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)) {
@@ -85,7 +76,6 @@ export const GET = apiMiddleware.protected(
           })
         }
       })
-
       // Add field activity from satellite data
       farms.forEach(farm => {
         farm.fields.forEach(field => {
@@ -104,23 +94,18 @@ export const GET = apiMiddleware.protected(
           })
         })
       })
-
       // Sort activities by date and take most recent
       activityItems.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       const recentActivities = activityItems.slice(0, 5)
-
       // Calculate crop distribution - simplified since crop data is in separate model
       // For now, return empty distribution until we implement proper crop querying
       const cropDistribution: Record<string, number> = {}
-
       // Calculate total farm area
       const totalArea = farms.reduce((sum, farm) => {
         return sum + farm.fields.reduce((fieldSum, field) => fieldSum + (field.area || 0), 0)
       }, 0)
-
       // Health score simulation (would be from actual satellite analysis)
       const avgHealthScore = totalFields > 0 ? 75 + Math.random() * 20 : 0
-
       const stats = {
         overview: {
           totalFarms,
@@ -153,7 +138,6 @@ export const GET = apiMiddleware.protected(
           upcomingTasks: generateUpcomingTasks(farms)
         }
       }
-
       return createSuccessResponse({
         data: stats,
         summary: {
@@ -165,13 +149,11 @@ export const GET = apiMiddleware.protected(
         },
         message: 'Dashboard statistics retrieved successfully'
       })
-
     } catch (error) {
       return handleApiError(error)
     }
   })
 )
-
 // Helper functions
 function getTimeAgo(date: Date): string {
   const now = new Date()
@@ -179,39 +161,30 @@ function getTimeAgo(date: Date): string {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffMinutes = Math.floor(diffMs / (1000 * 60))
-
   if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
   if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
   if (diffMinutes > 0) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`
   return 'Just now'
 }
-
 function generateRecommendations(farms: any[], alertsCount: number): string[] {
   const recommendations = []
-  
   if (farms.length === 0) {
     recommendations.push('Create your first farm to start monitoring')
     recommendations.push('Set up field boundaries for satellite analysis')
   } else {
     const totalFields = farms.reduce((sum, farm) => sum + farm.fields.length, 0)
-    
     if (totalFields === 0) {
       recommendations.push('Add fields to your farms for detailed monitoring')
     }
-    
     if (alertsCount > 0) {
       recommendations.push('Check weather alerts for potential farm impacts')
     }
-    
     recommendations.push('Review crop health analytics for optimization opportunities')
-    
     // Note: isActive field doesn't exist in current schema
     // Skip inactive fields recommendation for now
   }
-  
   return recommendations.slice(0, 3) // Top 3 recommendations
 }
-
 function generateUpcomingTasks(farms: any[]): Array<{
   id: string
   title: string
@@ -221,13 +194,11 @@ function generateUpcomingTasks(farms: any[]): Array<{
 }> {
   const tasks = []
   const now = new Date()
-  
   // Generate tasks based on farms and season
   farms.forEach(farm => {
     farm.fields.forEach((field: any) => {
       // Seasonal task generation (simplified without crop type)
       const month = now.getMonth()
-      
       if (month >= 2 && month <= 4) { // Spring
         tasks.push({
           id: `planting-${field.id}`,
@@ -237,7 +208,6 @@ function generateUpcomingTasks(farms: any[]): Array<{
           priority: 'high' as const
         })
       }
-      
       if (month >= 5 && month <= 8) { // Growing season
         tasks.push({
           id: `monitoring-${field.id}`,
@@ -249,7 +219,6 @@ function generateUpcomingTasks(farms: any[]): Array<{
       }
     })
   })
-  
   // Add general maintenance tasks
   if (farms.length > 0) {
     tasks.push({
@@ -260,6 +229,5 @@ function generateUpcomingTasks(farms: any[]): Array<{
       priority: 'low' as const
     })
   }
-  
   return tasks.slice(0, 5) // Top 5 upcoming tasks
 }

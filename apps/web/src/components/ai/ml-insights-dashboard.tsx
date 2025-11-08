@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -13,7 +12,6 @@ import {
 } from 'lucide-react'
 import { modelRegistry } from '../../lib/ml/model-registry'
 import { LoadingState, LoadingCard } from '../ui/loading'
-
 interface MLInsightsProps {
   farmId: string
   selectedAgriculture?: Array<{
@@ -28,7 +26,6 @@ interface MLInsightsProps {
     longitude: number
   }
 }
-
 interface ModelInsight {
   modelId: string
   modelName: string
@@ -40,7 +37,6 @@ interface ModelInsight {
   dataFreshness: 'real-time' | 'hourly' | 'daily' | 'weekly'
   lastUpdated: Date
 }
-
 interface SmartRecommendation {
   id: string
   title: string
@@ -55,41 +51,33 @@ interface SmartRecommendation {
   actionSteps: string[]
   timeframe: string
 }
-
 export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLocation }: MLInsightsProps) {
   const [loading, setLoading] = useState(true)
   const [modelInsights, setModelInsights] = useState<ModelInsight[]>([])
   const [smartRecommendations, setSmartRecommendations] = useState<SmartRecommendation[]>([])
   const [activeTab, setActiveTab] = useState('insights')
-
   // Get relevant models based on selected agriculture
   const relevantModels = useMemo(() => {
     const availableData = [
       'temperature', 'precipitation', 'ndvi', 'soil_moisture',
       ...selectedAgriculture.flatMap(item => item.monitoringParameters.map(p => p.toLowerCase().replace(/\s+/g, '_')))
     ]
-
     return modelRegistry.recommendModels({
       cropType: selectedAgriculture.find(item => item.type === 'crop')?.name,
       dataAvailable: availableData,
       objective: 'yield'
     })
   }, [selectedAgriculture])
-
   useEffect(() => {
     generateInsights()
   }, [farmId, selectedAgriculture, farmLocation])
-
   const generateInsights = async () => {
     setLoading(true)
-    
     try {
       // Simulate ML model execution with realistic data
       await new Promise(resolve => setTimeout(resolve, 2000))
-      
       const insights = await generateModelInsights()
       const recommendations = await generateSmartRecommendations(insights)
-      
       setModelInsights(insights)
       setSmartRecommendations(recommendations)
     } catch (error) {
@@ -98,14 +86,11 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
       setLoading(false)
     }
   }
-
   const generateModelInsights = async (): Promise<ModelInsight[]> => {
     const insights: ModelInsight[] = []
-
     for (const model of relevantModels.slice(0, 4)) { // Limit to 4 most relevant models
       let prediction: any = {}
       let actionableInsights: string[] = []
-
       switch (model.category) {
         case 'yield_prediction':
           if (selectedAgriculture.some(item => item.name.toLowerCase().includes('corn'))) {
@@ -134,7 +119,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             ]
           }
           break
-
         case 'crop_health':
           prediction = {
             overallHealth: 87,
@@ -152,7 +136,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             'Weather conditions favor continued healthy growth'
           ]
           break
-
         case 'weather':
           prediction = {
             sevenDayForecast: {
@@ -170,7 +153,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             'Good window for field operations early week'
           ]
           break
-
         case 'pest_disease':
           prediction = {
             riskLevel: 'moderate',
@@ -186,7 +168,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             'Weather favors beneficial insects'
           ]
           break
-
         case 'market':
           prediction = {
             priceOutlook: {
@@ -205,7 +186,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
           ]
           break
       }
-
       insights.push({
         modelId: model.id,
         modelName: model.name,
@@ -218,10 +198,8 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
         lastUpdated: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000) // Random within last 24h
       })
     }
-
     return insights
   }
-
   const generateSmartRecommendations = async (insights: ModelInsight[]): Promise<SmartRecommendation[]> => {
     return [
       {
@@ -268,7 +246,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
       }
     ]
   }
-
   const getModelIcon = (category: string) => {
     const icons = {
       'yield_prediction': TrendingUp,
@@ -280,7 +257,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
     }
     return icons[category as keyof typeof icons] || Brain
   }
-
   const getPriorityColor = (priority: string) => {
     const colors = {
       critical: 'bg-red-100 text-red-800 border-red-200',
@@ -290,7 +266,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
     }
     return colors[priority as keyof typeof colors] || colors.medium
   }
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -300,7 +275,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -316,7 +290,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
           Refresh Insights
         </Button>
       </div>
-
       {/* Model Coverage Summary */}
       <Card>
         <CardHeader>
@@ -347,14 +320,12 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
           </div>
         </CardContent>
       </Card>
-
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="insights">Model Insights</TabsTrigger>
           <TabsTrigger value="recommendations">Smart Recommendations</TabsTrigger>
         </TabsList>
-
         <TabsContent value="insights" className="space-y-4">
           {modelInsights.map(insight => {
             const Icon = getModelIcon(insight.category)
@@ -384,7 +355,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                       {JSON.stringify(insight.prediction, null, 2)}
                     </pre>
                   </div>
-
                   {/* Actionable Insights */}
                   <div>
                     <h4 className="font-medium mb-2 flex items-center gap-2">
@@ -405,7 +375,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             )
           })}
         </TabsContent>
-
         <TabsContent value="recommendations" className="space-y-4">
           {smartRecommendations.map(rec => (
             <Card key={rec.id}>
@@ -442,7 +411,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                     </div>
                   )}
                 </div>
-
                 {/* Action Steps */}
                 <div>
                   <h4 className="font-medium mb-2 flex items-center gap-2">
@@ -460,7 +428,6 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                     ))}
                   </ol>
                 </div>
-
                 {/* Metadata */}
                 <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t">
                   <div className="flex items-center gap-2">

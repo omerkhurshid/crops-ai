@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef } from 'react'
 import { DashboardLayout } from '../../components/layout/dashboard-layout'
 import { Button } from '../../components/ui/button'
@@ -17,7 +16,6 @@ import {
   Upload
 } from 'lucide-react'
 import Link from 'next/link'
-
 export default function FieldCheckPage() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -26,7 +24,6 @@ export default function FieldCheckPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -39,29 +36,23 @@ export default function FieldCheckPage() {
       console.error('Error accessing camera:', error)
     }
   }
-
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const canvas = canvasRef.current
       const video = videoRef.current
       const ctx = canvas.getContext('2d')
-      
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
-      
       ctx?.drawImage(video, 0, 0)
       const imageData = canvas.toDataURL('image/jpeg')
       setCapturedImage(imageData)
-      
       // Stop camera stream
       const stream = video.srcObject as MediaStream
       stream?.getTracks().forEach(track => track.stop())
-      
       // Simulate AI analysis
       analyzeImage(imageData)
     }
   }
-
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -74,13 +65,10 @@ export default function FieldCheckPage() {
       reader.readAsDataURL(file)
     }
   }
-
   const analyzeImage = async (imageData: string) => {
     setIsAnalyzing(true)
-    
     // Simulate AI analysis delay
     await new Promise(resolve => setTimeout(resolve, 2000))
-    
     // Mock analysis results
     const mockAnalysis = {
       confidence: 92,
@@ -95,24 +83,20 @@ export default function FieldCheckPage() {
       diseaseRisk: 'Low',
       nutritionStatus: 'Good'
     }
-    
     setAnalysis(mockAnalysis)
     setIsAnalyzing(false)
   }
-
   const retakePhoto = () => {
     setCapturedImage(null)
     setAnalysis(null)
     startCamera()
   }
-
   const quickActions = [
     { icon: Droplets, label: 'Watered', color: 'bg-blue-500' },
     { icon: Sprout, label: 'Fertilized', color: 'bg-green-500' },
     { icon: Bug, label: 'Sprayed', color: 'bg-red-500' },
     { icon: CheckCircle, label: 'Harvested', color: 'bg-amber-500' }
   ]
-
   return (
     <DashboardLayout>
       <div className="max-w-2xl mx-auto min-h-screen bg-white">
@@ -131,7 +115,6 @@ export default function FieldCheckPage() {
             </div>
           </div>
         </div>
-
         {/* Camera/Photo Section */}
         <div className="p-4">
           {!capturedImage ? (
@@ -145,13 +128,11 @@ export default function FieldCheckPage() {
                   onLoadedMetadata={startCamera}
                 />
                 <canvas ref={canvasRef} className="hidden" />
-                
                 {/* Camera overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="border-2 border-white/30 rounded-lg w-64 h-48"></div>
                 </div>
               </div>
-
               {/* Camera Controls */}
               <div className="flex justify-center gap-4">
                 <Button
@@ -161,7 +142,6 @@ export default function FieldCheckPage() {
                 >
                   <Camera className="h-8 w-8" />
                 </Button>
-                
                 <Button
                   onClick={() => fileInputRef.current?.click()}
                   variant="outline"
@@ -170,7 +150,6 @@ export default function FieldCheckPage() {
                 >
                   <Upload className="h-6 w-6" />
                 </Button>
-                
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -179,7 +158,6 @@ export default function FieldCheckPage() {
                   className="hidden"
                 />
               </div>
-              
               <p className="text-center text-gray-600">
                 Point camera at your crops for instant AI analysis
               </p>
@@ -201,7 +179,6 @@ export default function FieldCheckPage() {
                   Retake
                 </Button>
               </div>
-
               {/* Analysis Results */}
               {isAnalyzing ? (
                 <div className="bg-gray-50 rounded-xl p-6 text-center">
@@ -220,7 +197,6 @@ export default function FieldCheckPage() {
                     </div>
                     <p className="text-green-700 font-medium">{analysis.condition}</p>
                   </div>
-
                   {/* Risk Assessment */}
                   <div className="grid grid-cols-3 gap-3">
                     <div className="bg-white border rounded-lg p-3 text-center">
@@ -239,7 +215,6 @@ export default function FieldCheckPage() {
                       <p className="font-semibold text-sm text-green-600">{analysis.nutritionStatus}</p>
                     </div>
                   </div>
-
                   {/* Recommendations */}
                   <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
                     <h3 className="font-semibold text-blue-800 mb-2">Recommendations:</h3>
@@ -257,7 +232,6 @@ export default function FieldCheckPage() {
             </div>
           )}
         </div>
-
         {/* Quick Action Logging */}
         <div className="border-t border-gray-200 p-4">
           <h3 className="font-semibold text-gray-900 mb-3">Log Field Activity</h3>
@@ -269,7 +243,6 @@ export default function FieldCheckPage() {
                 className="h-16 flex-col gap-2 hover:bg-gray-50"
                 onClick={() => {
                   // Log activity to database
-
                 }}
               >
                 <action.icon className={`h-6 w-6 text-white rounded-full p-1 ${action.color}`} />
@@ -278,7 +251,6 @@ export default function FieldCheckPage() {
             ))}
           </div>
         </div>
-
         {/* Voice Notes */}
         <div className="border-t border-gray-200 p-4">
           <h3 className="font-semibold text-gray-900 mb-3">Voice Notes</h3>

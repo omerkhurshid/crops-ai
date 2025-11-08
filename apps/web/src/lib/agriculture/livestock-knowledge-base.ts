@@ -9,14 +9,12 @@
  * - Economic analysis
  * - Market information
  */
-
 export interface LivestockData {
   id: string
   name: string
   scientificName: string
   category: 'cattle' | 'swine' | 'poultry' | 'sheep' | 'goat' | 'aquaculture' | 'other'
   primaryProduct: 'meat' | 'milk' | 'eggs' | 'fiber' | 'multiple'
-  
   // Basic characteristics
   physicalCharacteristics: {
     averageWeight: {
@@ -26,7 +24,6 @@ export interface LivestockData {
     lifespan: number // years
     matureAge: number // months
   }
-  
   // Breeding information
   breeding: {
     breedingAge: {
@@ -44,7 +41,6 @@ export interface LivestockData {
       heritability: number // 0-1 scale
     }[]
   }
-  
   // Nutrition requirements
   nutrition: {
     dailyFeedIntake: {
@@ -61,7 +57,6 @@ export interface LivestockData {
     }>
     feedTypes: string[]
   }
-  
   // Housing requirements
   housing: {
     spaceRequirement: {
@@ -77,7 +72,6 @@ export interface LivestockData {
     flooring: string[]
     specialRequirements: string[]
   }
-  
   // Production metrics
   production: {
     meat: {
@@ -104,7 +98,6 @@ export interface LivestockData {
       shearingFrequency: number // times per year
     }
   }
-  
   // Health management
   health: {
     commonDiseases: Array<{
@@ -132,7 +125,6 @@ export interface LivestockData {
       respiratoryRate: { min: number, max: number } // breaths per minute
     }
   }
-  
   // Economic data
   economics: {
     initialInvestment: {
@@ -157,7 +149,6 @@ export interface LivestockData {
     }
     profitabilityIndex: number // 1-10 scale
   }
-  
   // Environmental impact
   environmental: {
     carbonFootprint: number // kg CO2 equivalent per year
@@ -167,7 +158,6 @@ export interface LivestockData {
     sustainabilityRating: 'low' | 'moderate' | 'high'
   }
 }
-
 export const LIVESTOCK_DATABASE: LivestockData[] = [
   // 1. DAIRY CATTLE
   {
@@ -176,7 +166,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
     scientificName: 'Bos taurus',
     category: 'cattle',
     primaryProduct: 'milk',
-    
     physicalCharacteristics: {
       averageWeight: {
         male: { min: 900, max: 1200 },
@@ -185,7 +174,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       lifespan: 18,
       matureAge: 24
     },
-    
     breeding: {
       breedingAge: {
         male: 12,
@@ -203,7 +191,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         { trait: 'protein_content', heritability: 0.40 }
       ]
     },
-    
     nutrition: {
       dailyFeedIntake: {
         adult: { min: 15, max: 25 },
@@ -227,7 +214,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       ],
       feedTypes: ['hay', 'silage', 'grain', 'protein supplements', 'minerals']
     },
-    
     housing: {
       spaceRequirement: {
         adult: 12,
@@ -242,7 +228,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       flooring: ['concrete with rubber mats', 'sand bedding', 'straw bedding'],
       specialRequirements: ['milking parlor access', 'feed bunks', 'water troughs']
     },
-    
     production: {
       meat: {
         liveWeightAtSlaughter: 550,
@@ -257,7 +242,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         proteinContent: 3.1
       }
     },
-    
     health: {
       commonDiseases: [
         {
@@ -295,7 +279,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         respiratoryRate: { min: 26, max: 50 }
       }
     },
-    
     economics: {
       initialInvestment: {
         animal: 1500,
@@ -319,7 +302,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       },
       profitabilityIndex: 7
     },
-    
     environmental: {
       carbonFootprint: 4000,
       waterUsage: 700,
@@ -328,7 +310,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       sustainabilityRating: 'moderate'
     }
   },
-
   // 2. BEEF CATTLE
   {
     id: 'beef_cattle',
@@ -336,7 +317,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
     scientificName: 'Bos taurus',
     category: 'cattle',
     primaryProduct: 'meat',
-    
     physicalCharacteristics: {
       averageWeight: {
         male: { min: 800, max: 1100 },
@@ -345,7 +325,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       lifespan: 15,
       matureAge: 20
     },
-    
     breeding: {
       breedingAge: {
         male: 12,
@@ -363,7 +342,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         { trait: 'carcass_quality', heritability: 0.45 }
       ]
     },
-    
     nutrition: {
       dailyFeedIntake: {
         adult: { min: 10, max: 18 },
@@ -387,7 +365,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       ],
       feedTypes: ['grass', 'hay', 'grain', 'protein supplements']
     },
-    
     housing: {
       spaceRequirement: {
         adult: 15,
@@ -402,7 +379,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       flooring: ['dirt lots', 'concrete with bedding', 'pasture'],
       specialRequirements: ['wind protection', 'shade structures', 'water access']
     },
-    
     production: {
       meat: {
         liveWeightAtSlaughter: 600,
@@ -411,7 +387,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         primeAge: 20
       }
     },
-    
     health: {
       commonDiseases: [
         {
@@ -440,7 +415,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         respiratoryRate: { min: 26, max: 50 }
       }
     },
-    
     economics: {
       initialInvestment: {
         animal: 1200,
@@ -463,7 +437,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       },
       profitabilityIndex: 6
     },
-    
     environmental: {
       carbonFootprint: 3500,
       waterUsage: 550,
@@ -472,7 +445,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       sustainabilityRating: 'moderate'
     }
   },
-
   // 3. LAYER CHICKENS
   {
     id: 'layer_chickens',
@@ -480,7 +452,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
     scientificName: 'Gallus gallus domesticus',
     category: 'poultry',
     primaryProduct: 'eggs',
-    
     physicalCharacteristics: {
       averageWeight: {
         male: { min: 2.5, max: 3.5 },
@@ -489,7 +460,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       lifespan: 8,
       matureAge: 5
     },
-    
     breeding: {
       breedingAge: {
         male: 5,
@@ -507,7 +477,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         { trait: 'feed_efficiency', heritability: 0.30 }
       ]
     },
-    
     nutrition: {
       dailyFeedIntake: {
         adult: { min: 0.11, max: 0.13 },
@@ -531,7 +500,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       ],
       feedTypes: ['layer mash', 'cracked corn', 'oyster shell', 'grit']
     },
-    
     housing: {
       spaceRequirement: {
         adult: 0.37,
@@ -546,7 +514,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       flooring: ['wire mesh', 'slatted floors', 'deep litter'],
       specialRequirements: ['nest boxes', 'perches', 'lighting program']
     },
-    
     production: {
       meat: {
         liveWeightAtSlaughter: 2.2,
@@ -561,7 +528,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         peakProduction: 310
       }
     },
-    
     health: {
       commonDiseases: [
         {
@@ -590,7 +556,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
         respiratoryRate: { min: 12, max: 37 }
       }
     },
-    
     economics: {
       initialInvestment: {
         animal: 3,
@@ -613,7 +578,6 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       },
       profitabilityIndex: 8
     },
-    
     environmental: {
       carbonFootprint: 2.5,
       waterUsage: 35,
@@ -622,24 +586,19 @@ export const LIVESTOCK_DATABASE: LivestockData[] = [
       sustainabilityRating: 'high'
     }
   }
-  
   // Additional 17 livestock types would continue here including:
   // Broiler Chickens, Pigs (Commercial), Sheep (Wool), Sheep (Meat), 
   // Goats (Dairy), Goats (Meat), Turkeys, Ducks, Geese, Rabbits,
   // Tilapia, Catfish, Salmon, Horses, Donkeys, Llamas, Alpacas
 ]
-
 // Utility functions for livestock data analysis
 export class LivestockAnalytics {
-  
   static getLivestockById(id: string): LivestockData | undefined {
     return LIVESTOCK_DATABASE.find(livestock => livestock.id === id)
   }
-  
   static getLivestockByCategory(category: LivestockData['category']): LivestockData[] {
     return LIVESTOCK_DATABASE.filter(livestock => livestock.category === category)
   }
-  
   static calculateProductionForecast(
     livestockId: string,
     animalCount: number,
@@ -650,34 +609,28 @@ export class LivestockAnalytics {
   } {
     const livestock = this.getLivestockById(livestockId)
     if (!livestock) return { primaryProduct: { quantity: 0, revenue: 0 } }
-    
     let primaryQuantity = 0
     let primaryRevenue = 0
-    
     if (livestock.production.milk) {
       const dailyMilk = (livestock.production.milk.dailyProduction.min + 
                        livestock.production.milk.dailyProduction.max) / 2
       primaryQuantity = dailyMilk * animalCount * timeframe
       primaryRevenue = primaryQuantity * livestock.economics.revenue.primary.value
     }
-    
     if (livestock.production.eggs) {
       primaryQuantity = livestock.production.eggs.dailyProduction * animalCount * timeframe
       primaryRevenue = primaryQuantity * livestock.economics.revenue.primary.value
     }
-    
     if (livestock.primaryProduct === 'meat') {
       const slaughterWeight = livestock.production.meat.liveWeightAtSlaughter
       const turnoverRate = 365 / livestock.physicalCharacteristics.matureAge
       primaryQuantity = slaughterWeight * animalCount * (timeframe / 365) * turnoverRate
       primaryRevenue = primaryQuantity * livestock.economics.revenue.primary.value
     }
-    
     return {
       primaryProduct: { quantity: primaryQuantity, revenue: primaryRevenue }
     }
   }
-  
   static getBreedingCalendar(livestockId: string): Array<{
     stage: string
     daysFromBreeding: number
@@ -686,9 +639,7 @@ export class LivestockAnalytics {
   }> {
     const livestock = this.getLivestockById(livestockId)
     if (!livestock) return []
-    
     const gestationDays = livestock.breeding.gestationPeriod
-    
     return [
       {
         stage: 'Breeding',
@@ -722,7 +673,6 @@ export class LivestockAnalytics {
       }
     ]
   }
-  
   static getHealthRiskAssessment(
     livestockId: string,
     currentConditions: {
@@ -738,20 +688,16 @@ export class LivestockAnalytics {
   }> {
     const livestock = this.getLivestockById(livestockId)
     if (!livestock) return []
-    
     return livestock.health.commonDiseases.map(disease => {
       let riskLevel = disease.severity
-      
       // Adjust risk based on environmental conditions
       if (currentConditions.temperature < livestock.housing.temperatureRange.optimal.min ||
           currentConditions.temperature > livestock.housing.temperatureRange.optimal.max) {
         riskLevel = riskLevel === 'low' ? 'moderate' : 'high'
       }
-      
       if (currentConditions.density > livestock.housing.spaceRequirement.adult * 0.8) {
         riskLevel = 'high' // Overcrowding increases disease risk
       }
-      
       return {
         disease: disease.name,
         riskLevel,
@@ -759,7 +705,6 @@ export class LivestockAnalytics {
       }
     })
   }
-  
   static calculateFeedRequirements(
     livestockId: string,
     animalCount: number,
@@ -772,9 +717,7 @@ export class LivestockAnalytics {
   } {
     const livestock = this.getLivestockById(livestockId)
     if (!livestock) return { dailyFeed: 0, monthlyFeed: 0, annualFeed: 0, estimatedCost: 0 }
-    
     let dailyPerAnimal = 0
-    
     switch (productionStage) {
       case 'growing':
         dailyPerAnimal = (livestock.nutrition.dailyFeedIntake.growing.min + 
@@ -789,12 +732,10 @@ export class LivestockAnalytics {
         dailyPerAnimal = livestock.nutrition.dailyFeedIntake.adult.max * 1.5 // Increase for lactation
         break
     }
-    
     const dailyFeed = dailyPerAnimal * animalCount
     const monthlyFeed = dailyFeed * 30
     const annualFeed = dailyFeed * 365
     const estimatedCost = annualFeed * 0.3 // Assume $0.30 per kg feed
-    
     return {
       dailyFeed,
       monthlyFeed,
@@ -803,5 +744,4 @@ export class LivestockAnalytics {
     }
   }
 }
-
 export default LIVESTOCK_DATABASE

@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +23,6 @@ import {
   MapPin,
   Tag
 } from 'lucide-react';
-
 interface Transaction {
   id: string;
   type: 'INCOME' | 'EXPENSE';
@@ -47,13 +45,11 @@ interface Transaction {
     variety?: string;
   };
 }
-
 interface TransactionListProps {
   farmId: string;
   fieldId?: string;
   onRefresh: () => void;
 }
-
 const CATEGORY_LABELS: Record<string, string> = {
   CROP_SALES: 'Crop Sales',
   LIVESTOCK_SALES: 'Livestock Sales',
@@ -72,7 +68,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   OVERHEAD: 'Overhead',
   OTHER_EXPENSE: 'Other Expenses',
 };
-
 export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,42 +77,33 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 20;
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(amount);
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
-
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      
       const params = new URLSearchParams({
         farmId,
         limit: itemsPerPage.toString(),
         offset: ((currentPage - 1) * itemsPerPage).toString(),
       });
-
       if (fieldId) {
         params.append('fieldId', fieldId);
       }
-
       if (typeFilter !== 'all') {
         params.append('type', typeFilter);
       }
-
       if (categoryFilter !== 'all') {
         params.append('category', categoryFilter);
       }
-
       const response = await fetch(`/api/financial/transactions?${params}`);
-      
       if (response.ok) {
         const data = await response.json();
         setTransactions(data.transactions);
@@ -129,21 +115,17 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchTransactions();
   }, [farmId, fieldId, currentPage, typeFilter, categoryFilter]);
-
   const handleDelete = async (transactionId: string) => {
     if (!confirm('Are you sure you want to delete this transaction?')) {
       return;
     }
-
     try {
       const response = await fetch(`/api/financial/transactions/${transactionId}`, {
         method: 'DELETE',
       });
-
       if (response.ok) {
         fetchTransactions();
         onRefresh();
@@ -155,7 +137,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       alert('Failed to delete transaction');
     }
   };
-
   const filteredTransactions = transactions.filter(transaction => {
     const matchesSearch = !searchTerm || 
       transaction.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -163,10 +144,8 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       transaction.notes?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.field?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.crop?.cropType.toLowerCase().includes(searchTerm.toLowerCase());
-    
     return matchesSearch;
   });
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -186,7 +165,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* Filters */}
@@ -203,7 +181,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
               />
             </div>
           </div>
-          
           <Select value={typeFilter} onValueChange={setTypeFilter}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by type" />
@@ -214,7 +191,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
               <SelectItem value="EXPENSE">Expenses</SelectItem>
             </SelectContent>
           </Select>
-          
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="Filter by category" />
@@ -228,7 +204,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
           </Select>
         </div>
       </Card>
-
       {/* Transaction List */}
       <div className="space-y-3">
         {filteredTransactions.length === 0 ? (
@@ -249,34 +224,29 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                     >
                       {transaction.type === 'INCOME' ? '↗' : '↙'} {CATEGORY_LABELS[transaction.category] || transaction.category}
                     </Badge>
-                    
                     {transaction.subcategory && (
                       <Badge variant="outline" className="text-xs">
                         {transaction.subcategory}
                       </Badge>
                     )}
                   </div>
-                  
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-gray-600">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-3 w-3" />
                       <span>{formatDate(transaction.transactionDate)}</span>
                     </div>
-                    
                     {transaction.field && (
                       <div className="flex items-center space-x-1">
                         <MapPin className="h-3 w-3" />
                         <span>{transaction.field.name}</span>
                       </div>
                     )}
-                    
                     {transaction.crop && (
                       <div className="flex items-center space-x-1">
                         <span>🌾</span>
                         <span>{transaction.crop.cropType}</span>
                       </div>
                     )}
-                    
                     {transaction.tags && transaction.tags.length > 0 && (
                       <div className="flex items-center space-x-1">
                         <Tag className="h-3 w-3" />
@@ -284,25 +254,21 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                       </div>
                     )}
                   </div>
-                  
                   {transaction.notes && (
                     <p className="mt-2 text-sm text-gray-700">{transaction.notes}</p>
                   )}
-                  
                   {transaction.quantity && transaction.unitPrice && (
                     <p className="mt-1 text-xs text-gray-500">
                       {transaction.quantity} × {formatCurrency(transaction.unitPrice)}
                     </p>
                   )}
                 </div>
-                
                 <div className="flex items-center space-x-3 ml-4">
                   <span className={`text-lg font-semibold ${
                     transaction.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
                   }`}>
                     {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                   </span>
-                  
                   <div className="flex items-center space-x-1">
                     <Button size="sm" variant="outline" className="h-8 w-8 p-0">
                       <Edit className="h-3 w-3" />
@@ -322,7 +288,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
           ))
         )}
       </div>
-
       {/* Pagination */}
       {totalPages > 1 && (
         <Card className="p-4">
@@ -330,7 +295,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
             <div className="text-sm text-gray-600">
               Page {currentPage} of {totalPages}
             </div>
-            
             <div className="flex items-center space-x-2">
               <Button
                 size="sm"
@@ -341,7 +305,6 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                 <ChevronLeft className="h-4 w-4" />
                 Previous
               </Button>
-              
               <Button
                 size="sm"
                 variant="outline"

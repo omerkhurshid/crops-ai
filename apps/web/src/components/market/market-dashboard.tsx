@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -8,11 +7,9 @@ import {
   DollarSign, TrendingUp, TrendingDown, BarChart3, 
   Calendar, AlertCircle, Target, RefreshCw, ArrowUp, ArrowDown
 } from 'lucide-react'
-
 interface MarketDashboardProps {
   cropTypes?: string[]
 }
-
 interface CommodityPrice {
   crop: string
   currentPrice: number
@@ -27,7 +24,6 @@ interface CommodityPrice {
   weekLow: number
   volume: number
 }
-
 interface MarketInsight {
   id: string
   type: 'opportunity' | 'warning' | 'trend'
@@ -37,18 +33,14 @@ interface MarketInsight {
   timeframe: string
   recommendation: string
 }
-
 // Removed mock data - fetch real prices from API
-
 export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
   const [prices, setPrices] = useState<CommodityPrice[]>([])
   const [insights, setInsights] = useState<MarketInsight[]>([])
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     fetchMarketData()
   }, [cropTypes])
-
   const fetchMarketData = async () => {
     setLoading(true)
     try {
@@ -74,35 +66,29 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
       setLoading(false)
     }
   }
-
   const refreshPrices = async () => {
     await fetchMarketData()
   }
-
   const getPriceColor = (changePercent: number) => {
     if (changePercent > 0) return 'text-green-600'
     if (changePercent < 0) return 'text-red-600'
     return 'text-gray-600'
   }
-
   const getBadgeColor = (changePercent: number) => {
     if (changePercent > 0) return 'bg-green-100 text-green-800'
     if (changePercent < 0) return 'bg-red-100 text-red-800'
     return 'bg-gray-100 text-gray-800'
   }
-
   const getInsightColor = (type: string, impact: string) => {
     if (type === 'opportunity') return 'border-l-4 border-l-green-500 bg-green-50'
     if (type === 'warning') return 'border-l-4 border-l-red-500 bg-red-50'
     return 'border-l-4 border-l-blue-500 bg-blue-50'
   }
-
   const getInsightIcon = (type: string) => {
     if (type === 'opportunity') return <TrendingUp className="h-5 w-5 text-green-600" />
     if (type === 'warning') return <AlertCircle className="h-5 w-5 text-red-600" />
     return <BarChart3 className="h-5 w-5 text-blue-600" />
   }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -116,7 +102,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
           {loading ? 'Updating...' : 'Refresh'}
         </Button>
       </div>
-
       {/* Price Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {prices.map((price) => (
@@ -149,7 +134,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                     </span>
                   </div>
                 </div>
-                
                 <div className="text-xs text-gray-500">
                   <div className="flex justify-between">
                     <span>Week High:</span>
@@ -169,7 +153,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
           </Card>
         ))}
       </div>
-
       {/* Market Insights */}
       <Card className="border-2">
         <CardHeader>
@@ -200,9 +183,7 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                         </Badge>
                       </div>
                     </div>
-                    
                     <p className="text-sm mb-3">{insight.description}</p>
-                    
                     <div className="bg-white/50 rounded-lg p-3">
                       <div className="flex items-center gap-2 mb-1">
                         <Target className="h-4 w-4" />
@@ -217,7 +198,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Quick Actions */}
       <Card className="border-2">
         <CardHeader>
@@ -235,7 +215,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                 Set up notifications for target prices
               </span>
             </Button>
-            
             <Button variant="outline" className="h-auto p-4 flex flex-col items-start text-left">
               <BarChart3 className="h-6 w-6 mb-2" />
               <span className="font-medium">Market Analysis</span>
@@ -243,7 +222,6 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                 Detailed charts and historical data
               </span>
             </Button>
-            
             <Button variant="outline" className="h-auto p-4 flex flex-col items-start text-left">
               <TrendingUp className="h-6 w-6 mb-2" />
               <span className="font-medium">Contract Opportunities</span>

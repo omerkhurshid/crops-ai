@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Badge } from '../ui/badge'
@@ -21,7 +20,6 @@ import {
   TrendingDown,
   AlertTriangle
 } from 'lucide-react'
-
 interface Field {
   id: string
   name: string
@@ -36,7 +34,6 @@ interface Field {
   soilMoisture?: number
   temperature?: number
 }
-
 interface Farm {
   id: string
   name: string
@@ -45,11 +42,9 @@ interface Farm {
   totalArea?: number
   fields?: Field[]
 }
-
 interface EnhancedFarmMapProps {
   farm: Farm
 }
-
 // NDVI color scale (red to green)
 const getNDVIColor = (ndvi: number) => {
   if (ndvi < 0.2) return '#ff4444' // Red - Bare soil/Very poor
@@ -59,7 +54,6 @@ const getNDVIColor = (ndvi: number) => {
   if (ndvi < 0.6) return '#44dd44' // Green - Very good
   return '#00aa00' // Dark green - Excellent
 }
-
 const getStressColor = (stressLevel: string) => {
   switch (stressLevel) {
     case 'none': return '#00aa00'
@@ -70,13 +64,11 @@ const getStressColor = (stressLevel: string) => {
     default: return '#cccccc'
   }
 }
-
 export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
   const [selectedField, setSelectedField] = useState<Field | null>(null)
   const [showNDVI, setShowNDVI] = useState(true)
   const [loading, setLoading] = useState(true)
   const [fields, setFields] = useState<Field[]>([])
-
   // Fetch field data with NDVI
   useEffect(() => {
     async function fetchFieldData() {
@@ -96,10 +88,8 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
         setLoading(false)
       }
     }
-
     fetchFieldData()
   }, [farm.id, farm.fields])
-
   if (loading) {
     return (
       <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
@@ -112,7 +102,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
       </Card>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Map Controls */}
@@ -140,7 +129,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
           </div>
         </CardHeader>
       </Card>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map Placeholder - In a real implementation, this would be an actual map */}
         <div className="lg:col-span-2">
@@ -202,7 +190,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                   )}
                 </div>
               </div>
-
               {/* Map Legend */}
               {showNDVI && fields.length > 0 && (
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg">
@@ -238,7 +225,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
             </CardContent>
           </Card>
         </div>
-
         {/* Field Details Panel */}
         <div className="lg:col-span-1">
           <Card className="bg-surface rounded-card shadow-fk-md border border-fk-border">
@@ -275,7 +261,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                       )}
                     </div>
                   </div>
-
                   {/* NDVI Health Metrics */}
                   {selectedField.ndvi !== undefined && (
                     <div className="border-t pt-4">
@@ -301,7 +286,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                             ></div>
                           </div>
                         </div>
-
                         {selectedField.ndviChange !== undefined && (
                           <div className="flex items-center justify-between p-3 bg-fk-primary/5 rounded-lg">
                             <span className="text-sm">Change (7 days)</span>
@@ -317,7 +301,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                             </span>
                           </div>
                         )}
-
                         {selectedField.stressLevel && (
                           <div className="flex items-center justify-between p-3 bg-fk-warning/5 rounded-lg">
                             <span className="text-sm flex items-center gap-2">
@@ -339,7 +322,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                       </div>
                     </div>
                   )}
-
                   {/* Additional Metrics */}
                   <div className="border-t pt-4">
                     <h4 className="font-semibold text-sm text-fk-text mb-3">Environmental Conditions</h4>
@@ -364,7 +346,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                       </div>
                     </div>
                   </div>
-
                   {/* Last Analysis */}
                   {selectedField.lastAnalysisDate && (
                     <div className="text-xs text-fk-text-muted text-center pt-2">
@@ -383,7 +364,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
           </Card>
         </div>
       </div>
-
       {/* Farm Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
@@ -401,7 +381,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
             </div>
           </CardContent>
         </Card>
-
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -415,7 +394,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
             </div>
           </CardContent>
         </Card>
-
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -429,7 +407,6 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
             </div>
           </CardContent>
         </Card>
-
         <Card className="bg-surface rounded-card shadow-fk-sm border border-fk-border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -447,14 +424,12 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
     </div>
   )
 }
-
 // Add text shadow utility
 const styles = `
   .text-shadow {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 `
-
 if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style')
   styleSheet.textContent = styles

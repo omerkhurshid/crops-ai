@@ -4,7 +4,6 @@
  * Shows the practical differences between MODIS (250m) and Sentinel-2 (10m)
  * for different farm sizes and use cases.
  */
-
 export interface ResolutionImpact {
   farmSize: number // acres
   modis250m: {
@@ -21,22 +20,17 @@ export interface ResolutionImpact {
   }
   recommendation: string
 }
-
 export function analyzeResolutionImpact(farmSizeAcres: number): ResolutionImpact {
   // 1 acre = 4,047 m²
   // 250m pixel = 62,500 m² = 15.4 acres
   // 10m pixel = 100 m² = 0.025 acres
-  
   const acresPerModisPixel = 15.4
   const acresPerSentinelPixel = 0.025
-  
   const modisPixels = Math.max(1, Math.round(farmSizeAcres / acresPerModisPixel))
   const sentinelPixels = Math.round(farmSizeAcres / acresPerSentinelPixel)
-
   let modisAccuracy: 'poor' | 'fair' | 'good' | 'excellent'
   let sentinelAccuracy: 'poor' | 'fair' | 'good' | 'excellent'
   let recommendation: string
-
   if (farmSizeAcres < 50) {
     modisAccuracy = 'poor'
     sentinelAccuracy = 'excellent'
@@ -54,7 +48,6 @@ export function analyzeResolutionImpact(farmSizeAcres: number): ResolutionImpact
     sentinelAccuracy = 'excellent'
     recommendation = 'Either works well. Choose based on cost/complexity preferences.'
   }
-
   return {
     farmSize: farmSizeAcres,
     modis250m: {
@@ -72,7 +65,6 @@ export function analyzeResolutionImpact(farmSizeAcres: number): ResolutionImpact
     recommendation
   }
 }
-
 function getModisCapabilities(acres: number): string[] {
   const base = [
     'Overall field health trend',
@@ -80,7 +72,6 @@ function getModisCapabilities(acres: number): string[] {
     'Drought stress (field-wide)',
     'Harvest timing (general)'
   ]
-  
   if (acres > 200) {
     return [
       ...base,
@@ -89,17 +80,14 @@ function getModisCapabilities(acres: number): string[] {
       'Crop rotation planning'
     ]
   }
-  
   return base
 }
-
 function getModisLimitations(acres: number): string[] {
   const base = [
     'Cannot detect small problem areas',
     'Mixed pixel problem (crops + roads + buildings)',
     'Poor boundary accuracy'
   ]
-  
   if (acres < 100) {
     return [
       ...base,
@@ -108,10 +96,8 @@ function getModisLimitations(acres: number): string[] {
       'Cannot guide variable rate application'
     ]
   }
-  
   return base
 }
-
 function getSentinelCapabilities(): string[] {
   return [
     'Individual crop rows visible',
@@ -126,7 +112,6 @@ function getSentinelCapabilities(): string[] {
     'Yield prediction (sub-field level)'
   ]
 }
-
 function getSentinelAdvantages(acres: number): string[] {
   const base = [
     'Precise field boundaries',
@@ -134,7 +119,6 @@ function getSentinelAdvantages(acres: number): string[] {
     'Variable rate application guidance',
     'Insurance claim documentation'
   ]
-  
   if (acres < 100) {
     return [
       ...base,
@@ -143,10 +127,8 @@ function getSentinelAdvantages(acres: number): string[] {
       'Suitable for precision farming'
     ]
   }
-  
   return base
 }
-
 /**
  * Real-world examples of what each resolution can detect
  */
@@ -165,7 +147,6 @@ export const realWorldExamples = {
       practical: 'Can guide tractor to exact spot needing attention'
     }
   },
-  
   largeFarm500Acres: {
     modis250m: {
       pixels: '30+ pixels',
@@ -181,7 +162,6 @@ export const realWorldExamples = {
     }
   }
 }
-
 /**
  * Cost-benefit analysis
  */
@@ -196,14 +176,11 @@ export function getCostBenefitRecommendation(
       return 'NASA MODIS is acceptable for large farms. Consider upgrading later.'
     }
   }
-  
   if (farmSize < 50) {
     return 'Must use high-resolution (Sentinel-2). MODIS will not provide actionable insights.'
   }
-  
   if (farmSize > 1000) {
     return 'Both work well. MODIS might be sufficient and more cost-effective.'
   }
-  
   return 'Sentinel-2 recommended for precision agriculture benefits.'
 }

@@ -1,7 +1,6 @@
 // Enhanced Error Handling Middleware
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-
 export class APIError extends Error {
   statusCode?: number
   code?: string
@@ -12,7 +11,6 @@ export class APIError extends Error {
     this.name = 'APIError'
   }
 }
-
 export class ValidationError extends APIError {
   statusCode = 400
   code = 'VALIDATION_ERROR'
@@ -21,7 +19,6 @@ export class ValidationError extends APIError {
     this.name = 'ValidationError'
   }
 }
-
 export class AuthenticationError extends APIError {
   statusCode = 401
   code = 'AUTHENTICATION_ERROR'
@@ -30,7 +27,6 @@ export class AuthenticationError extends APIError {
     this.name = 'AuthenticationError'
   }
 }
-
 export class AuthorizationError extends APIError {
   statusCode = 403
   code = 'AUTHORIZATION_ERROR'
@@ -39,7 +35,6 @@ export class AuthorizationError extends APIError {
     this.name = 'AuthorizationError'
   }
 }
-
 export class NotFoundError extends Error implements APIError {
   statusCode = 404
   code = 'NOT_FOUND'
@@ -48,7 +43,6 @@ export class NotFoundError extends Error implements APIError {
     this.name = 'NotFoundError'
   }
 }
-
 export class RateLimitError extends Error implements APIError {
   statusCode = 429
   code = 'RATE_LIMIT_EXCEEDED'
@@ -57,7 +51,6 @@ export class RateLimitError extends Error implements APIError {
     this.name = 'RateLimitError'
   }
 }
-
 export class InternalServerError extends Error implements APIError {
   statusCode = 500
   code = 'INTERNAL_SERVER_ERROR'
@@ -66,10 +59,8 @@ export class InternalServerError extends Error implements APIError {
     this.name = 'InternalServerError'
   }
 }
-
 export function handleAPIError(error: unknown): NextResponse {
   console.error('API Error:', error)
-
   if (error instanceof z.ZodError) {
     return NextResponse.json({
       error: 'Validation failed',
@@ -78,7 +69,6 @@ export function handleAPIError(error: unknown): NextResponse {
       timestamp: new Date().toISOString()
     }, { status: 400 })
   }
-
   if (error instanceof ValidationError) {
     return NextResponse.json({
       error: error.message,
@@ -87,7 +77,6 @@ export function handleAPIError(error: unknown): NextResponse {
       timestamp: new Date().toISOString()
     }, { status: error.statusCode })
   }
-
   if (error instanceof APIError) {
     return NextResponse.json({
       error: error.message,
@@ -95,7 +84,6 @@ export function handleAPIError(error: unknown): NextResponse {
       timestamp: new Date().toISOString()
     }, { status: error.statusCode })
   }
-
   // Generic error fallback
   return NextResponse.json({
     error: 'Internal server error',
@@ -103,7 +91,6 @@ export function handleAPIError(error: unknown): NextResponse {
     timestamp: new Date().toISOString()
   }, { status: 500 })
 }
-
 export function withErrorHandling<T extends any[]>(
   handler: (...args: T) => Promise<NextResponse>
 ) {
@@ -115,7 +102,6 @@ export function withErrorHandling<T extends any[]>(
     }
   }
 }
-
 // Usage example:
 /*
 export const GET = withErrorHandling(async (request: NextRequest) => {
@@ -124,7 +110,6 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   // throw new ValidationError('Invalid input')
   // throw new NotFoundError('User not found')
   // throw new AuthenticationError()
-  
   return NextResponse.json({ success: true })
 })
 */

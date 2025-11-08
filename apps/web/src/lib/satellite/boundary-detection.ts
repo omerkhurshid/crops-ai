@@ -4,10 +4,8 @@
  * Implements algorithms for automatic field boundary detection from satellite imagery
  * using computer vision and machine learning techniques.
  */
-
 import { sentinelHub } from './sentinel-hub';
 import type { BoundingBox, FieldBoundary, SatelliteImage } from './types';
-
 export interface BoundaryDetectionOptions {
   method: 'edge-detection' | 'segmentation' | 'machine-learning' | 'hybrid' | 'watershed';
   sensitivity: 'low' | 'medium' | 'high';
@@ -22,7 +20,6 @@ export interface BoundaryDetectionOptions {
   cropTypeClassification?: boolean; // Classify detected fields by crop type
   qualityFilter?: 'strict' | 'moderate' | 'permissive'; // Filter quality
 }
-
 export interface DetectedBoundary {
   geometry: {
     type: 'Polygon' | 'MultiPolygon';
@@ -40,7 +37,6 @@ export interface DetectedBoundary {
   };
   landUse?: 'cropland' | 'pasture' | 'forest' | 'water' | 'urban' | 'unknown';
 }
-
 export interface BoundaryDetectionResult {
   imageId: string;
   detectionDate: string;
@@ -55,12 +51,10 @@ export interface BoundaryDetectionResult {
   };
   processingTime: number; // milliseconds
 }
-
 class FieldBoundaryDetector {
   private readonly EDGE_THRESHOLD = 0.15;
   private readonly MIN_CONTOUR_AREA = 10000; // square meters
   private readonly SMOOTHING_EPSILON = 0.02;
-
   /**
    * Detect field boundaries from satellite imagery
    */
@@ -70,18 +64,14 @@ class FieldBoundaryDetector {
     options: BoundaryDetectionOptions = this.getDefaultOptions()
   ): Promise<BoundaryDetectionResult> {
     const startTime = Date.now();
-
     try {
       // Search for suitable satellite images
       const images = await sentinelHub.searchImages(bbox, date, date, 20);
-      
       if (images.length === 0) {
         throw new Error('No suitable satellite images found for boundary detection');
       }
-
       const selectedImage = images[0];
       let boundaries: DetectedBoundary[] = [];
-
       // Apply detection method
       switch (options.method) {
         case 'edge-detection':
@@ -102,13 +92,10 @@ class FieldBoundaryDetector {
         default:
           throw new Error(`Unsupported detection method: ${options.method}`);
       }
-
       // Post-process boundaries
       boundaries = this.postProcessBoundaries(boundaries, options);
-
       // Calculate statistics
       const statistics = this.calculateStatistics(boundaries);
-
       return {
         imageId: selectedImage.id,
         detectionDate: date,
@@ -123,7 +110,6 @@ class FieldBoundaryDetector {
       throw error;
     }
   }
-
   /**
    * Edge detection method for boundary detection
    */
@@ -135,26 +121,20 @@ class FieldBoundaryDetector {
     // Simulate edge detection algorithm
     // In production, this would use actual image processing
     const boundaries: DetectedBoundary[] = [];
-    
     // Generate sample boundaries based on typical field patterns
     const numFields = Math.floor(Math.random() * 5) + 3;
-    
     for (let i = 0; i < numFields; i++) {
       const centerLon = bbox.west + (bbox.east - bbox.west) * Math.random();
       const centerLat = bbox.south + (bbox.north - bbox.south) * Math.random();
-      
       const boundary = this.generateFieldPolygon(
         centerLon,
         centerLat,
         options.minFieldSize + Math.random() * (options.maxFieldSize - options.minFieldSize)
       );
-      
       boundaries.push(boundary);
     }
-
     return boundaries;
   }
-
   /**
    * Segmentation method for boundary detection
    */
@@ -166,26 +146,20 @@ class FieldBoundaryDetector {
     // Simulate segmentation algorithm
     // Would use watershed, superpixel, or similar algorithms
     const boundaries: DetectedBoundary[] = [];
-    
     // Generate more organic-shaped boundaries
     const numFields = Math.floor(Math.random() * 7) + 4;
-    
     for (let i = 0; i < numFields; i++) {
       const centerLon = bbox.west + (bbox.east - bbox.west) * Math.random();
       const centerLat = bbox.south + (bbox.north - bbox.south) * Math.random();
-      
       const boundary = this.generateOrganicFieldPolygon(
         centerLon,
         centerLat,
         options.minFieldSize + Math.random() * (options.maxFieldSize - options.minFieldSize)
       );
-      
       boundaries.push(boundary);
     }
-
     return boundaries;
   }
-
   /**
    * Machine learning method for boundary detection
    */
@@ -197,26 +171,20 @@ class FieldBoundaryDetector {
     // Simulate ML-based detection
     // Would use trained models for field boundary detection
     const boundaries: DetectedBoundary[] = [];
-    
     // Generate high-confidence boundaries
     const numFields = Math.floor(Math.random() * 6) + 2;
-    
     for (let i = 0; i < numFields; i++) {
       const centerLon = bbox.west + (bbox.east - bbox.west) * Math.random();
       const centerLat = bbox.south + (bbox.north - bbox.south) * Math.random();
-      
       const boundary = this.generateMLDetectedPolygon(
         centerLon,
         centerLat,
         options.minFieldSize + Math.random() * (options.maxFieldSize - options.minFieldSize)
       );
-      
       boundaries.push(boundary);
     }
-
     return boundaries;
   }
-
   /**
    * Post-process detected boundaries
    */
@@ -225,22 +193,18 @@ class FieldBoundaryDetector {
     options: BoundaryDetectionOptions
   ): DetectedBoundary[] {
     let processed = [...boundaries];
-
     // Filter by size
     processed = processed.filter(b => 
       b.area >= options.minFieldSize && b.area <= options.maxFieldSize
     );
-
     // Apply smoothing if requested
     if (options.smoothing) {
       processed = processed.map(b => this.smoothBoundary(b));
     }
-
     // Merge adjacent fields if requested
     if (options.mergeAdjacent) {
       processed = this.mergeAdjacentBoundaries(processed);
     }
-
     // Filter out water bodies and urban areas if requested
     if (options.excludeWater || options.excludeUrban) {
       processed = processed.filter(b => {
@@ -249,10 +213,8 @@ class FieldBoundaryDetector {
         return true;
       });
     }
-
     return processed;
   }
-
   /**
    * Generate a regular field polygon
    */
@@ -266,14 +228,11 @@ class FieldBoundaryDetector {
     const aspectRatio = 1 + Math.random() * 0.5; // 1:1 to 1.5:1
     const width = Math.sqrt(areaMeters / aspectRatio);
     const height = areaMeters / width;
-
     // Convert to degrees (approximate)
     const widthDeg = width / 111320;
     const heightDeg = height / 110540;
-
     // Add slight rotation
     const rotation = Math.random() * 45 - 22.5; // -22.5 to +22.5 degrees
-
     // Generate rectangle with rotation
     const coordinates = this.rotateRectangle(
       centerLon,
@@ -282,7 +241,6 @@ class FieldBoundaryDetector {
       heightDeg,
       rotation
     );
-
     return {
       geometry: {
         type: 'Polygon',
@@ -301,7 +259,6 @@ class FieldBoundaryDetector {
       landUse: 'cropland'
     };
   }
-
   /**
    * Generate an organic-shaped field polygon
    */
@@ -313,28 +270,21 @@ class FieldBoundaryDetector {
     // Generate irregular polygon using radial approach
     const numPoints = 8 + Math.floor(Math.random() * 8);
     const baseRadius = Math.sqrt(areaHectares * 10000 / Math.PI) / 111320;
-    
     const coordinates: number[][] = [];
-    
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * 2 * Math.PI;
       const radiusVariation = 0.7 + Math.random() * 0.6; // 70% to 130%
       const radius = baseRadius * radiusVariation;
-      
       const lon = centerLon + radius * Math.cos(angle);
       const lat = centerLat + radius * Math.sin(angle);
-      
       coordinates.push([lon, lat]);
     }
-    
     // Close the polygon
     coordinates.push(coordinates[0]);
-
     // Calculate actual area and characteristics
     const area = this.calculatePolygonArea(coordinates);
     const perimeter = this.calculatePolygonPerimeter(coordinates);
     const compactness = (4 * Math.PI * area) / (perimeter * perimeter);
-
     return {
       geometry: {
         type: 'Polygon',
@@ -353,7 +303,6 @@ class FieldBoundaryDetector {
       landUse: Math.random() > 0.8 ? 'pasture' : 'cropland'
     };
   }
-
   /**
    * Generate ML-detected polygon with high confidence
    */
@@ -364,45 +313,35 @@ class FieldBoundaryDetector {
   ): DetectedBoundary {
     // ML would typically produce more accurate boundaries
     const boundary = this.generateFieldPolygon(centerLon, centerLat, areaHectares);
-    
     // Increase confidence for ML detection
     boundary.confidence = 0.9 + Math.random() * 0.08;
-    
     // Add slight irregularities to make it more realistic
     boundary.geometry.coordinates[0] = boundary.geometry.coordinates[0].map((coord, i) => {
       if (i === boundary.geometry.coordinates[0].length - 1) return coord;
-      
       const variation = 0.00001 * (Math.random() - 0.5);
       return [coord[0] + variation, coord[1] + variation];
     });
-
     return boundary;
   }
-
   /**
    * Smooth boundary using Douglas-Peucker algorithm simulation
    */
   private smoothBoundary(boundary: DetectedBoundary): DetectedBoundary {
     // Simplified smoothing - in production would use actual algorithm
     const smoothed = { ...boundary };
-    
     // Reduce number of points while maintaining shape
     const coords = boundary.geometry.coordinates[0];
     const simplified: number[][] = [];
-    
     for (let i = 0; i < coords.length; i += 2) {
       simplified.push(coords[i]);
     }
-    
     // Ensure polygon is closed
     if (simplified[simplified.length - 1] !== simplified[0]) {
       simplified.push(simplified[0]);
     }
-
     smoothed.geometry.coordinates = [simplified];
     return smoothed;
   }
-
   /**
    * Merge adjacent boundaries
    */
@@ -410,35 +349,27 @@ class FieldBoundaryDetector {
     // Simplified merging - would use actual geometric operations
     const merged: DetectedBoundary[] = [];
     const processed = new Set<number>();
-
     for (let i = 0; i < boundaries.length; i++) {
       if (processed.has(i)) continue;
-      
       let current = boundaries[i];
       processed.add(i);
-
       // Check for adjacent boundaries
       for (let j = i + 1; j < boundaries.length; j++) {
         if (processed.has(j)) continue;
-
         const distance = this.calculateCentroidDistance(
           current.centroid,
           boundaries[j].centroid
         );
-
         // If close enough, merge
         if (distance < 0.001) { // ~100 meters
           current = this.mergeBoundaries(current, boundaries[j]);
           processed.add(j);
         }
       }
-
       merged.push(current);
     }
-
     return merged;
   }
-
   /**
    * Helper methods
    */
@@ -455,43 +386,33 @@ class FieldBoundaryDetector {
       [widthDeg / 2, heightDeg / 2],
       [-widthDeg / 2, heightDeg / 2]
     ];
-
     const rotRad = (rotation * Math.PI) / 180;
     const cos = Math.cos(rotRad);
     const sin = Math.sin(rotRad);
-
     const rotated = corners.map(([x, y]) => {
       const newX = x * cos - y * sin + centerLon;
       const newY = x * sin + y * cos + centerLat;
       return [newX, newY];
     });
-
     // Close the polygon
     rotated.push(rotated[0]);
-
     return rotated;
   }
-
   private calculatePolygonArea(coordinates: number[][]): number {
     // Shoelace formula for area calculation
     let area = 0;
     const n = coordinates.length - 1; // Exclude closing point
-
     for (let i = 0; i < n; i++) {
       const j = (i + 1) % n;
       area += coordinates[i][0] * coordinates[j][1];
       area -= coordinates[j][0] * coordinates[i][1];
     }
-
     area = Math.abs(area) / 2;
-    
     // Convert from square degrees to square meters (approximate)
     return area * 111320 * 110540;
   }
-
   private calculatePolygonPerimeter(coordinates: number[][]): number {
     let perimeter = 0;
-    
     for (let i = 0; i < coordinates.length - 1; i++) {
       const distance = this.calculateDistance(
         coordinates[i],
@@ -499,10 +420,8 @@ class FieldBoundaryDetector {
       );
       perimeter += distance;
     }
-
     return perimeter;
   }
-
   private calculateDistance(coord1: number[], coord2: number[]): number {
     // Haversine formula for distance
     const R = 6371000; // Earth radius in meters
@@ -510,23 +429,18 @@ class FieldBoundaryDetector {
     const lat2 = coord2[1] * Math.PI / 180;
     const deltaLat = (coord2[1] - coord1[1]) * Math.PI / 180;
     const deltaLon = (coord2[0] - coord1[0]) * Math.PI / 180;
-
     const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
               Math.cos(lat1) * Math.cos(lat2) *
               Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-    
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    
     return R * c;
   }
-
   private calculateCentroidDistance(
     centroid1: [number, number],
     centroid2: [number, number]
   ): number {
     return this.calculateDistance(centroid1, centroid2);
   }
-
   private mergeBoundaries(
     boundary1: DetectedBoundary,
     boundary2: DetectedBoundary
@@ -542,11 +456,9 @@ class FieldBoundaryDetector {
       ]
     };
   }
-
   private calculateStatistics(boundaries: DetectedBoundary[]): BoundaryDetectionResult['statistics'] {
     const totalArea = boundaries.reduce((sum, b) => sum + b.area, 0);
     const avgConfidence = boundaries.reduce((sum, b) => sum + b.confidence, 0) / boundaries.length;
-
     return {
       totalFieldsDetected: boundaries.length,
       totalArea,
@@ -554,7 +466,6 @@ class FieldBoundaryDetector {
       confidenceScore: avgConfidence
     };
   }
-
   /**
    * Advanced hybrid boundary detection combining multiple methods
    */
@@ -566,20 +477,16 @@ class FieldBoundaryDetector {
     // Combine edge detection and segmentation for better results
     const edgeBoundaries = await this.detectUsingEdgeDetection(bbox, date, options);
     const segmentationBoundaries = await this.detectUsingSegmentation(bbox, date, options);
-    
     // Merge and validate boundaries using ensemble approach
     const combinedBoundaries = [...edgeBoundaries, ...segmentationBoundaries];
-    
     // Apply clustering to merge similar boundaries
     const clusteredBoundaries = this.clusterSimilarBoundaries(combinedBoundaries, 50); // 50m threshold
-    
     // Score boundaries based on multiple criteria
     return clusteredBoundaries.map(boundary => ({
       ...boundary,
       confidence: this.calculateHybridConfidence(boundary, edgeBoundaries, segmentationBoundaries)
     }));
   }
-
   /**
    * Watershed-based boundary detection for complex field shapes
    */
@@ -593,20 +500,16 @@ class FieldBoundaryDetector {
     const boundaries: DetectedBoundary[] = [];
     const area = (bbox.east - bbox.west) * (bbox.north - bbox.south);
     const numFields = Math.floor(area * 1000 * Math.random()) + 3; // 3-X fields based on area
-    
     for (let i = 0; i < numFields; i++) {
       const centerLon = bbox.west + Math.random() * (bbox.east - bbox.west);
       const centerLat = bbox.south + Math.random() * (bbox.north - bbox.south);
       const fieldArea = options.minFieldSize + Math.random() * (options.maxFieldSize - options.minFieldSize);
-      
       // Generate watershed-like irregular boundaries
       const boundary = this.generateWatershedBoundary(centerLon, centerLat, fieldArea);
       boundaries.push(boundary);
     }
-    
     return boundaries;
   }
-
   /**
    * Multi-scale boundary detection
    */
@@ -617,43 +520,34 @@ class FieldBoundaryDetector {
   ): Promise<DetectedBoundary[]> {
     const scales = [10, 20, 60]; // Different resolutions in meters
     const allBoundaries: DetectedBoundary[][] = [];
-    
     for (const scale of scales) {
       const scaleOptions = { ...options, resolution: scale };
       const boundaries = await this.detectUsingEdgeDetection(bbox, date, scaleOptions);
       allBoundaries.push(boundaries);
     }
-    
     // Merge results from different scales
     return this.mergeMultiScaleResults(allBoundaries);
   }
-
   /**
    * Cluster similar boundaries to remove duplicates
    */
   private clusterSimilarBoundaries(boundaries: DetectedBoundary[], threshold: number): DetectedBoundary[] {
     const clusters: DetectedBoundary[][] = [];
     const processed = new Set<number>();
-    
     for (let i = 0; i < boundaries.length; i++) {
       if (processed.has(i)) continue;
-      
       const cluster: DetectedBoundary[] = [boundaries[i]];
       processed.add(i);
-      
       for (let j = i + 1; j < boundaries.length; j++) {
         if (processed.has(j)) continue;
-        
         const distance = this.calculateBoundaryDistance(boundaries[i], boundaries[j]);
         if (distance < threshold) {
           cluster.push(boundaries[j]);
           processed.add(j);
         }
       }
-      
       clusters.push(cluster);
     }
-    
     // Return the best boundary from each cluster
     return clusters.map(cluster => {
       return cluster.reduce((best, current) => 
@@ -661,7 +555,6 @@ class FieldBoundaryDetector {
       );
     });
   }
-
   /**
    * Calculate distance between two boundaries
    */
@@ -670,7 +563,6 @@ class FieldBoundaryDetector {
     const [lon2, lat2] = boundary2.centroid;
     return this.calculateDistance([lon1, lat1], [lon2, lat2]);
   }
-
   /**
    * Calculate hybrid confidence score
    */
@@ -680,7 +572,6 @@ class FieldBoundaryDetector {
     segmentationBoundaries: DetectedBoundary[]
   ): number {
     let score = boundary.confidence;
-    
     // Boost score if detected by multiple methods
     const foundInEdge = edgeBoundaries.some(b => 
       this.calculateBoundaryDistance(b, boundary) < 25
@@ -688,19 +579,15 @@ class FieldBoundaryDetector {
     const foundInSegmentation = segmentationBoundaries.some(b => 
       this.calculateBoundaryDistance(b, boundary) < 25
     );
-    
     if (foundInEdge && foundInSegmentation) {
       score = Math.min(0.95, score + 0.2);
     }
-    
     // Consider shape regularity
     if (boundary.characteristics.compactness > 0.7) {
       score = Math.min(0.95, score + 0.1);
     }
-    
     return score;
   }
-
   /**
    * Generate watershed-like boundary
    */
@@ -712,30 +599,22 @@ class FieldBoundaryDetector {
     // Generate irregular shape mimicking watershed segmentation
     const numPoints = 12 + Math.floor(Math.random() * 8);
     const baseRadius = Math.sqrt(areaHectares * 10000 / Math.PI) / 111320;
-    
     const coordinates: number[][] = [];
-    
     for (let i = 0; i < numPoints; i++) {
       const angle = (i / numPoints) * 2 * Math.PI;
       const radiusVariation = 0.4 + Math.random() * 1.2; // More irregular than organic
       const radius = baseRadius * radiusVariation;
-      
       // Add some noise for watershed-like edges
       const noiseX = (Math.random() - 0.5) * baseRadius * 0.1;
       const noiseY = (Math.random() - 0.5) * baseRadius * 0.1;
-      
       const lon = centerLon + radius * Math.cos(angle) + noiseX;
       const lat = centerLat + radius * Math.sin(angle) + noiseY;
-      
       coordinates.push([lon, lat]);
     }
-    
     coordinates.push(coordinates[0]);
-    
     const area = this.calculatePolygonArea(coordinates);
     const perimeter = this.calculatePolygonPerimeter(coordinates);
     const compactness = (4 * Math.PI * area) / (perimeter * perimeter);
-    
     return {
       geometry: {
         type: 'Polygon',
@@ -754,34 +633,28 @@ class FieldBoundaryDetector {
       landUse: Math.random() > 0.3 ? 'cropland' : 'pasture'
     };
   }
-
   /**
    * Merge results from multiple scales
    */
   private mergeMultiScaleResults(allBoundaries: DetectedBoundary[][]): DetectedBoundary[] {
     const merged: DetectedBoundary[] = [];
-    
     // Start with finest scale (highest resolution)
     if (allBoundaries.length > 0) {
       merged.push(...allBoundaries[0]);
     }
-    
     // Add boundaries from coarser scales if they don't overlap significantly
     for (let i = 1; i < allBoundaries.length; i++) {
       for (const boundary of allBoundaries[i]) {
         const hasOverlap = merged.some(existing => 
           this.calculateBoundaryDistance(existing, boundary) < 100
         );
-        
         if (!hasOverlap) {
           merged.push(boundary);
         }
       }
     }
-    
     return merged;
   }
-
   private getDefaultOptions(): BoundaryDetectionOptions {
     return {
       method: 'edge-detection',
@@ -799,5 +672,4 @@ class FieldBoundaryDetector {
     };
   }
 }
-
 export const boundaryDetector = new FieldBoundaryDetector();

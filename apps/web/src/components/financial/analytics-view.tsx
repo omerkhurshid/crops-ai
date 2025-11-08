@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -11,7 +10,6 @@ import {
   Target, MapPin, Calendar, RefreshCw, AlertCircle, Zap,
   Leaf, Activity, Users
 } from 'lucide-react';
-
 interface AnalyticsData {
   profitability: {
     byField: Array<{
@@ -74,27 +72,22 @@ interface AnalyticsData {
     action: string;
   }>;
 }
-
 interface AnalyticsViewProps {
   farmId: string;
   dateRange: { start: Date; end: Date };
 }
-
 export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetchAnalyticsData();
   }, [farmId, dateRange]);
-
   const fetchAnalyticsData = async () => {
     setLoading(true);
     try {
       const response = await fetch(
         `/api/financial/analytics?farmId=${farmId}&startDate=${dateRange.start.toISOString()}&endDate=${dateRange.end.toISOString()}`
       );
-      
       if (response.ok) {
         const result = await response.json();
         setData(result.data);
@@ -108,7 +101,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       setLoading(false);
     }
   };
-
   // Removed mock data function - only show real data
   /*const getMockAnalyticsData = (): AnalyticsData => ({
     profitability: {
@@ -223,7 +215,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       }
     ]
   });*/
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -231,11 +222,9 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       minimumFractionDigits: 0
     }).format(amount);
   };
-
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;
   };
-
   const getInsightIcon = (type: string) => {
     switch (type) {
       case 'opportunity': return <TrendingUp className="h-4 w-4 text-green-600" />;
@@ -244,7 +233,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       default: return <Activity className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const getInsightColor = (type: string) => {
     switch (type) {
       case 'opportunity': return 'bg-green-50 border-green-200';
@@ -253,7 +241,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       default: return 'bg-gray-50 border-gray-200';
     }
   };
-
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
@@ -262,12 +249,10 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getBenchmarkColor = (value: number, benchmark: number) => {
     if (value <= benchmark) return 'text-green-600';
     return 'text-red-600';
   };
-
   if (loading) {
     return (
       <div className="space-y-6">
@@ -282,7 +267,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       </div>
     );
   }
-
   if (!data) {
     return (
       <div className="text-center py-12">
@@ -292,7 +276,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       </div>
     );
   }
-
   return (
     <div className="space-y-6">
       {/* AI Insights */}
@@ -327,7 +310,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Profitability Analysis */}
       <Tabs defaultValue="fields" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
@@ -335,7 +317,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
           <TabsTrigger value="crops">By Crop</TabsTrigger>
           <TabsTrigger value="categories">By Category</TabsTrigger>
         </TabsList>
-
         <TabsContent value="fields">
           <Card>
             <CardHeader>
@@ -359,7 +340,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                         <p className="text-sm text-gray-600">{formatPercentage(field.roi)} ROI</p>
                       </div>
                     </div>
-                    
                     <div className="grid grid-cols-3 gap-4 text-center">
                       <div>
                         <div className="text-green-600 font-semibold">{formatCurrency(field.revenue)}</div>
@@ -380,7 +360,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="crops">
           <Card>
             <CardHeader>
@@ -404,7 +383,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                         <p className="text-sm text-gray-600">{crop.yieldPerAcre} bu/acre</p>
                       </div>
                     </div>
-                    
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
                         <div className="text-green-600 font-semibold">{formatCurrency(crop.pricePerUnit)}</div>
@@ -421,7 +399,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="categories">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
@@ -442,7 +419,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-red-600">Expense Breakdown</CardTitle>
@@ -464,7 +440,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
           </div>
         </TabsContent>
       </Tabs>
-
       {/* Efficiency Metrics */}
       <Card>
         <CardHeader>
@@ -494,7 +469,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                 ))}
               </div>
             </div>
-
             <div>
               <h4 className="font-semibold mb-4">Resource Utilization</h4>
               <div className="space-y-3">
@@ -512,7 +486,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
           </div>
         </CardContent>
       </Card>
-
       {/* Benchmarking */}
       <Card>
         <CardHeader>
@@ -545,7 +518,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                 </div>
               </div>
             </div>
-
             <div className="p-4 bg-gray-50 rounded-lg">
               <h4 className="font-semibold text-gray-900 mb-3">Regional Average</h4>
               <div className="space-y-2">
@@ -569,7 +541,6 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                 </div>
               </div>
             </div>
-
             <div className="p-4 bg-green-50 rounded-lg">
               <h4 className="font-semibold text-green-900 mb-3">Industry Best</h4>
               <div className="space-y-2">

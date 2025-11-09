@@ -602,17 +602,29 @@ export function ThreeStepFarmCreator() {
                             onClick={() => setFarm(prev => ({ ...prev, isMultiField: false, fields: [] }))}
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               !farm.isMultiField
-                                ? 'border-sage-500 bg-sage-50'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-sage-600 bg-sage-600 text-white'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-sage-300 hover:bg-sage-50'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                                <Wheat className="h-3 w-3 text-green-600" />
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                                !farm.isMultiField 
+                                  ? 'bg-white/20' 
+                                  : 'bg-sage-100'
+                              }`}>
+                                <Wheat className={`h-3 w-3 ${
+                                  !farm.isMultiField 
+                                    ? 'text-white' 
+                                    : 'text-sage-600'
+                                }`} />
                               </div>
                               <span className="font-medium text-sm">Single Field</span>
                             </div>
-                            <p className="text-xs text-gray-600">
+                            <p className={`text-xs ${
+                              !farm.isMultiField 
+                                ? 'text-white/80' 
+                                : 'text-gray-600'
+                            }`}>
                               Treat entire farm as one field
                             </p>
                           </button>
@@ -621,17 +633,29 @@ export function ThreeStepFarmCreator() {
                             onClick={() => setFarm(prev => ({ ...prev, isMultiField: true }))}
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               farm.isMultiField
-                                ? 'border-sage-500 bg-sage-50'
-                                : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-sage-600 bg-sage-600 text-white'
+                                : 'border-gray-200 bg-white text-gray-700 hover:border-sage-300 hover:bg-sage-50'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                <Satellite className="h-3 w-3 text-blue-600" />
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                                farm.isMultiField 
+                                  ? 'bg-white/20' 
+                                  : 'bg-blue-100'
+                              }`}>
+                                <Satellite className={`h-3 w-3 ${
+                                  farm.isMultiField 
+                                    ? 'text-white' 
+                                    : 'text-blue-600'
+                                }`} />
                               </div>
                               <span className="font-medium text-sm">Multiple Fields</span>
                             </div>
-                            <p className="text-xs text-gray-600">
+                            <p className={`text-xs ${
+                              farm.isMultiField 
+                                ? 'text-white/80' 
+                                : 'text-gray-600'
+                            }`}>
                               Draw separate field boundaries
                             </p>
                           </button>

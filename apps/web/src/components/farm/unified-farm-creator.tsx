@@ -224,12 +224,18 @@ export function UnifiedFarmCreator() {
   }
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
-    // Wait for all required Google Maps APIs to load
+    // Wait for all required Google Maps APIs to load with timeout protection
+    let attempts = 0
+    const maxAttempts = 100 // 10 seconds timeout
     const checkGoogleMapsReady = () => {
       if (window.google?.maps?.geometry && window.google?.maps?.drawing) {
+        console.log('Google Maps APIs loaded successfully')
         setGoogleMapsLoaded(true)
-      } else {
+      } else if (attempts < maxAttempts) {
+        attempts++
         setTimeout(checkGoogleMapsReady, 100)
+      } else {
+        console.error('Google Maps APIs failed to load within timeout')
       }
     }
     checkGoogleMapsReady()
@@ -242,55 +248,77 @@ export function UnifiedFarmCreator() {
       console.error('Google Maps geometry library not loaded')
       return
     }
-    const path = polygon.getPath()
-    const coordinates: Array<{ lat: number; lng: number }> = []
-    for (let i = 0; i < path.getLength(); i++) {
-      const latLng = path.getAt(i)
-      coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
+    if (!googleMapsLoaded) {
+      console.error('Google Maps not fully loaded yet')
+      return
     }
-    // Calculate area
-    const area = window.google.maps.geometry.spherical.computeArea(path)
-    const areaInAcres = Math.round(area / 4047) // Convert sq meters to acres
-    setFarm(prev => ({
-      ...prev,
-      boundaries: coordinates,
-      totalArea: areaInAcres
-    }))
-    polygon.setMap(null)
-    if (drawingManager) {
-      drawingManager.setDrawingMode(null)
+    
+    try {
+      const path = polygon.getPath()
+      const coordinates: Array<{ lat: number; lng: number }> = []
+      for (let i = 0; i < path.getLength(); i++) {
+        const latLng = path.getAt(i)
+        coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
+      }
+      // Calculate area
+      const area = window.google.maps.geometry.spherical.computeArea(path)
+      const areaInAcres = Math.round(area / 4047) // Convert sq meters to acres
+      setFarm(prev => ({
+        ...prev,
+        boundaries: coordinates,
+        totalArea: areaInAcres
+      }))
+      console.log('Farm boundary created:', areaInAcres, 'acres')
+    } catch (error) {
+      console.error('Error creating farm boundary:', error)
+    } finally {
+      polygon.setMap(null)
+      if (drawingManager) {
+        drawingManager.setDrawingMode(null)
+      }
     }
-  }, [drawingManager])
+  }, [drawingManager, googleMapsLoaded])
   const onFieldBoundaryComplete = useCallback((polygon: google.maps.Polygon) => {
     if (!window.google?.maps?.geometry) {
       console.error('Google Maps geometry library not loaded')
       return
     }
+    if (!googleMapsLoaded) {
+      console.error('Google Maps not fully loaded yet')
+      return
+    }
     if (!hasValidBoundaries) return
-    const path = polygon.getPath()
-    const coordinates: Array<{ lat: number; lng: number }> = []
-    for (let i = 0; i < path.getLength(); i++) {
-      const latLng = path.getAt(i)
-      coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
+    
+    try {
+      const path = polygon.getPath()
+      const coordinates: Array<{ lat: number; lng: number }> = []
+      for (let i = 0; i < path.getLength(); i++) {
+        const latLng = path.getAt(i)
+        coordinates.push({ lat: latLng.lat(), lng: latLng.lng() })
+      }
+      const area = window.google.maps.geometry.spherical.computeArea(path)
+      const areaInAcres = Math.round(area / 4047)
+      const newField: Field = {
+        id: `field-${Date.now()}`,
+        name: `Field ${(farm.fields?.length || 0) + 1}`,
+        area: areaInAcres,
+        boundaries: coordinates,
+        color: fieldColors[(farm.fields?.length || 0) % fieldColors.length]
+      }
+      setFarm(prev => ({
+        ...prev,
+        fields: [...(prev.fields || []), newField]
+      }))
+      console.log('Field created:', newField.name, areaInAcres, 'acres')
+    } catch (error) {
+      console.error('Error creating field boundary:', error)
+    } finally {
+      polygon.setMap(null)
+      if (drawingManager) {
+        drawingManager.setDrawingMode(null)
+      }
     }
-    const area = window.google.maps.geometry.spherical.computeArea(path)
-    const areaInAcres = Math.round(area / 4047)
-    const newField: Field = {
-      id: `field-${Date.now()}`,
-      name: `Field ${(farm.fields?.length || 0) + 1}`,
-      area: areaInAcres,
-      boundaries: coordinates,
-      color: fieldColors[(farm.fields?.length || 0) % fieldColors.length]
-    }
-    setFarm(prev => ({
-      ...prev,
-      fields: [...(prev.fields || []), newField]
-    }))
-    polygon.setMap(null)
-    if (drawingManager) {
-      drawingManager.setDrawingMode(null)
-    }
-  }, [drawingManager, hasValidBoundaries, farm.fields])
+  }, [drawingManager, googleMapsLoaded, hasValidBoundaries, farm.fields])
   const deleteField = (fieldId: string) => {
     setFarm(prev => ({
       ...prev,
@@ -629,6 +657,21 @@ export function UnifiedFarmCreator() {
                             }
                           }}
                         />
+                      )}
+                      {!googleMapsLoaded && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          background: 'rgba(0,0,0,0.7)',
+                          color: 'white',
+                          padding: '8px 16px',
+                          borderRadius: '4px',
+                          zIndex: 1000
+                        }}>
+                          Loading drawing tools...
+                        </div>
                       )}
                     </GoogleMap>
                   </LoadScript>

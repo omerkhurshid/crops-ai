@@ -14,8 +14,8 @@ export function UserPreferencesProvider({ children }: { children: React.ReactNod
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES)
   const [loading, setLoading] = useState(true)
   const fetchPreferences = async () => {
-    // Only fetch preferences if user is authenticated
-    if (!session) {
+    // Only fetch preferences if user is authenticated and status is confirmed
+    if (!session || status !== 'authenticated') {
       setLoading(false)
       return
     }
@@ -26,6 +26,11 @@ export function UserPreferencesProvider({ children }: { children: React.ReactNod
         if (data.success && data.data.preferences) {
           setPreferences(data.data.preferences)
         }
+      } else {
+        // If 401, don't spam the console - user might still be authenticating
+        if (response.status !== 401) {
+          console.error('Failed to fetch preferences:', response.status)
+        }
       }
     } catch (error) {
       console.error('Failed to fetch preferences:', error)
@@ -34,6 +39,10 @@ export function UserPreferencesProvider({ children }: { children: React.ReactNod
     }
   }
   const updatePreferences = async (newPreferences: Partial<UserPreferences>) => {
+    if (!session || status !== 'authenticated') {
+      throw new Error('User not authenticated')
+    }
+    
     try {
       const response = await fetch('/api/users/preferences', {
         method: 'PUT',
@@ -56,9 +65,13 @@ export function UserPreferencesProvider({ children }: { children: React.ReactNod
     await fetchPreferences()
   }
   useEffect(() => {
-    // Only fetch preferences when authentication status is determined
-    if (status !== 'loading') {
+    // Only fetch preferences when user is confirmed authenticated
+    if (status === 'authenticated' && session) {
       fetchPreferences()
+    } else if (status === 'unauthenticated') {
+      // Reset to default preferences for unauthenticated users
+      setPreferences(DEFAULT_PREFERENCES)
+      setLoading(false)
     }
   }, [status, session])
   return (

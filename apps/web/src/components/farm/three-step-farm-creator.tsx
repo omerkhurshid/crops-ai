@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
+import { useSession } from '../../lib/auth-unified'
 
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
 
@@ -31,6 +32,8 @@ interface Field {
   color: string
   cropType?: string
   cropVariety?: string
+  fieldType?: 'crop' | 'livestock'
+  selectedCategory?: string
 }
 
 interface Farm {
@@ -85,8 +88,10 @@ export function ThreeStepFarmCreator() {
   const [drawingMode, setDrawingMode] = useState<'farm' | 'field'>('farm')
   const [activeFieldIndex, setActiveFieldIndex] = useState(-1)
   const [crops, setCrops] = useState<CropOption[]>(mockCrops)
+  const [groupedCrops, setGroupedCrops] = useState<Record<string, CropOption[]>>({})
   
   const router = useRouter()
+  const { data: session, status } = useSession()
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
   // Load crops from API
@@ -98,6 +103,9 @@ export function ThreeStepFarmCreator() {
           const data = await response.json()
           if (data.crops) {
             setCrops(data.crops)
+          }
+          if (data.groupedCrops) {
+            setGroupedCrops(data.groupedCrops)
           }
         }
       } catch (error) {
@@ -322,9 +330,16 @@ export function ThreeStepFarmCreator() {
   const submitFarm = async () => {
     setIsLoading(true)
     try {
+      // Check session before making the API call
+      if (status !== 'authenticated' || !session) {
+        throw new Error('Please sign in to create a farm')
+      }
+
       const response = await fetch('/api/farms', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           name: farm.name,
           latitude: farm.location.lat,
@@ -344,12 +359,20 @@ export function ThreeStepFarmCreator() {
         })
       })
       
-      if (!response.ok) throw new Error('Failed to create farm')
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Your session has expired. Please sign in again.')
+        }
+        const errorText = await response.text()
+        console.error('Farm creation failed:', response.status, errorText)
+        throw new Error(`Failed to create farm: ${response.status}`)
+      }
       
       router.push('/dashboard')
     } catch (error) {
       console.error('Error creating farm:', error)
-      alert('Failed to create farm. Please try again.')
+      const message = error instanceof Error ? error.message : 'An error occurred. Please try again.'
+      alert(message) // Replace with proper toast/notification system
     } finally {
       setIsLoading(false)
     }
@@ -812,22 +835,89 @@ export function ThreeStepFarmCreator() {
                       </div>
                       
                       <div>
-                        <Label className="text-sm font-medium">What's growing in this field?</Label>
-                        <Select onValueChange={(value) => updateFieldCrop(field.id, value)}>
-                          <SelectTrigger className="mt-2">
-                            <SelectValue placeholder="Select crop type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {crops.map((crop) => (
-                              <SelectItem key={crop.id} value={crop.id}>
-                                <div className="flex flex-col">
-                                  <span className="font-medium">{crop.name}</span>
-                                  <span className="text-xs text-gray-500">{crop.category}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Label className="text-sm font-medium">What's the purpose of this field?</Label>
+                        <div className="space-y-3 mt-2">
+                          {/* Field Type Selection */}
+                          <Select onValueChange={(value) => {
+                            const updatedFields = farm.fields.map(f => 
+                              f.id === field.id 
+                                ? { ...f, fieldType: value as 'crop' | 'livestock', cropType: '' }
+                                : f
+                            )
+                            setFarm({ ...farm, fields: updatedFields })
+                          }}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select field purpose" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="crop">🌾 Growing Crops</SelectItem>
+                              <SelectItem value="livestock">🐄 Livestock Grazing/Housing</SelectItem>
+                            </SelectContent>
+                          </Select>
+
+                          {/* Category Selection (only for crop fields) */}
+                          {field.fieldType === 'crop' && (
+                            <Select onValueChange={(value) => {
+                              const updatedFields = farm.fields.map(f => 
+                                f.id === field.id 
+                                  ? { ...f, selectedCategory: value, cropType: '' }
+                                  : f
+                              )
+                              setFarm({ ...farm, fields: updatedFields })
+                            }}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select crop category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.keys(groupedCrops).map((category) => (
+                                  <SelectItem key={category} value={category}>
+                                    {category}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+
+                          {/* Specific Crop Selection */}
+                          {field.fieldType === 'crop' && field.selectedCategory && (
+                            <Select onValueChange={(value) => updateFieldCrop(field.id, value)}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select specific crop" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {groupedCrops[field.selectedCategory]?.map((crop: any) => (
+                                  <SelectItem key={crop.id} value={crop.id}>
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{crop.name}</span>
+                                      {crop.scientificName && (
+                                        <span className="text-xs text-gray-500 italic">{crop.scientificName}</span>
+                                      )}
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          )}
+
+                          {/* Livestock Type Selection */}
+                          {field.fieldType === 'livestock' && (
+                            <Select onValueChange={(value) => updateFieldCrop(field.id, `livestock-${value}`)}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select livestock type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="cattle">🐄 Cattle</SelectItem>
+                                <SelectItem value="dairy">🥛 Dairy Cows</SelectItem>
+                                <SelectItem value="sheep">🐑 Sheep</SelectItem>
+                                <SelectItem value="goats">🐐 Goats</SelectItem>
+                                <SelectItem value="pigs">🐷 Pigs</SelectItem>
+                                <SelectItem value="chickens">🐔 Chickens</SelectItem>
+                                <SelectItem value="horses">🐎 Horses</SelectItem>
+                                <SelectItem value="mixed">🦎 Mixed Livestock</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}

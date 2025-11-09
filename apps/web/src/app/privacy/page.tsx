@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-sage-800 mb-4">1. Introduction</h2>
               <p className="text-sage-700 mb-4">
-                Crops.AI ("we," "our," or "us") is committed to protecting your privacy and ensuring you have a positive experience on our platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our agricultural management services (collectively, the "Service").
+                Cropple.ai ("we," "our," or "us") is committed to protecting your privacy and ensuring you have a positive experience on our platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our agricultural management services (collectively, the "Service").
               </p>
               <p className="text-sage-700 mb-4">
                 By accessing or using our Service, you agree to the collection and use of information in accordance with this policy. If you disagree with any part of this policy, please do not access the Service.
@@ -210,16 +210,16 @@ export default function PrivacyPolicyPage() {
                 If you have questions about this Privacy Policy or wish to exercise your rights, please contact us:
               </p>
               <div className="bg-sage-50 p-6 rounded-lg">
-                <p className="text-sage-700 mb-2"><strong>Email:</strong> privacy@crops.ai</p>
+                <p className="text-sage-700 mb-2"><strong>Email:</strong> privacy@cropple.ai</p>
                 <p className="text-sage-700 mb-2"><strong>Mailing Address:</strong></p>
                 <p className="text-sage-700 mb-2">
-                  Crops.AI Inc.<br />
+                  Cropple.ai Inc.<br />
                   Privacy Department<br />
                   [Your Business Address]<br />
                   [City, State, ZIP Code]<br />
                   [Country]
                 </p>
-                <p className="text-sage-700 mb-2"><strong>Data Protection Officer:</strong> dpo@crops.ai</p>
+                <p className="text-sage-700 mb-2"><strong>Data Protection Officer:</strong> dpo@cropple.ai</p>
                 <p className="text-sage-700"><strong>EU Representative:</strong> [If applicable]</p>
               </div>
             </section>

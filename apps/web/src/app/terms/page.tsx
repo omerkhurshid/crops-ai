@@ -10,7 +10,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-sage-800 mb-4">1. Acceptance of Terms</h2>
               <p className="text-sage-700 mb-4">
-                Welcome to Crops.AI ("we," "us," "our," "Company," or "Service"). These Terms of Service ("Terms") govern your access to and use of our agricultural management platform, website, mobile applications, and related services (collectively, the "Service").
+                Welcome to Cropple.ai ("we," "us," "our," "Company," or "Service"). These Terms of Service ("Terms") govern your access to and use of our agricultural management platform, website, mobile applications, and related services (collectively, the "Service").
               </p>
               <p className="text-sage-700 mb-4">
                 By accessing or using our Service, you agree to be bound by these Terms and our Privacy Policy. If you disagree with any part of these terms, you may not access or use the Service.
@@ -22,7 +22,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-sage-800 mb-4">2. Description of Service</h2>
               <p className="text-sage-700 mb-4">
-                Crops.AI provides an agricultural management platform that offers:
+                Cropple.ai provides an agricultural management platform that offers:
               </p>
               <ul className="list-disc pl-6 text-sage-700 mb-4">
                 <li>Farm and field management tools</li>
@@ -204,7 +204,7 @@ export default function TermsOfServicePage() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-sage-800 mb-4">13. Indemnification</h2>
               <p className="text-sage-700 mb-4">
-                You agree to indemnify, defend, and hold harmless Crops.AI and its officers, directors, employees, agents, and affiliates from and against any claims, liabilities, damages, losses, and expenses arising out of or in any way connected with your use of the Service or violation of these Terms.
+                You agree to indemnify, defend, and hold harmless Cropple.ai and its officers, directors, employees, agents, and affiliates from and against any claims, liabilities, damages, losses, and expenses arising out of or in any way connected with your use of the Service or violation of these Terms.
               </p>
             </section>
             <section className="mb-8">
@@ -295,11 +295,11 @@ export default function TermsOfServicePage() {
                 If you have any questions about these Terms of Service, please contact us:
               </p>
               <div className="bg-sage-50 p-6 rounded-lg">
-                <p className="text-sage-700 mb-2"><strong>Email:</strong> legal@crops.ai</p>
-                <p className="text-sage-700 mb-2"><strong>Support:</strong> support@crops.ai</p>
+                <p className="text-sage-700 mb-2"><strong>Email:</strong> legal@cropple.ai</p>
+                <p className="text-sage-700 mb-2"><strong>Support:</strong> support@cropple.ai</p>
                 <p className="text-sage-700 mb-2"><strong>Mailing Address:</strong></p>
                 <p className="text-sage-700 mb-2">
-                  Crops.AI Inc.<br />
+                  Cropple.ai Inc.<br />
                   Legal Department<br />
                   [Your Business Address]<br />
                   [City, State, ZIP Code]<br />

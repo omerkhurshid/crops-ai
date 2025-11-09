@@ -1,6 +1,6 @@
 # Test Mocking Strategies
 
-This directory contains comprehensive mocking utilities for testing the Crops.AI application.
+This directory contains comprehensive mocking utilities for testing the Cropple.ai application.
 
 ## Overview
 

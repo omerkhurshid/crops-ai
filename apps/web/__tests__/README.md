@@ -1,6 +1,6 @@
 # Testing Documentation
 
-This directory contains the comprehensive testing setup for the Crops.AI web application.
+This directory contains the comprehensive testing setup for the Cropple.ai web application.
 
 ## Testing Strategy
 
@@ -121,7 +121,7 @@ import { test, expect } from '@playwright/test'
 
 test('should complete user workflow', async ({ page }) => {
   await page.goto('/login')
-  await page.fill('input[type="email"]', 'demo@crops.ai')
+  await page.fill('input[type="email"]', 'demo@cropple.ai')
   await page.fill('input[type="password"]', 'Demo123!')
   await page.click('button[type="submit"]')
   

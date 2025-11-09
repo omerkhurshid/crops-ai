@@ -1,4 +1,4 @@
-# 🚀 Production Checklist for Crops.AI
+# 🚀 Production Checklist for Cropple.ai
 
 ## ❌ **Critical Issues Found - Must Fix Before Production**
 

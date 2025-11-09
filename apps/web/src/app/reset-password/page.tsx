@@ -98,7 +98,7 @@ function ResetPasswordContent() {
         <div className="absolute inset-0 agricultural-overlay"></div>
         <div className="max-w-md w-full space-y-8 relative z-10">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-white mb-4">Crops.AI</h1>
+            <h1 className="text-4xl font-bold text-white mb-4">Cropple.ai</h1>
           </div>
           <ModernCard variant="floating" className="shadow-2xl">
             <ModernCardContent className="text-center py-8">

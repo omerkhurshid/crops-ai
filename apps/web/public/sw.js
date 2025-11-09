@@ -1,5 +1,5 @@
 /**
- * Crops.AI Service Worker
+ * Cropple.ai Service Worker
  * Provides offline capabilities and background synchronization for agricultural data
  */
 

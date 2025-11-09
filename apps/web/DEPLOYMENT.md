@@ -1,4 +1,4 @@
-# 🚀 Crops.AI NBA System - Deployment Guide
+# 🚀 Cropple.ai NBA System - Deployment Guide
 
 ## Deployment Status: ✅ READY FOR PRODUCTION
 

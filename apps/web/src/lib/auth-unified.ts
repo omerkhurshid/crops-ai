@@ -21,6 +21,11 @@ export interface AuthResult {
   ok?: boolean
   error?: string
   url?: string
+  user?: {
+    id: string
+    email: string
+    email_confirmed_at?: string
+  }
 }
 // Supabase-only auth functions
 export const unifiedAuth = {
@@ -64,7 +69,14 @@ export const unifiedAuth = {
       if (error) {
         return { error: error.message }
       }
-      return { ok: true }
+      return { 
+        ok: true,
+        user: data?.user ? {
+          id: data.user.id,
+          email: data.user.email || email,
+          email_confirmed_at: data.user.email_confirmed_at
+        } : undefined
+      }
     } catch (error) {
       return { error: 'Registration failed' }
     }

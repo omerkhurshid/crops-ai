@@ -16,7 +16,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 export const metadata: Metadata = {
-  title: 'Crops.AI - Smart Farm Management',
+  title: 'Cropple.ai - Smart Farm Management',
   description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
   keywords: 'agriculture, farming, smart farming, crop health, field monitoring, farm management',
   authors: [{ name: 'Cropple.ai Team' }],
@@ -29,24 +29,24 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico'
   },
   openGraph: {
-    title: 'Crops.AI - Smart Farm Management',
+    title: 'Cropple.ai - Smart Farm Management',
     description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
     url: 'https://cropple.ai',
-    siteName: 'Crops.AI',
+    siteName: 'Cropple.ai',
     type: 'website',
     images: [
       {
         url: '/crops-ai-logo.png',
         width: 400,
         height: 400,
-        alt: 'Crops.AI - Smart farming logo'
+        alt: 'Cropple.ai - Smart farming logo'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@cropsai',
-    title: 'Crops.AI - Smart Farm Management',
+    site: '@croppleai',
+    title: 'Cropple.ai - Smart Farm Management',
     description: 'Help your farm grow better crops and increase profits with field health tracking, weather alerts, and smart recommendations.',
     images: ['/crops-ai-logo.png']
   },

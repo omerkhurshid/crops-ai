@@ -1,6 +1,6 @@
 # Performance Testing Guide
 
-This document outlines the performance testing setup and procedures for the Crops.AI web application.
+This document outlines the performance testing setup and procedures for the Cropple.ai web application.
 
 ## Overview
 

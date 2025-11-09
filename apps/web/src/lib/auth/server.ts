@@ -16,14 +16,12 @@ function createSupabaseServerClient(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set() {
-          // For API routes, we don't need to set cookies
-        },
-        remove() {
-          // For API routes, we don't need to remove cookies
+        setAll(cookiesToSet) {
+          // For API routes, we don't modify response cookies
+          // The middleware will handle session refresh
         },
       },
     }
@@ -43,13 +41,28 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
   try {
     const supabase = createSupabaseServerClient(request)
     if (!supabase) {
-      // Supabase not configured, return null
+      console.log('Supabase not configured - missing environment variables')
       return null
     }
+
+    // Debug: Log cookie information
+    const cookies = request.cookies.getAll()
+    const authCookies = cookies.filter(c => c.name.includes('supabase'))
+    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => c.name))
+
     const { data: { user }, error } = await supabase.auth.getUser()
-    if (error || !user) {
+    
+    if (error) {
+      console.log('Supabase auth error:', error.message)
       return null
     }
+    
+    if (!user) {
+      console.log('No user found in session')
+      return null
+    }
+
+    console.log('User authenticated:', user.id, user.email)
     return {
       id: user.id,
       email: user.email || '',

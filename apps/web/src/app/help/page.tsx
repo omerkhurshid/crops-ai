@@ -14,7 +14,7 @@ const helpSections = [
   {
     id: 'getting-started',
     title: 'Getting Started',
-    description: 'Simple guides to set up and use Crops.AI for your farm',
+    description: 'Simple guides to set up and use Cropple.ai for your farm',
     icon: <Sprout className="h-6 w-6" />,
     articles: [
       {
@@ -115,7 +115,7 @@ const helpSections = [
     articles: [
       {
         title: 'Your Personal Farm Assistant',
-        description: 'How Crops.AI analyzes your data to give you simple, actionable farming advice',
+        description: 'How Cropple.ai analyzes your data to give you simple, actionable farming advice',
         readTime: '7 min read',
         tags: ['Smart Advice', 'Farm Assistant']
       },
@@ -174,7 +174,7 @@ const helpSections = [
   {
     id: 'troubleshooting',
     title: 'Troubleshooting',
-    description: 'Common issues and solutions for using Crops.AI',
+    description: 'Common issues and solutions for using Cropple.ai',
     icon: <Settings className="h-6 w-6" />,
     articles: [
       {

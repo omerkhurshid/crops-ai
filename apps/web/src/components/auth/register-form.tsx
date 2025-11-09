@@ -89,6 +89,27 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
       if (result?.error) {
         throw new Error(result.error)
       }
+
+      // Send custom confirmation email via Resend
+      if (result?.user && !result?.user.email_confirmed_at) {
+        try {
+          const confirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://cropple.ai'}/auth/confirm?token=${result.user.id}`
+          
+          await fetch('/api/auth/send-confirmation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              confirmationUrl
+            }),
+          })
+        } catch (emailError) {
+          console.warn('Failed to send custom confirmation email:', emailError)
+          // Don't fail registration if custom email fails - Supabase will send its default
+        }
+      }
       
       setSuccess(true)
       // Auto-login after successful registration
@@ -120,9 +141,13 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     return (
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-green-600">Registration Successful!</CardTitle>
-          <CardDescription>
-            Your account has been created successfully. You are being signed in...
+          <CardTitle className="text-green-600">Welcome to Cropple.ai! 🌱</CardTitle>
+          <CardDescription className="space-y-2">
+            <p>Your account has been created successfully!</p>
+            <p className="text-sm text-gray-600">
+              Please check your email for a confirmation link to complete your registration. 
+              You can start exploring your dashboard while you wait.
+            </p>
           </CardDescription>
         </CardHeader>
       </Card>

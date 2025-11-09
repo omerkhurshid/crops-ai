@@ -230,7 +230,10 @@ export function UnifiedFarmCreator() {
     setDrawingManager(drawingManager)
   }, [])
   const onFarmBoundaryComplete = useCallback((polygon: google.maps.Polygon) => {
-    if (!window.google?.maps?.geometry) return
+    if (!window.google?.maps?.geometry) {
+      console.error('Google Maps geometry library not loaded')
+      return
+    }
     const path = polygon.getPath()
     const coordinates: Array<{ lat: number; lng: number }> = []
     for (let i = 0; i < path.getLength(); i++) {
@@ -251,7 +254,11 @@ export function UnifiedFarmCreator() {
     }
   }, [drawingManager])
   const onFieldBoundaryComplete = useCallback((polygon: google.maps.Polygon) => {
-    if (!window.google?.maps?.geometry || !hasValidBoundaries) return
+    if (!window.google?.maps?.geometry) {
+      console.error('Google Maps geometry library not loaded')
+      return
+    }
+    if (!hasValidBoundaries) return
     const path = polygon.getPath()
     const coordinates: Array<{ lat: number; lng: number }> = []
     for (let i = 0; i < path.getLength(); i++) {
@@ -589,15 +596,15 @@ export function UnifiedFarmCreator() {
                           }}
                         />
                       ))}
-                      {googleMapsLoaded && (
+                      {googleMapsLoaded && window.google?.maps?.drawing && (
                         <DrawingManager
                           onLoad={onDrawingManagerLoad}
                           onPolygonComplete={!hasValidBoundaries ? onFarmBoundaryComplete : onFieldBoundaryComplete}
                           options={{
                             drawingControl: true,
                             drawingControlOptions: {
-                              position: window.google?.maps?.ControlPosition?.TOP_CENTER,
-                              drawingModes: [window.google?.maps?.drawing?.OverlayType?.POLYGON].filter(Boolean)
+                              position: window.google.maps.ControlPosition.TOP_CENTER,
+                              drawingModes: [window.google.maps.drawing.OverlayType.POLYGON]
                             },
                             polygonOptions: {
                               fillColor: !hasValidBoundaries ? '#22c55e' : fieldColors[(farm.fields?.length || 0) % fieldColors.length],

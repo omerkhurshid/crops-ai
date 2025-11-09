@@ -30,7 +30,7 @@ export default function FinancialCalculationsPage() {
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
             <p className="text-lg text-sage-700 leading-relaxed mb-4">
-              Crops.AI automatically calculates key financial metrics to help you understand which parts of your farm 
+              Cropple.ai automatically calculates key financial metrics to help you understand which parts of your farm 
               are most profitable and where you can improve your returns. No spreadsheets required!
             </p>
             <Alert>

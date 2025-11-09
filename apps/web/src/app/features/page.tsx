@@ -113,7 +113,7 @@ export default function FeaturesPage() {
             <span className="text-sage-500">Smart Farming</span>
           </h1>
           <p className="text-xl text-sage-600 font-light leading-relaxed mb-12 max-w-3xl mx-auto">
-            From real-time crop monitoring to financial forecasting, Crops.AI provides a complete 
+            From real-time crop monitoring to financial forecasting, Cropple.ai provides a complete 
             suite of AI-powered tools for modern agriculture.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -295,7 +295,7 @@ export default function FeaturesPage() {
               Transform Your Farm Today
             </ModernCardTitle>
             <ModernCardDescription className="text-lg max-w-2xl mx-auto mb-8">
-              Join thousands of farmers already using Crops.AI to increase yields, reduce costs, 
+              Join thousands of farmers already using Cropple.ai to increase yields, reduce costs, 
               and make smarter farming decisions with AI-powered insights.
             </ModernCardDescription>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

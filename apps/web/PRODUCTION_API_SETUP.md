@@ -2,7 +2,7 @@
 
 ## 🚀 Complete Production API Configuration
 
-This guide covers setting up all external API keys needed for Crops.AI production deployment.
+This guide covers setting up all external API keys needed for Cropple.ai production deployment.
 
 ## Required API Keys
 

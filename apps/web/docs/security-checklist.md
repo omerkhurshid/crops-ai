@@ -1,6 +1,6 @@
-# OWASP Security Checklist for Crops.AI
+# OWASP Security Checklist for Cropple.ai
 
-This document provides a comprehensive security checklist based on OWASP guidelines for the Crops.AI application.
+This document provides a comprehensive security checklist based on OWASP guidelines for the Cropple.ai application.
 
 ## OWASP Top 10 2021 - Security Controls
 
@@ -201,9 +201,9 @@ This document provides a comprehensive security checklist based on OWASP guideli
 
 ## Security Contact Information
 
-- **Security Team**: security@crops.ai
-- **Incident Response**: incident@crops.ai
-- **Bug Reports**: security-bugs@crops.ai
+- **Security Team**: security@cropple.ai
+- **Incident Response**: incident@cropple.ai
+- **Bug Reports**: security-bugs@cropple.ai
 
 ---
 

@@ -297,7 +297,7 @@ export default function PricingPage() {
               </div>
               <ModernCardTitle className="text-2xl text-sage-800 mb-4">Calculate Your ROI</ModernCardTitle>
               <ModernCardDescription className="text-lg max-w-2xl mx-auto mb-8">
-                See how Crops.AI can improve your farm&apos;s profitability with data-driven insights
+                See how Cropple.ai can improve your farm&apos;s profitability with data-driven insights
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="p-8">

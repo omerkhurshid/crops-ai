@@ -44,7 +44,7 @@ export default function WeatherIntelligencePage() {
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
             <p className="text-lg text-sage-700 leading-relaxed mb-4">
-              Crops.AI combines weather data from multiple sources to give you
+              Cropple.ai combines weather data from multiple sources to give you
               hyperlocal forecasts for each field, plus intelligent alerts that
               help you make better farming decisions before weather events
               impact your crops.

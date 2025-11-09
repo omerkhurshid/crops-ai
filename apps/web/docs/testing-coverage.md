@@ -1,6 +1,6 @@
 # Test Coverage Documentation
 
-This document outlines the comprehensive test coverage setup for the Crops.AI web application.
+This document outlines the comprehensive test coverage setup for the Cropple.ai web application.
 
 ## Current Status - Phase 9 Complete ✅
 

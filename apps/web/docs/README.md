@@ -1,6 +1,6 @@
-# Crops.AI Documentation
+# Cropple.ai Documentation
 
-This directory contains comprehensive documentation for the Crops.AI web application.
+This directory contains comprehensive documentation for the Cropple.ai web application.
 
 ## Documentation Index
 

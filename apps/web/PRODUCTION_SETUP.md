@@ -1,4 +1,4 @@
-# 🚀 Crops.AI Production Setup Guide
+# 🚀 Cropple.ai Production Setup Guide
 
 ## 🎯 Current Status
 ✅ **Working**: Authentication, Database, Farm Management, Financial Tracking, Livestock  
@@ -14,7 +14,7 @@
 
 **Steps:**
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create/select project: "Crops.AI"
+2. Create/select project: "Cropple.ai"
 3. Enable APIs:
    - Maps JavaScript API
    - Places API  

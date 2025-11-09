@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import { prisma } from '../../lib/prisma'
 import { ensureArray } from '../../lib/utils'
+import { OnboardingTooltips, dashboardTooltips } from '../../components/onboarding/onboarding-tooltips'
 export const dynamic = 'force-dynamic'
 async function getFarmData(userId: string) {
   try {
@@ -151,6 +152,7 @@ export default function DashboardPage() {
   const [crops, setCrops] = useState<any[]>([])
   const [livestock, setLivestock] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   useEffect(() => {
     if (status === 'loading') return
     if (!session) {
@@ -172,6 +174,16 @@ export default function DashboardPage() {
       }
     }
     fetchData()
+  }, [session, status, router])
+
+  // Check if user should see onboarding
+  useEffect(() => {
+    if (farms.length > 0 && !localStorage.getItem('dashboard-onboarding-completed')) {
+      const timer = setTimeout(() => {
+        setShowOnboarding(true)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
   }, [session, status, router])
   if (status === 'loading' || isLoading) {
     return (
@@ -217,7 +229,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link href="/farms/create-unified">
-                <Button className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-3 text-lg">
+                <Button data-tour="add-farm-button" className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-3 text-lg">
                   <Plus className="h-5 w-5 mr-2" />
                   Add Your First Farm
                 </Button>
@@ -263,6 +275,22 @@ export default function DashboardPage() {
         </div>
         {/* Global Floating Action Button */}
         <GlobalFAB role="farmer" />
+        
+        {/* Onboarding Tooltips */}
+        {showOnboarding && (
+          <OnboardingTooltips
+            steps={dashboardTooltips}
+            onComplete={() => {
+              localStorage.setItem('dashboard-onboarding-completed', 'true')
+              setShowOnboarding(false)
+            }}
+            onSkip={() => {
+              localStorage.setItem('dashboard-onboarding-completed', 'true')
+              setShowOnboarding(false)
+            }}
+            theme="sage"
+          />
+        )}
       </DashboardLayout>
     )
 }

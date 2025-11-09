@@ -14,6 +14,38 @@ import {
   TrendingUp,
   Clock
 } from 'lucide-react'
+import { OnboardingTooltips } from '../../components/onboarding/onboarding-tooltips'
+
+const taskTooltips = [
+  {
+    id: 'task-overview',
+    target: '[data-tour="task-board"]',
+    title: 'Task Management',
+    content: 'Organize and track your daily farm operations. Create tasks, assign priorities, and monitor progress.',
+    position: 'auto' as const
+  },
+  {
+    id: 'add-task',
+    target: '[data-tour="add-task-button"]',
+    title: 'Create New Tasks',
+    content: 'Click here to add new tasks for field work, equipment maintenance, or other farm activities.',
+    position: 'auto' as const,
+    action: {
+      label: 'Add Task',
+      onClick: () => {
+        const addBtn = document.querySelector('[data-tour="add-task-button"]') as HTMLElement
+        if (addBtn) addBtn.click()
+      }
+    }
+  },
+  {
+    id: 'task-priorities',
+    target: '[data-tour="task-priorities"]',
+    title: 'Task Priorities',
+    content: 'Tasks are organized by priority levels to help you focus on the most important activities first.',
+    position: 'auto' as const
+  }
+]
 interface Farm {
   id: string
   name: string
@@ -26,6 +58,7 @@ export default function TasksPage() {
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   useEffect(() => {
     if (status === 'loading') return
     if (!session) {
@@ -56,6 +89,16 @@ export default function TasksPage() {
     }
     fetchUserData()
   }, [session, status, router])
+
+  // Check if user should see onboarding
+  useEffect(() => {
+    if (farms.length > 0 && !localStorage.getItem('tasks-onboarding-completed')) {
+      const timer = setTimeout(() => {
+        setShowOnboarding(true)
+      }, 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [farms])
   if (status === 'loading' || loading) {
     return (
       <DashboardLayout>
@@ -140,6 +183,7 @@ export default function TasksPage() {
     <DashboardLayout>
       {/* Floating Action Button */}
       <ClientFloatingButton
+        data-tour="add-task-button"
         icon={<Plus className="h-5 w-5" />}
         label="New Task"
         variant="primary"
@@ -156,14 +200,32 @@ export default function TasksPage() {
         {/* Task Board */}
         <ModernCard variant="floating">
           <ModernCardContent className="p-6">
-            <TaskBoard 
-              farmId={selectedFarm?.id || session.user.id} 
-              showAssignments={true} 
-            />
+            <div data-tour="task-board">
+              <TaskBoard 
+                farmId={selectedFarm?.id || session.user.id} 
+                showAssignments={true} 
+              />
+            </div>
           </ModernCardContent>
         </ModernCard>
         {/* Quick Actions - will show when user has tasks or team members */}
       </main>
+      
+      {/* Onboarding Tooltips */}
+      {showOnboarding && (
+        <OnboardingTooltips
+          steps={taskTooltips}
+          onComplete={() => {
+            localStorage.setItem('tasks-onboarding-completed', 'true')
+            setShowOnboarding(false)
+          }}
+          onSkip={() => {
+            localStorage.setItem('tasks-onboarding-completed', 'true')
+            setShowOnboarding(false)
+          }}
+          theme="sage"
+        />
+      )}
     </DashboardLayout>
   )
 }

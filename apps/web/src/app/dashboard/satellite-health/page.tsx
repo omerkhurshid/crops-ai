@@ -13,6 +13,31 @@ import {
   AlertTriangle, CheckCircle, RefreshCw, Settings, Download
 } from 'lucide-react'
 import { ensureArray } from '../../../lib/utils'
+import { OnboardingTooltips } from '../../../components/onboarding/onboarding-tooltips'
+
+const satelliteTooltips = [
+  {
+    id: 'satellite-overview',
+    target: '[data-tour="satellite-stats"]',
+    title: 'Satellite Analysis Overview',
+    content: 'Monitor your field health using real satellite imagery. View key metrics like NDVI analysis and stress detection.',
+    position: 'auto' as const
+  },
+  {
+    id: 'field-monitor',
+    target: '[data-tour="field-monitor"]',
+    title: 'Field Health Monitor',
+    content: 'Interactive satellite maps showing vegetation health, stress zones, and AI-powered recommendations for each field.',
+    position: 'auto' as const
+  },
+  {
+    id: 'analysis-info',
+    target: '[data-tour="analysis-info"]',
+    title: 'Analysis Capabilities',
+    content: 'Learn about NDVI analysis, stress detection, and how satellite data helps optimize your farm management.',
+    position: 'auto' as const
+  }
+]
 interface Farm {
   id: string
   name: string
@@ -24,6 +49,7 @@ export default function SatelliteHealthPage() {
   const [farms, setFarms] = useState<Farm[]>([])
   const [selectedFarmId, setSelectedFarmId] = useState<string>('')
   const [isLoadingFarms, setIsLoadingFarms] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(false)
   // Fetch user's farms
   useEffect(() => {
     const fetchFarms = async () => {
@@ -46,6 +72,16 @@ export default function SatelliteHealthPage() {
       fetchFarms()
     }
   }, [session])
+
+  // Check if user should see onboarding
+  useEffect(() => {
+    if (farms.length > 0 && !localStorage.getItem('satellite-health-onboarding-completed')) {
+      const timer = setTimeout(() => {
+        setShowOnboarding(true)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [farms])
   const selectedFarm = farms.find(farm => farm.id === selectedFarmId)
   const stats = [
     {
@@ -153,7 +189,7 @@ export default function SatelliteHealthPage() {
           </Card>
         )}
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div data-tour="satellite-stats" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat) => (
             <Card key={stat.title} className="bg-white/10 backdrop-blur border-white/20">
               <CardContent className="p-6">
@@ -169,7 +205,7 @@ export default function SatelliteHealthPage() {
           ))}
         </div>
         {/* Key Features Info */}
-        <Card className="mb-8 bg-white/10 backdrop-blur border-white/20">
+        <Card data-tour="analysis-info" className="mb-8 bg-white/10 backdrop-blur border-white/20">
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Satellite className="h-5 w-5 mr-2" />
@@ -207,7 +243,7 @@ export default function SatelliteHealthPage() {
         </Card>
         {/* Field Health Monitor Component */}
         {selectedFarmId ? (
-          <div className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
+          <div data-tour="field-monitor" className="bg-white/5 backdrop-blur rounded-xl p-6 border border-white/10">
             <FieldHealthMonitor 
               farmId={selectedFarmId}
               autoRefresh={true}
@@ -279,6 +315,22 @@ export default function SatelliteHealthPage() {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Onboarding Tooltips */}
+        {showOnboarding && (
+          <OnboardingTooltips
+            steps={satelliteTooltips}
+            onComplete={() => {
+              localStorage.setItem('satellite-health-onboarding-completed', 'true')
+              setShowOnboarding(false)
+            }}
+            onSkip={() => {
+              localStorage.setItem('satellite-health-onboarding-completed', 'true')
+              setShowOnboarding(false)
+            }}
+            theme="sage"
+          />
+        )}
       </div>
     </div>
   )

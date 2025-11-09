@@ -109,7 +109,7 @@ export function MorningBriefing({
     }
   }
   return (
-    <ModernCard variant="glow" className={cn('overflow-hidden', className)}>
+    <ModernCard variant="glow" data-tour="dashboard-stats" className={cn('overflow-hidden', className)}>
       <ModernCardContent className="p-0">
         {/* Header */}
         <div className="bg-gradient-to-r from-sage-600 to-sage-700 text-white p-6">

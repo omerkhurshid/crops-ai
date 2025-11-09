@@ -96,7 +96,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
     )
   }
   return (
-    <ModernCard variant="soft" className={cn("overflow-hidden", className)}>
+    <ModernCard variant="soft" data-tour="health-section" className={cn("overflow-hidden", className)}>
       <ModernCardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div>

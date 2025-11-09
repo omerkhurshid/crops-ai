@@ -141,7 +141,7 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
   const displayAlerts = showAll ? activeAlerts : activeAlerts.slice(0, 3)
   if (loading) {
     return (
-      <ModernCard variant="soft" className={className}>
+      <ModernCard variant="soft" data-tour="weather-section" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
             <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
@@ -159,7 +159,7 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
   }
   if (activeAlerts.length === 0) {
     return (
-      <ModernCard variant="soft" className={className}>
+      <ModernCard variant="soft" data-tour="weather-section" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
             <Sun className="h-5 w-5 text-green-600" />
@@ -181,7 +181,7 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
     )
   }
   return (
-    <ModernCard variant="soft" className={className}>
+    <ModernCard variant="soft" data-tour="weather-section" className={className}>
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <ModernCardTitle className="flex items-center gap-2">

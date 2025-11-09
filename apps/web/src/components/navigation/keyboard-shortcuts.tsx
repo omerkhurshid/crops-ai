@@ -118,6 +118,28 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       icon: <Keyboard className="h-4 w-4" />
     },
     {
+      id: 'show-tooltips',
+      key: 't',
+      modifiers: ['cmd', 'shift'],
+      description: 'Show Page Tooltips',
+      action: () => {
+        // Clear existing onboarding flags and trigger tooltips for current page
+        const currentPath = window.location.pathname
+        if (currentPath.includes('/dashboard') && !currentPath.includes('/satellite-health')) {
+          localStorage.removeItem('dashboard-onboarding-completed')
+          window.location.reload()
+        } else if (currentPath.includes('/tasks')) {
+          localStorage.removeItem('tasks-onboarding-completed')
+          window.location.reload()
+        } else if (currentPath.includes('/satellite-health')) {
+          localStorage.removeItem('satellite-health-onboarding-completed')
+          window.location.reload()
+        }
+      },
+      category: 'general',
+      icon: <HelpCircle className="h-4 w-4" />
+    },
+    {
       id: 'settings',
       key: ',',
       modifiers: ['cmd'],

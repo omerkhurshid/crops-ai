@@ -58,7 +58,7 @@ export default function FinancialPage() {
     }
   };
   const handleCreateFarm = () => {
-    router.push('/farms/create-unified);
+    router.push('/farms/create-unified');
   };
   const handleFarmSelect = async (farmId: string) => {
     const farm = farms.find(f => f.id === farmId);

@@ -16,6 +16,7 @@ import {
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
 import { useSession } from '../../lib/auth-unified'
+import { supabase } from '../../lib/supabase'
 
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
 
@@ -343,19 +344,58 @@ export function ThreeStepFarmCreator() {
     }))
   }
 
+  const refreshSessionAndValidate = async () => {
+    try {
+      if (!supabase) {
+        throw new Error('Authentication system not available')
+      }
+
+      // Force refresh the session
+      const { data: { session: refreshedSession }, error } = await supabase.auth.getSession()
+      
+      if (error) {
+        console.error('Session refresh error:', error)
+        throw new Error('Failed to validate session')
+      }
+
+      if (!refreshedSession || !refreshedSession.user) {
+        throw new Error('Your session has expired. Please sign in again.')
+      }
+
+      // Check if session is close to expiry (within 5 minutes)
+      const now = Math.floor(Date.now() / 1000)
+      const expiresAt = refreshedSession.expires_at || 0
+      
+      if (expiresAt - now < 300) { // Less than 5 minutes
+        console.log('Session expires soon, refreshing...')
+        const { data: { session: newSession }, error: refreshError } = await supabase.auth.refreshSession()
+        
+        if (refreshError || !newSession) {
+          throw new Error('Your session has expired. Please sign in again.')
+        }
+      }
+
+      return true
+    } catch (error) {
+      console.error('Session validation failed:', error)
+      throw error
+    }
+  }
+
   const submitFarm = async () => {
     setIsLoading(true)
     try {
-      // Check session before making the API call
-      if (status !== 'authenticated' || !session) {
-        throw new Error('Please sign in to create a farm')
-      }
+      // Check and refresh session before making the API call
+      console.log('Starting farm creation, current session status:', status)
+      await refreshSessionAndValidate()
+      console.log('Session validated successfully')
 
       const response = await fetch('/api/farms', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Ensure cookies are included
         body: JSON.stringify({
           name: farm.name,
           latitude: farm.location.lat,
@@ -375,13 +415,21 @@ export function ThreeStepFarmCreator() {
         })
       })
       
+      console.log('API response status:', response.status)
+      
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Farm creation failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers),
+          body: errorText
+        })
+        
         if (response.status === 401) {
           throw new Error('Your session has expired. Please sign in again.')
         }
-        const errorText = await response.text()
-        console.error('Farm creation failed:', response.status, errorText)
-        throw new Error(`Failed to create farm: ${response.status}`)
+        throw new Error(`Failed to create farm: ${response.status} - ${errorText || response.statusText}`)
       }
       
       router.push('/dashboard')

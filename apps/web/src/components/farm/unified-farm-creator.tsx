@@ -224,7 +224,15 @@ export function UnifiedFarmCreator() {
   }
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
-    setGoogleMapsLoaded(true)
+    // Wait for all required Google Maps APIs to load
+    const checkGoogleMapsReady = () => {
+      if (window.google?.maps?.geometry && window.google?.maps?.drawing) {
+        setGoogleMapsLoaded(true)
+      } else {
+        setTimeout(checkGoogleMapsReady, 100)
+      }
+    }
+    checkGoogleMapsReady()
   }, [])
   const onDrawingManagerLoad = useCallback((drawingManager: google.maps.drawing.DrawingManager) => {
     setDrawingManager(drawingManager)
@@ -554,7 +562,12 @@ export function UnifiedFarmCreator() {
             ) : apiKey ? (
               <div className="space-y-4">
                 <div className="h-96 rounded-lg overflow-hidden border">
-                  <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
+                  <LoadScript 
+                    googleMapsApiKey={apiKey} 
+                    libraries={libraries}
+                    onLoad={() => console.log('Google Maps Script loaded')}
+                    onError={(err) => console.error('Google Maps loading error:', err)}
+                  >
                     <GoogleMap
                       mapContainerStyle={{ width: '100%', height: '100%' }}
                       center={farm.location}

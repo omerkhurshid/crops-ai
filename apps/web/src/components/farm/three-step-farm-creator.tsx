@@ -116,6 +116,22 @@ export function ThreeStepFarmCreator() {
     fetchCrops()
   }, [])
 
+  // Create grouped crops from current crops if groupedCrops is empty
+  useEffect(() => {
+    console.log('Crops grouping effect:', { cropsLength: crops.length, groupedCropsKeys: Object.keys(groupedCrops) })
+    if (Object.keys(groupedCrops).length === 0 && crops.length > 0) {
+      const grouped = crops.reduce((acc: Record<string, CropOption[]>, crop) => {
+        if (!acc[crop.category]) {
+          acc[crop.category] = []
+        }
+        acc[crop.category].push(crop)
+        return acc
+      }, {})
+      console.log('Setting grouped crops:', grouped)
+      setGroupedCrops(grouped)
+    }
+  }, [crops, groupedCrops])
+
   const getCurrentLocation = () => {
     setDetectingLocation(true)
     if ('geolocation' in navigator) {
@@ -869,11 +885,17 @@ export function ThreeStepFarmCreator() {
                                 <SelectValue placeholder="Select crop category" />
                               </SelectTrigger>
                               <SelectContent>
-                                {Object.keys(groupedCrops).map((category) => (
-                                  <SelectItem key={category} value={category}>
-                                    {category}
+                                {Object.keys(groupedCrops).length > 0 ? (
+                                  Object.keys(groupedCrops).map((category) => (
+                                    <SelectItem key={category} value={category}>
+                                      {category}
+                                    </SelectItem>
+                                  ))
+                                ) : (
+                                  <SelectItem value="loading" disabled>
+                                    Loading categories...
                                   </SelectItem>
-                                ))}
+                                )}
                               </SelectContent>
                             </Select>
                           )}

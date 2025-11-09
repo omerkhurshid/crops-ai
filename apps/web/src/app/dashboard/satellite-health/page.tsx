@@ -232,7 +232,7 @@ export default function SatelliteHealthPage() {
               {!isLoadingFarms && farms.length === 0 && (
                 <Button 
                   className="mt-4 bg-white/20 hover:bg-white/30 text-white border-white/20"
-                  onClick={() => window.location.href = '/farms/create'}
+                  onClick={() => window.location.href = '/farms/create-unified}
                 >
                   Create Your First Farm
                 </Button>

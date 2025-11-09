@@ -94,7 +94,7 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       key: 'n',
       modifiers: ['cmd'],
       description: 'Create New Farm',
-      action: () => window.location.href = '/farms/create',
+      action: () => window.location.href = '/farms/create-unified,
       category: 'actions',
       icon: <Plus className="h-4 w-4" />
     },

@@ -12,7 +12,7 @@ export function FieldsQuickActions({ isQuickMode = false }: FieldsQuickActionsPr
       <button
         onClick={() => {
           const url = isQuickMode 
-            ? '/farms/create?guided=true&step=fields' 
+            ? '/farms/create-unifiedguided=true&step=fields' 
             : '/fields/create'
           router.push(url)
         }}

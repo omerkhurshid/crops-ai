@@ -12,7 +12,7 @@ export function FieldsHeaderActions() {
         className="bg-sage-600 hover:bg-sage-700"
         onClick={() => {
           const url = isQuickMode 
-            ? '/farms/create?guided=true&step=fields' 
+            ? '/farms/create-unifiedguided=true&step=fields' 
             : '/fields/create'
           router.push(url)
         }}

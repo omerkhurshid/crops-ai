@@ -117,7 +117,7 @@ export function NoFarmsEmptyState() {
       description="Create your first farm to start monitoring your agricultural operations with AI-powered insights and satellite data."
       action={{
         label: "Create Your First Farm",
-        href: "/farms/create",
+        href: "/farms/create-unified",
         variant: "primary"
       }}
       secondaryAction={{

@@ -216,7 +216,7 @@ export default function DashboardPage() {
                   Add your first farm to start tracking crops, weather, and financials
                 </p>
               </div>
-              <Link href="/farms/create">
+              <Link href="/farms/create-unified">
                 <Button className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-3 text-lg">
                   <Plus className="h-5 w-5 mr-2" />
                   Add Your First Farm

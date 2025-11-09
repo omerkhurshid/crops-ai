@@ -47,7 +47,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
       status: (userStats?.totalFarms || 0) > 0 ? 'completed' : 'in_progress',
       action: {
         label: (userStats?.totalFarms || 0) > 0 ? 'View Farms' : 'Create Farm',
-        href: (userStats?.totalFarms || 0) > 0 ? '/farms' : '/farms/create',
+        href: (userStats?.totalFarms || 0) > 0 ? '/farms' : '/farms/create-unified',
         variant: 'primary'
       },
       estimatedTime: '5 minutes',

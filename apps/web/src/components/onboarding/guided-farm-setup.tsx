@@ -164,7 +164,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
               showLabel={true}
               onClick={() => {
                 // Redirect to farm creation
-                window.location.href = '/farms/create?guided=true'
+                window.location.href = '/farms/create-unifiedguided=true'
               }}
             />
           </div>

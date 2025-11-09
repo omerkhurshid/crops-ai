@@ -351,7 +351,7 @@ export const dashboardTooltips: TooltipStep[] = [
     position: 'auto',
     action: {
       label: 'Start Adding Farm',
-      onClick: () => window.location.href = '/farms/create'
+      onClick: () => window.location.href = '/farms/create-unified
     }
   },
   {

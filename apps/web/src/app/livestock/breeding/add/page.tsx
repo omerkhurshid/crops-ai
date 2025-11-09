@@ -28,7 +28,7 @@ export default function AddBreedingPage() {
           setUserFarms(farms)
           // If no farms, redirect to farm creation
           if (farms.length === 0) {
-            router.push('/farms/create?from=breeding')
+            router.push('/farms/create-unifiedfrom=breeding')
             return
           }
           // Fetch animals for breeding
@@ -70,7 +70,7 @@ export default function AddBreedingPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-gray-600 mb-6">You need to create a farm before adding breeding records.</p>
             <button 
-              onClick={() => router.push('/farms/create?from=breeding')}
+              onClick={() => router.push('/farms/create-unifiedfrom=breeding')}
               className="bg-green-600 text-white px-4 py-2 rounded-lg"
             >
               Create Farm

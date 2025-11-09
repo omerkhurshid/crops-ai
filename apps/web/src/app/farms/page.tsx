@@ -110,7 +110,7 @@ export default function FarmsPage() {
             <p className="text-lg text-sage-600 mb-6">
               View and manage all your farm locations
             </p>
-            <Link href="/farms/create">
+            <Link href="/farms/create-unified">
               <button className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
                 <Plus className="h-5 w-5" />
                 Add New Farm

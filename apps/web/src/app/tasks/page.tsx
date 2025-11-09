@@ -124,7 +124,7 @@ export default function TasksPage() {
                 Tasks help you organize and track your daily farm operations.
               </p>
               <button
-                onClick={() => router.push('/farms/create')}
+                onClick={() => router.push('/farms/create-unified)}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sage-600 hover:bg-sage-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sage-500"
               >
                 <Plus className="h-5 w-5 mr-2" />

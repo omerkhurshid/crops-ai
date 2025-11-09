@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from '../../../lib/auth-unified'
 import { DashboardLayout } from '../../../components/layout/dashboard-layout'
-import { UnifiedFarmCreator } from '../../../components/farm/unified-farm-creator'
+import { ThreeStepFarmCreator } from '../../../components/farm/three-step-farm-creator'
 import { LoadingSpinner } from '../../../components/ui/loading'
 
 export default function CreateUnifiedFarmPage() {
@@ -30,7 +30,13 @@ export default function CreateUnifiedFarmPage() {
 
   return (
     <DashboardLayout>
-      <UnifiedFarmCreator />
+      <div className="py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Farm</h1>
+          <p className="text-lg text-gray-600">Set up your farm in three easy steps</p>
+        </div>
+        <ThreeStepFarmCreator />
+      </div>
     </DashboardLayout>
   )
 }

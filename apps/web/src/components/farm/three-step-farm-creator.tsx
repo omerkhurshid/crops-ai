@@ -511,28 +511,53 @@ export function ThreeStepFarmCreator() {
                             paths={farm.boundaries}
                             options={{
                               fillColor: '#22c55e',
-                              fillOpacity: 0.3,
+                              fillOpacity: farm.isMultiField ? 0.1 : 0.3,
                               strokeColor: '#22c55e',
                               strokeOpacity: 0.8,
                               strokeWeight: 3,
                             }}
                           />
                         )}
+
+                        {/* Field boundaries for multi-field mode */}
+                        {farm.isMultiField && farm.fields.map((field) => (
+                          <Polygon
+                            key={field.id}
+                            paths={field.boundaries}
+                            options={{
+                              fillColor: field.color,
+                              fillOpacity: 0.4,
+                              strokeColor: field.color,
+                              strokeOpacity: 1,
+                              strokeWeight: 2,
+                            }}
+                          />
+                        ))}
                         
                         {googleMapsLoaded && window.google?.maps?.drawing && (
                           <DrawingManager
                             onLoad={onDrawingManagerLoad}
-                            onPolygonComplete={onFarmBoundaryComplete}
+                            onPolygonComplete={
+                              !farm.boundaries || farm.boundaries.length === 0
+                                ? onFarmBoundaryComplete
+                                : farm.isMultiField
+                                  ? onFieldBoundaryComplete
+                                  : undefined
+                            }
                             options={{
-                              drawingControl: true,
+                              drawingControl: !farm.boundaries || (farm.boundaries.length > 0 && farm.isMultiField),
                               drawingControlOptions: {
                                 position: window.google.maps.ControlPosition.TOP_CENTER,
                                 drawingModes: [window.google.maps.drawing.OverlayType.POLYGON]
                               },
                               polygonOptions: {
-                                fillColor: '#22c55e',
+                                fillColor: !farm.boundaries || farm.boundaries.length === 0
+                                  ? '#22c55e'
+                                  : fieldColors[farm.fields.length % fieldColors.length],
                                 fillOpacity: 0.3,
-                                strokeColor: '#22c55e',
+                                strokeColor: !farm.boundaries || farm.boundaries.length === 0
+                                  ? '#22c55e'
+                                  : fieldColors[farm.fields.length % fieldColors.length],
                                 strokeOpacity: 0.8,
                                 strokeWeight: 2,
                                 editable: true
@@ -561,12 +586,141 @@ export function ThreeStepFarmCreator() {
                   </div>
 
                   {farm.boundaries && farm.boundaries.length > 0 && (
-                    <Alert className="border-green-200 bg-green-50">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <AlertDescription className="text-green-800">
-                        <strong>Farm boundaries complete!</strong> Total area: {farm.totalArea} acres
-                      </AlertDescription>
-                    </Alert>
+                    <div className="space-y-4">
+                      <Alert className="border-green-200 bg-green-50">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <AlertDescription className="text-green-800">
+                          <strong>Farm boundaries complete!</strong> Total area: {farm.totalArea} acres
+                        </AlertDescription>
+                      </Alert>
+
+                      {/* Field Configuration Choice */}
+                      <div className="border rounded-lg p-4 bg-gray-50">
+                        <h3 className="font-semibold mb-3">How do you want to organize your fields?</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <button
+                            onClick={() => setFarm(prev => ({ ...prev, isMultiField: false, fields: [] }))}
+                            className={`p-4 rounded-lg border-2 text-left transition-all ${
+                              !farm.isMultiField
+                                ? 'border-sage-500 bg-sage-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                                <Wheat className="h-3 w-3 text-green-600" />
+                              </div>
+                              <span className="font-medium text-sm">Single Field</span>
+                            </div>
+                            <p className="text-xs text-gray-600">
+                              Treat entire farm as one field
+                            </p>
+                          </button>
+
+                          <button
+                            onClick={() => setFarm(prev => ({ ...prev, isMultiField: true }))}
+                            className={`p-4 rounded-lg border-2 text-left transition-all ${
+                              farm.isMultiField
+                                ? 'border-sage-500 bg-sage-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                <Satellite className="h-3 w-3 text-blue-600" />
+                              </div>
+                              <span className="font-medium text-sm">Multiple Fields</span>
+                            </div>
+                            <p className="text-xs text-gray-600">
+                              Draw separate field boundaries
+                            </p>
+                          </button>
+                        </div>
+
+                        {/* Single Field Configuration */}
+                        {!farm.isMultiField && (
+                          <div className="mt-4 p-3 bg-white rounded-lg border">
+                            <Label className="text-sm font-medium">What are you growing?</Label>
+                            <Select onValueChange={(value) => {
+                              const crop = crops.find(c => c.id === value)
+                              setFarm(prev => ({ 
+                                ...prev, 
+                                fields: [{
+                                  id: 'single',
+                                  name: farm.name,
+                                  area: farm.totalArea || 0,
+                                  boundaries: farm.boundaries || [],
+                                  color: fieldColors[0],
+                                  cropType: crop?.name,
+                                  cropVariety: crop?.scientificName
+                                }]
+                              }))
+                            }}>
+                              <SelectTrigger className="mt-2">
+                                <SelectValue placeholder="Select crop type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {crops.map((crop) => (
+                                  <SelectItem key={crop.id} value={crop.id}>
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{crop.name}</span>
+                                      <span className="text-xs text-gray-500">{crop.category}</span>
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+
+                        {/* Multiple Fields Instructions */}
+                        {farm.isMultiField && (
+                          <div className="mt-4">
+                            {farm.fields.length === 0 ? (
+                              <Alert className="border-blue-200 bg-blue-50">
+                                <AlertCircle className="h-4 w-4 text-blue-600" />
+                                <AlertDescription className="text-blue-800">
+                                  Use the polygon tool above to draw individual field boundaries within your farm.
+                                </AlertDescription>
+                              </Alert>
+                            ) : (
+                              <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                  <h4 className="font-medium text-sm">Fields Created</h4>
+                                  <Badge variant="secondary">{farm.fields.length} fields</Badge>
+                                </div>
+                                {farm.fields.map((field, index) => (
+                                  <div key={field.id} className="flex items-center justify-between p-3 bg-white rounded border">
+                                    <div className="flex items-center gap-3">
+                                      <div
+                                        className="w-3 h-3 rounded-full border border-white shadow"
+                                        style={{ backgroundColor: field.color }}
+                                      />
+                                      <div>
+                                        <Input
+                                          value={field.name}
+                                          onChange={(e) => updateFieldName(field.id, e.target.value)}
+                                          className="font-medium border-none p-0 h-auto text-sm"
+                                        />
+                                        <p className="text-xs text-gray-600">{field.area} acres</p>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      onClick={() => deleteField(field.id)}
+                                      variant="ghost"
+                                      size="sm"
+                                      className="text-red-600 hover:text-red-700 h-6 w-6 p-0"
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   )}
 
                   {(!farm.boundaries || farm.boundaries.length === 0) && (
@@ -585,7 +739,7 @@ export function ThreeStepFarmCreator() {
                   </Button>
                   <Button 
                     onClick={nextStep} 
-                    disabled={!canProceedStep2}
+                    disabled={!canProceedStep2 || (!farm.isMultiField && !farm.fields.length)}
                     className="bg-sage-600 hover:bg-sage-700"
                   >
                     Continue <ChevronRight className="ml-2 h-4 w-4" />
@@ -597,244 +751,146 @@ export function ThreeStepFarmCreator() {
         </div>
       )}
 
-      {/* Step 3: Field Configuration */}
-      {currentStep === 3 && (
+      {/* Step 3: Crop Selection for Multi-Field */}
+      {currentStep === 3 && farm.isMultiField && (
         <div className="space-y-6">
           <ModernCard variant="soft">
             <ModernCardHeader>
-              <ModernCardTitle>Field Configuration</ModernCardTitle>
+              <ModernCardTitle>Configure Your Fields</ModernCardTitle>
               <ModernCardDescription>
-                Is this one field, or multiple fields within your farm?
+                Select what crops you're growing in each field
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button
-                  onClick={() => setFarm(prev => ({ ...prev, isMultiField: false, fields: [] }))}
-                  className={`p-6 rounded-lg border-2 text-left transition-all ${
-                    !farm.isMultiField
-                      ? 'border-sage-500 bg-sage-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <Wheat className="h-4 w-4 text-green-600" />
-                    </div>
-                    <h3 className="font-semibold">Single Field</h3>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    The entire farm is one field with the same crop
-                  </p>
-                </button>
-
-                <button
-                  onClick={() => setFarm(prev => ({ ...prev, isMultiField: true }))}
-                  className={`p-6 rounded-lg border-2 text-left transition-all ${
-                    farm.isMultiField
-                      ? 'border-sage-500 bg-sage-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Satellite className="h-4 w-4 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold">Multiple Fields</h3>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Divide into separate fields with different crops
-                  </p>
-                </button>
-              </div>
-
-              {/* Single Field Crop Selection */}
-              {!farm.isMultiField && (
-                <div className="border rounded-lg p-4 bg-gray-50">
-                  <Label className="text-sm font-medium">What are you growing?</Label>
-                  <Select onValueChange={(value) => {
-                    const crop = crops.find(c => c.id === value)
-                    setFarm(prev => ({ 
-                      ...prev, 
-                      fields: [{
-                        id: 'single',
-                        name: farm.name,
-                        area: farm.totalArea || 0,
-                        boundaries: farm.boundaries || [],
-                        color: fieldColors[0],
-                        cropType: crop?.name,
-                        cropVariety: crop?.scientificName
-                      }]
-                    }))
-                  }}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select crop type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {crops.map((crop) => (
-                        <SelectItem key={crop.id} value={crop.id}>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{crop.name}</span>
-                            <span className="text-xs text-gray-500">{crop.category}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-
-              {/* Multi-Field Drawing & Management */}
-              {farm.isMultiField && (
-                <div className="space-y-6">
-                  {/* Drawing Interface */}
-                  {farm.location.lat !== 0 && apiKey && (
-                    <div className="border rounded-lg p-4">
+              {farm.fields.length > 0 ? (
+                <div className="space-y-4">
+                  {farm.fields.map((field, index) => (
+                    <div key={field.id} className="border rounded-lg p-4 bg-white">
                       <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <h3 className="font-semibold">Draw Field Boundaries</h3>
-                          <p className="text-sm text-gray-600">Create separate fields within your farm</p>
-                        </div>
-                        <Badge variant="secondary">{farm.fields.length} fields</Badge>
-                      </div>
-
-                      <div className="h-96 rounded-lg overflow-hidden border">
-                        <LoadScript 
-                          googleMapsApiKey={apiKey} 
-                          libraries={libraries}
-                        >
-                          <GoogleMap
-                            mapContainerStyle={{ width: '100%', height: '100%' }}
-                            center={farm.location}
-                            zoom={16}
-                            onLoad={onMapLoad}
-                            options={{
-                              mapTypeId: 'satellite',
-                              disableDefaultUI: true,
-                              zoomControl: true,
-                              mapTypeControl: true,
-                            }}
-                          >
-                            {/* Farm boundary */}
-                            {farm.boundaries && farm.boundaries.length > 0 && (
-                              <Polygon
-                                paths={farm.boundaries}
-                                options={{
-                                  fillColor: '#22c55e',
-                                  fillOpacity: 0.1,
-                                  strokeColor: '#22c55e',
-                                  strokeOpacity: 0.8,
-                                  strokeWeight: 3,
-                                }}
-                              />
-                            )}
-                            
-                            {/* Field boundaries */}
-                            {farm.fields.map((field) => (
-                              <Polygon
-                                key={field.id}
-                                paths={field.boundaries}
-                                options={{
-                                  fillColor: field.color,
-                                  fillOpacity: 0.4,
-                                  strokeColor: field.color,
-                                  strokeOpacity: 1,
-                                  strokeWeight: 2,
-                                }}
-                              />
-                            ))}
-                            
-                            {googleMapsLoaded && window.google?.maps?.drawing && (
-                              <DrawingManager
-                                onLoad={onDrawingManagerLoad}
-                                onPolygonComplete={onFieldBoundaryComplete}
-                                options={{
-                                  drawingControl: true,
-                                  drawingControlOptions: {
-                                    position: window.google.maps.ControlPosition.TOP_CENTER,
-                                    drawingModes: [window.google.maps.drawing.OverlayType.POLYGON]
-                                  },
-                                  polygonOptions: {
-                                    fillColor: fieldColors[farm.fields.length % fieldColors.length],
-                                    fillOpacity: 0.4,
-                                    strokeColor: fieldColors[farm.fields.length % fieldColors.length],
-                                    strokeOpacity: 0.8,
-                                    strokeWeight: 2,
-                                    editable: true
-                                  }
-                                }}
-                              />
-                            )}
-                          </GoogleMap>
-                        </LoadScript>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Field Management */}
-                  {farm.fields.length > 0 && (
-                    <div className="space-y-4">
-                      <h3 className="font-semibold">Configure Your Fields</h3>
-                      {farm.fields.map((field, index) => (
-                        <div key={field.id} className="border rounded-lg p-4 bg-white">
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className="w-4 h-4 rounded-full border-2 border-white shadow"
-                                style={{ backgroundColor: field.color }}
-                              />
-                              <div>
-                                <Input
-                                  value={field.name}
-                                  onChange={(e) => updateFieldName(field.id, e.target.value)}
-                                  className="font-medium border-none p-0 h-auto"
-                                />
-                                <p className="text-sm text-gray-600">{field.area} acres</p>
-                              </div>
-                            </div>
-                            <Button
-                              onClick={() => deleteField(field.id)}
-                              variant="ghost"
-                              size="sm"
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-4 h-4 rounded-full border-2 border-white shadow"
+                            style={{ backgroundColor: field.color }}
+                          />
                           <div>
-                            <Label className="text-sm font-medium">What's growing in this field?</Label>
-                            <Select onValueChange={(value) => updateFieldCrop(field.id, value)}>
-                              <SelectTrigger className="mt-2">
-                                <SelectValue placeholder="Select crop type" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {crops.map((crop) => (
-                                  <SelectItem key={crop.id} value={crop.id}>
-                                    <div className="flex flex-col">
-                                      <span className="font-medium">{crop.name}</span>
-                                      <span className="text-xs text-gray-500">{crop.category}</span>
-                                    </div>
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            <h3 className="font-medium">{field.name}</h3>
+                            <p className="text-sm text-gray-600">{field.area} acres</p>
                           </div>
                         </div>
-                      ))}
+                        <Button
+                          onClick={() => deleteField(field.id)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      
+                      <div>
+                        <Label className="text-sm font-medium">What's growing in this field?</Label>
+                        <Select onValueChange={(value) => updateFieldCrop(field.id, value)}>
+                          <SelectTrigger className="mt-2">
+                            <SelectValue placeholder="Select crop type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {crops.map((crop) => (
+                              <SelectItem key={crop.id} value={crop.id}>
+                                <div className="flex flex-col">
+                                  <span className="font-medium">{crop.name}</span>
+                                  <span className="text-xs text-gray-500">{crop.category}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
-                  )}
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <h3 className="font-medium text-gray-700 mb-2">No fields created yet</h3>
+                  <p className="text-sm text-gray-600 mb-4">Go back to step 2 to draw your field boundaries</p>
+                  <Button onClick={prevStep} variant="outline">
+                    <ChevronLeft className="mr-2 h-4 w-4" /> Back to Mapping
+                  </Button>
                 </div>
               )}
 
               {/* Navigation & Submit */}
+              {farm.fields.length > 0 && (
+                <div className="flex justify-between">
+                  <Button onClick={prevStep} variant="outline">
+                    <ChevronLeft className="mr-2 h-4 w-4" /> Back
+                  </Button>
+                  <Button
+                    onClick={submitFarm}
+                    disabled={isLoading}
+                    className="bg-sage-600 hover:bg-sage-700 px-8"
+                    size="lg"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        Creating Farm...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-5 w-5 mr-2" />
+                        Create Farm with {farm.fields.length} Fields
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </ModernCardContent>
+          </ModernCard>
+        </div>
+      )}
+
+      {/* Step 3: Single Field Complete */}
+      {currentStep === 3 && !farm.isMultiField && (
+        <div className="space-y-6">
+          <ModernCard variant="soft">
+            <ModernCardHeader className="text-center">
+              <ModernCardTitle className="text-2xl">Ready to Create Your Farm!</ModernCardTitle>
+              <ModernCardDescription>
+                Your farm setup is complete and ready to be created
+              </ModernCardDescription>
+            </ModernCardHeader>
+            <ModernCardContent className="space-y-6">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Farm Name:</span>
+                    <span>{farm.name}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Total Area:</span>
+                    <span>{farm.totalArea} acres</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Field Type:</span>
+                    <span>Single field</span>
+                  </div>
+                  {farm.fields[0]?.cropType && (
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Crop:</span>
+                      <span>{farm.fields[0].cropType}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-between">
                 <Button onClick={prevStep} variant="outline">
                   <ChevronLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 <Button
                   onClick={submitFarm}
-                  disabled={isLoading || (!farm.isMultiField && !farm.fields.length) || (farm.isMultiField && farm.fields.length === 0)}
+                  disabled={isLoading}
                   className="bg-sage-600 hover:bg-sage-700 px-8"
                   size="lg"
                 >

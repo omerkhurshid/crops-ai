@@ -11,6 +11,39 @@ function createSupabaseServerClient(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return null
   }
+
+  // Check for Authorization header first
+  const authHeader = request.headers.get('Authorization')
+  const accessToken = authHeader?.replace('Bearer ', '')
+
+  if (accessToken) {
+    // If we have a Bearer token, use it directly
+    return createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        auth: {
+          detectSessionInUrl: false,
+          persistSession: false,
+        },
+        global: {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+        cookies: {
+          getAll() {
+            return []
+          },
+          setAll() {
+            // No-op for token-based auth
+          },
+        },
+      }
+    )
+  }
+
+  // Fallback to cookie-based auth
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -39,16 +72,23 @@ export interface AuthenticatedUser {
  */
 export async function getAuthenticatedUser(request: NextRequest): Promise<AuthenticatedUser | null> {
   try {
+    // Debug: Log authentication method being used
+    const authHeader = request.headers.get('Authorization')
+    const hasAuthToken = !!authHeader?.replace('Bearer ', '')
+    const cookies = request.cookies.getAll()
+    const authCookies = cookies.filter(c => c.name.includes('supabase'))
+    
+    console.log(`Authentication method: ${hasAuthToken ? 'Bearer token' : 'Cookies'}`)
+    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => c.name))
+    if (hasAuthToken) {
+      console.log('Bearer token present in Authorization header')
+    }
+
     const supabase = createSupabaseServerClient(request)
     if (!supabase) {
       console.log('Supabase not configured - missing environment variables')
       return null
     }
-
-    // Debug: Log cookie information
-    const cookies = request.cookies.getAll()
-    const authCookies = cookies.filter(c => c.name.includes('supabase'))
-    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => c.name))
 
     const { data: { user }, error } = await supabase.auth.getUser()
     

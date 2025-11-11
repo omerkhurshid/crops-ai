@@ -74,26 +74,34 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
   try {
     // Debug: Log authentication method being used
     const authHeader = request.headers.get('Authorization')
-    const hasAuthToken = !!authHeader?.replace('Bearer ', '')
+    const accessToken = authHeader?.replace('Bearer ', '')
+    const hasAuthToken = !!accessToken
     const cookies = request.cookies.getAll()
     const authCookies = cookies.filter(c => c.name.includes('supabase'))
     
+    console.log('=== AUTHENTICATION DEBUG ===')
+    console.log(`URL: ${request.url}`)
+    console.log(`Method: ${request.method}`)
     console.log(`Authentication method: ${hasAuthToken ? 'Bearer token' : 'Cookies'}`)
-    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => c.name))
+    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => `${c.name}=${c.value?.substring(0, 20)}...`))
     if (hasAuthToken) {
-      console.log('Bearer token present in Authorization header')
+      console.log('Bearer token present:', accessToken?.substring(0, 20) + '...')
     }
 
     const supabase = createSupabaseServerClient(request)
     if (!supabase) {
-      console.log('Supabase not configured - missing environment variables')
+      console.log('ERROR: Supabase not configured - missing environment variables')
+      console.log('NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
+      console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
       return null
     }
 
+    console.log('Calling supabase.auth.getUser()...')
     const { data: { user }, error } = await supabase.auth.getUser()
     
     if (error) {
-      console.log('Supabase auth error:', error.message)
+      console.log('Supabase auth error:', error.message, error.status)
+      console.log('Error details:', JSON.stringify(error, null, 2))
       return null
     }
     
@@ -102,7 +110,14 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       return null
     }
 
-    console.log('User authenticated:', user.id, user.email)
+    console.log('User authenticated successfully:', {
+      id: user.id,
+      email: user.email,
+      aud: user.aud,
+      exp: user.exp,
+      iat: user.iat
+    })
+    console.log('=== END AUTHENTICATION DEBUG ===')
     return {
       id: user.id,
       email: user.email || '',
@@ -111,6 +126,7 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
     }
   } catch (error) {
     console.error('Authentication error:', error)
+    console.log('=== END AUTHENTICATION DEBUG (ERROR) ===')
     return null
   }
 }

@@ -358,29 +358,73 @@ export function UnifiedFarmCreator() {
     if (!isBasicInfoComplete) return
     setIsLoading(true)
     try {
+      console.log('=== UNIFIED FARM CREATION DEBUG START ===')
+      
+      // Get authentication token
+      let authToken = null
+      if (supabase) {
+        const { data: { session } } = await supabase.auth.getSession()
+        authToken = session?.access_token
+        console.log('Session status:', {
+          hasSession: !!session,
+          hasToken: !!authToken,
+          expiresAt: session?.expires_at,
+          currentTime: Math.floor(Date.now() / 1000)
+        })
+      }
+
+      if (!authToken) {
+        console.log('ERROR: No auth token available')
+        throw new Error('Your session has expired. Please sign in again.')
+      }
+
+      const farmData = {
+        name: farm.name,
+        latitude: farm.location.lat,
+        longitude: farm.location.lng,
+        address: farm.location.address || '',
+        country: 'US',
+        totalArea: farm.totalArea || 0,
+        primaryProduct: farm.type,
+        selectedAgriculture: farm.selectedAgriculture || []
+      }
+
+      console.log('Creating farm with data:', farmData)
+      console.log('Using auth token:', authToken.substring(0, 20) + '...')
+
       const response = await fetch('/api/farms', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: farm.name,
-          latitude: farm.location.lat,
-          longitude: farm.location.lng,
-          address: farm.location.address || '',
-          country: 'US',
-          totalArea: farm.totalArea || 0,
-          primaryProduct: farm.type,
-          selectedAgriculture: farm.selectedAgriculture || []
-        })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        credentials: 'include',
+        body: JSON.stringify(farmData)
       })
-      if (!response.ok) throw new Error('Failed to create farm')
+      console.log('API Response status:', response.status)
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.log('API Error response:', errorData)
+        throw new Error(`Failed to create farm: ${response.status} - ${JSON.stringify(errorData)}`)
+      }
+
       const result = await response.json()
+      console.log('Farm created successfully:', result.farm?.id)
+      
       // Create fields if mapped
       if (farm.fields && result.farm?.id) {
+        console.log('Creating', farm.fields.length, 'fields...')
         for (let i = 0; i < farm.fields.length; i++) {
           const field = farm.fields[i]
-          await fetch('/api/fields', {
+          console.log('Creating field:', field.name)
+          const fieldResponse = await fetch('/api/fields', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${authToken}`
+            },
+            credentials: 'include',
             body: JSON.stringify({
               farmId: result.farm.id,
               name: field.name,
@@ -393,8 +437,16 @@ export function UnifiedFarmCreator() {
               status: 'active'
             })
           })
+          
+          if (!fieldResponse.ok) {
+            console.error('Field creation failed for:', field.name)
+          } else {
+            console.log('Field created successfully:', field.name)
+          }
         }
       }
+      
+      console.log('=== UNIFIED FARM CREATION DEBUG END ===')
       router.push('/dashboard')
     } catch (error) {
       console.error('Error creating farm:', error)

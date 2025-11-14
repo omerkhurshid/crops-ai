@@ -114,8 +114,7 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       id: user.id,
       email: user.email,
       aud: user.aud,
-      exp: user.exp,
-      iat: user.iat
+      created_at: user.created_at
     })
     console.log('=== END AUTHENTICATION DEBUG ===')
     return {

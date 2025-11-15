@@ -22,8 +22,13 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     try {
-      // Get current session token if available
-      const accessToken = sessionManager.getAccessToken()
+      // Get current session token if available - handle gracefully if session manager fails
+      let accessToken: string | null = null
+      try {
+        accessToken = sessionManager.getAccessToken()
+      } catch (error) {
+        console.warn('Session manager access failed, proceeding with cookie-only auth:', error)
+      }
       
       // Build headers with authentication
       const headers: Record<string, string> = {
@@ -46,12 +51,23 @@ class ApiClient {
       if (response.status === 401) {
         console.warn('Authentication failed, attempting session refresh...')
         
-        // Try to refresh session
-        const sessionRefreshed = await sessionManager.initializeSession()
+        // Try to refresh session - handle gracefully if it fails
+        let sessionRefreshed = false
+        try {
+          sessionRefreshed = await sessionManager.initializeSession()
+        } catch (error) {
+          console.warn('Session refresh failed:', error)
+        }
         
         if (sessionRefreshed) {
           // Retry with new token
-          const newToken = sessionManager.getAccessToken()
+          let newToken: string | null = null
+          try {
+            newToken = sessionManager.getAccessToken()
+          } catch (error) {
+            console.warn('Failed to get new access token after refresh:', error)
+          }
+          
           const retryHeaders = { ...headers }
           if (newToken) {
             retryHeaders['Authorization'] = `Bearer ${newToken}`

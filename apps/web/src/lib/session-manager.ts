@@ -114,11 +114,21 @@ export class SessionManager {
   }
 
   getAccessToken(): string | null {
-    return this.session?.access_token || null
+    try {
+      return this.session?.access_token || null
+    } catch (error) {
+      console.warn('Failed to get access token:', error)
+      return null
+    }
   }
 
   isAuthenticated(): boolean {
-    return !!this.session && !!this.session.user
+    try {
+      return !!this.session && !!this.session.user
+    } catch (error) {
+      console.warn('Failed to check authentication status:', error)
+      return false
+    }
   }
 
   async signOut(): Promise<void> {

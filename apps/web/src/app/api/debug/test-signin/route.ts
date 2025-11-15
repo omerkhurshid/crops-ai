@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
     // Sign in with Supabase
     const { data, error } = await supabaseAuth.signIn(email, password)
     
-    if (error) {
+    if (error || !data) {
       console.error('Sign in error:', error)
       return NextResponse.json({ 
         success: false,
-        error: error.message 
+        error: error?.message || 'Sign in failed' 
       }, { status: 400 })
     }
 

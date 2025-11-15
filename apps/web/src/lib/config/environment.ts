@@ -1,210 +1,119 @@
 /**
- * Centralized Environment Configuration
- * Validates and exposes environment variables safely
+ * Environment variable validation and configuration
+ * Ensures all required environment variables are present and valid
  */
-// Logger replaced with console for local development
-interface EnvironmentConfig {
-  // App Configuration
-  NODE_ENV: 'development' | 'production' | 'test'
-  NEXT_PUBLIC_APP_VERSION: string
-  // Authentication
-  NEXTAUTH_SECRET: string
+
+import { z } from 'zod'
+
+const envSchema = z.object({
   // Database
-  DATABASE_URL: string
-  // Redis (Optional)
-  UPSTASH_REDIS_REST_URL?: string
-  UPSTASH_REDIS_REST_TOKEN?: string
-  // External APIs
-  OPENWEATHER_API_KEY: string
-  GOOGLE_MAPS_API_KEY: string
-  // Public Configuration
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
-  // Optional APIs
-  ALPHA_VANTAGE_API_KEY?: string
-  CME_API_KEY?: string
-  RESEND_API_KEY?: string
-  // Satellite Services (Optional) - Using Google Earth Engine
-  // SENTINEL_HUB_CLIENT_ID?: string  // DEPRECATED: Using Google Earth Engine instead
-  // SENTINEL_HUB_CLIENT_SECRET?: string  // DEPRECATED: Using Google Earth Engine instead
-  PLANET_LABS_API_KEY?: string
-  COPERNICUS_CLIENT_ID?: string
-  COPERNICUS_CLIENT_SECRET?: string
-  COPERNICUS_USERNAME?: string
-  COPERNICUS_PASSWORD?: string
-  // Google Earth Engine (Optional)
-  GEE_SERVICE_ACCOUNT_EMAIL?: string
-  GEE_PRIVATE_KEY?: string
-  GEE_PROJECT_ID?: string
-  // Alerting
-  ALERT_WEBHOOK_URL?: string
-  SLACK_CHANNEL?: string
-  ALERT_EMAIL_RECIPIENTS?: string
-  DISCORD_WEBHOOK_URL?: string
-  // Email
-  EMAIL_FROM?: string
-  // Demo Configuration
-  ENABLE_DEMO_USERS?: string
-  // Additional Public Configuration
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY?: string
-}
-class EnvironmentValidator {
-  private static instance: EnvironmentValidator
-  private _config: EnvironmentConfig | null = null
-  private constructor() {}
-  static getInstance(): EnvironmentValidator {
-    if (!EnvironmentValidator.instance) {
-      EnvironmentValidator.instance = new EnvironmentValidator()
-    }
-    return EnvironmentValidator.instance
-  }
-  /**
-   * Validate and load environment configuration
-   * Throws error if required variables are missing
-   */
-  validateAndLoad(): EnvironmentConfig {
-    if (this._config) {
-      return this._config
-    }
-    const errors: string[] = []
-    // Required variables
-    const requiredVars = {
-      NODE_ENV: process.env.NODE_ENV,
-      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-      DATABASE_URL: process.env.DATABASE_URL,
-      OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY,
-      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
-      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-    }
-    // Optional Redis variables (check if both are provided and not placeholders)
-    const redisUrl = process.env.UPSTASH_REDIS_REST_URL
-    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
-    const isValidRedisUrl = redisUrl && !redisUrl.startsWith('YOUR_') && redisUrl.startsWith('https://')
-    const isValidRedisToken = redisToken && !redisToken.startsWith('YOUR_')
-    const hasRedis = isValidRedisUrl && isValidRedisToken
-    // Check required variables
-    for (const [key, value] of Object.entries(requiredVars)) {
-      if (!value || value.trim() === '') {
-        errors.push(`Missing required environment variable: ${key}`)
+  DATABASE_URL: z.string().url('Invalid database URL'),
+  DIRECT_URL: z.string().url('Invalid direct database URL').optional(),
+  
+  // Supabase
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url('Invalid Supabase URL'),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, 'Supabase anon key is required'),
+  
+  // NextAuth
+  NEXTAUTH_SECRET: z.string().min(32, 'NextAuth secret must be at least 32 characters'),
+  NEXTAUTH_URL: z.string().url('Invalid NextAuth URL'),
+  
+  // Google Maps
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1, 'Google Maps API key is required'),
+  
+  // Optional services (with fallbacks)
+  OPENWEATHER_API_KEY: z.string().optional(),
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
+  UPSTASH_REDIS_REST_URL: z.string().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  
+  // Monitoring
+  SENTRY_DSN: z.string().optional(),
+  
+  // App configuration
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  NEXT_PUBLIC_APP_URL: z.string().url('Invalid app URL'),
+})
+
+export type EnvConfig = z.infer<typeof envSchema>
+
+function validateEnvironment(): EnvConfig {
+  try {
+    return envSchema.parse(process.env)
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      // During build time, just warn instead of throwing
+      if (process.env.NODE_ENV === 'development') {
+        const missingVars = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join('\n')
+        console.warn(`Environment validation warnings:\n${missingVars}`)
+        // Return partial environment for build time
+        return envSchema.partial().parse(process.env) as EnvConfig
       }
+      const missingVars = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join('\n')
+      throw new Error(`Environment validation failed:\n${missingVars}`)
     }
-    // Validate NODE_ENV
-    if (requiredVars.NODE_ENV && !['development', 'production', 'test'].includes(requiredVars.NODE_ENV)) {
-      errors.push('NODE_ENV must be one of: development, production, test')
-    }
-    // Validate NEXTAUTH_SECRET length
-    if (requiredVars.NEXTAUTH_SECRET && requiredVars.NEXTAUTH_SECRET.length < 32) {
-      errors.push('NEXTAUTH_SECRET must be at least 32 characters long')
-    }
-    // Validate Redis URL format if provided (ignore placeholder values)
-    if (redisUrl && !redisUrl.startsWith('YOUR_') && !redisUrl.startsWith('https://')) {
-      errors.push('UPSTASH_REDIS_REST_URL must be a valid HTTPS URL')
-    }
-    // If one Redis var is provided, both must be provided (ignore placeholders)
-    if ((isValidRedisUrl && !isValidRedisToken) || (!isValidRedisUrl && isValidRedisToken)) {
-      errors.push('Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be provided together')
-    }
-    // Production-specific validations
-    if (requiredVars.NODE_ENV === 'production') {
-      if (process.env.ENABLE_DEMO_USERS === 'true') {
-        errors.push('Demo users cannot be enabled in production')
-      }
-    }
-    if (errors.length > 0) {
-      const errorMessage = `Environment validation failed:\n${errors.join('\n')}`
-      console.error('Environment validation failed', new Error(errorMessage))
-      throw new Error(errorMessage)
-    }
-    // Build validated config
-    this._config = {
-      NODE_ENV: requiredVars.NODE_ENV as 'development' | 'production' | 'test',
-      NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
-      NEXTAUTH_SECRET: requiredVars.NEXTAUTH_SECRET!,
-      DATABASE_URL: requiredVars.DATABASE_URL!,
-      UPSTASH_REDIS_REST_URL: isValidRedisUrl ? redisUrl : undefined,
-      UPSTASH_REDIS_REST_TOKEN: isValidRedisToken ? redisToken : undefined,
-      OPENWEATHER_API_KEY: requiredVars.OPENWEATHER_API_KEY!,
-      GOOGLE_MAPS_API_KEY: requiredVars.GOOGLE_MAPS_API_KEY!,
-      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: requiredVars.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-      // Optional variables
-      ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY,
-      CME_API_KEY: process.env.CME_API_KEY,
-      RESEND_API_KEY: process.env.RESEND_API_KEY,
-      // Satellite Services - Google Earth Engine (Sentinel Hub deprecated)
-      // SENTINEL_HUB_CLIENT_ID: process.env.SENTINEL_HUB_CLIENT_ID,  // DEPRECATED
-      // SENTINEL_HUB_CLIENT_SECRET: process.env.SENTINEL_HUB_CLIENT_SECRET,  // DEPRECATED
-      PLANET_LABS_API_KEY: process.env.PLANET_LABS_API_KEY,
-      COPERNICUS_CLIENT_ID: process.env.COPERNICUS_CLIENT_ID,
-      COPERNICUS_CLIENT_SECRET: process.env.COPERNICUS_CLIENT_SECRET,
-      COPERNICUS_USERNAME: process.env.COPERNICUS_USERNAME,
-      COPERNICUS_PASSWORD: process.env.COPERNICUS_PASSWORD,
-      // Google Earth Engine
-      GEE_SERVICE_ACCOUNT_EMAIL: process.env.GEE_SERVICE_ACCOUNT_EMAIL,
-      GEE_PRIVATE_KEY: process.env.GEE_PRIVATE_KEY,
-      GEE_PROJECT_ID: process.env.GEE_PROJECT_ID,
-      // Alerting
-      ALERT_WEBHOOK_URL: process.env.ALERT_WEBHOOK_URL,
-      SLACK_CHANNEL: process.env.SLACK_CHANNEL,
-      ALERT_EMAIL_RECIPIENTS: process.env.ALERT_EMAIL_RECIPIENTS,
-      DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
-      EMAIL_FROM: process.env.EMAIL_FROM,
-      ENABLE_DEMO_USERS: process.env.ENABLE_DEMO_USERS,
-      NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
-    }
-    return this._config
-  }
-  /**
-   * Get validated configuration
-   * Validates on first access
-   */
-  getConfig(): EnvironmentConfig {
-    return this.validateAndLoad()
-  }
-  /**
-   * Check if running in production
-   */
-  isProduction(): boolean {
-    return this.getConfig().NODE_ENV === 'production'
-  }
-  /**
-   * Check if running in development
-   */
-  isDevelopment(): boolean {
-    return this.getConfig().NODE_ENV === 'development'
-  }
-  /**
-   * Check if running in test
-   */
-  isTest(): boolean {
-    return this.getConfig().NODE_ENV === 'test'
-  }
-  /**
-   * Get a safe configuration summary for logging
-   * Excludes sensitive values
-   */
-  getConfigSummary() {
-    const config = this.getConfig()
-    return {
-      NODE_ENV: config.NODE_ENV,
-      NEXT_PUBLIC_APP_VERSION: config.NEXT_PUBLIC_APP_VERSION,
-      hasNextAuthSecret: !!config.NEXTAUTH_SECRET,
-      hasDatabaseUrl: !!config.DATABASE_URL,
-      hasRedisConfig: !!(config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN),
-      hasOpenWeatherKey: !!config.OPENWEATHER_API_KEY,
-      hasGoogleMapsKey: !!config.GOOGLE_MAPS_API_KEY,
-      optionalApiKeys: {
-        alphaVantage: !!config.ALPHA_VANTAGE_API_KEY,
-        cme: !!config.CME_API_KEY,
-        resend: !!config.RESEND_API_KEY
-      },
-      alertingConfigured: !!(config.ALERT_WEBHOOK_URL || config.SLACK_CHANNEL || config.DISCORD_WEBHOOK_URL)
-    }
+    throw error
   }
 }
-// Export singleton instance
-export const envValidator = EnvironmentValidator.getInstance()
-// Export config getter for convenience
-export const getConfig = () => envValidator.getConfig()
-// Export environment checks
-export const isProduction = () => envValidator.isProduction()
-export const isDevelopment = () => envValidator.isDevelopment()
-export const isTest = () => envValidator.isTest()
+
+// Validate environment variables at startup
+export const env = validateEnvironment()
+
+// Helper functions
+export const isProduction = env.NODE_ENV === 'production'
+export const isDevelopment = env.NODE_ENV === 'development'
+export const isTest = env.NODE_ENV === 'test'
+
+// Feature flags based on available services
+export const features = {
+  weather: !!env.OPENWEATHER_API_KEY,
+  imageUpload: !!(env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY),
+  caching: !!(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN),
+  monitoring: !!env.SENTRY_DSN,
+}
+
+// Configuration object for easy access
+export const config = {
+  database: {
+    url: env.DATABASE_URL,
+    directUrl: env.DIRECT_URL,
+  },
+  supabase: {
+    url: env.NEXT_PUBLIC_SUPABASE_URL,
+    anonKey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  },
+  auth: {
+    secret: env.NEXTAUTH_SECRET,
+    url: env.NEXTAUTH_URL,
+  },
+  maps: {
+    apiKey: env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  },
+  weather: {
+    apiKey: env.OPENWEATHER_API_KEY,
+  },
+  cloudinary: {
+    cloudName: env.CLOUDINARY_CLOUD_NAME,
+    apiKey: env.CLOUDINARY_API_KEY,
+    apiSecret: env.CLOUDINARY_API_SECRET,
+  },
+  redis: {
+    url: env.UPSTASH_REDIS_REST_URL,
+    token: env.UPSTASH_REDIS_REST_TOKEN,
+  },
+  sentry: {
+    dsn: env.SENTRY_DSN,
+  },
+  app: {
+    url: env.NEXT_PUBLIC_APP_URL,
+    env: env.NODE_ENV,
+  },
+  features,
+}
+
+// Runtime configuration check
+export function getConfig() {
+  return config
+}

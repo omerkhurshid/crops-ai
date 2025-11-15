@@ -6,6 +6,7 @@
  */
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest } from 'next/server'
+import { logger } from '../logger'
 // Server-side Supabase client for authentication
 function createSupabaseServerClient(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -79,44 +80,44 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
     const cookies = request.cookies.getAll()
     const authCookies = cookies.filter(c => c.name.includes('supabase'))
     
-    console.log('=== AUTHENTICATION DEBUG ===')
-    console.log(`URL: ${request.url}`)
-    console.log(`Method: ${request.method}`)
-    console.log(`Authentication method: ${hasAuthToken ? 'Bearer token' : 'Cookies'}`)
-    console.log(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => `${c.name}=${c.value?.substring(0, 20)}...`))
+    logger.debug('=== AUTHENTICATION DEBUG ===')
+    logger.debug(`URL: ${request.url}`)
+    logger.debug(`Method: ${request.method}`)
+    logger.debug(`Authentication method: ${hasAuthToken ? 'Bearer token' : 'Cookies'}`)
+    logger.debug(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => `${c.name}=${c.value?.substring(0, 20)}...`))
     if (hasAuthToken) {
-      console.log('Bearer token present:', accessToken?.substring(0, 20) + '...')
+      logger.debug('Bearer token present:', accessToken?.substring(0, 20) + '...')
     }
 
     const supabase = createSupabaseServerClient(request)
     if (!supabase) {
-      console.log('ERROR: Supabase not configured - missing environment variables')
-      console.log('NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
-      console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+      logger.error('Supabase not configured - missing environment variables')
+      logger.debug('NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
+      logger.debug('NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
       return null
     }
 
-    console.log('Calling supabase.auth.getUser()...')
+    logger.debug('Calling supabase.auth.getUser()...')
     const { data: { user }, error } = await supabase.auth.getUser()
     
     if (error) {
-      console.log('Supabase auth error:', error.message, error.status)
-      console.log('Error details:', JSON.stringify(error, null, 2))
+      logger.warn('Supabase auth error:', error.message, error.status)
+      logger.debug('Error details:', JSON.stringify(error, null, 2))
       return null
     }
     
     if (!user) {
-      console.log('No user found in session')
+      logger.debug('No user found in session')
       return null
     }
 
-    console.log('User authenticated successfully:', {
+    logger.debug('User authenticated successfully:', {
       id: user.id,
       email: user.email,
       aud: user.aud,
       created_at: user.created_at
     })
-    console.log('=== END AUTHENTICATION DEBUG ===')
+    logger.debug('=== END AUTHENTICATION DEBUG ===')
     return {
       id: user.id,
       email: user.email || '',
@@ -124,8 +125,8 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       role: user.user_metadata?.role || 'FARM_OWNER'
     }
   } catch (error) {
-    console.error('Authentication error:', error)
-    console.log('=== END AUTHENTICATION DEBUG (ERROR) ===')
+    logger.error('Authentication error:', error)
+    logger.debug('=== END AUTHENTICATION DEBUG (ERROR) ===')
     return null
   }
 }

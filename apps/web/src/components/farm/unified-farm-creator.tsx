@@ -2,6 +2,7 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabase'
+import { logger } from '../../lib/logger'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -359,14 +360,14 @@ export function UnifiedFarmCreator() {
     if (!isBasicInfoComplete) return
     setIsLoading(true)
     try {
-      console.log('=== UNIFIED FARM CREATION DEBUG START ===')
+      logger.debug('=== UNIFIED FARM CREATION DEBUG START ===')
       
       // Get authentication token
       let authToken = null
       if (supabase) {
         const { data: { session } } = await supabase.auth.getSession()
         authToken = session?.access_token
-        console.log('Session status:', {
+        logger.debug('Session status:', {
           hasSession: !!session,
           hasToken: !!authToken,
           expiresAt: session?.expires_at,
@@ -375,7 +376,7 @@ export function UnifiedFarmCreator() {
       }
 
       if (!authToken) {
-        console.log('ERROR: No auth token available')
+        logger.error('No auth token available')
         throw new Error('Your session has expired. Please sign in again.')
       }
 
@@ -390,8 +391,9 @@ export function UnifiedFarmCreator() {
         selectedAgriculture: farm.selectedAgriculture || []
       }
 
-      console.log('Creating farm with data:', farmData)
-      console.log('Using auth token:', authToken.substring(0, 20) + '...')
+      logger.info('Creating farm:', farmData.name)
+      logger.debug('Creating farm with data:', farmData)
+      logger.debug('Using auth token:', authToken.substring(0, 20) + '...')
 
       const response = await fetch('/api/farms', {
         method: 'POST',
@@ -402,23 +404,23 @@ export function UnifiedFarmCreator() {
         credentials: 'include',
         body: JSON.stringify(farmData)
       })
-      console.log('API Response status:', response.status)
+      logger.debug('API Response status:', response.status)
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        console.log('API Error response:', errorData)
+        logger.error('Farm creation failed:', errorData)
         throw new Error(`Failed to create farm: ${response.status} - ${JSON.stringify(errorData)}`)
       }
 
       const result = await response.json()
-      console.log('Farm created successfully:', result.farm?.id)
+      logger.info('Farm created successfully:', result.farm?.id)
       
       // Create fields if mapped
       if (farm.fields && result.farm?.id) {
-        console.log('Creating', farm.fields.length, 'fields...')
+        logger.info('Creating', farm.fields.length, 'fields...')
         for (let i = 0; i < farm.fields.length; i++) {
           const field = farm.fields[i]
-          console.log('Creating field:', field.name)
+          logger.debug('Creating field:', field.name)
           const fieldResponse = await fetch('/api/fields', {
             method: 'POST',
             headers: { 
@@ -440,17 +442,17 @@ export function UnifiedFarmCreator() {
           })
           
           if (!fieldResponse.ok) {
-            console.error('Field creation failed for:', field.name)
+            logger.error('Field creation failed for:', field.name)
           } else {
-            console.log('Field created successfully:', field.name)
+            logger.info('Field created successfully:', field.name)
           }
         }
       }
       
-      console.log('=== UNIFIED FARM CREATION DEBUG END ===')
+      logger.debug('=== UNIFIED FARM CREATION DEBUG END ===')
       router.push('/dashboard')
     } catch (error) {
-      console.error('Error creating farm:', error)
+      logger.error('Error creating farm:', error)
       alert('Failed to create farm. Please try again.')
     } finally {
       setIsLoading(false)

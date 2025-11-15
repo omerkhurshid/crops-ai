@@ -74,7 +74,9 @@ const nextConfig = {
   
   // Bundle optimization
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'] // Keep error and warn logs in production
+    } : false,
   },
   
   // Webpack optimizations

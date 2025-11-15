@@ -62,13 +62,16 @@ export const GET = apiMiddleware.protected(
 // POST /api/farms - Create new farm
 export const POST = apiMiddleware.protected(
   withMethods(['POST'], async (request: AuthenticatedRequest) => {
+    let body: any = null
+    let finalData: any = null
+    
     try {
-      const body = await request.json()
+      body = await request.json()
       const farmData = validateRequestBody(createFarmSchema, body)
       // Extract and prepare data - only keep fields that exist in database schema
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
       // Only include fields that actually exist in the database schema
-      const finalData = {
+      finalData = {
         name: dbFarmData.name,
         ownerId: request.user.id,
         latitude: dbFarmData.latitude,
@@ -95,7 +98,14 @@ export const POST = apiMiddleware.protected(
       // Boundary handling will be implemented when geographic features are added
       return createSuccessResponse({ farm }, 201)
     } catch (error) {
-      console.error('Farm creation error', error, { userId: request.user.id })
+      console.error('Farm creation error details:', {
+        error: error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : null,
+        userId: request.user?.id || 'unknown',
+        requestBody: body,
+        finalData: finalData
+      })
       throw error // Re-throw to let middleware handle it
     }
   })

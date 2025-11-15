@@ -4,13 +4,13 @@ import { Redis } from '@upstash/redis';
 // Only initialize on server-side where environment variables are available
 let redis: Redis | null = null;
 if (typeof window === 'undefined') {
-  // Server-side only - import getConfig here to avoid client-side execution
-  const { getConfig } = require('./config/environment');
-  const config = getConfig();
-  redis = config.UPSTASH_REDIS_REST_URL && config.UPSTASH_REDIS_REST_TOKEN 
+  // Server-side only - use environment variables directly
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  redis = redisUrl && redisToken 
     ? new Redis({
-        url: config.UPSTASH_REDIS_REST_URL,
-        token: config.UPSTASH_REDIS_REST_TOKEN
+        url: redisUrl,
+        token: redisToken
       })
     : null;
 }

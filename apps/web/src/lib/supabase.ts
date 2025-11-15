@@ -1,21 +1,43 @@
 import { createClient } from '@supabase/supabase-js'
-// Environment validation
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-// Create Supabase client only if environment variables are available
-// This prevents build-time errors when Supabase isn't configured yet
+
+// Environment validation with fallback
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://drtbsioeqfodcaelukpo.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRydGJzaW9lcWZvZGNhZWx1a3BvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNzAyOTAsImV4cCI6MjAyNDY0NjI5MH0.K8fKnZfMq4hqfmDQhzxnZRdHtN8L9xJtYrShQzjBpHo'
+
+// Development-only configuration logging
+if (process.env.NODE_ENV === 'development') {
+  console.log('🔧 Supabase Configuration:', {
+    url: supabaseUrl ? supabaseUrl.substring(0, 30) + '...' : 'MISSING',
+    key: supabaseAnonKey ? supabaseAnonKey.substring(0, 20) + '...' : 'MISSING',
+    configured: !!(supabaseUrl && supabaseAnonKey)
+  })
+}
+
+// Create Supabase client with enhanced error handling
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
-        flowType: 'pkce'
+        flowType: 'pkce',
+        debug: process.env.NODE_ENV === 'development'
       }
     })
   : null
-// Helper to check if Supabase is configured
-export const isSupabaseConfigured = () => !!(supabaseUrl && supabaseAnonKey && supabase)
+
+// Enhanced configuration check
+export const isSupabaseConfigured = () => {
+  const configured = !!(supabaseUrl && supabaseAnonKey && supabase)
+  if (!configured) {
+    console.error('❌ Supabase not properly configured:', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseAnonKey,
+      hasClient: !!supabase
+    })
+  }
+  return configured
+}
 // Types matching existing NextAuth structure
 export interface SupabaseUser {
   id: string

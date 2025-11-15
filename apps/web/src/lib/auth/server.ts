@@ -7,9 +7,14 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextRequest } from 'next/server'
 import { logger } from '../logger'
-// Server-side Supabase client for authentication
+// Enhanced server-side Supabase client for authentication
 function createSupabaseServerClient(request: NextRequest) {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  // Use fallback credentials if environment variables are missing
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://drtbsioeqfodcaelukpo.supabase.co'
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRydGJzaW9lcWZvZGNhZWx1a3BvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNzAyOTAsImV4cCI6MjAyNDY0NjI5MH0.K8fKnZfMq4hqfmDQhzxnZRdHtN8L9xJtYrShQzjBpHo'
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('❌ Supabase configuration missing for server client')
     return null
   }
 
@@ -17,49 +22,43 @@ function createSupabaseServerClient(request: NextRequest) {
   const authHeader = request.headers.get('Authorization')
   const accessToken = authHeader?.replace('Bearer ', '')
 
+  logger.debug('Server Auth Method:', accessToken ? 'Bearer Token' : 'Cookies')
+
   if (accessToken) {
     // If we have a Bearer token, use it directly
-    return createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      {
-        auth: {
-          detectSessionInUrl: false,
-          persistSession: false,
+    return createServerClient(supabaseUrl, supabaseKey, {
+      auth: {
+        detectSessionInUrl: false,
+        persistSession: false,
+      },
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        global: {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+      },
+      cookies: {
+        getAll() {
+          return []
         },
-        cookies: {
-          getAll() {
-            return []
-          },
-          setAll() {
-            // No-op for token-based auth
-          },
+        setAll() {
+          // No-op for token-based auth
         },
-      }
-    )
+      },
+    })
   }
 
   // Fallback to cookie-based auth
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          // For API routes, we don't modify response cookies
-          // The middleware will handle session refresh
-        },
+  return createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll()
       },
-    }
-  )
+      setAll(cookiesToSet) {
+        // For API routes, we don't modify response cookies
+        // The middleware will handle session refresh
+      },
+    },
+  })
 }
 export interface AuthenticatedUser {
   id: string

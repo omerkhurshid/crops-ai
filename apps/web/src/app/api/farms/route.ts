@@ -67,9 +67,31 @@ export const POST = apiMiddleware.protected(
     
     try {
       body = await request.json()
+      console.log('🚜 Farm Creation Request:', {
+        userId: request.user?.id,
+        email: request.user?.email,
+        bodyKeys: Object.keys(body),
+        requestHeaders: Object.fromEntries(request.headers.entries())
+      })
+
       const farmData = validateRequestBody(createFarmSchema, body)
+      
+      // Ensure user exists before creating farm
+      const existingUser = await prisma.user.findUnique({
+        where: { id: request.user.id },
+        select: { id: true, email: true, name: true }
+      })
+      
+      if (!existingUser) {
+        console.error('❌ User not found in database:', request.user.id)
+        throw new Error(`User ${request.user.id} not found in database`)
+      }
+
+      console.log('✅ User found:', existingUser)
+
       // Extract and prepare data - only keep fields that exist in database schema
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
+      
       // Only include fields that actually exist in the database schema
       finalData = {
         name: dbFarmData.name,
@@ -80,8 +102,11 @@ export const POST = apiMiddleware.protected(
         region: dbFarmData.region || null,
         country: dbFarmData.country,
         totalArea: dbFarmData.totalArea,
-        location: dbFarmData.address || `${dbFarmData.name} Farm` // Add location field with fallback
+        location: dbFarmData.address || `${dbFarmData.name} Farm`
       }
+
+      console.log('🏗️ Creating farm with data:', finalData)
+
       const farm = await prisma.farm.create({
         data: finalData,
         include: {
@@ -94,18 +119,37 @@ export const POST = apiMiddleware.protected(
           }
         }
       })
-      // Note: Farm boundary update functionality removed temporarily due to schema mismatch
-      // Boundary handling will be implemented when geographic features are added
+
+      console.log('✅ Farm created successfully:', farm.id)
       return createSuccessResponse({ farm }, 201)
+
     } catch (error) {
-      console.error('Farm creation error details:', {
-        error: error,
+      console.error('❌ Farm creation error details:', {
+        errorType: error?.constructor?.name,
         message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : null,
+        stack: error instanceof Error ? error.stack?.split('\n').slice(0, 5) : null,
         userId: request.user?.id || 'unknown',
+        userEmail: request.user?.email || 'unknown',
         requestBody: body,
-        finalData: finalData
+        finalData: finalData,
+        isPrismaError: error && typeof error === 'object' && 'code' in error && typeof (error as any).code === 'string' && (error as any).code.startsWith('P')
       })
+
+      // Handle Prisma-specific errors
+      if (error && typeof error === 'object' && 'code' in error) {
+        const prismaError = error as any
+        switch (prismaError.code) {
+          case 'P2002':
+            throw new Error('A farm with this name already exists')
+          case 'P2003':
+            throw new Error('Invalid user reference - user may not exist')
+          case 'P2025':
+            throw new Error('User not found')
+          default:
+            throw new Error(`Database error: ${prismaError.message}`)
+        }
+      }
+
       throw error // Re-throw to let middleware handle it
     }
   })

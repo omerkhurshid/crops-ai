@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabase'
 import { logger } from '../../lib/logger'
+import { api, apiClient } from '../../lib/api-client'
 import { ModernCard, ModernCardContent, ModernCardDescription, ModernCardHeader, ModernCardTitle } from '../ui/modern-card'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -395,54 +396,36 @@ export function UnifiedFarmCreator() {
       logger.debug('Creating farm with data:', farmData)
       logger.debug('Using auth token:', authToken.substring(0, 20) + '...')
 
-      const response = await fetch('/api/farms', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        credentials: 'include',
-        body: JSON.stringify(farmData)
-      })
+      const response = await api.farms.create(farmData)
       logger.debug('API Response status:', response.status)
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        logger.error('Farm creation failed:', errorData)
-        throw new Error(`Failed to create farm: ${response.status} - ${JSON.stringify(errorData)}`)
+      if (!response.data) {
+        logger.error('Farm creation failed:', response.error)
+        throw new Error(`Failed to create farm: ${response.status} - ${response.error}`)
       }
 
-      const result = await response.json()
-      logger.info('Farm created successfully:', result.farm?.id)
+      logger.info('Farm created successfully:', response.data?.farm?.id)
       
       // Create fields if mapped
-      if (farm.fields && result.farm?.id) {
+      if (farm.fields && response.data?.farm?.id) {
         logger.info('Creating', farm.fields.length, 'fields...')
         for (let i = 0; i < farm.fields.length; i++) {
           const field = farm.fields[i]
           logger.debug('Creating field:', field.name)
-          const fieldResponse = await fetch('/api/fields', {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${authToken}`
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-              farmId: result.farm.id,
-              name: field.name,
-              area: field.area,
-              latitude: field.boundaries[0]?.lat || farm.location.lat,
-              longitude: field.boundaries[0]?.lng || farm.location.lng,
-              boundaries: field.boundaries,
-              color: field.color,
-              cropType: null,
-              status: 'active'
-            })
+          const fieldResponse = await apiClient.post('/api/fields', {
+            farmId: response.data.farm.id,
+            name: field.name,
+            area: field.area,
+            latitude: field.boundaries[0]?.lat || farm.location.lat,
+            longitude: field.boundaries[0]?.lng || farm.location.lng,
+            boundaries: field.boundaries,
+            color: field.color,
+            cropType: null,
+            status: 'active'
           })
           
-          if (!fieldResponse.ok) {
-            logger.error('Field creation failed for:', field.name)
+          if (!fieldResponse.data) {
+            logger.error('Field creation failed for:', field.name, fieldResponse.error)
           } else {
             logger.info('Field created successfully:', field.name)
           }

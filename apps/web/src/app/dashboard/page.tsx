@@ -29,6 +29,7 @@ import {
 import { prisma } from '../../lib/prisma'
 import { ensureArray } from '../../lib/utils'
 import { OnboardingTooltips, dashboardTooltips } from '../../components/onboarding/onboarding-tooltips'
+import { api } from '../../lib/api-client'
 export const dynamic = 'force-dynamic'
 async function getFarmData(userId: string) {
   try {
@@ -161,10 +162,11 @@ export default function DashboardPage() {
     }
     async function fetchData() {
       try {
-        const farmResponse = await fetch('/api/farms')
-        if (farmResponse.ok) {
-          const farmData = await farmResponse.json()
-          setFarms(farmData)
+        const farmResponse = await api.farms.getAll()
+        if (farmResponse.data) {
+          setFarms(farmResponse.data)
+        } else if (farmResponse.error) {
+          console.error('Failed to fetch farms:', farmResponse.error)
         }
         // TODO: Add other data fetching as needed
       } catch (error) {

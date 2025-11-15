@@ -46,10 +46,31 @@ export const unifiedAuth = {
         }
       }
       // Direct Supabase sign in
-      const { error } = await supabaseAuth.signIn(email, password)
+      const { data, error } = await supabaseAuth.signIn(email, password)
       if (error) {
         return { error: error.message }
       }
+      
+      // Ensure session is properly established
+      if (data?.session) {
+        console.log('✅ Session established:', data.session.user.id)
+        
+        // Call the session endpoint to properly set cookies
+        try {
+          const sessionResponse = await fetch('/api/auth/session', {
+            method: 'GET',
+            credentials: 'include'
+          })
+          
+          if (sessionResponse.ok) {
+            const sessionData = await sessionResponse.json()
+            console.log('✅ Session cookies set:', !!sessionData.session)
+          }
+        } catch (sessionError) {
+          console.warn('Session cookie setup failed:', sessionError)
+        }
+      }
+      
       return { ok: true }
     } catch (error) {
       return { error: 'Authentication failed' }

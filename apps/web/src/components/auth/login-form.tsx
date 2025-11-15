@@ -2,6 +2,7 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { unifiedAuth } from '../../lib/auth-unified'
+import { sessionManager } from '../../lib/session-manager'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -74,10 +75,23 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
         setError(result.error)
       } else {
         setError('')
-        setSuccessMessage('Login successful! Redirecting...')
-        setTimeout(() => {
-          window.location.href = callbackUrl
-        }, 1000)
+        setSuccessMessage('Login successful! Initializing session...')
+        
+        // Initialize session manager to ensure proper cookie handling
+        const sessionInitialized = await sessionManager.initializeSession()
+        
+        if (sessionInitialized) {
+          setSuccessMessage('Login successful! Redirecting...')
+          setTimeout(() => {
+            window.location.href = callbackUrl
+          }, 1000)
+        } else {
+          console.warn('Session initialization failed, but login succeeded')
+          setSuccessMessage('Login successful! Redirecting...')
+          setTimeout(() => {
+            window.location.href = callbackUrl
+          }, 1000)
+        }
       }
     } catch (err) {
       console.error('Login error:', err)

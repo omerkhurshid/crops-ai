@@ -18,6 +18,18 @@ export default function FarmsPage() {
   const [userFarms, setUserFarms] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [componentError, setComponentError] = useState<string | null>(null)
+
+  // Add error boundary logic
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('Farms page error:', event.error || event.message)
+      setComponentError(event.error?.message || event.message || 'Unknown error')
+    }
+    
+    window.addEventListener('error', handleError)
+    return () => window.removeEventListener('error', handleError)
+  }, [])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -29,22 +41,31 @@ export default function FarmsPage() {
     async function fetchFarms() {
       try {
         setError(null)
+        console.log('Fetching farms...')
         const response = await fetch('/api/farms', {
           credentials: 'include'
         })
         
+        console.log('Farms response status:', response.status)
+        
         if (response.ok) {
           const farmsData = await response.json()
-          setUserFarms(farmsData)
+          console.log('Farms data received:', farmsData)
+          
+          // Handle both array response and object with farms property
+          const farms = Array.isArray(farmsData) ? farmsData : (farmsData.farms || [])
+          setUserFarms(farms)
         } else if (response.status === 401) {
           setError('Authentication failed. Please log in again.')
           router.push('/login')
         } else {
-          setError('Failed to load farms')
+          const errorText = await response.text()
+          console.error('Farms API error:', response.status, errorText)
+          setError(`Failed to load farms: ${response.status}`)
         }
       } catch (error) {
         console.error('Error fetching farms:', error)
-        setError('Failed to load farms')
+        setError(`Failed to load farms: ${error instanceof Error ? error.message : 'Unknown error'}`)
       } finally {
         setIsLoading(false)
       }
@@ -66,6 +87,28 @@ export default function FarmsPage() {
 
   if (!session) {
     return null
+  }
+
+  if (componentError) {
+    return (
+      <DashboardLayout>
+        <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Component Error</h1>
+            <p className="text-gray-600 mb-6">{componentError}</p>
+            <button 
+              onClick={() => {
+                setComponentError(null)
+                window.location.reload()
+              }}
+              className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      </DashboardLayout>
+    )
   }
 
   if (error) {
@@ -184,12 +227,25 @@ export default function FarmsPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-sage-200/30">
-                      {userFarms.map((farm: any) => (
-                        <ExpandableFarmRow 
-                          key={farm.id} 
-                          farm={farm}
-                        />
-                      ))}
+                      {userFarms.map((farm: any) => {
+                        try {
+                          return (
+                            <ExpandableFarmRow 
+                              key={farm.id} 
+                              farm={farm}
+                            />
+                          )
+                        } catch (error) {
+                          console.error('Error rendering farm row:', error, farm)
+                          return (
+                            <tr key={farm.id}>
+                              <td colSpan={5} className="p-4 text-red-600">
+                                Error displaying farm: {farm.name}
+                              </td>
+                            </tr>
+                          )
+                        }
+                      })}
                     </tbody>
                   </table>
                 </div>

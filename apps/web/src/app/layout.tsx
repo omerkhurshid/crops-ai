@@ -69,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#FAFAF7] text-[#1A1A1A]`}>
         <ThemeProvider defaultTheme="system">
           <CacheProvider>
             <AuthProvider>
@@ -83,10 +83,34 @@ export default function RootLayout({
             toastOptions={{
               duration: 3000,
               style: {
-                background: 'white',
-                color: '#374151',
-                border: '1px solid #e5e7eb',
-                borderRadius: '0.75rem',
+                background: '#FFFFFF',
+                color: '#1A1A1A',
+                border: '1px solid #E6E6E6',
+                borderRadius: '12px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                fontSize: '14px',
+              },
+              success: {
+                style: {
+                  background: '#7A8F78',
+                  color: '#FFFFFF',
+                  border: '1px solid #7A8F78',
+                },
+                iconTheme: {
+                  primary: '#FFFFFF',
+                  secondary: '#7A8F78',
+                },
+              },
+              error: {
+                style: {
+                  background: '#DC2626',
+                  color: '#FFFFFF',
+                  border: '1px solid #DC2626',
+                },
+                iconTheme: {
+                  primary: '#FFFFFF',
+                  secondary: '#DC2626',
+                },
               },
             }}
           />

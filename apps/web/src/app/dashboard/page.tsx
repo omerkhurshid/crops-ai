@@ -12,7 +12,7 @@ import dynamicImport from 'next/dynamic'
 
 // Dynamic imports for heavy dashboard components to improve LCP
 const FarmerDashboard = dynamicImport(() => import('../../components/dashboard/farmer-dashboard').then(mod => ({ default: mod.FarmerDashboard })), {
-  loading: () => <div className="h-64 bg-gray-100 rounded-lg animate-pulse"></div>
+  loading: () => <div className="h-64 bg-[#F5F5F5] rounded-lg animate-pulse"></div>
 })
 
 const GlobalFAB = dynamicImport(() => import('../../components/ui/global-fab').then(mod => ({ default: mod.GlobalFAB })), {
@@ -24,7 +24,7 @@ const MobileFAB = dynamicImport(() => import('../../components/ui/global-fab').t
 })
 
 const NBARecommendations = dynamicImport(() => import('../../components/dashboard/nba-recommendations'), {
-  loading: () => <div className="h-32 bg-gray-100 rounded-lg animate-pulse"></div>
+  loading: () => <div className="h-32 bg-[#F5F5F5] rounded-lg animate-pulse"></div>
 })
 
 import { 
@@ -108,8 +108,8 @@ export default function DashboardPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading dashboard...</p>
         </div>
       </DashboardLayout>
     )
@@ -125,8 +125,8 @@ export default function DashboardPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Something went wrong</h1>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Something went wrong</h1>
+            <p className="text-[#555555] mb-6">{error}</p>
             <Button onClick={() => window.location.reload()}>Try again</Button>
           </div>
         </div>
@@ -141,13 +141,13 @@ export default function DashboardPage() {
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-left mb-12">
             <div className="mb-6">
-              <h1 className="text-4xl font-light text-sage-800 mb-4">Welcome to Your Farm Dashboard</h1>
-              <p className="text-xl text-sage-600 max-w-2xl">
+              <h1 className="text-4xl font-light text-[#7A8F78] mb-4">Welcome to Your Farm Dashboard</h1>
+              <p className="text-xl text-[#555555] max-w-2xl">
                 Add your first farm to start tracking crops, weather, and financials
               </p>
             </div>
             <Link href="/farms/create-unified">
-              <Button data-tour="add-farm-button" className="bg-sage-600 hover:bg-sage-700 text-white px-8 py-3 text-lg">
+              <Button data-tour="add-farm-button" className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-8 py-3 text-lg">
                 <Plus className="h-5 w-5 mr-2" />
                 Add Your First Farm
               </Button>
@@ -155,16 +155,16 @@ export default function DashboardPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-sage-800 mb-2">Weather Tracking</h3>
-              <p className="text-sage-600 text-sm">Get weather alerts to help you time planting, irrigation, and harvests</p>
+              <h3 className="font-semibold text-[#1A1A1A] mb-2">Weather Tracking</h3>
+              <p className="text-[#555555] text-sm">Get weather alerts to help you time planting, irrigation, and harvests</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-sage-800 mb-2">Crop Health</h3>
-              <p className="text-sage-600 text-sm">Monitor your fields to catch problems early and maximize yields</p>
+              <h3 className="font-semibold text-[#1A1A1A] mb-2">Crop Health</h3>
+              <p className="text-[#555555] text-sm">Monitor your fields to catch problems early and maximize yields</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-sage-800 mb-2">Financial Reports</h3>
-              <p className="text-sage-600 text-sm">Track your income and expenses to improve farm profitability</p>
+              <h3 className="font-semibold text-[#1A1A1A] mb-2">Financial Reports</h3>
+              <p className="text-[#555555] text-sm">Track your income and expenses to improve farm profitability</p>
             </div>
           </div>
         </div>
@@ -177,8 +177,8 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         {/* Page Header - Consistent with other pages */}
         <div className="mb-8">
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Farm Dashboard</h1>
-          <p className="text-lg text-sage-600">Monitor your operations and stay on top of important tasks</p>
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Farm Dashboard</h1>
+          <p className="text-lg text-[#555555]">Monitor your operations and stay on top of important tasks</p>
         </div>
 
         {/* Use the new farmer-friendly dashboard */}

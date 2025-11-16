@@ -168,21 +168,19 @@
   .sage-hero {
     @apply bg-[#FAFAF7] min-h-screen;
     @apply flex flex-col items-center justify-center;
-    @apply text-center px-4;
+    @apply text-center px-4 py-20;
   }
   
   .sage-hero h1 {
-    @apply text-5xl md:text-6xl font-medium text-[#1A1A1A];
-    @apply mb-6 max-w-4xl;
-    letter-spacing: -0.5%;
-    line-height: 1.1;
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1A1A1A];
+    @apply mb-6 max-w-4xl leading-tight;
+    letter-spacing: -0.02em;
   }
   
   .sage-hero p {
-    @apply text-xl md:text-2xl font-light text-[#555555];
-    @apply mb-8 max-w-2xl;
-    letter-spacing: 0%;
-    line-height: 1.4;
+    @apply text-lg md:text-xl font-normal text-[#555555];
+    @apply mb-8 max-w-3xl leading-relaxed;
+    letter-spacing: -0.01em;
   }
 
   /* Feature Section */
@@ -206,11 +204,13 @@
   }
   
   .sage-feature-title {
-    @apply text-xl font-medium text-[#1A1A1A] mb-3;
+    @apply text-lg font-semibold text-[#1A1A1A] mb-3;
+    letter-spacing: -0.01em;
   }
   
   .sage-feature-description {
-    @apply text-[#555555] leading-relaxed;
+    @apply text-[#555555] leading-relaxed text-sm;
+    letter-spacing: -0.005em;
   }
 
   /* Footer Styling */
@@ -405,14 +405,9 @@
     transform: translateY(0);
   }
 
-  /* Agricultural background for landing page */
-  .sage-agricultural-bg {
-    background-image: 
-      linear-gradient(135deg, rgba(122, 143, 120, 0.1) 0%, rgba(94, 111, 90, 0.15) 100%),
-      url('/aerial-fields.jpg?v=20250822');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+  /* Clean background for landing page */
+  .sage-clean-bg {
+    background: linear-gradient(135deg, #FAFAF7 0%, #F8FAF8 100%);
   }
 
   /* Utility classes for consistent spacing */

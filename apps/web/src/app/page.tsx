@@ -12,153 +12,198 @@ import {
 import { useRouter } from 'next/navigation'
 import { useSession } from '../lib/auth-unified'
 import { HomePageDemos } from '../components/demos/home-page-demos'
+
 export default function Home() {
   const { data: session, status } = useSession()
   const router = useRouter()
+
   useEffect(() => {
     // Check if user is logged in and redirect to dashboard
     if (status !== 'loading' && session) {
       router.push('/dashboard')
     }
   }, [session, status, router])
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-earth-50">
+    <div className="sage-agricultural-bg min-h-screen">
       <Navbar />
+      
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="sage-hero">
+        <div className="sage-container">
           {/* Professional Header */}
           <div className="text-center mb-8">
-            <Badge variant="outline" className="bg-sage-600 text-white border-sage-500 px-4 py-2 text-sm font-medium">
+            <div className="inline-flex items-center bg-[#7A8F78] text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Sprout className="h-4 w-4 mr-2" />
               Smart Farming Made Simple
-            </Badge>
+            </div>
           </div>
+          
           {/* Main Hero */}
-          <div className="text-center mb-8 sm:mb-16 p-4 sm:p-8 md:p-12 bg-white rounded-2xl shadow-xl border border-sage-100">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-sage-800 leading-tight">
+          <div className="sage-card text-center max-w-5xl mx-auto mb-16">
+            <h1 className="sage-hero h1 text-4xl md:text-6xl font-medium text-[#1A1A1A] mb-6">
               Increase Your Farm Profits<br />
-              <span className="text-sage-600">by 20% This Season</span>
+              <span className="text-[#7A8F78]">by 20% This Season</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-sage-700 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-2">
-              Make better timing decisions with AI-powered recommendations. Farmers using our platform average $15,000 more profit per season.
+            <p className="sage-hero p text-xl md:text-2xl font-light text-[#555555] mb-8 max-w-3xl mx-auto">
+              Make better timing decisions with AI-powered recommendations from <strong>Cropple.ai</strong>. 
+              Farmers using our platform average $15,000 more profit per season.
             </p>
+            
             {/* Outcome-Focused Benefits */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-5xl mx-auto px-2">
-              <div className="bg-green-50 p-4 sm:p-6 rounded-lg border border-green-200">
-                <DollarSign className="h-8 w-8 sm:h-10 sm:w-10 text-green-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-green-700 mb-2">Catch Problems Early</h3>
-                <p className="text-sm sm:text-base text-green-600">Save $5,000+ per season by spotting issues before they spread</p>
+            <div className="sage-feature-grid mb-8">
+              <div className="sage-feature-card">
+                <DollarSign className="sage-feature-icon" />
+                <h3 className="sage-feature-title">Catch Problems Early</h3>
+                <p className="sage-feature-description">Save $5,000+ per season by spotting issues before they spread</p>
               </div>
-              <div className="bg-blue-50 p-4 sm:p-6 rounded-lg border border-blue-200">
-                <CloudRain className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-blue-700 mb-2">Perfect Timing Decisions</h3>
-                <p className="text-sm sm:text-base text-blue-600">15% higher yields with AI-powered planting and harvest timing</p>
+              <div className="sage-feature-card">
+                <CloudRain className="sage-feature-icon" />
+                <h3 className="sage-feature-title">Perfect Timing Decisions</h3>
+                <p className="sage-feature-description">15% higher yields with AI-powered planting and harvest timing</p>
               </div>
-              <div className="bg-amber-50 p-4 sm:p-6 rounded-lg border border-amber-200">
-                <TrendingUp className="h-8 w-8 sm:h-10 sm:w-10 text-amber-600 mb-2 sm:mb-3 mx-auto" />
-                <h3 className="text-base sm:text-lg font-semibold text-amber-700 mb-2">Maximize Market Prices</h3>
-                <p className="text-sm sm:text-base text-amber-600">Sell at peak prices with market timing alerts</p>
+              <div className="sage-feature-card">
+                <TrendingUp className="sage-feature-icon" />
+                <h3 className="sage-feature-title">Maximize Market Prices</h3>
+                <p className="sage-feature-description">Sell at peak prices with market timing alerts</p>
               </div>
             </div>
+            
             {/* CTA */}
             <div className="mb-6">
               <Link href="/register">
-                <button className="bg-green-600 hover:bg-green-700 px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold text-base sm:text-lg rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-flex items-center mb-4 w-full sm:w-auto justify-center">
-                  <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                <button className="btn-primary text-lg px-8 py-4 mb-4">
+                  <DollarSign className="h-5 w-5 mr-2" />
                   Start Increasing Profits Today
                 </button>
               </Link>
               <div className="text-center">
-                <p className="text-sage-600 text-xs sm:text-sm mb-2 px-4">First month free • Setup in 5 minutes • Cancel anytime</p>
-                <div className="inline-flex items-center text-sage-600 font-medium text-xs sm:text-sm">
-                  <Shield className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                  Trusted by 1,200+ farmers
+                <p className="text-[#555555] text-sm mb-2">First month free • Setup in 5 minutes • Cancel anytime</p>
+                <div className="inline-flex items-center text-[#7A8F78] font-medium text-sm">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Trusted by 1,200+ farmers using Cropple.ai
                 </div>
               </div>
             </div>
           </div>
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 px-2">
-            {/* Crop Monitoring */}
-            <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
-              <div className="p-2 sm:p-3 bg-sage-100 rounded-full w-fit mb-3 sm:mb-4">
-                <Satellite className="h-6 w-6 sm:h-8 sm:w-8 text-sage-700" />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="sage-features">
+        <div className="sage-container">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-medium text-[#1A1A1A] mb-6">
+              Everything You Need to Farm Smarter
+            </h2>
+            <p className="text-xl text-[#555555] max-w-2xl mx-auto">
+              Cropple.ai combines satellite imagery, weather data, and AI insights 
+              to help you make better decisions for your farm.
+            </p>
+          </div>
+          
+          <div className="sage-feature-grid">
+            {/* Field Health Monitoring */}
+            <div className="sage-feature-card">
+              <div className="p-3 bg-[#DDE4D8] rounded-full w-fit mb-4 mx-auto">
+                <Satellite className="h-8 w-8 text-[#7A8F78]" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Field Health Monitoring</h3>
-              <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                Check your crops' health and spot problems early. 
-                Spot problems with your crops before they hurt your harvest.
+              <h3 className="sage-feature-title">Field Health Monitoring</h3>
+              <p className="sage-feature-description">
+                Monitor your crops' health with satellite imagery and spot problems 
+                before they impact your harvest.
               </p>
             </div>
+            
             {/* Weather Intelligence */}
-            <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
-              <div className="p-2 sm:p-3 bg-earth-100 rounded-full w-fit mb-3 sm:mb-4">
-                <CloudRain className="h-6 w-6 sm:h-8 sm:w-8 text-earth-700" />
+            <div className="sage-feature-card">
+              <div className="p-3 bg-[#DDE4D8] rounded-full w-fit mb-4 mx-auto">
+                <CloudRain className="h-8 w-8 text-[#7A8F78]" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Weather Forecasts</h3>
-              <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                Get accurate weather forecasts for your farm. 
-                Know the best times to spray, water, and harvest.
+              <h3 className="sage-feature-title">Weather Forecasts</h3>
+              <p className="sage-feature-description">
+                Get hyper-local weather forecasts and know the perfect timing 
+                for spraying, watering, and harvesting.
               </p>
             </div>
+            
             {/* Data Analytics */}
-            <div className="bg-white p-4 sm:p-6 rounded-lg border border-sage-200 hover:shadow-lg transition-shadow">
-              <div className="p-2 sm:p-3 bg-cream-100 rounded-full w-fit mb-3 sm:mb-4">
-                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-golden" />
+            <div className="sage-feature-card">
+              <div className="p-3 bg-[#DDE4D8] rounded-full w-fit mb-4 mx-auto">
+                <TrendingUp className="h-8 w-8 text-[#7A8F78]" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-sage-800 mb-2 sm:mb-3">Track Your Progress</h3>
-              <p className="text-sm sm:text-base text-sage-600 leading-relaxed">
-                See how your farm is doing with harvest tracking, profit reports, 
-                and tips to improve your results.
+              <h3 className="sage-feature-title">Track Your Progress</h3>
+              <p className="sage-feature-description">
+                Monitor your farm's performance with harvest tracking, profit reports, 
+                and actionable insights to improve yields.
               </p>
             </div>
           </div>
         </div>
       </section>
+
       {/* Interactive Demos Section */}
       <HomePageDemos />
-      {/* Trust & Security */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-sage-800 mb-8">
-            Trusted by Professional Farmers
-          </h2>
+
+      {/* Trust & Security Section */}
+      <section className="sage-section bg-[#F8FAF8]">
+        <div className="sage-container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-medium text-[#1A1A1A] mb-8">
+              Trusted by Professional Farmers
+            </h2>
+            <p className="text-lg text-[#555555] max-w-2xl mx-auto mb-12">
+              Cropple.ai is built on proven agricultural science and trusted by farmers worldwide.
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <Shield className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">Secure & Private</h3>
-              <p className="text-sage-600">Your farm data is protected and private</p>
+              <Shield className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-[#1A1A1A] mb-3">Secure & Private</h3>
+              <p className="text-[#555555]">Your farm data is protected with enterprise-grade security</p>
             </div>
             <div className="text-center">
-              <Eye className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">Proven Results</h3>
-              <p className="text-sage-600">Based on established agricultural research</p>
+              <Eye className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-[#1A1A1A] mb-3">Proven Results</h3>
+              <p className="text-[#555555]">Based on established agricultural research and real farm data</p>
             </div>
             <div className="text-center">
-              <Users className="h-12 w-12 text-sage-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">Farmer Focused</h3>
-              <p className="text-sage-600">Designed by and for agricultural professionals</p>
+              <Users className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-[#1A1A1A] mb-3">Farmer Focused</h3>
+              <p className="text-[#555555]">Designed by and for agricultural professionals</p>
             </div>
           </div>
         </div>
       </section>
+
       {/* Footer CTA */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Get Started?
+      <section className="sage-footer">
+        <div className="sage-container text-center">
+          <h2 className="text-3xl font-medium text-white mb-4">
+            Ready to Transform Your Farm?
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Join professional farmers using advanced agricultural technology.
+          <p className="text-xl text-white/80 mb-8">
+            Join thousands of farmers using Cropple.ai to increase their profits.
           </p>
           <Link href="/register">
-            <button className="bg-sage-600 hover:bg-sage-700 px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold text-base sm:text-lg rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl inline-flex items-center w-full sm:w-auto justify-center">
-              <Target className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-              Start Free Trial
-              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 ml-2" />
+            <button className="btn-primary text-lg px-8 py-4 bg-white text-[#5E6F5A] hover:bg-[#F8FAF8]">
+              <Target className="h-5 w-5 mr-2" />
+              Start Your Free Trial
+              <ArrowRight className="h-5 w-5 ml-2" />
             </button>
           </Link>
+          
+          <div className="sage-divider my-8 border-white/20" />
+          
+          <div className="text-center text-white/60 text-sm">
+            <p>&copy; 2024 Cropple.ai. All rights reserved.</p>
+            <div className="flex justify-center space-x-6 mt-4">
+              <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-white">Terms of Service</Link>
+              <Link href="/help" className="hover:text-white">Help Center</Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

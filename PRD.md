@@ -1,9 +1,64 @@
 # Product Requirements Document: Crops.AI
 ## Comprehensive Land & Crop Management Platform
 
-**Last Updated:** November 2, 2024  
+**Last Updated:** November 16, 2024  
 **Implementation Status:** Production Ready  
-**Current Version:** 1.0.0  
+**Current Version:** 1.1.0  
+
+---
+
+## Design System & Brand Identity
+
+### Cropple.ai Theme Specification
+
+#### Brand Typography
+• **Primary Font**: Sohne (use webfont or licensed version)  
+• **Font Weights**: 300, 400, 500, 600  
+• **Letter spacing**: –0.5% for headlines, 0% for body  
+• **Line height**: 1.25–1.4  
+
+#### Color Palette
+**Primary Sage Green Palette:**
+• Sage Green (Primary): #7A8F78  
+• Sage Dark: #5E6F5A  
+• Sage Light: #DDE4D8  
+• Accent Leaf Green: #8FBF7F  
+
+**Neutrals:**
+• Off-White Background: #FAFAF7  
+• White Surface Tiles: #FFFFFF  
+• Text Dark Grey: #1A1A1A  
+• Text Medium Grey: #555555  
+• Border Light Grey: #E6E6E6  
+
+#### UI Components Theme
+**General Styling:**
+• Border radius: 12–14px  
+• Tile shadow: 0 2px 6px rgba(0,0,0,0.06)  
+• Tile padding: 24–32px  
+• Section dividers: 1px solid #E6E6E6  
+• Max container width: 1180px  
+
+**Buttons:**
+Primary Button: background #7A8F78, color white, padding 14px 28px, font-weight 500, border-radius 10px, hover #5E6F5A  
+Secondary Button: background white, color #7A8F78, border 1.5px solid #7A8F78, hover #F3F6F1  
+
+#### CSS Variables
+```css
+.theme {
+  --font-primary: 'Sohne', sans-serif;
+  --color-primary: #7A8F78;
+  --color-primary-dark: #5E6F5A;
+  --color-primary-light: #DDE4D8;
+  --color-accent: #8FBF7F;
+  --color-bg: #FAFAF7;
+  --color-surface: #FFFFFF;
+  --color-text-dark: #1A1A1A;
+  --color-text-medium: #555555;
+  --color-border: #E6E6E6;
+  --radius: 12px;
+}
+```
 
 ---
 

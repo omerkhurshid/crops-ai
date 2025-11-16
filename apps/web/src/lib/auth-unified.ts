@@ -55,20 +55,8 @@ export const unifiedAuth = {
       if (data?.session) {
         console.log('✅ Session established:', data.session.user.id)
         
-        // Call the session endpoint to properly set cookies
-        try {
-          const sessionResponse = await fetch('/api/auth/session', {
-            method: 'GET',
-            credentials: 'include'
-          })
-          
-          if (sessionResponse.ok) {
-            const sessionData = await sessionResponse.json()
-            console.log('✅ Session cookies set:', !!sessionData.session)
-          }
-        } catch (sessionError) {
-          console.warn('Session cookie setup failed:', sessionError)
-        }
+        // The session should now be persisted by Supabase client automatically
+        // The middleware will handle server-side session refresh
       }
       
       return { ok: true }

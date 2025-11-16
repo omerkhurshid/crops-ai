@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-// Create Supabase client with enhanced error handling
+// Create Supabase client with enhanced error handling and proper cookie storage
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
@@ -21,7 +21,14 @@ export const supabase = supabaseUrl && supabaseAnonKey
         persistSession: true,
         detectSessionInUrl: true,
         flowType: 'pkce',
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        storageKey: 'sb-drtbsioeqfodcaelukpo-auth-token',
         debug: process.env.NODE_ENV === 'development'
+      },
+      global: {
+        headers: {
+          'X-Client-Info': 'supabase-js-web'
+        }
       }
     })
   : null

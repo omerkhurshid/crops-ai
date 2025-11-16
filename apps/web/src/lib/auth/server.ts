@@ -1,65 +1,10 @@
 /**
  * Server-side Supabase Authentication Utilities
  * 
- * This module provides server-side authentication helpers for API routes
- * using Supabase Auth with JWT token validation.
+ * Production-ready authentication helpers following Supabase SSR best practices
  */
-import { createServerClient } from '@supabase/ssr'
 import { NextRequest } from 'next/server'
-import { logger } from '../logger'
-// Enhanced server-side Supabase client for authentication
-function createSupabaseServerClient(request: NextRequest) {
-  // Use fallback credentials if environment variables are missing
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://drtbsioeqfodcaelukpo.supabase.co'
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRydGJzaW9lcWZvZGNhZWx1a3BvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNzAyOTAsImV4cCI6MjAyNDY0NjI5MH0.K8fKnZfMq4hqfmDQhzxnZRdHtN8L9xJtYrShQzjBpHo'
-
-  if (!supabaseUrl || !supabaseKey) {
-    console.error('❌ Supabase configuration missing for server client')
-    return null
-  }
-
-  // Check for Authorization header first
-  const authHeader = request.headers.get('Authorization')
-  const accessToken = authHeader?.replace('Bearer ', '')
-
-  logger.debug('Server Auth Method:', accessToken ? 'Bearer Token' : 'Cookies')
-
-  if (accessToken) {
-    // If we have a Bearer token, use it directly
-    return createServerClient(supabaseUrl, supabaseKey, {
-      auth: {
-        detectSessionInUrl: false,
-        persistSession: false,
-      },
-      global: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-      cookies: {
-        getAll() {
-          return []
-        },
-        setAll() {
-          // No-op for token-based auth
-        },
-      },
-    })
-  }
-
-  // Fallback to cookie-based auth
-  return createServerClient(supabaseUrl, supabaseKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll()
-      },
-      setAll(cookiesToSet) {
-        // For API routes, we don't modify response cookies
-        // The middleware will handle session refresh
-      },
-    },
-  })
-}
+import { createRouteHandlerClient } from '../supabase/server'
 export interface AuthenticatedUser {
   id: string
   email: string
@@ -70,53 +15,20 @@ export interface AuthenticatedUser {
  * Get the authenticated user from the request
  * Returns null if not authenticated
  */
+/**
+ * Get authenticated user from API route request
+ * Returns null if not authenticated
+ */
 export async function getAuthenticatedUser(request: NextRequest): Promise<AuthenticatedUser | null> {
   try {
-    // Debug: Log authentication method being used
-    const authHeader = request.headers.get('Authorization')
-    const accessToken = authHeader?.replace('Bearer ', '')
-    const hasAuthToken = !!accessToken
-    const cookies = request.cookies.getAll()
-    const authCookies = cookies.filter(c => c.name.includes('supabase'))
+    const { supabase } = createRouteHandlerClient(request)
     
-    logger.debug('=== AUTHENTICATION DEBUG ===')
-    logger.debug(`URL: ${request.url}`)
-    logger.debug(`Method: ${request.method}`)
-    logger.debug(`Authentication method: ${hasAuthToken ? 'Bearer token' : 'Cookies'}`)
-    logger.debug(`Auth cookies found: ${authCookies.length}`, authCookies.map(c => `${c.name}=${c.value?.substring(0, 20)}...`))
-    if (hasAuthToken) {
-      logger.debug('Bearer token present:', accessToken?.substring(0, 20) + '...')
-    }
-
-    const supabase = createSupabaseServerClient(request)
-    if (!supabase) {
-      logger.error('Supabase not configured - missing environment variables')
-      logger.debug('NEXT_PUBLIC_SUPABASE_URL:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
-      logger.debug('NEXT_PUBLIC_SUPABASE_ANON_KEY:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-      return null
-    }
-
-    logger.debug('Calling supabase.auth.getUser()...')
     const { data: { user }, error } = await supabase.auth.getUser()
     
-    if (error) {
-      logger.warn('Supabase auth error:', error.message, error.status)
-      logger.debug('Error details:', JSON.stringify(error, null, 2))
-      return null
-    }
-    
-    if (!user) {
-      logger.debug('No user found in session')
+    if (error || !user) {
       return null
     }
 
-    logger.debug('User authenticated successfully:', {
-      id: user.id,
-      email: user.email,
-      aud: user.aud,
-      created_at: user.created_at
-    })
-    logger.debug('=== END AUTHENTICATION DEBUG ===')
     return {
       id: user.id,
       email: user.email || '',
@@ -124,8 +36,7 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       role: user.user_metadata?.role || 'FARM_OWNER'
     }
   } catch (error) {
-    logger.error('Authentication error:', error)
-    logger.debug('=== END AUTHENTICATION DEBUG (ERROR) ===')
+    console.error('Authentication error:', error)
     return null
   }
 }

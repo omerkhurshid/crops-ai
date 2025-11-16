@@ -1,10 +1,9 @@
 /**
- * Supabase Authentication System
+ * Production-ready Supabase Authentication System
  * 
- * Primary authentication system using Supabase Auth.
- * NextAuth has been removed in favor of Supabase-only authentication.
+ * Following Supabase SSR best practices for Next.js App Router
  */
-import { supabaseAuth, type SupabaseSession, type SupabaseUser } from './supabase'
+import { createClient } from './supabase/client'
 import React, { useEffect, useState, useCallback } from 'react'
 // Supabase-only authentication (NextAuth removed)
 const USE_SUPABASE_AUTH = true
@@ -27,57 +26,63 @@ export interface AuthResult {
     email_confirmed_at?: string
   }
 }
-// Supabase-only auth functions
+// Production authentication functions
 export const unifiedAuth = {
   // Sign in using Supabase authentication
   signIn: async (email: string, password: string): Promise<AuthResult> => {
     try {
-      // First try migration endpoint for existing users
-      const migrationResponse = await fetch('/api/auth/supabase-signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+      const supabase = createClient()
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
-      if (migrationResponse.ok) {
-        const data = await migrationResponse.json()
-        if (data.migrated || data.legacy) {
-          // User migrated or handled via legacy system
-          return { ok: true }
-        }
-      }
-      // Direct Supabase sign in
-      const { data, error } = await supabaseAuth.signIn(email, password)
+      
       if (error) {
         return { error: error.message }
       }
       
-      // Ensure session is properly established
       if (data?.session) {
-        console.log('✅ Session established:', data.session.user.id)
-        
-        // The session should now be persisted by Supabase client automatically
-        // The middleware will handle server-side session refresh
+        console.log('✅ Authentication successful')
+        // Session cookies will be automatically handled by Supabase SSR
+        return { ok: true }
       }
       
-      return { ok: true }
+      return { error: 'No session created' }
     } catch (error) {
+      console.error('Sign in error:', error)
       return { error: 'Authentication failed' }
     }
   },
   // Sign out using Supabase
   signOut: async (options?: { callbackUrl?: string }): Promise<void> => {
-    await supabaseAuth.signOut()
-    if (options?.callbackUrl) {
-      window.location.href = options.callbackUrl
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      if (options?.callbackUrl) {
+        window.location.href = options.callbackUrl
+      }
+    } catch (error) {
+      console.error('Sign out error:', error)
     }
   },
+  
   // Sign up using Supabase
   signUp: async (email: string, password: string, name: string): Promise<AuthResult> => {
     try {
-      const { data, error } = await supabaseAuth.signUp(email, password, { name })
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name }
+        }
+      })
+      
       if (error) {
         return { error: error.message }
       }
+      
       return { 
         ok: true,
         user: data?.user ? {
@@ -87,25 +92,36 @@ export const unifiedAuth = {
         } : undefined
       }
     } catch (error) {
+      console.error('Sign up error:', error)
       return { error: 'Registration failed' }
     }
   },
+  
   // Password reset using Supabase
   resetPassword: async (email: string): Promise<AuthResult> => {
-    const { error } = await supabaseAuth.resetPassword(email)
-    if (error) {
-      return { error: error.message }
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.resetPasswordForEmail(email)
+      if (error) {
+        return { error: error.message }
+      }
+      return { ok: true }
+    } catch (error) {
+      console.error('Reset password error:', error)
+      return { error: 'Password reset failed' }
     }
-    return { ok: true }
   }
 }
-// Supabase session hook
+// Production session hook
 export function useSession(): { data: UnifiedSession | null; status: 'loading' | 'authenticated' | 'unauthenticated' } {
   const [session, setSession] = useState<UnifiedSession | null>(null)
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
+  
   useEffect(() => {
+    const supabase = createClient()
+    
     // Get initial session
-    supabaseAuth.getSession().then(({ session }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setSession({
           user: {
@@ -121,8 +137,9 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
         setStatus('unauthenticated')
       }
     })
+    
     // Listen for auth changes
-    const { data: { subscription } } = supabaseAuth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setSession({
           user: {
@@ -138,10 +155,12 @@ export function useSession(): { data: UnifiedSession | null; status: 'loading' |
         setStatus('unauthenticated')
       }
     })
+    
     return () => {
       subscription.unsubscribe()
     }
   }, [])
+  
   return {
     data: session,
     status: status

@@ -4,7 +4,7 @@
  * Provides serverless image processing capabilities for satellite imagery,
  * including preprocessing, analysis, and optimization for agricultural monitoring.
  */
-import { sentinelHub } from './sentinel-hub';
+// import { sentinelHub } from './sentinel-hub'; // Removed - using Google Earth Engine
 import { ndviAnalysis } from './ndvi-analysis';
 import { QueueManager } from '../queue/queue-manager';
 const queueManager = new QueueManager('satellite-processing');
@@ -150,32 +150,23 @@ class SatelliteImageProcessor {
   ): Promise<ProcessedImage> {
     try {
       // Search for satellite images
-      const images = await sentinelHub.searchImages(
-        bbox,
-        date,
-        date,
-        options.cloudCoverageMax
-      );
+      // const images = await sentinelHub.searchImages(bbox, date, date, options.cloudCoverageMax);
+      // TODO: Replace with Google Earth Engine integration
+      const images = [] as any; // Temporary placeholder
       if (images.length === 0) {
         throw new Error('No suitable satellite images found for the specified date and location');
       }
       const selectedImage = images[0]; // Select best image
       // Get true color image
-      const trueColorBlob = await sentinelHub.getTrueColorImage(
-        bbox,
-        date,
-        options.resolution * 100, // Convert to pixels
-        options.resolution * 100
-      );
+      // const trueColorBlob = await sentinelHub.getTrueColorImage(bbox, date, options.resolution * 100, options.resolution * 100);
+      // TODO: Replace with Google Earth Engine integration
+      const trueColorBlob = null;
       // Get NDVI image if requested
       let ndviBlob: Blob | null = null;
       if (options.analysisTypes.includes('ndvi')) {
-        ndviBlob = await sentinelHub.getNDVIImage(
-          bbox,
-          date,
-          options.resolution * 100,
-          options.resolution * 100
-        );
+        // ndviBlob = await sentinelHub.getNDVIImage(bbox, date, options.resolution * 100, options.resolution * 100);
+        // TODO: Replace with Google Earth Engine integration
+        ndviBlob = null;
       }
       // Upload images to Cloudinary
       const [trueColorUrl, ndviUrl] = await Promise.all([
@@ -185,7 +176,9 @@ class SatelliteImageProcessor {
       // Perform vegetation analysis
       let analysis;
       if (options.analysisTypes.includes('health') || options.analysisTypes.includes('stress')) {
-        const ndviAnalysisResult = await sentinelHub.calculateNDVIAnalysis(fieldId, bbox, date);
+        // const ndviAnalysisResult = await sentinelHub.calculateNDVIAnalysis(fieldId, bbox, date);
+        // TODO: Replace with Google Earth Engine integration
+        const ndviAnalysisResult = null;
         // Calculate vegetation indices
         const indices = ndviAnalysis.calculateVegetationIndices({
           red: 0.1, // These would come from actual spectral data

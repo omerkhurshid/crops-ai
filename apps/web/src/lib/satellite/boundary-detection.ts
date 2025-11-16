@@ -4,7 +4,7 @@
  * Implements algorithms for automatic field boundary detection from satellite imagery
  * using computer vision and machine learning techniques.
  */
-import { sentinelHub } from './sentinel-hub';
+// import { sentinelHub } from './sentinel-hub'; // Removed - using Google Earth Engine
 import type { BoundingBox, FieldBoundary, SatelliteImage } from './types';
 export interface BoundaryDetectionOptions {
   method: 'edge-detection' | 'segmentation' | 'machine-learning' | 'hybrid' | 'watershed';

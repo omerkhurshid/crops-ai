@@ -1,7 +1,7 @@
 /**
  * Shared types for satellite monitoring system
  */
-export * from './sentinel-hub';
+// export * from './sentinel-hub'; // Removed - using Google Earth Engine
 import type { VegetationIndices } from './ndvi-analysis';
 export interface BoundingBox {
   west: number;

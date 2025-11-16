@@ -69,7 +69,7 @@ Cropple.ai is a comprehensive agricultural intelligence platform that transforms
 
 #### **What Users Can Do:**
 - **NDVI Analysis**: View vegetation index maps showing crop vigor and stress areas
-- **Disease Detection**: AI-powered identification of crop diseases and pest infestations
+- **Disease Detection**: Algorithm-based identification of crop diseases and pest infestations
 - **Growth Stage Tracking**: Monitor crop development with stage-specific recommendations
 - **Stress Mapping**: Identify water stress, nutrient deficiencies, and environmental issues
 - **Treatment Planning**: Get targeted spray recommendations with optimal timing windows
@@ -110,7 +110,7 @@ Cropple.ai is a comprehensive agricultural intelligence platform that transforms
 #### **Product Manager Perspective:**
 - **Objective**: Provide actionable intelligence that improves farm profitability and sustainability
 - **Key Metrics**: Prediction accuracy, recommendation adoption rate, ROI from suggestions
-- **Format**: Dashboard with trend charts, prediction confidence intervals, actionable recommendations
+- **Format**: Dashboard with trend charts, prediction analysis ranges, actionable recommendations
 - **Outputs**: Yield forecasts, price predictions, risk assessments, optimization suggestions
 - **Business Value**: Differentiates platform through advanced AI, creates vendor lock-in through improved outcomes
 
@@ -147,7 +147,7 @@ Cropple.ai is a comprehensive agricultural intelligence platform that transforms
 
 #### **What Users Can Do:**
 - **Real-time Conditions**: View current temperature, humidity, wind, and precipitation
-- **Extended Forecasts**: Get 14-day agricultural weather forecasts with confidence intervals
+- **Extended Forecasts**: Get 14-day agricultural weather forecasts with validation indicators
 - **Application Windows**: Identify optimal timing for spraying, planting, and harvesting
 - **Alert Management**: Set custom thresholds for temperature, precipitation, and wind events
 - **Historical Analysis**: Compare current conditions to historical averages and extremes
@@ -248,12 +248,22 @@ Cropple.ai is a comprehensive agricultural intelligence platform that transforms
 
 ## Technical Infrastructure & Capabilities
 
-### **Machine Learning Models (7 Active Models)**
-1. **Corn Yield Predictor** - 87% accuracy for end-of-season yield forecasting
-2. **Soybean Yield Predictor** - 85% accuracy with 14-day lead time
+### ⚠️ **IMPLEMENTATION DISCLAIMER**
+
+**Production-Ready Features**: User management, farm operations, weather monitoring, satellite NDVI, financial tracking, and livestock management are fully functional with real data integration.
+
+**Simulated Features**: Yield predictions, pest detection, and crop analytics use sophisticated mathematical algorithms and environmental modeling but are not trained machine learning models. They provide realistic and useful outputs for farming decisions.
+
+**Framework Features**: Google Earth Engine integration and advanced ML capabilities have complete code frameworks but require additional setup (OAuth, model training) for full functionality.
+
+---
+
+### **Agricultural Modeling Services (7 Active Frameworks)**
+1. **Corn Yield Predictor** - Mathematical simulation for end-of-season yield forecasting
+2. **Soybean Yield Predictor** - Statistical modeling with environmental factors
 3. **Crop Stress Detector** - Real-time identification of water and nutrient stress
-4. **Hyperlocal Weather Predictor** - Field-specific weather with 92% accuracy
-5. **Pest Outbreak Predictor** - 14-day advance warning for major pest pressures
+4. **Hyperlocal Weather Predictor** - Field-specific weather using multi-source data fusion
+5. **Pest Outbreak Predictor** - Environmental risk modeling for pest pressures
 6. **Soil Nutrient Predictor** - Variable rate fertilizer recommendations
 7. **Grain Price Forecaster** - Market timing recommendations with trend analysis
 

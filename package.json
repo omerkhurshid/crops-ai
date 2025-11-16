@@ -28,6 +28,7 @@
   },
   "packageManager": "npm@9.8.1",
   "dependencies": {
-    "@supabase/ssr": "^0.7.0"
+    "@supabase/ssr": "^0.7.0",
+    "pg": "^8.16.3"
   }
 }

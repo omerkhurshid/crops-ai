@@ -3,10 +3,9 @@
  * Live Satellite Service with Fallback
  * Manages real satellite data integration with intelligent fallbacks
  */
-import { SentinelHubService } from './sentinel-hub'
 import { NDVIAnalysisService } from './ndvi-analysis'
-import { planetLabsService } from './planet-labs'
 import { copernicusService } from './copernicus-service'
+import { GoogleEarthEngineService } from './google-earth-engine-service'
 import { prisma } from '../prisma'
 export interface LiveSatelliteConfig {
   preferLiveData: boolean
@@ -21,7 +20,7 @@ export interface SatelliteDataPoint {
   stressLevel: 'NONE' | 'LOW' | 'MODERATE' | 'HIGH' | 'SEVERE'
   imageUrl: string | null
   metadata: {
-    source: 'sentinel-hub' | 'planet-labs' | 'copernicus'
+    source: 'google-earth-engine' | 'copernicus'
     cloudCoverage?: number
     resolution?: number
     bands?: string[]
@@ -30,11 +29,10 @@ export interface SatelliteDataPoint {
   }
 }
 class LiveSatelliteService {
-  private sentinelHub: SentinelHubService
   private ndviAnalyzer: NDVIAnalysisService
+  private geeService: GoogleEarthEngineService | null = null
   private config: LiveSatelliteConfig
   constructor(config?: Partial<LiveSatelliteConfig>) {
-    this.sentinelHub = new SentinelHubService()
     this.ndviAnalyzer = new NDVIAnalysisService()
     this.config = {
       preferLiveData: true,

@@ -18,59 +18,13 @@ import { VisualFarmMap } from '../../../components/farm/visual-farm-map'
 import { EnhancedFarmMap } from '../../../components/farm/enhanced-farm-map'
 import { FarmHealthCard } from '../../../components/farms/farm-health-card'
 import { FieldStatusToggle } from '../../../components/farm/field-status-toggle'
-import { prisma } from '../../../lib/prisma'
 import { 
   Sprout, MapPin, Activity, AlertTriangle, TrendingUp, Clock, 
   CloudRain, Sun, Droplets, Wind, Thermometer, BarChart,
   Satellite, Brain, DollarSign, Calendar, ArrowLeft, Eye, Plus, Settings
 } from 'lucide-react'
-export const dynamic = 'force-dynamic'
-async function getFarmDetails(farmId: string, userId: string) {
-  try {
-    const farm = await prisma.farm.findFirst({
-      where: { 
-        id: farmId,
-        ownerId: userId
-      },
-      include: {
-        fields: {
-          include: {
-            crops: {
-              where: { status: { not: 'HARVESTED' } },
-              orderBy: { createdAt: 'desc' },
-              take: 1
-            },
-            satelliteData: {
-              orderBy: { captureDate: 'desc' },
-              take: 1
-            }
-          }
-        }
-      }
-    })
-    if (!farm) {
-      return null
-    }
-    // Calculate aggregate stats
-    const totalArea = (farm.fields || []).reduce((sum, field) => sum + field.area, 0)
-    const averageNDVI = (farm.fields || []).reduce((sum, field) => {
-      const latestData = field.satelliteData?.[0]
-      return sum + (latestData?.ndvi || 0)
-    }, 0) / ((farm.fields || []).length || 1)
-    return {
-      ...farm,
-      stats: {
-        totalArea,
-        averageNDVI,
-        fieldsCount: (farm.fields || []).length,
-        healthScore: Math.round(averageNDVI * 100)
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching farm details:', error)
-    return null
-  }
-}
+
+// Removed unused getFarmDetails function to prevent Prisma client-side issues
 export default function FarmDetailsPage({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession()
   const router = useRouter()

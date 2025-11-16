@@ -4,8 +4,9 @@
  * Implements algorithms for automatic field boundary detection from satellite imagery
  * using computer vision and machine learning techniques.
  */
-// import { sentinelHub } from './sentinel-hub'; // Removed - using Google Earth Engine
-import type { BoundingBox, FieldBoundary, SatelliteImage } from './types';
+import { googleEarthEngine } from './google-earth-engine';
+import type { BoundingBox, FieldBoundary } from './types';
+import type { SatelliteImage } from './google-earth-engine';
 export interface BoundaryDetectionOptions {
   method: 'edge-detection' | 'segmentation' | 'machine-learning' | 'hybrid' | 'watershed';
   sensitivity: 'low' | 'medium' | 'high';
@@ -65,8 +66,8 @@ class FieldBoundaryDetector {
   ): Promise<BoundaryDetectionResult> {
     const startTime = Date.now();
     try {
-      // Search for suitable satellite images
-      const images = await sentinelHub.searchImages(bbox, date, date, 20);
+      // Search for suitable satellite images using Google Earth Engine
+      const images = await googleEarthEngine.searchImages(bbox, date, date, 20);
       if (images.length === 0) {
         throw new Error('No suitable satellite images found for boundary detection');
       }

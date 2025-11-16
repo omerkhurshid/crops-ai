@@ -16,7 +16,7 @@ import {
 import { GoogleMap, LoadScript, Polygon, DrawingManager, Marker } from '@react-google-maps/api'
 import { Alert, AlertDescription } from '../ui/alert'
 import { useSession } from '../../lib/auth-unified'
-import { supabase } from '../../lib/supabase'
+import { createClient } from '../../lib/supabase/client'
 
 const libraries: ("drawing" | "geometry")[] = ["drawing", "geometry"]
 
@@ -346,9 +346,7 @@ export function ThreeStepFarmCreator() {
 
   const refreshSessionAndValidate = async () => {
     try {
-      if (!supabase) {
-        throw new Error('Authentication system not available')
-      }
+      const supabase = createClient()
 
       // Force refresh the session
       const { data: { session: refreshedSession }, error } = await supabase.auth.getSession()
@@ -392,9 +390,12 @@ export function ThreeStepFarmCreator() {
 
       // Get the current session token for Authorization header
       let authToken = null
-      if (supabase) {
+      try {
+        const supabase = createClient()
         const { data: { session: currentSession } } = await supabase.auth.getSession()
         authToken = currentSession?.access_token
+      } catch (error) {
+        console.error('Error getting session:', error)
       }
 
       console.log('Using auth token:', authToken ? 'Token available' : 'No token')

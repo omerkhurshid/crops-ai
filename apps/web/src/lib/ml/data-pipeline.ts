@@ -8,7 +8,7 @@
 import { redis } from '../redis';
 import { prisma } from '../prisma';
 import { historicalWeather } from '../weather/historical';
-// import { sentinelHub } from '../satellite/sentinel-hub'; // Removed - using Google Earth Engine
+import { googleEarthEngine } from '../satellite/google-earth-engine';
 import { ndviAnalysis } from '../satellite/ndvi-analysis';
 // Logger replaced with console for local development;
 import type {
@@ -294,13 +294,12 @@ class AgricultureDataPipeline {
         south: 40.7,
         north: 40.8
       };
-      // Get NDVI analysis for the time period
-      // const ndviResult = await sentinelHub.calculateNDVIAnalysis(
-      //   fieldId,
-      //   bbox,
-      //   timeRange.start.toISOString().split('T')[0]
-      // );
-      const ndviResult = null; // TODO: Replace with Google Earth Engine integration
+      // Get NDVI analysis for the time period using Google Earth Engine
+      const ndviResult = await googleEarthEngine.calculateNDVIAnalysis(
+        fieldId,
+        bbox,
+        timeRange.start.toISOString().split('T')[0]
+      );
       // Calculate vegetation indices
       const indices = ndviAnalysis.calculateVegetationIndices({
         red: 0.1,

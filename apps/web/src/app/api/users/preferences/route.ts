@@ -15,24 +15,34 @@ export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
     try {
       const user = request.user;
-      // Get user preferences from database
-      const userPreferences = await prisma.user.findUnique({
-        where: { id: user.id },
-        select: {
-          currency: true,
-          landUnit: true,
-          temperatureUnit: true,
-          timezone: true,
-          language: true
-        }
-      });
+      // Get user preferences from database with error handling for missing columns
+      let userPreferences = null;
+      try {
+        userPreferences = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: {
+            currency: true,
+            landUnit: true,
+            temperatureUnit: true,
+            timezone: true,
+            language: true
+          }
+        });
+      } catch (dbError) {
+        console.error('Database preferences error:', dbError);
+        // If preferences columns don't exist, fall back to basic user data
+        userPreferences = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { id: true }
+        });
+      }
       // Return preferences with defaults
       const preferences = {
-        currency: userPreferences?.currency || 'USD',
-        landUnit: userPreferences?.landUnit || 'hectares',
-        temperatureUnit: userPreferences?.temperatureUnit || 'celsius',
-        timezone: userPreferences?.timezone || 'UTC',
-        language: userPreferences?.language || 'en'
+        currency: (userPreferences && 'currency' in userPreferences) ? userPreferences.currency : 'USD',
+        landUnit: (userPreferences && 'landUnit' in userPreferences) ? userPreferences.landUnit : 'hectares',
+        temperatureUnit: (userPreferences && 'temperatureUnit' in userPreferences) ? userPreferences.temperatureUnit : 'celsius',
+        timezone: (userPreferences && 'timezone' in userPreferences) ? userPreferences.timezone : 'UTC',
+        language: (userPreferences && 'language' in userPreferences) ? userPreferences.language : 'en'
       };
       return createSuccessResponse({
         preferences,

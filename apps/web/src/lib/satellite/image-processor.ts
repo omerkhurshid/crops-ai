@@ -4,7 +4,7 @@
  * Provides serverless image processing capabilities for satellite imagery,
  * including preprocessing, analysis, and optimization for agricultural monitoring.
  */
-// import { sentinelHub } from './sentinel-hub'; // Removed - using Google Earth Engine
+import { googleEarthEngine } from './google-earth-engine';
 import { ndviAnalysis } from './ndvi-analysis';
 import { QueueManager } from '../queue/queue-manager';
 const queueManager = new QueueManager('satellite-processing');
@@ -13,10 +13,10 @@ import { redis } from '../redis';
 import { uploadToCloudinary } from '../cloudinary';
 import type { 
   BoundingBox, 
-  SatelliteImage, 
   ProcessingJob,
   ProcessedImage
 } from './types';
+import type { SatelliteImage } from './google-earth-engine';
 // Helper function to safely use redis
 const safeRedis = {
   async get(key: string) {
@@ -149,24 +149,30 @@ class SatelliteImageProcessor {
     options: ProcessingJob['options']
   ): Promise<ProcessedImage> {
     try {
-      // Search for satellite images
-      // const images = await sentinelHub.searchImages(bbox, date, date, options.cloudCoverageMax);
-      // TODO: Replace with Google Earth Engine integration
-      const images = [] as any; // Temporary placeholder
+      // Search for satellite images using Google Earth Engine
+      const images = await googleEarthEngine.searchImages(bbox, date, date, options.cloudCoverageMax);
       if (images.length === 0) {
         throw new Error('No suitable satellite images found for the specified date and location');
       }
       const selectedImage = images[0]; // Select best image
-      // Get true color image
-      // const trueColorBlob = await sentinelHub.getTrueColorImage(bbox, date, options.resolution * 100, options.resolution * 100);
-      // TODO: Replace with Google Earth Engine integration
-      const trueColorBlob = null;
+      
+      // Get true color image from Google Earth Engine
+      const trueColorBlob = await googleEarthEngine.getTrueColorImage(
+        bbox, 
+        date, 
+        options.resolution * 100, 
+        options.resolution * 100
+      );
+      
       // Get NDVI image if requested
       let ndviBlob: Blob | null = null;
       if (options.analysisTypes.includes('ndvi')) {
-        // ndviBlob = await sentinelHub.getNDVIImage(bbox, date, options.resolution * 100, options.resolution * 100);
-        // TODO: Replace with Google Earth Engine integration
-        ndviBlob = null;
+        ndviBlob = await googleEarthEngine.getNDVIImage(
+          bbox, 
+          date, 
+          options.resolution * 100, 
+          options.resolution * 100
+        );
       }
       // Upload images to Cloudinary
       const [trueColorUrl, ndviUrl] = await Promise.all([
@@ -176,9 +182,7 @@ class SatelliteImageProcessor {
       // Perform vegetation analysis
       let analysis;
       if (options.analysisTypes.includes('health') || options.analysisTypes.includes('stress')) {
-        // const ndviAnalysisResult = await sentinelHub.calculateNDVIAnalysis(fieldId, bbox, date);
-        // TODO: Replace with Google Earth Engine integration
-        const ndviAnalysisResult = null;
+        const ndviAnalysisResult = await googleEarthEngine.calculateNDVIAnalysis(fieldId, bbox, date);
         // Calculate vegetation indices
         const indices = ndviAnalysis.calculateVegetationIndices({
           red: 0.1, // These would come from actual spectral data
@@ -213,8 +217,8 @@ class SatelliteImageProcessor {
         url: trueColorUrl,
         thumbnailUrl: trueColorUrl, // Could generate actual thumbnail
         metadata: {
-          acquisitionDate: selectedImage.acquisitionDate,
-          cloudCoverage: selectedImage.cloudCoverage,
+          acquisitionDate: selectedImage.date,
+          cloudCoverage: selectedImage.cloudCover,
           resolution: options.resolution,
           bbox,
           indices: analysis ? ndviAnalysis.calculateVegetationIndices({

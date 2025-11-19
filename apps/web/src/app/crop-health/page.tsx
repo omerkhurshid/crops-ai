@@ -66,8 +66,8 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading crop health data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading crop health data...</p>
         </div>
       </DashboardLayout>
     )
@@ -88,11 +88,11 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-light text-sage-800 mb-2 flex items-center gap-3">
-                <Leaf className="h-10 w-10 text-green-600" />
+              <h1 className="text-4xl font-light text-[#7A8F78] mb-2 flex items-center gap-3">
+                <Leaf className="h-10 w-10 text-[#7A8F78]" />
                 Crop Health Analytics
               </h1>
-              <p className="text-lg text-sage-600">
+              <p className="text-lg text-[#555555]">
                 Monitor crop health, detect diseases early, and optimize field management
               </p>
             </div>
@@ -118,8 +118,8 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
               }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'farmer-focused'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+                  ? 'bg-[#7A8F78] text-white'
+                  : 'bg-[#F8FAF8] text-[#7A8F78] hover:bg-[#DDE4D8]'
               }`}
             >
               <Eye className="h-4 w-4 inline mr-2" />
@@ -134,8 +134,8 @@ export default function CropHealthPage({ searchParams }: { searchParams: { farmI
               }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 view === 'advanced'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+                  ? 'bg-[#7A8F78] text-white'
+                  : 'bg-[#F8FAF8] text-[#7A8F78] hover:bg-[#DDE4D8]'
               }`}
             >
               <BarChart3 className="h-4 w-4 inline mr-2" />

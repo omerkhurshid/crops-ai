@@ -65,8 +65,8 @@ function RecommendationsPageContent() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600"></div>
-          <p className="ml-4 text-sage-600">Loading recommendations...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading recommendations...</p>
         </div>
       </DashboardLayout>
     )
@@ -79,10 +79,10 @@ function RecommendationsPageContent() {
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <p className="text-red-600 mb-4">{error}</p>
+            <p className="text-[#DC2626] mb-4">{error}</p>
             <button 
               onClick={() => window.location.reload()} 
-              className="bg-sage-600 hover:bg-sage-700 text-white px-4 py-2 rounded-lg"
+              className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-4 py-2 rounded-lg"
             >
               Retry
             </button>
@@ -107,8 +107,8 @@ function RecommendationsPageContent() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">AI Recommendations</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">AI Recommendations</h1>
+          <p className="text-lg text-[#555555] mb-6">
             AI-powered farming insights and recommendations for {farmName}
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -128,9 +128,9 @@ function RecommendationsPageContent() {
         {/* AI Intelligence Overview */}
         <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50/90 to-cream-50/90">
+            <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/90 to-[#FAFAF7]/90">
               <div className="flex items-center gap-3">
-                <ModernCardTitle className="text-sage-800">AI Analysis Overview</ModernCardTitle>
+                <ModernCardTitle className="text-[#1A1A1A]">AI Analysis Overview</ModernCardTitle>
               </div>
               <ModernCardDescription>
                 Smart recommendations based on your farm data and conditions
@@ -139,39 +139,39 @@ function RecommendationsPageContent() {
             <ModernCardContent className="p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-sage-200/30">
-                    <div className="p-3 bg-sage-200 rounded-xl mx-auto w-fit mb-4">
-                      <Activity className="h-6 w-6 text-sage-700" />
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                    <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
+                      <Activity className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-sage-800 mb-2">Active</div>
-                    <div className="text-sm text-sage-600">Farm Status</div>
+                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Active</div>
+                    <div className="text-sm text-[#555555]">Farm Status</div>
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-earth-100 to-earth-50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-earth-200/30">
-                    <div className="p-3 bg-earth-200 rounded-xl mx-auto w-fit mb-4">
-                      <Zap className="h-6 w-6 text-earth-700" />
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                    <div className="p-3 bg-[#8FBF7F]/30 rounded-xl mx-auto w-fit mb-4">
+                      <Zap className="h-6 w-6 text-[#8FBF7F]" />
                     </div>
-                    <div className="text-2xl font-bold text-earth-800 mb-2">Real-time</div>
+                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Real-time</div>
                     <div className="text-sm text-earth-600">Data Sources</div>
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-cream-200/30">
-                    <div className="p-3 bg-cream-200 rounded-xl mx-auto w-fit mb-4">
-                      <Brain className="h-6 w-6 text-sage-700" />
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                    <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
+                      <Brain className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-sage-800 mb-2">Smart</div>
-                    <div className="text-sm text-sage-600">Analysis</div>
+                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Smart</div>
+                    <div className="text-sm text-[#555555]">Analysis</div>
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-sage-100/70 to-earth-100/70 rounded-2xl hover:shadow-soft transition-all duration-300 border border-sage-200/30">
-                    <div className="p-3 bg-sage-200 rounded-xl mx-auto w-fit mb-4">
-                      <Target className="h-6 w-6 text-sage-700" />
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8]/70 to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                    <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
+                      <Target className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-sage-800 mb-2">Actionable</div>
-                    <div className="text-sm text-sage-600">Insights</div>
+                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Actionable</div>
+                    <div className="text-sm text-[#555555]">Insights</div>
                   </div>
                 </div>
               </div>
@@ -197,8 +197,8 @@ export default function RecommendationsPage() {
     <Suspense fallback={
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600"></div>
-          <p className="ml-4 text-sage-600">Loading recommendations...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading recommendations...</p>
         </div>
       </DashboardLayout>
     }>

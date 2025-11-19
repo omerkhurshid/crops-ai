@@ -85,13 +85,13 @@ export default function FinancialPage() {
       <DashboardLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-8 bg-[#F5F5F5] rounded w-1/3"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="h-32 bg-gray-200 rounded"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-32 bg-[#F5F5F5] rounded"></div>
+              <div className="h-32 bg-[#F5F5F5] rounded"></div>
+              <div className="h-32 bg-[#F5F5F5] rounded"></div>
             </div>
-            <div className="h-96 bg-gray-200 rounded"></div>
+            <div className="h-96 bg-[#F5F5F5] rounded"></div>
           </div>
         </div>
       </DashboardLayout>
@@ -107,11 +107,11 @@ export default function FinancialPage() {
         <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <ModernCard variant="floating" className="overflow-hidden">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 pb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-golden/20 to-wheat/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <DollarSign className="h-10 w-10 text-earth-700" />
+              <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7] pb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#7A8F78]/20 to-[#8FBF7F]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <DollarSign className="h-10 w-10 text-[#7A8F78]" />
                 </div>
-                <ModernCardTitle className="text-3xl mb-4 text-sage-800">
+                <ModernCardTitle className="text-3xl mb-4 text-[#1A1A1A]">
                   Welcome to Financial Management
                 </ModernCardTitle>
                 <ModernCardDescription className="text-lg max-w-lg mx-auto">
@@ -122,10 +122,10 @@ export default function FinancialPage() {
                 <ModernCard variant="soft" className="mb-8">
                   <ModernCardContent className="p-6">
                     <div className="flex items-start space-x-3">
-                      <AlertCircle className="h-5 w-5 text-moss-700 mt-0.5" />
+                      <AlertCircle className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                       <div className="text-sm">
-                        <p className="font-medium mb-1 text-moss-800">Get Started</p>
-                        <p className="text-moss-700">
+                        <p className="font-medium mb-1 text-[#1A1A1A]">Get Started</p>
+                        <p className="text-[#555555]">
                           You need to set up at least one farm to start tracking your financial data. 
                           Create your first farm to begin managing your agricultural finances.
                         </p>
@@ -158,7 +158,7 @@ export default function FinancialPage() {
             <Button
               variant="ghost"
               onClick={handleBackToUserView}
-              className="text-sage-600 hover:text-sage-800 p-0"
+              className="text-[#555555] hover:text-[#7A8F78] p-0"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Portfolio Overview
@@ -167,8 +167,8 @@ export default function FinancialPage() {
         )}
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Financial Management</h1>
-          <p className="text-lg text-sage-600">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Financial Management</h1>
+          <p className="text-lg text-[#555555]">
             {viewLevel === 'user' 
               ? 'Comprehensive financial overview across all your farming operations'
               : `Financial details for ${selectedFarm?.name || 'selected farm'}`

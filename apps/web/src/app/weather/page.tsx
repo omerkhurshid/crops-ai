@@ -90,21 +90,21 @@ function WeatherPageContent() {
         <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-6">
             <div className="space-y-2">
-              <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-10 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-6 bg-[#F5F5F5] rounded w-2/3"></div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-8">
-                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-6 bg-[#F5F5F5] rounded w-1/4"></div>
               </div>
               <div className="lg:col-span-4">
-                <div className="h-16 bg-gray-200 rounded"></div>
+                <div className="h-16 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-[#E6E6E6] p-6">
               <div className="space-y-4">
-                <div className="h-12 bg-gray-200 rounded"></div>
-                <div className="h-64 bg-gray-200 rounded"></div>
+                <div className="h-12 bg-[#F5F5F5] rounded"></div>
+                <div className="h-64 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
           </div>
@@ -121,8 +121,8 @@ function WeatherPageContent() {
         <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <ModernCard variant="floating">
             <ModernCardContent className="p-6 text-center">
-              <div className="text-red-600 mb-2">Error</div>
-              <div className="text-sage-600">{error}</div>
+              <div className="text-[#DC2626] mb-2">Error</div>
+              <div className="text-[#555555]">{error}</div>
             </ModernCardContent>
           </ModernCard>
         </main>
@@ -146,13 +146,13 @@ function WeatherPageContent() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Weather Intelligence</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Weather Intelligence</h1>
+          <p className="text-lg text-[#555555] mb-6">
             Real-time weather data and forecasting for {farm.name}
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8">
-              <div className="flex items-center gap-2 text-sage-600">
+              <div className="flex items-center gap-2 text-[#555555]">
                 <MapPin className="h-4 w-4" />
                 <span className="text-sm font-medium">
                   {latitude.toFixed(4)}°N, {Math.abs(longitude).toFixed(4)}°{longitude < 0 ? 'W' : 'E'}
@@ -172,12 +172,12 @@ function WeatherPageContent() {
         <div className="space-y-8">
           <ModernCard variant="floating" className="overflow-hidden">
             <Tabs defaultValue="current" className="space-y-0">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50/80 to-cream-50/80 border-b border-sage-200/30">
+              <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/80 to-[#FAFAF7]/80 border-b border-[#E6E6E6]/30">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ModernCardTitle className="text-sage-800">Weather Data</ModernCardTitle>
+                    <ModernCardTitle className="text-[#1A1A1A]">Weather Data</ModernCardTitle>
                   </div>
-                  <TabsList className="bg-white/60 border border-sage-200/50">
+                  <TabsList className="bg-white/60 border border-[#E6E6E6]/50">
                     <TabsTrigger value="current">
                       <div className="flex items-center gap-2">
                         <Thermometer className="h-4 w-4" />
@@ -214,8 +214,8 @@ function WeatherPageContent() {
                 <div className="p-6">
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-sage-800 mb-2">Active Weather Alerts</h3>
-                      <p className="text-sage-600 text-sm mb-4">
+                      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Active Weather Alerts</h3>
+                      <p className="text-[#555555] text-sm mb-4">
                         Real-time weather alerts and farming recommendations for {farm.name}
                       </p>
                     </div>
@@ -250,21 +250,21 @@ export default function WeatherPage() {
         <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-6">
             <div className="space-y-2">
-              <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-10 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-6 bg-[#F5F5F5] rounded w-2/3"></div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-8">
-                <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-6 bg-[#F5F5F5] rounded w-1/4"></div>
               </div>
               <div className="lg:col-span-4">
-                <div className="h-16 bg-gray-200 rounded"></div>
+                <div className="h-16 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-[#E6E6E6] p-6">
               <div className="space-y-4">
-                <div className="h-12 bg-gray-200 rounded"></div>
-                <div className="h-64 bg-gray-200 rounded"></div>
+                <div className="h-12 bg-[#F5F5F5] rounded"></div>
+                <div className="h-64 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
           </div>

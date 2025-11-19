@@ -78,8 +78,8 @@ export default function FarmsPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading farms...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading farms...</p>
         </div>
       </DashboardLayout>
     )
@@ -94,14 +94,14 @@ export default function FarmsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Component Error</h1>
-            <p className="text-gray-600 mb-6">{componentError}</p>
+            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Component Error</h1>
+            <p className="text-[#555555] mb-6">{componentError}</p>
             <button 
               onClick={() => {
                 setComponentError(null)
                 window.location.reload()
               }}
-              className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg"
+              className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-6 py-2 rounded-lg"
             >
               Try again
             </button>
@@ -116,11 +116,11 @@ export default function FarmsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Something went wrong</h1>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Something went wrong</h1>
+            <p className="text-[#555555] mb-6">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg"
+              className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-6 py-2 rounded-lg"
             >
               Try again
             </button>
@@ -136,12 +136,12 @@ export default function FarmsPage() {
         <div className="mb-16">
           {/* Page Header - Consistent with other pages */}
           <div className="mb-8">
-            <h1 className="text-4xl font-light text-sage-800 mb-2">My Farms</h1>
-            <p className="text-lg text-sage-600 mb-6">
+            <h1 className="text-4xl font-light text-[#7A8F78] mb-2">My Farms</h1>
+            <p className="text-lg text-[#555555] mb-6">
               View and manage all your farm locations
             </p>
             <Link href="/farms/create-unified">
-              <button className="bg-sage-600 hover:bg-sage-700 text-white px-6 py-2 rounded-lg flex items-center gap-2">
+              <button className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-6 py-2 rounded-lg flex items-center gap-2">
                 <Plus className="h-5 w-5" />
                 Add New Farm
               </button>
@@ -175,8 +175,8 @@ export default function FarmsPage() {
 
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200/30">
-              <ModernCardTitle className="text-sage-800">Your Farms</ModernCardTitle>
+            <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7] border-b border-[#E6E6E6]/30">
+              <ModernCardTitle className="text-[#1A1A1A]">Your Farms</ModernCardTitle>
               <ModernCardDescription>
                 Manage and monitor your agricultural operations
               </ModernCardDescription>
@@ -187,24 +187,24 @@ export default function FarmsPage() {
                 <div className="block md:hidden p-4 space-y-4">
                   {userFarms.map((farm: any) => (
                     <Link key={farm.id} href={`/farms/${farm.id}`}>
-                      <div className="p-4 border border-sage-200 rounded-lg hover:shadow-md transition-shadow bg-white">
+                      <div className="p-4 border border-[#E6E6E6] rounded-lg hover:shadow-md transition-shadow bg-white">
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold text-sage-800">{farm.name}</h3>
+                          <h3 className="font-semibold text-[#1A1A1A]">{farm.name}</h3>
                           <Badge variant="outline" className="text-xs">
                             {farm.fieldsCount || 0} fields
                           </Badge>
                         </div>
-                        <div className="text-sm text-gray-600 mb-2">
+                        <div className="text-sm text-[#555555] mb-2">
                           <MapPin className="h-4 w-4 inline mr-1" />
                           {farm.location || 'Location not set'}
                         </div>
                         <div className="flex justify-between items-center text-sm">
-                          <span className="text-gray-600">
+                          <span className="text-[#555555]">
                             {farm.totalArea?.toFixed(1) || '0'} ha
                           </span>
                           <div className="flex items-center">
                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                            <span className="text-green-700 text-xs">Healthy</span>
+                            <span className="text-[#7A8F78] text-xs">Healthy</span>
                           </div>
                         </div>
                       </div>
@@ -217,16 +217,16 @@ export default function FarmsPage() {
                 /* Desktop Table Layout */
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-sage-50/50 border-b border-sage-200/30">
+                    <thead className="bg-[#F8FAF8]/50 border-b border-[#E6E6E6]/30">
                       <tr>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Farm Name</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Location</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Area</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Fields</th>
-                        <th className="text-left p-4 text-sm font-semibold text-sage-700">Health Status</th>
+                        <th className="text-left p-4 text-sm font-semibold text-[#555555]">Farm Name</th>
+                        <th className="text-left p-4 text-sm font-semibold text-[#555555]">Location</th>
+                        <th className="text-left p-4 text-sm font-semibold text-[#555555]">Area</th>
+                        <th className="text-left p-4 text-sm font-semibold text-[#555555]">Fields</th>
+                        <th className="text-left p-4 text-sm font-semibold text-[#555555]">Health Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-sage-200/30">
+                    <tbody className="divide-y divide-[#E6E6E6]/30">
                       {userFarms.map((farm: any) => {
                         try {
                           return (
@@ -239,7 +239,7 @@ export default function FarmsPage() {
                           console.error('Error rendering farm row:', error, farm)
                           return (
                             <tr key={farm.id}>
-                              <td colSpan={5} className="p-4 text-red-600">
+                              <td colSpan={5} className="p-4 text-[#DC2626]">
                                 Error displaying farm: {farm.name}
                               </td>
                             </tr>

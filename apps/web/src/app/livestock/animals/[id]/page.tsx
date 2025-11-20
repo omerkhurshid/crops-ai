@@ -47,8 +47,8 @@ export default function AnimalProfilePage({ params }: PageProps) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading animal profile...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading animal profile...</p>
         </div>
       </DashboardLayout>
     )
@@ -79,7 +79,7 @@ export default function AnimalProfilePage({ params }: PageProps) {
           <div className="flex items-center gap-4">
             <Link 
               href="/livestock/animals"
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center text-[#555555] hover:text-[#1A1A1A] transition-colors"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
               Back to Animals
@@ -92,10 +92,10 @@ export default function AnimalProfilePage({ params }: PageProps) {
         </div>
         {/* Animal Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">
             {animal.name || `${animal.species} #${animal.tagNumber}`}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[#555555]">
             {animal.breed} • {animal.gender} • Born {animal.birthDate ? new Date(animal.birthDate).toLocaleDateString() : 'Unknown'}
           </p>
         </div>
@@ -104,10 +104,10 @@ export default function AnimalProfilePage({ params }: PageProps) {
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
-                <Heart className="h-8 w-8 text-green-600" />
+                <Heart className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Health Status</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-[#555555]">Health Status</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {recentHealthIssues === 0 ? 'Healthy' : 'Needs Attention'}
                   </p>
                 </div>
@@ -117,10 +117,10 @@ export default function AnimalProfilePage({ params }: PageProps) {
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className={`h-8 w-8 ${weightGain >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+                <TrendingUp className={`h-8 w-8 ${weightGain >= 0 ? 'text-[#7A8F78]' : 'text-red-600'}`} />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Weight Change</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-[#555555]">Weight Change</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {weightGain >= 0 ? '+' : ''}{weightGain.toFixed(1)} lbs
                   </p>
                 </div>
@@ -132,8 +132,8 @@ export default function AnimalProfilePage({ params }: PageProps) {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Current Value</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-[#555555]">Current Value</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     ${currentValue.toLocaleString()}
                   </p>
                 </div>
@@ -147,8 +147,8 @@ export default function AnimalProfilePage({ params }: PageProps) {
                   <div className="h-4 w-4 bg-orange-600 rounded-full"></div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Feed Cost (30d)</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-[#555555]">Feed Cost (30d)</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     ${feedCostLast30Days.toFixed(0)}
                   </p>
                 </div>

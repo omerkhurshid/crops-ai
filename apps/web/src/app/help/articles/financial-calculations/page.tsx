@@ -14,13 +14,13 @@ export default function FinancialCalculationsPage() {
         {/* Article Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <DollarSign className="h-6 w-6 text-sage-700" />
-            <span className="text-sage-600">Financial Management</span>
+            <DollarSign className="h-6 w-6 text-[#5E6F5A]" />
+            <span className="text-[#7A8F78]">Financial Management</span>
           </div>
-          <h1 className="text-3xl font-bold text-sage-800 mb-4">
+          <h1 className="text-3xl font-bold text-[#7A8F78] mb-4">
             Understanding Financial Calculations & ROI Analysis
           </h1>
-          <div className="flex items-center gap-4 text-sm text-sage-600">
+          <div className="flex items-center gap-4 text-sm text-[#7A8F78]">
             <Badge variant="outline">12 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
@@ -29,7 +29,7 @@ export default function FinancialCalculationsPage() {
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
-            <p className="text-lg text-sage-700 leading-relaxed mb-4">
+            <p className="text-lg text-[#5E6F5A] leading-relaxed mb-4">
               Cropple.ai automatically calculates key financial metrics to help you understand which parts of your farm 
               are most profitable and where you can improve your returns. No spreadsheets required!
             </p>
@@ -53,18 +53,18 @@ export default function FinancialCalculationsPage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">1. Revenue per Hectare</h3>
-                <div className="bg-sage-50 p-4 rounded-lg">
-                  <p className="text-sm font-mono text-sage-700 mb-2">
+                <h3 className="font-semibold text-[#7A8F78] mb-3">1. Revenue per Hectare</h3>
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <p className="text-sm font-mono text-[#5E6F5A] mb-2">
                     Revenue/ha = (Yield × Market Price) / Field Area
                   </p>
-                  <p className="text-sm text-sage-600">
+                  <p className="text-sm text-[#7A8F78]">
                     Shows how much money each hectare of your land generates. Higher is better.
                   </p>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">2. Cost per Hectare</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">2. Cost per Hectare</h3>
                 <div className="bg-earth-50 p-4 rounded-lg">
                   <p className="text-sm font-mono text-earth-700 mb-2">
                     Cost/ha = (Total Input Costs + Labor + Equipment) / Field Area
@@ -75,18 +75,18 @@ export default function FinancialCalculationsPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">3. Profit Margin</h3>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm font-mono text-green-700 mb-2">
+                <h3 className="font-semibold text-[#7A8F78] mb-3">3. Profit Margin</h3>
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <p className="text-sm font-mono text-[#7A8F78] mb-2">
                     Profit Margin = (Revenue - Total Costs) / Revenue × 100
                   </p>
-                  <p className="text-sm text-green-600">
+                  <p className="text-sm text-[#7A8F78]">
                     Percentage of revenue that becomes profit. Industry average is 10-15%.
                   </p>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">4. Return on Investment (ROI)</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">4. Return on Investment (ROI)</h3>
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-sm font-mono text-blue-700 mb-2">
                     ROI = (Net Profit / Total Investment) × 100
@@ -110,8 +110,8 @@ export default function FinancialCalculationsPage() {
           <ModernCardContent className="p-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold text-sage-800 mb-3">Direct Field Costs</h4>
-                <ul className="text-sm text-sage-700 space-y-2">
+                <h4 className="font-semibold text-[#7A8F78] mb-3">Direct Field Costs</h4>
+                <ul className="text-sm text-[#5E6F5A] space-y-2">
                   <li>• <strong>Seeds/Seedlings:</strong> All planting materials</li>
                   <li>• <strong>Fertilizers:</strong> NPK, organic amendments, micronutrients</li>
                   <li>• <strong>Pesticides:</strong> Herbicides, insecticides, fungicides</li>
@@ -120,8 +120,8 @@ export default function FinancialCalculationsPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-sage-800 mb-3">Overhead Costs</h4>
-                <ul className="text-sm text-sage-700 space-y-2">
+                <h4 className="font-semibold text-[#7A8F78] mb-3">Overhead Costs</h4>
+                <ul className="text-sm text-[#5E6F5A] space-y-2">
                   <li>• <strong>Land Costs:</strong> Rent, mortgage payments, taxes</li>
                   <li>• <strong>Insurance:</strong> Crop insurance, liability coverage</li>
                   <li>• <strong>Storage:</strong> Grain bins, cold storage, drying</li>
@@ -142,13 +142,13 @@ export default function FinancialCalculationsPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Here's how different farming decisions impact your ROI:
               </p>
               <div className="space-y-4">
-                <div className="border-l-4 border-green-500 pl-4">
-                  <h4 className="font-semibold text-sage-800 mb-2">High ROI Example: Precision Application</h4>
-                  <div className="text-sm text-sage-700 space-y-1">
+                <div className="border-l-4 border-[#8FBF7F] pl-4">
+                  <h4 className="font-semibold text-[#7A8F78] mb-2">High ROI Example: Precision Application</h4>
+                  <div className="text-sm text-[#5E6F5A] space-y-1">
                     <p>• <strong>Investment:</strong> $50/ha for variable-rate fertilizer application</p>
                     <p>• <strong>Yield Increase:</strong> 8% better yields (0.4 tonnes/ha extra)</p>
                     <p>• <strong>Additional Revenue:</strong> $200/ha</p>
@@ -156,8 +156,8 @@ export default function FinancialCalculationsPage() {
                   </div>
                 </div>
                 <div className="border-l-4 border-yellow-500 pl-4">
-                  <h4 className="font-semibold text-sage-800 mb-2">Medium ROI Example: Preventive Fungicide</h4>
-                  <div className="text-sm text-sage-700 space-y-1">
+                  <h4 className="font-semibold text-[#7A8F78] mb-2">Medium ROI Example: Preventive Fungicide</h4>
+                  <div className="text-sm text-[#5E6F5A] space-y-1">
                     <p>• <strong>Investment:</strong> $80/ha for fungicide application</p>
                     <p>• <strong>Disease Prevention:</strong> Avoided 15% yield loss</p>
                     <p>• <strong>Protected Revenue:</strong> $150/ha</p>
@@ -165,8 +165,8 @@ export default function FinancialCalculationsPage() {
                   </div>
                 </div>
                 <div className="border-l-4 border-red-500 pl-4">
-                  <h4 className="font-semibold text-sage-800 mb-2">Low ROI Example: Excessive Nitrogen</h4>
-                  <div className="text-sm text-sage-700 space-y-1">
+                  <h4 className="font-semibold text-[#7A8F78] mb-2">Low ROI Example: Excessive Nitrogen</h4>
+                  <div className="text-sm text-[#5E6F5A] space-y-1">
                     <p>• <strong>Investment:</strong> $120/ha for extra nitrogen application</p>
                     <p>• <strong>Yield Increase:</strong> Minimal (2% = 0.1 tonnes/ha)</p>
                     <p>• <strong>Additional Revenue:</strong> $50/ha</p>
@@ -187,15 +187,15 @@ export default function FinancialCalculationsPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Your break-even point is the minimum yield or price needed to cover all costs:
               </p>
-              <div className="bg-sage-50 p-6 rounded-lg">
-                <h4 className="font-semibold text-sage-800 mb-3">Break-Even Yield</h4>
-                <p className="text-sm font-mono text-sage-700 mb-2">
+              <div className="bg-[#F8FAF8] p-6 rounded-lg">
+                <h4 className="font-semibold text-[#7A8F78] mb-3">Break-Even Yield</h4>
+                <p className="text-sm font-mono text-[#5E6F5A] mb-2">
                   Break-Even Yield = Total Costs per Hectare / Market Price per Tonne
                 </p>
-                <div className="text-sm text-sage-600">
+                <div className="text-sm text-[#7A8F78]">
                   <p><strong>Example:</strong> If your costs are $1,200/ha and wheat is $300/tonne:</p>
                   <p>Break-even = 1,200 ÷ 300 = 4.0 tonnes/ha needed to break even</p>
                 </div>
@@ -224,46 +224,46 @@ export default function FinancialCalculationsPage() {
           <ModernCardContent className="p-8">
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-sage-400">1.</span>
+                <span className="text-[#7A8F78]">1.</span>
                 <div>
-                  <h4 className="font-semibold text-sage-800">Optimize Input Timing</h4>
-                  <p className="text-sage-700 text-sm">
+                  <h4 className="font-semibold text-[#7A8F78]">Optimize Input Timing</h4>
+                  <p className="text-[#5E6F5A] text-sm">
                     Apply fertilizers and pesticides only when needed. Our AI recommendations help avoid waste.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-sage-400">2.</span>
+                <span className="text-[#7A8F78]">2.</span>
                 <div>
-                  <h4 className="font-semibold text-sage-800">Focus on Your Best Fields</h4>
-                  <p className="text-sage-700 text-sm">
+                  <h4 className="font-semibold text-[#7A8F78]">Focus on Your Best Fields</h4>
+                  <p className="text-[#5E6F5A] text-sm">
                     Invest more in high-performing fields and consider alternative uses for low-ROI areas.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-sage-400">3.</span>
+                <span className="text-[#7A8F78]">3.</span>
                 <div>
-                  <h4 className="font-semibold text-sage-800">Reduce Post-Harvest Losses</h4>
-                  <p className="text-sage-700 text-sm">
+                  <h4 className="font-semibold text-[#7A8F78]">Reduce Post-Harvest Losses</h4>
+                  <p className="text-[#5E6F5A] text-sm">
                     Improve harvesting timing and storage to minimize quality losses and maximize price.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-sage-400">4.</span>
+                <span className="text-[#7A8F78]">4.</span>
                 <div>
-                  <h4 className="font-semibold text-sage-800">Plan Marketing Strategy</h4>
-                  <p className="text-sage-700 text-sm">
+                  <h4 className="font-semibold text-[#7A8F78]">Plan Marketing Strategy</h4>
+                  <p className="text-[#5E6F5A] text-sm">
                     Don't sell everything at harvest. Store quality grain and sell when prices are higher.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <span className="text-sage-400">5.</span>
+                <span className="text-[#7A8F78]">5.</span>
                 <div>
-                  <h4 className="font-semibold text-sage-800">Track Everything</h4>
-                  <p className="text-sage-700 text-sm">
+                  <h4 className="font-semibold text-[#7A8F78]">Track Everything</h4>
+                  <p className="text-[#5E6F5A] text-sm">
                     Record all costs and activities. You can't improve what you don't measure.
                   </p>
                 </div>
@@ -281,12 +281,12 @@ export default function FinancialCalculationsPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <div className="border-l-4 border-green-500 pl-4">
+              <div className="border-l-4 border-[#8FBF7F] pl-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <Badge className="bg-green-100 text-green-800">Profit Margin {'>'}15%</Badge>
+                  <CheckCircle className="h-5 w-5 text-[#7A8F78]" />
+                  <Badge className="bg-[#F8FAF8] text-[#7A8F78]">Profit Margin {'>'}15%</Badge>
                 </div>
-                <p className="text-sage-700 text-sm">
+                <p className="text-[#5E6F5A] text-sm">
                   <strong>Excellent Performance:</strong> Your operation is highly profitable. 
                   Consider expanding successful practices to other fields.
                 </p>
@@ -296,7 +296,7 @@ export default function FinancialCalculationsPage() {
                   <CheckCircle className="h-5 w-5 text-yellow-600" />
                   <Badge className="bg-yellow-100 text-yellow-800">Profit Margin 5-15%</Badge>
                 </div>
-                <p className="text-sage-700 text-sm">
+                <p className="text-[#5E6F5A] text-sm">
                   <strong>Good Performance:</strong> Healthy margins with room for improvement. 
                   Look for cost reduction opportunities.
                 </p>
@@ -306,7 +306,7 @@ export default function FinancialCalculationsPage() {
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <Badge className="bg-red-100 text-red-800">Profit Margin {'<'}5%</Badge>
                 </div>
-                <p className="text-sage-700 text-sm">
+                <p className="text-[#5E6F5A] text-sm">
                   <strong>Needs Attention:</strong> Margins are thin. Review input costs and consider 
                   higher-value crops or improved practices.
                 </p>

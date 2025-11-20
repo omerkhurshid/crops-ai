@@ -168,8 +168,8 @@ export default function LivestockFinancialsPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading financial data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading financial data...</p>
         </div>
       </DashboardLayout>
     )
@@ -183,11 +183,11 @@ export default function LivestockFinancialsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
-            <p className="text-gray-600 mb-6">You need to create a farm before viewing financial data.</p>
+            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <p className="text-[#555555] mb-6">You need to create a farm before viewing financial data.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=financials')}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              className="bg-[#7A8F78] text-white px-4 py-2 rounded-lg"
             >
               Create Farm
             </button>
@@ -202,8 +202,8 @@ export default function LivestockFinancialsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Livestock Financials</h1>
-            <p className="text-gray-600">Track costs, profits, and financial performance</p>
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Livestock Financials</h1>
+            <p className="text-[#555555]">Track costs, profits, and financial performance</p>
           </div>
         </div>
         {/* Financial Overview Cards */}
@@ -213,8 +213,8 @@ export default function LivestockFinancialsPage() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Investment</p>
-                  <p className="text-2xl font-bold text-gray-900">${financialData.totalInvestment.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-[#555555]">Total Investment</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">${financialData.totalInvestment.toLocaleString()}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -222,10 +222,10 @@ export default function LivestockFinancialsPage() {
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
-                <Calculator className="h-8 w-8 text-green-600" />
+                <Calculator className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Current Value</p>
-                  <p className="text-2xl font-bold text-gray-900">${financialData.totalValue.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-[#555555]">Current Value</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">${financialData.totalValue.toLocaleString()}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -234,14 +234,14 @@ export default function LivestockFinancialsPage() {
             <ModernCardContent className="p-6">
               <div className="flex items-center">
                 {financialData.profitLoss >= 0 ? (
-                  <TrendingUp className="h-8 w-8 text-green-600" />
+                  <TrendingUp className="h-8 w-8 text-[#7A8F78]" />
                 ) : (
                   <TrendingDown className="h-8 w-8 text-red-600" />
                 )}
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Profit/Loss</p>
+                  <p className="text-sm font-medium text-[#555555]">Profit/Loss</p>
                   <p className={`text-2xl font-bold ${
-                    financialData.profitLoss >= 0 ? 'text-green-600' : 'text-red-600'
+                    financialData.profitLoss >= 0 ? 'text-[#7A8F78]' : 'text-red-600'
                   }`}>
                     {financialData.profitLoss >= 0 ? '+' : ''}${financialData.profitLoss.toLocaleString()}
                   </p>
@@ -254,8 +254,8 @@ export default function LivestockFinancialsPage() {
               <div className="flex items-center">
                 <PieChart className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Monthly Costs</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-[#555555]">Monthly Costs</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     ${(financialData.feedCosts30Days + financialData.healthCosts30Days + financialData.breedingCosts30Days).toFixed(0)}
                   </p>
                 </div>
@@ -272,19 +272,19 @@ export default function LivestockFinancialsPage() {
             <ModernCardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Animal Purchases</span>
+                  <span className="text-[#555555]">Animal Purchases</span>
                   <span className="font-semibold">${financialData.costBreakdown.purchase.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Feed Costs</span>
+                  <span className="text-[#555555]">Feed Costs</span>
                   <span className="font-semibold">${financialData.costBreakdown.feed.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Health & Veterinary</span>
+                  <span className="text-[#555555]">Health & Veterinary</span>
                   <span className="font-semibold">${financialData.costBreakdown.health.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Breeding Costs</span>
+                  <span className="text-[#555555]">Breeding Costs</span>
                   <span className="font-semibold">${financialData.costBreakdown.breeding.toLocaleString()}</span>
                 </div>
                 <div className="border-t pt-4">
@@ -303,15 +303,15 @@ export default function LivestockFinancialsPage() {
             <ModernCardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Feed</span>
+                  <span className="text-[#555555]">Feed</span>
                   <span className="font-semibold">${financialData.feedCosts30Days.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Health & Veterinary</span>
+                  <span className="text-[#555555]">Health & Veterinary</span>
                   <span className="font-semibold">${financialData.healthCosts30Days.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Breeding</span>
+                  <span className="text-[#555555]">Breeding</span>
                   <span className="font-semibold">${financialData.breedingCosts30Days.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-4">

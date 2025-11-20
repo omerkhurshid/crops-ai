@@ -55,7 +55,7 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
             {description && <CardDescription>{description}</CardDescription>}
           </div>
           {showTrend && (
-            <Badge className={`${change >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            <Badge className={`${change >= 0 ? 'bg-[#F8FAF8] text-green-800' : 'bg-red-100 text-red-800'}`}>
               {change >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
               {change >= 0 ? '+' : ''}{change.toFixed(1)}%
             </Badge>
@@ -67,7 +67,7 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
           <div className="text-2xl font-bold" style={{ color }}>
             {currentValue.toFixed(1)}{unit}
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-[#555555]">
             Current value • {data.length} data points
           </div>
         </div>
@@ -111,14 +111,14 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
             })}
           </svg>
           {/* Y-axis labels */}
-          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 -ml-12">
+          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-[#555555] -ml-12">
             <span>{maxValue.toFixed(1)}</span>
             <span>{((maxValue + minValue) / 2).toFixed(1)}</span>
             <span>{minValue.toFixed(1)}</span>
           </div>
         </div>
         {/* X-axis labels */}
-        <div className="mt-2 flex justify-between text-xs text-gray-500">
+        <div className="mt-2 flex justify-between text-xs text-[#555555]">
           <span>{new Date(data[0]?.date).toLocaleDateString()}</span>
           <span>{new Date(data[data.length - 1]?.date).toLocaleDateString()}</span>
         </div>
@@ -130,7 +130,7 @@ export function MetricCard({ title, value, change, unit = '', trend, description
   const getTrendColor = () => {
     if (trend === 'up') return 'text-green-600'
     if (trend === 'down') return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#555555]'
   }
   const getTrendIcon = () => {
     if (trend === 'up') return <TrendingUp className="h-4 w-4" />
@@ -142,9 +142,9 @@ export function MetricCard({ title, value, change, unit = '', trend, description
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+            <p className="text-sm font-medium text-[#555555] mb-1">{title}</p>
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-[#1A1A1A]">
                 {typeof value === 'number' ? value.toLocaleString() : value}{unit}
               </p>
               {change !== undefined && (
@@ -157,11 +157,11 @@ export function MetricCard({ title, value, change, unit = '', trend, description
               )}
             </div>
             {description && (
-              <p className="text-xs text-gray-500 mt-1">{description}</p>
+              <p className="text-xs text-[#555555] mt-1">{description}</p>
             )}
           </div>
           {icon && (
-            <div className="ml-4 p-2 bg-gray-100 rounded-full">
+            <div className="ml-4 p-2 bg-[#F5F5F5] rounded-full">
               {icon}
             </div>
           )}
@@ -370,7 +370,7 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-green-50 rounded-lg">
+            <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
               <div className="text-2xl font-bold text-green-800 mb-2">{Math.round(farmMetrics.dataAccuracy)}%</div>
               <div className="text-sm font-medium text-green-700">Data Accuracy</div>
               <div className="text-xs text-green-600 mt-1">

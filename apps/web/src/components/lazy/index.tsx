@@ -4,23 +4,23 @@ import { ComponentType, ReactElement } from 'react'
 import { Spinner, SkeletonText } from '../ui/loading-states'
 // Loading components with proper styling
 const MapLoading = () => (
-  <div className="w-full h-[400px] flex items-center justify-center bg-gray-50 rounded-lg flex-col gap-3">
+  <div className="w-full h-[400px] flex items-center justify-center bg-[#FAFAF7] rounded-lg flex-col gap-3">
     <Spinner size="large" />
-    <span className="text-sm text-gray-600">Loading map...</span>
+    <span className="text-sm text-[#555555]">Loading map...</span>
   </div>
 )
 const CardLoading = () => (
   <div className="space-y-6">
     {[...Array(4)].map((_, i) => (
-      <div key={i} className="p-6 bg-gray-50 rounded-lg animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+      <div key={i} className="p-6 bg-[#FAFAF7] rounded-lg animate-pulse">
+        <div className="h-4 bg-[#F5F5F5] rounded w-1/4 mb-2"></div>
+        <div className="h-6 bg-[#F5F5F5] rounded w-1/2"></div>
       </div>
     ))}
   </div>
 )
 const SkeletonLoading = ({ className = "h-64" }: { className?: string }) => (
-  <div className={`bg-gray-50 rounded-lg animate-pulse ${className} flex items-center justify-center`}>
+  <div className={`bg-[#FAFAF7] rounded-lg animate-pulse ${className} flex items-center justify-center`}>
     <Spinner />
   </div>
 )

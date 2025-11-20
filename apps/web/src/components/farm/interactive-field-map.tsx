@@ -413,7 +413,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
               )}
               {mode === 'manual' && (
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">Click on the map to add points, or use a preset shape:</p>
+                  <p className="text-sm text-[#555555]">Click on the map to add points, or use a preset shape:</p>
                   <div className="flex space-x-4">
                     <Button onClick={createSquareField} variant="outline">
                       <Square className="h-4 w-4 mr-2" />
@@ -434,7 +434,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 {/* Map Container */}
                 <div 
                   ref={mapRef}
-                  className="relative w-full h-96 bg-gray-100 cursor-crosshair select-none overflow-hidden"
+                  className="relative w-full h-96 bg-[#F5F5F5] cursor-crosshair select-none overflow-hidden"
                   onClick={mode === 'manual' ? addCustomPoint : undefined}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
@@ -442,8 +442,8 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                 >
                   {/* Satellite imagery background or fallback */}
                   {loadingImage ? (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                      <div className="text-gray-600">Loading satellite image...</div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#F5F5F5]">
+                      <div className="text-[#555555]">Loading satellite image...</div>
                     </div>
                   ) : satelliteImage ? (
                     <Image 
@@ -547,22 +547,22 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                   {mode === 'manual' && points.length === 0 && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-white bg-opacity-90 rounded-lg p-4 text-center">
-                        <Shapes className="h-8 w-8 mx-auto mb-2 text-gray-600" />
-                        <p className="font-medium text-gray-800">Click to add points</p>
-                        <p className="text-sm text-gray-600">Create your field boundary</p>
+                        <Shapes className="h-8 w-8 mx-auto mb-2 text-[#555555]" />
+                        <p className="font-medium text-[#1A1A1A]">Click to add points</p>
+                        <p className="text-sm text-[#555555]">Create your field boundary</p>
                       </div>
                     </div>
                   )}
                 </div>
                 {/* Map Info Bar */}
-                <div className="bg-gray-50 px-4 py-2 flex justify-between items-center text-sm">
+                <div className="bg-[#FAFAF7] px-4 py-2 flex justify-between items-center text-sm">
                   <div className="flex space-x-4">
                     <span>Points: {points.length}</span>
                     <span>Area: {calculateArea().toFixed(2)} ha</span>
                     <span>Zoom: {currentZoom}</span>
                     <span>Center: {mapCenter.lat !== 0 ? `${mapCenter.lat.toFixed(4)}, ${mapCenter.lng.toFixed(4)}` : 'Not set'}</span>
                   </div>
-                  <div className="text-gray-500">
+                  <div className="text-[#555555]">
                     {mode === 'manual' ? 'Click to add • Drag to move • Zoom for detail' : 'Satellite detection mode'}
                   </div>
                 </div>
@@ -579,7 +579,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                         selectedField === index
                           ? 'border-crops-green-500 bg-crops-green-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                       }`}
                       onClick={() => selectDetectedField(index)}
                     >
@@ -589,7 +589,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                           {Math.round(field.confidence * 100)}% match
                         </Badge>
                       </div>
-                      <div className="text-sm text-gray-600 space-y-1">
+                      <div className="text-sm text-[#555555] space-y-1">
                         <div>Area: {field.area?.toFixed(2) || 'Unknown'} hectares</div>
                         <div>Shape: {field.characteristics?.shape || 'Polygon'}</div>
                       </div>

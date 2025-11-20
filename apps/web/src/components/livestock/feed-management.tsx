@@ -57,8 +57,8 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <div className="text-gray-400 mb-4">
           <Wheat className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Feed Records Yet</h3>
-        <p className="text-gray-600 mb-6">Start tracking feed costs and nutrition by recording your first feeding.</p>
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Feed Records Yet</h3>
+        <p className="text-[#555555] mb-6">Start tracking feed costs and nutrition by recording your first feeding.</p>
         <Link href="/livestock/feed/add">
           <Button>Record First Feeding</Button>
         </Link>
@@ -81,7 +81,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -91,7 +91,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Animals</option>
           {animals.map(animal => (
@@ -103,7 +103,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedFeedType}
           onChange={(e) => setSelectedFeedType(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Feed Types</option>
           {uniqueFeedTypes.map(feedType => (
@@ -115,7 +115,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>
@@ -126,68 +126,68 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
       </div>
       {/* Summary Stats */}
       {filteredRecords.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <DollarSign className="h-5 w-5 text-green-600 mr-2" />
-              <span className="font-medium text-gray-700">Total Cost</span>
+              <span className="font-medium text-[#555555]">Total Cost</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">${totalCost.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#1A1A1A]">${totalCost.toFixed(2)}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <Wheat className="h-5 w-5 text-orange-600 mr-2" />
-              <span className="font-medium text-gray-700">Total Quantity</span>
+              <span className="font-medium text-[#555555]">Total Quantity</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{totalQuantity.toFixed(1)} lbs</p>
+            <p className="text-2xl font-bold text-[#1A1A1A]">{totalQuantity.toFixed(1)} lbs</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
-              <span className="font-medium text-gray-700">Avg Cost/lb</span>
+              <span className="font-medium text-[#555555]">Avg Cost/lb</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">${avgCostPerPound.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-[#1A1A1A]">${avgCostPerPound.toFixed(2)}</p>
           </div>
         </div>
       )}
       {/* Feed Records Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#FAFAF7]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Animal
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Feed Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Quantity
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Cost
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Nutrition
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredRecords.map((record) => (
-              <tr key={record.id} className="hover:bg-gray-50">
+              <tr key={record.id} className="hover:bg-[#FAFAF7]">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-[#1A1A1A]">
                         #{record.animal.tagNumber}
                       </div>
                       {record.animal.name && (
-                        <div className="text-sm text-gray-500">{record.animal.name}</div>
+                        <div className="text-sm text-[#555555]">{record.animal.name}</div>
                       )}
                       <div className="text-xs text-gray-400">
                         {record.animal.species} • {record.animal.farm?.name}
@@ -197,28 +197,28 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-gray-900 capitalize">
+                    <div className="text-sm font-medium text-[#1A1A1A] capitalize">
                       {record.feedType.replace('_', ' ')}
                     </div>
                     {record.brand && (
-                      <div className="text-sm text-gray-500">{record.brand}</div>
+                      <div className="text-sm text-[#555555]">{record.brand}</div>
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-[#1A1A1A]">
                     {record.quantity} {record.unit}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     {record.totalCost && (
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-[#1A1A1A]">
                         ${record.totalCost.toFixed(2)}
                       </div>
                     )}
                     {record.costPerUnit && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-[#555555]">
                         ${record.costPerUnit.toFixed(2)}/{record.unit}
                       </div>
                     )}
@@ -238,7 +238,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-[#1A1A1A]">
                     {new Date(record.feedDate).toLocaleDateString()}
                   </div>
                 </td>
@@ -262,7 +262,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
       </div>
       {filteredRecords.length === 0 && searchTerm && (
         <div className="text-center py-8">
-          <p className="text-gray-500">No feed records found matching your search criteria.</p>
+          <p className="text-[#555555]">No feed records found matching your search criteria.</p>
         </div>
       )}
     </div>

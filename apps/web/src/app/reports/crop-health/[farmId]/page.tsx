@@ -23,8 +23,8 @@ export default function CropHealthReportPage() {
   }, [status, router])
   if (status === 'loading' || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sage-50 to-cream-50 flex items-center justify-center">
-        <div className="text-sage-600">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-#F8FAF8 to-cream-50 flex items-center justify-center">
+        <div className="text-[#7A8F78]">Loading...</div>
       </div>
     )
   }
@@ -32,20 +32,20 @@ export default function CropHealthReportPage() {
     return null
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-cream-50">
+    <div className="min-h-screen bg-gradient-to-br from-#F8FAF8 to-cream-50">
       <Navbar />
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <Link href="/reports" className="inline-flex items-center gap-2 text-sage-600 hover:text-sage-800 mb-4">
+          <Link href="/reports" className="inline-flex items-center gap-2 text-[#7A8F78] hover:text-[#7A8F78] mb-4">
             <ArrowLeft className="h-4 w-4" />
             Back to Reports
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-semibold text-sage-800 mb-2">
+              <h1 className="text-3xl font-semibold text-[#7A8F78] mb-2">
                 Crop Health Report
               </h1>
-              <p className="text-sage-600">
+              <p className="text-[#7A8F78]">
                 Satellite analysis of your crop health and stress levels
               </p>
             </div>

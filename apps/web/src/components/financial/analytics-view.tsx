@@ -230,23 +230,23 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       case 'opportunity': return <TrendingUp className="h-4 w-4 text-green-600" />;
       case 'risk': return <AlertCircle className="h-4 w-4 text-red-600" />;
       case 'achievement': return <Target className="h-4 w-4 text-blue-600" />;
-      default: return <Activity className="h-4 w-4 text-gray-600" />;
+      default: return <Activity className="h-4 w-4 text-[#555555]" />;
     }
   };
   const getInsightColor = (type: string) => {
     switch (type) {
-      case 'opportunity': return 'bg-green-50 border-green-200';
+      case 'opportunity': return 'bg-[#F8FAF8] border-[#DDE4D8]';
       case 'risk': return 'bg-red-50 border-red-200';
       case 'achievement': return 'bg-blue-50 border-blue-200';
-      default: return 'bg-gray-50 border-gray-200';
+      default: return 'bg-[#FAFAF7] border-[#E6E6E6]';
     }
   };
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'low': return 'bg-[#F8FAF8] text-green-800';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
     }
   };
   const getBenchmarkColor = (value: number, benchmark: number) => {
@@ -259,8 +259,8 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
         {[...Array(4)].map((_, i) => (
           <Card key={i} className="p-6">
             <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-32 bg-[#F5F5F5] rounded"></div>
             </div>
           </Card>
         ))}
@@ -271,8 +271,8 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
     return (
       <div className="text-center py-12">
         <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics Unavailable</h3>
-        <p className="text-gray-600">Unable to load analytics data. Please try again.</p>
+        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Analytics Unavailable</h3>
+        <p className="text-[#555555]">Unable to load analytics data. Please try again.</p>
       </div>
     );
   }
@@ -300,10 +300,10 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                     {insight.priority} priority
                   </Badge>
                 </div>
-                <p className="text-gray-700 mb-2">{insight.description}</p>
+                <p className="text-[#555555] mb-2">{insight.description}</p>
                 <div className="text-sm">
-                  <p className="font-medium text-gray-900 mb-1">Impact: {insight.impact}</p>
-                  <p className="text-gray-600">Recommended Action: {insight.action}</p>
+                  <p className="font-medium text-[#1A1A1A] mb-1">Impact: {insight.impact}</p>
+                  <p className="text-[#555555]">Recommended Action: {insight.action}</p>
                 </div>
               </div>
             ))}
@@ -329,29 +329,29 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
             <CardContent>
               <div className="space-y-4">
                 {data.profitability.byField.map((field) => (
-                  <div key={field.fieldId} className="p-4 bg-gray-50 rounded-lg">
+                  <div key={field.fieldId} className="p-4 bg-[#FAFAF7] rounded-lg">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-semibold">{field.fieldName}</h4>
-                        <p className="text-sm text-gray-600">{field.area.toFixed(1)} acres</p>
+                        <p className="text-sm text-[#555555]">{field.area.toFixed(1)} acres</p>
                       </div>
                       <div className="text-right">
                         <div className="font-bold text-lg">{formatCurrency(field.profit)}</div>
-                        <p className="text-sm text-gray-600">{formatPercentage(field.roi)} ROI</p>
+                        <p className="text-sm text-[#555555]">{formatPercentage(field.roi)} ROI</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4 text-center">
                       <div>
                         <div className="text-green-600 font-semibold">{formatCurrency(field.revenue)}</div>
-                        <p className="text-xs text-gray-600">Revenue</p>
+                        <p className="text-xs text-[#555555]">Revenue</p>
                       </div>
                       <div>
                         <div className="text-red-600 font-semibold">{formatCurrency(field.costs)}</div>
-                        <p className="text-xs text-gray-600">Costs</p>
+                        <p className="text-xs text-[#555555]">Costs</p>
                       </div>
                       <div>
                         <div className="text-blue-600 font-semibold">{formatCurrency(field.profitPerAcre)}</div>
-                        <p className="text-xs text-gray-600">Profit/Acre</p>
+                        <p className="text-xs text-[#555555]">Profit/Acre</p>
                       </div>
                     </div>
                   </div>
@@ -372,25 +372,25 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
             <CardContent>
               <div className="space-y-4">
                 {data.profitability.byCrop.map((crop) => (
-                  <div key={crop.cropType} className="p-4 bg-gray-50 rounded-lg">
+                  <div key={crop.cropType} className="p-4 bg-[#FAFAF7] rounded-lg">
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h4 className="font-semibold">{crop.cropType}</h4>
-                        <p className="text-sm text-gray-600">{crop.totalArea.toFixed(1)} acres</p>
+                        <p className="text-sm text-[#555555]">{crop.totalArea.toFixed(1)} acres</p>
                       </div>
                       <div className="text-right">
                         <div className="font-bold text-lg">{formatCurrency(crop.profit)}</div>
-                        <p className="text-sm text-gray-600">{crop.yieldPerAcre} bu/acre</p>
+                        <p className="text-sm text-[#555555]">{crop.yieldPerAcre} bu/acre</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
                         <div className="text-green-600 font-semibold">{formatCurrency(crop.pricePerUnit)}</div>
-                        <p className="text-xs text-gray-600">Price per bushel</p>
+                        <p className="text-xs text-[#555555]">Price per bushel</p>
                       </div>
                       <div>
                         <div className="text-blue-600 font-semibold">{formatCurrency(crop.revenue)}</div>
-                        <p className="text-xs text-gray-600">Total Revenue</p>
+                        <p className="text-xs text-[#555555]">Total Revenue</p>
                       </div>
                     </div>
                   </div>
@@ -412,7 +412,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                       <span className="text-sm font-medium">{item.category}</span>
                       <div className="text-right">
                         <div className="font-semibold">{formatCurrency(item.amount)}</div>
-                        <div className="text-xs text-gray-600">{formatPercentage(item.percentage)}</div>
+                        <div className="text-xs text-[#555555]">{formatPercentage(item.percentage)}</div>
                       </div>
                     </div>
                   ))}
@@ -430,7 +430,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                       <span className="text-sm font-medium">{item.category}</span>
                       <div className="text-right">
                         <div className="font-semibold">{formatCurrency(item.amount)}</div>
-                        <div className="text-xs text-gray-600">{formatPercentage(item.percentage)}</div>
+                        <div className="text-xs text-[#555555]">{formatPercentage(item.percentage)}</div>
                       </div>
                     </div>
                   ))}
@@ -461,7 +461,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                       <div className={`font-semibold ${getBenchmarkColor(costs.costPerAcre, costs.benchmark)}`}>
                         {formatCurrency(costs.costPerAcre)}/acre
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         Benchmark: {formatCurrency(costs.benchmark)}
                       </div>
                     </div>
@@ -504,63 +504,63 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                   <div className="text-xl font-bold text-blue-600">
                     {formatCurrency(756)}
                   </div>
-                  <p className="text-xs text-gray-600">Profit/Acre</p>
+                  <p className="text-xs text-[#555555]">Profit/Acre</p>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-blue-600">171</div>
-                  <p className="text-xs text-gray-600">Yield/Acre</p>
+                  <p className="text-xs text-[#555555]">Yield/Acre</p>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-blue-600">
                     {formatCurrency(584)}
                   </div>
-                  <p className="text-xs text-gray-600">Cost/Acre</p>
+                  <p className="text-xs text-[#555555]">Cost/Acre</p>
                 </div>
               </div>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-semibold text-gray-900 mb-3">Regional Average</h4>
+            <div className="p-4 bg-[#FAFAF7] rounded-lg">
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Regional Average</h4>
               <div className="space-y-2">
                 <div>
-                  <div className="text-xl font-bold text-gray-600">
+                  <div className="text-xl font-bold text-[#555555]">
                     {formatCurrency(data.benchmarks.regionalAverage.profitPerAcre)}
                   </div>
-                  <p className="text-xs text-gray-600">Profit/Acre</p>
+                  <p className="text-xs text-[#555555]">Profit/Acre</p>
                 </div>
                 <div>
-                  <div className="text-xl font-bold text-gray-600">
+                  <div className="text-xl font-bold text-[#555555]">
                     {data.benchmarks.regionalAverage.yieldPerAcre}
                   </div>
-                  <p className="text-xs text-gray-600">Yield/Acre</p>
+                  <p className="text-xs text-[#555555]">Yield/Acre</p>
                 </div>
                 <div>
-                  <div className="text-xl font-bold text-gray-600">
+                  <div className="text-xl font-bold text-[#555555]">
                     {formatCurrency(data.benchmarks.regionalAverage.costPerAcre)}
                   </div>
-                  <p className="text-xs text-gray-600">Cost/Acre</p>
+                  <p className="text-xs text-[#555555]">Cost/Acre</p>
                 </div>
               </div>
             </div>
-            <div className="p-4 bg-green-50 rounded-lg">
+            <div className="p-4 bg-[#F8FAF8] rounded-lg">
               <h4 className="font-semibold text-green-900 mb-3">Industry Best</h4>
               <div className="space-y-2">
                 <div>
                   <div className="text-xl font-bold text-green-600">
                     {formatCurrency(data.benchmarks.industryBest.profitPerAcre)}
                   </div>
-                  <p className="text-xs text-gray-600">Profit/Acre</p>
+                  <p className="text-xs text-[#555555]">Profit/Acre</p>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-green-600">
                     {data.benchmarks.industryBest.yieldPerAcre}
                   </div>
-                  <p className="text-xs text-gray-600">Yield/Acre</p>
+                  <p className="text-xs text-[#555555]">Yield/Acre</p>
                 </div>
                 <div>
                   <div className="text-xl font-bold text-green-600">
                     {formatCurrency(data.benchmarks.industryBest.costPerAcre)}
                   </div>
-                  <p className="text-xs text-gray-600">Cost/Acre</p>
+                  <p className="text-xs text-[#555555]">Cost/Acre</p>
                 </div>
               </div>
             </div>

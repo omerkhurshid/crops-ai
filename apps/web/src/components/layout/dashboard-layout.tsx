@@ -31,7 +31,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 z-40 bg-gray-900/80 lg:hidden"
+            className="fixed inset-0 z-40 bg-[#1A1A1A]/80 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
           {/* Mobile Sidebar */}

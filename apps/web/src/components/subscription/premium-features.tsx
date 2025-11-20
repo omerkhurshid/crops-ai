@@ -113,14 +113,14 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Crown className="h-8 w-8 text-yellow-600" />
-          <h2 className="text-3xl font-bold text-sage-800">Unlock Premium Features</h2>
+          <h2 className="text-3xl font-bold text-[#1A1A1A]">Unlock Premium Features</h2>
         </div>
-        <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+        <p className="text-lg text-[#555555] max-w-2xl mx-auto">
           Take your farming to the next level with AI-powered insights, advanced analytics, and personalized recommendations.
         </p>
       </div>
       {/* ROI Calculator */}
-      <Alert className="bg-green-50 border-green-200">
+      <Alert className="bg-[#F8FAF8] border-[#DDE4D8]">
         <TrendingUp className="h-4 w-4 text-green-600" />
         <AlertDescription className="text-green-800">
           <strong>Return on Investment:</strong> Premium users typically see 15-30% yield increases and 20-40% cost reductions, 
@@ -145,11 +145,11 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               </div>
             </ModernCardHeader>
             <ModernCardContent>
-              <p className="text-sage-600 mb-4">{benefit.description}</p>
-              <div className="bg-sage-100 rounded-lg p-3">
+              <p className="text-[#555555] mb-4">{benefit.description}</p>
+              <div className="bg-[#F8FAF8] rounded-lg p-3">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-yellow-600" />
-                  <span className="font-semibold text-sage-800">{benefit.value}</span>
+                  <span className="font-semibold text-[#1A1A1A]">{benefit.value}</span>
                 </div>
               </div>
             </ModernCardContent>
@@ -164,7 +164,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
           className={`relative ${selectedTier === 'premium' ? 'ring-2 ring-sage-500' : ''}`}
         >
           {selectedTier === 'premium' && (
-            <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-sage-600 text-white">
+            <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#7A8F78] text-white">
               Most Popular
             </Badge>
           )}
@@ -173,11 +173,11 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               <Crown className="h-6 w-6 text-yellow-600" />
               Premium
             </ModernCardTitle>
-            <div className="text-4xl font-bold text-sage-800 my-4">
+            <div className="text-4xl font-bold text-[#1A1A1A] my-4">
               ${pricing.premium.monthly}
-              <span className="text-lg font-normal text-sage-600">/month</span>
+              <span className="text-lg font-normal text-[#555555]">/month</span>
             </div>
-            <p className="text-sage-600">
+            <p className="text-[#555555]">
               or ${pricing.premium.annual}/year (save {pricing.premium.savings}%)
             </p>
           </ModernCardHeader>
@@ -186,12 +186,12 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               {features.premium.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
-                  <span className="text-sage-700">{feature}</span>
+                  <span className="text-[#555555]">{feature}</span>
                 </li>
               ))}
             </ul>
             <Button 
-              className="w-full mt-6 bg-sage-600 hover:bg-sage-700"
+              className="w-full mt-6 bg-[#7A8F78] hover:bg-[#5E6F5A]"
               onClick={() => {
                 setSelectedTier('premium')
                 onUpgrade?.('premium')
@@ -212,11 +212,11 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               <Zap className="h-6 w-6 text-purple-600" />
               Professional
             </ModernCardTitle>
-            <div className="text-4xl font-bold text-sage-800 my-4">
+            <div className="text-4xl font-bold text-[#1A1A1A] my-4">
               ${pricing.pro.monthly}
-              <span className="text-lg font-normal text-sage-600">/month</span>
+              <span className="text-lg font-normal text-[#555555]">/month</span>
             </div>
-            <p className="text-sage-600">
+            <p className="text-[#555555]">
               or ${pricing.pro.annual}/year (save {pricing.pro.savings}%)
             </p>
           </ModernCardHeader>
@@ -225,7 +225,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               {features.pro.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
-                  <span className="text-sage-700">{feature}</span>
+                  <span className="text-[#555555]">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -274,26 +274,26 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
         </ModernCard>
       )}
       {/* Testimonials */}
-      <div className="bg-sage-50 rounded-xl p-6">
-        <h3 className="text-xl font-semibold text-sage-800 mb-4 text-center">What Farmers Are Saying</h3>
+      <div className="bg-[#F8FAF8] rounded-xl p-6">
+        <h3 className="text-xl font-semibold text-[#1A1A1A] mb-4 text-center">What Farmers Are Saying</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg p-4">
-            <p className="text-sage-700 italic mb-2">
+            <p className="text-[#555555] italic mb-2">
               "The AI yield predictions saved me from overplanting last season. Increased my profit margins by 22%."
             </p>
-            <div className="text-sm text-sage-600">- Sarah M., Iowa (Corn & Soybeans)</div>
+            <div className="text-sm text-[#555555]">- Sarah M., Iowa (Corn & Soybeans)</div>
           </div>
           <div className="bg-white rounded-lg p-4">
-            <p className="text-sage-700 italic mb-2">
+            <p className="text-[#555555] italic mb-2">
               "Smart alerts prevented a major aphid outbreak. The early warning was worth the subscription cost alone."
             </p>
-            <div className="text-sm text-sage-600">- Mike T., Nebraska (Wheat & Corn)</div>
+            <div className="text-sm text-[#555555]">- Mike T., Nebraska (Wheat & Corn)</div>
           </div>
         </div>
       </div>
       {/* Money Back Guarantee */}
       <div className="text-center">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 inline-block">
+        <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-4 inline-block">
           <div className="flex items-center gap-2 text-green-800 font-semibold">
             <Shield className="h-5 w-5" />
             30-Day Money-Back Guarantee

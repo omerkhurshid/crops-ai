@@ -472,16 +472,16 @@ export function ThreeStepFarmCreator() {
           <div key={step} className="flex items-center">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
               step === currentStep 
-                ? 'bg-sage-600 text-white' 
+                ? 'bg-[#7A8F78] text-white' 
                 : step < currentStep 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-200 text-gray-600'
+                  ? 'bg-[#7A8F78] text-white' 
+                  : 'bg-[#F5F5F5] text-[#555555]'
             }`}>
               {step < currentStep ? <CheckCircle className="h-5 w-5" /> : step}
             </div>
             {step < 3 && (
               <div className={`w-20 h-1 mx-2 ${
-                step < currentStep ? 'bg-green-600' : 'bg-gray-200'
+                step < currentStep ? 'bg-[#7A8F78]' : 'bg-[#F5F5F5]'
               }`} />
             )}
           </div>
@@ -513,7 +513,7 @@ export function ThreeStepFarmCreator() {
               <Button 
                 onClick={nextStep} 
                 disabled={!canProceedStep1}
-                className="bg-sage-600 hover:bg-sage-700"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
               >
                 Continue <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
@@ -575,7 +575,7 @@ export function ThreeStepFarmCreator() {
             <ModernCard variant="soft">
               <ModernCardHeader>
                 <ModernCardTitle className="flex items-center gap-2">
-                  <Map className="h-5 w-5 text-green-600" />
+                  <Map className="h-5 w-5 text-[#7A8F78]" />
                   Draw Your Farm Boundaries
                 </ModernCardTitle>
                 <ModernCardDescription>
@@ -685,35 +685,35 @@ export function ThreeStepFarmCreator() {
 
                   {farm.boundaries && farm.boundaries.length > 0 && (
                     <div className="space-y-4">
-                      <Alert className="border-green-200 bg-green-50">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <AlertDescription className="text-green-800">
+                      <Alert className="border-[#DDE4D8] bg-[#F8FAF8]">
+                        <CheckCircle className="h-4 w-4 text-[#7A8F78]" />
+                        <AlertDescription className="text-[#1A1A1A]">
                           <strong>Farm boundaries complete!</strong> Total area: {farm.totalArea} acres
                         </AlertDescription>
                       </Alert>
 
                       {/* Field Configuration Choice */}
-                      <div className="border rounded-lg p-4 bg-gray-50">
+                      <div className="border rounded-lg p-4 bg-[#F8FAF8]">
                         <h3 className="font-semibold mb-3">How do you want to organize your fields?</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <button
                             onClick={() => setFarm(prev => ({ ...prev, isMultiField: false, fields: [] }))}
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               !farm.isMultiField
-                                ? 'border-sage-600 bg-sage-600 text-white'
-                                : 'border-gray-200 bg-white text-gray-700 hover:border-sage-300 hover:bg-sage-50'
+                                ? 'border-[#7A8F78] bg-[#7A8F78] text-white'
+                                : 'border-[#E6E6E6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">
                               <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
                                 !farm.isMultiField 
                                   ? 'bg-white/20' 
-                                  : 'bg-sage-100'
+                                  : 'bg-[#F8FAF8]'
                               }`}>
                                 <Wheat className={`h-3 w-3 ${
                                   !farm.isMultiField 
                                     ? 'text-white' 
-                                    : 'text-sage-600'
+                                    : 'text-[#555555]'
                                 }`} />
                               </div>
                               <span className="font-medium text-sm">Single Field</span>
@@ -721,7 +721,7 @@ export function ThreeStepFarmCreator() {
                             <p className={`text-xs ${
                               !farm.isMultiField 
                                 ? 'text-white/80' 
-                                : 'text-gray-600'
+                                : 'text-[#555555]'
                             }`}>
                               Treat entire farm as one field
                             </p>
@@ -731,8 +731,8 @@ export function ThreeStepFarmCreator() {
                             onClick={() => setFarm(prev => ({ ...prev, isMultiField: true }))}
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               farm.isMultiField
-                                ? 'border-sage-600 bg-sage-600 text-white'
-                                : 'border-gray-200 bg-white text-gray-700 hover:border-sage-300 hover:bg-sage-50'
+                                ? 'border-[#7A8F78] bg-[#7A8F78] text-white'
+                                : 'border-[#E6E6E6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">
@@ -752,7 +752,7 @@ export function ThreeStepFarmCreator() {
                             <p className={`text-xs ${
                               farm.isMultiField 
                                 ? 'text-white/80' 
-                                : 'text-gray-600'
+                                : 'text-[#555555]'
                             }`}>
                               Draw separate field boundaries
                             </p>
@@ -786,7 +786,7 @@ export function ThreeStepFarmCreator() {
                                   <SelectItem key={crop.id} value={crop.id}>
                                     <div className="flex flex-col">
                                       <span className="font-medium">{crop.name}</span>
-                                      <span className="text-xs text-gray-500">{crop.category}</span>
+                                      <span className="text-xs text-[#555555]">{crop.category}</span>
                                     </div>
                                   </SelectItem>
                                 ))}
@@ -824,7 +824,7 @@ export function ThreeStepFarmCreator() {
                                           onChange={(e) => updateFieldName(field.id, e.target.value)}
                                           className="font-medium border-none p-0 h-auto text-sm"
                                         />
-                                        <p className="text-xs text-gray-600">{field.area} acres</p>
+                                        <p className="text-xs text-[#555555]">{field.area} acres</p>
                                       </div>
                                     </div>
                                     <Button
@@ -862,7 +862,7 @@ export function ThreeStepFarmCreator() {
                   <Button 
                     onClick={nextStep} 
                     disabled={!canProceedStep2 || (!farm.isMultiField && !farm.fields.length)}
-                    className="bg-sage-600 hover:bg-sage-700"
+                    className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
                   >
                     Continue <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -896,7 +896,7 @@ export function ThreeStepFarmCreator() {
                           />
                           <div>
                             <h3 className="font-medium">{field.name}</h3>
-                            <p className="text-sm text-gray-600">{field.area} acres</p>
+                            <p className="text-sm text-[#555555]">{field.area} acres</p>
                           </div>
                         </div>
                         <Button
@@ -971,7 +971,7 @@ export function ThreeStepFarmCreator() {
                                     <div className="flex flex-col">
                                       <span className="font-medium">{crop.name}</span>
                                       {crop.scientificName && (
-                                        <span className="text-xs text-gray-500 italic">{crop.scientificName}</span>
+                                        <span className="text-xs text-[#555555] italic">{crop.scientificName}</span>
                                       )}
                                     </div>
                                   </SelectItem>
@@ -1006,8 +1006,8 @@ export function ThreeStepFarmCreator() {
               ) : (
                 <div className="text-center py-8">
                   <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                  <h3 className="font-medium text-gray-700 mb-2">No fields created yet</h3>
-                  <p className="text-sm text-gray-600 mb-4">Go back to step 2 to draw your field boundaries</p>
+                  <h3 className="font-medium text-[#555555] mb-2">No fields created yet</h3>
+                  <p className="text-sm text-[#555555] mb-4">Go back to step 2 to draw your field boundaries</p>
                   <Button onClick={prevStep} variant="outline">
                     <ChevronLeft className="mr-2 h-4 w-4" /> Back to Mapping
                   </Button>
@@ -1023,7 +1023,7 @@ export function ThreeStepFarmCreator() {
                   <Button
                     onClick={submitFarm}
                     disabled={isLoading}
-                    className="bg-sage-600 hover:bg-sage-700 px-8"
+                    className="bg-[#7A8F78] hover:bg-[#5E6F5A] px-8"
                     size="lg"
                   >
                     {isLoading ? (
@@ -1056,7 +1056,7 @@ export function ThreeStepFarmCreator() {
               </ModernCardDescription>
             </ModernCardHeader>
             <ModernCardContent className="space-y-6">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Farm Name:</span>
@@ -1086,7 +1086,7 @@ export function ThreeStepFarmCreator() {
                 <Button
                   onClick={submitFarm}
                   disabled={isLoading}
-                  className="bg-sage-600 hover:bg-sage-700 px-8"
+                  className="bg-[#7A8F78] hover:bg-[#5E6F5A] px-8"
                   size="lg"
                 >
                   {isLoading ? (

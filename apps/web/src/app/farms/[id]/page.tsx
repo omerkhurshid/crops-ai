@@ -58,8 +58,8 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading farm details...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading farm details...</p>
         </div>
       </DashboardLayout>
     )
@@ -78,7 +78,7 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         {/* Modern Header with Asymmetric Layout */}
         <div className="mb-12 relative">
-          <Link href="/farms" className="inline-flex items-center text-sm text-sage-600 hover:text-sage-800 mb-6 transition-colors">
+          <Link href="/farms" className="inline-flex items-center text-sm text-[#7A8F78] hover:text-[#7A8F78] mb-6 transition-colors">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Farms
           </Link>
@@ -88,15 +88,15 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-sage-800 tracking-tight">{farm.name}</h1>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#7A8F78] tracking-tight">{farm.name}</h1>
                     <InfoTooltip {...TOOLTIP_CONTENT.farm} size="md" />
                   </div>
-                  <div className="flex items-center text-sage-600 mb-4">
+                  <div className="flex items-center text-[#7A8F78] mb-4">
                     <MapPin className="h-4 w-4 mr-2" />
                     <span>{farm.address || `${farm.region || 'Unknown'}, ${farm.country || 'Unknown'}`}</span>
                   </div>
                 </div>
-                <Badge className="bg-sage-100 text-sage-700 border-sage-200 px-3 py-1">
+                <Badge className="bg-[#F8FAF8] text-[#5E6F5A] border-[#DDE4D8] px-3 py-1">
                   Active
                 </Badge>
               </div>
@@ -105,7 +105,7 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             <div className="lg:col-span-1">
               <ModernCard variant="glass" className="h-full">
                 <ModernCardContent className="p-4">
-                  <h3 className="font-medium text-sage-800 mb-3">Quick Actions</h3>
+                  <h3 className="font-medium text-[#7A8F78] mb-3">Quick Actions</h3>
                   <div className="space-y-2">
                     <Link href={`/farms/${farm.id}/fields/create`}>
                       <InlineFloatingButton
@@ -177,10 +177,10 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             <FarmHealthCard farmId={farm.id} farmName={farm.name} />
             {/* Fields Overview with Modern Design */}
             <ModernCard variant="floating" className="overflow-hidden">
-              <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+              <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-cream-50">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-3">
-                    <ModernCardTitle className="text-sage-800">Fields Overview</ModernCardTitle>
+                    <ModernCardTitle className="text-[#7A8F78]">Fields Overview</ModernCardTitle>
                     <InfoTooltip {...TOOLTIP_CONTENT.field} />
                   </div>
                   <Link href={`/farms/${farm.id}/fields/create`}>
@@ -205,10 +205,10 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
-                                <h4 className="font-semibold text-sage-800 group-hover:text-sage-900">{field.name}</h4>
+                                <h4 className="font-semibold text-[#7A8F78] group-hover:text-sage-900">{field.name}</h4>
                                 <InfoTooltip {...TOOLTIP_CONTENT.field} size="sm" />
                               </div>
-                              <div className="flex items-center gap-4 text-sm text-sage-600 mb-2">
+                              <div className="flex items-center gap-4 text-sm text-[#7A8F78] mb-2">
                                 <div className="flex items-center gap-1">
                                   <Sprout className="h-3 w-3" />
                                   <span>{field.crops[0]?.cropType || 'No crop'}</span>
@@ -228,13 +228,13 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                             </div>
                             <div className="text-right">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-medium text-sage-700">NDVI:</span>
+                                <span className="text-sm font-medium text-[#5E6F5A]">NDVI:</span>
                                 <InfoTooltip {...TOOLTIP_CONTENT.ndvi} size="sm" />
-                                <span className="text-lg font-semibold text-sage-800">
+                                <span className="text-lg font-semibold text-[#7A8F78]">
                                   {field.satelliteData[0]?.ndvi.toFixed(2) || 'N/A'}
                                 </span>
                               </div>
-                              <div className="text-xs text-sage-500">
+                              <div className="text-xs text-[#7A8F78]">
                                 {field.satelliteData[0] ? 
                                   new Date(field.satelliteData[0].captureDate).toLocaleDateString() : 
                                   'No data available'}
@@ -244,7 +244,7 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                           {field.satelliteData[0] && (
                             <div className="mt-4 flex items-center justify-between">
                               <div className="flex gap-3">
-                                <Badge className="bg-sage-100 text-sage-700 border-sage-200 text-xs">
+                                <Badge className="bg-[#F8FAF8] text-[#5E6F5A] border-[#DDE4D8] text-xs">
                                   <Activity className="h-3 w-3 mr-1" />
                                   Health: {(field.satelliteData[0].ndvi * 100).toFixed(0)}%
                                 </Badge>
@@ -314,9 +314,9 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
           <div className="lg:col-span-4 space-y-4 lg:space-y-6 order-1 lg:order-2">
             {/* Weather Widget - Data Not Available */}
             <ModernCard variant="glass" className="overflow-hidden">
-              <ModernCardHeader className="bg-gradient-to-br from-sage-50/80 to-cream-50/80">
+              <ModernCardHeader className="bg-gradient-to-br from-#F8FAF8/80 to-cream-50/80">
                 <div className="flex items-center gap-3">
-                  <ModernCardTitle className="text-sage-800">Weather Data</ModernCardTitle>
+                  <ModernCardTitle className="text-[#7A8F78]">Weather Data</ModernCardTitle>
                   <InfoTooltip {...TOOLTIP_CONTENT.temperature} />
                 </div>
                 <ModernCardDescription>
@@ -326,11 +326,11 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
               <ModernCardContent>
                 <div className="space-y-6">
                   <div className="text-center py-8">
-                    <CloudRain className="h-12 w-12 text-sage-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                    <CloudRain className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">
                       Weather Data Unavailable
                     </h3>
-                    <p className="text-sm text-sage-600 mb-6">
+                    <p className="text-sm text-[#7A8F78] mb-6">
                       Connect a weather service to view current conditions
                     </p>
                     <Link href={`/weather?farmId=${farm.id}`}>
@@ -348,9 +348,9 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             </ModernCard>
             {/* AI Insights */}
             <ModernCard variant="floating" className="overflow-hidden">
-              <ModernCardHeader className="bg-gradient-to-br from-sage-50/90 to-cream-50/90">
+              <ModernCardHeader className="bg-gradient-to-br from-#F8FAF8/90 to-cream-50/90">
                 <div className="flex items-center gap-3">
-                  <ModernCardTitle className="text-sage-800">AI Insights</ModernCardTitle>
+                  <ModernCardTitle className="text-[#7A8F78]">AI Insights</ModernCardTitle>
                   <InfoTooltip {...TOOLTIP_CONTENT.confidence} />
                 </div>
                 <ModernCardDescription>
@@ -359,11 +359,11 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
               </ModernCardHeader>
               <ModernCardContent>
                 <div className="text-center py-8">
-                  <Brain className="h-12 w-12 text-sage-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                  <Brain className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">
                     AI Insights Coming Soon
                   </h3>
-                  <p className="text-sm text-sage-600 mb-6">
+                  <p className="text-sm text-[#7A8F78] mb-6">
                     Connect satellite and weather data to receive AI-powered recommendations
                   </p>
                   <Link href={`/recommendations?farmId=${farm.id}`}>
@@ -382,7 +382,7 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
             <ModernCard variant="soft" className="overflow-hidden">
               <ModernCardHeader className="bg-gradient-to-br from-cream-100/80 to-earth-50/80">
                 <div className="flex items-center gap-3">
-                  <ModernCardTitle className="text-sage-800">Market Prices</ModernCardTitle>
+                  <ModernCardTitle className="text-[#7A8F78]">Market Prices</ModernCardTitle>
                   <InfoTooltip {...TOOLTIP_CONTENT.commodityPrice} />
                 </div>
                 <ModernCardDescription>
@@ -391,11 +391,11 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
               </ModernCardHeader>
               <ModernCardContent>
                 <div className="text-center py-8">
-                  <DollarSign className="h-12 w-12 text-sage-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-sage-800 mb-2">
+                  <DollarSign className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">
                     Market Data Unavailable
                   </h3>
-                  <p className="text-sm text-sage-600 mb-6">
+                  <p className="text-sm text-[#7A8F78] mb-6">
                     Connect to market data feeds to view live commodity prices
                   </p>
                   <InlineFloatingButton

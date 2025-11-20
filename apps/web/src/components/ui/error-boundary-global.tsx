@@ -71,25 +71,25 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       }
       // Default error UI
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-[#FAFAF7] px-4">
           <ModernCard className="max-w-lg w-full">
             <ModernCardContent className="p-8">
               <div className="flex flex-col items-center text-center">
                 <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
                   <AlertTriangle className="w-10 h-10 text-red-600" />
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">
                   Oops! Something went wrong
                 </h1>
-                <p className="text-gray-600 mb-8">
+                <p className="text-[#555555] mb-8">
                   We're sorry for the inconvenience. The application encountered an unexpected error.
                 </p>
                 {process.env.NODE_ENV === 'development' && this.state.error && (
                   <details className="w-full mb-6 text-left">
-                    <summary className="cursor-pointer text-sm font-medium text-gray-700 mb-2">
+                    <summary className="cursor-pointer text-sm font-medium text-[#555555] mb-2">
                       Error Details (Development Only)
                     </summary>
-                    <pre className="bg-gray-100 p-4 rounded-lg text-xs overflow-auto">
+                    <pre className="bg-[#F5F5F5] p-4 rounded-lg text-xs overflow-auto">
                       <code>{this.state.error.toString()}</code>
                       {this.state.errorInfo && (
                         <>

@@ -81,7 +81,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             name="animalId"
             value={formData.animalId}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="">Select animal...</option>
@@ -119,7 +119,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             required
           />
           {selectedAnimal?.currentWeight && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-[#555555] mt-1">
               Previous weight: {selectedAnimal.currentWeight} lbs
             </p>
           )}
@@ -131,7 +131,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             name="bodyConditionScore"
             value={formData.bodyConditionScore}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select score...</option>
             <option value="1">1 - Very Thin</option>
@@ -144,7 +144,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
             <option value="4.5">4.5</option>
             <option value="5">5 - Very Fat</option>
           </select>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-[#555555] mt-1">
             Body condition score helps assess animal health and nutrition status
           </p>
         </div>
@@ -180,9 +180,9 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
       )}
       {/* Age Information */}
       {selectedAnimal?.birthDate && (
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h4 className="font-medium text-gray-900 mb-2">Animal Information</h4>
-          <div className="text-gray-700">
+        <div className="bg-[#FAFAF7] p-4 rounded-lg">
+          <h4 className="font-medium text-[#1A1A1A] mb-2">Animal Information</h4>
+          <div className="text-[#555555]">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <span className="font-medium">Age: </span>

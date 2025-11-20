@@ -78,8 +78,8 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <div className="text-gray-400 mb-4">
           <Weight className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Weight Records Yet</h3>
-        <p className="text-gray-600 mb-6">Start tracking growth by recording your first weight measurement.</p>
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Weight Records Yet</h3>
+        <p className="text-[#555555] mb-6">Start tracking growth by recording your first weight measurement.</p>
         <Link href="/livestock/weight/add">
           <Button>Record First Weight</Button>
         </Link>
@@ -102,7 +102,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -112,7 +112,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Animals</option>
           {animals.map(animal => (
@@ -124,7 +124,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -136,7 +136,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>
@@ -148,27 +148,27 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
       {/* Weight Records Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#FAFAF7]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Animal
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Weight
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Trend
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Body Condition
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Age at Weighing
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -177,15 +177,15 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
             {filteredRecords.map((record) => {
               const trend = getWeightTrend(record.animalId)
               return (
-                <tr key={record.id} className="hover:bg-gray-50">
+                <tr key={record.id} className="hover:bg-[#FAFAF7]">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-[#1A1A1A]">
                           #{record.animal.tagNumber}
                         </div>
                         {record.animal.name && (
-                          <div className="text-sm text-gray-500">{record.animal.name}</div>
+                          <div className="text-sm text-[#555555]">{record.animal.name}</div>
                         )}
                         <div className="text-xs text-gray-400">
                           {record.animal.species} • {record.animal.farm?.name}
@@ -194,7 +194,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-[#1A1A1A]">
                       {record.weight} lbs
                     </div>
                   </td>
@@ -219,7 +219,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       {trend.trend === 'stable' && (
                         <>
                           <Minus className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-500">Stable</span>
+                          <span className="text-sm text-[#555555]">Stable</span>
                         </>
                       )}
                     </div>
@@ -230,10 +230,10 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                         <div className={`w-2 h-2 rounded-full mr-2 ${
                           record.bodyConditionScore <= 2 ? 'bg-red-500' :
                           record.bodyConditionScore <= 3 ? 'bg-yellow-500' :
-                          record.bodyConditionScore <= 4 ? 'bg-green-500' :
+                          record.bodyConditionScore <= 4 ? 'bg-[#8FBF7F]' :
                           'bg-blue-500'
                         }`} />
-                        <span className="text-sm text-gray-900">
+                        <span className="text-sm text-[#1A1A1A]">
                           {record.bodyConditionScore}/5
                         </span>
                       </div>
@@ -242,16 +242,16 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-[#1A1A1A]">
                       {calculateAge(record.animal.birthDate)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-[#1A1A1A]">
                       {new Date(record.weighDate).toLocaleDateString()}
                     </div>
                     {record.notes && (
-                      <div className="text-xs text-gray-500 truncate max-w-32">
+                      <div className="text-xs text-[#555555] truncate max-w-32">
                         {record.notes}
                       </div>
                     )}
@@ -277,7 +277,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
       </div>
       {filteredRecords.length === 0 && searchTerm && (
         <div className="text-center py-8">
-          <p className="text-gray-500">No weight records found matching your search criteria.</p>
+          <p className="text-[#555555]">No weight records found matching your search criteria.</p>
         </div>
       )}
     </div>

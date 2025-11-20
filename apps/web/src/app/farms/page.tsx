@@ -203,7 +203,7 @@ export default function FarmsPage() {
                             {farm.totalArea?.toFixed(1) || '0'} ha
                           </span>
                           <div className="flex items-center">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <div className="w-2 h-2 bg-[#8FBF7F] rounded-full mr-2"></div>
                             <span className="text-[#7A8F78] text-xs">Healthy</span>
                           </div>
                         </div>

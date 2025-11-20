@@ -175,7 +175,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
     switch (status) {
       case 'ready':
         return {
-          color: 'bg-green-100 border-green-200 text-green-800',
+          color: 'bg-[#F8FAF8] border-[#DDE4D8] text-green-800',
           icon: CheckCircle,
           urgency: 'Ready Now',
           urgencyColor: 'text-green-700'
@@ -196,10 +196,10 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         }
       default:
         return {
-          color: 'bg-gray-100 border-gray-200 text-gray-800',
+          color: 'bg-[#F5F5F5] border-[#E6E6E6] text-[#1A1A1A]',
           icon: Calendar,
           urgency: 'Monitor',
-          urgencyColor: 'text-gray-700'
+          urgencyColor: 'text-[#555555]'
         }
     }
   }
@@ -207,7 +207,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
     switch (impact) {
       case 'favorable': return 'text-green-600'
       case 'concerning': return 'text-red-600'
-      default: return 'text-gray-600'
+      default: return 'text-[#555555]'
     }
   }
   const getCropUnit = (cropType: string) => {
@@ -231,8 +231,8 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-3/4"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-1/2"></div>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -243,18 +243,18 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
       <ModernCard variant="soft" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <Wheat className="h-5 w-5 text-gray-600" />
+            <Wheat className="h-5 w-5 text-[#555555]" />
             Harvest Planning
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent>
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <div className="p-2 bg-gray-100 rounded-full">
-              <Calendar className="h-5 w-5 text-gray-600" />
+          <div className="flex items-center gap-3 p-4 bg-[#FAFAF7] rounded-lg">
+            <div className="p-2 bg-[#F5F5F5] rounded-full">
+              <Calendar className="h-5 w-5 text-[#555555]" />
             </div>
             <div>
-              <p className="font-medium text-gray-800">No Crops Ready</p>
-              <p className="text-sm text-gray-600">Add crop planting dates to see harvest alerts</p>
+              <p className="font-medium text-[#1A1A1A]">No Crops Ready</p>
+              <p className="text-sm text-[#555555]">Add crop planting dates to see harvest alerts</p>
             </div>
           </div>
         </ModernCardContent>
@@ -335,12 +335,12 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                     <span className="text-sm font-medium">Estimated Yield:</span>
                     <div className="flex items-center gap-2">
                       <span className="font-bold">{alert.estimatedYield}</span>
-                      <span className="text-sm text-gray-600">{getCropUnit(alert.cropType)}</span>
+                      <span className="text-sm text-[#555555]">{getCropUnit(alert.cropType)}</span>
                       <TrendingUp className="h-3 w-3 text-green-600" />
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-gray-600">Weather Impact:</span>
+                    <span className="text-xs text-[#555555]">Weather Impact:</span>
                     <div className={cn('text-sm font-medium capitalize', getWeatherImpactColor(alert.weatherImpact))}>
                       {alert.weatherImpact}
                     </div>
@@ -349,14 +349,14 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
               </div>
               {/* Recommendations */}
               <div className="space-y-2">
-                <h5 className="text-xs font-medium text-gray-600 flex items-center gap-1">
+                <h5 className="text-xs font-medium text-[#555555] flex items-center gap-1">
                   <Eye className="h-3 w-3" />
                   Recommendations:
                 </h5>
                 {alert.recommendations.map((rec, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-sm">
                     <span className="text-gray-400">•</span>
-                    <span className="text-gray-700">{rec}</span>
+                    <span className="text-[#555555]">{rec}</span>
                   </div>
                 ))}
               </div>
@@ -369,19 +369,19 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
             <div className="text-lg font-bold text-green-600">
               {alerts.filter(a => a.status === 'ready').length}
             </div>
-            <div className="text-xs text-gray-600">Ready Now</div>
+            <div className="text-xs text-[#555555]">Ready Now</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-blue-600">
               {alerts.filter(a => a.status === 'optimal').length}
             </div>
-            <div className="text-xs text-gray-600">Optimal Window</div>
+            <div className="text-xs text-[#555555]">Optimal Window</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-orange-600">
               {Math.round(alerts.reduce((sum, a) => sum + a.estimatedYield, 0) / alerts.length)}
             </div>
-            <div className="text-xs text-gray-600">Avg Yield</div>
+            <div className="text-xs text-[#555555]">Avg Yield</div>
           </div>
         </div>
       </ModernCardContent>

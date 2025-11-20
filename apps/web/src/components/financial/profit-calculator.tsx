@@ -113,14 +113,14 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
   const getProfitColor = (profit: number) => {
     if (profit > 0) return 'text-green-600'
     if (profit < 0) return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#555555]'
   }
   const getProfitIndicator = (profit: number, margin: number) => {
     if (profit > 0 && margin > 15) return { icon: TrendingUp, text: 'Excellent', color: 'text-green-600' }
     if (profit > 0 && margin > 5) return { icon: TrendingUp, text: 'Good', color: 'text-green-600' }
     if (profit > 0) return { icon: TrendingUp, text: 'Modest', color: 'text-yellow-600' }
     if (profit < 0) return { icon: TrendingDown, text: 'Loss', color: 'text-red-600' }
-    return { icon: Minus, text: 'Break Even', color: 'text-gray-600' }
+    return { icon: Minus, text: 'Break Even', color: 'text-[#555555]' }
   }
   if (!results) return null
   const indicator = getProfitIndicator(results.grossProfit, results.profitMargin)
@@ -145,11 +145,11 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
         {/* Quick Setup */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Crop</label>
+            <label className="block text-sm font-medium text-[#555555] mb-1">Crop</label>
             <select
               value={inputs.crop}
               onChange={(e) => setInputs(prev => ({ ...prev, crop: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="corn">Corn</option>
               <option value="soybeans">Soybeans</option>
@@ -159,40 +159,40 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Acres</label>
+            <label className="block text-sm font-medium text-[#555555] mb-1">Acres</label>
             <input
               type="number"
               value={inputs.acres}
               onChange={(e) => updateInput('acres', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               min="0"
               step="0.1"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#555555] mb-1">
               Expected Yield ({getCropUnit()}/acre)
             </label>
             <input
               type="number"
               value={inputs.expectedYield}
               onChange={(e) => updateInput('expectedYield', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               min="0"
               step="0.1"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#555555] mb-1">
               Price per {getCropUnit()}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555555]">$</span>
               <input
                 type="number"
                 value={inputs.pricePerUnit}
                 onChange={(e) => updateInput('pricePerUnit', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-8 pr-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 min="0"
                 step="0.01"
               />
@@ -205,7 +205,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <DollarSign className="h-5 w-5 text-green-600" />
-                <span className="text-sm font-medium text-gray-600">Total Revenue</span>
+                <span className="text-sm font-medium text-[#555555]">Total Revenue</span>
               </div>
               <div className="text-2xl font-bold text-green-700">
                 ${results.totalRevenue.toLocaleString()}
@@ -214,7 +214,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Minus className="h-5 w-5 text-red-600" />
-                <span className="text-sm font-medium text-gray-600">Total Costs</span>
+                <span className="text-sm font-medium text-[#555555]">Total Costs</span>
               </div>
               <div className="text-2xl font-bold text-red-700">
                 ${results.totalCosts.toLocaleString()}
@@ -223,12 +223,12 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <indicator.icon className={cn("h-5 w-5", indicator.color)} />
-                <span className="text-sm font-medium text-gray-600">Net Profit</span>
+                <span className="text-sm font-medium text-[#555555]">Net Profit</span>
               </div>
               <div className={cn("text-2xl font-bold", getProfitColor(results.grossProfit))}>
                 ${results.grossProfit.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600 mt-1">
+              <div className="text-sm text-[#555555] mt-1">
                 {indicator.text} • {results.profitMargin.toFixed(1)}% margin
               </div>
             </div>
@@ -236,35 +236,35 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
         </div>
         {/* Key Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-lg font-bold text-gray-900">
+          <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
+            <div className="text-lg font-bold text-[#1A1A1A]">
               ${results.profitPerAcre.toFixed(0)}
             </div>
-            <div className="text-sm text-gray-600">Profit per Acre</div>
+            <div className="text-sm text-[#555555]">Profit per Acre</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-lg font-bold text-gray-900">
+          <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
+            <div className="text-lg font-bold text-[#1A1A1A]">
               {results.breakEvenYield.toFixed(1)}
             </div>
-            <div className="text-sm text-gray-600">Break-even Yield</div>
+            <div className="text-sm text-[#555555]">Break-even Yield</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-lg font-bold text-gray-900">
+          <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
+            <div className="text-lg font-bold text-[#1A1A1A]">
               ${results.breakEvenPrice.toFixed(2)}
             </div>
-            <div className="text-sm text-gray-600">Break-even Price</div>
+            <div className="text-sm text-[#555555]">Break-even Price</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-lg font-bold text-gray-900">
+          <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
+            <div className="text-lg font-bold text-[#1A1A1A]">
               {results.profitMargin.toFixed(1)}%
             </div>
-            <div className="text-sm text-gray-600">Profit Margin</div>
+            <div className="text-sm text-[#555555]">Profit Margin</div>
           </div>
         </div>
         {/* Detailed Cost Breakdown */}
         {showDetails && (
           <div className="space-y-4">
-            <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+            <h4 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Cost Breakdown (per acre)
             </h4>
@@ -278,17 +278,17 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
                 { key: 'otherCosts', label: 'Other', icon: DollarSign }
               ].map(({ key, label, icon: Icon }) => (
                 <div key={key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1 flex items-center gap-1">
                     <Icon className="h-3 w-3" />
                     {label}
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555555]">$</span>
                     <input
                       type="number"
                       value={inputs[key as keyof CalculatorInputs]}
                       onChange={(e) => updateInput(key as keyof CalculatorInputs, parseFloat(e.target.value) || 0)}
-                      className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-8 pr-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="0"
                       step="0.01"
                     />
@@ -315,7 +315,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
           </div>
         )}
         {results.profitMargin > 15 && (
-          <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+          <div className="bg-[#F8FAF8] border border-[#DDE4D8] p-4 rounded-lg">
             <div className="flex items-start gap-3">
               <TrendingUp className="h-5 w-5 text-green-600 mt-0.5" />
               <div>

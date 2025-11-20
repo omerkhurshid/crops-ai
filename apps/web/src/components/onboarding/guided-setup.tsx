@@ -61,7 +61,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
           id: 'create-farm',
           title: 'Add Your First Farm',
           description: 'Set up your farm location and basic details to get started',
-          icon: <MapPin className="h-6 w-6 text-sage-600" />,
+          icon: <MapPin className="h-6 w-6 text-[#555555]" />,
           href: '/farms/create-unified',
           completed: hasFarms,
           priority: 'essential'
@@ -158,10 +158,10 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
       <ModernCard className={className}>
         <ModernCardContent className="p-8">
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-1/2"></div>
             <div className="space-y-2">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-3 bg-gray-200 rounded"></div>
+                <div key={i} className="h-3 bg-[#F5F5F5] rounded"></div>
               ))}
             </div>
           </div>
@@ -175,29 +175,29 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
         <div className="flex items-center justify-between">
           <div>
             <ModernCardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-sage-600" />
+              <Target className="h-5 w-5 text-[#555555]" />
               Welcome to Crops.AI
               {completedEssentialSteps === totalEssentialSteps && (
-                <Badge className="bg-green-100 text-green-700 border-green-200">
+                <Badge className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Setup Complete!
                 </Badge>
               )}
             </ModernCardTitle>
-            <p className="text-sage-600 mt-2">
+            <p className="text-[#555555] mt-2">
               Let&apos;s get your farm set up in just a few steps. You&apos;ll be tracking crops and getting insights in no time!
             </p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-sage-800">
+            <div className="text-2xl font-bold text-[#1A1A1A]">
               {completedSteps}/{steps.length}
             </div>
-            <div className="text-sm text-sage-600">steps completed</div>
+            <div className="text-sm text-[#555555]">steps completed</div>
           </div>
         </div>
         {/* Progress bar */}
         <div className="mt-4">
-          <div className="flex items-center justify-between text-sm text-sage-600 mb-2">
+          <div className="flex items-center justify-between text-sm text-[#555555] mb-2">
             <span>Essential setup</span>
             <span>{completedEssentialSteps}/{totalEssentialSteps} done</span>
           </div>
@@ -237,7 +237,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
               key={step.id}
               className={`border rounded-lg p-4 transition-all duration-200 ${
                 step.completed 
-                  ? 'border-green-200 bg-green-50' 
+                  ? 'border-[#DDE4D8] bg-[#F8FAF8]' 
                   : priorityColors[step.priority]
               } ${step.href || step.action ? 'hover:shadow-sm cursor-pointer' : ''}`}
               onClick={() => {
@@ -248,7 +248,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
               <div className="flex items-center justify-between">
                 <div className="flex items-start gap-3">
                   <div className={`p-2 rounded-lg ${
-                    step.completed ? 'bg-green-100' : 'bg-white'
+                    step.completed ? 'bg-[#F8FAF8]' : 'bg-white'
                   }`}>
                     {step.completed ? (
                       <CheckCircle className="h-6 w-6 text-green-600" />
@@ -259,7 +259,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className={`font-semibold ${
-                        step.completed ? 'text-green-800' : 'text-gray-900'
+                        step.completed ? 'text-green-800' : 'text-[#1A1A1A]'
                       }`}>
                         {step.title}
                       </h4>
@@ -274,7 +274,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                       </Badge>
                     </div>
                     <p className={`text-sm ${
-                      step.completed ? 'text-green-700' : 'text-gray-600'
+                      step.completed ? 'text-green-700' : 'text-[#555555]'
                     }`}>
                       {step.description}
                     </p>
@@ -289,7 +289,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
         </div>
         {/* Completion celebration */}
         {completedEssentialSteps === totalEssentialSteps && (
-          <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
+          <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-[#DDE4D8] rounded-lg p-4">
             <div className="text-center">
               <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
               <h4 className="font-semibold text-green-800 mb-2">
@@ -300,7 +300,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
               </p>
               <Button 
                 onClick={onComplete}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-[#7A8F78] hover:bg-green-700 text-white"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
                 Start Farming Smarter

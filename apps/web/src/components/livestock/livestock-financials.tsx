@@ -66,7 +66,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
   const getProfitabilityColor = (profitLoss: number) => {
     if (profitLoss > 0) return 'text-green-600'
     if (profitLoss < 0) return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#555555]'
   }
   if (animals.length === 0) {
     return (
@@ -74,8 +74,8 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <div className="text-gray-400 mb-4">
           <DollarSign className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Financial Data Yet</h3>
-        <p className="text-gray-600 mb-6">Add animals and track costs to see financial performance.</p>
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Financial Data Yet</h3>
+        <p className="text-[#555555] mb-6">Add animals and track costs to see financial performance.</p>
         <Link href="/livestock/animals/add">
           <Button>Add Your First Animal</Button>
         </Link>
@@ -98,7 +98,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -108,7 +108,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -120,7 +120,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="profitLoss">Sort by Profit/Loss</option>
           <option value="totalCosts">Sort by Total Costs</option>
@@ -129,20 +129,20 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
       </div>
       {/* Summary Stats */}
       {filteredAnimals.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <DollarSign className="h-5 w-5 text-blue-600 mr-2" />
-              <span className="font-medium text-gray-700">Total Investment</span>
+              <span className="font-medium text-[#555555]">Total Investment</span>
             </div>
-            <p className="text-xl font-bold text-gray-900">${summaryStats.totalInvestment.toLocaleString()}</p>
+            <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalInvestment.toLocaleString()}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <Calculator className="h-5 w-5 text-green-600 mr-2" />
-              <span className="font-medium text-gray-700">Current Value</span>
+              <span className="font-medium text-[#555555]">Current Value</span>
             </div>
-            <p className="text-xl font-bold text-gray-900">${summaryStats.totalValue.toLocaleString()}</p>
+            <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalValue.toLocaleString()}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
@@ -151,7 +151,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
               ) : (
                 <TrendingDown className="h-5 w-5 text-red-600 mr-2" />
               )}
-              <span className="font-medium text-gray-700">Net Profit/Loss</span>
+              <span className="font-medium text-[#555555]">Net Profit/Loss</span>
             </div>
             <p className={`text-xl font-bold ${getProfitabilityColor(summaryStats.totalProfitLoss)}`}>
               {summaryStats.totalProfitLoss >= 0 ? '+' : ''}${summaryStats.totalProfitLoss.toLocaleString()}
@@ -160,7 +160,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <PieChart className="h-5 w-5 text-purple-600 mr-2" />
-              <span className="font-medium text-gray-700">Avg ROI</span>
+              <span className="font-medium text-[#555555]">Avg ROI</span>
             </div>
             <p className={`text-xl font-bold ${getProfitabilityColor(summaryStats.avgROI)}`}>
               {summaryStats.avgROI >= 0 ? '+' : ''}{summaryStats.avgROI.toFixed(1)}%
@@ -171,27 +171,27 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
       {/* Animals Financial Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#FAFAF7]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Animal
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Total Investment
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Current Value
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Profit/Loss
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 ROI
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Performance
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -200,15 +200,15 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
             {sortedAnimals.map((animal) => {
               const roi = getROI(animal)
               return (
-                <tr key={animal.id} className="hover:bg-gray-50">
+                <tr key={animal.id} className="hover:bg-[#FAFAF7]">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-[#1A1A1A]">
                           #{animal.tagNumber}
                         </div>
                         {animal.name && (
-                          <div className="text-sm text-gray-500">{animal.name}</div>
+                          <div className="text-sm text-[#555555]">{animal.name}</div>
                         )}
                         <div className="text-xs text-gray-400">
                           {animal.species} • {animal.farm?.name}
@@ -217,15 +217,15 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-[#1A1A1A]">
                       ${animal.totalCosts.toLocaleString()}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-[#555555]">
                       Purchase: ${(animal.purchasePrice || 0).toLocaleString()}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-[#1A1A1A]">
                       ${(animal.currentValue || 0).toLocaleString()}
                     </div>
                   </td>
@@ -241,7 +241,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {roi >= 20 && (
-                      <Badge className="bg-green-100 text-green-800">Excellent</Badge>
+                      <Badge className="bg-[#F8FAF8] text-green-800">Excellent</Badge>
                     )}
                     {roi >= 10 && roi < 20 && (
                       <Badge className="bg-blue-100 text-blue-800">Good</Badge>
@@ -270,7 +270,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
       </div>
       {filteredAnimals.length === 0 && searchTerm && (
         <div className="text-center py-8">
-          <p className="text-gray-500">No animals found matching your search criteria.</p>
+          <p className="text-[#555555]">No animals found matching your search criteria.</p>
         </div>
       )}
     </div>

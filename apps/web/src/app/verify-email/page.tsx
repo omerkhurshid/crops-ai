@@ -54,17 +54,17 @@ function VerifyEmailContent() {
           <ModernCardContent className="text-center py-8">
             {status === 'verifying' && (
               <div className="space-y-4">
-                <Loader2 className="h-12 w-12 animate-spin text-sage-600 mx-auto" />
-                <p className="text-sage-600">Verifying your email address...</p>
+                <Loader2 className="h-12 w-12 animate-spin text-[#7A8F78] mx-auto" />
+                <p className="text-[#7A8F78]">Verifying your email address...</p>
               </div>
             )}
             {status === 'success' && (
               <div className="space-y-4">
-                <div className="p-3 bg-green-100 rounded-full w-fit mx-auto">
-                  <CheckCircle2 className="h-12 w-12 text-green-600" />
+                <div className="p-3 bg-[#F8FAF8] rounded-full w-fit mx-auto">
+                  <CheckCircle2 className="h-12 w-12 text-[#7A8F78]" />
                 </div>
-                <h3 className="text-xl font-semibold text-sage-800">Email Verified!</h3>
-                <p className="text-sage-600">
+                <h3 className="text-xl font-semibold text-[#7A8F78]">Email Verified!</h3>
+                <p className="text-[#7A8F78]">
                   Your email has been successfully verified. Redirecting to login...
                 </p>
                 <div className="pt-4">
@@ -84,10 +84,10 @@ function VerifyEmailContent() {
                 <div className="p-3 bg-red-100 rounded-full w-fit mx-auto">
                   <XCircle className="h-12 w-12 text-red-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-sage-800">Verification Failed</h3>
-                <p className="text-sage-600">{errorMessage}</p>
+                <h3 className="text-xl font-semibold text-[#7A8F78]">Verification Failed</h3>
+                <p className="text-[#7A8F78]">{errorMessage}</p>
                 <div className="pt-4 space-y-3">
-                  <p className="text-sm text-sage-600">
+                  <p className="text-sm text-[#7A8F78]">
                     The verification link may have expired or is invalid.
                   </p>
                   <Link href="/login">

@@ -109,7 +109,7 @@ export default function WeatherAlertsPage() {
       case 'moderate': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'severe': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'extreme': return 'bg-red-100 text-red-800 border-red-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F5F5F5]'
     }
   }
   const getUrgencyColor = (urgency: string) => {
@@ -117,7 +117,7 @@ export default function WeatherAlertsPage() {
       case 'watch': return 'text-blue-600'
       case 'warning': return 'text-orange-600'
       case 'critical': return 'text-red-600'
-      default: return 'text-gray-600'
+      default: return 'text-[#555555]'
     }
   }
   const formatTime = (isoString: string) => {
@@ -125,11 +125,11 @@ export default function WeatherAlertsPage() {
   }
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAFAF7]">
         <Navbar />
         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
-            <div className="animate-pulse text-gray-500">Loading weather alerts...</div>
+            <div className="animate-pulse text-[#555555]">Loading weather alerts...</div>
           </div>
         </main>
       </div>
@@ -142,13 +142,13 @@ export default function WeatherAlertsPage() {
         <div className="px-4 py-6 sm:px-0">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Weather Alerts</h1>
-            <p className="text-gray-600">Advanced weather monitoring and extreme event alerts</p>
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Weather Alerts</h1>
+            <p className="text-[#555555]">Advanced weather monitoring and extreme event alerts</p>
           </div>
           {/* Controls */}
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <div className="flex items-center space-x-2">
-              <MapPin className="h-4 w-4 text-gray-500" />
+              <MapPin className="h-4 w-4 text-[#555555]" />
               <select
                 value={`${selectedLocation.latitude},${selectedLocation.longitude}`}
                 onChange={(e) => {
@@ -159,7 +159,7 @@ export default function WeatherAlertsPage() {
                     name: e.target.options[e.target.selectedIndex].text
                   })
                 }}
-                className="rounded-md border-gray-300 shadow-sm focus:border-crops-green-500 focus:ring-crops-green-500"
+                className="rounded-md border-[#E6E6E6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
               >
                 <option value="40.7128,-74.0060">New York, NY</option>
                 <option value="39.7391,-104.9847">Denver, CO</option>
@@ -168,11 +168,11 @@ export default function WeatherAlertsPage() {
               </select>
             </div>
             <div className="flex items-center space-x-2">
-              <Settings className="h-4 w-4 text-gray-500" />
+              <Settings className="h-4 w-4 text-[#555555]" />
               <select
                 value={alertType}
                 onChange={(e) => setAlertType(e.target.value as 'basic' | 'advanced' | 'field')}
-                className="rounded-md border-gray-300 shadow-sm focus:border-crops-green-500 focus:ring-crops-green-500"
+                className="rounded-md border-[#E6E6E6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
               >
                 <option value="basic">Basic Alerts</option>
                 <option value="advanced">Advanced Monitoring</option>
@@ -200,10 +200,10 @@ export default function WeatherAlertsPage() {
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Total Alerts</p>
-                      <div className="text-2xl font-bold text-gray-900">{summary.totalAlerts}</div>
+                      <p className="text-sm font-medium text-[#555555]">Total Alerts</p>
+                      <div className="text-2xl font-bold text-[#1A1A1A]">{summary.totalAlerts}</div>
                     </div>
-                    <AlertTriangle className="h-8 w-8 text-gray-400" />
+                    <AlertTriangle className="h-8 w-8 text-[#555555]" />
                   </div>
                 </ModernCardContent>
               </ModernCard>
@@ -211,7 +211,7 @@ export default function WeatherAlertsPage() {
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Active Alerts</p>
+                      <p className="text-sm font-medium text-[#555555]">Active Alerts</p>
                       <div className="text-2xl font-bold text-orange-600">{summary.activeAlertsCount}</div>
                     </div>
                     <TrendingUp className="h-8 w-8 text-orange-600" />
@@ -222,7 +222,7 @@ export default function WeatherAlertsPage() {
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Highest Priority</p>
+                      <p className="text-sm font-medium text-[#555555]">Highest Priority</p>
                       <div className="text-2xl font-bold text-red-600">{summary.highestPriority}</div>
                     </div>
                     <AlertTriangle className="h-8 w-8 text-red-600" />
@@ -233,7 +233,7 @@ export default function WeatherAlertsPage() {
                 <ModernCardContent className="pt-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Severe/Extreme</p>
+                      <p className="text-sm font-medium text-[#555555]">Severe/Extreme</p>
                       <div className="text-2xl font-bold text-red-600">
                         {summary.severityBreakdown.severe + summary.severityBreakdown.extreme}
                       </div>
@@ -248,8 +248,8 @@ export default function WeatherAlertsPage() {
           {alerts.length === 0 ? (
             <ModernCard>
               <ModernCardContent className="pt-6">
-                <div className="text-center text-gray-500 py-8">
-                  <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                <div className="text-center text-[#555555] py-8">
+                  <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-[#E6E6E6]" />
                   <p className="text-lg font-medium">No weather alerts</p>
                   <p className="text-sm">Current conditions are normal for your area</p>
                 </div>
@@ -282,13 +282,13 @@ export default function WeatherAlertsPage() {
                             <Badge variant="outline" className={getUrgencyColor(alert.farmImpact.urgencyLevel)}>
                               {alert.farmImpact.urgencyLevel.toUpperCase()}
                             </Badge>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-[#555555]">
                               Priority: {alert.priority}/10
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="text-right text-sm text-gray-500">
+                      <div className="text-right text-sm text-[#555555]">
                         <div className="flex items-center space-x-1">
                           <Clock className="h-3 w-3" />
                           <span>{formatTime(alert.startTime)}</span>
@@ -309,22 +309,22 @@ export default function WeatherAlertsPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {/* Farm Impact */}
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-3">Farm Impact Assessment</h4>
+                        <h4 className="font-medium text-[#1A1A1A] mb-3">Farm Impact Assessment</h4>
                         <div className="space-y-2">
                           <div>
-                            <span className="text-sm font-medium text-gray-600">Estimated Damage:</span>
+                            <span className="text-sm font-medium text-[#555555]">Estimated Damage:</span>
                             <Badge className={`ml-2 ${
                               alert.farmImpact.estimatedDamage === 'severe' ? 'bg-red-100 text-red-800' :
                               alert.farmImpact.estimatedDamage === 'high' ? 'bg-orange-100 text-orange-800' :
                               alert.farmImpact.estimatedDamage === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
+                              'bg-[#F8FAF8] text-[#7A8F78]'
                             }`}>
                               {alert.farmImpact.estimatedDamage.toUpperCase()}
                             </Badge>
                           </div>
                           {alert.farmImpact.cropsAtRisk.length > 0 && (
                             <div>
-                              <span className="text-sm font-medium text-gray-600">Crops at Risk:</span>
+                              <span className="text-sm font-medium text-[#555555]">Crops at Risk:</span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {alert.farmImpact.cropsAtRisk.map((crop, idx) => (
                                   <Badge key={idx} variant="outline" className="text-xs">
@@ -338,11 +338,11 @@ export default function WeatherAlertsPage() {
                       </div>
                       {/* Action Required */}
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-3">Required Actions</h4>
+                        <h4 className="font-medium text-[#1A1A1A] mb-3">Required Actions</h4>
                         {alert.actionRequired.immediate.length > 0 && (
                           <div className="mb-3">
                             <h5 className="text-sm font-medium text-red-600 mb-1">🚨 Immediate</h5>
-                            <ul className="text-sm text-gray-600 space-y-1">
+                            <ul className="text-sm text-[#555555] space-y-1">
                               {alert.actionRequired.immediate.map((action, idx) => (
                                 <li key={idx} className="flex items-start space-x-1">
                                   <span>•</span>
@@ -355,7 +355,7 @@ export default function WeatherAlertsPage() {
                         {alert.actionRequired.shortTerm.length > 0 && (
                           <div className="mb-3">
                             <h5 className="text-sm font-medium text-orange-600 mb-1">⏰ Short-term</h5>
-                            <ul className="text-sm text-gray-600 space-y-1">
+                            <ul className="text-sm text-[#555555] space-y-1">
                               {alert.actionRequired.shortTerm.map((action, idx) => (
                                 <li key={idx} className="flex items-start space-x-1">
                                   <span>•</span>
@@ -368,7 +368,7 @@ export default function WeatherAlertsPage() {
                         {alert.actionRequired.monitoring.length > 0 && (
                           <div>
                             <h5 className="text-sm font-medium text-blue-600 mb-1">👁️ Monitor</h5>
-                            <ul className="text-sm text-gray-600 space-y-1">
+                            <ul className="text-sm text-[#555555] space-y-1">
                               {alert.actionRequired.monitoring.map((action, idx) => (
                                 <li key={idx} className="flex items-start space-x-1">
                                   <span>•</span>
@@ -383,8 +383,8 @@ export default function WeatherAlertsPage() {
                     {/* Recommendations */}
                     {alert.recommendations.length > 0 && (
                       <div className="mt-4 pt-4 border-t">
-                        <h4 className="font-medium text-gray-900 mb-2">General Recommendations</h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
+                        <h4 className="font-medium text-[#1A1A1A] mb-2">General Recommendations</h4>
+                        <ul className="text-sm text-[#555555] space-y-1">
                           {alert.recommendations.map((rec, idx) => (
                             <li key={idx} className="flex items-start space-x-1">
                               <span>•</span>

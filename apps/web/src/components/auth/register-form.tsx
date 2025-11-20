@@ -45,7 +45,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     strength = checks.filter(Boolean).length
     if (strength < 2) return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
     if (strength < 4) return { level: 'medium', color: 'bg-yellow-500', text: 'Medium' }
-    if (strength >= 4) return { level: 'strong', color: 'bg-green-500', text: 'Strong' }
+    if (strength >= 4) return { level: 'strong', color: 'bg-[#8FBF7F]', text: 'Strong' }
     return { level: 'weak', color: 'bg-red-500', text: 'Weak' }
   }
   const validateForm = () => {
@@ -141,10 +141,10 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
     return (
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-green-600">Welcome to Cropple.ai! 🌱</CardTitle>
+          <CardTitle className="text-[#7A8F78]">Welcome to Cropple.ai! 🌱</CardTitle>
           <CardDescription className="space-y-2">
             <p>Your account has been created successfully!</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#555555]">
               Please check your email for a confirmation link to complete your registration. 
               You can start exploring your dashboard while you wait.
             </p>
@@ -193,7 +193,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Label htmlFor="userType">Primary Interest</Label>
-              <div className="text-xs text-gray-500 flex items-center gap-1">
+              <div className="text-xs text-[#555555] flex items-center gap-1">
                 <Info className="h-3 w-3" />
                 <span>This helps us share relevant features and updates</span>
               </div>
@@ -204,7 +204,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 name="userType"
                 value={formData.userType}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border-2 border-sage-200 hover:border-sage-300 focus-visible:border-sage-400 bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-200 appearance-none"
+                className="flex h-10 w-full rounded-md border-2 border-[#DDE4D8] hover:border-[#7A8F78] focus-visible:border-[#7A8F78] bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDE4D8] appearance-none"
                 disabled={isLoading}
               >
                 <option value="">Select your primary interest</option>
@@ -214,7 +214,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <option value="MIXED">Mixed - Multiple interests</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <svg className="h-4 w-4 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 text-[#555555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -228,7 +228,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border-2 border-sage-200 hover:border-sage-300 focus-visible:border-sage-400 bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-200 appearance-none"
+                className="flex h-10 w-full rounded-md border-2 border-[#DDE4D8] hover:border-[#7A8F78] focus-visible:border-[#7A8F78] bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DDE4D8] appearance-none"
                 disabled={isLoading}
                 required
               >
@@ -237,7 +237,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <option value={UserRole.AGRONOMIST}>Agronomist</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <svg className="h-4 w-4 text-sage-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 text-[#555555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -258,7 +258,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             {formData.password && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-[#F5F5F5] rounded-full h-2">
                     <div 
                       className={`h-2 rounded-full transition-all duration-300 ${
                         getPasswordStrength(formData.password).color
@@ -271,14 +271,14 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                   </div>
                   <span className={`text-xs font-medium ${
                     getPasswordStrength(formData.password).level === 'weak' ? 'text-red-600' :
-                    getPasswordStrength(formData.password).level === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                    getPasswordStrength(formData.password).level === 'medium' ? 'text-yellow-600' : 'text-[#8FBF7F]'
                   }`}>
                     {getPasswordStrength(formData.password).text}
                   </span>
                 </div>
               </div>
             )}
-            <div className="text-xs text-gray-600">
+            <div className="text-xs text-[#555555]">
               Password must have 8+ characters, one uppercase letter, and one special character
             </div>
           </div>
@@ -296,7 +296,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             />
           </div>
           {/* Terms & Conditions and Newsletter */}
-          <div className="space-y-3 pt-2 border-t border-gray-200">
+          <div className="space-y-3 pt-2 border-t border-[#E6E6E6]">
             <div className="flex items-start space-x-2">
               <input
                 id="acceptTerms"
@@ -306,14 +306,14 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 onChange={handleChange}
                 required
                 disabled={isLoading}
-                className="mt-0.5 h-4 w-4 text-sage-600 focus:ring-sage-500 border-gray-300 rounded"
+                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#E6E6E6] rounded"
               />
-              <label htmlFor="acceptTerms" className="text-sm text-gray-700 leading-tight">
+              <label htmlFor="acceptTerms" className="text-sm text-[#555555] leading-tight">
                 I accept the{' '}
                 <a 
                   href="/terms" 
                   target="_blank" 
-                  className="text-sage-600 hover:text-sage-700 underline"
+                  className="text-[#555555] hover:text-[#1A1A1A] underline"
                 >
                   Terms & Conditions
                 </a>{' '}
@@ -321,7 +321,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <a 
                   href="/privacy" 
                   target="_blank" 
-                  className="text-sage-600 hover:text-sage-700 underline"
+                  className="text-[#555555] hover:text-[#1A1A1A] underline"
                 >
                   Privacy Policy
                 </a>
@@ -336,11 +336,11 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 checked={formData.subscribeNewsletter}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="mt-0.5 h-4 w-4 text-sage-600 focus:ring-sage-500 border-gray-300 rounded"
+                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#E6E6E6] rounded"
               />
-              <label htmlFor="subscribeNewsletter" className="text-sm text-gray-700 leading-tight">
+              <label htmlFor="subscribeNewsletter" className="text-sm text-[#555555] leading-tight">
                 <span className="font-medium">Join our newsletter</span> for farming tips, feature updates, and insights to maximize your yield{' '}
-                <span className="text-gray-500">(optional)</span>
+                <span className="text-[#555555]">(optional)</span>
               </label>
             </div>
           </div>
@@ -351,7 +351,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
           )}
           <Button 
             type="submit" 
-            className="w-full bg-sage-600 hover:bg-sage-700 text-white font-medium" 
+            className="w-full bg-[#7A8F78] hover:bg-[#5E6F5A] text-white font-medium" 
             disabled={isLoading}
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
@@ -359,10 +359,10 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
         </form>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-sage-200" />
+            <span className="w-full border-t border-[#DDE4D8]" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-sage-600">Or continue with</span>
+            <span className="bg-white px-2 text-[#555555]">Or continue with</span>
           </div>
         </div>
         <Button

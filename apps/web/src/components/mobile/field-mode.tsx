@@ -269,7 +269,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       id: 'task',
       label: 'Complete Task',
       icon: <CheckCircle2 className="h-8 w-8" />,
-      color: 'bg-green-500 hover:bg-green-600',
+      color: 'bg-[#8FBF7F] hover:bg-[#7A8F78]',
       action: async () => {
         // Quick task completion
         const taskName = prompt('What task did you complete?', 'Checked Field 3 for pests')
@@ -402,13 +402,13 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
           className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all min-h-[56px] min-w-[56px]"
           aria-label="Exit Field Mode"
         >
-          <ArrowLeft className="h-6 w-6 text-gray-700" />
-          <span className="text-lg font-medium text-gray-700">Exit</span>
+          <ArrowLeft className="h-6 w-6 text-[#555555]" />
+          <span className="text-lg font-medium text-[#555555]">Exit</span>
         </button>
         <div className="bg-white rounded-2xl px-6 py-4 shadow-lg">
           <div className="text-center">
             <div className="text-lg font-bold text-green-800">Field Mode</div>
-            <div className="text-sm text-gray-600 flex items-center gap-1">
+            <div className="text-sm text-[#555555] flex items-center gap-1">
               <MapPin className="h-4 w-4" />
               {currentLocation}
             </div>
@@ -416,7 +416,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
         </div>
         <a 
           href="tel:+1-800-CROPS-AI"
-          className="flex items-center gap-3 bg-green-600 text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all min-h-[56px] min-w-[56px]"
+          className="flex items-center gap-3 bg-[#7A8F78] text-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all min-h-[56px] min-w-[56px]"
           aria-label="Call Support"
         >
           <Phone className="h-6 w-6" />
@@ -449,7 +449,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       </div>
       {/* Today's Priority - Simplified view */}
       <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
           <Home className="h-6 w-6 text-green-600" />
           Today's Priority
         </h2>

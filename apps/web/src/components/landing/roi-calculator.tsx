@@ -33,20 +33,20 @@ export function ROICalculator() {
     })
   }
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sage-50/30">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[#F8FAF8]/30">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-light text-[#1A1A1A] mb-4">
             Calculate Your Potential ROI
           </h2>
-          <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#555555] max-w-2xl mx-auto">
             See how Cropple.ai could impact your farming operation's profitability
           </p>
         </div>
         <ModernCard variant="floating">
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <Calculator className="h-5 w-5 text-sage-600" />
+              <Calculator className="h-5 w-5 text-[#555555]" />
               ROI Calculator
             </ModernCardTitle>
             <ModernCardDescription>
@@ -57,27 +57,27 @@ export function ROICalculator() {
             {/* Input Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-sage-700 mb-2">
+                <label className="block text-sm font-medium text-[#555555] mb-2">
                   Farm Size (acres)
                 </label>
                 <input
                   type="number"
                   value={farmSize}
                   onChange={(e) => setFarmSize(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-sage-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500"
+                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-[#7A8F78]"
                   min="1"
                   max="10000"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-sage-700 mb-2">
+                <label className="block text-sm font-medium text-[#555555] mb-2">
                   Current Yield (bushels/acre)
                 </label>
                 <input
                   type="number"
                   value={currentYield}
                   onChange={(e) => setCurrentYield(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-sage-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-sage-500"
+                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-[#7A8F78]"
                   min="50"
                   max="300"
                 />
@@ -85,7 +85,7 @@ export function ROICalculator() {
             </div>
             <Button 
               onClick={calculateROI}
-              className="w-full bg-sage-700 hover:bg-sage-800"
+              className="w-full bg-[#5E6F5A] hover:bg-[#7A8F78]"
               size="lg"
             >
               <Calculator className="h-4 w-4 mr-2" />
@@ -93,12 +93,12 @@ export function ROICalculator() {
             </Button>
             {/* Results Section */}
             {results && (
-              <div className="border-t border-sage-200 pt-6">
-                <h3 className="text-lg font-semibold text-sage-800 mb-4 text-center">
+              <div className="border-t border-[#DDE4D8] pt-6">
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4 text-center">
                   Your Potential Annual Benefits
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
                     <div className="text-2xl font-bold text-green-700">
                       {results.yieldIncrease.toLocaleString()} bu
                     </div>
@@ -120,16 +120,16 @@ export function ROICalculator() {
                     <div className="text-xs text-purple-500 mt-1">Annual ROI</div>
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-sage-50 to-cream-50 rounded-lg p-6 border border-sage-200">
+                <div className="bg-gradient-to-r from-sage-50 to-#FAFAF7 rounded-lg p-6 border border-[#DDE4D8]">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-sage-100 rounded-lg">
-                      <DollarSign className="h-5 w-5 text-sage-700" />
+                    <div className="p-2 bg-[#F8FAF8] rounded-lg">
+                      <DollarSign className="h-5 w-5 text-[#555555]" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-sage-800 mb-2">
+                      <h4 className="font-semibold text-[#1A1A1A] mb-2">
                         Total Annual Value: ${results.totalSavings.toLocaleString()}
                       </h4>
-                      <p className="text-sm text-sage-700">
+                      <p className="text-sm text-[#555555]">
                         These estimates are based on industry averages and research from agricultural universities. 
                         Actual results depend on your specific conditions, but many farmers see improvements within the first season.
                       </p>
@@ -137,7 +137,7 @@ export function ROICalculator() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <Button size="lg" className="bg-sage-700 hover:bg-sage-800">
+                  <Button size="lg" className="bg-[#5E6F5A] hover:bg-[#7A8F78]">
                     <Target className="h-4 w-4 mr-2" />
                     Start Your Free Trial
                   </Button>

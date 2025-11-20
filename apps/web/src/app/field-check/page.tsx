@@ -93,7 +93,7 @@ export default function FieldCheckPage() {
   }
   const quickActions = [
     { icon: Droplets, label: 'Watered', color: 'bg-blue-500' },
-    { icon: Sprout, label: 'Fertilized', color: 'bg-green-500' },
+    { icon: Sprout, label: 'Fertilized', color: 'bg-[#8FBF7F]' },
     { icon: Bug, label: 'Sprayed', color: 'bg-red-500' },
     { icon: CheckCircle, label: 'Harvested', color: 'bg-amber-500' }
   ]
@@ -101,15 +101,15 @@ export default function FieldCheckPage() {
     <DashboardLayout>
       <div className="max-w-2xl mx-auto min-h-screen bg-white">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center gap-4 z-10">
+        <div className="sticky top-0 bg-white border-b border-[#F5F5F5] p-4 flex items-center gap-4 z-10">
           <Link href="/dashboard">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-xl font-semibold text-gray-900">Field Check</h1>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <h1 className="text-xl font-semibold text-[#1A1A1A]">Field Check</h1>
+            <div className="flex items-center gap-2 text-sm text-[#555555]">
               <MapPin className="h-3 w-3" />
               <span>North Field • Corn</span>
             </div>
@@ -138,7 +138,7 @@ export default function FieldCheckPage() {
                 <Button
                   onClick={capturePhoto}
                   size="lg"
-                  className="bg-sage-600 hover:bg-sage-700 rounded-full w-16 h-16 p-0"
+                  className="bg-[#7A8F78] hover:bg-[#5E6F5A] rounded-full w-16 h-16 p-0"
                 >
                   <Camera className="h-8 w-8" />
                 </Button>
@@ -158,7 +158,7 @@ export default function FieldCheckPage() {
                   className="hidden"
                 />
               </div>
-              <p className="text-center text-gray-600">
+              <p className="text-center text-[#555555]">
                 Point camera at your crops for instant AI analysis
               </p>
             </div>
@@ -181,38 +181,38 @@ export default function FieldCheckPage() {
               </div>
               {/* Analysis Results */}
               {isAnalyzing ? (
-                <div className="bg-gray-50 rounded-xl p-6 text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">Analyzing your crops...</p>
+                <div className="bg-[#FAFAF7] rounded-xl p-6 text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto mb-4"></div>
+                  <p className="text-[#555555]">Analyzing your crops...</p>
                 </div>
               ) : analysis ? (
                 <div className="space-y-4">
                   {/* Confidence Score */}
-                  <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                  <div className="bg-[#F8FAF8] rounded-xl p-4 border border-[#DDE4D8]">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-green-800">Analysis Complete</span>
-                      <Badge variant="outline" className="bg-green-100 text-green-800">
+                      <span className="font-semibold text-[#7A8F78]">Analysis Complete</span>
+                      <Badge variant="outline" className="bg-[#F8FAF8] text-[#7A8F78]">
                         {analysis.confidence}% confident
                       </Badge>
                     </div>
-                    <p className="text-green-700 font-medium">{analysis.condition}</p>
+                    <p className="text-[#7A8F78] font-medium">{analysis.condition}</p>
                   </div>
                   {/* Risk Assessment */}
                   <div className="grid grid-cols-3 gap-3">
                     <div className="bg-white border rounded-lg p-3 text-center">
-                      <Bug className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <p className="text-xs text-gray-600">Pest Risk</p>
-                      <p className="font-semibold text-sm text-green-600">{analysis.pestRisk}</p>
+                      <Bug className="h-5 w-5 mx-auto mb-1 text-[#555555]" />
+                      <p className="text-xs text-[#555555]">Pest Risk</p>
+                      <p className="font-semibold text-sm text-[#7A8F78]">{analysis.pestRisk}</p>
                     </div>
                     <div className="bg-white border rounded-lg p-3 text-center">
-                      <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <p className="text-xs text-gray-600">Disease Risk</p>
-                      <p className="font-semibold text-sm text-green-600">{analysis.diseaseRisk}</p>
+                      <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-[#555555]" />
+                      <p className="text-xs text-[#555555]">Disease Risk</p>
+                      <p className="font-semibold text-sm text-[#7A8F78]">{analysis.diseaseRisk}</p>
                     </div>
                     <div className="bg-white border rounded-lg p-3 text-center">
-                      <Sprout className="h-5 w-5 mx-auto mb-1 text-gray-600" />
-                      <p className="text-xs text-gray-600">Nutrition</p>
-                      <p className="font-semibold text-sm text-green-600">{analysis.nutritionStatus}</p>
+                      <Sprout className="h-5 w-5 mx-auto mb-1 text-[#555555]" />
+                      <p className="text-xs text-[#555555]">Nutrition</p>
+                      <p className="font-semibold text-sm text-[#7A8F78]">{analysis.nutritionStatus}</p>
                     </div>
                   </div>
                   {/* Recommendations */}
@@ -233,14 +233,14 @@ export default function FieldCheckPage() {
           )}
         </div>
         {/* Quick Action Logging */}
-        <div className="border-t border-gray-200 p-4">
-          <h3 className="font-semibold text-gray-900 mb-3">Log Field Activity</h3>
+        <div className="border-t border-[#F5F5F5] p-4">
+          <h3 className="font-semibold text-[#1A1A1A] mb-3">Log Field Activity</h3>
           <div className="grid grid-cols-2 gap-3">
             {quickActions.map((action, index) => (
               <Button
                 key={index}
                 variant="outline"
-                className="h-16 flex-col gap-2 hover:bg-gray-50"
+                className="h-16 flex-col gap-2 hover:bg-[#FAFAF7]"
                 onClick={() => {
                   // Log activity to database
                 }}
@@ -252,14 +252,14 @@ export default function FieldCheckPage() {
           </div>
         </div>
         {/* Voice Notes */}
-        <div className="border-t border-gray-200 p-4">
-          <h3 className="font-semibold text-gray-900 mb-3">Voice Notes</h3>
+        <div className="border-t border-[#F5F5F5] p-4">
+          <h3 className="font-semibold text-[#1A1A1A] mb-3">Voice Notes</h3>
           <Button
             variant="outline"
             className="w-full h-12 flex items-center justify-center gap-2"
             onClick={() => setIsRecording(!isRecording)}
           >
-            <Mic className={`h-5 w-5 ${isRecording ? 'text-red-500' : 'text-gray-600'}`} />
+            <Mic className={`h-5 w-5 ${isRecording ? 'text-red-500' : 'text-[#555555]'}`} />
             {isRecording ? 'Stop Recording' : 'Record Voice Note'}
           </Button>
         </div>

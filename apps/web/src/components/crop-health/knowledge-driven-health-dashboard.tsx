@@ -281,8 +281,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       <Card>
         <CardContent className="p-8 text-center">
           <Sprout className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Crops Selected</h3>
-          <p className="text-gray-500 mb-4">
+          <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Crops Selected</h3>
+          <p className="text-[#555555] mb-4">
             Add crops to your farm to get detailed health monitoring and insights
           </p>
           <Button variant="outline">
@@ -302,8 +302,8 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
             onClick={() => setSelectedCrop(crop.cropId)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all whitespace-nowrap ${
               selectedCrop === crop.cropId
-                ? 'border-green-500 bg-green-50 text-green-800'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-[#8FBF7F] bg-[#F8FAF8] text-green-800'
+                : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
             }`}
           >
             <Sprout className="h-4 w-4" />
@@ -322,7 +322,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Overall Health</p>
+                    <p className="text-sm text-[#555555]">Overall Health</p>
                     <p className={`text-2xl font-bold ${getHealthScoreColor(selectedCropData.healthScore)}`}>
                       {selectedCropData.healthScore}%
                     </p>
@@ -336,7 +336,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Growth Stage</p>
+                    <p className="text-sm text-[#555555]">Growth Stage</p>
                     <p className="text-lg font-semibold capitalize">
                       {selectedCropData.currentStage}
                     </p>
@@ -349,7 +349,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Risk Factors</p>
+                    <p className="text-sm text-[#555555]">Risk Factors</p>
                     <p className="text-lg font-semibold">
                       {selectedCropData.riskFactors.length} Active
                     </p>
@@ -378,12 +378,12 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 <CardContent>
                   <div className="space-y-4">
                     {selectedCropData.monitoringParameters.map((param, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={idx} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                         <div className="flex items-center gap-3">
                           {getStatusIcon(param.status)}
                           <div>
                             <p className="font-medium">{param.parameter}</p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-[#555555]">
                               Current: {param.value} | Threshold: {param.threshold}
                             </p>
                           </div>
@@ -451,10 +451,10 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {selectedCropData.optimalConditions.nutrients.map((nutrient, idx) => (
-                      <div key={idx} className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div key={idx} className="text-center p-3 bg-[#FAFAF7] rounded-lg">
                         <p className="font-medium">{nutrient.name}</p>
                         <p className="text-2xl font-bold text-green-600">{Math.round(nutrient.level)}</p>
-                        <p className="text-xs text-gray-600">{nutrient.status}</p>
+                        <p className="text-xs text-[#555555]">{nutrient.status}</p>
                       </div>
                     ))}
                   </div>

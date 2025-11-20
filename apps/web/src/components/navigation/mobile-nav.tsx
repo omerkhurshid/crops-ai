@@ -55,24 +55,24 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
   return (
     <>
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden bg-white border-b border-[#E6E6E6] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-sage-500"
+            className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-sage-500"
             aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <Link href="/dashboard" className="ml-4 text-xl font-semibold text-sage-800">
+          <Link href="/dashboard" className="ml-4 text-xl font-semibold text-[#1A1A1A]">
             Cropple.ai
           </Link>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+          <button className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5]">
             <Search className="h-5 w-5" />
           </button>
-          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 relative">
+          <button className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] relative">
             <Bell className="h-5 w-5" />
             <div className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></div>
           </button>
@@ -92,25 +92,25 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Menu Header */}
-        <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 py-6 border-b border-[#E6E6E6]">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-sage-600 rounded-full flex items-center justify-center">
+            <div className="h-10 w-10 bg-[#7A8F78] rounded-full flex items-center justify-center">
               <span className="text-white font-semibold">
                 {user?.name?.charAt(0) || 'U'}
               </span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-[#1A1A1A]">
                 {user?.name || 'User'}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#555555]">
                 {user?.email || 'user@crops-ai.com'}
               </p>
             </div>
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="p-2 rounded-md text-gray-400 hover:text-[#555555] hover:bg-[#F5F5F5]"
             aria-label="Close menu"
           >
             <X className="h-6 w-6" />
@@ -128,46 +128,46 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
                 className={`
                   flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
                   ${isActive 
-                    ? 'bg-sage-100 text-sage-900 border-l-4 border-sage-600' 
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-[#F8FAF8] text-sage-900 border-l-4 border-[#7A8F78]' 
+                    : 'text-[#555555] hover:bg-[#F5F5F5] hover:text-[#1A1A1A]'
                   }
                 `}
               >
                 <Icon className="h-5 w-5 mr-3" />
                 {item.label}
                 {isActive && (
-                  <div className="ml-auto h-2 w-2 bg-sage-600 rounded-full"></div>
+                  <div className="ml-auto h-2 w-2 bg-[#7A8F78] rounded-full"></div>
                 )}
               </Link>
             )
           })}
         </nav>
         {/* Quick Actions */}
-        <div className="border-t border-gray-200 px-4 py-4">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <div className="border-t border-[#E6E6E6] px-4 py-4">
+          <h3 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-3">
             Quick Actions
           </h3>
           <div className="space-y-2">
-            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">
+            <button className="w-full flex items-center px-3 py-2 text-sm text-[#555555] hover:bg-[#F5F5F5] rounded-lg">
               <DollarSign className="h-4 w-4 mr-2" />
               Add Expense
             </button>
-            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">
+            <button className="w-full flex items-center px-3 py-2 text-sm text-[#555555] hover:bg-[#F5F5F5] rounded-lg">
               <TrendingUp className="h-4 w-4 mr-2" />
               Log Harvest
             </button>
-            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg">
+            <button className="w-full flex items-center px-3 py-2 text-sm text-[#555555] hover:bg-[#F5F5F5] rounded-lg">
               <Cloud className="h-4 w-4 mr-2" />
               Weather Alert
             </button>
           </div>
         </div>
         {/* Menu Footer */}
-        <div className="border-t border-gray-200 px-4 py-4">
+        <div className="border-t border-[#E6E6E6] px-4 py-4">
           <div className="space-y-2">
             <Link
               href="/profile"
-              className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg"
+              className="flex items-center px-3 py-2 text-sm text-[#555555] hover:bg-[#F5F5F5] rounded-lg"
             >
               <User className="h-4 w-4 mr-2" />
               Profile

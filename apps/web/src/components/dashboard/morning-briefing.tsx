@@ -132,14 +132,14 @@ export function MorningBriefing({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
             {/* Farm Status */}
             <div className="pb-6 md:pb-0 md:pr-6">
-              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
                 Farm Status
               </h3>
               <div className="space-y-4">
                 {/* Health Summary - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium text-gray-700">Overall Health</span>
+                    <span className="text-sm font-medium text-[#555555]">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
                   </div>
                   {/* Simplified Progress Display */}
@@ -191,7 +191,7 @@ export function MorningBriefing({
                         {overallHealth >= 80 ? 'Excellent' : 
                          overallHealth >= 60 ? 'Good' : 'Needs Attention'}
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         {overallHealth >= 80 ? 'Most fields look great' :
                          overallHealth >= 60 ? 'Some areas need watching' :
                          'Several fields need attention'}
@@ -209,7 +209,7 @@ export function MorningBriefing({
                       </span>
                       <span className={cn(
                         'text-xs font-medium px-2 py-1 rounded-full',
-                        livestockHealthStatus === 'good' ? 'bg-green-100 text-green-700' :
+                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-green-700' :
                         livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' :
                         'bg-red-100 text-red-700'
                       )}>
@@ -223,23 +223,23 @@ export function MorningBriefing({
                 )}
                 {/* Crop Stats - Clean Professional Layout */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                    <div className="text-xl font-bold text-gray-800">{plantingsCount}</div>
-                    <div className="text-xs text-gray-600 font-medium">Planned</div>
+                  <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
+                    <div className="text-xl font-bold text-[#1A1A1A]">{plantingsCount}</div>
+                    <div className="text-xs text-[#555555] font-medium">Planned</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
                     <div className="text-xl font-bold text-green-700">{growingCount}</div>
-                    <div className="text-xs text-gray-600 font-medium">Growing</div>
+                    <div className="text-xs text-[#555555] font-medium">Growing</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
                     <div className="text-xl font-bold text-amber-700">{readyToHarvestCount}</div>
-                    <div className="text-xs text-gray-600 font-medium">Ready</div>
+                    <div className="text-xs text-[#555555] font-medium">Ready</div>
                   </div>
                 </div>
                 {/* Fields Needing Attention */}
                 {fieldsNeedingAttention.length > 0 && (
                   <div className="mt-2">
-                    <div className="text-xs font-medium text-sage-600 mb-1">Fields needing attention:</div>
+                    <div className="text-xs font-medium text-[#555555] mb-1">Fields needing attention:</div>
                     <div className="flex flex-wrap gap-1">
                       {fieldsNeedingAttention.slice(0, 3).map((field, i) => (
                         <span key={i} className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full">
@@ -247,7 +247,7 @@ export function MorningBriefing({
                         </span>
                       ))}
                       {fieldsNeedingAttention.length > 3 && (
-                        <Link href="/ai-insights" className="text-xs px-2 py-1 bg-sage-100 text-sage-700 rounded-full hover:bg-sage-200">
+                        <Link href="/ai-insights" className="text-xs px-2 py-1 bg-[#F8FAF8] text-[#555555] rounded-full hover:bg-[#DDE4D8]">
                           +{fieldsNeedingAttention.length - 3} more →
                         </Link>
                       )}
@@ -256,13 +256,13 @@ export function MorningBriefing({
                 )}
                 {/* Livestock Status */}
                 {livestockCount > 0 && (
-                  <div className="flex items-center justify-between pt-2 border-t border-sage-200">
-                    <span className="text-sm text-sage-700">Livestock</span>
+                  <div className="flex items-center justify-between pt-2 border-t border-[#DDE4D8]">
+                    <span className="text-sm text-[#555555]">Livestock</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-sage-800">{livestockCount} head</span>
+                      <span className="font-semibold text-[#1A1A1A]">{livestockCount} head</span>
                       <span className={cn(
                         'text-xs px-2 py-0.5 rounded-full',
-                        livestockHealthStatus === 'good' ? 'bg-green-100 text-green-700' :
+                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-green-700' :
                         livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                       )}>
                         {livestockHealthStatus}
@@ -274,55 +274,55 @@ export function MorningBriefing({
             </div>
             {/* Weather Conditions */}
             <div className="py-6 md:py-0 md:px-6">
-              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
                 Weather Conditions
               </h3>
               <div className="space-y-4">
                 {/* Current Weather - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-50 rounded-lg">
                         <WeatherIcon className="h-8 w-8 text-blue-600" />
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-gray-800">
+                        <div className="text-2xl font-bold text-[#1A1A1A]">
                           {formatTemperature(weather.current.temp, preferences)}
                         </div>
-                        <div className="text-sm text-gray-600 capitalize">{weather.current.condition}</div>
+                        <div className="text-sm text-[#555555] capitalize">{weather.current.condition}</div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm text-gray-700 font-medium">H: {weather.today.high}°</div>
-                      <div className="text-sm text-gray-700 font-medium">L: {weather.today.low}°</div>
+                      <div className="text-sm text-[#555555] font-medium">H: {weather.today.high}°</div>
+                      <div className="text-sm text-[#555555] font-medium">L: {weather.today.low}°</div>
                     </div>
                   </div>
                   {/* Weather Metrics */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex items-center gap-2">
                       <Droplets className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm text-gray-700">Rain: {weather.today.precipitation}%</span>
+                      <span className="text-sm text-[#555555]">Rain: {weather.today.precipitation}%</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Wind className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm text-gray-700">Wind: {weather.today.windSpeed} mph</span>
+                      <span className="text-sm text-[#555555]">Wind: {weather.today.windSpeed} mph</span>
                     </div>
                   </div>
                 </div>
                 {/* 3-Day Forecast */}
                 {weather.forecast && weather.forecast.length > 0 && (
                   <div>
-                    <div className="text-xs font-medium text-sage-600 mb-2">3-Day Forecast:</div>
+                    <div className="text-xs font-medium text-[#555555] mb-2">3-Day Forecast:</div>
                     <div className="grid grid-cols-3 gap-2">
                       {weather.forecast.slice(0, 3).map((day, i) => (
-                        <div key={i} className="text-center p-2 bg-sage-50 rounded border">
-                          <div className="text-xs text-sage-600 mb-1">
+                        <div key={i} className="text-center p-2 bg-[#F8FAF8] rounded border">
+                          <div className="text-xs text-[#555555] mb-1">
                             {new Date(day.date).toLocaleDateString('en', { weekday: 'short' })}
                           </div>
-                          <div className="text-sm font-medium text-sage-800">
+                          <div className="text-sm font-medium text-[#1A1A1A]">
                             {day.high}°/{day.low}°
                           </div>
-                          <div className="text-xs text-sage-600 capitalize">{day.condition}</div>
+                          <div className="text-xs text-[#555555] capitalize">{day.condition}</div>
                           <div className="text-xs text-blue-600">{day.precipitation}%</div>
                         </div>
                       ))}
@@ -340,7 +340,7 @@ export function MorningBriefing({
                       <AlertTriangle className="h-4 w-4 text-orange-600" />
                       <span className="text-xs font-medium text-orange-700">Weather Alert</span>
                     </div>
-                    <div className="text-xs text-sage-800">
+                    <div className="text-xs text-[#1A1A1A]">
                       {weather.alerts[0].type}: {weather.alerts[0].message}
                     </div>
                   </div>
@@ -349,20 +349,20 @@ export function MorningBriefing({
             </div>
             {/* Financial Performance */}
             <div className="pt-6 md:pt-0 md:pl-6">
-              <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
                 Financial Performance
               </h3>
               <div className="space-y-4">
                 {/* Net Profit - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-700 font-medium">Net Profit YTD</span>
+                    <span className="text-sm text-[#555555] font-medium">Net Profit YTD</span>
                     <TrendIndicator value={financials.trend} size="sm" />
                   </div>
                   <div className="flex items-center gap-3">
                     <div className={cn(
                       'p-2 rounded-lg',
-                      financials.netYTD >= 0 ? 'bg-green-50' : 'bg-red-50'
+                      financials.netYTD >= 0 ? 'bg-[#F8FAF8]' : 'bg-red-50'
                     )}>
                       <DollarSign className={cn(
                         'h-6 w-6',
@@ -376,7 +376,7 @@ export function MorningBriefing({
                       )}>
                         {financials.netYTD >= 0 ? '' : '-'}{formatCurrency(Math.abs(financials.netYTD), preferences)}
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         {financials.netYTD >= 0 ? 'Profit so far this year' : 'Loss so far this year'}
                       </div>
                     </div>
@@ -384,12 +384,12 @@ export function MorningBriefing({
                   {/* Yearly Progress */}
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-gray-600">Yearly Progress</span>
-                      <span className="text-gray-600">{Math.round((new Date().getMonth() + 1) / 12 * 100)}%</span>
+                      <span className="text-[#555555]">Yearly Progress</span>
+                      <span className="text-[#555555]">{Math.round((new Date().getMonth() + 1) / 12 * 100)}%</span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-[#F5F5F5] rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gray-500 rounded-full transition-all duration-300"
+                        className="h-full bg-[#FAFAF7]0 rounded-full transition-all duration-300"
                         style={{ width: `${(new Date().getMonth() + 1) / 12 * 100}%` }}
                       ></div>
                     </div>
@@ -397,7 +397,7 @@ export function MorningBriefing({
                 </div>
                 <div className="pt-2">
                   <Link href="/financial">
-                    <button className="w-full text-sm px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors flex items-center justify-center gap-2">
+                    <button className="w-full text-sm px-3 py-2 bg-[#F5F5F5] hover:bg-[#F5F5F5] rounded-lg text-[#555555] transition-colors flex items-center justify-center gap-2">
                       <Plus className="h-4 w-4" />
                       Add Transaction
                     </button>
@@ -407,10 +407,10 @@ export function MorningBriefing({
             </div>
           </div>
           {/* Action Bar */}
-          <div className="mt-6 pt-4 border-t border-gray-200">
+          <div className="mt-6 pt-4 border-t border-[#E6E6E6]">
             <div className="flex items-center justify-end">
               <Link href="/crop-health">
-                <button className="text-sm text-gray-700 hover:text-gray-800 font-medium">
+                <button className="text-sm text-[#555555] hover:text-[#1A1A1A] font-medium">
                   View detailed analytics →
                 </button>
               </Link>

@@ -97,16 +97,16 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       severe: 'text-red-600 bg-red-50',
       extreme: 'text-red-800 bg-red-100'
     }
-    return colorMap[severity] || 'text-gray-600 bg-gray-50'
+    return colorMap[severity] || 'text-[#555555] bg-[#FAFAF7]'
   }
   if (loading) {
     return (
       <div className={`p-6 ${className}`}>
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-8 bg-[#F5F5F5] rounded w-1/4"></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              <div key={i} className="h-32 bg-[#F5F5F5] rounded"></div>
             ))}
           </div>
         </div>
@@ -130,7 +130,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">Weather Dashboard</h2>
+        <h2 className="text-2xl font-bold text-[#1A1A1A]">Weather Dashboard</h2>
         <Button onClick={fetchWeatherData} variant="outline" size="sm">
           Refresh
         </Button>
@@ -138,7 +138,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       {/* Active Alerts */}
       {alerts.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-gray-900">Active Weather Alerts</h3>
+          <h3 className="text-lg font-semibold text-[#1A1A1A]">Active Weather Alerts</h3>
           {alerts.map(alert => (
             <Card key={alert.id} className={`border-l-4 ${getSeverityColor(alert.severity)}`}>
               <CardContent className="pt-4">
@@ -146,7 +146,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                   <span className="text-2xl">{getAlertIcon(alert.alertType)}</span>
                   <div className="flex-1">
                     <h4 className="font-semibold">{alert.title}</h4>
-                    <p className="text-sm text-gray-600">{alert.description}</p>
+                    <p className="text-sm text-[#555555]">{alert.description}</p>
                     <div className="mt-2">
                       <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getSeverityColor(alert.severity)}`}>
                         {alert.severity.toUpperCase()}
@@ -154,8 +154,8 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                     </div>
                     {alert.recommendations.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-sm font-medium text-gray-700">Recommendations:</p>
-                        <ul className="text-sm text-gray-600 list-disc list-inside">
+                        <p className="text-sm font-medium text-[#555555]">Recommendations:</p>
+                        <ul className="text-sm text-[#555555] list-disc list-inside">
                           {alert.recommendations.map((rec: string, index: number) => (
                             <li key={index}>{rec}</li>
                           ))}
@@ -179,7 +179,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
               </span>
               <div>
                 <div className="text-2xl">{Math.round(currentWeather.temperature)}°C</div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-[#555555]">
                   Feels like {Math.round(currentWeather.feelsLike)}°C
                 </div>
               </div>
@@ -192,19 +192,19 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Humidity</p>
+                <p className="text-sm text-[#555555]">Humidity</p>
                 <p className="font-semibold">{currentWeather.humidity}%</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Wind</p>
+                <p className="text-sm text-[#555555]">Wind</p>
                 <p className="font-semibold">{Math.round(currentWeather.windSpeed * 3.6)} km/h</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Pressure</p>
+                <p className="text-sm text-[#555555]">Pressure</p>
                 <p className="font-semibold">{currentWeather.pressure} hPa</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Cloud Cover</p>
+                <p className="text-sm text-[#555555]">Cloud Cover</p>
                 <p className="font-semibold">{currentWeather.cloudCover}%</p>
               </div>
             </div>
@@ -220,8 +220,8 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {forecast.map(day => (
-                <div key={day.id} className="text-center p-3 rounded-lg bg-gray-50">
-                  <p className="text-sm font-medium text-gray-600">
+                <div key={day.id} className="text-center p-3 rounded-lg bg-[#FAFAF7]">
+                  <p className="text-sm font-medium text-[#555555]">
                     {new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}
                   </p>
                   <div className="text-2xl my-2">
@@ -230,7 +230,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                   <p className="text-sm font-semibold">
                     {Math.round(day.temperature.max)}° / {Math.round(day.temperature.min)}°
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-[#555555] mt-1">
                     {day.precipitationProbability}% rain
                   </p>
                 </div>
@@ -252,13 +252,13 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {agricultureData.growingDegreeDays !== undefined && (
                 <div>
-                  <p className="text-sm text-gray-600">Growing Degree Days</p>
+                  <p className="text-sm text-[#555555]">Growing Degree Days</p>
                   <p className="font-semibold">{Math.round(agricultureData.growingDegreeDays)}</p>
                 </div>
               )}
               {agricultureData.frostRisk && (
                 <div>
-                  <p className="text-sm text-gray-600">Frost Risk</p>
+                  <p className="text-sm text-[#555555]">Frost Risk</p>
                   <p className={`font-semibold capitalize ${
                     agricultureData.frostRisk === 'high' ? 'text-red-600' :
                     agricultureData.frostRisk === 'moderate' ? 'text-orange-600' :
@@ -270,7 +270,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
               )}
               {agricultureData.heatStress && (
                 <div>
-                  <p className="text-sm text-gray-600">Heat Stress</p>
+                  <p className="text-sm text-[#555555]">Heat Stress</p>
                   <p className={`font-semibold capitalize ${
                     agricultureData.heatStress === 'severe' ? 'text-red-800' :
                     agricultureData.heatStress === 'high' ? 'text-red-600' :
@@ -283,7 +283,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
               )}
               {agricultureData.evapotranspiration !== undefined && (
                 <div>
-                  <p className="text-sm text-gray-600">ET₀ (mm/day)</p>
+                  <p className="text-sm text-[#555555]">ET₀ (mm/day)</p>
                   <p className="font-semibold">{agricultureData.evapotranspiration.toFixed(1)}</p>
                 </div>
               )}

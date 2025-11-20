@@ -94,19 +94,19 @@ export default function AddLivestockEventPage() {
         <div className="mb-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-sage-600 hover:text-sage-700 mb-4"
+            className="flex items-center gap-2 text-[#7A8F78] hover:text-[#5E6F5A] mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Livestock
           </button>
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Add Livestock Event</h1>
-          <p className="text-lg text-sage-600">Record a new livestock event or activity</p>
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Add Livestock Event</h1>
+          <p className="text-lg text-[#7A8F78]">Record a new livestock event or activity</p>
         </div>
         <ModernCard variant="floating">
           <ModernCardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-sage-100 rounded-lg">
-                <Users className="h-5 w-5 text-sage-600" />
+              <div className="p-2 bg-[#F8FAF8] rounded-lg">
+                <Users className="h-5 w-5 text-[#7A8F78]" />
               </div>
               <ModernCardTitle>Livestock Event Details</ModernCardTitle>
             </div>
@@ -120,7 +120,7 @@ export default function AddLivestockEventPage() {
                     id="farmId"
                     value={formData.farmId}
                     onChange={(e) => setFormData(prev => ({ ...prev, farmId: e.target.value }))}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     <option value="">Select a farm</option>
@@ -149,7 +149,7 @@ export default function AddLivestockEventPage() {
                     id="livestockType"
                     value={formData.livestockType}
                     onChange={(e) => setFormData(prev => ({ ...prev, livestockType: e.target.value }))}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     {livestockTypes.map(type => (
@@ -163,7 +163,7 @@ export default function AddLivestockEventPage() {
                     id="eventType"
                     value={formData.eventType}
                     onChange={(e) => setFormData(prev => ({ ...prev, eventType: e.target.value }))}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     {eventTypes.map(type => (
@@ -189,7 +189,7 @@ export default function AddLivestockEventPage() {
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                  className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                   rows={3}
                   placeholder="Add any additional details about this event..."
                 />
@@ -198,7 +198,7 @@ export default function AddLivestockEventPage() {
                 <Button 
                   type="submit" 
                   disabled={loading}
-                  className="bg-sage-600 hover:bg-sage-700"
+                  className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
                 >
                   {loading ? 'Adding Event...' : 'Add Livestock Event'}
                 </Button>

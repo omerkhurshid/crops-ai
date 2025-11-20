@@ -102,7 +102,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       severe: 'bg-red-100 text-red-800 border-red-200',
       extreme: 'bg-red-200 text-red-900 border-red-300'
     }
-    return colors[severity] || 'bg-gray-100 text-gray-800 border-gray-200'
+    return colors[severity] || 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]'
   }
   const getUrgencyColor = (urgency: string) => {
     const colors: Record<string, string> = {
@@ -110,17 +110,17 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       today: 'bg-orange-100 text-orange-800',
       'this-week': 'bg-blue-100 text-blue-800'
     }
-    return colors[urgency] || 'bg-gray-100 text-gray-800'
+    return colors[urgency] || 'bg-[#F5F5F5] text-[#1A1A1A]'
   }
   if (loading) {
     return (
       <ModernCard className={className}>
         <ModernCardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-sage-200 rounded w-1/3"></div>
+            <div className="h-6 bg-[#DDE4D8] rounded w-1/3"></div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[1, 2, 3].map(i => (
-                <div key={i} className="h-24 bg-sage-100 rounded"></div>
+                <div key={i} className="h-24 bg-[#F8FAF8] rounded"></div>
               ))}
             </div>
           </div>
@@ -177,7 +177,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
             </div>
             {/* Detailed Conditions */}
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
+              <div className="flex items-center gap-2 p-2 bg-[#F8FAF8] rounded">
                 <Droplets className="h-4 w-4 text-blue-500" />
                 <span>{weather.current.humidity}% humidity</span>
                 <InfoTooltip 
@@ -186,8 +186,8 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
                   size="sm"
                 />
               </div>
-              <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
-                <Wind className="h-4 w-4 text-gray-500" />
+              <div className="flex items-center gap-2 p-2 bg-[#F8FAF8] rounded">
+                <Wind className="h-4 w-4 text-[#555555]" />
                 <span>{weather.current.windSpeed} km/h {weather.current.windDirection}</span>
                 <InfoTooltip 
                   title="Wind Speed" 
@@ -195,11 +195,11 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
                   size="sm"
                 />
               </div>
-              <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
+              <div className="flex items-center gap-2 p-2 bg-[#F8FAF8] rounded">
                 <Sunrise className="h-4 w-4 text-yellow-500" />
                 <span>Sunrise {weather.today.sunrise}</span>
               </div>
-              <div className="flex items-center gap-2 p-2 bg-sage-50 rounded">
+              <div className="flex items-center gap-2 p-2 bg-[#F8FAF8] rounded">
                 <Sunset className="h-4 w-4 text-orange-500" />
                 <span>Sunset {weather.today.sunset}</span>
               </div>
@@ -207,12 +207,12 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
           </div>
           {/* Right: Farming Actions */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sage-800 flex items-center gap-2">
+            <h4 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
               <Target className="h-4 w-4 text-green-600" />
               Weather-Based Actions
             </h4>
             {weather.farmingActions.map((action) => (
-              <div key={action.id} className="bg-white border border-sage-200 rounded-lg p-3">
+              <div key={action.id} className="bg-white border border-[#DDE4D8] rounded-lg p-3">
                 <div className="flex items-start gap-2 mb-2">
                   <Badge className={`text-xs ${getUrgencyColor(action.urgency)}`}>
                     {action.urgency.toUpperCase()}
@@ -225,8 +225,8 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
                   )}
                 </div>
                 <h5 className="font-medium text-sage-900 mb-1">{action.action}</h5>
-                <p className="text-xs text-sage-600 mb-2">{action.reason}</p>
-                <div className="bg-green-50 p-2 rounded text-xs text-green-800">
+                <p className="text-xs text-[#555555] mb-2">{action.reason}</p>
+                <div className="bg-[#F8FAF8] p-2 rounded text-xs text-green-800">
                   <strong>Impact:</strong> {action.impact}
                 </div>
               </div>
@@ -235,16 +235,16 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
         </div>
         {/* 4-Day Forecast */}
         <div>
-          <h4 className="font-semibold text-sage-800 mb-3 flex items-center gap-2">
+          <h4 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             4-Day Outlook
           </h4>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {weather.forecast.map((day) => (
-              <div key={day.date} className="bg-white border border-sage-200 rounded-lg p-3 text-center">
-                <div className="text-sm font-medium text-sage-800 mb-1">{day.day}</div>
+              <div key={day.date} className="bg-white border border-[#DDE4D8] rounded-lg p-3 text-center">
+                <div className="text-sm font-medium text-[#1A1A1A] mb-1">{day.day}</div>
                 <div className="text-2xl mb-2">{day.icon}</div>
-                <div className="text-sm text-sage-600 mb-1">{day.condition}</div>
+                <div className="text-sm text-[#555555] mb-1">{day.condition}</div>
                 <div className="text-sm font-medium">
                   {day.high}° / {day.low}°
                 </div>

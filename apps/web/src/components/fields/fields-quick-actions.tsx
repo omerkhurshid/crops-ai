@@ -16,13 +16,13 @@ export function FieldsQuickActions({ isQuickMode = false }: FieldsQuickActionsPr
             : '/fields/create'
           router.push(url)
         }}
-        className="w-full bg-sage-600 hover:bg-sage-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+        className="w-full bg-[#7A8F78] hover:bg-[#5E6F5A] text-white px-6 py-3 rounded-lg font-medium transition-colors"
       >
         Create Your First Field
       </button>
       <button
         onClick={() => router.push('/fields/quick-setup')}
-        className="w-full bg-white hover:bg-sage-50 text-sage-700 border border-sage-300 px-6 py-3 rounded-lg font-medium transition-colors"
+        className="w-full bg-white hover:bg-[#F8FAF8] text-[#555555] border border-[#DDE4D8] px-6 py-3 rounded-lg font-medium transition-colors"
       >
         Quick Setup
       </button>

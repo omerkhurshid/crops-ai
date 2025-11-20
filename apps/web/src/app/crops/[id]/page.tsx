@@ -94,20 +94,20 @@ export default function CropDetailPage() {
   }, [cropId])
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading crop details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7A8F78] mx-auto mb-4"></div>
+          <p className="text-[#555555]">Loading crop details...</p>
         </div>
       </div>
     )
   }
   if (error || !crop) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Crop Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The requested crop could not be found.'}</p>
+          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-4">Crop Not Found</h1>
+          <p className="text-[#555555] mb-6">{error || 'The requested crop could not be found.'}</p>
           <Link href="/dashboard">
             <Button>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -119,7 +119,7 @@ export default function CropDetailPage() {
     )
   }
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAFAF7]">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -132,8 +132,8 @@ export default function CropDetailPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{crop.name}</h1>
-                <p className="text-lg text-gray-600 italic">{crop.scientific_name}</p>
+                <h1 className="text-3xl font-bold text-[#1A1A1A]">{crop.name}</h1>
+                <p className="text-lg text-[#555555] italic">{crop.scientific_name}</p>
               </div>
             </div>
             <Badge variant="secondary" className="text-lg px-4 py-2">
@@ -157,10 +157,10 @@ export default function CropDetailPage() {
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
-                    <Calendar className="h-5 w-5 text-sage-600" />
+                    <Calendar className="h-5 w-5 text-[#7A8F78]" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Maturity</p>
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-[#555555]">Maturity</p>
+                      <p className="text-2xl font-bold text-[#1A1A1A]">
                         {crop.days_to_maturity_min}-{crop.days_to_maturity_max} days
                       </p>
                     </div>
@@ -170,10 +170,10 @@ export default function CropDetailPage() {
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
-                    <TrendingUp className="h-5 w-5 text-sage-600" />
+                    <TrendingUp className="h-5 w-5 text-[#7A8F78]" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Avg. Yield</p>
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-[#555555]">Avg. Yield</p>
+                      <p className="text-2xl font-bold text-[#1A1A1A]">
                         {(crop.average_yield_kg_per_hectare / 1000).toFixed(1)} t/ha
                       </p>
                     </div>
@@ -183,10 +183,10 @@ export default function CropDetailPage() {
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
-                    <Droplets className="h-5 w-5 text-sage-600" />
+                    <Droplets className="h-5 w-5 text-[#7A8F78]" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Water Needs</p>
-                      <p className="text-2xl font-bold text-gray-900 capitalize">
+                      <p className="text-sm font-medium text-[#555555]">Water Needs</p>
+                      <p className="text-2xl font-bold text-[#1A1A1A] capitalize">
                         {crop.water_requirements}
                       </p>
                     </div>
@@ -196,10 +196,10 @@ export default function CropDetailPage() {
               <ModernCard>
                 <ModernCardContent className="p-6">
                   <div className="flex items-center space-x-2">
-                    <Thermometer className="h-5 w-5 text-sage-600" />
+                    <Thermometer className="h-5 w-5 text-[#7A8F78]" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">pH Range</p>
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-[#555555]">pH Range</p>
+                      <p className="text-2xl font-bold text-[#1A1A1A]">
                         {crop.soil_ph_min}-{crop.soil_ph_max}
                       </p>
                     </div>
@@ -246,19 +246,19 @@ export default function CropDetailPage() {
               <ModernCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-2">Frost Tolerance</p>
+                    <p className="text-sm font-medium text-[#555555] mb-2">Frost Tolerance</p>
                     <Badge variant={crop.frost_tolerance === 'none' ? 'destructive' : 'secondary'}>
                       {crop.frost_tolerance.charAt(0).toUpperCase() + crop.frost_tolerance.slice(1)}
                     </Badge>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-2">Drought Tolerance</p>
+                    <p className="text-sm font-medium text-[#555555] mb-2">Drought Tolerance</p>
                     <Badge variant={crop.drought_tolerance === 'high' ? 'default' : 'secondary'}>
                       {crop.drought_tolerance.charAt(0).toUpperCase() + crop.drought_tolerance.slice(1)}
                     </Badge>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-2">Heat Tolerance</p>
+                    <p className="text-sm font-medium text-[#555555] mb-2">Heat Tolerance</p>
                     <Badge variant={crop.heat_tolerance === 'high' ? 'default' : 'secondary'}>
                       {crop.heat_tolerance.charAt(0).toUpperCase() + crop.heat_tolerance.slice(1)}
                     </Badge>
@@ -275,20 +275,20 @@ export default function CropDetailPage() {
                 <ModernCardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-sage-600">{crop.nutrition_data.calories_per_100g}</p>
-                      <p className="text-sm text-gray-600">Calories</p>
+                      <p className="text-2xl font-bold text-[#7A8F78]">{crop.nutrition_data.calories_per_100g}</p>
+                      <p className="text-sm text-[#555555]">Calories</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-sage-600">{crop.nutrition_data.protein_g}g</p>
-                      <p className="text-sm text-gray-600">Protein</p>
+                      <p className="text-2xl font-bold text-[#7A8F78]">{crop.nutrition_data.protein_g}g</p>
+                      <p className="text-sm text-[#555555]">Protein</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-sage-600">{crop.nutrition_data.carbohydrates_g}g</p>
-                      <p className="text-sm text-gray-600">Carbs</p>
+                      <p className="text-2xl font-bold text-[#7A8F78]">{crop.nutrition_data.carbohydrates_g}g</p>
+                      <p className="text-sm text-[#555555]">Carbs</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-sage-600">{crop.nutrition_data.fiber_g}g</p>
-                      <p className="text-sm text-gray-600">Fiber</p>
+                      <p className="text-2xl font-bold text-[#7A8F78]">{crop.nutrition_data.fiber_g}g</p>
+                      <p className="text-sm text-[#555555]">Fiber</p>
                     </div>
                   </div>
                 </ModernCardContent>
@@ -307,7 +307,7 @@ export default function CropDetailPage() {
               <ModernCardContent>
                 <div className="flex flex-wrap gap-2">
                   {crop.companion_plants.map((plant, index) => (
-                    <Badge key={index} variant="outline" className="text-green-700 border-green-300">
+                    <Badge key={index} variant="outline" className="text-[#7A8F78] border-[#DDE4D8]">
                       {plant.charAt(0).toUpperCase() + plant.slice(1)}
                     </Badge>
                   ))}
@@ -367,7 +367,7 @@ export default function CropDetailPage() {
                     <ModernCardContent>
                       <div className="space-y-4">
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2">Disease Resistance</p>
+                          <p className="text-sm font-medium text-[#555555] mb-2">Disease Resistance</p>
                           <div className="flex flex-wrap gap-1">
                             {variety.disease_resistance.map((disease, i) => (
                               <Badge key={i} variant="secondary" className="text-xs">
@@ -377,7 +377,7 @@ export default function CropDetailPage() {
                           </div>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Maturity:</span>
+                          <span className="text-[#555555]">Maturity:</span>
                           <span className="font-medium">{variety.maturity_days} days</span>
                         </div>
                       </div>
@@ -388,7 +388,7 @@ export default function CropDetailPage() {
             ) : (
               <ModernCard>
                 <ModernCardContent className="p-8 text-center">
-                  <p className="text-gray-600">No specific varieties available in the database yet.</p>
+                  <p className="text-[#555555]">No specific varieties available in the database yet.</p>
                 </ModernCardContent>
               </ModernCard>
             )}
@@ -404,9 +404,9 @@ export default function CropDetailPage() {
               <ModernCardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {crop.major_producing_countries.map((country, index) => (
-                    <div key={index} className="text-center p-4 bg-gray-50 rounded-lg">
-                      <p className="font-medium text-gray-900">{country}</p>
-                      <p className="text-sm text-gray-600">#{index + 1} Producer</p>
+                    <div key={index} className="text-center p-4 bg-[#FAFAF7] rounded-lg">
+                      <p className="font-medium text-[#1A1A1A]">{country}</p>
+                      <p className="text-sm text-[#555555]">#{index + 1} Producer</p>
                     </div>
                   ))}
                 </div>
@@ -419,14 +419,14 @@ export default function CropDetailPage() {
               <ModernCardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-2">Growth Habit</p>
+                    <p className="text-sm font-medium text-[#555555] mb-2">Growth Habit</p>
                     <Badge variant="outline">
                       {crop.growth_habit.charAt(0).toUpperCase() + crop.growth_habit.slice(1)}
                     </Badge>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-2">Global Production</p>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-sm font-medium text-[#555555] mb-2">Global Production</p>
+                    <p className="text-lg font-bold text-[#1A1A1A]">
                       {(crop.global_production_tonnes / 1000000).toFixed(0)}M tonnes/year
                     </p>
                   </div>

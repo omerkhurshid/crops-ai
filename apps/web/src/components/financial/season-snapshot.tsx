@@ -47,21 +47,21 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
     <div className="space-y-6">
       {/* Main Profit Overview */}
       <ModernCard variant="floating" className="overflow-hidden">
-        <ModernCardContent className="p-8 bg-gradient-to-r from-sage-50 to-cream-50">
+        <ModernCardContent className="p-8 bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-light text-sage-800">Financial Overview</h2>
+            <h2 className="text-2xl font-light text-[#1A1A1A]">Financial Overview</h2>
             <div className="flex items-center space-x-2">
-              <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+              <Badge className="bg-[#F8FAF8] text-[#555555] border-[#DDE4D8]">
                 {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}
               </Badge>
-              <Badge className="bg-earth-100 text-earth-700 border-earth-200">
+              <Badge className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
                 {summary.transactionCount} transactions
               </Badge>
             </div>
           </div>
         {/* Main Profit Display */}
-        <div className="text-center py-6 border-b border-gray-200">
-          <p className="text-sm text-gray-600 mb-2">Net Profit</p>
+        <div className="text-center py-6 border-b border-[#E6E6E6]">
+          <p className="text-sm text-[#555555] mb-2">Net Profit</p>
           <p className={`text-4xl font-bold ${
             summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
           }`}>

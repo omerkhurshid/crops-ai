@@ -445,8 +445,8 @@ export function UnifiedFarmCreator() {
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Farm</h1>
-        <p className="text-lg text-gray-600">Set up your farm profile and map your fields</p>
+        <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Create Your Farm</h1>
+        <p className="text-lg text-[#555555]">Set up your farm profile and map your fields</p>
       </div>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Basic Information */}
@@ -480,15 +480,15 @@ export function UnifiedFarmCreator() {
                       onClick={() => setFarm(prev => ({ ...prev, type: type.id }))}
                       className={`p-3 rounded-lg border-2 transition-all text-left ${
                         farm.type === type.id
-                          ? 'border-green-500 bg-green-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-[#8FBF7F] bg-[#F8FAF8]'
+                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
                         <Icon className="h-4 w-4" />
                         <span className="font-medium text-sm">{type.label}</span>
                       </div>
-                      <p className="text-xs text-gray-600">{type.desc}</p>
+                      <p className="text-xs text-[#555555]">{type.desc}</p>
                     </button>
                   )
                 })}
@@ -560,7 +560,7 @@ export function UnifiedFarmCreator() {
               </Button>
             </div>
             {farm.location.lat !== 0 && (
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
                 <div className="flex items-center gap-2 text-sm text-green-600">
                   <CheckCircle className="h-4 w-4" />
                   Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
@@ -612,10 +612,10 @@ export function UnifiedFarmCreator() {
           </ModernCardHeader>
           <ModernCardContent>
             {!showMap ? (
-              <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <div className="h-96 flex items-center justify-center bg-[#FAFAF7] rounded-lg border-2 border-dashed border-[#E6E6E6]">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-4">Set your farm location first</p>
+                  <p className="text-[#555555] mb-4">Set your farm location first</p>
                   <Button
                     onClick={() => setShowMap(true)}
                     disabled={farm.location.lat === 0}
@@ -717,10 +717,10 @@ export function UnifiedFarmCreator() {
                 {/* Enhanced Map Instructions */}
                 <div className="space-y-3">
                   {!hasValidBoundaries ? (
-                    <Alert className="border-green-200 bg-green-50">
+                    <Alert className="border-[#DDE4D8] bg-[#F8FAF8]">
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0">
-                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-[#8FBF7F] rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-sm">1</span>
                           </div>
                         </div>
@@ -730,8 +730,8 @@ export function UnifiedFarmCreator() {
                           </AlertDescription>
                         </div>
                         <div className="flex-shrink-0">
-                          <div className="bg-green-200 p-2 rounded-lg animate-pulse">
-                            <div className="w-6 h-6 border-2 border-green-600 bg-green-100 flex items-center justify-center text-xs">📐</div>
+                          <div className="bg-[#DDE4D8] p-2 rounded-lg animate-pulse">
+                            <div className="w-6 h-6 border-2 border-[#7A8F78] bg-[#F8FAF8] flex items-center justify-center text-xs">📐</div>
                           </div>
                         </div>
                       </div>
@@ -745,8 +745,8 @@ export function UnifiedFarmCreator() {
                     </Alert>
                   )}
                   {farm.totalArea && (
-                    <div className="text-center p-3 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600">
+                    <div className="text-center p-3 bg-[#FAFAF7] rounded-lg">
+                      <p className="text-sm text-[#555555]">
                         Farm Area: <span className="font-semibold text-green-600">{farm.totalArea} acres</span>
                       </p>
                     </div>
@@ -754,8 +754,8 @@ export function UnifiedFarmCreator() {
                 </div>
               </div>
             ) : (
-              <div className="h-96 flex items-center justify-center bg-gray-50 rounded-lg">
-                <p className="text-gray-600">Google Maps API key required</p>
+              <div className="h-96 flex items-center justify-center bg-[#FAFAF7] rounded-lg">
+                <p className="text-[#555555]">Google Maps API key required</p>
               </div>
             )}
           </ModernCardContent>
@@ -791,7 +791,7 @@ export function UnifiedFarmCreator() {
               {farm.fields && farm.fields.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {farm.fields.map((field, index) => (
-                    <div key={field.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={field.id} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex items-center gap-3">
                         <div
                           className="w-4 h-4 rounded-full border-2 border-white shadow"
@@ -799,7 +799,7 @@ export function UnifiedFarmCreator() {
                         />
                         <div>
                           <p className="font-medium">{field.name}</p>
-                          <p className="text-sm text-gray-600">{field.area} acres</p>
+                          <p className="text-sm text-[#555555]">{field.area} acres</p>
                         </div>
                       </div>
                       <Button
@@ -813,7 +813,7 @@ export function UnifiedFarmCreator() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-[#555555]">
                   <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                   <p className="font-medium">No fields created yet</p>
                   <p className="text-sm">Use the polygon tool on the map above to draw field boundaries</p>
@@ -851,7 +851,7 @@ export function UnifiedFarmCreator() {
                 </>
               )}
             </Button>
-            <p className="text-sm text-gray-600 text-center mt-3">
+            <p className="text-sm text-[#555555] text-center mt-3">
               {hasValidBoundaries 
                 ? "Fields are optional - you can add them later from your dashboard"
                 : "Farm boundaries are optional - you can add them later for field mapping"

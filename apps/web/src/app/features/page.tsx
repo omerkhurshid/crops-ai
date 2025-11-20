@@ -95,24 +95,24 @@ export default function FeaturesPage() {
       <Navbar />
       {/* Animated Background */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <Layers className="h-8 w-8 text-sage-600" />
+        <Layers className="h-8 w-8 text-[#7A8F78]" />
       </div>
       <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Target className="h-8 w-8 text-sage-600" />
+        <Target className="h-8 w-8 text-[#7A8F78]" />
       </div>
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-20">
-          <Badge className="bg-sage-100 text-sage-700 border-sage-200 mb-8 px-6 py-2 text-sm">
+          <Badge className="bg-[#F8FAF8] text-[#5E6F5A] border-[#DDE4D8] mb-8 px-6 py-2 text-sm">
             <Zap className="h-4 w-4 mr-2" />
             Comprehensive Feature Set
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-8 tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-light text-[#7A8F78] mb-8 tracking-tight">
             Everything You Need for
             <br />
-            <span className="text-sage-500">Smart Farming</span>
+            <span className="text-[#7A8F78]">Smart Farming</span>
           </h1>
-          <p className="text-xl text-sage-600 font-light leading-relaxed mb-12 max-w-3xl mx-auto">
+          <p className="text-xl text-[#7A8F78] font-light leading-relaxed mb-12 max-w-3xl mx-auto">
             From real-time crop monitoring to financial forecasting, Cropple.ai provides a complete 
             suite of AI-powered tools for modern agriculture.
           </p>
@@ -142,8 +142,8 @@ export default function FeaturesPage() {
         {/* Core Features Grid */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">Core Features</h2>
-            <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-[#7A8F78] mb-4">Core Features</h2>
+            <p className="text-lg text-[#7A8F78] max-w-2xl mx-auto">
               Four pillars of intelligent farm management working together to optimize your operations
             </p>
           </div>
@@ -152,11 +152,11 @@ export default function FeaturesPage() {
               <ModernCard key={index} variant="floating" className="hover:scale-105 transition-all duration-300">
                 <ModernCardHeader>
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-sage-100 rounded-xl text-sage-700">
+                    <div className="p-3 bg-[#F8FAF8] rounded-xl text-[#5E6F5A]">
                       {feature.icon}
                     </div>
                     <div>
-                      <ModernCardTitle className="text-xl text-sage-800">{feature.title}</ModernCardTitle>
+                      <ModernCardTitle className="text-xl text-[#7A8F78]">{feature.title}</ModernCardTitle>
                     </div>
                   </div>
                   <ModernCardDescription className="mt-3">
@@ -166,8 +166,8 @@ export default function FeaturesPage() {
                 <ModernCardContent>
                   <ul className="space-y-2">
                     {feature.features.map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm text-sage-600">
-                        <CheckCircle className="h-4 w-4 text-sage-500" />
+                      <li key={idx} className="flex items-center gap-2 text-sm text-[#7A8F78]">
+                        <CheckCircle className="h-4 w-4 text-[#7A8F78]" />
                         {item}
                       </li>
                     ))}
@@ -180,8 +180,8 @@ export default function FeaturesPage() {
         {/* Advanced Features */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">Advanced Capabilities</h2>
-            <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-[#7A8F78] mb-4">Advanced Capabilities</h2>
+            <p className="text-lg text-[#7A8F78] max-w-2xl mx-auto">
               Sophisticated tools for precision agriculture and data-driven decision making
             </p>
           </div>
@@ -190,12 +190,12 @@ export default function FeaturesPage() {
               <ModernCard key={index} variant="soft" className="hover:variant-floating transition-all duration-300">
                 <ModernCardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-2 bg-sage-100 rounded-lg text-sage-700 mt-1">
+                    <div className="p-2 bg-[#F8FAF8] rounded-lg text-[#5E6F5A] mt-1">
                       {feature.icon}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-sage-800 mb-2">{feature.title}</h3>
-                      <p className="text-sm text-sage-600 leading-relaxed">{feature.description}</p>
+                      <h3 className="font-semibold text-[#7A8F78] mb-2">{feature.title}</h3>
+                      <p className="text-sm text-[#7A8F78] leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
                 </ModernCardContent>
@@ -206,8 +206,8 @@ export default function FeaturesPage() {
         {/* Platform Features */}
         <div className="mb-20">
           <ModernCard variant="glow" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 text-center">
-              <ModernCardTitle className="text-2xl text-sage-800 mb-2">Platform Excellence</ModernCardTitle>
+            <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-cream-50 text-center">
+              <ModernCardTitle className="text-2xl text-[#7A8F78] mb-2">Platform Excellence</ModernCardTitle>
               <ModernCardDescription className="text-lg max-w-2xl mx-auto">
                 Built with enterprise-grade infrastructure and user-centric design
               </ModernCardDescription>
@@ -216,12 +216,12 @@ export default function FeaturesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {platformFeatures.map((feature, index) => (
                   <div key={index} className="text-center group">
-                    <div className="p-4 bg-sage-50 rounded-2xl mb-4 group-hover:bg-sage-100 transition-colors">
-                      <div className="text-sage-700 mx-auto mb-3">
+                    <div className="p-4 bg-[#F8FAF8] rounded-2xl mb-4 group-hover:bg-[#F8FAF8] transition-colors">
+                      <div className="text-[#5E6F5A] mx-auto mb-3">
                         {feature.icon}
                       </div>
-                      <h3 className="font-semibold text-sage-800 mb-2">{feature.title}</h3>
-                      <p className="text-sm text-sage-600 leading-relaxed">{feature.description}</p>
+                      <h3 className="font-semibold text-[#7A8F78] mb-2">{feature.title}</h3>
+                      <p className="text-sm text-[#7A8F78] leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
                 ))}
@@ -232,8 +232,8 @@ export default function FeaturesPage() {
         {/* Technology Stack */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">Powered by Advanced Technology</h2>
-            <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-[#7A8F78] mb-4">Powered by Advanced Technology</h2>
+            <p className="text-lg text-[#7A8F78] max-w-2xl mx-auto">
               Cutting-edge infrastructure ensuring reliability, accuracy, and scalability
             </p>
           </div>
@@ -241,10 +241,10 @@ export default function FeaturesPage() {
             <ModernCard variant="soft" className="text-center">
               <ModernCardContent className="p-8">
                 <div className="p-6 bg-white/20 rounded-2xl mx-auto w-fit mb-6 backdrop-blur-sm">
-                  <Satellite className="h-10 w-10 text-sage-700" />
+                  <Satellite className="h-10 w-10 text-[#5E6F5A]" />
                 </div>
-                <h3 className="text-xl font-semibold text-sage-800 mb-4">Satellite Data Sources</h3>
-                <ul className="text-sage-700 text-sm space-y-2">
+                <h3 className="text-xl font-semibold text-[#7A8F78] mb-4">Satellite Data Sources</h3>
+                <ul className="text-[#5E6F5A] text-sm space-y-2">
                   <li>ESA Copernicus Sentinel-2</li>
                   <li>Planet Labs Imagery</li>
                   <li>NASA Landsat Program</li>
@@ -284,9 +284,9 @@ export default function FeaturesPage() {
         </div>
         {/* CTA Section */}
         <ModernCard variant="floating" className="overflow-hidden max-w-4xl mx-auto">
-          <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center py-12">
+          <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-earth-50 text-center py-12">
             <div className="flex justify-center mb-4">
-              <Badge className="bg-white text-sage-700 border-sage-200">
+              <Badge className="bg-white text-[#5E6F5A] border-[#DDE4D8]">
                 <Target className="h-4 w-4 mr-2" />
                 Ready to Get Started?
               </Badge>

@@ -24,7 +24,7 @@ interface FarmerMetricCardProps {
 const trendConfig = {
   up: {
     icon: TrendingUp,
-    color: 'text-green-600'
+    color: 'text-[#8FBF7F]'
   },
   down: {
     icon: TrendingDown,
@@ -32,7 +32,7 @@ const trendConfig = {
   },
   stable: {
     icon: Minus,
-    color: 'text-gray-500'
+    color: 'text-[#555555]'
   }
 }
 export function FarmerMetricCard({
@@ -64,12 +64,12 @@ export function FarmerMetricCard({
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             {icon && (
-              <div className="p-2 bg-sage-100/70 rounded-xl">
+              <div className="p-2 bg-[#F8FAF8]/70 rounded-xl">
                 {icon}
               </div>
             )}
             <div>
-              <h3 className="text-base font-semibold text-sage-800 mb-1">
+              <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">
                 {title}
               </h3>
               {status && (
@@ -83,30 +83,30 @@ export function FarmerMetricCard({
             </div>
           </div>
           {showMore && (
-            <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-sage-600 transition-colors" />
+            <ChevronRight className="h-4 w-4 text-[#555555] group-hover:text-[#7A8F78] transition-colors" />
           )}
         </div>
         {/* Main Value */}
         <div className="mb-4">
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-sage-800">
+            <span className="text-3xl font-bold text-[#1A1A1A]">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </span>
             {unit && (
-              <span className="text-lg text-sage-600 font-medium">
+              <span className="text-lg text-[#555555] font-medium">
                 {unit}
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="text-sm text-sage-600 leading-relaxed">
+            <p className="text-sm text-[#555555] leading-relaxed">
               {subtitle}
             </p>
           )}
         </div>
         {/* Trend Indicator */}
         {trend && (
-          <div className="flex items-center gap-2 pt-3 border-t border-sage-200/30">
+          <div className="flex items-center gap-2 pt-3 border-t border-[#DDE4D8]/30">
             {TrendIcon && (
               <TrendIcon className={cn('h-4 w-4', trendConfig[trend.direction].color)} />
             )}
@@ -118,7 +118,7 @@ export function FarmerMetricCard({
                 </span>
               )}
               {trend.label && (
-                <span className="text-sage-600">
+                <span className="text-[#555555]">
                   {trend.label}
                 </span>
               )}
@@ -159,7 +159,7 @@ export function CropHealthCard({
       }
       showMore={showMore}
       onShowMore={onShowMore}
-      icon={<div className="w-5 h-5 bg-green-500 rounded-full" />}
+      icon={<div className="w-5 h-5 bg-[#8FBF7F] rounded-full" />}
       className={className}
     />
   )

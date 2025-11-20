@@ -28,7 +28,7 @@ const farmerActions: QuickAction[] = [
     id: 'expense',
     label: 'Log Expense',
     icon: <DollarSign className="h-5 w-5" />,
-    color: 'bg-green-500 hover:bg-green-600',
+    color: 'bg-[#8FBF7F] hover:bg-[#7A8F78]',
     onClick: () => window.location.href = '/financials?action=add-expense'
   },
   {
@@ -58,7 +58,7 @@ const landowenerActions: QuickAction[] = [
     id: 'payment',
     label: 'Record Payment',
     icon: <DollarSign className="h-5 w-5" />,
-    color: 'bg-green-500 hover:bg-green-600',
+    color: 'bg-[#8FBF7F] hover:bg-[#7A8F78]',
     onClick: () => window.location.href = '/financials?action=add-income'
   },
   {
@@ -123,7 +123,7 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
         className={cn(
           'relative flex items-center justify-center',
           'w-14 h-14 rounded-full shadow-xl',
-          'bg-sage-700 hover:bg-sage-800 text-white',
+          'bg-[#5E6F5A] hover:bg-[#7A8F78] text-white',
           'transition-all duration-300',
           isOpen && 'bg-red-500 hover:bg-red-600'
         )}
@@ -141,7 +141,7 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
         </motion.div>
         {/* Pulse animation when closed */}
         {!isOpen && (
-          <span className="absolute inset-0 rounded-full bg-sage-600 animate-ping opacity-20" />
+          <span className="absolute inset-0 rounded-full bg-[#7A8F78] animate-ping opacity-20" />
         )}
       </motion.button>
       {/* Tooltip */}
@@ -153,7 +153,7 @@ export function GlobalFAB({ className, role = 'farmer' }: GlobalFABProps) {
             exit={{ opacity: 0, x: 10 }}
             className="absolute right-full mr-3 top-1/2 -translate-y-1/2"
           >
-            <div className="bg-gray-900 text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap">
+            <div className="bg-[#1A1A1A] text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap">
               Quick Actions
               <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1">
                 <div className="border-8 border-transparent border-l-gray-900" />
@@ -176,7 +176,7 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
         className={cn(
           'fixed bottom-6 right-6 z-50',
           'w-14 h-14 rounded-full shadow-xl',
-          'bg-sage-700 active:bg-sage-800 text-white',
+          'bg-[#5E6F5A] active:bg-[#7A8F78] text-white',
           'touch-manipulation',
           className
         )}
@@ -208,14 +208,14 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
               </div>
               {/* Actions */}
               <div className="p-6 pb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">
                   Quick Actions
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {actions.map((action) => (
                     <button
                       key={action.id}
-                      className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gray-50 active:bg-gray-100"
+                      className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[#FAFAF7] active:bg-[#F5F5F5]"
                       onClick={() => {
                         action.onClick()
                         setIsOpen(false)
@@ -224,7 +224,7 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
                       <div className={cn('p-3 rounded-xl text-white', action.color.split(' ')[0])}>
                         {action.icon}
                       </div>
-                      <span className="text-sm text-gray-700">{action.label}</span>
+                      <span className="text-sm text-[#555555]">{action.label}</span>
                     </button>
                   ))}
                 </div>

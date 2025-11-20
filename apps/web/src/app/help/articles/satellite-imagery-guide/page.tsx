@@ -14,13 +14,13 @@ export default function SatelliteImageryGuidePage() {
         {/* Article Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Satellite className="h-6 w-6 text-sage-700" />
-            <span className="text-sage-600">Satellite Monitoring</span>
+            <Satellite className="h-6 w-6 text-[#5E6F5A]" />
+            <span className="text-[#7A8F78]">Satellite Monitoring</span>
           </div>
-          <h1 className="text-3xl font-bold text-sage-800 mb-4">
+          <h1 className="text-3xl font-bold text-[#7A8F78] mb-4">
             Understanding Satellite Imagery & NDVI Analysis
           </h1>
-          <div className="flex items-center gap-4 text-sm text-sage-600">
+          <div className="flex items-center gap-4 text-sm text-[#7A8F78]">
             <Badge variant="outline">15 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
@@ -29,7 +29,7 @@ export default function SatelliteImageryGuidePage() {
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
-            <p className="text-lg text-sage-700 leading-relaxed mb-4">
+            <p className="text-lg text-[#5E6F5A] leading-relaxed mb-4">
               Satellite imagery gives you x-ray vision for your crops. Instead of walking every field every day, 
               you can monitor crop health, spot problems early, and track growth patterns from space - all automatically updated every few days.
             </p>
@@ -52,14 +52,14 @@ export default function SatelliteImageryGuidePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 We combine data from multiple satellite constellations to give you the most complete picture:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Sentinel-2 (European Space Agency)</h4>
-                  <div className="bg-sage-50 p-4 rounded-lg">
-                    <ul className="text-sm text-sage-700 space-y-1">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Sentinel-2 (European Space Agency)</h4>
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <ul className="text-sm text-[#5E6F5A] space-y-1">
                       <li>• <strong>Resolution:</strong> 10m per pixel</li>
                       <li>• <strong>Frequency:</strong> Every 3-5 days</li>
                       <li>• <strong>Coverage:</strong> Global, free access</li>
@@ -68,7 +68,7 @@ export default function SatelliteImageryGuidePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Landsat 8/9 (NASA/USGS)</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Landsat 8/9 (NASA/USGS)</h4>
                   <div className="bg-earth-50 p-4 rounded-lg">
                     <ul className="text-sm text-earth-700 space-y-1">
                       <li>• <strong>Resolution:</strong> 30m per pixel</li>
@@ -79,9 +79,9 @@ export default function SatelliteImageryGuidePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Planet Labs</h4>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <ul className="text-sm text-green-700 space-y-1">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Planet Labs</h4>
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <ul className="text-sm text-[#7A8F78] space-y-1">
                       <li>• <strong>Resolution:</strong> 3-5m per pixel</li>
                       <li>• <strong>Frequency:</strong> Daily coverage</li>
                       <li>• <strong>Coverage:</strong> Agricultural regions</li>
@@ -90,7 +90,7 @@ export default function SatelliteImageryGuidePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">MODIS (NASA)</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">MODIS (NASA)</h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <ul className="text-sm text-blue-700 space-y-1">
                       <li>• <strong>Resolution:</strong> 250m per pixel</li>
@@ -114,7 +114,7 @@ export default function SatelliteImageryGuidePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Satellites detect light wavelengths beyond human vision, revealing crop health information invisible to the naked eye:
               </p>
               <div className="space-y-4">
@@ -125,9 +125,9 @@ export default function SatelliteImageryGuidePage() {
                     while stressed plants reflect more (appearing lighter in red imagery).
                   </p>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-800 mb-2">Near-Infrared (NIR) (850nm)</h4>
-                  <p className="text-green-700 text-sm">
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <h4 className="font-semibold text-[#7A8F78] mb-2">Near-Infrared (NIR) (850nm)</h4>
+                  <p className="text-[#7A8F78] text-sm">
                     Healthy plant cells reflect lots of near-infrared light (invisible to us). 
                     Stressed, diseased, or dying plants reflect much less NIR.
                   </p>
@@ -161,49 +161,49 @@ export default function SatelliteImageryGuidePage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-2">What is NDVI?</h3>
-                <p className="text-sage-700 mb-4">
+                <h3 className="font-semibold text-[#7A8F78] mb-2">What is NDVI?</h3>
+                <p className="text-[#5E6F5A] mb-4">
                   NDVI (Normalized Difference Vegetation Index) is like a thermometer for plant health. 
                   It compares how much red and near-infrared light your crops reflect to calculate a health score from -1 to +1.
                 </p>
-                <div className="bg-sage-50 p-4 rounded-lg">
-                  <p className="text-sm font-mono text-sage-700 mb-2">
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <p className="text-sm font-mono text-[#5E6F5A] mb-2">
                     NDVI = (NIR - Red) / (NIR + Red)
                   </p>
-                  <p className="text-sm text-sage-600">
+                  <p className="text-sm text-[#7A8F78]">
                     The math is automatic - you just see the results as easy-to-understand health scores.
                   </p>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">NDVI Value Meanings</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">NDVI Value Meanings</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                     <div>
-                      <Badge className="bg-green-100 text-green-800 mb-2">0.6 - 0.9: Healthy Vegetation</Badge>
-                      <p className="text-sage-700 text-sm">Dense, green, actively growing crops. This is what you want to see.</p>
+                      <Badge className="bg-[#F8FAF8] text-[#7A8F78] mb-2">0.6 - 0.9: Healthy Vegetation</Badge>
+                      <p className="text-[#5E6F5A] text-sm">Dense, green, actively growing crops. This is what you want to see.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
                     <div>
                       <Badge className="bg-yellow-100 text-yellow-800 mb-2">0.3 - 0.6: Moderate Vegetation</Badge>
-                      <p className="text-sage-700 text-sm">Sparse vegetation, young crops, or mild stress. May need attention.</p>
+                      <p className="text-[#5E6F5A] text-sm">Sparse vegetation, young crops, or mild stress. May need attention.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 mt-0.5" />
                     <div>
                       <Badge className="bg-orange-100 text-orange-800 mb-2">0.1 - 0.3: Sparse Vegetation</Badge>
-                      <p className="text-sage-700 text-sm">Very young crops, severe stress, or poor growing conditions.</p>
+                      <p className="text-[#5E6F5A] text-sm">Very young crops, severe stress, or poor growing conditions.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-red-600 mt-0.5" />
                     <div>
                       <Badge className="bg-red-100 text-red-800 mb-2">Below 0.1: No Vegetation</Badge>
-                      <p className="text-sage-700 text-sm">Bare soil, water, rocks, or dead vegetation.</p>
+                      <p className="text-[#5E6F5A] text-sm">Bare soil, water, rocks, or dead vegetation.</p>
                     </div>
                   </div>
                 </div>
@@ -221,12 +221,12 @@ export default function SatelliteImageryGuidePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 While NDVI is our primary health indicator, we also use specialized indices for specific conditions:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">NDWI (Water Stress)</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">NDWI (Water Stress)</h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <p className="text-sm text-blue-700 mb-2">
                       <strong>Best for:</strong> Detecting drought stress before visible symptoms
@@ -238,19 +238,19 @@ export default function SatelliteImageryGuidePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">EVI (Enhanced Vegetation)</h4>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm text-green-700 mb-2">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">EVI (Enhanced Vegetation)</h4>
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <p className="text-sm text-[#7A8F78] mb-2">
                       <strong>Best for:</strong> Dense canopy areas where NDVI saturates
                     </p>
-                    <p className="text-sm text-green-600">
+                    <p className="text-sm text-[#7A8F78]">
                       More sensitive than NDVI in areas with very dense vegetation. 
                       Reduces background soil influence.
                     </p>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">SAVI (Soil-Adjusted)</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">SAVI (Soil-Adjusted)</h4>
                   <div className="bg-yellow-50 p-4 rounded-lg">
                     <p className="text-sm text-yellow-700 mb-2">
                       <strong>Best for:</strong> Early season when soil is still visible
@@ -262,7 +262,7 @@ export default function SatelliteImageryGuidePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">GNDVI (Green NDVI)</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">GNDVI (Green NDVI)</h4>
                   <div className="bg-emerald-50 p-4 rounded-lg">
                     <p className="text-sm text-emerald-700 mb-2">
                       <strong>Best for:</strong> Chlorophyll content and nitrogen status
@@ -288,30 +288,30 @@ export default function SatelliteImageryGuidePage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">Color Schemes</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">Color Schemes</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-gradient-to-r from-red-500 to-yellow-500 to-green-500 rounded"></div>
+                    <div className="w-6 h-6 bg-gradient-to-r from-red-500 to-yellow-500 to-#8FBF7F rounded"></div>
                     <div>
-                      <h4 className="font-medium text-sage-700">Red → Yellow → Green</h4>
-                      <p className="text-sm text-sage-600">Red = Poor health, Yellow = Moderate, Green = Excellent</p>
+                      <h4 className="font-medium text-[#5E6F5A]">Red → Yellow → Green</h4>
+                      <p className="text-sm text-[#7A8F78]">Red = Poor health, Yellow = Moderate, Green = Excellent</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-r from-blue-900 to-blue-300 to-red-500 rounded"></div>
                     <div>
-                      <h4 className="font-medium text-sage-700">Blue → Light Blue → Red</h4>
-                      <p className="text-sm text-sage-600">Alternative scheme: Dark blue = Poor, Light blue = Good, Red = Excellent</p>
+                      <h4 className="font-medium text-[#5E6F5A]">Blue → Light Blue → Red</h4>
+                      <p className="text-sm text-[#7A8F78]">Alternative scheme: Dark blue = Poor, Light blue = Good, Red = Excellent</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">What Patterns Mean</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">What Patterns Mean</h3>
                 <div className="space-y-4">
-                  <div className="bg-sage-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-sage-800 mb-2">Uniform High Values</h4>
-                    <p className="text-sage-700 text-sm">
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <h4 className="font-semibold text-[#7A8F78] mb-2">Uniform High Values</h4>
+                    <p className="text-[#5E6F5A] text-sm">
                       Field shows consistent green/high NDVI = Healthy, even crop growth. Keep doing what you're doing!
                     </p>
                   </div>
@@ -349,11 +349,11 @@ export default function SatelliteImageryGuidePage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">Image Update Schedule</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">Image Update Schedule</h3>
                 <div className="space-y-3">
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-800 mb-2">Peak Growing Season (April-September)</h4>
-                    <ul className="text-sm text-green-700 space-y-1">
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <h4 className="font-semibold text-[#7A8F78] mb-2">Peak Growing Season (April-September)</h4>
+                    <ul className="text-sm text-[#7A8F78] space-y-1">
                       <li>• <strong>New images:</strong> Every 2-5 days (weather permitting)</li>
                       <li>• <strong>Processing time:</strong> 1-2 days after satellite pass</li>
                       <li>• <strong>Cloud coverage:</strong> Only clear images are processed</li>
@@ -370,23 +370,23 @@ export default function SatelliteImageryGuidePage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">Factors Affecting Image Availability</h3>
+                <h3 className="font-semibold text-[#7A8F78] mb-3">Factors Affecting Image Availability</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700"><strong>Cloud Cover:</strong> Images with {'>'}20% clouds are filtered out for accuracy</span>
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]"><strong>Cloud Cover:</strong> Images with {'>'}20% clouds are filtered out for accuracy</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700"><strong>Weather Patterns:</strong> Extended cloudy periods may delay updates by 1-2 weeks</span>
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]"><strong>Weather Patterns:</strong> Extended cloudy periods may delay updates by 1-2 weeks</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700"><strong>Satellite Orbits:</strong> Polar-orbiting satellites may have longer intervals at certain latitudes</span>
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]"><strong>Satellite Orbits:</strong> Polar-orbiting satellites may have longer intervals at certain latitudes</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700"><strong>Snow/Ice:</strong> Winter coverage makes vegetation analysis impossible</span>
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]"><strong>Snow/Ice:</strong> Winter coverage makes vegetation analysis impossible</span>
                   </li>
                 </ul>
               </div>
@@ -403,7 +403,7 @@ export default function SatelliteImageryGuidePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Satellite imagery is powerful but has limitations. Understanding these helps you use the data more effectively:
               </p>
               <div className="space-y-4">

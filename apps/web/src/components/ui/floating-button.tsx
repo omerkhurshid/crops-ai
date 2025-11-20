@@ -8,11 +8,11 @@ interface FloatingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   isFloating?: boolean
 }
 const variants = {
-  primary: 'bg-sage-500 hover:bg-sage-600 text-white shadow-glow hover:shadow-soft-lg',
-  secondary: 'bg-cream-200 hover:bg-cream-300 text-sage-800 shadow-soft hover:shadow-floating',
-  ghost: 'bg-white/70 hover:bg-white/90 text-sage-700 backdrop-blur-sm shadow-soft',
+  primary: 'bg-[#7A8F78] hover:bg-[#5E6F5A] text-white shadow-glow hover:shadow-soft-lg',
+  secondary: 'bg-[#DDE4D8] hover:bg-[#DDE4D8] text-[#1A1A1A] shadow-soft hover:shadow-floating',
+  ghost: 'bg-white/70 hover:bg-white/90 text-[#555555] backdrop-blur-sm shadow-soft',
   success: 'bg-crops-green-500 hover:bg-crops-green-600 text-white shadow-glow',
-  warning: 'bg-earth-500 hover:bg-earth-600 text-white shadow-soft'
+  warning: 'bg-[#7A8F78] hover:bg-[#7A8F78] text-white shadow-soft'
 }
 const sizes = {
   sm: 'h-10 w-10 text-sm',
@@ -73,7 +73,7 @@ export function FloatingActionButton({
       >
         {icon}
         {label && (
-          <span className="absolute right-full mr-3 px-2 py-1 bg-sage-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          <span className="absolute right-full mr-3 px-2 py-1 bg-[#7A8F78] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
             {label}
           </span>
         )}
@@ -103,7 +103,7 @@ export function InlineFloatingButton({
         <span className="text-sm font-medium">{label}</span>
       )}
       {label && !showLabel && (
-        <span className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-sage-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+        <span className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-[#7A8F78] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
           {label}
         </span>
       )}

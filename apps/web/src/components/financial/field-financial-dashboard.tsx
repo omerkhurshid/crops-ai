@@ -97,15 +97,15 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
     return (
       <div className="space-y-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-16 bg-gray-200 rounded-lg"></div>
-          <div className="h-32 bg-gray-200 rounded-lg"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded-lg"></div>
+          <div className="h-32 bg-[#F5F5F5] rounded-lg"></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
+            <div className="h-24 bg-[#F5F5F5] rounded-lg"></div>
+            <div className="h-24 bg-[#F5F5F5] rounded-lg"></div>
+            <div className="h-24 bg-[#F5F5F5] rounded-lg"></div>
+            <div className="h-24 bg-[#F5F5F5] rounded-lg"></div>
           </div>
-          <div className="h-96 bg-gray-200 rounded-lg"></div>
+          <div className="h-96 bg-[#F5F5F5] rounded-lg"></div>
         </div>
       </div>
     )
@@ -119,8 +119,8 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
           Back to Farm Overview
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{field.name}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">{field.name}</h1>
+          <p className="text-[#555555]">
             {field.farmName} • {field.area.toFixed(1)} acres
             {field.soilType && ` • ${field.soilType} soil`}
           </p>
@@ -140,7 +140,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               </ModernCardDescription>
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => handleAddTransaction('INCOME')} className="bg-sage-600 hover:bg-sage-700">
+              <Button onClick={() => handleAddTransaction('INCOME')} className="bg-[#7A8F78] hover:bg-[#5E6F5A]">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Income
               </Button>
@@ -157,31 +157,31 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-green-600" />
-                  <span className="text-sm font-medium text-gray-600">Total Income</span>
+                  <span className="text-sm font-medium text-[#555555]">Total Income</span>
                 </div>
                 <p className="text-2xl font-bold text-green-700">
                   {formatCurrency(summary.totalIncome)}
                 </p>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-[#555555]">
                   {formatCurrency(summary.totalIncome / field.area)}/acre
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-orange-600" />
-                  <span className="text-sm font-medium text-gray-600">Total Expenses</span>
+                  <span className="text-sm font-medium text-[#555555]">Total Expenses</span>
                 </div>
                 <p className="text-2xl font-bold text-orange-700">
                   {formatCurrency(summary.totalExpenses)}
                 </p>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-[#555555]">
                   {formatCurrency(summary.totalExpenses / field.area)}/acre
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-blue-600" />
-                  <span className="text-sm font-medium text-gray-600">Net Profit</span>
+                  <span className="text-sm font-medium text-[#555555]">Net Profit</span>
                 </div>
                 <p className={`text-2xl font-bold ${
                   summary.netProfit >= 0 ? 'text-green-700' : 'text-red-700'
@@ -189,7 +189,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   {formatCurrency(summary.netProfit)}
                 </p>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-gray-500">
+                  <span className="text-[#555555]">
                     {formatCurrency(summary.profitPerAcre)}/acre
                   </span>
                   {summary.profitChange !== 0 && (
@@ -211,23 +211,23 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Activity className="h-5 w-5 text-purple-600" />
-                  <span className="text-sm font-medium text-gray-600">Transactions</span>
+                  <span className="text-sm font-medium text-[#555555]">Transactions</span>
                 </div>
                 <p className="text-2xl font-bold text-purple-700">
                   {summary.transactionCount}
                 </p>
                 {summary.lastTransactionDate && (
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-[#555555]">
                     Last: {new Date(summary.lastTransactionDate).toLocaleDateString()}
                   </div>
                 )}
               </div>
             </div>
             {/* Profit Margin Badge */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t border-[#E6E6E6]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-600">Profit Margin:</span>
+                  <span className="text-sm font-medium text-[#555555]">Profit Margin:</span>
                   <Badge variant={summary.profitMargin >= 20 ? 'default' : summary.profitMargin >= 10 ? 'secondary' : 'destructive'}>
                     {summary.profitMargin.toFixed(1)}%
                   </Badge>
@@ -285,10 +285,10 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             <ModernCardContent>
               <div className="text-center py-12">
                 <PieChart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                   Advanced Analytics Coming Soon
                 </h3>
-                <p className="text-gray-600 max-w-sm mx-auto">
+                <p className="text-[#555555] max-w-sm mx-auto">
                   Detailed income and expense breakdowns with interactive charts will be available soon.
                 </p>
               </div>
@@ -306,10 +306,10 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             <ModernCardContent>
               <div className="text-center py-12">
                 <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                   Field-Specific Trends Coming Soon
                 </h3>
-                <p className="text-gray-600 max-w-sm mx-auto">
+                <p className="text-[#555555] max-w-sm mx-auto">
                   Detailed field-level financial trends and analysis charts will be available soon.
                 </p>
               </div>
@@ -329,32 +329,32 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">Income</h4>
+                      <h4 className="font-medium text-[#555555]">Income</h4>
                       <p className="text-2xl font-bold text-green-600">
                         {formatCurrency(summary.totalIncome)}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[#555555]">
                         {formatCurrency(summary.totalIncome / field.area)}/acre
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">Expenses</h4>
+                      <h4 className="font-medium text-[#555555]">Expenses</h4>
                       <p className="text-2xl font-bold text-orange-600">
                         {formatCurrency(summary.totalExpenses)}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[#555555]">
                         {formatCurrency(summary.totalExpenses / field.area)}/acre
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">Net Profit</h4>
+                      <h4 className="font-medium text-[#555555]">Net Profit</h4>
                       <p className={`text-2xl font-bold ${
                         summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {formatCurrency(summary.netProfit)}
                       </p>
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="text-gray-500">Margin:</span>
+                        <span className="text-[#555555]">Margin:</span>
                         <Badge variant={summary.profitMargin >= 20 ? 'default' : summary.profitMargin >= 10 ? 'secondary' : 'destructive'}>
                           {summary.profitMargin.toFixed(1)}%
                         </Badge>

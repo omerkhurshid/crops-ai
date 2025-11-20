@@ -34,7 +34,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       case 'LIVESTOCK': return <Heart className="h-4 w-4 text-red-600" />
       case 'ORCHARD': return <TreePine className="h-4 w-4 text-green-700" />
       case 'MIXED': return <Target className="h-4 w-4 text-blue-600" />
-      default: return <User className="h-4 w-4 text-gray-600" />
+      default: return <User className="h-4 w-4 text-[#555555]" />
     }
   }
   const getRoleIcon = (role: string) => {
@@ -42,7 +42,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
       case 'FARM_OWNER': return <Shield className="h-4 w-4 text-blue-600" />
       case 'FARM_MANAGER': return <UserCheck className="h-4 w-4 text-green-600" />
       case 'AGRONOMIST': return <User className="h-4 w-4 text-purple-600" />
-      default: return <User className="h-4 w-4 text-gray-600" />
+      default: return <User className="h-4 w-4 text-[#555555]" />
     }
   }
   const getUserTypeName = (type: string | null) => {
@@ -80,10 +80,10 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsList>
           <TabsContent value="demographics" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Users by Interest Type</h4>
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Users by Interest Type</h4>
               <div className="space-y-3">
                 {usersByType.map((type) => (
-                  <div key={type.userType || 'unspecified'} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={type.userType || 'unspecified'} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                     <div className="flex items-center gap-3">
                       {getUserTypeIcon(type.userType)}
                       <span className="font-medium">{getUserTypeName(type.userType)}</span>
@@ -101,10 +101,10 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsContent>
           <TabsContent value="roles" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Users by Role</h4>
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Users by Role</h4>
               <div className="space-y-3">
                 {usersByRole.map((role) => (
-                  <div key={role.role} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={role.role} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                     <div className="flex items-center gap-3">
                       {getRoleIcon(role.role)}
                       <span className="font-medium">{getRoleName(role.role)}</span>
@@ -122,28 +122,28 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsContent>
           <TabsContent value="activity" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Recent Farm Registrations</h4>
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Recent Farm Registrations</h4>
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {recentActivity.length > 0 ? (
                   recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-start justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={activity.id} className="flex items-start justify-between p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex items-start gap-3">
                         <MapPin className="h-4 w-4 text-green-600 mt-1" />
                         <div>
                           <div className="font-medium">{activity.name}</div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-[#555555]">
                             by {activity.owner.name} ({activity.owner.email})
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <div className="flex items-center gap-1 text-xs text-[#555555]">
                         <Clock className="h-3 w-3" />
                         {new Date(activity.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-gray-500">
+                  <div className="text-center py-6 text-[#555555]">
                     No recent farm registrations
                   </div>
                 )}

@@ -99,7 +99,7 @@ export function FieldHealthMonitor({
   // Get health status color and icon
   const getHealthStatus = (healthScore: number) => {
     if (healthScore >= 80) {
-      return { color: 'text-green-600', bg: 'bg-green-50', icon: CheckCircle, label: 'Excellent' }
+      return { color: 'text-green-600', bg: 'bg-[#F8FAF8]', icon: CheckCircle, label: 'Excellent' }
     } else if (healthScore >= 60) {
       return { color: 'text-blue-600', bg: 'bg-blue-50', icon: Activity, label: 'Good' }
     } else if (healthScore >= 40) {
@@ -113,7 +113,7 @@ export function FieldHealthMonitor({
     switch (trend) {
       case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />
       case 'declining': return <TrendingDown className="h-4 w-4 text-red-600" />
-      default: return <Minus className="h-4 w-4 text-gray-600" />
+      default: return <Minus className="h-4 w-4 text-[#555555]" />
     }
   }
   // Get stress indicator icon
@@ -170,14 +170,14 @@ export function FieldHealthMonitor({
           <Satellite className="h-6 w-6 text-blue-600" />
           <div>
             <h2 className="text-xl font-semibold">Field Health Monitor</h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#555555]">
               Real-time satellite analysis • {healthData.length} fields monitored
             </p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
           {lastRefresh && (
-            <div className="flex items-center text-sm text-gray-500">
+            <div className="flex items-center text-sm text-[#555555]">
               <Clock className="h-4 w-4 mr-1" />
               {formatTimeAgo(lastRefresh)}
             </div>
@@ -227,7 +227,7 @@ export function FieldHealthMonitor({
                     value={field.vegetationHealth.healthScore} 
                     className="h-2"
                   />
-                  <div className="flex justify-between text-xs text-gray-600 mt-1">
+                  <div className="flex justify-between text-xs text-[#555555] mt-1">
                     <span>0</span>
                     <span className="font-medium">
                       {field.vegetationHealth.healthScore.toFixed(1)}%
@@ -237,41 +237,41 @@ export function FieldHealthMonitor({
                 </div>
                 {/* NDVI Value */}
                 <div className="flex items-center justify-between py-2 border-b">
-                  <span className="text-sm text-gray-600">NDVI Index</span>
+                  <span className="text-sm text-[#555555]">NDVI Index</span>
                   <span className="font-semibold">
                     {field.vegetationHealth.ndvi.toFixed(3)}
                   </span>
                 </div>
                 {/* Stress Indicators */}
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">Stress Indicators</h4>
+                  <h4 className="text-sm font-medium text-[#555555]">Stress Indicators</h4>
                   <div className="grid grid-cols-3 gap-2 text-xs">
-                    <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
+                    <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Droplets className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.drought > 0.6 ? 'text-red-500' : 
                         field.vegetationHealth.stressIndicators.drought > 0.3 ? 'text-yellow-500' : 'text-green-500'
                       }`} />
-                      <span className="text-gray-600">Drought</span>
+                      <span className="text-[#555555]">Drought</span>
                       <span className="font-semibold">
                         {(field.vegetationHealth.stressIndicators.drought * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
+                    <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Bug className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.disease > 0.6 ? 'text-red-500' : 
                         field.vegetationHealth.stressIndicators.disease > 0.3 ? 'text-yellow-500' : 'text-green-500'
                       }`} />
-                      <span className="text-gray-600">Disease</span>
+                      <span className="text-[#555555]">Disease</span>
                       <span className="font-semibold">
                         {(field.vegetationHealth.stressIndicators.disease * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="flex flex-col items-center p-2 bg-gray-50 rounded">
+                    <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Zap className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.nutrient > 0.6 ? 'text-red-500' : 
                         field.vegetationHealth.stressIndicators.nutrient > 0.3 ? 'text-yellow-500' : 'text-green-500'
                       }`} />
-                      <span className="text-gray-600">Nutrient</span>
+                      <span className="text-[#555555]">Nutrient</span>
                       <span className="font-semibold">
                         {(field.vegetationHealth.stressIndicators.nutrient * 100).toFixed(0)}%
                       </span>
@@ -281,7 +281,7 @@ export function FieldHealthMonitor({
                 {/* Active Alerts */}
                 {field.stressAlerts.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-gray-700">Active Alerts</h4>
+                    <h4 className="text-sm font-medium text-[#555555]">Active Alerts</h4>
                     <div className="space-y-1">
                       {field.stressAlerts.slice(0, 2).map((alert, index) => (
                         <div key={index} className="flex items-start space-x-2 p-2 bg-red-50 rounded text-xs">
@@ -296,14 +296,14 @@ export function FieldHealthMonitor({
                                 {alert.severity}
                               </Badge>
                             </div>
-                            <p className="text-gray-600 mt-1 line-clamp-2">
+                            <p className="text-[#555555] mt-1 line-clamp-2">
                               {alert.recommendation}
                             </p>
                           </div>
                         </div>
                       ))}
                       {field.stressAlerts.length > 2 && (
-                        <p className="text-xs text-gray-500 text-center">
+                        <p className="text-xs text-[#555555] text-center">
                           +{field.stressAlerts.length - 2} more alerts
                         </p>
                       )}
@@ -313,7 +313,7 @@ export function FieldHealthMonitor({
                 {/* Top Recommendations */}
                 {highPriorityRecommendations.length > 0 && (
                   <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-gray-700">Priority Actions</h4>
+                    <h4 className="text-sm font-medium text-[#555555]">Priority Actions</h4>
                     <div className="space-y-1">
                       {highPriorityRecommendations.slice(0, 2).map((rec, index) => (
                         <div key={index} className="p-2 bg-blue-50 rounded text-xs">
@@ -326,7 +326,7 @@ export function FieldHealthMonitor({
                               {rec.priority}
                             </Badge>
                           </div>
-                          <p className="text-gray-600">{rec.timeframe}</p>
+                          <p className="text-[#555555]">{rec.timeframe}</p>
                         </div>
                       ))}
                     </div>
@@ -335,12 +335,12 @@ export function FieldHealthMonitor({
                 {/* Trend Indicator */}
                 {field.comparisonToPrevious && (
                   <div className="flex items-center justify-between pt-2 border-t text-xs">
-                    <span className="text-gray-600">Trend vs. Previous</span>
+                    <span className="text-[#555555]">Trend vs. Previous</span>
                     <div className="flex items-center space-x-1">
                       {getTrendIcon(field.comparisonToPrevious.trend)}
                       <span className={`font-semibold ${
                         field.comparisonToPrevious.trend === 'improving' ? 'text-green-600' :
-                        field.comparisonToPrevious.trend === 'declining' ? 'text-red-600' : 'text-gray-600'
+                        field.comparisonToPrevious.trend === 'declining' ? 'text-red-600' : 'text-[#555555]'
                       }`}>
                         {(field.comparisonToPrevious.change > 0 ? '+' : '')}
                         {(field.comparisonToPrevious.change * 100).toFixed(1)}%
@@ -363,7 +363,7 @@ export function FieldHealthMonitor({
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
           <div className="text-center">
             <p className="text-lg font-medium">Analyzing Fields</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#555555]">
               Processing satellite imagery and calculating vegetation health...
             </p>
           </div>
@@ -373,8 +373,8 @@ export function FieldHealthMonitor({
       {!isLoading && healthData.length === 0 && !error && (
         <div className="text-center py-12">
           <Satellite className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-          <p className="text-lg font-medium text-gray-600">No Field Data</p>
-          <p className="text-sm text-gray-500">
+          <p className="text-lg font-medium text-[#555555]">No Field Data</p>
+          <p className="text-sm text-[#555555]">
             Start analyzing your fields to see health monitoring data here.
           </p>
         </div>

@@ -240,8 +240,8 @@ export default function HelpPage() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header - Consistent with other pages */}
         <div className="mb-8">
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Help Center</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Help Center</h1>
+          <p className="text-lg text-[#7A8F78] mb-6">
             Find guides and support for using your farm management platform
           </p>
           {/* Search Bar */}
@@ -251,20 +251,20 @@ export default function HelpPage() {
         </div>
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-sage-800 mb-6">Quick Actions</h2>
+          <h2 className="text-2xl font-semibold text-[#7A8F78] mb-6">Quick Actions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
               <ModernCard key={index} variant="soft" className="group hover:shadow-soft transition-all duration-300">
                 <ModernCardContent className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-sage-100 rounded-lg group-hover:bg-sage-200 transition-colors">
+                    <div className="p-2 bg-[#F8FAF8] rounded-lg group-hover:bg-[#DDE4D8] transition-colors">
                       {action.icon}
                     </div>
-                    <h3 className="font-semibold text-sage-800">{action.title}</h3>
-                    {action.external && <ExternalLink className="h-4 w-4 text-sage-500" />}
+                    <h3 className="font-semibold text-[#7A8F78]">{action.title}</h3>
+                    {action.external && <ExternalLink className="h-4 w-4 text-[#7A8F78]" />}
                   </div>
-                  <p className="text-sm text-sage-600 mb-4">{action.description}</p>
-                  <div className="flex items-center text-sage-700 font-medium text-sm group-hover:text-sage-800">
+                  <p className="text-sm text-[#7A8F78] mb-4">{action.description}</p>
+                  <div className="flex items-center text-[#5E6F5A] font-medium text-sm group-hover:text-[#7A8F78]">
                     Access now <ChevronRight className="h-4 w-4 ml-1" />
                   </div>
                 </ModernCardContent>
@@ -275,8 +275,8 @@ export default function HelpPage() {
         {/* Support Contact Info */}
         <div className="mb-8">
           <ModernCard variant="glow" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50">
-              <ModernCardTitle className="text-sage-800 flex items-center gap-3">
+            <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-earth-50">
+              <ModernCardTitle className="text-[#7A8F78] flex items-center gap-3">
                 <Users className="h-6 w-6" />
                 Need Personal Support?
               </ModernCardTitle>
@@ -287,11 +287,11 @@ export default function HelpPage() {
             <ModernCardContent className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="p-3 bg-sage-100 rounded-xl mx-auto w-fit mb-3">
-                    <Phone className="h-6 w-6 text-sage-700" />
+                  <div className="p-3 bg-[#F8FAF8] rounded-xl mx-auto w-fit mb-3">
+                    <Phone className="h-6 w-6 text-[#5E6F5A]" />
                   </div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Phone Support</h4>
-                  <p className="text-sm text-sage-600 mb-2">+1 (555) 123-4567</p>
+                  <h4 className="font-semibold text-[#7A8F78] mb-1">Phone Support</h4>
+                  <p className="text-sm text-[#7A8F78] mb-2">+1 (555) 123-4567</p>
                   <Badge variant="outline" className="text-xs">Mon-Fri 8AM-6PM EST</Badge>
                 </div>
                 <div className="text-center">
@@ -304,10 +304,10 @@ export default function HelpPage() {
                 </div>
                 <div className="text-center">
                   <div className="p-3 bg-cream-100 rounded-xl mx-auto w-fit mb-3">
-                    <Clock className="h-6 w-6 text-sage-700" />
+                    <Clock className="h-6 w-6 text-[#5E6F5A]" />
                   </div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Live Chat</h4>
-                  <p className="text-sm text-sage-600 mb-2">Available in-app</p>
+                  <h4 className="font-semibold text-[#7A8F78] mb-1">Live Chat</h4>
+                  <p className="text-sm text-[#7A8F78] mb-2">Available in-app</p>
                   <Badge variant="outline" className="text-xs">Mon-Fri 9AM-5PM EST</Badge>
                 </div>
               </div>
@@ -319,12 +319,12 @@ export default function HelpPage() {
           {helpSections.map((section) => (
             <div key={section.id}>
               <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-gradient-to-br from-sage-100 to-earth-100 rounded-xl">
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-earth-100 rounded-xl">
                   {section.icon}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-sage-800">{section.title}</h2>
-                  <p className="text-sage-600">{section.description}</p>
+                  <h2 className="text-2xl font-semibold text-[#7A8F78]">{section.title}</h2>
+                  <p className="text-[#7A8F78]">{section.description}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -332,12 +332,12 @@ export default function HelpPage() {
                   <ModernCard key={index} variant="soft" className="group hover:shadow-soft transition-all duration-300">
                     <ModernCardContent className="p-6">
                       <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-sage-800 group-hover:text-sage-900">
+                        <h3 className="font-semibold text-[#7A8F78] group-hover:text-sage-900">
                           {article.title}
                         </h3>
-                        <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-sage-600 transition-colors" />
+                        <ChevronRight className="h-4 w-4 text-[#7A8F78] group-hover:text-[#7A8F78] transition-colors" />
                       </div>
-                      <p className="text-sm text-sage-600 mb-4 leading-relaxed">
+                      <p className="text-sm text-[#7A8F78] mb-4 leading-relaxed">
                         {article.description}
                       </p>
                       <div className="flex items-center justify-between">
@@ -348,7 +348,7 @@ export default function HelpPage() {
                             </Badge>
                           ))}
                         </div>
-                        <span className="text-xs text-sage-500">{article.readTime}</span>
+                        <span className="text-xs text-[#7A8F78]">{article.readTime}</span>
                       </div>
                     </ModernCardContent>
                   </ModernCard>

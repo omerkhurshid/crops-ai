@@ -65,7 +65,7 @@ export function SystemHealth() {
   const getStatusColor = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return 'bg-green-100 text-green-800 border-green-200'
+        return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
       case 'warning':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'error':
@@ -109,7 +109,7 @@ export function SystemHealth() {
           <button
             onClick={fetchSystemHealth}
             disabled={loading}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-[#F5F5F5] rounded-lg transition-colors"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -118,15 +118,15 @@ export function SystemHealth() {
       <ModernCardContent className="space-y-6">
         {/* Service Status */}
         <div>
-          <h4 className="font-semibold text-gray-900 mb-3">Service Status</h4>
+          <h4 className="font-semibold text-[#1A1A1A] mb-3">Service Status</h4>
           <div className="space-y-3">
             {services.map((service) => (
-              <div key={service.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={service.name} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                 <div className="flex items-center gap-3">
                   {service.icon}
                   <div>
                     <div className="font-medium">{service.name}</div>
-                    <div className="text-xs text-gray-600">{service.description}</div>
+                    <div className="text-xs text-[#555555]">{service.description}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export function SystemHealth() {
         </div>
         {/* Performance Metrics */}
         <div>
-          <h4 className="font-semibold text-gray-900 mb-3">Performance Metrics</h4>
+          <h4 className="font-semibold text-[#1A1A1A] mb-3">Performance Metrics</h4>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between items-center mb-2">
@@ -163,7 +163,7 @@ export function SystemHealth() {
           </div>
         </div>
         {/* Last Update */}
-        <div className="text-xs text-gray-500 text-center">
+        <div className="text-xs text-[#555555] text-center">
           Last updated: {systemStatus.lastUpdate.toLocaleTimeString()}
         </div>
       </ModernCardContent>

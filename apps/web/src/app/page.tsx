@@ -183,7 +183,7 @@ export default function Home() {
             Join thousands of farmers using Cropple.ai to increase their profits.
           </p>
           <Link href="/register">
-            <button className="bg-white text-[#5E6F5A] hover:bg-gray-50 font-semibold text-lg px-8 py-4 rounded-lg transition-all duration-200 inline-flex items-center shadow-lg">
+            <button className="bg-white text-[#5E6F5A] hover:bg-[#FAFAF7] font-semibold text-lg px-8 py-4 rounded-lg transition-all duration-200 inline-flex items-center shadow-lg">
               <Target className="h-5 w-5 mr-2" />
               Start Your Free Trial
               <ArrowRight className="h-5 w-5 ml-2" />

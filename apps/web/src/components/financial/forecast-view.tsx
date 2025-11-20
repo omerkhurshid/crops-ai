@@ -106,7 +106,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
   const getScenarioColor = (scenario: string) => {
     switch (scenario) {
       case 'optimistic':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]';
       case 'pessimistic':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
@@ -133,8 +133,8 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
         {[...Array(3)].map((_, i) => (
           <Card key={i} className="p-6">
             <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-20 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-20 bg-[#F5F5F5] rounded"></div>
             </div>
           </Card>
         ))}
@@ -147,8 +147,8 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       <Card className="p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Financial Forecast</h3>
-            <p className="text-gray-600">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Financial Forecast</h3>
+            <p className="text-[#555555]">
               AI-powered predictions based on satellite data, weather patterns, and market trends
             </p>
           </div>
@@ -204,31 +204,31 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Predicted Revenue</p>
+                <p className="text-sm text-[#555555]">Predicted Revenue</p>
                 <p className="text-2xl font-bold text-green-600">
                   {formatCurrency(totalPredictedRevenue)}
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-500" />
             </div>
-            <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
+            <p className="text-xs text-[#555555] mt-2">Next 3 months</p>
           </Card>
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Predicted Costs</p>
+                <p className="text-sm text-[#555555]">Predicted Costs</p>
                 <p className="text-2xl font-bold text-red-600">
                   {formatCurrency(totalPredictedCost)}
                 </p>
               </div>
               <TrendingDown className="h-8 w-8 text-red-500" />
             </div>
-            <p className="text-xs text-gray-500 mt-2">Next 3 months</p>
+            <p className="text-xs text-[#555555] mt-2">Next 3 months</p>
           </Card>
           <Card className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Net Profit</p>
+                <p className="text-sm text-[#555555]">Net Profit</p>
                 <p className={`text-2xl font-bold ${
                   predictedProfit >= 0 ? 'text-green-600' : 'text-red-600'
                 }`}>
@@ -239,20 +239,20 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                 predictedProfit >= 0 ? 'text-green-500' : 'text-red-500'
               }`} />
             </div>
-            <p className="text-xs text-gray-500 mt-2">Projected profit</p>
+            <p className="text-xs text-[#555555] mt-2">Projected profit</p>
           </Card>
         </div>
       )}
       {/* Detailed Forecasts */}
       {revenueForecasts.length > 0 && (
         <Card className="p-6">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center">
             <DollarSign className="h-5 w-5 mr-2 text-green-600" />
             Revenue Forecasts
           </h4>
           <div className="space-y-3">
             {revenueForecasts.map((forecast) => (
-              <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={forecast.id} className="flex items-center justify-between p-4 bg-[#FAFAF7] rounded-lg">
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="font-medium">{formatDate(forecast.forecastDate)}</span>
@@ -260,7 +260,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                       {forecast.assumptions?.scenario || 'Realistic'}
                     </Badge>
                   </div>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-4 text-sm text-[#555555]">
                     <span className={getConfidenceColor(forecast.confidenceScore)}>
                       {forecast.confidenceScore.toFixed(0)}% confidence
                     </span>
@@ -283,7 +283,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                     {formatCurrency(forecast.predictedRevenue || 0)}
                   </p>
                   {forecast.predictedYield && (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#555555]">
                       Est. yield: {forecast.predictedYield.toFixed(1)} t/ha
                     </p>
                   )}
@@ -296,13 +296,13 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {/* Cost Forecasts */}
       {costForecasts.length > 0 && (
         <Card className="p-6">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center">
             <TrendingDown className="h-5 w-5 mr-2 text-red-600" />
             Cost Forecasts
           </h4>
           <div className="space-y-3">
             {costForecasts.map((forecast) => (
-              <div key={forecast.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={forecast.id} className="flex items-center justify-between p-4 bg-[#FAFAF7] rounded-lg">
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="font-medium">{formatDate(forecast.forecastDate)}</span>
@@ -310,7 +310,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                       {forecast.assumptions?.scenario || 'Realistic'}
                     </Badge>
                   </div>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-4 text-sm text-[#555555]">
                     <span className={getConfidenceColor(forecast.confidenceScore)}>
                       {forecast.confidenceScore.toFixed(0)}% confidence
                     </span>
@@ -333,8 +333,8 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {revenueForecasts.length === 0 && costForecasts.length === 0 && (
         <Card className="p-12 text-center">
           <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Forecasts Available</h3>
-          <p className="text-gray-600 mb-6">
+          <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Forecasts Available</h3>
+          <p className="text-[#555555] mb-6">
             Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.
           </p>
           <Button

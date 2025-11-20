@@ -118,7 +118,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
     if (value < 0.3) return { status: 'Poor', color: 'text-red-600', bg: 'bg-red-50' }
     if (value < 0.5) return { status: 'Developing', color: 'text-orange-600', bg: 'bg-orange-50' }
     if (value < 0.7) return { status: 'Good', color: 'text-yellow-600', bg: 'bg-yellow-50' }
-    return { status: 'Excellent', color: 'text-green-600', bg: 'bg-green-50' }
+    return { status: 'Excellent', color: 'text-green-600', bg: 'bg-[#F8FAF8]' }
   }
   const interpretation = getNDVIInterpretation(currentData.value)
   const handleTimePointChange = (index: number) => {
@@ -149,7 +149,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             <ModernCardTitle className="text-lg">Live Satellite NDVI Analysis</ModernCardTitle>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-green-100 text-green-800">Real Field Data</Badge>
+            <Badge className="bg-[#F8FAF8] text-green-800">Real Field Data</Badge>
             <Button
               variant="outline"
               size="sm"
@@ -163,12 +163,12 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Field Information */}
-        <div className="bg-sage-50 p-3 rounded-lg">
+        <div className="bg-[#F8FAF8] p-3 rounded-lg">
           <div className="flex items-center gap-2 mb-1">
-            <MapPin className="h-4 w-4 text-sage-600" />
-            <span className="font-medium text-sage-800">{DEMO_FIELD_LOCATION.name}</span>
+            <MapPin className="h-4 w-4 text-[#555555]" />
+            <span className="font-medium text-[#1A1A1A]">{DEMO_FIELD_LOCATION.name}</span>
           </div>
-          <div className="text-sm text-sage-600">
+          <div className="text-sm text-[#555555]">
             {DEMO_FIELD_LOCATION.address} • {DEMO_FIELD_LOCATION.acres} acres • {DEMO_FIELD_LOCATION.crop}
           </div>
         </div>
@@ -177,7 +177,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
           <div className="relative">
             {/* Simulated Field View */}
             <div 
-              className="h-64 rounded-lg border-2 border-gray-300 relative overflow-hidden"
+              className="h-64 rounded-lg border-2 border-[#E6E6E6] relative overflow-hidden"
               style={{ backgroundColor: currentData.hexColor }}
             >
               {/* Field Pattern */}
@@ -198,7 +198,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
               {/* Field Info Overlay */}
               <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-2 rounded-lg">
                 <div className="text-sm font-medium">Story County, IA</div>
-                <div className="text-xs text-gray-600">Lat: 41.5868, Lng: -93.6250</div>
+                <div className="text-xs text-[#555555]">Lat: 41.5868, Lng: -93.6250</div>
               </div>
               {/* NDVI Value Overlay */}
               <div className="absolute top-3 right-3 bg-black/80 text-white px-3 py-2 rounded-lg">
@@ -214,7 +214,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
             </div>
           </div>
         ) : (
-          <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+          <div className="h-64 bg-[#FAFAF7] rounded-lg flex items-center justify-center">
             {/* NDVI Time Series Chart */}
             <div className="w-full p-4">
               <div className="flex items-end justify-between h-40 gap-1">
@@ -259,14 +259,14 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
             <div className="text-3xl font-bold text-green-600">{currentData.value.toFixed(2)}</div>
-            <div className="text-sm text-gray-600 mb-1">NDVI Value</div>
+            <div className="text-sm text-[#555555] mb-1">NDVI Value</div>
             <Badge className={`${interpretation.color} ${interpretation.bg}`}>
               {interpretation.status}
             </Badge>
           </div>
           <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
             <div className="text-lg font-bold text-blue-600">{currentData.stage}</div>
-            <div className="text-sm text-gray-600 mb-1">Growth Stage</div>
+            <div className="text-sm text-[#555555] mb-1">Growth Stage</div>
             <div className="text-xs text-blue-600">{currentData.date}</div>
           </div>
         </div>
@@ -281,7 +281,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
           </div>
         </div>
         {/* Real-time Insights */}
-        <div className="bg-green-50 p-3 rounded-lg">
+        <div className="bg-[#F8FAF8] p-3 rounded-lg">
           <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Real-time Analysis
@@ -294,7 +294,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
           </div>
         </div>
         <div className="pt-2 border-t">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-[#555555]">
             <Eye className="h-3 w-3" />
             <span>Data from ESA Copernicus Sentinel-2 • Processed with Google Earth Engine</span>
           </div>

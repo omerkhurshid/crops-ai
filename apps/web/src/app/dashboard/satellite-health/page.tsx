@@ -94,7 +94,7 @@ export default function SatelliteHealthPage() {
       title: 'Total Area',
       value: `${selectedFarm?.totalArea || 0} acres`,
       icon: BarChart3,
-      color: 'text-green-600'
+      color: 'text-[#7A8F78]'
     },
     {
       title: 'Analysis Frequency',
@@ -218,7 +218,7 @@ export default function SatelliteHealthPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <TrendingUp className="h-8 w-8 text-green-400 mx-auto mb-3" />
+                <TrendingUp className="h-8 w-8 text-[#8FBF7F] mx-auto mb-3" />
                 <h3 className="text-white font-semibold mb-2">NDVI Analysis</h3>
                 <p className="text-white/70 text-sm">
                   Normalized Difference Vegetation Index for crop health assessment

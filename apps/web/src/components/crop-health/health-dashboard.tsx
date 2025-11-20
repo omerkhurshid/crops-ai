@@ -54,7 +54,7 @@ interface FieldHealth {
   }
 }
 const stressLevelColors = {
-  none: 'bg-green-100 text-green-800',
+  none: 'bg-[#F8FAF8] text-green-800',
   low: 'bg-yellow-100 text-yellow-800',
   moderate: 'bg-orange-100 text-orange-800',
   high: 'bg-red-100 text-red-800',
@@ -286,7 +286,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Overall Health</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#555555]">Overall Health</CardTitle>
               <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
             </div>
           </CardHeader>
@@ -294,7 +294,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             <div className="text-2xl font-bold text-green-600">
               {Math.round((fields || []).reduce((sum, f) => sum + f.healthScore, 0) / (fields || []).length)}%
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-[#555555] mt-1">
               Average across {(fields || []).length} fields
             </p>
           </CardContent>
@@ -302,7 +302,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Stressed Areas</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#555555]">Stressed Areas</CardTitle>
               <InfoTooltip {...TOOLTIP_CONTENT.stressLevel} />
             </div>
           </CardHeader>
@@ -310,7 +310,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             <div className="text-2xl font-bold text-orange-600">
               {(fields || []).reduce((sum, f) => sum + f.zones?.stressed?.percentage || 0, 0).toFixed(1)}%
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-[#555555] mt-1">
               Requiring attention
             </p>
           </CardContent>
@@ -318,7 +318,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Avg NDVI</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#555555]">Avg NDVI</CardTitle>
               <InfoTooltip {...TOOLTIP_CONTENT.ndvi} />
             </div>
           </CardHeader>
@@ -326,7 +326,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             <div className="text-2xl font-bold text-green-600">
               {((fields || []).reduce((sum, f) => sum + f.indices?.ndvi || 0, 0) / (fields || []).length).toFixed(2)}
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-[#555555] mt-1">
               Vegetation index
             </p>
           </CardContent>
@@ -334,7 +334,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
         <Card className="border-2">
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Area</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#555555]">Total Area</CardTitle>
               <InfoTooltip {...TOOLTIP_CONTENT.area} />
             </div>
           </CardHeader>
@@ -342,7 +342,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             <div className="text-2xl font-bold text-blue-600">
               {(fields || []).reduce((sum, f) => sum + f.area, 0).toFixed(1)} ha
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-[#555555] mt-1">
               Under monitoring
             </p>
           </CardContent>
@@ -362,14 +362,14 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                 onClick={() => setSelectedField(field.fieldId)}
                 className={`p-4 border-2 rounded-lg text-left transition-all ${
                   selectedField === field.fieldId || (selectedField === null && field === fields[0])
-                    ? 'border-green-500 bg-green-50' 
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-[#8FBF7F] bg-[#F8FAF8]' 
+                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <div className="font-semibold">{field.fieldName}</div>
-                    <div className="text-sm text-gray-600">{field.cropType} • {field.area.toFixed(1)} ha</div>
+                    <div className="text-sm text-[#555555]">{field.cropType} • {field.area.toFixed(1)} ha</div>
                   </div>
                   <Badge className={stressLevelColors[field.stressLevel]}>
                     {field.stressLevel}
@@ -405,14 +405,14 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     <div key={zone}>
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm font-medium capitalize">{zone}</span>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-[#555555]">
                           {data.percentage}% ({data.area.toFixed(1)} ha)
                         </span>
                       </div>
                       <Progress 
                         value={data.percentage} 
                         className={`h-2 ${
-                          zone === 'excellent' ? '[&>div]:bg-green-500' :
+                          zone === 'excellent' ? '[&>div]:bg-[#8FBF7F]' :
                           zone === 'good' ? '[&>div]:bg-yellow-500' :
                           zone === 'moderate' ? '[&>div]:bg-orange-500' :
                           '[&>div]:bg-red-500'
@@ -438,9 +438,9 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     const tooltipKey = index as keyof typeof TOOLTIP_CONTENT
                     const tooltipData = TOOLTIP_CONTENT[tooltipKey]
                     return (
-                      <div key={index} className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div key={index} className="text-center p-3 bg-[#FAFAF7] rounded-lg">
                         <div className="text-lg font-bold">{value.toFixed(3)}</div>
-                        <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                        <div className="flex items-center justify-center gap-1 text-xs text-[#555555]">
                           <span>{index.toUpperCase()}</span>
                           {tooltipData && <InfoTooltip {...tooltipData} size="sm" />}
                         </div>
@@ -488,15 +488,15 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                         <Progress 
                           value={data.severity} 
                           className={`h-2 ${
-                            data.severity <= 10 ? '[&>div]:bg-green-500' :
+                            data.severity <= 10 ? '[&>div]:bg-[#8FBF7F]' :
                             data.severity <= 30 ? '[&>div]:bg-yellow-500' :
                             '[&>div]:bg-red-500'
                           }`}
                         />
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-[#555555]">
                           Confidence: {data.confidence}%
                         </div>
-                        <p className="text-xs text-gray-700 mt-2">
+                        <p className="text-xs text-[#555555] mt-2">
                           {data.description}
                         </p>
                       </div>
@@ -525,12 +525,12 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     <span>Current Projection</span>
                     <InfoTooltip {...TOOLTIP_CONTENT.currentYield} size="sm" />
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">
+                  <div className="text-xs text-[#555555] mt-1">
                     {selectedFieldData.cropType === 'Corn' ? 'bushels/acre' : 
                      selectedFieldData.cropType === 'Soybeans' ? 'bushels/acre' : 'units/acre'}
                   </div>
                 </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
                   <div className="text-2xl font-bold text-green-800">
                     {selectedFieldData.yieldPrediction.potential}
                   </div>
@@ -538,7 +538,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     <span>Potential Yield</span>
                     <InfoTooltip {...TOOLTIP_CONTENT.potentialYield} size="sm" />
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">
+                  <div className="text-xs text-[#555555] mt-1">
                     With optimization
                   </div>
                 </div>
@@ -550,17 +550,17 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                     <span>Confidence Level</span>
                     <InfoTooltip {...TOOLTIP_CONTENT.confidence} size="sm" />
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">
+                  <div className="text-xs text-[#555555] mt-1">
                     Prediction accuracy
                   </div>
                 </div>
               </div>
-              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <div className="mt-4 p-4 bg-[#FAFAF7] rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <Target className="h-4 w-4 text-blue-600" />
                   <span className="font-medium">Yield Gap Analysis</span>
                 </div>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#555555]">
                   Current projection is {((selectedFieldData.yieldPrediction.potential - selectedFieldData.yieldPrediction.current) / selectedFieldData.yieldPrediction.current * 100).toFixed(1)}% below potential. 
                   Key improvement opportunities: stress management and nutrient optimization.
                 </p>

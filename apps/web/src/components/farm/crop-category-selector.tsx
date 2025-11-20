@@ -76,7 +76,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
         {filteredCategories.map((category) => (
           <Card key={category.id} className="overflow-hidden">
             <CardHeader 
-              className="cursor-pointer hover:bg-gray-50 transition-colors"
+              className="cursor-pointer hover:bg-[#FAFAF7] transition-colors"
               onClick={() => setSelectedCategory(
                 selectedCategory === category.id ? null : category.id
               )}
@@ -86,7 +86,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                   <span className="text-2xl">{category.icon}</span>
                   <div>
                     <CardTitle className="text-lg">{category.name}</CardTitle>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-[#555555] mt-1">
                       {category.description}
                     </p>
                   </div>
@@ -111,20 +111,20 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                       key={crop.id}
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
                         selectedCrop === crop.id
-                          ? 'bg-sage-50 border-sage-300 ring-1 ring-sage-500'
-                          : 'bg-white hover:bg-gray-50 border-gray-200'
+                          ? 'bg-[#F8FAF8] border-[#DDE4D8] ring-1 ring-sage-500'
+                          : 'bg-white hover:bg-[#FAFAF7] border-[#E6E6E6]'
                       }`}
                       onClick={() => onSelect(crop, category)}
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{crop.name}</h4>
+                        <h4 className="font-medium text-[#1A1A1A]">{crop.name}</h4>
                         <InfoTooltip
                           title={crop.name}
                           description={`${crop.scientificName ? `Scientific: ${crop.scientificName}. ` : ''}${crop.growingSeasonDays ? `Growing season: ${crop.growingSeasonDays} days. ` : ''}${crop.primaryHarvestSeason ? `Harvest: ${crop.primaryHarvestSeason.join(', ')}. ` : ''}${crop.commonVarieties ? `Varieties: ${crop.commonVarieties.slice(0, 3).join(', ')}` : ''}`}
                         />
                       </div>
                       {crop.scientificName && (
-                        <p className="text-xs text-gray-500 italic mb-2">
+                        <p className="text-xs text-[#555555] italic mb-2">
                           {crop.scientificName}
                         </p>
                       )}
@@ -140,11 +140,11 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                           </Badge>
                         )}
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         <p className="mb-1"><strong>Monitors:</strong></p>
                         <p>{crop.monitoringParameters.slice(0, 3).join(', ')}</p>
                         {crop.monitoringParameters.length > 3 && (
-                          <p className="text-gray-500">+{crop.monitoringParameters.length - 3} more</p>
+                          <p className="text-[#555555]">+{crop.monitoringParameters.length - 3} more</p>
                         )}
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
               <span className="text-2xl">🌾</span>
               <div>
                 <CardTitle className="text-lg">Comprehensive Agricultural Database</CardTitle>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-[#555555] mt-1">
                   {comprehensiveCrops.length} crops found with detailed agricultural data
                 </p>
               </div>
@@ -174,7 +174,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
               {comprehensiveCrops.map((crop) => (
                 <div
                   key={crop.id}
-                  className="p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md bg-white hover:bg-gray-50 border-gray-200"
+                  className="p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md bg-white hover:bg-[#FAFAF7] border-[#E6E6E6]"
                   onClick={() => {
                     // Convert comprehensive crop to CropItem format
                     const cropItem: CropItem = {
@@ -202,13 +202,13 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                   }}
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-gray-900">{crop.name}</h4>
+                    <h4 className="font-medium text-[#1A1A1A]">{crop.name}</h4>
                     <InfoTooltip
                       title={crop.name}
                       description={`Scientific: ${crop.scientific_name}. Type: ${crop.crop_type}. Maturity: ${crop.days_to_maturity_min}-${crop.days_to_maturity_max} days. ${crop.varieties?.length ? `${crop.varieties.length} varieties available.` : ''}`}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 italic mb-2">
+                  <p className="text-xs text-[#555555] italic mb-2">
                     {crop.scientific_name}
                   </p>
                   <div className="flex flex-wrap gap-1 mb-2">
@@ -226,11 +226,11 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                       </Badge>
                     )}
                   </div>
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-[#555555]">
                     <p className="mb-1"><strong>Climate zones:</strong></p>
                     <p>{crop.climate_zones.slice(0, 2).join(', ')}</p>
                     {crop.climate_zones.length > 2 && (
-                      <p className="text-gray-500">+{crop.climate_zones.length - 2} more</p>
+                      <p className="text-[#555555]">+{crop.climate_zones.length - 2} more</p>
                     )}
                   </div>
                 </div>
@@ -241,12 +241,12 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
       )}
       {loading && (
         <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600 mx-auto"></div>
-          <p className="text-gray-500 mt-2">Searching comprehensive database...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto"></div>
+          <p className="text-[#555555] mt-2">Searching comprehensive database...</p>
         </div>
       )}
       {filteredCategories.length === 0 && comprehensiveCrops.length === 0 && !loading && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-[#555555]">
           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
           <h3 className="text-lg font-medium mb-2">No crops found</h3>
           <p>Try adjusting your search terms or browse categories above.</p>

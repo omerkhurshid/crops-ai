@@ -100,10 +100,10 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
         <div className="animate-pulse">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-32 bg-sage-100 rounded-xl"></div>
+              <div key={i} className="h-32 bg-[#F8FAF8] rounded-xl"></div>
             ))}
           </div>
-          <div className="h-96 bg-sage-100 rounded-xl"></div>
+          <div className="h-96 bg-[#F8FAF8] rounded-xl"></div>
         </div>
       </div>
     )
@@ -111,7 +111,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
   if (!summary) {
     return (
       <div className="text-center py-12">
-        <p className="text-sage-600">No financial data available</p>
+        <p className="text-[#555555]">No financial data available</p>
       </div>
     )
   }
@@ -129,8 +129,8 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       {/* Header with Add Transaction */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold text-sage-800 mb-2">Portfolio Overview</h2>
-          <p className="text-sage-600">Financial summary across all your farms</p>
+          <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">Portfolio Overview</h2>
+          <p className="text-[#555555]">Financial summary across all your farms</p>
         </div>
         <InlineFloatingButton
           icon={<Plus className="h-4 w-4" />}
@@ -197,9 +197,9 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       {/* Monthly Trends Chart */}
       {monthlyTrends.length > 0 && (
         <ModernCard variant="floating">
-          <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+          <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
             <ModernCardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-sage-600" />
+              <BarChart3 className="h-5 w-5 text-[#555555]" />
               Monthly Trends
             </ModernCardTitle>
             <ModernCardDescription>
@@ -207,8 +207,8 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
             </ModernCardDescription>
           </ModernCardHeader>
           <ModernCardContent className="p-6">
-            <div className="h-64 flex items-center justify-center bg-sage-50 rounded-lg">
-              <p className="text-sage-600">Chart visualization coming soon</p>
+            <div className="h-64 flex items-center justify-center bg-[#F8FAF8] rounded-lg">
+              <p className="text-[#555555]">Chart visualization coming soon</p>
             </div>
           </ModernCardContent>
         </ModernCard>

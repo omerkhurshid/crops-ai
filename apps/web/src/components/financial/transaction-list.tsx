@@ -154,10 +154,10 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
             <Card className="p-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-32"></div>
-                  <div className="h-3 bg-gray-200 rounded w-24"></div>
+                  <div className="h-4 bg-[#F5F5F5] rounded w-32"></div>
+                  <div className="h-3 bg-[#F5F5F5] rounded w-24"></div>
                 </div>
-                <div className="h-6 bg-gray-200 rounded w-20"></div>
+                <div className="h-6 bg-[#F5F5F5] rounded w-20"></div>
               </div>
             </Card>
           </div>
@@ -209,8 +209,8 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
         {filteredTransactions.length === 0 ? (
           <Card className="p-8 text-center">
             <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
-            <p className="text-gray-600">Start by adding your first income or expense transaction.</p>
+            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No transactions found</h3>
+            <p className="text-[#555555]">Start by adding your first income or expense transaction.</p>
           </Card>
         ) : (
           filteredTransactions.map((transaction) => (
@@ -220,7 +220,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                   <div className="flex items-center space-x-3 mb-2">
                     <Badge 
                       variant={transaction.type === 'INCOME' ? 'default' : 'secondary'}
-                      className={transaction.type === 'INCOME' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'}
+                      className={transaction.type === 'INCOME' ? 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]' : 'bg-red-100 text-red-800 border-red-200'}
                     >
                       {transaction.type === 'INCOME' ? '↗' : '↙'} {CATEGORY_LABELS[transaction.category] || transaction.category}
                     </Badge>
@@ -230,7 +230,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                       </Badge>
                     )}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-gray-600">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-[#555555]">
                     <div className="flex items-center space-x-1">
                       <Calendar className="h-3 w-3" />
                       <span>{formatDate(transaction.transactionDate)}</span>
@@ -255,10 +255,10 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                     )}
                   </div>
                   {transaction.notes && (
-                    <p className="mt-2 text-sm text-gray-700">{transaction.notes}</p>
+                    <p className="mt-2 text-sm text-[#555555]">{transaction.notes}</p>
                   )}
                   {transaction.quantity && transaction.unitPrice && (
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-[#555555]">
                       {transaction.quantity} × {formatCurrency(transaction.unitPrice)}
                     </p>
                   )}
@@ -292,7 +292,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       {totalPages > 1 && (
         <Card className="p-4">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-[#555555]">
               Page {currentPage} of {totalPages}
             </div>
             <div className="flex items-center space-x-2">

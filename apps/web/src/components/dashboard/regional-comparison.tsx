@@ -244,7 +244,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
     return icons[category as keyof typeof icons] || BarChart3
   }
   const getPercentileColor = (percentile: number) => {
-    if (percentile >= 75) return 'text-green-600 bg-green-100'
+    if (percentile >= 75) return 'text-green-600 bg-[#F8FAF8]'
     if (percentile >= 50) return 'text-blue-600 bg-blue-100'
     if (percentile >= 25) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
@@ -268,8 +268,8 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         </ModernCardHeader>
         <ModernCardContent>
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-3/4"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-1/2"></div>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -280,15 +280,15 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       <ModernCard variant="soft" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-gray-600" />
+            <Users className="h-5 w-5 text-[#555555]" />
             Regional Comparison
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent>
           <div className="text-center py-6">
             <MapPin className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600">Regional data not available</p>
-            <p className="text-xs text-gray-500">Set farm location to enable regional benchmarking</p>
+            <p className="text-sm text-[#555555]">Regional data not available</p>
+            <p className="text-xs text-[#555555]">Set farm location to enable regional benchmarking</p>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -306,7 +306,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
                 #{comparison.ranking.overall} of {comparison.ranking.totalFarms}
               </Badge>
             </ModernCardTitle>
-            <div className="flex items-center gap-4 text-xs text-gray-600">
+            <div className="flex items-center gap-4 text-xs text-[#555555]">
               <span className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 {comparison.region}
@@ -341,16 +341,16 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Performance Overview */}
-        <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-2 gap-3 p-3 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
             <div className="text-lg font-bold text-blue-600">{comparison.ranking.category}</div>
-            <div className="text-xs text-gray-600">Overall Rating</div>
+            <div className="text-xs text-[#555555]">Overall Rating</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-orange-600">
               {Math.round(comparison.metrics.reduce((sum, m) => sum + m.percentile, 0) / comparison.metrics.length)}%
             </div>
-            <div className="text-xs text-gray-600">Avg Percentile</div>
+            <div className="text-xs text-[#555555]">Avg Percentile</div>
           </div>
         </div>
         {/* Metrics Comparison */}
@@ -362,10 +362,10 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
               ? performanceDiff < 0  // Lower is better for costs/carbon
               : performanceDiff > 0  // Higher is better for yield/profit
             return (
-              <div key={metric.metric} className="p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+              <div key={metric.metric} className="p-3 border rounded-lg hover:bg-[#FAFAF7] transition-colors">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 text-gray-600" />
+                    <Icon className="h-4 w-4 text-[#555555]" />
                     <span className="font-medium text-sm">{metric.metric}</span>
                     {getTrendIcon(metric.trend)}
                   </div>
@@ -375,19 +375,19 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
                 </div>
                 <div className="grid grid-cols-3 gap-3 text-xs">
                   <div>
-                    <span className="text-gray-500 block">Your Farm</span>
+                    <span className="text-[#555555] block">Your Farm</span>
                     <span className="font-semibold">
                       {metric.yourValue.toFixed(metric.unit.includes('$') ? 0 : 1)} {metric.unit}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-500 block">Region Avg</span>
+                    <span className="text-[#555555] block">Region Avg</span>
                     <span className="font-medium">
                       {metric.regionAverage.toFixed(metric.unit.includes('$') ? 0 : 1)} {metric.unit}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-500 block">Difference</span>
+                    <span className="text-[#555555] block">Difference</span>
                     <span className={cn('font-medium', isGoodDiff ? 'text-green-600' : 'text-red-600')}>
                       {isGoodDiff ? '+' : ''}{performanceDiff.toFixed(metric.unit.includes('$') ? 0 : 1)}
                     </span>
@@ -400,7 +400,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         {/* Benchmark Goals */}
         {showBenchmarks && comparison.benchmarkGoals.length > 0 && (
           <div className="space-y-3 pt-4 border-t">
-            <h4 className="font-medium text-sm text-gray-800 flex items-center gap-2">
+            <h4 className="font-medium text-sm text-[#1A1A1A] flex items-center gap-2">
               <Target className="h-4 w-4" />
               Improvement Targets
             </h4>
@@ -417,7 +417,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
                     {goal.priority} priority
                   </Badge>
                 </div>
-                <div className="text-xs text-gray-700">
+                <div className="text-xs text-[#555555]">
                   <span>Target: {goal.improvement}</span>
                   <span className="ml-3">
                     ({goal.currentValue.toFixed(1)} → {goal.targetValue.toFixed(1)})
@@ -430,12 +430,12 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         {/* Insights */}
         {comparison.insights.length > 0 && (
           <div className="space-y-2 pt-4 border-t">
-            <h4 className="font-medium text-sm text-gray-800 flex items-center gap-2">
+            <h4 className="font-medium text-sm text-[#1A1A1A] flex items-center gap-2">
               <Info className="h-4 w-4" />
               Regional Insights
             </h4>
             {comparison.insights.map((insight, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-sm text-gray-700 p-2 bg-blue-50 rounded">
+              <div key={idx} className="flex items-start gap-2 text-sm text-[#555555] p-2 bg-blue-50 rounded">
                 <span className="text-blue-600 mt-0.5">•</span>
                 <span>{insight}</span>
               </div>

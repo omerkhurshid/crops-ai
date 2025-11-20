@@ -65,8 +65,8 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <div className="text-gray-400 mb-4">
           <Heart className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Animals Yet</h3>
-        <p className="text-gray-600 mb-6">Start building your herd by adding your first animal.</p>
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Animals Yet</h3>
+        <p className="text-[#555555] mb-6">Start building your herd by adding your first animal.</p>
         <Link href="/livestock/animals/add">
           <Button>Add Your First Animal</Button>
         </Link>
@@ -89,7 +89,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {farms.map(farm => (
@@ -99,7 +99,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -112,22 +112,22 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
       {/* Animal Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAnimals.map(animal => (
-          <div key={animal.id} className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div key={animal.id} className="bg-white rounded-lg border border-[#E6E6E6] shadow-sm hover:shadow-md transition-shadow">
             <div className="p-6">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A]">
                     #{animal.tagNumber}
                   </h3>
                   {animal.name && (
-                    <p className="text-sm text-gray-600">{animal.name}</p>
+                    <p className="text-sm text-[#555555]">{animal.name}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
                   {/* Health Status */}
                   <div className={`w-3 h-3 rounded-full ${
-                    getHealthStatus(animal) === 'healthy' ? 'bg-green-500' : 'bg-yellow-500'
+                    getHealthStatus(animal) === 'healthy' ? 'bg-[#8FBF7F]' : 'bg-yellow-500'
                   }`} />
                   {/* Weight Trend */}
                   <TrendingUp className={`h-4 w-4 ${
@@ -139,26 +139,26 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
               {/* Animal Info */}
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Species:</span>
+                  <span className="text-[#555555]">Species:</span>
                   <span className="font-medium">{animal.species}</span>
                 </div>
                 {animal.breed && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Breed:</span>
+                    <span className="text-[#555555]">Breed:</span>
                     <span className="font-medium">{animal.breed}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Gender:</span>
+                  <span className="text-[#555555]">Gender:</span>
                   <span className="font-medium">{animal.gender}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Age:</span>
+                  <span className="text-[#555555]">Age:</span>
                   <span className="font-medium">{calculateAge(animal.birthDate)}</span>
                 </div>
                 {animal.currentWeight && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Weight:</span>
+                    <span className="text-[#555555]">Weight:</span>
                     <span className="font-medium">{animal.currentWeight} lbs</span>
                   </div>
                 )}
@@ -171,7 +171,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
                 >
                   {animal.status}
                 </Badge>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-[#555555]">
                   {animal.farm?.name}
                 </span>
               </div>
@@ -193,7 +193,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
       </div>
       {filteredAnimals.length === 0 && searchTerm && (
         <div className="text-center py-8">
-          <p className="text-gray-500">No animals found matching your search criteria.</p>
+          <p className="text-[#555555]">No animals found matching your search criteria.</p>
         </div>
       )}
     </div>

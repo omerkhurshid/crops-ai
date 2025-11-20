@@ -58,15 +58,15 @@ export function FieldStatusToggle({
           size="sm"
           aria-label={`Toggle ${fieldName} active status`}
         />
-        <span className="text-xs text-sage-600">
+        <span className="text-xs text-[#555555]">
           {isLoading ? 'Updating...' : isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
       <Badge 
         className={`text-xs ${
           isActive 
-            ? 'bg-sage-100 text-sage-700 border-sage-200' 
-            : 'bg-gray-100 text-gray-600 border-gray-200'
+            ? 'bg-[#F8FAF8] text-[#555555] border-[#DDE4D8]' 
+            : 'bg-[#F5F5F5] text-[#555555] border-[#E6E6E6]'
         }`}
       >
         {isActive ? 'Active' : 'Inactive'}

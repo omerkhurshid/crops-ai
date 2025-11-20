@@ -320,7 +320,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           </div>
           <div className="flex items-center gap-2">
             <Badge className={
-              cacheStatus === 'live' ? 'bg-green-100 text-green-800' :
+              cacheStatus === 'live' ? 'bg-[#F8FAF8] text-green-800' :
               cacheStatus === 'cached' ? 'bg-blue-100 text-blue-800' :
               'bg-yellow-100 text-yellow-800'
             }>
@@ -340,22 +340,22 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       </ModernCardHeader>
       <ModernCardContent className="space-y-4">
         {/* Field Information */}
-        <div className="bg-sage-50 p-3 rounded-lg">
+        <div className="bg-[#F8FAF8] p-3 rounded-lg">
           <div className="flex items-center gap-2 mb-1">
-            <MapPin className="h-4 w-4 text-sage-600" />
-            <span className="font-medium text-sage-800">{DEMO_FIELD_LOCATION.name}</span>
+            <MapPin className="h-4 w-4 text-[#555555]" />
+            <span className="font-medium text-[#1A1A1A]">{DEMO_FIELD_LOCATION.name}</span>
           </div>
-          <div className="text-sm text-sage-600">
+          <div className="text-sm text-[#555555]">
             {DEMO_FIELD_LOCATION.address} • {DEMO_FIELD_LOCATION.acres} acres • {DEMO_FIELD_LOCATION.crop}
           </div>
         </div>
         {/* Date Selection */}
         <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-gray-600" />
+          <Calendar className="h-4 w-4 text-[#555555]" />
           <select
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+            className="flex-1 px-3 py-2 border border-[#E6E6E6] rounded-md text-sm"
           >
             {availableDates.map(date => (
               <option key={date} value={date}>
@@ -382,10 +382,10 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             <LoadScript 
               googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
               loadingElement={
-                <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div className="h-96 bg-[#F5F5F5] rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-2"></div>
-                    <div className="text-sm text-gray-600">Loading Google Maps...</div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto mb-2"></div>
+                    <div className="text-sm text-[#555555]">Loading Google Maps...</div>
                   </div>
                 </div>
               }
@@ -407,7 +407,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                     onCloseClick={() => setShowInfo(false)}
                   >
                     <div className="p-2 max-w-xs">
-                      <h3 className="font-medium text-gray-800 mb-2">Field Analysis</h3>
+                      <h3 className="font-medium text-[#1A1A1A] mb-2">Field Analysis</h3>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span>Average NDVI:</span>
@@ -423,7 +423,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                           <span>Min NDVI:</span>
                           <span className="font-medium">{(ndviData.minNDVI || 0.65).toFixed(2)}</span>
                         </div>
-                        <div className="text-xs text-gray-600 mt-2">
+                        <div className="text-xs text-[#555555] mt-2">
                           Data from Google Earth Engine
                         </div>
                       </div>
@@ -440,7 +440,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 <div className="text-sm text-green-700 mb-4">
                   Interactive satellite mapping available with Google Maps API
                 </div>
-                <div className="bg-green-50 p-3 rounded-lg text-xs text-green-600 border border-green-200">
+                <div className="bg-[#F8FAF8] p-3 rounded-lg text-xs text-green-600 border border-[#DDE4D8]">
                   <div className="font-semibold mb-1">Current Analysis:</div>
                   <div>• Field: {DEMO_FIELD_LOCATION.name}</div>
                   <div>• NDVI: {(ndviData?.averageNDVI || 0.82).toFixed(2)} (Excellent)</div>
@@ -458,30 +458,30 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 <div className="text-2xl font-bold text-green-600">
                   {ndviData.averageNDVI.toFixed(2)}
                 </div>
-                <div className="text-xs text-gray-600">Avg NDVI</div>
+                <div className="text-xs text-[#555555]">Avg NDVI</div>
               </div>
               <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600">
                   {ndviData.maxNDVI.toFixed(2)}
                 </div>
-                <div className="text-xs text-gray-600">Max NDVI</div>
+                <div className="text-xs text-[#555555]">Max NDVI</div>
               </div>
               <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600">
                   {ndviData.uniformity}%
                 </div>
-                <div className="text-xs text-gray-600">Uniformity</div>
+                <div className="text-xs text-[#555555]">Uniformity</div>
               </div>
             </div>
             {/* Crop Stage and Yield Projection */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
                 <div className="text-sm font-medium text-orange-800">{ndviData.stage}</div>
-                <div className="text-xs text-gray-600 mt-1">Growth Stage</div>
+                <div className="text-xs text-[#555555] mt-1">Growth Stage</div>
               </div>
               <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg">
                 <div className="text-lg font-bold text-emerald-600">{ndviData.yieldProjection} bu/ac</div>
-                <div className="text-xs text-gray-600">Yield Projection</div>
+                <div className="text-xs text-[#555555]">Yield Projection</div>
               </div>
             </div>
           </div>
@@ -490,18 +490,18 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
         {ndviData && (
           <div className="space-y-4">
             {/* Field Performance Analysis */}
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-[#DDE4D8]">
               <h5 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 Field Performance Analysis
               </h5>
               <div className="grid grid-cols-2 gap-4 mb-3">
                 <div className="bg-white/60 p-3 rounded-lg">
-                  <div className="text-sm text-gray-600 mb-1">Health Status</div>
+                  <div className="text-sm text-[#555555] mb-1">Health Status</div>
                   <div className="font-semibold text-green-700">{ndviData.healthStatus}</div>
                 </div>
                 <div className="bg-white/60 p-3 rounded-lg">
-                  <div className="text-sm text-gray-600 mb-1">Projected Revenue</div>
+                  <div className="text-sm text-[#555555] mb-1">Projected Revenue</div>
                   <div className="font-semibold text-green-700">
                     ${((ndviData.yieldProjection * 4.25 * 160) / 1000).toFixed(0)}k
                   </div>
@@ -549,7 +549,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
               <div className="space-y-2">
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Disease Pressure</span>
-                  <Badge className="bg-green-100 text-green-800 text-xs">Low</Badge>
+                  <Badge className="bg-[#F8FAF8] text-green-800 text-xs">Low</Badge>
                 </div>
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Moisture Stress</span>
@@ -557,15 +557,15 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Pest Activity</span>
-                  <Badge className="bg-green-100 text-green-800 text-xs">Normal</Badge>
+                  <Badge className="bg-[#F8FAF8] text-green-800 text-xs">Normal</Badge>
                 </div>
               </div>
             </div>
           </div>
         )}
         {/* Cache and Update Info */}
-        <div className="bg-gray-50 p-3 rounded-lg">
-          <div className="flex items-center justify-between text-xs text-gray-600">
+        <div className="bg-[#FAFAF7] p-3 rounded-lg">
+          <div className="flex items-center justify-between text-xs text-[#555555]">
             <div className="flex items-center gap-2">
               <Eye className="h-3 w-3" />
               <span>Google Earth Engine • 10m resolution • {ndviData?.source === 'live' ? 'Live API' : 'Enhanced Demo'}</span>

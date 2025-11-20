@@ -35,7 +35,7 @@ interface ColoredTransactionListProps {
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   // Income categories
   CROP_SALES: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
-  LIVESTOCK_SALES: { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300' },
+  LIVESTOCK_SALES: { bg: 'bg-[#F8FAF8]', text: 'text-green-800', border: 'border-green-300' },
   SUBSIDIES: { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
   LEASE_INCOME: { bg: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-300' },
   OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' },
@@ -49,7 +49,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   IRRIGATION: { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-300' },
   STORAGE: { bg: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-300' },
   INSURANCE: { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-300' },
-  OTHER_EXPENSE: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-300' },
+  OTHER_EXPENSE: { bg: 'bg-[#F5F5F5]', text: 'text-[#1A1A1A]', border: 'border-[#E6E6E6]' },
 }
 const CATEGORY_LABELS: Record<string, string> = {
   CROP_SALES: 'Crop Sales',
@@ -137,12 +137,12 @@ export function ColoredTransactionList({
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                   <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-32"></div>
-                    <div className="h-3 bg-gray-200 rounded w-24"></div>
+                    <div className="h-4 bg-[#F5F5F5] rounded w-32"></div>
+                    <div className="h-3 bg-[#F5F5F5] rounded w-24"></div>
                   </div>
-                  <div className="h-5 bg-gray-200 rounded w-20"></div>
+                  <div className="h-5 bg-[#F5F5F5] rounded w-20"></div>
                 </div>
               </div>
             ))}
@@ -180,7 +180,7 @@ export function ColoredTransactionList({
         </div>
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+          <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
             <div className="flex items-center justify-between">
               <span className="text-xs text-green-600">Income</span>
               <ArrowUpRight className="h-3 w-3 text-green-600" />
@@ -211,7 +211,7 @@ export function ColoredTransactionList({
                   className={cn(
                     "p-3 rounded-lg border transition-all hover:shadow-sm cursor-pointer",
                     transaction.type === 'INCOME' 
-                      ? "bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 hover:border-green-300" 
+                      ? "bg-gradient-to-r from-green-50 to-emerald-50 border-[#DDE4D8] hover:border-green-300" 
                       : "bg-gradient-to-r from-red-50 to-pink-50 border-red-200 hover:border-red-300"
                   )}
                 >
@@ -230,18 +230,18 @@ export function ColoredTransactionList({
                         >
                           {CATEGORY_LABELS[transaction.category] || transaction.category}
                         </Badge>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-[#555555]">
                           {formatDate(transaction.transactionDate)}
                         </span>
                       </div>
                       {/* Description */}
                       {transaction.notes && (
-                        <p className="text-sm text-gray-700 truncate">
+                        <p className="text-sm text-[#555555] truncate">
                           {transaction.notes}
                         </p>
                       )}
                       {/* Metadata */}
-                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                      <div className="flex items-center gap-3 mt-1 text-xs text-[#555555]">
                         {transaction.field && (
                           <span className="flex items-center gap-1">
                             <MapPin className="h-3 w-3" />

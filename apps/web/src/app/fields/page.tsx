@@ -59,8 +59,8 @@ export default function FieldsPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-        <p className="ml-4 text-gray-600">Loading fields...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+        <p className="ml-4 text-[#555555]">Loading fields...</p>
       </div>
     )
   }
@@ -89,11 +89,11 @@ export default function FieldsPage() {
   }
   const getHealthColor = (health: string) => {
     switch (health) {
-      case 'Excellent': return 'bg-green-100 text-green-800'
+      case 'Excellent': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'Good': return 'bg-blue-100 text-blue-800'
       case 'Fair': return 'bg-yellow-100 text-yellow-800'
       case 'Poor': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
   return (
@@ -104,8 +104,8 @@ export default function FieldsPage() {
           {/* Header */}
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Field Management</h1>
-              <p className="text-gray-600">Monitor and analyze individual field performance</p>
+              <h1 className="text-3xl font-bold text-[#1A1A1A]">Field Management</h1>
+              <p className="text-[#555555]">Monitor and analyze individual field performance</p>
             </div>
             <FieldsHeaderActions />
           </div>
@@ -114,22 +114,22 @@ export default function FieldsPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <ModernCard>
                 <div className="p-6">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Total Fields</h3>
-                  <div className="text-2xl font-bold text-green-600">{allFields.length}</div>
+                  <h3 className="text-sm font-medium text-[#555555] mb-2">Total Fields</h3>
+                  <div className="text-2xl font-bold text-[#7A8F78]">{allFields.length}</div>
                 </div>
               </ModernCard>
               <ModernCard>
                 <div className="p-6">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Total Area</h3>
-                  <div className="text-2xl font-bold text-green-600">
+                  <h3 className="text-sm font-medium text-[#555555] mb-2">Total Area</h3>
+                  <div className="text-2xl font-bold text-[#7A8F78]">
                     {allFields.reduce((total, field) => total + field.size, 0).toFixed(1)} ha
                   </div>
                 </div>
               </ModernCard>
               <ModernCard>
                 <div className="p-6">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Avg NDVI</h3>
-                  <div className="text-2xl font-bold text-green-600">
+                  <h3 className="text-sm font-medium text-[#555555] mb-2">Avg NDVI</h3>
+                  <div className="text-2xl font-bold text-[#7A8F78]">
                     {allFields.filter(f => f.ndvi > 0).length > 0
                       ? (allFields.reduce((total, field) => total + field.ndvi, 0) / allFields.filter(f => f.ndvi > 0).length).toFixed(2)
                       : 'N/A'
@@ -139,8 +139,8 @@ export default function FieldsPage() {
               </ModernCard>
               <ModernCard>
                 <div className="p-6">
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Healthy Fields</h3>
-                  <div className="text-2xl font-bold text-green-600">
+                  <h3 className="text-sm font-medium text-[#555555] mb-2">Healthy Fields</h3>
+                  <div className="text-2xl font-bold text-[#7A8F78]">
                     {allFields.filter(field => field.health === 'Excellent' || field.health === 'Good').length}
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export default function FieldsPage() {
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-lg font-semibold">{field.name}</h3>
-                      <p className="text-gray-600">{field.farmName} • {field.size.toFixed(1)} ha</p>
+                      <p className="text-[#555555]">{field.farmName} • {field.size.toFixed(1)} ha</p>
                     </div>
                     <Badge className={getHealthColor(field.health)}>
                       {field.health}
@@ -190,47 +190,47 @@ export default function FieldsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Crop Info */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">Crop Information</h4>
+                      <h4 className="font-medium text-[#1A1A1A] mb-2">Crop Information</h4>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Crop:</span>
+                          <span className="text-[#555555]">Crop:</span>
                           <span className="font-medium">{field.crop}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Planted:</span>
+                          <span className="text-[#555555]">Planted:</span>
                           <span>{field.plantingDate ? new Date(field.plantingDate).toLocaleDateString() : 'Not specified'}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Harvest:</span>
+                          <span className="text-[#555555]">Harvest:</span>
                           <span>{field.expectedHarvest ? new Date(field.expectedHarvest).toLocaleDateString() : 'Not specified'}</span>
                         </div>
                       </div>
                     </div>
                     {/* Health Metrics */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">Health Metrics</h4>
+                      <h4 className="font-medium text-[#1A1A1A] mb-2">Health Metrics</h4>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-gray-600">NDVI:</span>
-                          <span className="font-medium text-green-600">
+                          <span className="text-[#555555]">NDVI:</span>
+                          <span className="font-medium text-[#7A8F78]">
                             {field.ndvi > 0 ? field.ndvi.toFixed(2) : 'N/A'}
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Soil Moisture:</span>
-                          <span className={field.soilMoisture > 50 ? 'text-green-600' : 'text-yellow-600'}>
+                          <span className="text-[#555555]">Soil Moisture:</span>
+                          <span className={field.soilMoisture > 50 ? 'text-[#7A8F78]' : 'text-yellow-600'}>
                             {field.soilMoisture}%
                           </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-gray-600">Updated:</span>
+                          <span className="text-[#555555]">Updated:</span>
                           <span>{field.lastUpdate}</span>
                         </div>
                       </div>
                     </div>
                     {/* Progress Bar */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">Growing Season</h4>
+                      <h4 className="font-medium text-[#1A1A1A] mb-2">Growing Season</h4>
                       {field.plantingDate && field.expectedHarvest ? (
                         (() => {
                           const planted = new Date(field.plantingDate)
@@ -243,20 +243,20 @@ export default function FieldsPage() {
                           return (
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Progress</span>
+                                <span className="text-[#555555]">Progress</span>
                                 <span>{progress}%</span>
                               </div>
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div className="bg-green-600 h-2 rounded-full" style={{width: `${progress}%`}}></div>
+                              <div className="w-full bg-[#F5F5F5] rounded-full h-2">
+                                <div className="bg-[#7A8F78] h-2 rounded-full" style={{width: `${progress}%`}}></div>
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-[#555555]">
                                 {daysRemaining > 0 ? `${daysRemaining} days until harvest` : 'Ready for harvest'}
                               </div>
                             </div>
                           )
                         })()
                       ) : (
-                        <p className="text-sm text-gray-500">No planting schedule set</p>
+                        <p className="text-sm text-[#555555]">No planting schedule set</p>
                       )}
                     </div>
                     {/* Actions */}
@@ -282,23 +282,23 @@ export default function FieldsPage() {
             <ModernCard>
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-2">Field Analysis Tools</h3>
-                <p className="text-gray-600 mb-6">Advanced monitoring and analysis capabilities</p>
+                <p className="text-[#555555] mb-6">Advanced monitoring and analysis capabilities</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">NDVI Analysis</div>
-                    <div className="text-sm text-gray-500 mt-1">Monitor vegetation health</div>
+                    <div className="text-sm text-[#555555] mt-1">Monitor vegetation health</div>
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Stress Detection</div>
-                    <div className="text-sm text-gray-500 mt-1">Identify crop stress patterns</div>
+                    <div className="text-sm text-[#555555] mt-1">Identify crop stress patterns</div>
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Yield Prediction</div>
-                    <div className="text-sm text-gray-500 mt-1">AI-powered yield forecasts</div>
+                    <div className="text-sm text-[#555555] mt-1">AI-powered yield forecasts</div>
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col items-start">
                     <div className="font-medium">Field Comparison</div>
-                    <div className="text-sm text-gray-500 mt-1">Compare field performance</div>
+                    <div className="text-sm text-[#555555] mt-1">Compare field performance</div>
                   </Button>
                 </div>
               </div>

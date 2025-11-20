@@ -44,7 +44,7 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
             {showAddButtons && (
               <div className="flex gap-2">
                 <Button 
-                  className="bg-sage-600 hover:bg-sage-700"
+                  className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
                   onClick={() => window.location.href = '/livestock/add-animal'}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -101,10 +101,10 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
             <TabsContent value="breeding" className="space-y-6 mt-6">
               <div className="text-center py-12">
                 <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                   Breeding Program Coming Soon
                 </h3>
-                <p className="text-gray-600 max-w-sm mx-auto">
+                <p className="text-[#555555] max-w-sm mx-auto">
                   Advanced breeding management, genetic tracking, and performance analytics will be available in the next update.
                 </p>
                 <Button variant="outline" className="mt-4">

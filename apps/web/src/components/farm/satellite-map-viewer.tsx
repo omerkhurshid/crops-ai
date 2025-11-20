@@ -278,7 +278,7 @@ export function SatelliteMapViewer({
           )}
           {/* Map Container */}
           <div 
-            className={`relative bg-gray-100 rounded-lg overflow-hidden border ${isMarkingBoundary ? 'cursor-crosshair' : 'cursor-move'}`}
+            className={`relative bg-[#F5F5F5] rounded-lg overflow-hidden border ${isMarkingBoundary ? 'cursor-crosshair' : 'cursor-move'}`}
             style={{ height }}
             onClick={handleMapClick}
             onMouseDown={handleMouseDown}
@@ -287,10 +287,10 @@ export function SatelliteMapViewer({
             onMouseLeave={handleMouseUp}
           >
             {loading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#FAFAF7]">
                 <div className="text-center">
                   <Loader2 className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Loading satellite imagery...</p>
+                  <p className="text-sm text-[#555555]">Loading satellite imagery...</p>
                 </div>
               </div>
             ) : imageUrl ? (
@@ -362,18 +362,18 @@ export function SatelliteMapViewer({
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                   <div className="relative">
                     {/* Subtle crosshair lines */}
-                    <div className="absolute w-6 h-0.5 bg-gray-800 bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
-                    <div className="absolute w-0.5 h-6 bg-gray-800 bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
+                    <div className="absolute w-6 h-0.5 bg-[#1A1A1A] bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
+                    <div className="absolute w-0.5 h-6 bg-[#1A1A1A] bg-opacity-60 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"></div>
                     {/* Center dot */}
-                    <div className="w-2 h-2 bg-gray-800 bg-opacity-80 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+                    <div className="w-2 h-2 bg-[#1A1A1A] bg-opacity-80 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
                   </div>
                 </div>
               </>
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#FAFAF7]">
                 <div className="text-center">
                   <MapIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Unable to load imagery</p>
+                  <p className="text-sm text-[#555555]">Unable to load imagery</p>
                 </div>
               </div>
             )}
@@ -444,12 +444,12 @@ export function SatelliteMapViewer({
             <div className="absolute bottom-4 left-4 bg-white bg-opacity-90 rounded-lg p-3 shadow-md">
               <div className="text-sm space-y-1">
                 <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4 text-gray-600" />
+                  <Calendar className="h-4 w-4 text-[#555555]" />
                   <span className="font-medium">
                     {imageDate ? new Date(imageDate).toLocaleDateString() : 'Loading...'}
                   </span>
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-[#555555]">
                   {location.lat.toFixed(6)}, {location.lng.toFixed(6)} • Zoom: {zoom}
                 </div>
                 {detectedFields.length > 0 && (
@@ -463,7 +463,7 @@ export function SatelliteMapViewer({
                   </div>
                 )}
                 {isMarkingBoundary && (
-                  <div className="text-xs text-green-800 bg-green-50 px-2 py-1 rounded border border-green-200">
+                  <div className="text-xs text-green-800 bg-[#F8FAF8] px-2 py-1 rounded border border-[#DDE4D8]">
                     Click on the map to drop boundary pins
                   </div>
                 )}
@@ -471,7 +471,7 @@ export function SatelliteMapViewer({
             </div>
           </div>
           {/* Layer Information */}
-          <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+          <div className="text-sm text-[#555555] bg-[#FAFAF7] p-3 rounded-lg">
             <div className="flex items-start space-x-2">
               <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
               <div>

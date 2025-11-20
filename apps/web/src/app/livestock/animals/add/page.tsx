@@ -38,8 +38,8 @@ export default function AddAnimalPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading...</p>
         </div>
       </DashboardLayout>
     )
@@ -53,10 +53,10 @@ export default function AddAnimalPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
-            <p className="text-gray-600 mb-6">You need to create a farm before adding animals.</p>
+            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <p className="text-[#555555] mb-6">You need to create a farm before adding animals.</p>
             <Link href="/farms/create-unifiedfrom=animals">
-              <button className="bg-green-600 text-white px-4 py-2 rounded-lg">Create Farm</button>
+              <button className="bg-[#7A8F78] text-white px-4 py-2 rounded-lg">Create Farm</button>
             </Link>
           </div>
         </div>
@@ -72,15 +72,15 @@ export default function AddAnimalPage() {
         <div className="flex items-center gap-4">
           <Link 
             href="/livestock/animals"
-            className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center text-[#555555] hover:text-[#1A1A1A] transition-colors"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Animals
           </Link>
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Add New Animal</h1>
-          <p className="text-gray-600">Register a new animal in your herd</p>
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">Add New Animal</h1>
+          <p className="text-[#555555]">Register a new animal in your herd</p>
         </div>
         {/* Add Animal Form */}
         <ModernCard>

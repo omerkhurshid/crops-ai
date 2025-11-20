@@ -8,36 +8,36 @@ export default function NotFound() {
     <div className="min-h-screen flex items-center justify-center px-4">
       {/* Animated Background with Floating Elements */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" aria-hidden="true">
-        <Search className="h-8 w-8 text-sage-600" aria-hidden="true" />
+        <Search className="h-8 w-8 text-[#7A8F78]" aria-hidden="true" />
       </div>
       <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }} aria-hidden="true">
-        <Map className="h-8 w-8 text-sage-600" aria-hidden="true" />
+        <Map className="h-8 w-8 text-[#7A8F78]" aria-hidden="true" />
       </div>
       <div className="max-w-2xl w-full relative z-10">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
-            <div className="p-6 bg-gradient-to-br from-sage-100 to-earth-100 rounded-3xl relative overflow-hidden">
-              <Sprout className="h-16 w-16 text-sage-700 relative z-10" aria-hidden="true" />
-              <div className="absolute inset-0 bg-gradient-to-br from-sage-200/30 to-earth-200/30 animate-pulse-soft"></div>
+            <div className="p-6 bg-gradient-to-br from-#F8FAF8 to-earth-100 rounded-3xl relative overflow-hidden">
+              <Sprout className="h-16 w-16 text-[#5E6F5A] relative z-10" aria-hidden="true" />
+              <div className="absolute inset-0 bg-gradient-to-br from-#DDE4D8/30 to-earth-200/30 animate-pulse-soft"></div>
             </div>
           </div>
           <div className="mb-6">
-            <div className="text-8xl font-light text-sage-300 mb-4" aria-label="404 Error">404</div>
-            <h1 className="text-4xl md:text-5xl font-light text-sage-800 mb-4 tracking-tight">
+            <div className="text-8xl font-light text-[#DDE4D8] mb-4" aria-label="404 Error">404</div>
+            <h1 className="text-4xl md:text-5xl font-light text-[#7A8F78] mb-4 tracking-tight">
               Page Not Found
             </h1>
-            <p className="text-xl text-sage-600 font-light leading-relaxed">
+            <p className="text-xl text-[#7A8F78] font-light leading-relaxed">
               Looks like this field hasn&apos;t been planted yet. Let&apos;s get you back to fertile ground.
             </p>
           </div>
-          <Badge className="bg-sage-100 text-sage-700 border-sage-200 mb-8">
+          <Badge className="bg-[#F8FAF8] text-[#5E6F5A] border-[#DDE4D8] mb-8">
             <Search className="h-4 w-4 mr-2" aria-hidden="true" />
             Lost in the fields?
           </Badge>
         </div>
         <ModernCard variant="floating" className="overflow-hidden">
-          <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
-            <ModernCardTitle className="text-center text-sage-800">Where would you like to go?</ModernCardTitle>
+          <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-cream-50">
+            <ModernCardTitle className="text-center text-[#7A8F78]">Where would you like to go?</ModernCardTitle>
             <ModernCardDescription className="text-center">
               Navigate back to your agricultural dashboard or explore our platform
             </ModernCardDescription>
@@ -84,9 +84,9 @@ export default function NotFound() {
           </ModernCardContent>
         </ModernCard>
         <div className="text-center mt-8">
-          <p className="text-sage-500 text-sm">
+          <p className="text-[#7A8F78] text-sm">
             If you believe this is an error, please{' '}
-            <Link href="/contact" className="text-sage-700 hover:text-sage-900 underline">
+            <Link href="/contact" className="text-[#5E6F5A] hover:text-sage-900 underline">
               contact our support team
             </Link>
           </p>

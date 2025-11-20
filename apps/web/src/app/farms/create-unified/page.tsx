@@ -32,8 +32,8 @@ export default function CreateUnifiedFarmPage() {
     <DashboardLayout>
       <div className="py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Farm</h1>
-          <p className="text-lg text-gray-600">Set up your farm in three easy steps</p>
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Create Your Farm</h1>
+          <p className="text-lg text-[#555555]">Set up your farm in three easy steps</p>
         </div>
         <ThreeStepFarmCreator />
       </div>

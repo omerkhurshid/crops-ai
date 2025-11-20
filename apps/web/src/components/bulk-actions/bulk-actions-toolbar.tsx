@@ -79,7 +79,7 @@ export function BulkActionsToolbar({
   }
   return (
     <div className={`sticky top-20 z-40 ${className}`}>
-      <ModernCard variant="floating" className="shadow-lg border-sage-300">
+      <ModernCard variant="floating" className="shadow-lg border-[#DDE4D8]">
         <ModernCardContent className="p-4">
           <div className="flex items-center justify-between">
             {/* Selection Info */}
@@ -87,27 +87,27 @@ export function BulkActionsToolbar({
               {showSelectAll && (
                 <button
                   onClick={handleSelectAllToggle}
-                  className="flex items-center gap-2 p-2 hover:bg-sage-100 rounded-lg transition-colors"
+                  className="flex items-center gap-2 p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors"
                 >
                   {allSelected ? (
-                    <CheckSquare className="h-5 w-5 text-sage-600" />
+                    <CheckSquare className="h-5 w-5 text-[#555555]" />
                   ) : someSelected ? (
-                    <div className="h-5 w-5 border-2 border-sage-600 rounded bg-sage-200 flex items-center justify-center">
-                      <div className="h-2 w-2 bg-sage-600 rounded-sm"></div>
+                    <div className="h-5 w-5 border-2 border-[#7A8F78] rounded bg-[#DDE4D8] flex items-center justify-center">
+                      <div className="h-2 w-2 bg-[#7A8F78] rounded-sm"></div>
                     </div>
                   ) : (
-                    <Square className="h-5 w-5 text-sage-600" />
+                    <Square className="h-5 w-5 text-[#555555]" />
                   )}
-                  <span className="text-sm font-medium text-sage-800">
+                  <span className="text-sm font-medium text-[#1A1A1A]">
                     {allSelected ? 'Deselect all' : 'Select all'}
                   </span>
                 </button>
               )}
               <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="bg-sage-100 text-sage-800">
+                <Badge variant="secondary" className="bg-[#F8FAF8] text-[#1A1A1A]">
                   {selectedItems.length} selected
                 </Badge>
-                <span className="text-sm text-sage-600">
+                <span className="text-sm text-[#555555]">
                   of {totalItems} items
                 </span>
               </div>
@@ -136,17 +136,17 @@ export function BulkActionsToolbar({
                     onClick={() => setShowActions(!showActions)}
                   />
                   {showActions && (
-                    <div className="absolute top-full right-0 mt-2 bg-white border border-sage-200 rounded-lg shadow-lg z-50 min-w-48">
+                    <div className="absolute top-full right-0 mt-2 bg-white border border-[#DDE4D8] rounded-lg shadow-lg z-50 min-w-48">
                       <div className="py-2">
                         {secondaryActions.map((action) => (
                           <button
                             key={action.id}
                             onClick={() => handleActionClick(action)}
                             disabled={action.disabled || isExecuting !== null}
-                            className={`w-full text-left px-4 py-2 text-sm hover:bg-sage-50 transition-colors flex items-center gap-3 ${
+                            className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F8FAF8] transition-colors flex items-center gap-3 ${
                               action.disabled ? 'opacity-50 cursor-not-allowed' : ''
                             } ${
-                              action.variant === 'warning' ? 'text-red-600 hover:bg-red-50' : 'text-sage-700'
+                              action.variant === 'warning' ? 'text-red-600 hover:bg-red-50' : 'text-[#555555]'
                             }`}
                           >
                             {isExecuting === action.id ? (
@@ -172,7 +172,7 @@ export function BulkActionsToolbar({
               {/* Clear Selection */}
               <button
                 onClick={onDeselectAll}
-                className="p-2 hover:bg-sage-100 rounded-lg transition-colors text-sage-500 hover:text-sage-700"
+                className="p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors text-sage-500 hover:text-[#555555]"
                 title="Clear selection"
               >
                 <X className="h-4 w-4" />
@@ -181,7 +181,7 @@ export function BulkActionsToolbar({
           </div>
           {/* Confirmation Dialog */}
           {showConfirmation && (
-            <div className="mt-4 pt-4 border-t border-sage-200">
+            <div className="mt-4 pt-4 border-t border-[#DDE4D8]">
               <Alert className="border-orange-200 bg-orange-50">
                 <AlertTriangle className="h-4 w-4 text-orange-600" />
                 <AlertDescription className="text-orange-800">

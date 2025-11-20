@@ -45,7 +45,7 @@ export function InfoTooltip({
         className={`transition-colors duration-200 focus:outline-none focus:ring-2 rounded-full p-1 ${
           variant === 'light' 
             ? 'text-white/70 hover:text-white focus:ring-white/50' 
-            : 'text-sage-500 hover:text-sage-700 focus:ring-sage-300'
+            : 'text-sage-500 hover:text-[#555555] focus:ring-sage-300'
         }`}
         type="button"
         aria-label={`Information about ${title}`}
@@ -55,7 +55,7 @@ export function InfoTooltip({
       {isVisible && (
         <div className={`absolute z-50 ${tooltipPositions[position]} pointer-events-none`}>
           <div className="bg-slate-800/95 backdrop-blur-sm text-white text-sm rounded-lg px-3 py-2 shadow-lg border border-slate-700/50 max-w-xs">
-            <div className="font-medium text-cream-100 mb-1">{title}</div>
+            <div className="font-medium text-[#F8FAF8] mb-1">{title}</div>
             <div className="text-slate-200 text-xs leading-relaxed">{description}</div>
           </div>
           <div className={`absolute w-0 h-0 border-4 ${arrowPositions[position]}`}></div>

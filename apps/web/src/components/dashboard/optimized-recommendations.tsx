@@ -43,7 +43,7 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
       case 'urgent': return 'bg-red-100 text-red-800 border-red-200'
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      default: return 'bg-green-100 text-green-800 border-green-200'
+      default: return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
     }
   }
   const getConfidenceColor = (confidence: number) => {
@@ -64,8 +64,8 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
           <div className="space-y-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 h-4 rounded mb-2" />
-                <div className="bg-gray-200 h-12 rounded" />
+                <div className="bg-[#F5F5F5] h-4 rounded mb-2" />
+                <div className="bg-[#F5F5F5] h-12 rounded" />
               </div>
             ))}
           </div>
@@ -96,7 +96,7 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
             {topRecommendations.map((rec: any, index: number) => (
               <div
                 key={rec.id || index}
-                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="p-4 border rounded-lg hover:bg-[#FAFAF7] transition-colors"
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
@@ -104,18 +104,18 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-medium text-gray-900 line-clamp-1">
+                      <h4 className="font-medium text-[#1A1A1A] line-clamp-1">
                         {rec.title}
                       </h4>
                       <Badge className={getPriorityColor(rec.priority)}>
                         {rec.priority}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                    <p className="text-sm text-[#555555] line-clamp-2 mb-3">
                       {rec.description}
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                      <div className="flex items-center gap-4 text-xs text-[#555555]">
                         {rec.estimatedTime && (
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
@@ -142,8 +142,8 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
         ) : (
           <div className="text-center py-6">
             <Brain className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-600">No recommendations available</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-sm text-[#555555]">No recommendations available</p>
+            <p className="text-xs text-[#555555] mt-1">
               Add field data to get personalized insights
             </p>
           </div>

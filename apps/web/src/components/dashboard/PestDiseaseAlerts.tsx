@@ -137,11 +137,11 @@ export default function PestDiseaseAlerts({
   }
   const getRiskLevelColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-600 bg-green-100'
+      case 'low': return 'text-green-600 bg-[#F8FAF8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-100'
       case 'high': return 'text-orange-600 bg-orange-100'
       case 'extreme': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      default: return 'text-[#555555] bg-[#F5F5F5]'
     }
   }
   const getRiskIcon = (level: string) => {

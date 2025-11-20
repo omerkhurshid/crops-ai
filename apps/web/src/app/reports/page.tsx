@@ -32,7 +32,7 @@ export default function ReportsPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-96">
-          <div className="text-sage-600">Loading...</div>
+          <div className="text-[#7A8F78]">Loading...</div>
         </div>
       </DashboardLayout>
     )
@@ -51,8 +51,8 @@ export default function ReportsPage() {
       <div className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Farm Reports</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Farm Reports</h1>
+          <p className="text-lg text-[#7A8F78] mb-6">
             View performance reports and analytics for your farming operations
           </p>
         </div>
@@ -60,8 +60,8 @@ export default function ReportsPage() {
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
-                  <BarChart className="h-6 w-6 text-sage-700" />
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-#F8FAF8 rounded-2xl">
+                  <BarChart className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>How's Your Farm Doing?</ModernCardTitle>
@@ -93,7 +93,7 @@ export default function ReportsPage() {
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl">
-                  <Leaf className="h-6 w-6 text-sage-700" />
+                  <Leaf className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>Are Your Crops Happy?</ModernCardTitle>
@@ -108,8 +108,8 @@ export default function ReportsPage() {
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
-                  <DollarSign className="h-6 w-6 text-sage-700" />
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-#F8FAF8 rounded-2xl">
+                  <DollarSign className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>Show Me the Money</ModernCardTitle>
@@ -124,8 +124,8 @@ export default function ReportsPage() {
           <ModernCard variant="floating" className="group hover:scale-105 transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl">
-                  <TreePine className="h-6 w-6 text-green-700" />
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-#F8FAF8 rounded-2xl">
+                  <TreePine className="h-6 w-6 text-[#7A8F78]" />
                 </div>
               </div>
               <ModernCardTitle>Taking Care of the Land</ModernCardTitle>
@@ -141,7 +141,7 @@ export default function ReportsPage() {
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 bg-gradient-to-br from-cream-100 to-cream-50 rounded-2xl">
-                  <FileText className="h-6 w-6 text-sage-700" />
+                  <FileText className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>Build Your Own</ModernCardTitle>

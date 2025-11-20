@@ -98,8 +98,8 @@ export default function LivestockPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading livestock data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading livestock data...</p>
         </div>
       </DashboardLayout>
     )
@@ -113,11 +113,11 @@ export default function LivestockPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
-            <p className="text-gray-600 mb-6">You need to create a farm before managing livestock.</p>
+            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <p className="text-[#555555] mb-6">You need to create a farm before managing livestock.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=livestock')}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              className="bg-[#7A8F78] text-white px-4 py-2 rounded-lg"
             >
               Create Farm
             </button>
@@ -137,12 +137,12 @@ export default function LivestockPage() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Livestock Management</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Livestock Management</h1>
+          <p className="text-lg text-[#7A8F78] mb-6">
             Monitor herd health and track animal performance
           </p>
           {/* Getting Started Guide for Livestock */}
-          <div className="bg-gradient-to-r from-earth-50 to-sage-50 rounded-xl p-4 mb-6 border border-earth-200">
+          <div className="bg-gradient-to-r from-earth-50 to-#F8FAF8 rounded-xl p-4 mb-6 border border-earth-200">
             <h3 className="font-semibold text-earth-800 mb-2 flex items-center gap-2">
               <Users className="h-5 w-5 text-earth-600" />
               New to Livestock Management?
@@ -179,8 +179,8 @@ export default function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
-                  <Users className="h-6 w-6 text-sage-700" />
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-#F8FAF8 rounded-2xl">
+                  <Users className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>Total Livestock</ModernCardTitle>
@@ -190,16 +190,16 @@ export default function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-600 mb-2">{stats.totalAnimals || 0}</div>
-                <div className="text-sm text-sage-600">animals registered</div>
+                <div className="text-3xl font-bold text-[#7A8F78] mb-2">{stats.totalAnimals || 0}</div>
+                <div className="text-sm text-[#7A8F78]">animals registered</div>
               </div>
             </ModernCardContent>
           </ModernCard>
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-sage-100 to-sage-50 rounded-2xl">
-                  <Heart className="h-6 w-6 text-sage-700" />
+                <div className="p-3 bg-gradient-to-br from-#F8FAF8 to-#F8FAF8 rounded-2xl">
+                  <Heart className="h-6 w-6 text-[#5E6F5A]" />
                 </div>
               </div>
               <ModernCardTitle>Health Score</ModernCardTitle>
@@ -209,8 +209,8 @@ export default function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-700 mb-2">{stats.totalAnimals > 0 ? `${stats.healthScore.toFixed(1)}/10` : '--'}</div>
-                <div className="text-sm text-sage-600">{stats.totalAnimals > 0 ? (stats.healthScore >= 8 ? 'excellent condition' : stats.healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
+                <div className="text-3xl font-bold text-[#5E6F5A] mb-2">{stats.totalAnimals > 0 ? `${stats.healthScore.toFixed(1)}/10` : '--'}</div>
+                <div className="text-sm text-[#7A8F78]">{stats.totalAnimals > 0 ? (stats.healthScore >= 8 ? 'excellent condition' : stats.healthScore >= 6 ? 'good condition' : 'needs attention') : 'no data'}</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -236,8 +236,8 @@ export default function LivestockPage() {
           <ModernCard variant="soft" className="group hover:shadow-soft transition-all duration-300">
             <ModernCardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 bg-gradient-to-br from-sage-200 to-sage-100 rounded-2xl">
-                  <TrendingUp className="h-6 w-6 text-sage-800" />
+                <div className="p-3 bg-gradient-to-br from-#DDE4D8 to-#F8FAF8 rounded-2xl">
+                  <TrendingUp className="h-6 w-6 text-[#7A8F78]" />
                 </div>
               </div>
               <ModernCardTitle>Avg Daily Gain</ModernCardTitle>
@@ -247,8 +247,8 @@ export default function LivestockPage() {
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-4">
-                <div className="text-3xl font-bold text-sage-700 mb-2">{stats.avgDailyGain > 0 ? `${stats.avgDailyGain.toFixed(1)}kg` : '--'}</div>
-                <div className="text-sm text-sage-600">daily average</div>
+                <div className="text-3xl font-bold text-[#5E6F5A] mb-2">{stats.avgDailyGain > 0 ? `${stats.avgDailyGain.toFixed(1)}kg` : '--'}</div>
+                <div className="text-sm text-[#7A8F78]">daily average</div>
               </div>
             </ModernCardContent>
           </ModernCard>
@@ -262,12 +262,12 @@ export default function LivestockPage() {
               <LivestockDashboard farmId={userFarms[0].id} />
             ) : (
               <div className="text-center py-12">
-                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
-                <p className="text-gray-600 mb-6">Start by adding your first livestock event to track your animals.</p>
+                <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Livestock Data</h3>
+                <p className="text-[#555555] mb-6">Start by adding your first livestock event to track your animals.</p>
                 <a 
                   href="/livestock/add-event"
-                  className="inline-block bg-sage-600 text-white px-4 py-2 rounded-lg hover:bg-sage-700"
+                  className="inline-block bg-[#7A8F78] text-white px-4 py-2 rounded-lg hover:bg-[#5E6F5A]"
                 >
                   Add Livestock Event
                 </a>

@@ -247,11 +247,11 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
     return (
       <div className="space-y-6">
         <div className="animate-pulse space-y-6">
-          <div className="h-32 bg-gray-200 rounded-2xl"></div>
+          <div className="h-32 bg-[#F5F5F5] rounded-2xl"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="h-48 bg-gray-200 rounded-2xl"></div>
-            <div className="h-48 bg-gray-200 rounded-2xl"></div>
-            <div className="h-48 bg-gray-200 rounded-2xl"></div>
+            <div className="h-48 bg-[#F5F5F5] rounded-2xl"></div>
+            <div className="h-48 bg-[#F5F5F5] rounded-2xl"></div>
+            <div className="h-48 bg-[#F5F5F5] rounded-2xl"></div>
           </div>
         </div>
       </div>
@@ -274,15 +274,15 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
     <div className="space-y-6">
       {/* Field Mode Button - Prominent for mobile users */}
       {isMobile && (
-        <div className="bg-green-600 text-white p-4 rounded-2xl shadow-lg">
+        <div className="bg-[#7A8F78] text-white p-4 rounded-2xl shadow-lg">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold mb-1">Going to the field?</h3>
-              <p className="text-green-100 text-sm">Switch to Field Mode for easier mobile use</p>
+              <p className="text-[#DDE4D8] text-sm">Switch to Field Mode for easier mobile use</p>
             </div>
             <button
               onClick={enableFieldMode}
-              className="bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors flex items-center gap-2 min-h-[48px]"
+              className="bg-white text-[#7A8F78] px-6 py-3 rounded-xl font-semibold hover:bg-[#F8FAF8] transition-colors flex items-center gap-2 min-h-[48px]"
             >
               <Smartphone className="h-5 w-5" />
               Field Mode
@@ -340,11 +340,11 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
+            <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">
               <MapPin className="inline h-6 w-6 mr-2" />
               Your Farms
             </h2>
-            <p className="text-sage-600">
+            <p className="text-[#555555]">
               Interactive map showing all your farm locations and their health status
             </p>
           </div>
@@ -407,10 +407,10 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
+            <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">
               What to do today
             </h2>
-            <p className="text-sage-600">
+            <p className="text-[#555555]">
               Your prioritized task list for today and tomorrow
             </p>
           </div>
@@ -447,7 +447,7 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       {showDetailedView && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-sage-800">
+            <h2 className="text-2xl font-semibold text-[#1A1A1A]">
               Detailed Analysis
             </h2>
             <Button 
@@ -458,7 +458,7 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
             </Button>
           </div>
           {/* Additional technical metrics can be shown here in detailed view */}
-          <div className="text-center py-8 text-sage-600">
+          <div className="text-center py-8 text-[#555555]">
             <p>Additional detailed metrics and analysis will be displayed here</p>
           </div>
         </div>

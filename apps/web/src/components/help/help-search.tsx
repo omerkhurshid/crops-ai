@@ -164,12 +164,12 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => searchTerm.length >= 2 && setShowResults(true)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
+          className="w-full pl-10 pr-10 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
         />
         {searchTerm && (
           <button
             onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-sage-100 rounded-full transition-colors"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-[#F8FAF8] rounded-full transition-colors"
           >
             <X className="h-4 w-4 text-sage-500" />
           </button>
@@ -182,22 +182,22 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
             <ModernCardContent className="p-4">
               {results.length > 0 ? (
                 <div className="space-y-2">
-                  <div className="text-sm text-sage-600 mb-3">
+                  <div className="text-sm text-[#555555] mb-3">
                     {results.length} article{results.length !== 1 ? 's' : ''} found
                   </div>
                   {(results || []).map((article) => (
                     <button
                       key={article.id}
                       onClick={() => handleArticleClick(article)}
-                      className="w-full text-left p-3 rounded-lg hover:bg-sage-50 transition-colors group"
+                      className="w-full text-left p-3 rounded-lg hover:bg-[#F8FAF8] transition-colors group"
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-sage-800 group-hover:text-sage-900">
+                        <h3 className="font-semibold text-[#1A1A1A] group-hover:text-sage-900">
                           {article.title}
                         </h3>
-                        <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-sage-600 transition-colors flex-shrink-0 ml-2" />
+                        <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-[#555555] transition-colors flex-shrink-0 ml-2" />
                       </div>
-                      <p className="text-sm text-sage-600 mb-2 line-clamp-2">
+                      <p className="text-sm text-[#555555] mb-2 line-clamp-2">
                         {article.description}
                       </p>
                       <div className="flex items-center justify-between">
@@ -222,7 +222,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
               ) : (
                 <div className="text-center py-6">
                   <Search className="h-8 w-8 text-sage-400 mx-auto mb-3" />
-                  <p className="text-sage-600 mb-2">No articles found</p>
+                  <p className="text-[#555555] mb-2">No articles found</p>
                   <p className="text-sm text-sage-500">
                     Try different keywords or browse our help sections below
                   </p>
@@ -230,14 +230,14 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
               )}
               {/* Recent Searches */}
               {recentSearches.length > 0 && results.length === 0 && searchTerm.length < 2 && (
-                <div className="mt-4 pt-4 border-t border-sage-200">
-                  <div className="text-sm text-sage-600 mb-2">Recent searches</div>
+                <div className="mt-4 pt-4 border-t border-[#DDE4D8]">
+                  <div className="text-sm text-[#555555] mb-2">Recent searches</div>
                   <div className="flex flex-wrap gap-2">
                     {(recentSearches || []).map((term, index) => (
                       <button
                         key={index}
                         onClick={() => handleSearch(term)}
-                        className="text-xs px-2 py-1 bg-sage-100 text-sage-700 rounded-full hover:bg-sage-200 transition-colors"
+                        className="text-xs px-2 py-1 bg-[#F8FAF8] text-[#555555] rounded-full hover:bg-[#DDE4D8] transition-colors"
                       >
                         {term}
                       </button>

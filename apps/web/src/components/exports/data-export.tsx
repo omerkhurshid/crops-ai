@@ -215,7 +215,7 @@ export function DataExport({
           {/* Format Selection */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-sage-800 mb-3">Export Format</h3>
+              <h3 className="text-sm font-medium text-[#1A1A1A] mb-3">Export Format</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {formats.map((format) => (
                   <button
@@ -223,23 +223,23 @@ export function DataExport({
                     onClick={() => handleFormatSelect(format)}
                     className={`p-4 border rounded-lg text-left transition-all ${
                       selectedFormat.id === format.id
-                        ? 'border-sage-500 bg-sage-50'
-                        : 'border-sage-200 hover:border-sage-300 hover:bg-sage-50'
+                        ? 'border-[#7A8F78] bg-[#F8FAF8]'
+                        : 'border-[#DDE4D8] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`${selectedFormat.id === format.id ? 'text-sage-600' : 'text-sage-500'}`}>
+                      <div className={`${selectedFormat.id === format.id ? 'text-[#555555]' : 'text-sage-500'}`}>
                         {format.icon}
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium text-sage-800 text-sm">{format.label}</div>
-                        <div className="text-xs text-sage-600 mt-1">{format.description}</div>
+                        <div className="font-medium text-[#1A1A1A] text-sm">{format.label}</div>
+                        <div className="text-xs text-[#555555] mt-1">{format.description}</div>
                         {format.fileSize && (
                           <div className="text-xs text-sage-500 mt-1">~{format.fileSize}</div>
                         )}
                       </div>
                       {selectedFormat.id === format.id && (
-                        <CheckCircle2 className="h-4 w-4 text-sage-600" />
+                        <CheckCircle2 className="h-4 w-4 text-[#555555]" />
                       )}
                     </div>
                   </button>
@@ -248,11 +248,11 @@ export function DataExport({
             </div>
             {/* Export Options */}
             <div>
-              <h3 className="text-sm font-medium text-sage-800 mb-3">Export Options</h3>
+              <h3 className="text-sm font-medium text-[#1A1A1A] mb-3">Export Options</h3>
               <div className="space-y-3">
                 {/* Date Range */}
                 <div>
-                  <label className="text-sm text-sage-700 mb-2 block">Date Range</label>
+                  <label className="text-sm text-[#555555] mb-2 block">Date Range</label>
                   <div className="flex gap-2 items-center">
                     <input
                       type="date"
@@ -261,7 +261,7 @@ export function DataExport({
                         ...prev,
                         dateRange: { ...prev.dateRange!, start: e.target.value }
                       }))}
-                      className="flex-1 p-2 border border-sage-200 rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
                     />
                     <span className="text-sage-500">to</span>
                     <input
@@ -271,13 +271,13 @@ export function DataExport({
                         ...prev,
                         dateRange: { ...prev.dateRange!, end: e.target.value }
                       }))}
-                      className="flex-1 p-2 border border-sage-200 rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
                     />
                   </div>
                 </div>
                 {/* Include Options */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
+                  <label className="flex items-center gap-2 p-3 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={exportOptions.includeMetadata}
@@ -285,15 +285,15 @@ export function DataExport({
                         ...prev,
                         includeMetadata: e.target.checked
                       }))}
-                      className="rounded border-sage-300 text-sage-600 focus:ring-sage-500"
+                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
                     />
                     <div>
-                      <div className="text-sm font-medium text-sage-800">Include Metadata</div>
-                      <div className="text-xs text-sage-600">Export date, filters, etc.</div>
+                      <div className="text-sm font-medium text-[#1A1A1A]">Include Metadata</div>
+                      <div className="text-xs text-[#555555]">Export date, filters, etc.</div>
                     </div>
                   </label>
                   {selectedFormat.supportsCharts && (
-                    <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
+                    <label className="flex items-center gap-2 p-3 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] cursor-pointer">
                       <input
                         type="checkbox"
                         checked={exportOptions.includeCharts}
@@ -301,15 +301,15 @@ export function DataExport({
                           ...prev,
                           includeCharts: e.target.checked
                         }))}
-                        className="rounded border-sage-300 text-sage-600 focus:ring-sage-500"
+                        className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
                       />
                       <div>
-                        <div className="text-sm font-medium text-sage-800">Include Charts</div>
-                        <div className="text-xs text-sage-600">Graphs and visualizations</div>
+                        <div className="text-sm font-medium text-[#1A1A1A]">Include Charts</div>
+                        <div className="text-xs text-[#555555]">Graphs and visualizations</div>
                       </div>
                     </label>
                   )}
-                  <label className="flex items-center gap-2 p-3 border border-sage-200 rounded-lg hover:bg-sage-50 cursor-pointer">
+                  <label className="flex items-center gap-2 p-3 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={exportOptions.includeRawData}
@@ -317,11 +317,11 @@ export function DataExport({
                         ...prev,
                         includeRawData: e.target.checked
                       }))}
-                      className="rounded border-sage-300 text-sage-600 focus:ring-sage-500"
+                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
                     />
                     <div>
-                      <div className="text-sm font-medium text-sage-800">Include Raw Data</div>
-                      <div className="text-xs text-sage-600">Detailed records and values</div>
+                      <div className="text-sm font-medium text-[#1A1A1A]">Include Raw Data</div>
+                      <div className="text-xs text-[#555555]">Detailed records and values</div>
                     </div>
                   </label>
                 </div>
@@ -331,7 +331,7 @@ export function DataExport({
             {exportStatus !== 'idle' && (
               <div className="mt-4">
                 {exportStatus === 'success' && (
-                  <Alert className="border-green-200 bg-green-50">
+                  <Alert className="border-[#DDE4D8] bg-[#F8FAF8]">
                     <CheckCircle2 className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
                       Export completed successfully! Your file should download automatically.
@@ -349,8 +349,8 @@ export function DataExport({
               </div>
             )}
             {/* Export Button */}
-            <div className="flex items-center justify-between pt-4 border-t border-sage-200">
-              <div className="text-sm text-sage-600">
+            <div className="flex items-center justify-between pt-4 border-t border-[#DDE4D8]">
+              <div className="text-sm text-[#555555]">
                 Ready to export {data.length} records as {selectedFormat.label.toLowerCase()}
               </div>
               <InlineFloatingButton

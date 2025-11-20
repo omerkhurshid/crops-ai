@@ -56,7 +56,7 @@ export function SelectableList<T extends SelectableItem>({
       <div className={`space-y-4 ${listClassName}`}>
         {items.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-sage-600 mb-2">{emptyMessage}</div>
+            <div className="text-[#555555] mb-2">{emptyMessage}</div>
           </div>
         ) : (
           items.map((item) => (
@@ -88,8 +88,8 @@ export function SelectableItemWrapper({
     <div
       className={`group relative border rounded-lg transition-all ${
         isSelected
-          ? 'border-sage-500 bg-sage-50 shadow-sm'
-          : 'border-sage-200 hover:border-sage-300 hover:shadow-sm'
+          ? 'border-[#7A8F78] bg-[#F8FAF8] shadow-sm'
+          : 'border-[#DDE4D8] hover:border-[#DDE4D8] hover:shadow-sm'
       } ${className}`}
     >
       {/* Selection Checkbox */}
@@ -102,7 +102,7 @@ export function SelectableItemWrapper({
             }}
             className={`p-1 rounded transition-all ${
               isSelected
-                ? 'text-sage-600'
+                ? 'text-[#555555]'
                 : 'text-sage-400 opacity-0 group-hover:opacity-100'
             }`}
           >
@@ -123,7 +123,7 @@ export function SelectableItemWrapper({
       </div>
       {/* Selection Indicator */}
       {isSelected && (
-        <div className="absolute top-0 left-0 w-1 h-full bg-sage-500 rounded-l-lg" />
+        <div className="absolute top-0 left-0 w-1 h-full bg-[#7A8F78] rounded-l-lg" />
       )}
     </div>
   )
@@ -149,9 +149,9 @@ export function SelectableFarmItem({ farm, isSelected, onToggle }: FarmItemProps
         <ModernCardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="font-semibold text-sage-800 mb-1">{farm.name}</h3>
+              <h3 className="font-semibold text-[#1A1A1A] mb-1">{farm.name}</h3>
               {farm.location && (
-                <p className="text-sm text-sage-600 mb-2">📍 {farm.location}</p>
+                <p className="text-sm text-[#555555] mb-2">📍 {farm.location}</p>
               )}
               <div className="flex items-center gap-4 text-sm text-sage-500">
                 {farm.totalArea && (
@@ -202,8 +202,8 @@ export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemPr
         <ModernCardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="font-semibold text-sage-800 mb-1">{field.name}</h3>
-              <div className="flex items-center gap-4 text-sm text-sage-600 mb-2">
+              <h3 className="font-semibold text-[#1A1A1A] mb-1">{field.name}</h3>
+              <div className="flex items-center gap-4 text-sm text-[#555555] mb-2">
                 {field.cropType && (
                   <span>🌱 {field.cropType}</span>
                 )}
@@ -258,7 +258,7 @@ export function SelectableTransactionItem({ transaction, isSelected, onToggle }:
         <ModernCardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <h3 className="font-medium text-sage-800 mb-1">{transaction.description}</h3>
+              <h3 className="font-medium text-[#1A1A1A] mb-1">{transaction.description}</h3>
               <div className="flex items-center gap-4 text-sm text-sage-500">
                 <span>{new Date(transaction.date).toLocaleDateString()}</span>
                 {transaction.category && (

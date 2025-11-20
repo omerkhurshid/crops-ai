@@ -113,7 +113,7 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             name="farmId"
             value={formData.farmId}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             {farms.map(farm => (
@@ -149,7 +149,7 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             name="species"
             value={formData.species}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             {speciesOptions.map(species => (
@@ -176,7 +176,7 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
             name="gender"
             value={formData.gender}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="female">Female</option>
@@ -231,7 +231,7 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
               name="motherId"
               value={formData.motherId}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select mother...</option>
               {motherOptions.map(animal => (
@@ -248,7 +248,7 @@ export function AddAnimalForm({ farms, parentAnimals, userId }: AddAnimalFormPro
               name="fatherId"
               value={formData.fatherId}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select father...</option>
               {fatherOptions.map(animal => (

@@ -52,10 +52,10 @@ export function MarketTicker({ className }: MarketTickerProps) {
   }, [])
   if (loading) {
     return (
-      <div className={cn('bg-sage-50 border-b border-sage-200 px-4 py-2', className)}>
+      <div className={cn('bg-[#F8FAF8] border-b border-[#DDE4D8] px-4 py-2', className)}>
         <div className="animate-pulse flex gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-4 bg-sage-200 rounded w-24"></div>
+            <div key={i} className="h-4 bg-[#DDE4D8] rounded w-24"></div>
           ))}
         </div>
       </div>
@@ -63,14 +63,14 @@ export function MarketTicker({ className }: MarketTickerProps) {
   }
   if (prices.length === 0) {
     return (
-      <div className={cn('bg-sage-50 border-b border-sage-200 px-4 py-2 text-center', className)}>
-        <span className="text-sm text-sage-600">Market data unavailable</span>
+      <div className={cn('bg-[#F8FAF8] border-b border-[#DDE4D8] px-4 py-2 text-center', className)}>
+        <span className="text-sm text-[#555555]">Market data unavailable</span>
       </div>
     )
   }
   return (
     <div className={cn(
-      'bg-gradient-to-r from-sage-50 to-cream-50 border-b border-sage-200',
+      'bg-gradient-to-r from-sage-50 to-#FAFAF7 border-b border-[#DDE4D8]',
       'overflow-hidden',
       className
     )}>
@@ -78,7 +78,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
         {/* Duplicate for seamless scroll */}
         {[...ensureArray(prices), ...ensureArray(prices)].map((price, index) => (
           <div key={index} className="flex items-center gap-2 whitespace-nowrap">
-            <span className="font-medium text-sage-800">{price.commodity}:</span>
+            <span className="font-medium text-[#1A1A1A]">{price.commodity}:</span>
             <span className="font-semibold text-sage-900">
               ${price.price.toFixed(2)}/{price.unit}
             </span>
@@ -134,12 +134,12 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
   const currentPrice = prices[currentIndex]
   return (
     <div className={cn(
-      'bg-gradient-to-r from-sage-50 to-cream-50 px-3 py-1.5',
+      'bg-gradient-to-r from-sage-50 to-#FAFAF7 px-3 py-1.5',
       'flex items-center justify-between text-xs',
       className
     )}>
       <div className="flex items-center gap-2">
-        <span className="font-medium text-sage-700">{currentPrice.commodity}:</span>
+        <span className="font-medium text-[#555555]">{currentPrice.commodity}:</span>
         <span className="font-semibold text-sage-900">
           ${currentPrice.price.toFixed(2)}
         </span>

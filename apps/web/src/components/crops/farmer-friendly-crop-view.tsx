@@ -193,7 +193,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                     </div>
                   </div>
                   <div className="text-right">
-                    <Badge className={priorityConfig[action.priority as keyof typeof priorityConfig]?.color || 'bg-gray-100 text-gray-600'}>
+                    <Badge className={priorityConfig[action.priority as keyof typeof priorityConfig]?.color || 'bg-[#F5F5F5] text-[#555555]'}>
                       {action.daysUntil === 0 ? 'Today!' : getDaysText(action.daysUntil)}
                     </Badge>
                   </div>
@@ -290,7 +290,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       </div>
                       <Progress value={crop.progress} className="h-3" />
                       {crop.daysToHarvest && crop.daysToHarvest > 0 && (
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-[#555555] mt-1">
                           About {getDaysText(crop.daysToHarvest)} to harvest
                         </p>
                       )}
@@ -299,36 +299,36 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                   {/* Next Action - Most Important */}
                   <div className={`p-3 ${statusInfo.bgColor} rounded-lg mb-3`}>
                     <div className="flex items-center gap-2 mb-1">
-                      <Target className="h-4 w-4 text-gray-600" />
+                      <Target className="h-4 w-4 text-[#555555]" />
                       <span className="font-semibold text-sm">Next Step:</span>
                     </div>
-                    <p className="font-medium text-gray-900">{crop.nextAction}</p>
-                    <p className="text-sm text-gray-600">Due: {crop.nextActionDate}</p>
+                    <p className="font-medium text-[#1A1A1A]">{crop.nextAction}</p>
+                    <p className="text-sm text-[#555555]">Due: {crop.nextActionDate}</p>
                   </div>
                   {/* Key Stats Row */}
                   <div className="grid grid-cols-3 gap-4 text-center text-sm">
                     <div>
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold text-[#1A1A1A]">
                         {formatArea(crop.plantedArea, crop.unit)}
                       </div>
-                      <div className="text-gray-500">Planted</div>
+                      <div className="text-[#555555]">Planted</div>
                     </div>
                     <div>
                       <div className="font-semibold text-green-600">
                         {crop.expectedYield.toLocaleString()} {crop.yieldUnit}
                       </div>
-                      <div className="text-gray-500">Expected</div>
+                      <div className="text-[#555555]">Expected</div>
                     </div>
                     <div>
                       <div className="font-semibold text-purple-600">
                         {formatCurrency(crop.expectedRevenue)}
                       </div>
-                      <div className="text-gray-500">Revenue</div>
+                      <div className="text-[#555555]">Revenue</div>
                     </div>
                   </div>
                   {/* Health Score */}
                   {crop.healthScore > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
+                    <div className="mt-3 pt-3 border-t border-[#F5F5F5]">
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center gap-2">
                           <span className={crop.healthScore >= 90 ? 'text-green-600' : crop.healthScore >= 70 ? 'text-yellow-600' : 'text-red-600'}>
@@ -367,7 +367,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
               {crops.length > 0 ? crops.map((crop) => {
                 const statusInfo = statusConfig[crop.status]
                 return (
-                  <div key={crop.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div key={crop.id} className="flex items-center gap-4 p-4 bg-[#FAFAF7] rounded-lg">
                     <div className="text-2xl">{crop.icon}</div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
@@ -376,14 +376,14 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                           {statusInfo.label}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600">{crop.location}</p>
+                      <p className="text-sm text-[#555555]">{crop.location}</p>
                     </div>
                     <div className="text-right">
                       <div className="font-semibold text-green-600">
                         {formatCurrency(crop.expectedRevenue)}
                       </div>
                       {crop.daysToHarvest && crop.daysToHarvest > 0 && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-[#555555]">
                           {getDaysText(crop.daysToHarvest)}
                         </div>
                       )}

@@ -168,9 +168,9 @@ export function SettingsForm({ user }: SettingsFormProps) {
     <div className="space-y-6">
       {/* Account Information */}
       <ModernCard variant="floating">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
           <ModernCardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-sage-600" />
+            <User className="h-5 w-5 text-[#555555]" />
             Account Information
           </ModernCardTitle>
           <ModernCardDescription>
@@ -206,9 +206,9 @@ export function SettingsForm({ user }: SettingsFormProps) {
       </ModernCard>
       {/* Change Password */}
       <ModernCard variant="floating">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
           <ModernCardTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5 text-sage-600" />
+            <Lock className="h-5 w-5 text-[#555555]" />
             Change Password
           </ModernCardTitle>
           <ModernCardDescription>
@@ -264,9 +264,9 @@ export function SettingsForm({ user }: SettingsFormProps) {
       </ModernCard>
       {/* System Preferences */}
       <ModernCard variant="floating">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+        <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
           <ModernCardTitle className="flex items-center gap-2">
-            <Globe className="h-5 w-5 text-sage-600" />
+            <Globe className="h-5 w-5 text-[#555555]" />
             System Preferences
           </ModernCardTitle>
           <ModernCardDescription>
@@ -277,7 +277,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           {/* Currency */}
           <div>
             <Label className="flex items-center gap-2 mb-3">
-              <DollarSign className="h-4 w-4 text-sage-600" />
+              <DollarSign className="h-4 w-4 text-[#555555]" />
               Default Currency
               <InfoTooltip 
                 title="Currency Setting"
@@ -307,7 +307,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           {/* Land Units */}
           <div>
             <Label className="flex items-center gap-2 mb-3">
-              <Ruler className="h-4 w-4 text-sage-600" />
+              <Ruler className="h-4 w-4 text-[#555555]" />
               Land Measurement Unit
               <InfoTooltip 
                 title="Land Measurement"
@@ -340,7 +340,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
           {/* Temperature Units */}
           <div>
             <Label className="flex items-center gap-2 mb-3">
-              <Thermometer className="h-4 w-4 text-sage-600" />
+              <Thermometer className="h-4 w-4 text-[#555555]" />
               Temperature Unit
               <InfoTooltip 
                 title="Temperature Display"
@@ -396,14 +396,14 @@ export function SettingsForm({ user }: SettingsFormProps) {
             </div>
             <div>
               <p className="text-xs text-sage-500 uppercase tracking-wide">Account</p>
-              <Badge className="mt-1 bg-green-100 text-green-700">Active</Badge>
+              <Badge className="mt-1 bg-[#F8FAF8] text-green-700">Active</Badge>
             </div>
           </div>
         </ModernCardContent>
       </ModernCard>
       {/* Status Messages */}
       {saveStatus === 'success' && (
-        <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div className="flex items-center gap-2 p-4 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
           <CheckCircle className="h-5 w-5 text-green-600" />
           <span className="text-green-800">Settings saved successfully!</span>
         </div>

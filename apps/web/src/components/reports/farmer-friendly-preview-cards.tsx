@@ -33,12 +33,12 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded"></div>
-        <div className="h-20 bg-gray-200 rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
+        <div className="h-20 bg-[#F5F5F5] rounded"></div>
         <div className="grid grid-cols-3 gap-3">
-          <div className="h-16 bg-gray-200 rounded"></div>
-          <div className="h-16 bg-gray-200 rounded"></div>
-          <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
         </div>
       </div>
     )
@@ -46,12 +46,12 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
   if (!performanceData) {
     return (
       <div className="space-y-4 text-center py-8">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
           <BarChart3 className="h-6 w-6 text-gray-400" />
         </div>
         <div>
-          <p className="text-lg font-medium text-gray-900 mb-1">No Performance Data</p>
-          <p className="text-sm text-gray-600">Add crop yields and expenses to track performance</p>
+          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Performance Data</p>
+          <p className="text-sm text-[#555555]">Add crop yields and expenses to track performance</p>
         </div>
         <Link href={`/reports/performance/${farmId}`} className="block">
           <Button variant="sage">
@@ -66,27 +66,27 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#F8FAF8] rounded-full flex items-center justify-center">
             <BarChart3 className="h-5 w-5 text-green-600" />
           </div>
           <div>
-            <p className="text-lg font-semibold text-sage-800">Farm Performance</p>
-            <p className="text-sm text-sage-600">Current season metrics</p>
+            <p className="text-lg font-semibold text-[#1A1A1A]">Farm Performance</p>
+            <p className="text-sm text-[#555555]">Current season metrics</p>
           </div>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3 text-center">
         <div className="bg-white rounded-lg p-3 border">
           <div className="text-xl font-bold text-green-600">{performanceData.yieldPerAcre || 'N/A'}</div>
-          <div className="text-xs text-sage-600">yield per acre</div>
+          <div className="text-xs text-[#555555]">yield per acre</div>
         </div>
         <div className="bg-white rounded-lg p-3 border">
           <div className="text-xl font-bold text-red-600">{performanceData.costPerAcre || 'N/A'}</div>
-          <div className="text-xs text-sage-600">cost per acre</div>
+          <div className="text-xs text-[#555555]">cost per acre</div>
         </div>
         <div className="bg-white rounded-lg p-3 border">
           <div className="text-xl font-bold text-blue-600">{performanceData.profitPerAcre || 'N/A'}</div>
-          <div className="text-xs text-sage-600">profit per acre</div>
+          <div className="text-xs text-[#555555]">profit per acre</div>
         </div>
       </div>
       <Link href={`/reports/performance/${farmId}`} className="block">
@@ -121,21 +121,21 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded"></div>
-        <div className="h-20 bg-gray-200 rounded"></div>
-        <div className="h-8 bg-gray-200 rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
+        <div className="h-20 bg-[#F5F5F5] rounded"></div>
+        <div className="h-8 bg-[#F5F5F5] rounded"></div>
       </div>
     )
   }
   if (!weatherData) {
     return (
       <div className="space-y-4 text-center py-8">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
           <CloudRain className="h-6 w-6 text-gray-400" />
         </div>
         <div>
-          <p className="text-lg font-medium text-gray-900 mb-1">No Weather Data</p>
-          <p className="text-sm text-gray-600">Enable weather tracking for insights</p>
+          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Weather Data</p>
+          <p className="text-sm text-[#555555]">Enable weather tracking for insights</p>
         </div>
         <Link href={`/weather`} className="block">
           <Button variant="sage">
@@ -152,15 +152,15 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <CloudRain className="h-8 w-8 text-blue-600" />
           <div>
-            <p className="text-lg font-semibold text-sage-800">Weather Impact</p>
-            <p className="text-sm text-sage-600">Last 30 days analysis</p>
+            <p className="text-lg font-semibold text-[#1A1A1A]">Weather Impact</p>
+            <p className="text-sm text-[#555555]">Last 30 days analysis</p>
           </div>
         </div>
       </div>
-      <div className="bg-white border border-sage-200 rounded-lg p-4">
+      <div className="bg-white border border-[#DDE4D8] rounded-lg p-4">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-sage-800">Rainfall Impact</span>
+            <span className="text-sm font-medium text-[#1A1A1A]">Rainfall Impact</span>
             <span className={`text-sm ${
               weatherData.rainfallImpact === 'positive' ? 'text-green-600' : 
               weatherData.rainfallImpact === 'negative' ? 'text-red-600' : 'text-yellow-600'
@@ -169,7 +169,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-sage-800">Temperature Stress</span>
+            <span className="text-sm font-medium text-[#1A1A1A]">Temperature Stress</span>
             <span className={`text-sm ${
               weatherData.temperatureStress === 'low' ? 'text-green-600' : 
               weatherData.temperatureStress === 'high' ? 'text-red-600' : 'text-yellow-600'
@@ -178,7 +178,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-sage-800">Growth Conditions</span>
+            <span className="text-sm font-medium text-[#1A1A1A]">Growth Conditions</span>
             <span className={`text-sm ${
               weatherData.growthConditions === 'optimal' ? 'text-green-600' : 
               weatherData.growthConditions === 'poor' ? 'text-red-600' : 'text-yellow-600'
@@ -220,21 +220,21 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded"></div>
-        <div className="h-12 bg-gray-200 rounded"></div>
-        <div className="h-16 bg-gray-200 rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
+        <div className="h-12 bg-[#F5F5F5] rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
       </div>
     )
   }
   if (!cropHealthData) {
     return (
       <div className="space-y-4 text-center py-8">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
           <Leaf className="h-6 w-6 text-gray-400" />
         </div>
         <div>
-          <p className="text-lg font-medium text-gray-900 mb-1">No Crop Health Data</p>
-          <p className="text-sm text-gray-600">Add fields and crops to monitor health</p>
+          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Crop Health Data</p>
+          <p className="text-sm text-[#555555]">Add fields and crops to monitor health</p>
         </div>
         <Link href={`/crop-health`} className="block">
           <Button variant="sage">
@@ -259,18 +259,18 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
             <Leaf className={`h-5 w-5 text-${healthColor}-600`} />
           </div>
           <div>
-            <p className="text-lg font-semibold text-sage-800">Crop Health</p>
-            <p className="text-sm text-sage-600">{cropHealthData.fieldCount} fields monitored</p>
+            <p className="text-lg font-semibold text-[#1A1A1A]">Crop Health</p>
+            <p className="text-sm text-[#555555]">{cropHealthData.fieldCount} fields monitored</p>
           </div>
         </div>
       </div>
       <div className="space-y-3">
         <div>
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-sage-600">Overall Field Health</span>
+            <span className="text-[#555555]">Overall Field Health</span>
             <span className={`font-medium text-${healthColor}-600`}>{cropHealthData.overallHealth}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-[#F5F5F5] rounded-full h-3">
             <div className={`bg-${healthColor}-500 h-3 rounded-full`} style={{ width: `${cropHealthData.overallHealth}%` }}></div>
           </div>
         </div>
@@ -326,11 +326,11 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded"></div>
-        <div className="h-20 bg-gray-200 rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
+        <div className="h-20 bg-[#F5F5F5] rounded"></div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="h-16 bg-gray-200 rounded"></div>
-          <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
         </div>
       </div>
     )
@@ -338,12 +338,12 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
   if (!financialData) {
     return (
       <div className="space-y-4 text-center py-8">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
           <DollarSign className="h-6 w-6 text-gray-400" />
         </div>
         <div>
-          <p className="text-lg font-medium text-gray-900 mb-1">No Financial Data</p>
-          <p className="text-sm text-gray-600">Add transactions to track income and expenses</p>
+          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Financial Data</p>
+          <p className="text-sm text-[#555555]">Add transactions to track income and expenses</p>
         </div>
         <Link href={`/financial`} className="block">
           <Button variant="sage">
@@ -360,24 +360,24 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <DollarSign className="h-8 w-8 text-green-600" />
           <div>
-            <p className="text-lg font-semibold text-sage-800">Financial Summary</p>
-            <p className="text-sm text-sage-600">Current year performance</p>
+            <p className="text-lg font-semibold text-[#1A1A1A]">Financial Summary</p>
+            <p className="text-sm text-[#555555]">Current year performance</p>
           </div>
         </div>
       </div>
-      <div className="text-center bg-white border border-sage-200 rounded-lg p-4">
+      <div className="text-center bg-white border border-[#DDE4D8] rounded-lg p-4">
         <div className={`text-3xl font-bold mb-1 ${
           financialData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
         }`}>
           {formatCurrency(financialData.netProfit)}
         </div>
-        <div className="text-sm text-sage-600 mb-2">Net profit this year</div>
+        <div className="text-sm text-[#555555] mb-2">Net profit this year</div>
         <div className="text-xs text-sage-500">
           {financialData.transactionCount} transactions recorded
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+        <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3 text-center">
           <div className="text-lg font-bold text-green-700">{formatCurrency(financialData.income)}</div>
           <div className="text-xs text-green-600 mb-1">Income</div>
         </div>
@@ -418,11 +418,11 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-16 bg-gray-200 rounded"></div>
+        <div className="h-16 bg-[#F5F5F5] rounded"></div>
         <div className="space-y-3">
-          <div className="h-16 bg-gray-200 rounded"></div>
-          <div className="h-16 bg-gray-200 rounded"></div>
-          <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
+          <div className="h-16 bg-[#F5F5F5] rounded"></div>
         </div>
       </div>
     )
@@ -430,12 +430,12 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
   if (!sustainabilityData) {
     return (
       <div className="space-y-4 text-center py-8">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
           <TreePine className="h-6 w-6 text-gray-400" />
         </div>
         <div>
-          <p className="text-lg font-medium text-gray-900 mb-1">No Sustainability Data</p>
-          <p className="text-sm text-gray-600">Add environmental tracking to monitor sustainability</p>
+          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Sustainability Data</p>
+          <p className="text-sm text-[#555555]">Add environmental tracking to monitor sustainability</p>
         </div>
         <Link href={`/reports/sustainability/${farmId}`} className="block">
           <Button variant="sage">
@@ -452,8 +452,8 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <TreePine className="h-8 w-8 text-green-600" />
           <div>
-            <p className="text-lg font-semibold text-sage-800">Sustainability Score</p>
-            <p className="text-sm text-sage-600">Environmental impact metrics</p>
+            <p className="text-lg font-semibold text-[#1A1A1A]">Sustainability Score</p>
+            <p className="text-sm text-[#555555]">Environmental impact metrics</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -477,13 +477,13 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
           </div>
         )}
         {sustainabilityData.carbonFootprint && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+          <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-green-800">Carbon Footprint</span>
               <span className="text-sm text-green-600">{sustainabilityData.carbonFootprint.rating}</span>
             </div>
-            <div className="w-full bg-green-200 rounded-full h-2">
-              <div className="bg-green-500 h-2 rounded-full" style={{ width: `${sustainabilityData.carbonFootprint.score}%` }}></div>
+            <div className="w-full bg-[#DDE4D8] rounded-full h-2">
+              <div className="bg-[#8FBF7F] h-2 rounded-full" style={{ width: `${sustainabilityData.carbonFootprint.score}%` }}></div>
             </div>
           </div>
         )}
@@ -513,44 +513,44 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
   return (
     <div className="space-y-4">
       <div className="text-center py-4">
-        <div className="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-3">
-          <BarChart3 className="h-6 w-6 text-sage-600" />
+        <div className="w-12 h-12 bg-[#F8FAF8] rounded-full flex items-center justify-center mx-auto mb-3">
+          <BarChart3 className="h-6 w-6 text-[#555555]" />
         </div>
-        <h3 className="text-lg font-semibold text-sage-800 mb-2">
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
           Create Your Own Report
         </h3>
-        <p className="text-sm text-sage-600">
+        <p className="text-sm text-[#555555]">
           Mix and match the information that matters most to you
         </p>
       </div>
-      <div className="bg-sage-50 border border-sage-200 rounded-lg p-4">
-        <p className="text-sm font-medium text-sage-800 mb-3">Popular combinations:</p>
+      <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-4">
+        <p className="text-sm font-medium text-[#1A1A1A] mb-3">Popular combinations:</p>
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm text-sage-700">
-            <Target className="h-4 w-4 text-sage-600" />
+          <div className="flex items-center gap-2 text-sm text-[#555555]">
+            <Target className="h-4 w-4 text-[#555555]" />
             <span>Profit + Weather + Yield (Season Summary)</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-sage-700">
-            <Target className="h-4 w-4 text-sage-600" />
+          <div className="flex items-center gap-2 text-sm text-[#555555]">
+            <Target className="h-4 w-4 text-[#555555]" />
             <span>Crop Health + Soil + Sustainability (Field Report)</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-sage-700">
-            <Target className="h-4 w-4 text-sage-600" />
+          <div className="flex items-center gap-2 text-sm text-[#555555]">
+            <Target className="h-4 w-4 text-[#555555]" />
             <span>Costs + Revenue + Benchmarking (Financial Deep Dive)</span>
           </div>
         </div>
       </div>
       <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm text-sage-700">
-          <span className="w-5 h-5 bg-sage-600 text-white rounded-full flex items-center justify-center text-xs font-medium">1</span>
+        <div className="flex items-center gap-2 text-sm text-[#555555]">
+          <span className="w-5 h-5 bg-[#7A8F78] text-white rounded-full flex items-center justify-center text-xs font-medium">1</span>
           <span>Pick what to include</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-sage-700">
-          <span className="w-5 h-5 bg-sage-600 text-white rounded-full flex items-center justify-center text-xs font-medium">2</span>
+        <div className="flex items-center gap-2 text-sm text-[#555555]">
+          <span className="w-5 h-5 bg-[#7A8F78] text-white rounded-full flex items-center justify-center text-xs font-medium">2</span>
           <span>Choose time period</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-sage-700">
-          <span className="w-5 h-5 bg-sage-600 text-white rounded-full flex items-center justify-center text-xs font-medium">3</span>
+        <div className="flex items-center gap-2 text-sm text-[#555555]">
+          <span className="w-5 h-5 bg-[#7A8F78] text-white rounded-full flex items-center justify-center text-xs font-medium">3</span>
           <span>Get your custom insights</span>
         </div>
       </div>

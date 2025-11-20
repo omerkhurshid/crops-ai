@@ -116,7 +116,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       case 'disease': return <Shield className="h-4 w-4 text-red-600" />;
       case 'nutrient': return <Zap className="h-4 w-4 text-yellow-600" />;
       case 'pest': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default: return <Activity className="h-4 w-4 text-gray-600" />;
+      default: return <Activity className="h-4 w-4 text-[#555555]" />;
     }
   };
   const getStressFactorName = (type: string) => {
@@ -134,7 +134,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
   if (loading) {
@@ -143,7 +143,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         <ModernCardContent className="p-8">
           <div className="flex items-center justify-center">
             <RefreshCw className="h-6 w-6 animate-spin text-sage-400 mr-3" />
-            <span className="text-sage-600">Analyzing crop health...</span>
+            <span className="text-[#555555]">Analyzing crop health...</span>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -154,7 +154,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       <ModernCard variant="soft">
         <ModernCardContent className="p-8 text-center">
           <AlertTriangle className="h-8 w-8 text-sage-400 mx-auto mb-4" />
-          <p className="text-sage-600">Unable to load crop health data</p>
+          <p className="text-[#555555]">Unable to load crop health data</p>
           <Button 
             onClick={fetchHealthData}
             variant="outline"
@@ -172,17 +172,17 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h3 className="text-xl font-semibold text-sage-800 mb-2">
+          <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
             How Healthy Your Crops Are
           </h3>
-          <p className="text-sage-600">
+          <p className="text-[#555555]">
             Satellite analysis of your crop health and stress levels
           </p>
         </div>
         <Button
           onClick={generateReport}
           disabled={generating}
-          className="bg-sage-700 hover:bg-sage-800 w-full sm:w-auto"
+          className="bg-[#5E6F5A] hover:bg-[#7A8F78] w-full sm:w-auto"
         >
           {generating ? (
             <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -198,7 +198,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           <div className="flex items-center gap-3">
             <Leaf className="h-6 w-6 text-green-700" />
             <div>
-              <ModernCardTitle className="text-sage-800">
+              <ModernCardTitle className="text-[#1A1A1A]">
                 Overall Crop Health
               </ModernCardTitle>
               <ModernCardDescription>
@@ -216,14 +216,14 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                 showIcon={true}
                 showText={false}
               />
-              <div className="text-4xl font-bold text-sage-800">
+              <div className="text-4xl font-bold text-[#1A1A1A]">
                 {data.summary.overallHealth}%
               </div>
             </div>
-            <p className="text-lg text-sage-600 mb-4">
+            <p className="text-lg text-[#555555] mb-4">
               {convertHealthScore(data.summary.overallHealth)}
             </p>
-            <div className="flex items-center justify-center gap-2 text-sm text-sage-600">
+            <div className="flex items-center justify-center gap-2 text-sm text-[#555555]">
               {data.summary.improvementTrend > 0 ? (
                 <TrendingUp className="h-4 w-4 text-green-600" />
               ) : (
@@ -264,7 +264,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       <ModernCard variant="soft">
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-sage-700" />
+            <Target className="h-5 w-5 text-[#555555]" />
             Field-by-Field Health
           </ModernCardTitle>
           <ModernCardDescription>
@@ -274,7 +274,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         <ModernCardContent>
           <div className="space-y-4">
             {data.fieldAnalysis.map((field) => (
-              <div key={field.fieldId} className="p-4 bg-white rounded-xl border border-sage-100">
+              <div key={field.fieldId} className="p-4 bg-white rounded-xl border border-[#F8FAF8]">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <TrafficLightStatus 
@@ -283,24 +283,24 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                       showText={false}
                     />
                     <div>
-                      <h4 className="font-semibold text-sage-800">{field.fieldName}</h4>
-                      <p className="text-sm text-sage-600">{field.cropType}</p>
+                      <h4 className="font-semibold text-[#1A1A1A]">{field.fieldName}</h4>
+                      <p className="text-sm text-[#555555]">{field.cropType}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-sage-800">{field.healthScore}%</div>
-                    <div className="text-sm text-sage-600">Health Score</div>
+                    <div className="text-lg font-bold text-[#1A1A1A]">{field.healthScore}%</div>
+                    <div className="text-sm text-[#555555]">Health Score</div>
                   </div>
                 </div>
                 {/* Stress Factors */}
                 {field.stressFactors.length > 0 && (
                   <div className="mb-4">
-                    <h5 className="text-sm font-medium text-sage-800 mb-2">Issues Found:</h5>
+                    <h5 className="text-sm font-medium text-[#1A1A1A] mb-2">Issues Found:</h5>
                     <div className="space-y-2">
                       {field.stressFactors.map((stress, index) => (
                         <div key={index} className="flex items-center gap-2 text-sm">
                           {getStressFactorIcon(stress.type)}
-                          <span className="text-sage-700">
+                          <span className="text-[#555555]">
                             {getStressFactorName(stress.type)} affecting {stress.affected_area}% of field
                           </span>
                           <Badge variant="outline" className="ml-auto">
@@ -313,10 +313,10 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                 )}
                 {/* Recommendations */}
                 <div>
-                  <h5 className="text-sm font-medium text-sage-800 mb-2">What to do:</h5>
+                  <h5 className="text-sm font-medium text-[#1A1A1A] mb-2">What to do:</h5>
                   <ul className="space-y-1">
                     {field.recommendations.map((rec, index) => (
-                      <li key={index} className="text-sm text-sage-700 flex items-start gap-2">
+                      <li key={index} className="text-sm text-[#555555] flex items-start gap-2">
                         <span className="text-sage-400 mt-1">•</span>
                         {rec}
                       </li>
@@ -343,7 +343,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           <ModernCardContent>
             <div className="space-y-3">
               {data.alerts.map((alert, index) => (
-                <div key={index} className="p-4 bg-white rounded-xl border border-sage-100">
+                <div key={index} className="p-4 bg-white rounded-xl border border-[#F8FAF8]">
                   <div className="flex items-start justify-between mb-2">
                     <Badge className={cn("border", getAlertColor(alert.level))}>
                       {alert.level.toUpperCase()}
@@ -354,7 +354,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                       </span>
                     )}
                   </div>
-                  <p className="text-sage-700 leading-relaxed">{alert.message}</p>
+                  <p className="text-[#555555] leading-relaxed">{alert.message}</p>
                 </div>
               ))}
             </div>
@@ -365,7 +365,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       <ModernCard variant="soft">
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-sage-700" />
+            <BarChart3 className="h-5 w-5 text-[#555555]" />
             Health Trends
           </ModernCardTitle>
           <ModernCardDescription>
@@ -374,21 +374,21 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-green-50 rounded-xl border border-green-100">
-              <div className="text-sm font-medium text-sage-600 mb-1">Spring</div>
-              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.spring}%</div>
+            <div className="text-center p-4 bg-[#F8FAF8] rounded-xl border border-green-100">
+              <div className="text-sm font-medium text-[#555555] mb-1">Spring</div>
+              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.spring}%</div>
             </div>
             <div className="text-center p-4 bg-yellow-50 rounded-xl border border-yellow-100">
-              <div className="text-sm font-medium text-sage-600 mb-1">Summer</div>
-              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.summer}%</div>
+              <div className="text-sm font-medium text-[#555555] mb-1">Summer</div>
+              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.summer}%</div>
             </div>
             <div className="text-center p-4 bg-orange-50 rounded-xl border border-orange-100">
-              <div className="text-sm font-medium text-sage-600 mb-1">Fall</div>
-              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.fall}%</div>
+              <div className="text-sm font-medium text-[#555555] mb-1">Fall</div>
+              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.fall}%</div>
             </div>
             <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <div className="text-sm font-medium text-sage-600 mb-1">Winter</div>
-              <div className="text-xl font-bold text-sage-800">{data.trends.seasonalPattern.winter}%</div>
+              <div className="text-sm font-medium text-[#555555] mb-1">Winter</div>
+              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.winter}%</div>
             </div>
           </div>
         </ModernCardContent>

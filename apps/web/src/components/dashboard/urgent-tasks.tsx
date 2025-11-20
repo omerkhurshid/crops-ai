@@ -46,9 +46,9 @@ const categoryConfig = {
   },
   financial: {
     icon: DollarSign,
-    color: 'bg-green-500',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200'
+    color: 'bg-[#8FBF7F]',
+    bgColor: 'bg-[#F8FAF8]',
+    borderColor: 'border-[#DDE4D8]'
   },
   health: {
     icon: AlertTriangle,
@@ -120,33 +120,33 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
                   )}
                 </div>
                 {/* Task Details */}
-                <h3 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2 leading-tight">
                   {task.title}
                 </h3>
                 {task.field && (
-                  <p className="text-gray-700 font-medium mb-3">
+                  <p className="text-[#555555] font-medium mb-3">
                     📍 {task.field}
                   </p>
                 )}
                 {/* Timeframe and Impact */}
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-[#555555]">
                     <Clock className="h-4 w-4" />
                     <span>Complete within: <strong>{task.timeframe}</strong></span>
                   </div>
                   {task.impact && (
-                    <div className="text-sm font-medium text-gray-700">
+                    <div className="text-sm font-medium text-[#555555]">
                       💰 Potential impact: {task.impact}
                     </div>
                   )}
                 </div>
                 {/* Action Button */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-gray-900 group-hover:text-gray-700">
+                  <span className="text-sm font-semibold text-[#1A1A1A] group-hover:text-[#555555]">
                     Start Task
                   </span>
                   <div className="p-2 bg-white rounded-lg shadow-sm group-hover:shadow-md transition-all">
-                    <ArrowRight className="h-5 w-5 text-gray-700" />
+                    <ArrowRight className="h-5 w-5 text-[#555555]" />
                   </div>
                 </div>
               </div>
@@ -156,8 +156,8 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
       </div>
       {/* More Tasks Indicator */}
       {tasks.length > 2 && (
-        <button className="w-full p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border-2 border-gray-200 transition-colors">
-          <div className="flex items-center justify-center gap-2 text-gray-700">
+        <button className="w-full p-4 bg-[#FAFAF7] hover:bg-[#F5F5F5] rounded-xl border-2 border-[#E6E6E6] transition-colors">
+          <div className="flex items-center justify-center gap-2 text-[#555555]">
             <span className="font-medium">View {tasks.length - 2} more urgent tasks</span>
             <ChevronRight className="h-4 w-4" />
           </div>
@@ -198,10 +198,10 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
                 <Icon className="h-4 w-4 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900 text-sm leading-tight">
+                <h3 className="font-bold text-[#1A1A1A] text-sm leading-tight">
                   {task.title}
                 </h3>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-[#555555] mt-1">
                   {task.timeframe} • {task.field}
                 </p>
               </div>

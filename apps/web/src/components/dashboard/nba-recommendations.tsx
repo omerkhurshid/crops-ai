@@ -72,7 +72,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       case 'URGENT': return 'bg-red-100 text-red-800 border-red-200'
       case 'HIGH': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'MEDIUM': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'LOW': return 'bg-green-100 text-green-800 border-green-200'
+      case 'LOW': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
     }
   }
   const formatCurrency = (amount: number | undefined) => {
@@ -136,18 +136,18 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       }
     >
       <div className={`bg-white rounded-lg shadow-sm border ${className}`}>
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-[#E6E6E6]">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Next Best Actions</h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <h2 className="text-lg font-semibold text-[#1A1A1A]">Next Best Actions</h2>
+              <p className="text-sm text-[#555555] mt-1">
                 AI-powered farm operation recommendations based on current conditions
               </p>
             </div>
             <button
               onClick={handleGenerateRecommendations}
               disabled={isGenerating || loading}
-              className="flex items-center gap-2 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[#7A8F78] text-white rounded-lg hover:bg-[#5E6F5A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isGenerating ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -161,19 +161,19 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
           <div className="flex gap-6 mt-4">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-red-500" />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[#555555]">
                 {urgentRecs.length} urgent
               </span>
             </div>
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[#555555]">
                 {highValueRecs.length} high-value
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-blue-500" />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[#555555]">
                 {pendingRecs.length} pending
               </span>
             </div>
@@ -193,8 +193,8 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
             <div className="p-6">
               <div className="text-center py-12">
                 <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">All caught up!</h3>
-                <p className="text-gray-600">
+                <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">All caught up!</h3>
+                <p className="text-[#555555]">
                   No urgent actions needed right now. Check back later or generate new recommendations.
                 </p>
               </div>
@@ -206,13 +206,13 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
               {ensureArray(pendingRecs).slice(0, 5).map((rec) => (
               <div
                 key={rec.id}
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                className="border border-[#E6E6E6] rounded-lg p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
                     {/* Icon and Priority */}
                     <div className="flex items-center gap-2">
-                      <div className="p-2 bg-sage-100 rounded-lg">
+                      <div className="p-2 bg-[#F8FAF8] rounded-lg">
                         {getRecommendationIcon(rec.type)}
                       </div>
                       <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(rec.priority)}`}>
@@ -221,10 +221,10 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                     </div>
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 mb-1">{rec.title}</h3>
-                      <p className="text-sm text-gray-600 mb-2">{rec.description}</p>
+                      <h3 className="font-medium text-[#1A1A1A] mb-1">{rec.title}</h3>
+                      <p className="text-sm text-[#555555] mb-2">{rec.description}</p>
                       {/* Financial Impact */}
-                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
+                      <div className="flex items-center gap-4 text-xs text-[#555555] mb-2">
                         {rec.estimatedImpact.revenue && (
                           <div className="flex items-center gap-1">
                             <DollarSign className="h-3 w-3" />
@@ -238,12 +238,12 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                           </div>
                         )}
                         <div className="flex items-center gap-1">
-                          <span className="text-sage-600 font-medium">{rec.confidence}% confidence</span>
+                          <span className="text-[#555555] font-medium">{rec.confidence}% confidence</span>
                         </div>
                       </div>
                       {/* Timing */}
                       {rec.timing.idealStart && (
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <div className="flex items-center gap-1 text-xs text-[#555555]">
                           <Clock className="h-3 w-3" />
                           <span>Best time: {formatDate(rec.timing.idealStart)}</span>
                           {rec.timing.mustCompleteBy && (
@@ -259,7 +259,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => setSelectedRecommendation(rec)}
-                      className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="p-2 text-gray-400 hover:text-[#555555] transition-colors"
                       title="View details"
                     >
                       <Eye className="h-4 w-4" />
@@ -280,7 +280,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                     </button>
                     <button
                       onClick={() => dismissRecommendation(rec.id)}
-                      className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="p-2 text-gray-400 hover:text-[#555555] transition-colors"
                       title="Dismiss"
                     >
                       <X className="h-4 w-4" />
@@ -293,7 +293,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
               <div className="text-center pt-4">
                 <button
                   onClick={handleGenerateRecommendations}
-                  className="text-sage-600 hover:text-sage-700 text-sm font-medium"
+                  className="text-[#555555] hover:text-[#555555] text-sm font-medium"
                 >
                   View all {pendingRecs.length} recommendations →
                 </button>
@@ -333,12 +333,12 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-[#E6E6E6]">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">{recommendation.title}</h2>
+            <h2 className="text-xl font-semibold text-[#1A1A1A]">{recommendation.title}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-[#555555] transition-colors"
             >
               <X className="h-6 w-6" />
             </button>
@@ -347,15 +347,15 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
         <div className="p-6 space-y-6">
           {/* Description */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Description</h3>
-            <p className="text-gray-600">{recommendation.description}</p>
+            <h3 className="font-medium text-[#1A1A1A] mb-2">Description</h3>
+            <p className="text-[#555555]">{recommendation.description}</p>
           </div>
           {/* Financial Impact */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">Financial Impact</h3>
+            <h3 className="font-medium text-[#1A1A1A] mb-3">Financial Impact</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {recommendation.estimatedImpact.revenue && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
                   <div className="text-green-800 font-medium">Revenue</div>
                   <div className="text-2xl font-bold text-green-900">
                     {formatCurrency(recommendation.estimatedImpact.revenue)}
@@ -370,8 +370,8 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
                   </div>
                 </div>
               )}
-              <div className="bg-sage-50 border border-sage-200 rounded-lg p-3">
-                <div className="text-sage-800 font-medium">Confidence</div>
+              <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
+                <div className="text-[#1A1A1A] font-medium">Confidence</div>
                 <div className="text-2xl font-bold text-sage-900">
                   {recommendation.confidence}%
                 </div>
@@ -380,27 +380,27 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
           </div>
           {/* Explanation */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-2">Analysis</h3>
-            <p className="text-gray-600">{recommendation.explanation}</p>
+            <h3 className="font-medium text-[#1A1A1A] mb-2">Analysis</h3>
+            <p className="text-[#555555]">{recommendation.explanation}</p>
           </div>
           {/* Action Steps */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">Action Steps</h3>
+            <h3 className="font-medium text-[#1A1A1A] mb-3">Action Steps</h3>
             <ol className="list-decimal list-inside space-y-2">
               {recommendation.actionSteps.map((step, index) => (
-                <li key={index} className="text-gray-600">{step}</li>
+                <li key={index} className="text-[#555555]">{step}</li>
               ))}
             </ol>
           </div>
           {/* Resource Requirements */}
           {recommendation.resourceRequirements && recommendation.resourceRequirements.length > 0 && (
             <div>
-              <h3 className="font-medium text-gray-900 mb-3">Required Resources</h3>
+              <h3 className="font-medium text-[#1A1A1A] mb-3">Required Resources</h3>
               <div className="flex flex-wrap gap-2">
                 {recommendation.resourceRequirements.map((resource, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-gray-100 text-gray-800 rounded-lg text-sm"
+                    className="px-2 py-1 bg-[#F5F5F5] text-[#1A1A1A] rounded-lg text-sm"
                   >
                     {resource}
                   </span>
@@ -409,13 +409,13 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             </div>
           )}
         </div>
-        <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
+        <div className="p-6 border-t border-[#E6E6E6] flex justify-end gap-3">
           <button
             onClick={() => {
               onReject()
               onClose()
             }}
-            className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            className="px-4 py-2 text-[#555555] bg-[#F5F5F5] hover:bg-[#F5F5F5] rounded-lg transition-colors"
           >
             Not Now
           </button>
@@ -424,7 +424,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
               onAccept()
               onClose()
             }}
-            className="px-4 py-2 bg-sage-600 text-white hover:bg-sage-700 rounded-lg transition-colors"
+            className="px-4 py-2 bg-[#7A8F78] text-white hover:bg-[#5E6F5A] rounded-lg transition-colors"
           >
             Accept & Proceed
           </button>

@@ -184,17 +184,17 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   }
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800'
+      case 'active': return 'bg-[#F8FAF8] text-green-800'
       case 'fallow': return 'bg-yellow-100 text-yellow-800'
       case 'preparation': return 'bg-blue-100 text-blue-800'
-      default: return 'bg-gray-100 text-gray-800'
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
   if (!apiKey) {
     return (
       <Card>
         <CardContent className="p-6">
-          <div className="text-center text-gray-500">
+          <div className="text-center text-[#555555]">
             Google Maps API key required for map visualization
           </div>
         </CardContent>
@@ -217,20 +217,20 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
         <CardContent>
           <div className="rounded-lg overflow-hidden border">
             {!showMap ? (
-              <div className="h-96 flex items-center justify-center bg-gray-100">
+              <div className="h-96 flex items-center justify-center bg-[#F5F5F5]">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                     Interactive Farm Map
                   </h3>
-                  <p className="text-gray-600 mb-4 max-w-sm">
+                  <p className="text-[#555555] mb-4 max-w-sm">
                     View your farm boundaries and color-coded fields in satellite view
                   </p>
                   <Button onClick={handleLoadMap} className="mb-2">
                     <MapPin className="h-4 w-4 mr-2" />
                     Load Map
                   </Button>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#555555]">
                     {fields.length} fields ready to display
                   </p>
                 </div>
@@ -240,10 +240,10 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                 googleMapsApiKey={apiKey}
                 libraries={libraries}
                 loadingElement={
-                  <div className="h-96 flex items-center justify-center bg-gray-100">
+                  <div className="h-96 flex items-center justify-center bg-[#F5F5F5]">
                     <div className="text-center">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-gray-600" />
-                      <p className="text-sm text-gray-600">Loading farm map...</p>
+                      <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-[#555555]" />
+                      <p className="text-sm text-[#555555]">Loading farm map...</p>
                     </div>
                   </div>
                 }
@@ -349,12 +349,12 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                 <div className="space-y-3">
                   {[1, 2, 3].map(i => (
                     <div key={i} className="animate-pulse">
-                      <div className="h-16 bg-gray-200 rounded-lg"></div>
+                      <div className="h-16 bg-[#F5F5F5] rounded-lg"></div>
                     </div>
                   ))}
                 </div>
               ) : fields.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-[#555555]">
                   <Sprout className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                   <p>No fields found for this farm</p>
                   <p className="text-sm">Create fields in the farm creation flow</p>
@@ -366,15 +366,15 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                       key={field.id}
                       className={`border rounded-lg p-4 transition-all ${
                         visibleFields.has(field.id) 
-                          ? 'border-gray-200 bg-white' 
-                          : 'border-gray-100 bg-gray-50'
+                          ? 'border-[#E6E6E6] bg-white' 
+                          : 'border-[#F5F5F5] bg-[#FAFAF7]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           {/* Color indicator */}
                           <div
-                            className="w-6 h-6 rounded-full border-2 border-gray-300"
+                            className="w-6 h-6 rounded-full border-2 border-[#E6E6E6]"
                             style={{ backgroundColor: field.color }}
                           />
                           <div className="flex-1">
@@ -403,7 +403,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                             ) : (
                               <div>
                                 <h3 className="font-medium">{field.name}</h3>
-                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                <div className="flex items-center gap-2 text-sm text-[#555555]">
                                   <span>{formatArea(field.area)}</span>
                                   {field.cropType && (
                                     <>
@@ -451,13 +451,13 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                       </div>
                       {/* Field stats */}
                       {field.lastAnalysis && (
-                        <div className="mt-3 pt-3 border-t border-gray-100">
+                        <div className="mt-3 pt-3 border-t border-[#F5F5F5]">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Last Analysis:</span>
+                            <span className="text-[#555555]">Last Analysis:</span>
                             <div className="flex items-center space-x-4">
                               <span>NDVI: {field.lastAnalysis.ndvi.toFixed(2)}</span>
                               <span className={`px-2 py-1 rounded text-xs ${
-                                field.lastAnalysis.stressLevel === 'low' ? 'bg-green-100 text-green-800' :
+                                field.lastAnalysis.stressLevel === 'low' ? 'bg-[#F8FAF8] text-green-800' :
                                 field.lastAnalysis.stressLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>
@@ -487,30 +487,30 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
               <div className="space-y-4">
                 <div>
                   <div className="text-2xl font-bold">{fields.length}</div>
-                  <div className="text-sm text-gray-600">Total Fields</div>
+                  <div className="text-sm text-[#555555]">Total Fields</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold">{farm.totalArea.toFixed(1)}</div>
-                  <div className="text-sm text-gray-600">Total Acres</div>
+                  <div className="text-sm text-[#555555]">Total Acres</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold">
                     {fields.reduce((sum, field) => sum + field.area, 0).toFixed(1)}
                   </div>
-                  <div className="text-sm text-gray-600">Mapped Acres</div>
+                  <div className="text-sm text-[#555555]">Mapped Acres</div>
                 </div>
                 {fields.length > 0 && (
                   <div>
-                    <div className="text-sm font-medium text-gray-700 mb-2">Field Coverage</div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="text-sm font-medium text-[#555555] mb-2">Field Coverage</div>
+                    <div className="w-full bg-[#F5F5F5] rounded-full h-2">
                       <div 
-                        className="bg-green-600 h-2 rounded-full"
+                        className="bg-[#7A8F78] h-2 rounded-full"
                         style={{ 
                           width: `${Math.min(100, (fields.reduce((sum, field) => sum + field.area, 0) / farm.totalArea) * 100)}%` 
                         }}
                       />
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-[#555555] mt-1">
                       {((fields.reduce((sum, field) => sum + field.area, 0) / farm.totalArea) * 100).toFixed(1)}% mapped
                     </div>
                   </div>
@@ -529,14 +529,14 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2 text-sm">
-                  <div className="w-4 h-4 rounded bg-green-500 opacity-40"></div>
+                  <div className="w-4 h-4 rounded bg-[#8FBF7F] opacity-40"></div>
                   <span>Farm Boundary</span>
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
                   <div className="w-4 h-4 rounded bg-blue-500 opacity-60"></div>
                   <span>Field Boundaries</span>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
+                <div className="text-xs text-[#555555] mt-2">
                   Click on fields to see details. Use eye icon to toggle visibility.
                 </div>
               </div>

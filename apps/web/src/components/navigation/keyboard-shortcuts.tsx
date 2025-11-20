@@ -269,7 +269,7 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                 </ModernCardTitle>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="p-2 hover:bg-sage-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-[#F8FAF8] rounded-full transition-colors"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -280,10 +280,10 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                 {Object.entries(groupedShortcuts).map(([category, shortcuts]) => (
                   <div key={category}>
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="text-sage-600">
+                      <div className="text-[#555555]">
                         {categoryIcons[category as keyof typeof categoryIcons]}
                       </div>
-                      <h3 className="font-semibold text-sage-800">
+                      <h3 className="font-semibold text-[#1A1A1A]">
                         {categoryLabels[category as keyof typeof categoryLabels]}
                       </h3>
                     </div>
@@ -293,27 +293,27 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                           key={shortcut.id}
                           className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
                             executedShortcut === shortcut.id
-                              ? 'bg-sage-100 border-sage-300 shadow-sm'
+                              ? 'bg-[#F8FAF8] border-[#DDE4D8] shadow-sm'
                               : shortcut.disabled
-                              ? 'bg-sage-50 border-sage-200 opacity-50'
-                              : 'bg-white border-sage-200 hover:bg-sage-50'
+                              ? 'bg-[#F8FAF8] border-[#DDE4D8] opacity-50'
+                              : 'bg-white border-[#DDE4D8] hover:bg-[#F8FAF8]'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`text-sage-600 ${shortcut.disabled ? 'opacity-50' : ''}`}>
+                            <div className={`text-[#555555] ${shortcut.disabled ? 'opacity-50' : ''}`}>
                               {shortcut.icon}
                             </div>
-                            <span className={`text-sm ${shortcut.disabled ? 'text-sage-400' : 'text-sage-700'}`}>
+                            <span className={`text-sm ${shortcut.disabled ? 'text-sage-400' : 'text-[#555555]'}`}>
                               {shortcut.description}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
                             {shortcut.modifiers.map((modifier, index) => (
-                              <kbd key={index} className="px-2 py-1 bg-sage-100 text-sage-700 text-xs rounded border">
+                              <kbd key={index} className="px-2 py-1 bg-[#F8FAF8] text-[#555555] text-xs rounded border">
                                 {getModifierSymbol(modifier)}
                               </kbd>
                             ))}
-                            <kbd className="px-2 py-1 bg-sage-100 text-sage-700 text-xs rounded border">
+                            <kbd className="px-2 py-1 bg-[#F8FAF8] text-[#555555] text-xs rounded border">
                               {shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase()}
                             </kbd>
                           </div>
@@ -323,10 +323,10 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                   </div>
                 ))}
               </div>
-              <div className="mt-8 pt-6 border-t border-sage-200">
+              <div className="mt-8 pt-6 border-t border-[#DDE4D8]">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm text-sage-600">
-                    Press <kbd className="px-2 py-1 bg-sage-100 text-sage-700 text-xs rounded border">Esc</kbd> to close
+                  <div className="text-sm text-[#555555]">
+                    Press <kbd className="px-2 py-1 bg-[#F8FAF8] text-[#555555] text-xs rounded border">Esc</kbd> to close
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="text-xs">
@@ -342,7 +342,7 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
       {/* Executed Shortcut Indicator */}
       {executedShortcut && (
         <div className="fixed bottom-4 right-4 z-40 animate-in fade-in slide-in-from-right-2 duration-300">
-          <div className="bg-sage-800 text-white px-3 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <div className="bg-[#7A8F78] text-white px-3 py-2 rounded-lg shadow-lg flex items-center gap-2">
             <div className="text-sage-200">
               {allShortcuts.find(s => s.id === executedShortcut)?.icon}
             </div>

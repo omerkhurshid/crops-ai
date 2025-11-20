@@ -9,7 +9,7 @@ export function FieldsHeaderActions() {
   return (
     <div className="flex gap-2">
       <Button 
-        className="bg-sage-600 hover:bg-sage-700"
+        className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
         onClick={() => {
           const url = isQuickMode 
             ? '/farms/create-unifiedguided=true&step=fields' 

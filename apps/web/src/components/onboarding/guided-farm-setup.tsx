@@ -36,32 +36,32 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       content: (
         <div className="space-y-6">
           <div className="text-center">
-            <div className="p-4 bg-gradient-to-br from-sage-100 to-earth-100 rounded-2xl mx-auto w-fit mb-4">
-              <Sprout className="h-12 w-12 text-sage-700" />
+            <div className="p-4 bg-gradient-to-br from-sage-100 to-#F8FAF8 rounded-2xl mx-auto w-fit mb-4">
+              <Sprout className="h-12 w-12 text-[#555555]" />
             </div>
-            <h3 className="text-2xl font-semibold text-sage-800 mb-3">
+            <h3 className="text-2xl font-semibold text-[#1A1A1A] mb-3">
               Smart Farming Made Simple
             </h3>
-            <p className="text-sage-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[#555555] max-w-2xl mx-auto leading-relaxed">
               Get field health updates, weather alerts, and farming recommendations 
               to help you grow better crops and increase profits.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-sage-50 rounded-xl">
-              <Activity className="h-8 w-8 text-sage-600 mx-auto mb-2" />
-              <h4 className="font-medium text-sage-800 mb-1">Field Health Checks</h4>
-              <p className="text-xs text-sage-600">See how your crops are doing</p>
+            <div className="text-center p-4 bg-[#F8FAF8] rounded-xl">
+              <Activity className="h-8 w-8 text-[#555555] mx-auto mb-2" />
+              <h4 className="font-medium text-[#1A1A1A] mb-1">Field Health Checks</h4>
+              <p className="text-xs text-[#555555]">See how your crops are doing</p>
             </div>
-            <div className="text-center p-4 bg-earth-50 rounded-xl">
-              <CloudRain className="h-8 w-8 text-earth-600 mx-auto mb-2" />
-              <h4 className="font-medium text-earth-800 mb-1">Weather Forecasts</h4>
-              <p className="text-xs text-earth-600">Weather updates for your farm</p>
+            <div className="text-center p-4 bg-[#F8FAF8] rounded-xl">
+              <CloudRain className="h-8 w-8 text-[#7A8F78] mx-auto mb-2" />
+              <h4 className="font-medium text-[#7A8F78] mb-1">Weather Forecasts</h4>
+              <p className="text-xs text-[#7A8F78]">Weather updates for your farm</p>
             </div>
-            <div className="text-center p-4 bg-cream-50 rounded-xl">
-              <Target className="h-8 w-8 text-sage-600 mx-auto mb-2" />
-              <h4 className="font-medium text-sage-800 mb-1">Smart Suggestions</h4>
-              <p className="text-xs text-sage-600">Tips to improve your farm</p>
+            <div className="text-center p-4 bg-[#FAFAF7] rounded-xl">
+              <Target className="h-8 w-8 text-[#555555] mx-auto mb-2" />
+              <h4 className="font-medium text-[#1A1A1A] mb-1">Smart Suggestions</h4>
+              <p className="text-xs text-[#555555]">Tips to improve your farm</p>
             </div>
           </div>
           <Alert>
@@ -105,50 +105,50 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       content: (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-sage-800 mb-3">Farm Details</h3>
-            <p className="text-sage-600 mb-6">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">Farm Details</h3>
+            <p className="text-[#555555] mb-6">
               Let&apos;s start with basic information about your farm.
             </p>
           </div>
-          <div className="bg-sage-50 rounded-xl p-6">
+          <div className="bg-[#F8FAF8] rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-sage-200 rounded-lg">
-                <Sprout className="h-5 w-5 text-sage-700" />
+              <div className="p-2 bg-[#DDE4D8] rounded-lg">
+                <Sprout className="h-5 w-5 text-[#555555]" />
               </div>
               <div>
-                <h4 className="font-semibold text-sage-800">What you&apos;ll provide:</h4>
-                <p className="text-sm text-sage-600">Essential farm information for setup</p>
+                <h4 className="font-semibold text-[#1A1A1A]">What you&apos;ll provide:</h4>
+                <p className="text-sm text-[#555555]">Essential farm information for setup</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-sage-700">
-                  <CheckCircle2 className="h-4 w-4 text-sage-600" />
+                <div className="flex items-center gap-2 text-sm text-[#555555]">
+                  <CheckCircle2 className="h-4 w-4 text-[#555555]" />
                   Farm name and description
                 </div>
-                <div className="flex items-center gap-2 text-sm text-sage-700">
-                  <CheckCircle2 className="h-4 w-4 text-sage-600" />
+                <div className="flex items-center gap-2 text-sm text-[#555555]">
+                  <CheckCircle2 className="h-4 w-4 text-[#555555]" />
                   Your farm's location
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-sage-700">
-                  <CheckCircle2 className="h-4 w-4 text-sage-600" />
+                <div className="flex items-center gap-2 text-sm text-[#555555]">
+                  <CheckCircle2 className="h-4 w-4 text-[#555555]" />
                   How many acres you farm
                 </div>
-                <div className="flex items-center gap-2 text-sm text-sage-700">
-                  <CheckCircle2 className="h-4 w-4 text-sage-600" />
+                <div className="flex items-center gap-2 text-sm text-[#555555]">
+                  <CheckCircle2 className="h-4 w-4 text-[#555555]" />
                   Primary crop types
                 </div>
               </div>
             </div>
           </div>
-          <div className="bg-sage-50 rounded-xl p-4 mb-6">
-            <h4 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-sage-600" />
+          <div className="bg-[#F8FAF8] rounded-xl p-4 mb-6">
+            <h4 className="font-semibold text-[#1A1A1A] mb-2 flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-[#555555]" />
               Quick Start Tips
             </h4>
-            <ul className="text-sm text-sage-700 space-y-1">
+            <ul className="text-sm text-[#555555] space-y-1">
               <li>• Farm name can be simple: "Johnson Farm" or "Prairie View Ranch"</li>
               <li>• Location helps us provide accurate weather and market data</li>
               <li>• Area estimate is fine - you can update this later</li>
@@ -180,33 +180,33 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       content: (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-sage-800 mb-3">Map Your Fields</h3>
-            <p className="text-sage-600 mb-6">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">Map Your Fields</h3>
+            <p className="text-[#555555] mb-6">
               Mapping your fields helps us track each field's health and give you specific recommendations.
             </p>
           </div>
-          <div className="bg-gradient-to-r from-earth-50 to-sage-50 rounded-xl p-6">
+          <div className="bg-gradient-to-r from-[#F8FAF8] to-[#F8FAF8] rounded-xl p-6">
             <div className="flex items-start gap-4">
-              <div className="p-3 bg-earth-200 rounded-xl">
-                <Target className="h-6 w-6 text-earth-700" />
+              <div className="p-3 bg-[#DDE4D8] rounded-xl">
+                <Target className="h-6 w-6 text-[#7A8F78]" />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold text-earth-800 mb-2">Why field mapping helps:</h4>
-                <ul className="space-y-2 text-sm text-earth-700">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">Why field mapping helps:</h4>
+                <ul className="space-y-2 text-sm text-[#7A8F78]">
                   <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-earth-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-[#7A8F78] rounded-full"></div>
                     Check each field's health individually
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-earth-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-[#7A8F78] rounded-full"></div>
                     Get weather updates for each field
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-earth-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-[#7A8F78] rounded-full"></div>
                     Receive tips specific to each field
                   </li>
                   <li className="flex items-center gap-2">
-                    <div className="w-1 h-1 bg-earth-600 rounded-full"></div>
+                    <div className="w-1 h-1 bg-[#7A8F78] rounded-full"></div>
                     Track how each field is performing
                   </li>
                 </ul>
@@ -220,13 +220,13 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="bg-white rounded-lg p-3 border">
-                <h5 className="font-medium text-gray-800 mb-1">Quick Start</h5>
-                <p className="text-sm text-gray-600">Add 1-3 fields with estimated boundaries</p>
+                <h5 className="font-medium text-[#1A1A1A] mb-1">Quick Start</h5>
+                <p className="text-sm text-[#555555]">Add 1-3 fields with estimated boundaries</p>
                 <p className="text-xs text-green-600 mt-1">✓ 5 minutes • Good for beginners</p>
               </div>
               <div className="bg-white rounded-lg p-3 border">
-                <h5 className="font-medium text-gray-800 mb-1">Detailed Mapping</h5>
-                <p className="text-sm text-gray-600">Draw exact field shapes on the map</p>
+                <h5 className="font-medium text-[#1A1A1A] mb-1">Detailed Mapping</h5>
+                <p className="text-sm text-[#555555]">Draw exact field shapes on the map</p>
                 <p className="text-xs text-blue-600 mt-1">✓ 15 minutes • Most accurate</p>
               </div>
             </div>
@@ -239,7 +239,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </AlertDescription>
           </Alert>
           <div className="text-center space-y-3">
-            <p className="text-sm text-sage-600">
+            <p className="text-sm text-[#555555]">
               Complete farm setup first, then return to add field boundaries
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
@@ -273,83 +273,83 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
       content: (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-sage-800 mb-3">Your Farming Command Center</h3>
-            <p className="text-sage-600 mb-6">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">Your Farming Command Center</h3>
+            <p className="text-[#555555] mb-6">
               Explore the tools that will help you grow better crops and increase profits.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
+            <div className="p-4 border border-[#DDE4D8] rounded-xl hover:bg-[#F8FAF8] transition-colors">
               <div className="flex items-start gap-3">
-                <Activity className="h-6 w-6 text-sage-600 mt-1" />
+                <Activity className="h-6 w-6 text-[#555555] mt-1" />
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Crop Health</h4>
-                  <p className="text-sm text-sage-600 leading-relaxed">
+                  <h4 className="font-semibold text-[#1A1A1A] mb-1">Crop Health</h4>
+                  <p className="text-sm text-[#555555] leading-relaxed">
                     Check how healthy your crops are and spot problems early
                   </p>
                 </div>
               </div>
             </div>
-            <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
+            <div className="p-4 border border-[#DDE4D8] rounded-xl hover:bg-[#F8FAF8] transition-colors">
               <div className="flex items-start gap-3">
-                <CloudRain className="h-6 w-6 text-sage-600 mt-1" />
+                <CloudRain className="h-6 w-6 text-[#555555] mt-1" />
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Weather Forecasts</h4>
-                  <p className="text-sm text-sage-600 leading-relaxed">
+                  <h4 className="font-semibold text-[#1A1A1A] mb-1">Weather Forecasts</h4>
+                  <p className="text-sm text-[#555555] leading-relaxed">
                     Get accurate weather forecasts and alerts for your farm
                   </p>
                 </div>
               </div>
             </div>
-            <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
+            <div className="p-4 border border-[#DDE4D8] rounded-xl hover:bg-[#F8FAF8] transition-colors">
               <div className="flex items-start gap-3">
-                <Target className="h-6 w-6 text-sage-600 mt-1" />
+                <Target className="h-6 w-6 text-[#555555] mt-1" />
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Smart Recommendations</h4>
-                  <p className="text-sm text-sage-600 leading-relaxed">
+                  <h4 className="font-semibold text-[#1A1A1A] mb-1">Smart Recommendations</h4>
+                  <p className="text-sm text-[#555555] leading-relaxed">
                     Get farming advice tailored specifically to your farm
                   </p>
                 </div>
               </div>
             </div>
-            <div className="p-4 border border-sage-200 rounded-xl hover:bg-sage-50 transition-colors">
+            <div className="p-4 border border-[#DDE4D8] rounded-xl hover:bg-[#F8FAF8] transition-colors">
               <div className="flex items-start gap-3">
-                <DollarSign className="h-6 w-6 text-sage-600 mt-1" />
+                <DollarSign className="h-6 w-6 text-[#555555] mt-1" />
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-1">Financial Tracking</h4>
-                  <p className="text-sm text-sage-600 leading-relaxed">
+                  <h4 className="font-semibold text-[#1A1A1A] mb-1">Financial Tracking</h4>
+                  <p className="text-sm text-[#555555] leading-relaxed">
                     Comprehensive expense tracking and profitability analysis
                   </p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6">
-            <h4 className="font-semibold text-sage-800 mb-3 flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-sage-600" />
+          <div className="bg-gradient-to-r from-sage-50 to-#F8FAF8 rounded-xl p-4 mb-6">
+            <h4 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-[#555555]" />
               Immediate Value You'll Get
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-              <div className="flex items-center gap-2 text-sage-700">
+              <div className="flex items-center gap-2 text-[#555555]">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Check crop health anytime
               </div>
-              <div className="flex items-center gap-2 text-sage-700">
+              <div className="flex items-center gap-2 text-[#555555]">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Weekly weather forecasts for your fields
               </div>
-              <div className="flex items-center gap-2 text-sage-700">
+              <div className="flex items-center gap-2 text-[#555555]">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Smart suggestions for best timing
               </div>
-              <div className="flex items-center gap-2 text-sage-700">
+              <div className="flex items-center gap-2 text-[#555555]">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Financial tracking and profitability analysis
               </div>
             </div>
           </div>
           <div className="text-center space-y-3">
-            <p className="text-sm text-sage-600">
+            <p className="text-sm text-[#555555]">
               Ready to explore all features and start optimizing your farm?
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
@@ -404,14 +404,14 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-sage-100 rounded-lg">
+              <div className="p-2 bg-[#F8FAF8] rounded-lg">
                 {currentStepData.icon}
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-sage-800">
+                <h2 className="text-xl font-semibold text-[#1A1A1A]">
                   Step {currentStep + 1} of {steps.length}
                 </h2>
-                <p className="text-sm text-sage-600">
+                <p className="text-sm text-[#555555]">
                   {currentStepData.title}
                   {currentStepData.estimatedTime && ` • ${currentStepData.estimatedTime}`}
                   {currentStepData.isOptional && (

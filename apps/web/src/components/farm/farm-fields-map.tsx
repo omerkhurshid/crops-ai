@@ -58,13 +58,13 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     if (field.stressLevel === 'high') return 'bg-orange-500'
     if (field.stressLevel === 'moderate') return 'bg-yellow-500'
     if (field.stressLevel === 'low') return 'bg-green-400'
-    return 'bg-green-600'
+    return 'bg-[#7A8F78]'
   }
   const getFieldBorderColor = (field: Field) => {
     if (field.stressLevel === 'severe') return 'border-red-600'
     if (field.stressLevel === 'high') return 'border-orange-600'
     if (field.stressLevel === 'moderate') return 'border-yellow-600'
-    if (field.stressLevel === 'low') return 'border-green-500'
+    if (field.stressLevel === 'low') return 'border-[#8FBF7F]'
     return 'border-green-700'
   }
   // Calculate summary stats
@@ -76,18 +76,18 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     <ModernCard variant="floating" className="mb-8">
       <ModernCardHeader>
         <ModernCardTitle className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-sage-600" />
+          <MapPin className="h-5 w-5 text-[#555555]" />
           Farm Fields Overview
         </ModernCardTitle>
       </ModernCardHeader>
       <ModernCardContent>
         {/* Summary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-sage-50 rounded-lg p-3 border border-sage-200">
-            <div className="text-2xl font-bold text-sage-800">{totalFields}</div>
-            <div className="text-sm text-sage-600">Total Fields</div>
+          <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
+            <div className="text-2xl font-bold text-[#1A1A1A]">{totalFields}</div>
+            <div className="text-sm text-[#555555]">Total Fields</div>
           </div>
-          <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+          <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
             <div className="text-2xl font-bold text-green-700">{healthyFields}</div>
             <div className="text-sm text-green-600">Healthy</div>
           </div>
@@ -101,7 +101,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
           </div>
         </div>
         {/* Visual Map Representation */}
-        <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-6">
+        <div className="bg-[#FAFAF7] rounded-lg p-6 border border-[#E6E6E6] mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {fields.map((field) => (
               <div
@@ -141,26 +141,26 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
         </div>
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-4 text-sm">
-          <div className="font-medium text-sage-700">Field Health Status:</div>
+          <div className="font-medium text-[#555555]">Field Health Status:</div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-600 rounded"></div>
-            <span className="text-sage-600">Excellent (80-100%)</span>
+            <div className="w-4 h-4 bg-[#7A8F78] rounded"></div>
+            <span className="text-[#555555]">Excellent (80-100%)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-green-400 rounded"></div>
-            <span className="text-sage-600">Good (70-79%)</span>
+            <span className="text-[#555555]">Good (70-79%)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-yellow-500 rounded"></div>
-            <span className="text-sage-600">Fair (60-69%)</span>
+            <span className="text-[#555555]">Fair (60-69%)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-orange-500 rounded"></div>
-            <span className="text-sage-600">Poor (50-59%)</span>
+            <span className="text-[#555555]">Poor (50-59%)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-red-500 rounded"></div>
-            <span className="text-sage-600">Critical (&lt;50%)</span>
+            <span className="text-[#555555]">Critical (&lt;50%)</span>
           </div>
         </div>
       </ModernCardContent>

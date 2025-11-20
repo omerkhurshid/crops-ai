@@ -47,15 +47,15 @@ export default function ForgotPasswordPage() {
           <ModernCard variant="floating" className="shadow-2xl">
             <ModernCardContent className="text-center py-8">
               <div className="space-y-4">
-                <div className="p-3 bg-green-100 rounded-full w-fit mx-auto">
-                  <CheckCircle2 className="h-12 w-12 text-green-600" />
+                <div className="p-3 bg-[#F8FAF8] rounded-full w-fit mx-auto">
+                  <CheckCircle2 className="h-12 w-12 text-[#7A8F78]" />
                 </div>
-                <h3 className="text-xl font-semibold text-sage-800">Check Your Email</h3>
-                <p className="text-sage-600">
+                <h3 className="text-xl font-semibold text-[#7A8F78]">Check Your Email</h3>
+                <p className="text-[#7A8F78]">
                   If an account exists with <span className="font-medium">{email}</span>, 
                   we&apos;ve sent a password reset link.
                 </p>
-                <p className="text-sm text-sage-500">
+                <p className="text-sm text-[#7A8F78]">
                   The link will expire in 1 hour.
                 </p>
                 <div className="pt-4">
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
               <div>
                 <Label htmlFor="email">Email address</Label>
                 <div className="mt-1 relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-sage-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#7A8F78]" />
                   <Input
                     id="email"
                     name="email"
@@ -124,7 +124,7 @@ export default function ForgotPasswordPage() {
                 type="submit"
               />
               <div className="text-center pt-4">
-                <Link href="/login" className="text-sm text-sage-600 hover:text-sage-700">
+                <Link href="/login" className="text-sm text-[#7A8F78] hover:text-[#5E6F5A]">
                   <InlineFloatingButton
                     icon={<ArrowLeft className="h-4 w-4" />}
                     label="Back to Login"

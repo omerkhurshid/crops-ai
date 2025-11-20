@@ -196,8 +196,8 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
     return (
       <div className="space-y-6">
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading tasks...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto"></div>
+          <p className="text-[#555555] mt-4">Loading tasks...</p>
         </div>
       </div>
     )
@@ -288,7 +288,7 @@ export function TaskBoard({ farmId, showAssignments = true }: TaskBoardProps) {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     className={`space-y-3 min-h-[200px] p-2 rounded-lg transition-colors ${
-                      snapshot.isDraggingOver ? 'bg-gray-50' : ''
+                      snapshot.isDraggingOver ? 'bg-[#FAFAF7]' : ''
                     }`}
                   >
                     {tasksByStatus[status as keyof typeof tasksByStatus].map((task, index) => (

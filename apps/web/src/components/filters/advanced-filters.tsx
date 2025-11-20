@@ -70,7 +70,7 @@ export function AdvancedFilters({
                 setSearchValues(prev => ({ ...prev, [filter.id]: e.target.value }))
                 onFilterChange(filter.id, e.target.value)
               }}
-              className="w-full pl-10 pr-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
             />
           </div>
         )
@@ -79,9 +79,9 @@ export function AdvancedFilters({
           <div className="relative">
             <button
               onClick={() => toggleDropdown(filter.id)}
-              className="w-full flex items-center justify-between p-2 border border-sage-200 rounded-lg hover:bg-sage-50 transition-colors text-sm"
+              className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={filter.value ? 'text-sage-800' : 'text-sage-500'}>
+              <span className={filter.value ? 'text-[#1A1A1A]' : 'text-sage-500'}>
                 {filter.value 
                   ? filter.options?.find(opt => opt.value === filter.value)?.label 
                   : `Select ${filter.label.toLowerCase()}`
@@ -92,7 +92,7 @@ export function AdvancedFilters({
               }`} />
             </button>
             {openDropdowns.includes(filter.id) && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-sage-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#DDE4D8] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                 {filter.options?.map((option) => (
                   <button
                     key={option.id}
@@ -100,7 +100,7 @@ export function AdvancedFilters({
                       onFilterChange(filter.id, option.value)
                       setOpenDropdowns(prev => prev.filter(id => id !== filter.id))
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-sage-50 transition-colors text-sm flex items-center justify-between"
+                    className="w-full text-left px-3 py-2 hover:bg-[#F8FAF8] transition-colors text-sm flex items-center justify-between"
                   >
                     <span>{option.label}</span>
                     {option.count && (
@@ -109,7 +109,7 @@ export function AdvancedFilters({
                       </Badge>
                     )}
                     {filter.value === option.value && (
-                      <Check className="h-4 w-4 text-sage-600" />
+                      <Check className="h-4 w-4 text-[#555555]" />
                     )}
                   </button>
                 ))}
@@ -123,9 +123,9 @@ export function AdvancedFilters({
           <div className="relative">
             <button
               onClick={() => toggleDropdown(filter.id)}
-              className="w-full flex items-center justify-between p-2 border border-sage-200 rounded-lg hover:bg-sage-50 transition-colors text-sm"
+              className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={selectedValues.length ? 'text-sage-800' : 'text-sage-500'}>
+              <span className={selectedValues.length ? 'text-[#1A1A1A]' : 'text-sage-500'}>
                 {selectedValues.length 
                   ? `${selectedValues.length} selected`
                   : `Select ${filter.label.toLowerCase()}`
@@ -136,12 +136,12 @@ export function AdvancedFilters({
               }`} />
             </button>
             {openDropdowns.includes(filter.id) && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-sage-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#DDE4D8] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
                 {filter.options?.map((option) => (
                   <button
                     key={option.id}
                     onClick={() => handleMultiselectChange(filter.id, option.value, selectedValues)}
-                    className="w-full text-left px-3 py-2 hover:bg-sage-50 transition-colors text-sm flex items-center justify-between"
+                    className="w-full text-left px-3 py-2 hover:bg-[#F8FAF8] transition-colors text-sm flex items-center justify-between"
                   >
                     <span>{option.label}</span>
                     <div className="flex items-center gap-2">
@@ -151,7 +151,7 @@ export function AdvancedFilters({
                         </Badge>
                       )}
                       {selectedValues.includes(option.value) && (
-                        <Check className="h-4 w-4 text-sage-600" />
+                        <Check className="h-4 w-4 text-[#555555]" />
                       )}
                     </div>
                   </button>
@@ -167,7 +167,7 @@ export function AdvancedFilters({
                       {option.label}
                       <button
                         onClick={() => handleMultiselectChange(filter.id, value, selectedValues)}
-                        className="ml-1 hover:bg-sage-200 rounded-full p-0.5"
+                        className="ml-1 hover:bg-[#DDE4D8] rounded-full p-0.5"
                       >
                         <X className="h-2 w-2" />
                       </button>
@@ -192,7 +192,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   min: e.target.value ? Number(e.target.value) : undefined 
                 })}
-                className="flex-1 p-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
               />
               <span className="text-sage-500">to</span>
               <input
@@ -205,7 +205,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   max: e.target.value ? Number(e.target.value) : undefined 
                 })}
-                className="flex-1 p-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   start: e.target.value 
                 })}
-                className="flex-1 p-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
               />
               <input
                 type="date"
@@ -230,7 +230,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   end: e.target.value 
                 })}
-                className="flex-1 p-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
               />
             </div>
           </div>
@@ -245,10 +245,10 @@ export function AdvancedFilters({
       {filters.map((filter) => (
         <div key={filter.id} className="space-y-2">
           <div className="flex items-center gap-2">
-            <div className="text-sage-600">
+            <div className="text-[#555555]">
               {filter.icon}
             </div>
-            <label className="text-sm font-medium text-sage-800">
+            <label className="text-sm font-medium text-[#1A1A1A]">
               {filter.label}
             </label>
           </div>
@@ -257,7 +257,7 @@ export function AdvancedFilters({
       ))}
       {/* Clear All Button */}
       {activeFiltersCount > 0 && (
-        <div className="pt-4 border-t border-sage-200">
+        <div className="pt-4 border-t border-[#DDE4D8]">
           <InlineFloatingButton
             icon={<X className="h-4 w-4" />}
             label={`Clear all filters (${activeFiltersCount})`}
@@ -293,7 +293,7 @@ export function AdvancedFilters({
                   </ModernCardTitle>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-sage-100 rounded-full transition-colors"
+                    className="p-2 hover:bg-[#F8FAF8] rounded-full transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>

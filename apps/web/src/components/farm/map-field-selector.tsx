@@ -155,17 +155,17 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                         selectedField === index
                           ? 'border-crops-green-500 bg-crops-green-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                       }`}
                       onClick={() => selectField(index)}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-medium">Field {index + 1}</h5>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-[#555555]">
                           {Math.round(field.confidence * 100)}% confidence
                         </span>
                       </div>
-                      <div className="text-sm text-gray-600 space-y-1">
+                      <div className="text-sm text-[#555555] space-y-1">
                         <div>Area: {field.area?.toFixed(2)} hectares</div>
                         <div>Shape: {field.characteristics?.shape || 'Unknown'}</div>
                         {field.landUse && (
@@ -178,7 +178,7 @@ export function MapFieldSelector({ fieldId, onBoundariesDetected, onClose }: Map
               </div>
             )}
             {detectedFields.length === 0 && !isDetecting && coordinates.centerLat && coordinates.centerLng && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-[#555555]">
                 <p>No field boundaries detected in this area.</p>
                 <p className="text-sm mt-2">Try adjusting the coordinates or increasing the search radius.</p>
               </div>

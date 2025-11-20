@@ -61,7 +61,7 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
         <ModernCardContent>
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse bg-gray-200 h-16 rounded-lg" />
+              <div key={i} className="animate-pulse bg-[#F5F5F5] h-16 rounded-lg" />
             ))}
           </div>
         </ModernCardContent>
@@ -85,25 +85,25 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
             {alerts.map((alert: any) => (
               <div
                 key={alert.id}
-                className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-start gap-3 p-3 border rounded-lg hover:bg-[#FAFAF7] transition-colors"
               >
-                <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
+                <div className="flex-shrink-0 p-2 bg-[#F5F5F5] rounded-lg">
                   {getAlertIcon(alert.alertType)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-medium text-gray-900 truncate">
+                    <h4 className="font-medium text-[#1A1A1A] truncate">
                       {alert.title}
                     </h4>
                     <Badge className={getSeverityColor(alert.severity)}>
                       {alert.severity}
                     </Badge>
                   </div>
-                  <p className="text-sm text-gray-600 line-clamp-2">
+                  <p className="text-sm text-[#555555] line-clamp-2">
                     {alert.description}
                   </p>
                   {alert.startTime && (
-                    <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 mt-2 text-xs text-[#555555]">
                       <Clock className="h-3 w-3" />
                       {new Date(alert.startTime).toLocaleDateString()}
                     </div>
@@ -115,7 +115,7 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
         ) : (
           <div className="text-center py-6">
             <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-            <p className="text-sm text-gray-600">No active weather alerts</p>
+            <p className="text-sm text-[#555555]">No active weather alerts</p>
           </div>
         )}
       </ModernCardContent>

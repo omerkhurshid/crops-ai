@@ -18,15 +18,15 @@ export function HerdRegistry({ farmId }: HerdRegistryProps) {
         <CardContent>
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">
               No Animals Registered
             </h3>
-            <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+            <p className="text-[#555555] mb-6 max-w-sm mx-auto">
               Start building your herd registry by adding individual animals with their details, health records, and tracking information.
             </p>
             <div className="flex gap-3 justify-center">
               <Button 
-                className="bg-sage-600 hover:bg-sage-700"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
                 onClick={() => window.location.href = '/livestock/add-animal'}
               >
                 <Plus className="h-4 w-4 mr-2" />

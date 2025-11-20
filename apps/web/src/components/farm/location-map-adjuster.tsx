@@ -90,13 +90,13 @@ export function LocationMapAdjuster({
       <Card className="shadow-soft">
         <CardHeader>
           <CardTitle className="text-2xl font-light">Adjust Your Farm Location</CardTitle>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#555555]">
             Pan and zoom the map to center your farm. We&apos;ll automatically detect field boundaries from satellite imagery.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Map Container */}
-          <div className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ height: '500px' }}>
+          <div className="relative bg-[#F5F5F5] rounded-lg overflow-hidden" style={{ height: '500px' }}>
             {/* Simulated Map View */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-green-200">
               {/* Map Controls */}
@@ -138,7 +138,7 @@ export function LocationMapAdjuster({
                 <div className="relative">
                   <MapPin className="h-12 w-12 text-red-600 drop-shadow-lg" />
                   <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1">
-                    <Move className="h-3 w-3 text-gray-600" />
+                    <Move className="h-3 w-3 text-[#555555]" />
                   </div>
                 </div>
               </div>
@@ -159,7 +159,7 @@ export function LocationMapAdjuster({
               <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-md p-3">
                 <div className="text-sm space-y-1">
                   <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-gray-600" />
+                    <MapPin className="h-4 w-4 text-[#555555]" />
                     <span className="font-medium">
                       {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                     </span>
@@ -207,21 +207,21 @@ export function LocationMapAdjuster({
           </div>
           {/* Additional Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[#FAFAF7] rounded-lg p-4">
               <h4 className="font-medium text-sm mb-2">Coverage Area</h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#555555]">
                 ~{Math.round(Math.pow(2, 20 - zoom) * 10)} acres visible
               </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[#FAFAF7] rounded-lg p-4">
               <h4 className="font-medium text-sm mb-2">Image Quality</h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#555555]">
                 {zoom >= 17 ? 'High Resolution' : zoom >= 15 ? 'Good' : 'Overview'}
               </p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[#FAFAF7] rounded-lg p-4">
               <h4 className="font-medium text-sm mb-2">Last Updated</h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#555555]">
                 Satellite: 3 days ago
               </p>
             </div>
@@ -232,12 +232,12 @@ export function LocationMapAdjuster({
               Back
             </Button>
             <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-[#555555]">
                 Position your farm in the center
               </span>
               <Button
                 onClick={handleConfirm}
-                className="bg-sage-600 hover:bg-sage-700"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
               >
                 <Check className="h-4 w-4 mr-2" />
                 Confirm Location

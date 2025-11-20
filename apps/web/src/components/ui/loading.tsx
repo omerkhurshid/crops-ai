@@ -58,10 +58,10 @@ export function LoadingState({
   return (
     <div className={cn("flex flex-col items-center justify-center", sizes.container, className)}>
       <div className="relative mb-4">
-        <Icon className={cn("animate-spin text-sage-400", sizes.icon)} />
-        <div className="absolute inset-0 rounded-full bg-sage-100 opacity-20 animate-pulse"></div>
+        <Icon className={cn("animate-spin text-[#7A8F78]", sizes.icon)} />
+        <div className="absolute inset-0 rounded-full bg-[#F8FAF8] opacity-20 animate-pulse"></div>
       </div>
-      <p className={cn("text-sage-600 font-medium", sizes.text)}>{message}</p>
+      <p className={cn("text-[#555555] font-medium", sizes.text)}>{message}</p>
     </div>
   )
 }
@@ -76,18 +76,18 @@ export function LoadingCard({
   type = "default" 
 }: LoadingCardProps) {
   return (
-    <div className="border border-sage-200 rounded-xl p-6 bg-white/80 backdrop-blur-sm">
+    <div className="border border-[#DDE4D8] rounded-xl p-6 bg-white/80 backdrop-blur-sm">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <LoadingSpinner size="md" className="text-sage-500" />
-          <h3 className="font-semibold text-sage-800">{title}</h3>
+          <LoadingSpinner size="md" className="text-[#7A8F78]" />
+          <h3 className="font-semibold text-[#1A1A1A]">{title}</h3>
         </div>
         <div className="space-y-2">
-          <div className="h-2 bg-sage-100 rounded-full animate-pulse"></div>
-          <div className="h-2 bg-sage-100 rounded-full animate-pulse w-3/4"></div>
-          <div className="h-2 bg-sage-100 rounded-full animate-pulse w-1/2"></div>
+          <div className="h-2 bg-[#F5F5F5] rounded-full animate-pulse"></div>
+          <div className="h-2 bg-[#F5F5F5] rounded-full animate-pulse w-3/4"></div>
+          <div className="h-2 bg-[#F5F5F5] rounded-full animate-pulse w-1/2"></div>
         </div>
-        <p className="text-sm text-sage-600">{message}</p>
+        <p className="text-sm text-[#555555]">{message}</p>
       </div>
     </div>
   )
@@ -112,7 +112,7 @@ export function LoadingButton({
       disabled={disabled || loading}
       className={cn(
         "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all",
-        "bg-sage-600 hover:bg-sage-700 text-white",
+        "bg-[#7A8F78] hover:bg-[#5E6F5A] text-white",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
@@ -127,12 +127,12 @@ interface SkeletonProps {
 }
 export function Skeleton({ className }: SkeletonProps) {
   return (
-    <div className={cn("animate-pulse rounded-md bg-sage-100", className)} />
+    <div className={cn("animate-pulse rounded-md bg-[#F5F5F5]", className)} />
   )
 }
 export function SkeletonCard() {
   return (
-    <div className="border border-sage-200 rounded-xl p-6 space-y-4">
+    <div className="border border-[#DDE4D8] rounded-xl p-6 space-y-4">
       <div className="flex items-center gap-3">
         <Skeleton className="h-6 w-6 rounded-full" />
         <Skeleton className="h-4 w-32" />
@@ -170,7 +170,7 @@ export function AsyncWrapper({
   if (loading) {
     return <>{loadingComponent || (
       <div className="flex items-center justify-center py-12">
-        <RefreshCw className="h-8 w-8 animate-spin text-sage-400" />
+        <RefreshCw className="h-8 w-8 animate-spin text-[#7A8F78]" />
       </div>
     )}</>
   }

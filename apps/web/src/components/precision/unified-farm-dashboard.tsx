@@ -281,7 +281,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
         <div className="text-center">
           <Satellite className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-lg font-semibold">Loading farm intelligence...</p>
-          <p className="text-gray-600">Analyzing satellite data and precision agriculture insights</p>
+          <p className="text-[#555555]">Analyzing satellite data and precision agriculture insights</p>
         </div>
       </div>
     )
@@ -292,11 +292,11 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold">Precision Farm Intelligence</h1>
-          <p className="text-gray-600">
+          <p className="text-[#555555]">
             Complete farm-to-satellite analysis with AI-powered recommendations
           </p>
           {lastUpdated && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-[#555555] mt-1">
               Last updated: {formatTimeAgo(lastUpdated)}
             </p>
           )}
@@ -333,9 +333,9 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               <div className="flex items-center">
                 <Target className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Fields Monitored</p>
+                  <p className="text-sm font-medium text-[#555555]">Fields Monitored</p>
                   <p className="text-2xl font-bold">{farmMetrics.farmOverview.totalFields}</p>
-                  <p className="text-sm text-gray-500">{farmMetrics.farmOverview.totalArea.toFixed(1)} acres</p>
+                  <p className="text-sm text-[#555555]">{farmMetrics.farmOverview.totalArea.toFixed(1)} acres</p>
                 </div>
               </div>
             </CardContent>
@@ -345,9 +345,9 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               <div className="flex items-center">
                 <Activity className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Health Score</p>
+                  <p className="text-sm font-medium text-[#555555]">Health Score</p>
                   <p className="text-2xl font-bold">{farmMetrics.farmOverview.avgHealthScore.toFixed(1)}%</p>
-                  <p className="text-sm text-gray-500">NDVI: {farmMetrics.farmOverview.avgNDVI.toFixed(3)}</p>
+                  <p className="text-sm text-[#555555]">NDVI: {farmMetrics.farmOverview.avgNDVI.toFixed(3)}</p>
                 </div>
               </div>
             </CardContent>
@@ -357,11 +357,11 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               <div className="flex items-center">
                 <AlertTriangle className={`h-8 w-8 ${getRiskColor(farmMetrics.riskAssessment.overallRisk)}`} />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Risk Level</p>
+                  <p className="text-sm font-medium text-[#555555]">Risk Level</p>
                   <p className={`text-2xl font-bold ${getRiskColor(farmMetrics.riskAssessment.overallRisk)}`}>
                     {farmMetrics.riskAssessment.overallRisk}
                   </p>
-                  <p className="text-sm text-gray-500">{farmMetrics.riskAssessment.immediateActions} urgent actions</p>
+                  <p className="text-sm text-[#555555]">{farmMetrics.riskAssessment.immediateActions} urgent actions</p>
                 </div>
               </div>
             </CardContent>
@@ -371,9 +371,9 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Projected ROI</p>
+                  <p className="text-sm font-medium text-[#555555]">Projected ROI</p>
                   <p className="text-2xl font-bold">{farmMetrics.precisionMetrics.averageROI.toFixed(0)}%</p>
-                  <p className="text-sm text-gray-500">{formatCurrency(farmMetrics.precisionMetrics.netBenefit)} net benefit</p>
+                  <p className="text-sm text-[#555555]">{formatCurrency(farmMetrics.precisionMetrics.netBenefit)} net benefit</p>
                 </div>
               </div>
             </CardContent>
@@ -403,7 +403,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                           {alert.severity.toUpperCase()}
                         </Badge>
                         <span className="font-medium">{alert.fieldName}</span>
-                        <span className="text-sm text-gray-500">{formatTimeAgo(alert.detectedAt)}</span>
+                        <span className="text-sm text-[#555555]">{formatTimeAgo(alert.detectedAt)}</span>
                       </div>
                       <h4 className="font-semibold text-red-800">{alert.title}</h4>
                       <p className="text-sm text-red-700 mb-3">{alert.message}</p>
@@ -454,7 +454,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
                       <div className="text-2xl font-bold text-green-700">
                         {farmMetrics.farmOverview.healthDistribution.excellent}
                       </div>
@@ -486,7 +486,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <div>
                         <div className="flex justify-between mb-1">
                           <span className="text-sm font-medium">Drought Stress</span>
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-[#555555]">
                             {(farmMetrics.stressAnalysis.stressFactors.drought * 100).toFixed(1)}%
                           </span>
                         </div>
@@ -498,7 +498,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <div>
                         <div className="flex justify-between mb-1">
                           <span className="text-sm font-medium">Nutrient Deficiency</span>
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-[#555555]">
                             {(farmMetrics.stressAnalysis.stressFactors.nutrient * 100).toFixed(1)}%
                           </span>
                         </div>
@@ -510,7 +510,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <div>
                         <div className="flex justify-between mb-1">
                           <span className="text-sm font-medium">Disease Pressure</span>
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-[#555555]">
                             {(farmMetrics.stressAnalysis.stressFactors.disease * 100).toFixed(1)}%
                           </span>
                         </div>
@@ -532,28 +532,28 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                 <CardContent>
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-600">Total Investment</p>
+                      <p className="text-sm font-medium text-[#555555]">Total Investment</p>
                       <p className="text-2xl font-bold text-red-600">
                         {formatCurrency(farmMetrics.precisionMetrics.totalInvestment)}
                       </p>
-                      <p className="text-sm text-gray-500">Equipment, inputs, services</p>
+                      <p className="text-sm text-[#555555]">Equipment, inputs, services</p>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-600">Expected Return</p>
+                      <p className="text-sm font-medium text-[#555555]">Expected Return</p>
                       <p className="text-2xl font-bold text-green-600">
                         {formatCurrency(farmMetrics.precisionMetrics.expectedReturn)}
                       </p>
-                      <p className="text-sm text-gray-500">Increased yield value</p>
+                      <p className="text-sm text-[#555555]">Increased yield value</p>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-600">Net Benefit</p>
+                      <p className="text-sm font-medium text-[#555555]">Net Benefit</p>
                       <p className="text-2xl font-bold text-blue-600">
                         {formatCurrency(farmMetrics.precisionMetrics.netBenefit)}
                       </p>
-                      <p className="text-sm text-gray-500">ROI: {farmMetrics.precisionMetrics.averageROI.toFixed(0)}%</p>
+                      <p className="text-sm text-[#555555]">ROI: {farmMetrics.precisionMetrics.averageROI.toFixed(0)}%</p>
                     </div>
                   </div>
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg">
+                  <div className="mt-6 p-4 bg-[#F8FAF8] rounded-lg">
                     <div className="flex items-center">
                       <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
                       <div>
@@ -587,15 +587,15 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <h4 className="font-semibold">Current NDVI Analysis</h4>
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-[#FAFAF7] p-4 rounded-lg">
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
                         <p className="text-2xl font-bold text-green-600">0.687</p>
-                        <p className="text-sm text-gray-600">Average NDVI</p>
+                        <p className="text-sm text-[#555555]">Average NDVI</p>
                       </div>
                       <div>
                         <p className="text-2xl font-bold text-blue-600">74.2%</p>
-                        <p className="text-sm text-gray-600">Health Score</p>
+                        <p className="text-sm text-[#555555]">Health Score</p>
                       </div>
                     </div>
                   </div>
@@ -624,28 +624,28 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       <Thermometer className="h-6 w-6 text-blue-600 mr-2" />
                       <div>
                         <p className="font-medium">78°F</p>
-                        <p className="text-xs text-gray-600">Temperature</p>
+                        <p className="text-xs text-[#555555]">Temperature</p>
                       </div>
                     </div>
-                    <div className="flex items-center p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center p-3 bg-[#F8FAF8] rounded-lg">
                       <Droplets className="h-6 w-6 text-green-600 mr-2" />
                       <div>
                         <p className="font-medium">0.2"</p>
-                        <p className="text-xs text-gray-600">Soil Moisture</p>
+                        <p className="text-xs text-[#555555]">Soil Moisture</p>
                       </div>
                     </div>
                     <div className="flex items-center p-3 bg-yellow-50 rounded-lg">
                       <Wind className="h-6 w-6 text-yellow-600 mr-2" />
                       <div>
                         <p className="font-medium">8 mph</p>
-                        <p className="text-xs text-gray-600">Wind Speed</p>
+                        <p className="text-xs text-[#555555]">Wind Speed</p>
                       </div>
                     </div>
                     <div className="flex items-center p-3 bg-orange-50 rounded-lg">
                       <Sun className="h-6 w-6 text-orange-600 mr-2" />
                       <div>
                         <p className="font-medium">12%</p>
-                        <p className="text-xs text-gray-600">Cloud Cover</p>
+                        <p className="text-xs text-[#555555]">Cloud Cover</p>
                       </div>
                     </div>
                   </div>
@@ -670,7 +670,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h4 className="font-semibold">{rec.fieldName} - {rec.applicationType.charAt(0).toUpperCase() + rec.applicationType.slice(1)}</h4>
-                        <p className="text-sm text-gray-600">{rec.recommendation.product}</p>
+                        <p className="text-sm text-[#555555]">{rec.recommendation.product}</p>
                       </div>
                       <Badge variant="outline">{rec.timing.optimalWindow.start} to {rec.timing.optimalWindow.end}</Badge>
                     </div>
@@ -683,7 +683,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                         </p>
                         <p className="text-sm text-blue-600">Cost: {formatCurrency(rec.recommendation.estimatedCost)}</p>
                       </div>
-                      <div className="bg-green-50 p-3 rounded-lg">
+                      <div className="bg-[#F8FAF8] p-3 rounded-lg">
                         <p className="text-sm font-medium text-green-800">Expected Yield Increase</p>
                         <p className="text-lg font-bold text-green-600">+{rec.expectedOutcome.yieldIncrease.toFixed(1)}%</p>
                         <p className="text-sm text-green-600">Savings: {formatCurrency(rec.expectedOutcome.costSavings)}</p>

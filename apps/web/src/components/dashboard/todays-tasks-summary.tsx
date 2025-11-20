@@ -39,7 +39,7 @@ const categoryIcons = {
   crop: <Sprout className="h-4 w-4 text-green-600" />,
   livestock: <Users className="h-4 w-4 text-blue-600" />,
   equipment: <Tractor className="h-4 w-4 text-orange-600" />,
-  general: <AlertTriangle className="h-4 w-4 text-gray-600" />
+  general: <AlertTriangle className="h-4 w-4 text-[#555555]" />
 }
 const getDaysUntilDue = (dueDate: string) => {
   const due = new Date(dueDate)
@@ -59,7 +59,7 @@ const formatEstimatedTime = (hours?: number) => {
 }
 const TaskCard = ({ task }: { task: Task }) => {
   return (
-    <div className="bg-white/50 rounded-lg border border-sage-200 p-3 hover:shadow-sm transition-all duration-200 cursor-pointer">
+    <div className="bg-white/50 rounded-lg border border-[#DDE4D8] p-3 hover:shadow-sm transition-all duration-200 cursor-pointer">
       <div className="flex items-start gap-2">
         <div className={`p-1.5 rounded ${
           task.priority === 'urgent' ? 'bg-red-100' :
@@ -167,13 +167,13 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ModernCard>
           <ModernCardContent className="p-6">
-            <h3 className="text-lg font-semibold text-sage-800 mb-4">Today's Tasks</h3>
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Today's Tasks</h3>
             <DataPendingState message="Loading today's tasks..." />
           </ModernCardContent>
         </ModernCard>
         <ModernCard>
           <ModernCardContent className="p-6">
-            <h3 className="text-lg font-semibold text-sage-800 mb-4">Tomorrow's Tasks</h3>
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Tomorrow's Tasks</h3>
             <DataPendingState message="Loading tomorrow's tasks..." />
           </ModernCardContent>
         </ModernCard>
@@ -186,7 +186,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <ModernCard>
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-sage-800">Today's Tasks</h3>
+            <h3 className="text-lg font-semibold text-[#1A1A1A]">Today's Tasks</h3>
             <Link href="/tasks">
               <Button variant="ghost" size="sm">
                 <Plus className="h-4 w-4 mr-1" />
@@ -218,7 +218,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <ModernCard>
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-sage-800">Tomorrow's Tasks</h3>
+            <h3 className="text-lg font-semibold text-[#1A1A1A]">Tomorrow's Tasks</h3>
             <Link href="/tasks">
               <Button variant="ghost" size="sm">
                 View All
@@ -228,8 +228,8 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
           {tomorrowsTasks.length === 0 ? (
             <div className="text-center py-6">
               <Calendar className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-              <p className="text-sm text-gray-600">No tasks scheduled for tomorrow</p>
-              <p className="text-xs text-gray-500">You're all set for tomorrow!</p>
+              <p className="text-sm text-[#555555]">No tasks scheduled for tomorrow</p>
+              <p className="text-xs text-[#555555]">You're all set for tomorrow!</p>
             </div>
           ) : (
             <div className="space-y-3">

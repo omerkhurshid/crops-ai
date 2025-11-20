@@ -121,7 +121,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
           Enter your email and password to access your farm dashboard
           {/* Show auth system indicator during development */}
           {process.env.NODE_ENV === 'development' && (
-            <span className="block mt-2 text-xs text-gray-500">
+            <span className="block mt-2 text-xs text-[#555555]">
               Using {isUsingSupabase ? 'Supabase' : 'NextAuth'} authentication
             </span>
           )}
@@ -147,7 +147,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
               <Label htmlFor="password" className="text-sm font-medium">Password</Label>
               <Link 
                 href="/forgot-password" 
-                className="text-xs sm:text-sm text-sage-600 hover:text-sage-800 underline"
+                className="text-xs sm:text-sm text-[#555555] hover:text-[#1A1A1A] underline"
               >
                 Forgot password?
               </Link>
@@ -164,7 +164,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
             />
           </div>
           {successMessage && (
-            <div className="text-green-600 text-xs sm:text-sm bg-green-50 p-3 rounded-md border border-green-200">
+            <div className="text-green-600 text-xs sm:text-sm bg-[#F8FAF8] p-3 rounded-md border border-[#DDE4D8]">
               {successMessage}
             </div>
           )}
@@ -175,7 +175,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
           )}
           <Button 
             type="submit" 
-            className="w-full h-12 text-base font-medium bg-earth-600 hover:bg-earth-700 text-white" 
+            className="w-full h-12 text-base font-medium bg-[#7A8F78] hover:bg-[#5E6F5A] text-white" 
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign in'}
@@ -196,7 +196,7 @@ export function UnifiedLoginForm({ callbackUrl }: UnifiedLoginFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="px-0">
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-[#555555]">
             Loading...
           </div>
         </CardContent>

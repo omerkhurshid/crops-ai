@@ -126,30 +126,30 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     return 'text-red-600'
   }
   const getHealthBgColor = (score: number) => {
-    if (score >= 80) return 'bg-green-50'
+    if (score >= 80) return 'bg-[#F8FAF8]'
     if (score >= 60) return 'bg-yellow-50'
     return 'bg-red-50'
   }
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'bg-green-100 text-green-700 border-green-200'
+      case 'low': return 'bg-[#F8FAF8] text-green-700 border-[#DDE4D8]'
       case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200'
       case 'high': return 'bg-red-100 text-red-700 border-red-200'
-      default: return 'bg-gray-100 text-gray-700 border-gray-200'
+      default: return 'bg-[#F5F5F5] text-[#555555] border-[#E6E6E6]'
     }
   }
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />
       case 'declining': return <TrendingDown className="h-4 w-4 text-red-600" />
-      default: return <Activity className="h-4 w-4 text-gray-600" />
+      default: return <Activity className="h-4 w-4 text-[#555555]" />
     }
   }
   if (loading) {
     return (
       <ModernCard variant="soft">
         <ModernCardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-sage-600" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#555555]" />
         </ModernCardContent>
       </ModernCard>
     )
@@ -157,9 +157,9 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
   if (!metrics || error) {
     if (compact) {
       return (
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-sage-100">
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8FAF8]">
           <Activity className="h-4 w-4 text-sage-500" />
-          <span className="text-sm text-sage-600">Analyzing...</span>
+          <span className="text-sm text-[#555555]">Analyzing...</span>
         </div>
       )
     }
@@ -167,8 +167,8 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
       <ModernCard variant="soft">
         <ModernCardContent className="flex flex-col items-center justify-center py-8 text-center">
           <XCircle className="h-8 w-8 text-gray-400 mb-2" />
-          <p className="text-gray-600">Health data unavailable</p>
-          <p className="text-sm text-gray-500">Add fields and satellite data to monitor health</p>
+          <p className="text-[#555555]">Health data unavailable</p>
+          <p className="text-sm text-[#555555]">Add fields and satellite data to monitor health</p>
         </ModernCardContent>
       </ModernCard>
     )
@@ -202,15 +202,15 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
   // Full view for farm detail page
   return (
     <ModernCard variant="floating" className="overflow-hidden">
-      <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50">
+      <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <ModernCardTitle className="text-sage-800">Farm Health Overview</ModernCardTitle>
+            <ModernCardTitle className="text-[#1A1A1A]">Farm Health Overview</ModernCardTitle>
             <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
           </div>
           <div className="flex items-center gap-2">
             {getTrendIcon(metrics.trend)}
-            <span className="text-sm text-sage-600 capitalize">{metrics.trend}</span>
+            <span className="text-sm text-[#555555] capitalize">{metrics.trend}</span>
           </div>
         </div>
       </ModernCardHeader>
@@ -222,19 +222,19 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
               <div className={`text-3xl font-bold ${getHealthColor(metrics.overallHealth)}`}>
                 {metrics.overallHealth}%
               </div>
-              <div className="text-sm text-sage-600">Health Score</div>
+              <div className="text-sm text-[#555555]">Health Score</div>
             </div>
           </div>
         </div>
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center justify-between p-3 bg-sage-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg">
             <div className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-sage-600" />
-              <span className="text-sm text-sage-700">NDVI</span>
+              <Activity className="h-4 w-4 text-[#555555]" />
+              <span className="text-sm text-[#555555]">NDVI</span>
               <InfoTooltip {...TOOLTIP_CONTENT.ndvi} size="sm" />
             </div>
-            <span className="font-semibold text-sage-800">{metrics.ndviScore.toFixed(2)}</span>
+            <span className="font-semibold text-[#1A1A1A]">{metrics.ndviScore.toFixed(2)}</span>
           </div>
           <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
             <div className="flex items-center gap-2">
@@ -243,19 +243,19 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
             </div>
             <span className="font-semibold text-blue-800">{metrics.soilMoisture}%</span>
           </div>
-          <div className="flex items-center justify-between p-3 bg-sage-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg">
             <div className="flex items-center gap-2">
-              <Bug className="h-4 w-4 text-sage-600" />
-              <span className="text-sm text-sage-700">Pest Risk</span>
+              <Bug className="h-4 w-4 text-[#555555]" />
+              <span className="text-sm text-[#555555]">Pest Risk</span>
             </div>
             <Badge className={getRiskColor(metrics.pestRisk)}>
               {metrics.pestRisk}
             </Badge>
           </div>
-          <div className="flex items-center justify-between p-3 bg-sage-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg">
             <div className="flex items-center gap-2">
-              <CloudRain className="h-4 w-4 text-sage-600" />
-              <span className="text-sm text-sage-700">Weather</span>
+              <CloudRain className="h-4 w-4 text-[#555555]" />
+              <span className="text-sm text-[#555555]">Weather</span>
             </div>
             <Badge className={getRiskColor(metrics.weatherRisk)}>
               {metrics.weatherRisk}
@@ -265,7 +265,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
         {/* Critical Alerts */}
         {metrics.criticalAlerts.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-sage-800">Active Alerts</h4>
+            <h4 className="text-sm font-semibold text-[#1A1A1A]">Active Alerts</h4>
             {metrics.criticalAlerts.map((alert, index) => (
               <div 
                 key={index}
@@ -287,7 +287,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
         )}
         {/* Action Items */}
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-sage-800">Recommended Actions</h4>
+          <h4 className="text-sm font-semibold text-[#1A1A1A]">Recommended Actions</h4>
           <div className="space-y-2">
             {metrics.irrigationNeeded ? (
               <div className="flex items-center gap-2 text-sm text-blue-700">

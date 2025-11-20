@@ -103,11 +103,11 @@ function ResetPasswordContent() {
           <ModernCard variant="floating" className="shadow-2xl">
             <ModernCardContent className="text-center py-8">
               <div className="space-y-4">
-                <div className="p-3 bg-green-100 rounded-full w-fit mx-auto">
-                  <CheckCircle2 className="h-12 w-12 text-green-600" />
+                <div className="p-3 bg-[#F8FAF8] rounded-full w-fit mx-auto">
+                  <CheckCircle2 className="h-12 w-12 text-[#7A8F78]" />
                 </div>
-                <h3 className="text-xl font-semibold text-sage-800">Password Reset Successful!</h3>
-                <p className="text-sage-600">
+                <h3 className="text-xl font-semibold text-[#7A8F78]">Password Reset Successful!</h3>
+                <p className="text-[#7A8F78]">
                   Your password has been reset. Redirecting to login...
                 </p>
               </div>
@@ -152,7 +152,7 @@ function ResetPasswordContent() {
                 <div>
                   <Label htmlFor="password">New Password</Label>
                   <div className="mt-1 relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-sage-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#7A8F78]" />
                     <Input
                       id="password"
                       name="password"
@@ -167,19 +167,19 @@ function ResetPasswordContent() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-400 hover:text-sage-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#7A8F78] hover:text-[#7A8F78]"
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                   </div>
-                  <p className="mt-1 text-xs text-sage-500">
+                  <p className="mt-1 text-xs text-[#7A8F78]">
                     Must be at least 8 characters long
                   </p>
                 </div>
                 <div>
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <div className="mt-1 relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-sage-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#7A8F78]" />
                     <Input
                       id="confirmPassword"
                       name="confirmPassword"
@@ -193,7 +193,7 @@ function ResetPasswordContent() {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-400 hover:text-sage-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#7A8F78] hover:text-[#7A8F78]"
                     >
                       {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -214,7 +214,7 @@ function ResetPasswordContent() {
                   type="submit"
                 />
                 <div className="text-center pt-4">
-                  <Link href="/login" className="text-sm text-sage-600 hover:text-sage-700">
+                  <Link href="/login" className="text-sm text-[#7A8F78] hover:text-[#5E6F5A]">
                     <InlineFloatingButton
                       icon={<ArrowLeft className="h-4 w-4" />}
                       label="Back to Login"

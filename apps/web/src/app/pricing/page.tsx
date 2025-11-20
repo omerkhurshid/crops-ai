@@ -129,38 +129,38 @@ export default function PricingPage() {
       <Navbar />
       {/* Animated Background */}
       <div className="absolute top-20 left-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float">
-        <DollarSign className="h-8 w-8 text-sage-600" />
+        <DollarSign className="h-8 w-8 text-[#7A8F78]" />
       </div>
       <div className="absolute bottom-20 right-20 p-6 bg-white/70 backdrop-blur-md rounded-3xl shadow-floating animate-float" style={{ animationDelay: '2s' }}>
-        <Calculator className="h-8 w-8 text-sage-600" />
+        <Calculator className="h-8 w-8 text-[#7A8F78]" />
       </div>
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-20">
-          <Badge className="bg-sage-100 text-sage-700 border-sage-200 mb-8 px-6 py-2 text-sm">
+          <Badge className="bg-[#F8FAF8] text-[#5E6F5A] border-[#DDE4D8] mb-8 px-6 py-2 text-sm">
             <Star className="h-4 w-4 mr-2" />
             Transparent Pricing
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-light text-sage-800 mb-8 tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-light text-[#7A8F78] mb-8 tracking-tight">
             Choose Your
             <br />
-            <span className="text-sage-500">Farming Plan</span>
+            <span className="text-[#7A8F78]">Farming Plan</span>
           </h1>
-          <p className="text-xl text-sage-600 font-light leading-relaxed mb-12 max-w-3xl mx-auto">
+          <p className="text-xl text-[#7A8F78] font-light leading-relaxed mb-12 max-w-3xl mx-auto">
             Scale your agricultural intelligence with flexible pricing designed for farms of all sizes. 
             Start free, upgrade as you grow.
           </p>
           <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="flex items-center gap-2 text-sage-600">
-              <Check className="h-5 w-5 text-sage-500" />
+            <div className="flex items-center gap-2 text-[#7A8F78]">
+              <Check className="h-5 w-5 text-[#7A8F78]" />
               <span>First month free</span>
             </div>
-            <div className="flex items-center gap-2 text-sage-600">
-              <Check className="h-5 w-5 text-sage-500" />
+            <div className="flex items-center gap-2 text-[#7A8F78]">
+              <Check className="h-5 w-5 text-[#7A8F78]" />
               <span>No setup fees</span>
             </div>
-            <div className="flex items-center gap-2 text-sage-600">
-              <Check className="h-5 w-5 text-sage-500" />
+            <div className="flex items-center gap-2 text-[#7A8F78]">
+              <Check className="h-5 w-5 text-[#7A8F78]" />
               <span>Cancel anytime</span>
             </div>
           </div>
@@ -172,41 +172,41 @@ export default function PricingPage() {
               key={index} 
               variant={plan.popular ? "glow" : "floating"} 
               className={`relative hover:scale-105 transition-all duration-300 ${
-                plan.popular ? 'ring-2 ring-sage-200 scale-105' : ''
+                plan.popular ? 'ring-2 ring-#DDE4D8 scale-105' : ''
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-sage-600 text-white border-sage-700 px-4 py-1">
+                  <Badge className="bg-[#7A8F78] text-white border-[#5E6F5A] px-4 py-1">
                     <Crown className="h-4 w-4 mr-1" />
                     Most Popular
                   </Badge>
                 </div>
               )}
-              <ModernCardHeader className={`${plan.popular ? 'bg-gradient-to-br from-sage-50/90 to-forest-50/90' : ''}`}>
+              <ModernCardHeader className={`${plan.popular ? 'bg-gradient-to-br from-#F8FAF8/90 to-forest-50/90' : ''}`}>
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`p-3 rounded-xl ${
-                    plan.color === 'sage' ? 'bg-sage-100 text-sage-700' :
+                    plan.color === 'sage' ? 'bg-[#F8FAF8] text-[#5E6F5A]' :
                     plan.color === 'forest' ? 'bg-forest-100 text-forest-700' :
                     'bg-golden-100 text-golden-700'
                   }`}>
                     {plan.icon}
                   </div>
                   <div>
-                    <ModernCardTitle className="text-xl text-sage-800">{plan.name}</ModernCardTitle>
+                    <ModernCardTitle className="text-xl text-[#7A8F78]">{plan.name}</ModernCardTitle>
                   </div>
                 </div>
                 <div className="mb-4">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-sage-800">
+                    <span className="text-4xl font-bold text-[#7A8F78]">
                       {typeof plan.price === 'string' ? plan.price : `$${plan.price}`}
                     </span>
                     {typeof plan.price === 'number' && (
-                      <span className="text-sage-600">/{plan.period}</span>
+                      <span className="text-[#7A8F78]">/{plan.period}</span>
                     )}
                   </div>
                 </div>
-                <ModernCardDescription className="text-sage-600 leading-relaxed">
+                <ModernCardDescription className="text-[#7A8F78] leading-relaxed">
                   {plan.description}
                 </ModernCardDescription>
               </ModernCardHeader>
@@ -214,17 +214,17 @@ export default function PricingPage() {
                 <div className="space-y-3">
                   {plan.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-sage-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-sage-700">{feature}</span>
+                      <Check className="h-5 w-5 text-[#7A8F78] mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-[#5E6F5A]">{feature}</span>
                     </div>
                   ))}
                   {plan.limitations.length > 0 && (
                     <>
-                      <div className="border-t border-sage-200/50 pt-3 mt-6"></div>
+                      <div className="border-t border-[#DDE4D8]/50 pt-3 mt-6"></div>
                       {plan.limitations.map((limitation, idx) => (
                         <div key={idx} className="flex items-start gap-3 opacity-60">
-                          <X className="h-5 w-5 text-sage-400 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-sage-600">{limitation}</span>
+                          <X className="h-5 w-5 text-[#7A8F78] mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-[#7A8F78]">{limitation}</span>
                         </div>
                       ))}
                     </>
@@ -258,8 +258,8 @@ export default function PricingPage() {
         {/* Add-ons Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">Optional Add-ons</h2>
-            <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-[#7A8F78] mb-4">Optional Add-ons</h2>
+            <p className="text-lg text-[#7A8F78] max-w-2xl mx-auto">
               Enhance your plan with specialized features and premium services
             </p>
           </div>
@@ -269,15 +269,15 @@ export default function PricingPage() {
                 <ModernCardContent className="p-6">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-semibold text-sage-800 mb-2">{addon.name}</h3>
-                      <p className="text-sm text-sage-600 leading-relaxed">{addon.description}</p>
+                      <h3 className="font-semibold text-[#7A8F78] mb-2">{addon.name}</h3>
+                      <p className="text-sm text-[#7A8F78] leading-relaxed">{addon.description}</p>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-sage-800">
+                      <div className="text-lg font-bold text-[#7A8F78]">
                         {typeof addon.price === 'string' ? addon.price : `$${addon.price}`}
                       </div>
                       {typeof addon.price === 'number' && (
-                        <div className="text-sm text-sage-500">/month</div>
+                        <div className="text-sm text-[#7A8F78]">/month</div>
                       )}
                     </div>
                   </div>
@@ -289,13 +289,13 @@ export default function PricingPage() {
         {/* ROI Calculator */}
         <div className="mb-20">
           <ModernCard variant="glow" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-cream-50 text-center">
+            <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-cream-50 text-center">
               <div className="flex justify-center mb-4">
-                <div className="p-4 bg-sage-100 rounded-2xl">
-                  <Calculator className="h-8 w-8 text-sage-700" />
+                <div className="p-4 bg-[#F8FAF8] rounded-2xl">
+                  <Calculator className="h-8 w-8 text-[#5E6F5A]" />
                 </div>
               </div>
-              <ModernCardTitle className="text-2xl text-sage-800 mb-4">Calculate Your ROI</ModernCardTitle>
+              <ModernCardTitle className="text-2xl text-[#7A8F78] mb-4">Calculate Your ROI</ModernCardTitle>
               <ModernCardDescription className="text-lg max-w-2xl mx-auto mb-8">
                 See how Cropple.ai can improve your farm&apos;s profitability with data-driven insights
               </ModernCardDescription>
@@ -303,24 +303,24 @@ export default function PricingPage() {
             <ModernCardContent className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div className="space-y-3">
-                  <div className="text-3xl font-bold text-sage-800">15-30%</div>
-                  <div className="text-sage-600 font-medium">Yield Increase</div>
-                  <div className="text-sm text-sage-500">Through optimized timing and resource management</div>
+                  <div className="text-3xl font-bold text-[#7A8F78]">15-30%</div>
+                  <div className="text-[#7A8F78] font-medium">Yield Increase</div>
+                  <div className="text-sm text-[#7A8F78]">Through optimized timing and resource management</div>
                 </div>
                 <div className="space-y-3">
-                  <div className="text-3xl font-bold text-sage-800">20-40%</div>
-                  <div className="text-sage-600 font-medium">Cost Reduction</div>
-                  <div className="text-sm text-sage-500">Via precision application and waste reduction</div>
+                  <div className="text-3xl font-bold text-[#7A8F78]">20-40%</div>
+                  <div className="text-[#7A8F78] font-medium">Cost Reduction</div>
+                  <div className="text-sm text-[#7A8F78]">Via precision application and waste reduction</div>
                 </div>
                 <div className="space-y-3">
-                  <div className="text-3xl font-bold text-sage-800">25%+</div>
-                  <div className="text-sage-600 font-medium">Loss Prevention</div>
-                  <div className="text-sm text-sage-500">Through predictive analytics and early warnings</div>
+                  <div className="text-3xl font-bold text-[#7A8F78]">25%+</div>
+                  <div className="text-[#7A8F78] font-medium">Loss Prevention</div>
+                  <div className="text-sm text-[#7A8F78]">Through predictive analytics and early warnings</div>
                 </div>
               </div>
               <div className="text-center mt-8">
-                <p className="text-sage-600 mb-6">
-                  For a 500-acre farm, this typically means <strong className="text-sage-800">$50,000-$150,000</strong> in additional annual profit
+                <p className="text-[#7A8F78] mb-6">
+                  For a 500-acre farm, this typically means <strong className="text-[#7A8F78]">$50,000-$150,000</strong> in additional annual profit
                 </p>
                 <InlineFloatingButton
                   icon={<Calculator className="h-4 w-4" />}
@@ -335,8 +335,8 @@ export default function PricingPage() {
         {/* FAQ Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-sage-800 mb-4">Frequently Asked Questions</h2>
-            <p className="text-lg text-sage-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-light text-[#7A8F78] mb-4">Frequently Asked Questions</h2>
+            <p className="text-lg text-[#7A8F78] max-w-2xl mx-auto">
               Get answers to common questions about our pricing and features
             </p>
           </div>
@@ -345,10 +345,10 @@ export default function PricingPage() {
               <ModernCard key={index} variant="soft">
                 <ModernCardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <HelpCircle className="h-5 w-5 text-sage-500 mt-1 flex-shrink-0" />
+                    <HelpCircle className="h-5 w-5 text-[#7A8F78] mt-1 flex-shrink-0" />
                     <div>
-                      <h3 className="font-semibold text-sage-800 mb-2">{item.question}</h3>
-                      <p className="text-sage-600 leading-relaxed">{item.answer}</p>
+                      <h3 className="font-semibold text-[#7A8F78] mb-2">{item.question}</h3>
+                      <p className="text-[#7A8F78] leading-relaxed">{item.answer}</p>
                     </div>
                   </div>
                 </ModernCardContent>
@@ -358,9 +358,9 @@ export default function PricingPage() {
         </div>
         {/* Final CTA */}
         <ModernCard variant="floating" className="overflow-hidden max-w-4xl mx-auto">
-          <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-earth-50 text-center py-12">
+          <ModernCardHeader className="bg-gradient-to-r from-#F8FAF8 to-earth-50 text-center py-12">
             <div className="flex justify-center mb-4">
-              <Badge className="bg-white text-sage-700 border-sage-200">
+              <Badge className="bg-white text-[#5E6F5A] border-[#DDE4D8]">
                 <Zap className="h-4 w-4 mr-2" />
                 Start Your Journey Today
               </Badge>

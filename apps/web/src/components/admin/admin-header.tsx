@@ -40,15 +40,15 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               <Shield className="h-6 w-6 text-red-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600">System analytics and user management</p>
+              <h1 className="text-3xl font-bold text-[#1A1A1A]">Admin Dashboard</h1>
+              <p className="text-[#555555]">System analytics and user management</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
               Admin Access
             </Badge>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-[#555555]">
               Logged in as {user.name} ({user.email})
             </span>
           </div>

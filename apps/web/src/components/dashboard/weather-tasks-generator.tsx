@@ -384,8 +384,8 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         </ModernCardHeader>
         <ModernCardContent>
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-3/4"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-1/2"></div>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -414,7 +414,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
           </Button>
         </div>
         {weatherData && (
-          <div className="flex items-center gap-4 text-xs text-gray-600 mt-2">
+          <div className="flex items-center gap-4 text-xs text-[#555555] mt-2">
             <span className="flex items-center gap-1">
               <Thermometer className="h-3 w-3" />
               {weatherData.temperature}°F
@@ -434,8 +434,8 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
         {tasks.length === 0 ? (
           <div className="text-center py-6">
             <Sun className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600">No weather-based tasks available</p>
-            <p className="text-xs text-gray-500">Our analytical models haven't identified any weather-related actions at this time</p>
+            <p className="text-sm text-[#555555]">No weather-based tasks available</p>
+            <p className="text-xs text-[#555555]">Our analytical models haven't identified any weather-related actions at this time</p>
             <Button 
               variant="ghost" 
               size="sm"
@@ -455,7 +455,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                 key={task.id}
                 className={cn(
                   'p-4 rounded-lg border transition-all',
-                  task.isRecommended ? getPriorityColor(task.priority) : 'bg-gray-50 border-gray-200',
+                  task.isRecommended ? getPriorityColor(task.priority) : 'bg-[#FAFAF7] border-[#E6E6E6]',
                   isCompleted && 'opacity-60'
                 )}
               >
@@ -466,8 +466,8 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                       className={cn(
                         'mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center',
                         isCompleted 
-                          ? 'bg-green-500 border-green-500 text-white' 
-                          : 'border-gray-300 hover:border-gray-400'
+                          ? 'bg-[#8FBF7F] border-[#8FBF7F] text-white' 
+                          : 'border-[#E6E6E6] hover:border-gray-400'
                       )}
                     >
                       {isCompleted && <CheckSquare className="h-3 w-3" />}
@@ -479,7 +479,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                       )}>
                         {task.title}
                       </h4>
-                      <p className="text-xs text-gray-700 mb-2">{task.description}</p>
+                      <p className="text-xs text-[#555555] mb-2">{task.description}</p>
                       <div className="flex items-center gap-2 mb-2">
                         <Badge variant="outline" className="text-xs">
                           {task.timeframe}
@@ -488,12 +488,12 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                           {task.estimatedTime}
                         </Badge>
                       </div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         <div className="flex items-center gap-1 mb-1">
                           <Icon className="h-3 w-3" />
                           <span>{task.category} • {task.conditions}</span>
                         </div>
-                        <div className="text-gray-500">
+                        <div className="text-[#555555]">
                           Impact: {task.farmImpact}
                         </div>
                       </div>

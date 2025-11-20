@@ -61,9 +61,9 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
   const getHealthBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'excellent':
-        return 'bg-green-100 text-green-800'
+        return 'bg-[#F8FAF8] text-green-800'
       case 'good':
-        return 'bg-green-100 text-green-800'
+        return 'bg-[#F8FAF8] text-green-800'
       case 'moderate':
         return 'bg-yellow-100 text-yellow-800'
       case 'stressed':
@@ -71,7 +71,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       case 'poor':
         return 'bg-red-100 text-red-800'
       default:
-        return 'bg-gray-100 text-gray-800'
+        return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
   if (loading) {
@@ -80,7 +80,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
         <CardContent className="flex items-center justify-center h-96">
           <div className="text-center">
             <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">Loading satellite data...</p>
+            <p className="text-[#555555]">Loading satellite data...</p>
           </div>
         </CardContent>
       </Card>
@@ -93,7 +93,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
           <div className="text-center">
             <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-3" />
             <p className="text-red-600 font-medium">Error loading satellite data</p>
-            <p className="text-sm text-gray-500 mt-1">{error}</p>
+            <p className="text-sm text-[#555555] mt-1">{error}</p>
             <Button onClick={fetchNDVIData} className="mt-4" size="sm" variant="outline">
               <RefreshCw className="h-4 w-4 mr-2" />
               Retry
@@ -109,8 +109,8 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
         <CardContent className="flex items-center justify-center h-96">
           <div className="text-center">
             <Satellite className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">No satellite data available</p>
-            <p className="text-sm text-gray-500 mt-1">Data will be available soon</p>
+            <p className="text-[#555555]">No satellite data available</p>
+            <p className="text-sm text-[#555555] mt-1">Data will be available soon</p>
           </div>
         </CardContent>
       </Card>
@@ -151,31 +151,31 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
               {ndviData.ndvi.toFixed(2)}
             </div>
           </div>
-          <div className="absolute bottom-2 left-2 text-sm text-gray-700">Poor</div>
-          <div className="absolute bottom-2 right-2 text-sm text-gray-700">Excellent</div>
+          <div className="absolute bottom-2 left-2 text-sm text-[#555555]">Poor</div>
+          <div className="absolute bottom-2 right-2 text-sm text-[#555555]">Excellent</div>
         </div>
         {/* Health Summary */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div>
-            <div className="text-sm text-gray-600">NDVI Score</div>
+            <div className="text-sm text-[#555555]">NDVI Score</div>
             <div className={`text-2xl font-bold ${getHealthColor(ndviData.ndvi)}`}>
               {ndviData.ndvi.toFixed(2)}
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Health Status</div>
+            <div className="text-sm text-[#555555]">Health Status</div>
             <Badge className={`mt-1 ${getHealthBadgeColor(ndviData.healthStatus)}`}>
               {ndviData.healthStatus}
             </Badge>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Cloud Cover</div>
+            <div className="text-sm text-[#555555]">Cloud Cover</div>
             <div className="text-lg font-medium">
               {ndviData.cloudCoverage.toFixed(0)}%
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-600">Confidence</div>
+            <div className="text-sm text-[#555555]">Confidence</div>
             <div className="text-lg font-medium">
               {ndviData.confidence.toFixed(0)}%
             </div>
@@ -193,10 +193,10 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
             <span>{showIndices ? '−' : '+'}</span>
           </Button>
           {showIndices && ndviData.indices && (
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-[#FAFAF7] rounded-lg">
               {Object.entries(ndviData.indices).map(([key, value]) => (
                 <div key={key}>
-                  <div className="text-xs text-gray-600">{key}</div>
+                  <div className="text-xs text-[#555555]">{key}</div>
                   <div className="text-sm font-medium">{value.toFixed(3)}</div>
                 </div>
               ))}

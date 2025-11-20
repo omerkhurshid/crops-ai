@@ -84,8 +84,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-48 bg-gray-200 rounded-lg"></div>
-        <div className="h-32 bg-gray-200 rounded-lg"></div>
+        <div className="h-48 bg-[#F5F5F5] rounded-lg"></div>
+        <div className="h-32 bg-[#F5F5F5] rounded-lg"></div>
       </div>
     )
   }
@@ -104,8 +104,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 <Calendar className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <ModernCardTitle className="text-sage-800">Cash Flow Forecast</ModernCardTitle>
-                <p className="text-sm text-sage-600 mt-1">Projected income and expenses for your farm</p>
+                <ModernCardTitle className="text-[#1A1A1A]">Cash Flow Forecast</ModernCardTitle>
+                <p className="text-sm text-[#555555] mt-1">Projected income and expenses for your farm</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -113,8 +113,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 onClick={() => setSelectedPeriod('30_days')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedPeriod === '30_days' 
-                    ? 'bg-sage-600 text-white' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#7A8F78] text-white' 
+                    : 'bg-[#F5F5F5] text-[#555555] hover:bg-[#F5F5F5]'
                 }`}
               >
                 Next 30 Days
@@ -123,8 +123,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 onClick={() => setSelectedPeriod('60_days')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedPeriod === '60_days' 
-                    ? 'bg-sage-600 text-white' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#7A8F78] text-white' 
+                    : 'bg-[#F5F5F5] text-[#555555] hover:bg-[#F5F5F5]'
                 }`}
               >
                 Next 60 Days
@@ -177,25 +177,25 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">
           <div className="flex items-start gap-4">
-            <div className="p-2 bg-sage-100 rounded-lg">
-              <DollarSign className="h-5 w-5 text-sage-600" />
+            <div className="p-2 bg-[#F8FAF8] rounded-lg">
+              <DollarSign className="h-5 w-5 text-[#555555]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sage-800 mb-3">Account Balance Projection</h3>
+              <h3 className="font-semibold text-[#1A1A1A] mb-3">Account Balance Projection</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <p className="text-sage-600 mb-1">Starting Balance</p>
-                  <p className="text-xl font-bold text-sage-800">{formatCurrency(currentForecast.startingBalance)}</p>
+                  <p className="text-[#555555] mb-1">Starting Balance</p>
+                  <p className="text-xl font-bold text-[#1A1A1A]">{formatCurrency(currentForecast.startingBalance)}</p>
                 </div>
                 <div>
-                  <p className="text-sage-600 mb-1">Net Change</p>
+                  <p className="text-[#555555] mb-1">Net Change</p>
                   <p className={`text-xl font-bold ${isPositiveCashFlow ? 'text-green-600' : 'text-red-600'}`}>
                     {isPositiveCashFlow ? '+' : ''}{formatCurrency(currentForecast.netCashFlow)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sage-600 mb-1">Projected Balance</p>
-                  <p className={`text-xl font-bold ${cashFlowHealthy ? 'text-sage-800' : 'text-red-600'}`}>
+                  <p className="text-[#555555] mb-1">Projected Balance</p>
+                  <p className={`text-xl font-bold ${cashFlowHealthy ? 'text-[#1A1A1A]' : 'text-red-600'}`}>
                     {formatCurrency(currentForecast.endingBalance)}
                   </p>
                 </div>
@@ -218,7 +218,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       {/* Key Upcoming Events */}
       <ModernCard variant="floating">
         <ModernCardHeader>
-          <ModernCardTitle className="text-sage-800 flex items-center gap-2">
+          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
             <Clock className="h-5 w-5" />
             Key Financial Events
           </ModernCardTitle>
@@ -226,10 +226,10 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
         <ModernCardContent>
           <div className="space-y-3">
             {currentForecast.keyEvents.map((event, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${
-                    event.type === 'income' ? 'bg-green-100' : 'bg-red-100'
+                    event.type === 'income' ? 'bg-[#F8FAF8]' : 'bg-red-100'
                   }`}>
                     {event.type === 'income' ? (
                       <TrendingUp className="h-4 w-4 text-green-600" />
@@ -238,8 +238,8 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-sage-800">{event.description}</p>
-                    <p className="text-sm text-sage-600">{event.date}</p>
+                    <p className="font-medium text-[#1A1A1A]">{event.description}</p>
+                    <p className="text-sm text-[#555555]">{event.date}</p>
                   </div>
                 </div>
                 <div className={`font-bold ${event.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>

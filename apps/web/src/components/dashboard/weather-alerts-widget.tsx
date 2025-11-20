@@ -150,8 +150,8 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
         </ModernCardHeader>
         <ModernCardContent>
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-3/4"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-1/2"></div>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -167,8 +167,8 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent>
-          <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
-            <div className="p-2 bg-green-100 rounded-full">
+          <div className="flex items-center gap-3 p-4 bg-[#F8FAF8] rounded-lg">
+            <div className="p-2 bg-[#F8FAF8] rounded-full">
               <Sun className="h-5 w-5 text-green-600" />
             </div>
             <div>
@@ -259,14 +259,14 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
                 <Eye className="h-3 w-3" />
                 What to do:
               </h5>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-[#555555]">
                 {getActionableMessage(alert)}
               </p>
             </div>
             {/* Crops at risk */}
             {alert.farmImpact.cropsAtRisk.length > 0 && (
               <div className="mt-3">
-                <span className="text-xs font-medium text-gray-600">
+                <span className="text-xs font-medium text-[#555555]">
                   Crops that could be affected:
                 </span>
                 <div className="flex flex-wrap gap-1 mt-1">
@@ -282,7 +282,7 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
         ))}
         {/* Location info if available */}
         {farmData?.latitude && farmData?.longitude && (
-          <div className="flex items-center gap-2 text-xs text-gray-500 pt-2 border-t">
+          <div className="flex items-center gap-2 text-xs text-[#555555] pt-2 border-t">
             <MapPin className="h-3 w-3" />
             <span>
               Alerts for {farmData.latitude.toFixed(2)}, {farmData.longitude.toFixed(2)}

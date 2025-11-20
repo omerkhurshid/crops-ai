@@ -49,10 +49,10 @@ export function ErrorFallback({ error, retry }: ErrorFallbackProps) {
         <div className="p-4 bg-red-50 rounded-full w-fit mx-auto mb-6">
           <AlertCircle className="h-8 w-8 text-red-600" />
         </div>
-        <h2 className="text-2xl font-bold text-sage-800 mb-4">
+        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">
           Something went wrong
         </h2>
-        <p className="text-sage-600 mb-6 leading-relaxed">
+        <p className="text-[#555555] mb-6 leading-relaxed">
           We encountered an unexpected error while processing your request. 
           This has been logged and our team will investigate.
         </p>
@@ -66,14 +66,14 @@ export function ErrorFallback({ error, retry }: ErrorFallbackProps) {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={handleRetry}
-            className="flex items-center gap-2 px-4 py-2 bg-sage-600 hover:bg-sage-700 text-white rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#7A8F78] hover:bg-[#5E6F5A] text-white rounded-lg font-medium transition-colors"
           >
             <RefreshCw className="h-4 w-4" />
             Try Again
           </button>
           <Link 
             href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2 border border-sage-300 hover:bg-sage-50 text-sage-700 rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 border border-[#DDE4D8] hover:bg-[#F8FAF8] text-[#555555] rounded-lg font-medium transition-colors"
           >
             <Home className="h-4 w-4" />
             Go to Dashboard
@@ -105,17 +105,17 @@ export function ErrorState({
       <div className="p-3 bg-red-50 rounded-full mb-4">
         <AlertCircle className="h-6 w-6 text-red-600" />
       </div>
-      <h3 className="text-lg font-semibold text-sage-800 mb-2 text-center">
+      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 text-center">
         {title}
       </h3>
-      <p className="text-sage-600 text-center mb-6 max-w-md leading-relaxed">
+      <p className="text-[#555555] text-center mb-6 max-w-md leading-relaxed">
         {message}
       </p>
       <div className="flex gap-3">
         {showRetry && onRetry && (
           <button
             onClick={onRetry}
-            className="flex items-center gap-2 px-4 py-2 bg-sage-600 hover:bg-sage-700 text-white rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#7A8F78] hover:bg-[#5E6F5A] text-white rounded-lg font-medium transition-colors"
           >
             <RefreshCw className="h-4 w-4" />
             Retry
@@ -124,7 +124,7 @@ export function ErrorState({
         {action && (
           <button
             onClick={action.onClick}
-            className="px-4 py-2 border border-sage-300 hover:bg-sage-50 text-sage-700 rounded-lg font-medium transition-colors"
+            className="px-4 py-2 border border-[#DDE4D8] hover:bg-[#F8FAF8] text-[#555555] rounded-lg font-medium transition-colors"
           >
             {action.label}
           </button>

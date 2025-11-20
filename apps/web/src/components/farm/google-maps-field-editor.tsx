@@ -221,7 +221,7 @@ export function GoogleMapsFieldEditor({
           <div className="text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
             <p>Loading Google Maps...</p>
-            <p className="text-sm text-gray-500 mt-1">API Key: {apiKey ? apiKey.substring(0, 10) + '...' : 'Missing'}</p>
+            <p className="text-sm text-[#555555] mt-1">API Key: {apiKey ? apiKey.substring(0, 10) + '...' : 'Missing'}</p>
           </div>
         </div>
       }
@@ -371,14 +371,14 @@ export function GoogleMapsFieldEditor({
                     className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                       selectedField === field.id 
                         ? 'border-orange-500 bg-orange-50' 
-                        : 'border-gray-200 hover:bg-gray-50'
+                        : 'border-[#E6E6E6] hover:bg-[#FAFAF7]'
                     }`}
                     onClick={() => setSelectedField(field.id)}
                   >
                     <div className="flex justify-between items-start">
                       <div>
                         <h4 className="font-medium">{field.name}</h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[#555555]">
                           {field.area.toLocaleString()} acres
                         </p>
                       </div>

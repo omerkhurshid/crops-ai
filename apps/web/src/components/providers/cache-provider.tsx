@@ -129,7 +129,7 @@ export function CacheDebugPanel() {
       <div className="mt-2 max-h-32 overflow-y-auto">
         <div className="text-xs font-semibold">Cached Keys:</div>
         {cacheStats.entries.map((entry, index) => (
-          <div key={index} className="text-xs text-gray-600 truncate">
+          <div key={index} className="text-xs text-[#555555] truncate">
             {entry.key} ({Math.round(entry.age / 1000)}s old)
           </div>
         ))}

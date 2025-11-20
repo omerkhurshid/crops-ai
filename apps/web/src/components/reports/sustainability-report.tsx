@@ -131,7 +131,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     return 'text-red-600';
   };
   const getScoreBg = (score: number) => {
-    if (score >= 80) return 'bg-green-50 border-green-200';
+    if (score >= 80) return 'bg-[#F8FAF8] border-[#DDE4D8]';
     if (score >= 60) return 'bg-yellow-50 border-yellow-200';
     return 'bg-red-50 border-red-200';
   };
@@ -139,8 +139,8 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-700';
       case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'low': return 'bg-green-100 text-green-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'low': return 'bg-[#F8FAF8] text-green-700';
+      default: return 'bg-[#F5F5F5] text-[#555555]';
     }
   };
   if (loading) {
@@ -156,7 +156,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     return (
       <div className="text-center py-8">
         <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-600">Unable to load sustainability data</p>
+        <p className="text-[#555555]">Unable to load sustainability data</p>
       </div>
     );
   }
@@ -166,7 +166,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold">Sustainability Assessment Report</h3>
-          <p className="text-sm text-gray-600">Environmental impact analysis and sustainable farming practices evaluation</p>
+          <p className="text-sm text-[#555555]">Environmental impact analysis and sustainable farming practices evaluation</p>
         </div>
         <Button onClick={generateReport} disabled={generating} size="sm">
           {generating ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
@@ -180,16 +180,16 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
             <h4 className="text-2xl font-bold ${getScoreColor(data.overview.sustainabilityScore)}">
               {data.overview.sustainabilityScore.toFixed(1)}/100
             </h4>
-            <p className="text-sm text-gray-600">Overall Sustainability Score</p>
+            <p className="text-sm text-[#555555]">Overall Sustainability Score</p>
             <div className="flex items-center gap-2 mt-2">
               <Award className="h-4 w-4 text-green-600" />
               <span className="text-sm font-medium text-green-600">{data.benchmarks.industry.rating}</span>
-              <span className="text-sm text-gray-500">• {data.benchmarks.regional.rank} regionally</span>
+              <span className="text-sm text-[#555555]">• {data.benchmarks.regional.rank} regionally</span>
             </div>
           </div>
           <div className="text-right">
             <Leaf className="h-12 w-12 text-green-600 mx-auto mb-2" />
-            <div className="text-xs text-gray-600">Certified Sustainable</div>
+            <div className="text-xs text-[#555555]">Certified Sustainable</div>
           </div>
         </div>
       </div>
@@ -198,22 +198,22 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
         <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
           <Droplets className="h-6 w-6 text-blue-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-blue-600">{data.overview.waterEfficiency.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">Water Efficiency</p>
+          <p className="text-xs text-[#555555]">Water Efficiency</p>
         </div>
-        <div className="text-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
+        <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border-2 border-[#DDE4D8]">
           <TreePine className="h-6 w-6 text-green-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-green-600">{data.overview.carbonReduction.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">Carbon Reduction</p>
+          <p className="text-xs text-[#555555]">Carbon Reduction</p>
         </div>
         <div className="text-center p-4 bg-amber-50 rounded-lg border-2 border-amber-200">
           <Sprout className="h-6 w-6 text-amber-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-amber-600">{data.overview.soilHealth.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">Soil Health</p>
+          <p className="text-xs text-[#555555]">Soil Health</p>
         </div>
         <div className="text-center p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
           <Sun className="h-6 w-6 text-purple-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-purple-600">{data.overview.renewableEnergy.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">Renewable Energy</p>
+          <p className="text-xs text-[#555555]">Renewable Energy</p>
         </div>
       </div>
       {/* Detailed Analysis Tabs */}
@@ -275,7 +275,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                     <span className="text-sm">Net Impact:</span>
                     <span className="font-semibold text-green-600">{data.environmental.carbon.netEmissions} tCO₂</span>
                   </div>
-                  <div className="text-xs text-gray-600 bg-green-50 p-2 rounded">
+                  <div className="text-xs text-[#555555] bg-[#F8FAF8] p-2 rounded">
                     Carbon negative! Exceeding offset target by {Math.abs(data.environmental.carbon.netEmissions + data.environmental.carbon.offsetTarget).toFixed(1)} tCO₂
                   </div>
                 </div>
@@ -320,18 +320,18 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {ensureArray(data.practices?.implemented).map((practice, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <span className="font-medium">{practice.name}</span>
-                          <div className="text-sm text-gray-600">{practice.category}</div>
+                          <div className="text-sm text-[#555555]">{practice.category}</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm font-semibold">{practice.impact}%</div>
                           <CheckCircle className="h-4 w-4 text-green-600" />
                         </div>
                       </div>
-                      <p className="text-xs text-gray-600">{practice.description}</p>
+                      <p className="text-xs text-[#555555]">{practice.description}</p>
                       <Progress value={practice.impact} className="mt-2" />
                     </div>
                   ))}
@@ -345,14 +345,14 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {ensureArray(data.practices?.recommendations).map((rec, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <span className="font-medium">{rec.practice}</span>
                         <Badge className={getPriorityColor(rec.priority)}>
                           {rec.priority}
                         </Badge>
                       </div>
-                      <div className="flex justify-between text-sm text-gray-600">
+                      <div className="flex justify-between text-sm text-[#555555]">
                         <span>Potential Impact: {rec.potentialImpact}%</span>
                         <span>Timeline: {rec.timeline}</span>
                       </div>
@@ -376,12 +376,12 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {ensureArray(data.certifications?.current).map((cert, index) => (
-                    <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex justify-between items-center p-3 bg-[#FAFAF7] rounded-lg">
                       <div>
                         <span className="font-medium">{cert.name}</span>
-                        <div className="text-sm text-gray-600">Expires: {cert.expiry}</div>
+                        <div className="text-sm text-[#555555]">Expires: {cert.expiry}</div>
                       </div>
-                      <Badge className={cert.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}>
+                      <Badge className={cert.status === 'Active' ? 'bg-[#F8FAF8] text-green-700' : 'bg-yellow-100 text-yellow-700'}>
                         {cert.status}
                       </Badge>
                     </div>
@@ -399,9 +399,9 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {ensureArray(data.certifications?.eligible).map((cert, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                       <span className="font-medium">{cert.name}</span>
-                      <div className="text-sm text-gray-600 mt-1">
+                      <div className="text-sm text-[#555555] mt-1">
                         Requirements: {cert.requirements}
                       </div>
                       <div className="text-sm text-green-600 mt-1">
@@ -425,7 +425,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   <div className="text-3xl font-bold text-green-600 mb-2">
                     {data.benchmarks.regional.rank}
                   </div>
-                  <p className="text-sm text-gray-600">Among regional farms</p>
+                  <p className="text-sm text-[#555555]">Among regional farms</p>
                   <div className="mt-4 text-lg font-semibold">
                     Score: {data.benchmarks.regional.score}/100
                   </div>
@@ -439,7 +439,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   <div className="text-3xl font-bold text-blue-600 mb-2">
                     {data.benchmarks.national.percentile}th
                   </div>
-                  <p className="text-sm text-gray-600">Percentile nationally</p>
+                  <p className="text-sm text-[#555555]">Percentile nationally</p>
                   <div className="mt-4 text-lg font-semibold">
                     Score: {data.benchmarks.national.score}/100
                   </div>
@@ -453,15 +453,15 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   <div className="text-3xl font-bold text-purple-600 mb-2">
                     {data.benchmarks.industry.rating}
                   </div>
-                  <p className="text-sm text-gray-600">Industry classification</p>
+                  <p className="text-sm text-[#555555]">Industry classification</p>
                   <div className="mt-4 text-lg font-semibold">
                     Score: {data.benchmarks.industry.score}/100
                   </div>
                 </CardContent>
               </Card>
             </div>
-            <div className="p-4 bg-green-50 rounded-lg">
-              <p className="text-sm text-gray-700">
+            <div className="p-4 bg-[#F8FAF8] rounded-lg">
+              <p className="text-sm text-[#555555]">
                 <strong>Sustainability Summary:</strong> Your farm demonstrates exceptional commitment to sustainable practices, 
                 ranking in the top 15% regionally and 88th percentile nationally. The implementation of cover cropping, 
                 precision irrigation, and no-till farming has resulted in carbon-negative operations while maintaining 

@@ -56,7 +56,7 @@ const typeIcons = {
   equipment: '🔧'
 }
 const confidenceColors = {
-  low: 'text-gray-500',
+  low: 'text-[#555555]',
   medium: 'text-blue-500',
   high: 'text-green-500'
 }
@@ -145,7 +145,7 @@ export function RecommendationsWidget({
         {showHeader && (
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-sage-600" />
+              <Lightbulb className="h-5 w-5 text-[#555555]" />
               Smart Recommendations
             </ModernCardTitle>
           </ModernCardHeader>
@@ -154,8 +154,8 @@ export function RecommendationsWidget({
           <div className="space-y-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-[#F5F5F5] rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-[#F5F5F5] rounded w-1/2"></div>
               </div>
             ))}
           </div>
@@ -169,10 +169,10 @@ export function RecommendationsWidget({
         <ModernCardHeader>
           <div className="flex items-center justify-between">
             <ModernCardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-sage-600" />
+              <Lightbulb className="h-5 w-5 text-[#555555]" />
               Smart Recommendations
               {recommendations.length > 0 && (
-                <Badge className="bg-sage-100 text-sage-700 border-sage-200">
+                <Badge className="bg-[#F8FAF8] text-[#555555] border-[#DDE4D8]">
                   {recommendations.length}
                 </Badge>
               )}
@@ -183,7 +183,7 @@ export function RecommendationsWidget({
                 size="sm"
                 onClick={generateNewRecommendations}
                 disabled={generating}
-                className="text-sage-600 hover:text-sage-700"
+                className="text-[#555555] hover:text-[#555555]"
               >
                 <RefreshCw className={`h-4 w-4 ${generating ? 'animate-spin' : ''}`} />
                 {generating ? 'Analyzing...' : 'Refresh'}
@@ -204,14 +204,14 @@ export function RecommendationsWidget({
         {recommendations.length === 0 && !error && (
           <div className="text-center py-8">
             <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Recommendations Yet</h3>
-            <p className="text-gray-600 mb-4">
+            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Recommendations Yet</h3>
+            <p className="text-[#555555] mb-4">
               Generate personalized farming insights based on your data
             </p>
             <Button 
               onClick={generateNewRecommendations} 
               disabled={generating}
-              className="bg-sage-700 hover:bg-sage-800"
+              className="bg-[#5E6F5A] hover:bg-[#7A8F78]"
             >
               <Lightbulb className="h-4 w-4 mr-2" />
               {generating ? 'Analyzing Farm Data...' : 'Generate Recommendations'}
@@ -222,7 +222,7 @@ export function RecommendationsWidget({
           {recommendations.map((rec) => (
             <div 
               key={rec.id} 
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow"
+              className="border border-[#E6E6E6] rounded-lg p-4 hover:shadow-sm transition-shadow"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
@@ -230,7 +230,7 @@ export function RecommendationsWidget({
                   <span className="text-2xl">{typeIcons[rec.type]}</span>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-gray-900 text-sm">
+                      <h4 className="font-semibold text-[#1A1A1A] text-sm">
                         {rec.title}
                       </h4>
                       <Badge className={`text-xs ${priorityColors[rec.priority]}`}>
@@ -238,7 +238,7 @@ export function RecommendationsWidget({
                       </Badge>
                     </div>
                     {rec.fieldName && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[#555555]">
                         {rec.fieldName} {rec.cropType && `• ${rec.cropType}`}
                       </p>
                     )}
@@ -249,7 +249,7 @@ export function RecommendationsWidget({
                     variant="ghost"
                     size="sm"
                     onClick={() => updateRecommendation(rec.id, 'complete')}
-                    className="p-1 h-6 w-6 text-green-600 hover:bg-green-50"
+                    className="p-1 h-6 w-6 text-green-600 hover:bg-[#F8FAF8]"
                     title="Mark as completed"
                   >
                     <CheckCircle className="h-3 w-3" />
@@ -258,7 +258,7 @@ export function RecommendationsWidget({
                     variant="ghost"
                     size="sm"
                     onClick={() => updateRecommendation(rec.id, 'dismiss')}
-                    className="p-1 h-6 w-6 text-gray-400 hover:bg-gray-50"
+                    className="p-1 h-6 w-6 text-gray-400 hover:bg-[#FAFAF7]"
                     title="Dismiss"
                   >
                     <X className="h-3 w-3" />
@@ -267,14 +267,14 @@ export function RecommendationsWidget({
               </div>
               {/* Content */}
               <div className="space-y-2">
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#555555]">
                   {rec.description}
                 </p>
-                <div className="bg-sage-50 border border-sage-200 rounded p-2">
-                  <p className="text-sm font-medium text-sage-800 mb-1">
+                <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded p-2">
+                  <p className="text-sm font-medium text-[#1A1A1A] mb-1">
                     Action Required:
                   </p>
-                  <p className="text-sm text-sage-700">
+                  <p className="text-sm text-[#555555]">
                     {rec.actionRequired}
                   </p>
                 </div>
@@ -288,8 +288,8 @@ export function RecommendationsWidget({
                 )}
               </div>
               {/* Footer */}
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                <div className="flex items-center gap-4 text-xs text-gray-500">
+              <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#F5F5F5]">
+                <div className="flex items-center gap-4 text-xs text-[#555555]">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {formatDate(rec.optimalTiming)}

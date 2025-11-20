@@ -25,7 +25,7 @@ const farmTypes = [
     name: 'Row Crops',
     description: 'Corn, soybeans, wheat, etc.',
     icon: <Wheat className="h-8 w-8" />,
-    color: 'border-green-500 bg-green-50 text-green-700'
+    color: 'border-[#8FBF7F] bg-[#F8FAF8] text-green-700'
   },
   {
     id: 'livestock',
@@ -171,7 +171,7 @@ export function SimpleFarmCreator() {
                 className={`p-4 rounded-xl border-2 transition-all text-left ${
                   farm.type === type.id
                     ? type.color
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                 }`}
               >
                 <div className="flex items-center space-x-3">
@@ -180,7 +180,7 @@ export function SimpleFarmCreator() {
                   </div>
                   <div>
                     <div className="font-semibold text-sm">{type.name}</div>
-                    <div className="text-xs text-gray-600">{type.description}</div>
+                    <div className="text-xs text-[#555555]">{type.description}</div>
                   </div>
                 </div>
               </button>
@@ -211,7 +211,7 @@ export function SimpleFarmCreator() {
               </Button>
             </div>
             <div className="text-center">
-              <span className="text-sm text-gray-500">or</span>
+              <span className="text-sm text-[#555555]">or</span>
             </div>
             <Button
               onClick={getCurrentLocation}
@@ -229,7 +229,7 @@ export function SimpleFarmCreator() {
           </div>
           {/* Location Preview */}
           {farm.location.lat !== 0 && (
-            <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mt-3 p-3 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
                 <div className="flex-1">

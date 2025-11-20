@@ -91,8 +91,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'low': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
   const getAlertIcon = (type: string) => {
@@ -101,7 +101,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       case 'health_decline': return <TrendingDown className="h-4 w-4 text-red-600" />;
       case 'improvement': return <TrendingUp className="h-4 w-4 text-green-600" />;
       case 'threshold_breach': return <Target className="h-4 w-4 text-red-600" />;
-      default: return <Activity className="h-4 w-4 text-gray-600" />;
+      default: return <Activity className="h-4 w-4 text-[#555555]" />;
     }
   };
   const exportData = () => {
@@ -112,8 +112,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
         {[...Array(3)].map((_, i) => (
           <Card key={i} className="p-6">
             <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-32 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-32 bg-[#F5F5F5] rounded"></div>
             </div>
           </Card>
         ))}
@@ -124,8 +124,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
     return (
       <div className="text-center py-12">
         <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Visualization Data Unavailable</h3>
-        <p className="text-gray-600">Unable to load advanced visualization data.</p>
+        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Visualization Data Unavailable</h3>
+        <p className="text-[#555555]">Unable to load advanced visualization data.</p>
       </div>
     );
   }
@@ -137,7 +137,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-gray-600" />
+                <Calendar className="h-4 w-4 text-[#555555]" />
                 <span className="text-sm font-medium">Timeframe:</span>
               </div>
               <div className="flex gap-1">
@@ -200,12 +200,12 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {['ndvi', 'evi', 'savi'].map((index) => (
-                        <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                        <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                           <div className="text-center mb-2">
                             <div className="text-lg font-bold text-blue-600">
                               {field.data[field.data.length - 1][index].toFixed(3)}
                             </div>
-                            <div className="text-xs text-gray-600 uppercase">{index}</div>
+                            <div className="text-xs text-[#555555] uppercase">{index}</div>
                           </div>
                           <div className="space-y-1">
                             {field.data.map((point: any, idx: number) => {
@@ -249,8 +249,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                 {data.stressHeatmap.map((field) => (
                   <div key={field.fieldId} className="space-y-3">
                     <h4 className="font-semibold">{field.fieldName}</h4>
-                    <div className="relative bg-green-100 rounded-lg p-6 min-h-[200px]">
-                      <div className="text-sm text-gray-600 mb-4">Field Visualization</div>
+                    <div className="relative bg-[#F8FAF8] rounded-lg p-6 min-h-[200px]">
+                      <div className="text-sm text-[#555555] mb-4">Field Visualization</div>
                       {/* Stress Zone Markers */}
                       {field.zones.map((zone) => (
                         <div
@@ -301,17 +301,17 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                     <div className="text-2xl font-bold text-blue-600">
                       {data.comparisonData.thisYear[data.comparisonData.thisYear.length - 1]?.health}%
                     </div>
-                    <p className="text-sm text-gray-600">This Year</p>
+                    <p className="text-sm text-[#555555]">This Year</p>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="text-2xl font-bold text-gray-600">
+                  <div className="p-4 bg-[#FAFAF7] rounded-lg">
+                    <div className="text-2xl font-bold text-[#555555]">
                       {data.comparisonData.lastYear[data.comparisonData.lastYear.length - 1]?.health}%
                     </div>
-                    <p className="text-sm text-gray-600">Last Year</p>
+                    <p className="text-sm text-[#555555]">Last Year</p>
                   </div>
-                  <div className="p-4 bg-green-50 rounded-lg">
+                  <div className="p-4 bg-[#F8FAF8] rounded-lg">
                     <div className="text-2xl font-bold text-green-600">{data.comparisonData.benchmark}%</div>
-                    <p className="text-sm text-gray-600">Industry Benchmark</p>
+                    <p className="text-sm text-[#555555]">Industry Benchmark</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -320,13 +320,13 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                     const lastYearValue = data.comparisonData.lastYear[index]?.health || 0;
                     const change = ((month.health - lastYearValue) / lastYearValue) * 100;
                     return (
-                      <div key={month.month} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                      <div key={month.month} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded">
                         <span className="font-medium">{month.month}</span>
                         <div className="flex items-center gap-4">
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-[#555555]">
                             This year: <span className="font-semibold">{month.health}%</span>
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-[#555555]">
                             Last year: <span className="font-semibold">{lastYearValue}%</span>
                           </div>
                           <div className={`text-sm font-semibold ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -364,13 +364,13 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                           {alert.severity}
                         </Badge>
                         {alert.resolved && (
-                          <Badge className="bg-green-100 text-green-800">
+                          <Badge className="bg-[#F8FAF8] text-green-800">
                             Resolved
                           </Badge>
                         )}
                       </div>
                     </div>
-                    <div className="text-sm text-gray-600 flex items-center gap-4">
+                    <div className="text-sm text-[#555555] flex items-center gap-4">
                       <span>Field: {alert.field}</span>
                       <span>Date: {new Date(alert.date).toLocaleDateString()}</span>
                     </div>
@@ -393,16 +393,16 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(data.seasonalPatterns).map(([season, pattern]) => (
-              <div key={season} className="text-center p-4 bg-gray-50 rounded-lg">
+              <div key={season} className="text-center p-4 bg-[#FAFAF7] rounded-lg">
                 <h4 className="font-semibold capitalize mb-2">{season}</h4>
                 <div className="space-y-2">
                   <div>
                     <div className="text-lg font-bold text-green-600">{pattern.avgNdvi.toFixed(2)}</div>
-                    <p className="text-xs text-gray-600">Avg NDVI</p>
+                    <p className="text-xs text-[#555555]">Avg NDVI</p>
                   </div>
                   <div>
                     <div className="text-lg font-bold text-orange-600">{pattern.stressEvents}</div>
-                    <p className="text-xs text-gray-600">Stress Events</p>
+                    <p className="text-xs text-[#555555]">Stress Events</p>
                   </div>
                 </div>
               </div>

@@ -202,7 +202,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">Generating AI recommendations...</p>
+            <p className="text-[#555555]">Generating AI recommendations...</p>
           </div>
         </div>
       </div>
@@ -215,7 +215,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
           <div className="text-center">
             <AlertTriangle className="h-12 w-12 text-red-400 mx-auto mb-3" />
             <p className="text-red-600 font-medium">Error loading recommendations</p>
-            <p className="text-sm text-gray-500 mt-1">{error}</p>
+            <p className="text-sm text-[#555555] mt-1">{error}</p>
             <Button onClick={fetchRecommendations} className="mt-4" size="sm" variant="outline">
               <RefreshCw className="h-4 w-4 mr-2" />
               Retry
@@ -278,8 +278,8 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                       }}
                       className={`flex items-center gap-1 px-3 py-1 rounded-full border-2 text-sm font-medium transition-colors ${
                         isSelected 
-                          ? 'bg-green-100 text-green-800 border-green-200' 
-                          : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                          ? 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]' 
+                          : 'bg-[#FAFAF7] text-[#555555] border-[#E6E6E6] hover:bg-[#F5F5F5]'
                       }`}
                     >
                       <Icon className="h-3 w-3" />
@@ -311,8 +311,8 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
             <CardContent className="flex items-center justify-center h-32">
               <div className="text-center">
                 <Lightbulb className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-600">No recommendations available</p>
-                <p className="text-sm text-gray-500 mt-1">Try adjusting your settings and regenerate</p>
+                <p className="text-[#555555]">No recommendations available</p>
+                <p className="text-sm text-[#555555] mt-1">Try adjusting your settings and regenerate</p>
               </div>
             </CardContent>
           </Card>
@@ -340,20 +340,20 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                     {/* Impact Metrics */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <div className="text-sm text-gray-600">Expected Yield Impact</div>
+                        <div className="text-sm text-[#555555]">Expected Yield Impact</div>
                         <div className={`text-lg font-semibold ${getImpactColor(recommendation.impact.yield)}`}>
                           +{recommendation.impact.yield.toFixed(1)}%
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm text-gray-600">Cost Impact</div>
+                        <div className="text-sm text-[#555555]">Cost Impact</div>
                         <div className={`text-lg font-semibold ${recommendation.impact.cost > 0 ? 'text-red-600' : 'text-green-600'}`}>
                           ${Math.abs(recommendation.impact.cost).toFixed(0)}
                           {recommendation.impact.cost > 0 ? ' cost' : ' savings'}
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm text-gray-600">Confidence</div>
+                        <div className="text-sm text-[#555555]">Confidence</div>
                         <div className="flex items-center gap-2">
                           <Progress value={recommendation.confidence} className="flex-1" />
                           <span className="text-sm font-medium">{recommendation.confidence}%</span>
@@ -367,8 +367,8 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                     </div>
                     {/* Timeline */}
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-600">Timeline: {recommendation.timeline}</span>
+                      <Calendar className="h-4 w-4 text-[#555555]" />
+                      <span className="text-sm text-[#555555]">Timeline: {recommendation.timeline}</span>
                     </div>
                     {/* Actions */}
                     {recommendation.actions && recommendation.actions.length > 0 && (
@@ -376,14 +376,14 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                         <div className="text-sm font-medium mb-2">Recommended Actions</div>
                         <div className="space-y-2">
                           {(recommendation.actions || []).slice(0, 2).map((action, index) => (
-                            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                            <div key={index} className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded-lg">
                               <div>
                                 <div className="text-sm font-medium">{action.title}</div>
-                                <div className="text-xs text-gray-600">{action.description}</div>
+                                <div className="text-xs text-[#555555]">{action.description}</div>
                               </div>
                               <div className="text-right">
                                 <div className="text-sm font-medium">${action.cost}</div>
-                                <div className="text-xs text-gray-500">{action.timeframe}</div>
+                                <div className="text-xs text-[#555555]">{action.timeframe}</div>
                               </div>
                             </div>
                           ))}

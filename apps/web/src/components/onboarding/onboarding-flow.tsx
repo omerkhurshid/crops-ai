@@ -141,10 +141,10 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
     <div className="space-y-8">
       {/* Progress Overview */}
       <ModernCard variant="glow" className="overflow-hidden">
-        <ModernCardHeader className="bg-gradient-to-r from-sage-50/90 to-earth-50/90">
+        <ModernCardHeader className="bg-gradient-to-r from-sage-50/90 to-#F8FAF8/90">
           <div className="flex items-center justify-between">
             <div>
-              <ModernCardTitle className="text-2xl text-sage-800 mb-2">
+              <ModernCardTitle className="text-2xl text-[#1A1A1A] mb-2">
                 Welcome to Crops.AI!
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
@@ -152,15 +152,15 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
               </ModernCardDescription>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-sage-800">{completedCount}/{totalSteps}</div>
-              <div className="text-sm text-sage-600">Steps Complete</div>
+              <div className="text-3xl font-bold text-[#1A1A1A]">{completedCount}/{totalSteps}</div>
+              <div className="text-sm text-[#555555]">Steps Complete</div>
             </div>
           </div>
           {/* Progress Bar */}
           <div className="mt-6">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-sage-700">Setup Progress</span>
-              <span className="text-sm text-sage-600">{Math.round(progress)}% Complete</span>
+              <span className="text-sm font-medium text-[#555555]">Setup Progress</span>
+              <span className="text-sm text-[#555555]">{Math.round(progress)}% Complete</span>
             </div>
             <Progress value={progress} className="h-3" />
           </div>
@@ -179,9 +179,9 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
             <ModernCardHeader>
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-xl ${
-                  step.status === 'completed' ? 'bg-green-100 text-green-700' :
-                  step.status === 'in_progress' ? 'bg-sage-100 text-sage-700' :
-                  'bg-gray-100 text-gray-500'
+                  step.status === 'completed' ? 'bg-[#F8FAF8] text-green-700' :
+                  step.status === 'in_progress' ? 'bg-[#F8FAF8] text-[#555555]' :
+                  'bg-[#F5F5F5] text-[#555555]'
                 }`}>
                   {step.status === 'completed' ? <CheckCircle2 className="h-6 w-6" /> : step.icon}
                 </div>
@@ -213,14 +213,14 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
             {step.benefits && (
               <ModernCardContent className="pt-0">
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-sage-800 mb-2 flex items-center gap-2">
+                  <h4 className="text-sm font-medium text-[#1A1A1A] mb-2 flex items-center gap-2">
                     <Target className="h-4 w-4" />
                     What you&apos;ll unlock:
                   </h4>
                   <ul className="space-y-1">
                     {step.benefits.map((benefit, i) => (
-                      <li key={i} className="text-sm text-sage-600 flex items-center gap-2">
-                        <div className="w-1 h-1 bg-sage-400 rounded-full"></div>
+                      <li key={i} className="text-sm text-[#555555] flex items-center gap-2">
+                        <div className="w-1 h-1 bg-[#7A8F78] rounded-full"></div>
                         {benefit}
                       </li>
                     ))}
@@ -261,8 +261,8 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
               <HelpCircle className="h-6 w-6 text-blue-700" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sage-800 mb-2">Need Help Getting Started?</h3>
-              <p className="text-sage-600 text-sm mb-4 leading-relaxed">
+              <h3 className="font-semibold text-[#1A1A1A] mb-2">Need Help Getting Started?</h3>
+              <p className="text-[#555555] text-sm mb-4 leading-relaxed">
                 Our team is here to help you get the most from your farm. Check our help guides, 
                 watch tutorial videos, or contact support.
               </p>

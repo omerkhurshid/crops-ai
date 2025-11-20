@@ -100,7 +100,7 @@ export function NoDataState({
     return (
       <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
         <RefreshCw className="h-8 w-8 animate-spin text-sage-400 mb-4" />
-        <p className="text-sage-600">Loading data...</p>
+        <p className="text-[#555555]">Loading data...</p>
       </div>
     )
   }
@@ -134,13 +134,13 @@ export function NoDataState({
   }
   return (
     <div className={`flex flex-col items-center justify-center py-12 px-4 ${className}`}>
-      <div className="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mb-6">
-        <IconComponent className="h-10 w-10 text-sage-600" />
+      <div className="w-20 h-20 bg-[#F8FAF8] rounded-full flex items-center justify-center mb-6">
+        <IconComponent className="h-10 w-10 text-[#555555]" />
       </div>
-      <h3 className="text-xl font-semibold text-sage-800 mb-2 text-center">
+      <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2 text-center">
         {title || config.title}
       </h3>
-      <p className="text-sage-600 mb-6 text-center max-w-md">
+      <p className="text-[#555555] mb-6 text-center max-w-md">
         {description || config.description}
       </p>
       {action && (
@@ -226,7 +226,7 @@ export function DataPendingState({
         <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
       </div>
       <p className="text-blue-600 font-medium">{message}</p>
-      <p className="text-gray-500 text-sm mt-1">This may take a few moments</p>
+      <p className="text-[#555555] text-sm mt-1">This may take a few moments</p>
     </div>
   )
 }
@@ -237,10 +237,10 @@ export function ConnectionErrorState({ onRetry }: { onRetry?: () => void }) {
       <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
         <Wifi className="h-8 w-8 text-orange-600" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
         Connection Problem
       </h3>
-      <p className="text-gray-600 mb-4 text-center max-w-sm">
+      <p className="text-[#555555] mb-4 text-center max-w-sm">
         Unable to connect to our servers. Please check your internet connection.
       </p>
       {onRetry && (

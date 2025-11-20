@@ -167,14 +167,14 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                   <button
                     type="button"
                     onClick={() => setUseMetric(false)}
-                    className={`px-2 py-1 rounded ${!useMetric ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
+                    className={`px-2 py-1 rounded ${!useMetric ? 'bg-blue-100 text-blue-700' : 'text-[#555555]'}`}
                   >
                     Acres
                   </button>
                   <button
                     type="button"
                     onClick={() => setUseMetric(true)}
-                    className={`px-2 py-1 rounded ${useMetric ? 'bg-blue-100 text-blue-700' : 'text-gray-600'}`}
+                    className={`px-2 py-1 rounded ${useMetric ? 'bg-blue-100 text-blue-700' : 'text-[#555555]'}`}
                   >
                     Hectares
                   </button>
@@ -192,7 +192,7 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
                 required
                 disabled={loading}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[#555555] mt-1">
                 {formData.area && !isNaN(parseFloat(formData.area)) && (
                   useMetric 
                     ? `≈ ${(parseFloat(formData.area) * 2.47).toFixed(1)} acres`
@@ -258,12 +258,12 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
               </div>
             </div>
             {/* Quick Start Tips */}
-            <div className="p-4 bg-sage-50 border border-sage-200 rounded-lg">
+            <div className="p-4 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb className="h-4 w-4 text-sage-600" />
+                <Lightbulb className="h-4 w-4 text-[#555555]" />
                 <span className="font-medium text-sage-900">Quick Start Tips</span>
               </div>
-              <div className="space-y-2 text-sm text-sage-700">
+              <div className="space-y-2 text-sm text-[#555555]">
                 <div>• Field names can be simple: "North Field", "Field A", or "Back 40"</div>
                 <div>• Area estimates are fine - you can refine boundaries later with satellite mapping</div>
                 <div>• Soil type helps optimize fertilizer recommendations (optional for now)</div>

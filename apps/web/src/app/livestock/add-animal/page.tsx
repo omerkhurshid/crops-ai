@@ -73,8 +73,8 @@ export default function AddAnimalPage() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Livestock
           </Button>
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Add Animal</h1>
-          <p className="text-lg text-sage-600">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Add Animal</h1>
+          <p className="text-lg text-[#7A8F78]">
             Register a new animal to your herd
           </p>
         </div>

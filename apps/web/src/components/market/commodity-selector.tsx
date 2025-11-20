@@ -73,7 +73,7 @@ export function CommoditySelector({
       <CardContent className="space-y-6">
         {/* Core Commodities */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-[#555555] mb-3 flex items-center gap-2">
             <Star className="h-4 w-4 text-yellow-500" />
             Core Commodities (Always Updated)
           </h3>
@@ -83,8 +83,8 @@ export function CommoditySelector({
                 key={symbol}
                 className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                   selected.includes(symbol)
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-[#8FBF7F] bg-[#F8FAF8]'
+                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                 }`}
                 onClick={() => toggleCommodity(symbol)}
               >
@@ -93,7 +93,7 @@ export function CommoditySelector({
                     {commodityIcons[symbol] || <DollarSign className="h-6 w-6" />}
                   </div>
                   <div className="font-medium text-sm">{symbol}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-[#555555]">
                     {COMMODITY_TIERS[symbol].description}
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export function CommoditySelector({
         </div>
         {/* Secondary Commodities */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-[#555555] mb-3 flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-blue-500" />
             Additional Commodities (On-Demand Updates)
           </h3>
@@ -113,8 +113,8 @@ export function CommoditySelector({
                 key={symbol}
                 className={`p-3 rounded-lg border cursor-pointer transition-all ${
                   selected.includes(symbol)
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-[#8FBF7F] bg-[#F8FAF8]'
+                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                 } ${selected.length >= 6 && !selected.includes(symbol) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => selected.length < 6 || selected.includes(symbol) ? toggleCommodity(symbol) : null}
               >
@@ -131,7 +131,7 @@ export function CommoditySelector({
         {/* Show More */}
         {showAll && (
           <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+            <h3 className="text-sm font-semibold text-[#555555] mb-3">
               Specialty Commodities (Daily Updates)
             </h3>
             <div className="grid grid-cols-4 gap-2">
@@ -140,8 +140,8 @@ export function CommoditySelector({
                   key={symbol}
                   className={`p-2 rounded border text-xs cursor-pointer ${
                     selected.includes(symbol)
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200'
+                      ? 'border-[#8FBF7F] bg-[#F8FAF8]'
+                      : 'border-[#E6E6E6]'
                   }`}
                   onClick={() => toggleCommodity(symbol)}
                 >
@@ -160,7 +160,7 @@ export function CommoditySelector({
             {showAll ? 'Show Less' : 'Show Specialty Crops'}
           </Button>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-[#555555]">
               {selected.length}/6 selected
             </span>
             <Button 

@@ -71,10 +71,10 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
       <ModernCard className={className}>
         <ModernCardContent className="p-6">
           <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-sage-200 rounded w-1/3"></div>
+            <div className="h-4 bg-[#DDE4D8] rounded w-1/3"></div>
             <div className="space-y-3">
-              <div className="h-16 bg-sage-100 rounded"></div>
-              <div className="h-16 bg-sage-100 rounded"></div>
+              <div className="h-16 bg-[#F8FAF8] rounded"></div>
+              <div className="h-16 bg-[#F8FAF8] rounded"></div>
             </div>
           </div>
         </ModernCardContent>
@@ -125,8 +125,8 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
         {actions.length === 0 && (
           <div className="text-center py-8">
             <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-sage-800 mb-2">All Caught Up!</h3>
-            <p className="text-sage-600">No urgent actions needed right now. Check back tomorrow.</p>
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Caught Up!</h3>
+            <p className="text-[#555555]">No urgent actions needed right now. Check back tomorrow.</p>
           </div>
         )}
       </ModernCardContent>
@@ -139,7 +139,7 @@ function ActionCard({ action }: { action: FarmerAction }) {
   const UrgencyIcon = urgencyInfo.icon
   const CategoryIcon = categoryInfo.icon
   return (
-    <div className="bg-white border border-sage-200 rounded-lg p-4 hover:border-sage-300 transition-colors">
+    <div className="bg-white border border-[#DDE4D8] rounded-lg p-4 hover:border-[#DDE4D8] transition-colors">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <CategoryIcon className={`h-4 w-4 ${categoryInfo.color}`} />
@@ -164,9 +164,9 @@ function ActionCard({ action }: { action: FarmerAction }) {
       <h4 className="font-semibold text-sage-900 mb-2 text-base">
         {action.action}
       </h4>
-      <p className="text-sm text-sage-600 mb-3">{action.reason}</p>
+      <p className="text-sm text-[#555555] mb-3">{action.reason}</p>
       <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
-        <div className="flex items-center gap-1 text-sage-600">
+        <div className="flex items-center gap-1 text-[#555555]">
           <Clock className="h-3 w-3" />
           {action.timeRequired}
         </div>
@@ -188,15 +188,15 @@ function ActionCard({ action }: { action: FarmerAction }) {
           </div>
         )}
       </div>
-      <div className="bg-sage-50 p-3 rounded-lg mb-3">
-        <p className="text-sm font-medium text-sage-800">{action.impact}</p>
+      <div className="bg-[#F8FAF8] p-3 rounded-lg mb-3">
+        <p className="text-sm font-medium text-[#1A1A1A]">{action.impact}</p>
       </div>
       <div className="flex gap-2">
-        <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white flex-1">
+        <Button size="sm" className="bg-[#7A8F78] hover:bg-green-700 text-white flex-1">
           <CheckCircle2 className="h-3 w-3 mr-1" />
           Mark Done
         </Button>
-        <Button size="sm" variant="outline" className="border-sage-300">
+        <Button size="sm" variant="outline" className="border-[#DDE4D8]">
           <ArrowRight className="h-3 w-3" />
         </Button>
       </div>

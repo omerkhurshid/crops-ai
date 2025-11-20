@@ -15,7 +15,7 @@ export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorPro
           key={option.id}
           className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
             selectedType === option.id 
-              ? 'ring-2 ring-sage-500 bg-sage-50' 
+              ? 'ring-2 ring-sage-500 bg-[#F8FAF8]' 
               : 'hover:ring-1 hover:ring-gray-300'
           }`}
           onClick={() => onSelect(option.id)}
@@ -24,18 +24,18 @@ export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorPro
             <div className="text-center">
               <div className="text-4xl mb-3">{option.icon}</div>
               <div className="flex items-center justify-center mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-[#1A1A1A]">
                   {option.name}
                 </h3>
                 {selectedType === option.id && (
-                  <Check className="w-5 h-5 ml-2 text-sage-600" />
+                  <Check className="w-5 h-5 ml-2 text-[#555555]" />
                 )}
               </div>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[#555555] mb-4">
                 {option.description}
               </p>
               <div className="space-y-2">
-                <p className="text-xs font-medium text-gray-700 mb-2">Key Benefits:</p>
+                <p className="text-xs font-medium text-[#555555] mb-2">Key Benefits:</p>
                 <div className="flex flex-wrap gap-1 justify-center">
                   {option.benefits.slice(0, 3).map((benefit, index) => (
                     <Badge 

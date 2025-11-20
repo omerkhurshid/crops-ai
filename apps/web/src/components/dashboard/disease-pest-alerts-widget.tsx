@@ -66,12 +66,12 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
   }, [farmId])
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
-      case 'very_low': return 'text-green-600 bg-green-50 border-green-200'
-      case 'low': return 'text-green-600 bg-green-50 border-green-200'
+      case 'very_low': return 'text-green-600 bg-[#F8FAF8] border-[#DDE4D8]'
+      case 'low': return 'text-green-600 bg-[#F8FAF8] border-[#DDE4D8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200'
       case 'severe': return 'text-red-600 bg-red-50 border-red-200'
-      default: return 'text-gray-600 bg-gray-50 border-gray-200'
+      default: return 'text-[#555555] bg-[#FAFAF7] border-[#E6E6E6]'
     }
   }
   const getRiskIcon = (riskLevel: string) => {
@@ -86,10 +86,10 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
     return (
       <ModernCard variant="soft" className={cn("p-6", className)}>
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-6 bg-[#F5F5F5] rounded w-3/4"></div>
           <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-full"></div>
+            <div className="h-4 bg-[#F5F5F5] rounded w-5/6"></div>
           </div>
         </div>
       </ModernCard>
@@ -100,13 +100,13 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       <ModernCardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div>
-            <ModernCardTitle className="text-lg font-semibold text-sage-800 flex items-center gap-2">
+            <ModernCardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
               <div className="p-2 bg-red-50 rounded-lg">
                 <Bug className="h-5 w-5 text-red-600" />
               </div>
               Disease & Pest Alert
             </ModernCardTitle>
-            <p className="text-sage-600 mt-1">
+            <p className="text-[#555555] mt-1">
               AI-powered threat detection and risk assessment
             </p>
           </div>
@@ -127,35 +127,35 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {riskSummary && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-sage-800">
+              <div className="text-2xl font-bold text-[#1A1A1A]">
                 {riskSummary.highRiskFields.length}
               </div>
-              <div className="text-sm text-sage-600">High Risk Fields</div>
+              <div className="text-sm text-[#555555]">High Risk Fields</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-orange-600">
                 {riskSummary.immediateActions}
               </div>
-              <div className="text-sm text-sage-600">Immediate Actions</div>
+              <div className="text-sm text-[#555555]">Immediate Actions</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">
                 {riskSummary.monitoring}
               </div>
-              <div className="text-sm text-sage-600">Fields Monitored</div>
+              <div className="text-sm text-[#555555]">Fields Monitored</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">
                 {threats.length}
               </div>
-              <div className="text-sm text-sage-600">Active Threats</div>
+              <div className="text-sm text-[#555555]">Active Threats</div>
             </div>
           </div>
         )}
         {/* Top Threats */}
         {threats.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-medium text-sage-800 flex items-center gap-2">
+            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-orange-500" />
               Top Threats This Week
             </h4>
@@ -163,7 +163,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
               {threats.slice(0, showDetails ? threats.length : 3).map((threat, index) => (
                 <div 
                   key={index}
-                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#F5F5F5]"
                 >
                   <div className="flex items-center gap-3">
                     <div className={cn(
@@ -180,10 +180,10 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-sage-800">
+                      <div className="font-medium text-[#1A1A1A]">
                         {threat.name}
                       </div>
-                      <div className="text-sm text-sage-600">
+                      <div className="text-sm text-[#555555]">
                         {threat.affectedFields} field{threat.affectedFields !== 1 ? 's' : ''} affected
                       </div>
                     </div>
@@ -214,7 +214,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowDetails(!showDetails)}
-                className="w-full text-sage-600 hover:text-sage-800"
+                className="w-full text-[#555555] hover:text-[#1A1A1A]"
               >
                 {showDetails ? 'Show Less' : `Show ${threats.length - 3} More Threats`}
               </Button>
@@ -224,28 +224,28 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {/* Seasonal Outlook */}
         {seasonalOutlook && (
           <div className="space-y-3">
-            <h4 className="font-medium text-sage-800 flex items-center gap-2">
+            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
               <Calendar className="h-4 w-4 text-blue-500" />
               Seasonal Outlook
             </h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-start gap-2">
-                <div className="font-medium text-sage-700 min-w-[80px]">Next Week:</div>
-                <div className="text-sage-600">{seasonalOutlook.nextWeek}</div>
+                <div className="font-medium text-[#555555] min-w-[80px]">Next Week:</div>
+                <div className="text-[#555555]">{seasonalOutlook.nextWeek}</div>
               </div>
               <div className="flex items-start gap-2">
-                <div className="font-medium text-sage-700 min-w-[80px]">Next Month:</div>
-                <div className="text-sage-600">{seasonalOutlook.nextMonth}</div>
+                <div className="font-medium text-[#555555] min-w-[80px]">Next Month:</div>
+                <div className="text-[#555555]">{seasonalOutlook.nextMonth}</div>
               </div>
               <div className="flex items-start gap-2">
-                <div className="font-medium text-sage-700 min-w-[80px]">Next Season:</div>
-                <div className="text-sage-600">{seasonalOutlook.nextSeason}</div>
+                <div className="font-medium text-[#555555] min-w-[80px]">Next Season:</div>
+                <div className="text-[#555555]">{seasonalOutlook.nextSeason}</div>
               </div>
             </div>
           </div>
         )}
         {/* Action Button */}
-        <div className="pt-4 border-t border-gray-100">
+        <div className="pt-4 border-t border-[#F5F5F5]">
           <Button 
             variant="outline"
             className="w-full"
@@ -259,8 +259,8 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {threats.length === 0 && !loading && (
           <div className="text-center py-8">
             <Shield className="h-12 w-12 mx-auto mb-4 text-green-500" />
-            <h3 className="font-medium text-sage-800 mb-2">All Clear!</h3>
-            <p className="text-sage-600 text-sm">
+            <h3 className="font-medium text-[#1A1A1A] mb-2">All Clear!</h3>
+            <p className="text-[#555555] text-sm">
               No immediate disease or pest threats detected. Continue monitoring.
             </p>
           </div>

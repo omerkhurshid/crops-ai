@@ -49,7 +49,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
       <ModernCardContent className="p-0">
         {/* Map Container */}
         <div className={cn(
-          'relative bg-sage-50',
+          'relative bg-[#F8FAF8]',
           isFullscreen ? 'h-full' : 'h-[500px]'
         )}>
           {/* Realistic Satellite Map Background */}
@@ -59,7 +59,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-sage-400 mx-auto mb-4" />
-                  <p className="text-sage-600 font-medium">No Farms to Display</p>
+                  <p className="text-[#555555] font-medium">No Farms to Display</p>
                   <p className="text-sage-500 text-sm mt-2">
                     Add your first farm to see it on the map
                   </p>
@@ -87,7 +87,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                         {/* Water features */}
                         <div className="absolute bottom-4 left-4 w-20 h-12 bg-blue-200 rounded-lg opacity-70" />
                         {/* Forested areas */}
-                        <div className="absolute top-4 right-4 w-16 h-16 bg-green-600 rounded-full opacity-40" />
+                        <div className="absolute top-4 right-4 w-16 h-16 bg-[#7A8F78] rounded-full opacity-40" />
                         <div className="absolute bottom-8 right-8 w-12 h-12 bg-green-700 rounded-full opacity-40" />
                       </div>
                     </div>
@@ -116,7 +116,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                   )}
                 </div>
                 {/* Geographic indicators */}
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-sage-700 bg-white/90 px-3 py-1.5 rounded-lg shadow-sm border">
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-xs text-[#555555] bg-white/90 px-3 py-1.5 rounded-lg shadow-sm border">
                   {mapType === 'satellite' ? '🛰️' : '🗺️'} Regional Farm Overview - {mapType === 'satellite' ? 'Satellite' : 'Terrain'} View
                 </div>
               </>
@@ -149,7 +149,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                     <div className={cn(
                       'w-12 h-12 rounded-full border-4 border-white shadow-lg',
                       'flex items-center justify-center transition-all',
-                      healthStatus === 'excellent' && 'bg-green-500',
+                      healthStatus === 'excellent' && 'bg-[#8FBF7F]',
                       healthStatus === 'good' && 'bg-yellow-400',
                       healthStatus === 'warning' && 'bg-orange-500',
                       healthStatus === 'critical' && 'bg-red-500',
@@ -166,10 +166,10 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                       'opacity-0 group-hover:opacity-100 transition-opacity',
                       'pointer-events-none'
                     )}>
-                      <div className="text-sm font-semibold text-sage-800">
+                      <div className="text-sm font-semibold text-[#1A1A1A]">
                         {farm.name}
                       </div>
-                      <div className="text-xs text-sage-600 mt-1">
+                      <div className="text-xs text-[#555555] mt-1">
                         {farm.totalArea.toFixed(1)} ha • {farm.fieldsCount} fields
                       </div>
                       <div className="flex items-center gap-3 mt-2">
@@ -192,7 +192,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                     </div>
                     {/* Primary Farm Badge */}
                     {farm.isPrimary && (
-                      <div className="absolute -top-1 -right-1 bg-sage-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                      <div className="absolute -top-1 -right-1 bg-[#7A8F78] text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                         PRIMARY
                       </div>
                     )}
@@ -208,16 +208,16 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               {isFullscreen ? (
-                <Minimize2 className="h-4 w-4 text-sage-700" />
+                <Minimize2 className="h-4 w-4 text-[#555555]" />
               ) : (
-                <Maximize2 className="h-4 w-4 text-sage-700" />
+                <Maximize2 className="h-4 w-4 text-[#555555]" />
               )}
             </button>
             <button
               onClick={() => setMapType(mapType === 'satellite' ? 'terrain' : 'satellite')}
               className={cn(
                 "p-2 rounded-lg shadow-md hover:shadow-lg transition-all",
-                mapType === 'satellite' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                mapType === 'satellite' ? 'bg-[#F8FAF8] text-green-700' : 'bg-amber-100 text-amber-700'
               )}
               title={`Switch to ${mapType === 'satellite' ? 'terrain' : 'satellite'} view`}
             >
@@ -227,7 +227,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               onClick={() => setShowNavigation(!showNavigation)}
               className={cn(
                 "p-2 rounded-lg shadow-md hover:shadow-lg transition-all",
-                showNavigation ? 'bg-blue-100 text-blue-700' : 'bg-white text-sage-700'
+                showNavigation ? 'bg-blue-100 text-blue-700' : 'bg-white text-[#555555]'
               )}
               title="Toggle navigation info"
             >
@@ -236,7 +236,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           </div>
           {/* Legend */}
           <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-lg p-3">
-            <h4 className="text-xs font-semibold text-sage-800 mb-2">Health Status</h4>
+            <h4 className="text-xs font-semibold text-[#1A1A1A] mb-2">Health Status</h4>
             <div className="space-y-1">
               {['excellent', 'good', 'warning', 'critical'].map((status) => (
                 <div key={status} className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                     showIcon={false} 
                     showText={false} 
                   />
-                  <span className="text-xs text-sage-600 capitalize">{status}</span>
+                  <span className="text-xs text-[#555555] capitalize">{status}</span>
                 </div>
               ))}
             </div>
@@ -254,11 +254,11 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           {/* Navigation Info Panel */}
           {showNavigation && (
             <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur rounded-lg p-3 max-w-xs">
-              <h4 className="text-xs font-semibold text-sage-800 mb-2 flex items-center gap-1">
+              <h4 className="text-xs font-semibold text-[#1A1A1A] mb-2 flex items-center gap-1">
                 <Navigation className="h-3 w-3" />
                 Navigation Info
               </h4>
-              <div className="space-y-2 text-xs text-sage-600">
+              <div className="space-y-2 text-xs text-[#555555]">
                 <div className="flex justify-between">
                   <span>View:</span>
                   <span className="font-medium capitalize">{mapType}</span>
@@ -291,13 +291,13 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                 if (!farm) return null
                 return (
                   <>
-                    <h3 className="font-semibold text-sage-800 mb-1">{farm.name}</h3>
-                    <div className="text-sm text-sage-600 space-y-1">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-1">{farm.name}</h3>
+                    <div className="text-sm text-[#555555] space-y-1">
                       <div>Area: {farm.totalArea.toFixed(1)} ha</div>
                       <div>Fields: {farm.fieldsCount}</div>
                       <div>Stressed areas: {farm.stressedAreas}%</div>
                     </div>
-                    <button className="mt-3 flex items-center gap-1 text-sm font-medium text-sage-700 hover:text-sage-800">
+                    <button className="mt-3 flex items-center gap-1 text-sm font-medium text-[#555555] hover:text-[#1A1A1A]">
                       <Eye className="h-4 w-4" />
                       View Details
                     </button>
@@ -327,28 +327,28 @@ export function FarmKPICard({
       <ModernCardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-sage-800">
+            <h3 className="text-lg font-semibold text-[#1A1A1A]">
               {farm.name}
             </h3>
-            <p className="text-sm text-sage-600 mt-1">
+            <p className="text-sm text-[#555555] mt-1">
               {farm.totalArea.toFixed(1)} ha • {farm.fieldsCount} fields
             </p>
           </div>
           {farm.isPrimary && (
-            <Badge className="bg-sage-100 text-sage-700">Primary</Badge>
+            <Badge className="bg-[#F8FAF8] text-[#555555]">Primary</Badge>
           )}
         </div>
         {/* KPIs Grid */}
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div>
-            <div className="text-xs text-sage-600 mb-1">Health</div>
+            <div className="text-xs text-[#555555] mb-1">Health</div>
             <div className="flex items-center gap-1">
               <TrafficLightStatus status={healthStatus} size="sm" showIcon={false} />
-              <span className="font-semibold text-sage-800">{farm.health}%</span>
+              <span className="font-semibold text-[#1A1A1A]">{farm.health}%</span>
             </div>
           </div>
           <div>
-            <div className="text-xs text-sage-600 mb-1">7-day trend</div>
+            <div className="text-xs text-[#555555] mb-1">7-day trend</div>
             <div className={cn(
               'flex items-center gap-0.5 font-semibold',
               farm.healthTrend > 0 ? 'text-green-600' : 'text-red-600'
@@ -362,7 +362,7 @@ export function FarmKPICard({
             </div>
           </div>
           <div>
-            <div className="text-xs text-sage-600 mb-1">Stress</div>
+            <div className="text-xs text-[#555555] mb-1">Stress</div>
             <div className="font-semibold text-orange-600">
               {farm.stressedAreas}%
             </div>
@@ -372,11 +372,11 @@ export function FarmKPICard({
         <div className="flex gap-2">
           <button 
             onClick={onViewDetails}
-            className="flex-1 px-3 py-1.5 bg-sage-700 hover:bg-sage-800 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex-1 px-3 py-1.5 bg-[#5E6F5A] hover:bg-[#7A8F78] text-white text-sm font-medium rounded-lg transition-colors"
           >
             View Details
           </button>
-          <button className="px-3 py-1.5 bg-sage-100 hover:bg-sage-200 text-sage-700 text-sm font-medium rounded-lg transition-colors">
+          <button className="px-3 py-1.5 bg-[#F8FAF8] hover:bg-[#DDE4D8] text-[#555555] text-sm font-medium rounded-lg transition-colors">
             Health Report
           </button>
         </div>

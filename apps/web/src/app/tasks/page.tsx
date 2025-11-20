@@ -105,17 +105,17 @@ export default function TasksPage() {
         <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-6">
             <div className="space-y-2">
-              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-8 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-2/3"></div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-[#DDE4D8] p-6">
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="h-32 bg-gray-200 rounded"></div>
-                  <div className="h-32 bg-gray-200 rounded"></div>
-                  <div className="h-32 bg-gray-200 rounded"></div>
+                  <div className="h-32 bg-[#F5F5F5] rounded"></div>
+                  <div className="h-32 bg-[#F5F5F5] rounded"></div>
+                  <div className="h-32 bg-[#F5F5F5] rounded"></div>
                 </div>
-                <div className="h-64 bg-gray-200 rounded"></div>
+                <div className="h-64 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
           </div>
@@ -149,26 +149,26 @@ export default function TasksPage() {
       <DashboardLayout>
         <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-light text-sage-800 mb-2">Farm Tasks</h1>
-            <p className="text-lg text-sage-600 mb-6">
+            <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Farm Tasks</h1>
+            <p className="text-lg text-[#7A8F78] mb-6">
               Organize and track your daily farm operations
             </p>
           </div>
           <ModernCard variant="floating">
             <ModernCardContent className="p-8 text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-sage-100 to-sage-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckSquare className="h-10 w-10 text-sage-600" />
+              <div className="w-20 h-20 bg-gradient-to-br from-#F8FAF8 to-#DDE4D8 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckSquare className="h-10 w-10 text-[#7A8F78]" />
               </div>
-              <h3 className="text-xl font-semibold text-sage-800 mb-4">
+              <h3 className="text-xl font-semibold text-[#7A8F78] mb-4">
                 No Farms Found
               </h3>
-              <p className="text-sage-600 mb-6">
+              <p className="text-[#7A8F78] mb-6">
                 You need to create a farm before you can start managing tasks. 
                 Tasks help you organize and track your daily farm operations.
               </p>
               <button
                 onClick={() => router.push('/farms/create-unified')}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-sage-600 hover:bg-sage-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sage-500"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#7A8F78] hover:bg-[#5E6F5A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-#7A8F78"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 Create Your First Farm
@@ -191,8 +191,8 @@ export default function TasksPage() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Farm Tasks</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Farm Tasks</h1>
+          <p className="text-lg text-[#7A8F78] mb-6">
             Organize and track your daily farm operations
           </p>
         </div>

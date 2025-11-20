@@ -62,7 +62,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-[#E6E6E6]">
         <nav className="-mb-px flex space-x-8">
           {tabs.map((tab) => {
             const Icon = tab.icon
@@ -73,7 +73,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-[#555555] hover:text-[#555555] hover:border-[#E6E6E6]'
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -94,56 +94,56 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             <ModernCardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Tag Number</label>
+                  <label className="text-sm font-medium text-[#555555]">Tag Number</label>
                   <p className="text-lg font-semibold">{animal.tagNumber}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Name</label>
+                  <label className="text-sm font-medium text-[#555555]">Name</label>
                   <p className="text-lg font-semibold">{animal.name || 'N/A'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Species</label>
+                  <label className="text-sm font-medium text-[#555555]">Species</label>
                   <p className="text-lg font-semibold capitalize">{animal.species}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Breed</label>
+                  <label className="text-sm font-medium text-[#555555]">Breed</label>
                   <p className="text-lg font-semibold">{animal.breed || 'N/A'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Gender</label>
+                  <label className="text-sm font-medium text-[#555555]">Gender</label>
                   <p className="text-lg font-semibold capitalize">{animal.gender}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Age</label>
+                  <label className="text-sm font-medium text-[#555555]">Age</label>
                   <p className="text-lg font-semibold">{calculateAge(animal.birthDate)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Status</label>
+                  <label className="text-sm font-medium text-[#555555]">Status</label>
                   <Badge variant={animal.status === 'active' ? 'default' : 'secondary'} className="capitalize">
                     {animal.status}
                   </Badge>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Farm</label>
+                  <label className="text-sm font-medium text-[#555555]">Farm</label>
                   <p className="text-lg font-semibold">{animal.farm?.name}</p>
                 </div>
               </div>
               {animal.color && (
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Color</label>
+                  <label className="text-sm font-medium text-[#555555]">Color</label>
                   <p className="text-lg font-semibold">{animal.color}</p>
                 </div>
               )}
               {animal.markings && (
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Markings</label>
+                  <label className="text-sm font-medium text-[#555555]">Markings</label>
                   <p className="text-lg font-semibold">{animal.markings}</p>
                 </div>
               )}
               {animal.notes && (
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Notes</label>
-                  <p className="text-gray-700">{animal.notes}</p>
+                  <label className="text-sm font-medium text-[#555555]">Notes</label>
+                  <p className="text-[#555555]">{animal.notes}</p>
                 </div>
               )}
             </ModernCardContent>
@@ -156,10 +156,10 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             <ModernCardContent className="space-y-4">
               {(animal.mother || animal.father) && (
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Parents</h4>
+                  <h4 className="font-medium text-[#1A1A1A] mb-2">Parents</h4>
                   <div className="space-y-2">
                     {animal.mother && (
-                      <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <div className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded">
                         <span className="text-sm">
                           <strong>Mother:</strong> #{animal.mother.tagNumber} {animal.mother.name && `(${animal.mother.name})`}
                         </span>
@@ -169,7 +169,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                       </div>
                     )}
                     {animal.father && (
-                      <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <div className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded">
                         <span className="text-sm">
                           <strong>Father:</strong> #{animal.father.tagNumber} {animal.father.name && `(${animal.father.name})`}
                         </span>
@@ -183,14 +183,14 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               )}
               {((animal.motherOffspring && animal.motherOffspring.length > 0) || (animal.fatherOffspring && animal.fatherOffspring.length > 0)) && (
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Offspring ({(animal.motherOffspring?.length || 0) + (animal.fatherOffspring?.length || 0)})</h4>
+                  <h4 className="font-medium text-[#1A1A1A] mb-2">Offspring ({(animal.motherOffspring?.length || 0) + (animal.fatherOffspring?.length || 0)})</h4>
                   <div className="space-y-2">
                     {[...(animal.motherOffspring || []), ...(animal.fatherOffspring || [])].map((offspring: any) => (
-                      <div key={offspring.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                      <div key={offspring.id} className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded">
                         <span className="text-sm">
                           #{offspring.tagNumber} {offspring.name && `(${offspring.name})`}
                           {offspring.birthDate && (
-                            <span className="text-gray-500 ml-2">
+                            <span className="text-[#555555] ml-2">
                               Born {new Date(offspring.birthDate).toLocaleDateString()}
                             </span>
                           )}
@@ -204,7 +204,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 </div>
               )}
               {!animal.mother && !animal.father && (!animal.motherOffspring || animal.motherOffspring.length === 0) && (!animal.fatherOffspring || animal.fatherOffspring.length === 0) && (
-                <p className="text-gray-500 text-center py-4">No family records available</p>
+                <p className="text-[#555555] text-center py-4">No family records available</p>
               )}
             </ModernCardContent>
           </ModernCard>
@@ -226,7 +226,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.healthRecords && animal.healthRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.healthRecords.map((record: any) => (
-                  <div key={record.id} className="border border-gray-200 rounded-lg p-4">
+                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Badge 
@@ -236,7 +236,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                         >
                           {record.recordType}
                         </Badge>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-[#555555]">
                           {new Date(record.recordDate).toLocaleDateString()}
                         </span>
                       </div>
@@ -250,13 +250,13 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                       </div>
                     </div>
                     {record.description && (
-                      <p className="text-gray-700 mb-2">{record.description}</p>
+                      <p className="text-[#555555] mb-2">{record.description}</p>
                     )}
                     {record.veterinarian && (
-                      <p className="text-sm text-gray-600">Veterinarian: {record.veterinarian}</p>
+                      <p className="text-sm text-[#555555]">Veterinarian: {record.veterinarian}</p>
                     )}
                     {record.cost && (
-                      <p className="text-sm text-gray-600">Cost: ${record.cost}</p>
+                      <p className="text-sm text-[#555555]">Cost: ${record.cost}</p>
                     )}
                   </div>
                 ))}
@@ -264,7 +264,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             ) : (
               <div className="text-center py-8">
                 <Heart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No health records yet</p>
+                <p className="text-[#555555] mb-4">No health records yet</p>
                 <Button>Add First Health Record</Button>
               </div>
             )}
@@ -293,25 +293,25 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                       {animal.weightRecords[0]?.weight || 'N/A'} lbs
                     </p>
                   </div>
-                  <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
                     <p className="text-sm font-medium text-green-800">Birth Weight</p>
                     <p className="text-2xl font-bold text-green-900">
                       {animal.birthWeight || 'N/A'} lbs
                     </p>
                   </div>
                   <div className={`p-4 rounded-lg ${
-                    weightTrend.trend === 'up' ? 'bg-green-50' : 
-                    weightTrend.trend === 'down' ? 'bg-red-50' : 'bg-gray-50'
+                    weightTrend.trend === 'up' ? 'bg-[#F8FAF8]' : 
+                    weightTrend.trend === 'down' ? 'bg-red-50' : 'bg-[#FAFAF7]'
                   }`}>
                     <p className={`text-sm font-medium ${
                       weightTrend.trend === 'up' ? 'text-green-800' : 
-                      weightTrend.trend === 'down' ? 'text-red-800' : 'text-gray-800'
+                      weightTrend.trend === 'down' ? 'text-red-800' : 'text-[#1A1A1A]'
                     }`}>
                       Recent Change
                     </p>
                     <p className={`text-2xl font-bold ${
                       weightTrend.trend === 'up' ? 'text-green-900' : 
-                      weightTrend.trend === 'down' ? 'text-red-900' : 'text-gray-900'
+                      weightTrend.trend === 'down' ? 'text-red-900' : 'text-[#1A1A1A]'
                     }`}>
                       {weightTrend.change >= 0 ? '+' : ''}{weightTrend.change.toFixed(1)} lbs
                     </p>
@@ -319,10 +319,10 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 </div>
                 <div className="space-y-3">
                   {animal.weightRecords.map((record: any) => (
-                    <div key={record.id} className="flex items-center justify-between p-3 border border-gray-200 rounded">
+                    <div key={record.id} className="flex items-center justify-between p-3 border border-[#E6E6E6] rounded">
                       <div>
                         <p className="font-medium">{record.weight} lbs</p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[#555555]">
                           {new Date(record.weighDate).toLocaleDateString()}
                         </p>
                       </div>
@@ -341,7 +341,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             ) : (
               <div className="text-center py-8">
                 <Weight className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No weight records yet</p>
+                <p className="text-[#555555] mb-4">No weight records yet</p>
                 <Button>Record First Weight</Button>
               </div>
             )}
@@ -364,11 +364,11 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.breedingRecords && animal.breedingRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.breedingRecords.map((record: any) => (
-                  <div key={record.id} className="border border-gray-200 rounded-lg p-4">
+                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Badge className="capitalize">{record.breedingType}</Badge>
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-[#555555]">
                           {new Date(record.breedingDate).toLocaleDateString()}
                         </span>
                       </div>
@@ -382,17 +382,17 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                       </div>
                     </div>
                     {record.mateId && (
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-[#555555] mb-1">
                         Mate: {record.mate?.tagNumber} {record.mate?.name && `(${record.mate.name})`}
                       </p>
                     )}
                     {record.expectedDueDate && (
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-[#555555] mb-1">
                         Expected Due: {new Date(record.expectedDueDate).toLocaleDateString()}
                       </p>
                     )}
                     {record.notes && (
-                      <p className="text-gray-700">{record.notes}</p>
+                      <p className="text-[#555555]">{record.notes}</p>
                     )}
                   </div>
                 ))}
@@ -400,7 +400,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             ) : (
               <div className="text-center py-8">
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No breeding records yet</p>
+                <p className="text-[#555555] mb-4">No breeding records yet</p>
                 <Button>Add First Breeding Record</Button>
               </div>
             )}
@@ -423,23 +423,23 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.feedRecords && animal.feedRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.feedRecords.map((record: any) => (
-                  <div key={record.id} className="border border-gray-200 rounded-lg p-4">
+                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div>
                         <p className="font-medium">{record.feedType}</p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[#555555]">
                           {new Date(record.feedDate).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">{record.quantity} lbs</p>
                         {record.totalCost && (
-                          <p className="text-sm text-gray-600">${record.totalCost}</p>
+                          <p className="text-sm text-[#555555]">${record.totalCost}</p>
                         )}
                       </div>
                     </div>
                     {record.notes && (
-                      <p className="text-sm text-gray-700">{record.notes}</p>
+                      <p className="text-sm text-[#555555]">{record.notes}</p>
                     )}
                   </div>
                 ))}
@@ -447,7 +447,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             ) : (
               <div className="text-center py-8">
                 <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 mb-4">No feed records yet</p>
+                <p className="text-[#555555] mb-4">No feed records yet</p>
                 <Button>Record First Feeding</Button>
               </div>
             )}
@@ -465,41 +465,41 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           <ModernCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Purchase Information</h4>
+                <h4 className="font-medium text-[#1A1A1A]">Purchase Information</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Purchase Price:</span>
+                    <span className="text-[#555555]">Purchase Price:</span>
                     <span className="font-medium">${animal.purchasePrice || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Purchase Date:</span>
+                    <span className="text-[#555555]">Purchase Date:</span>
                     <span className="font-medium">
                       {animal.purchaseDate ? new Date(animal.purchaseDate).toLocaleDateString() : 'N/A'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Current Value:</span>
+                    <span className="text-[#555555]">Current Value:</span>
                     <span className="font-medium">${animal.currentValue || 'N/A'}</span>
                   </div>
                 </div>
               </div>
               <div className="space-y-4">
-                <h4 className="font-medium text-gray-900">Cost Summary</h4>
+                <h4 className="font-medium text-[#1A1A1A]">Cost Summary</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Health Costs:</span>
+                    <span className="text-[#555555]">Total Health Costs:</span>
                     <span className="font-medium">
                       ${animal.healthRecords?.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) || 0}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Feed Costs:</span>
+                    <span className="text-[#555555]">Total Feed Costs:</span>
                     <span className="font-medium">
                       ${animal.feedRecords?.reduce((sum: number, record: any) => sum + (record.totalCost || 0), 0) || 0}
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t">
-                    <span className="font-medium text-gray-900">Total Investment:</span>
+                    <span className="font-medium text-[#1A1A1A]">Total Investment:</span>
                     <span className="font-bold">
                       ${(animal.purchasePrice || 0) + 
                         (animal.healthRecords?.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) || 0) +

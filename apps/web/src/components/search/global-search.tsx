@@ -142,30 +142,30 @@ export function GlobalSearch({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           data-global-search
-          className="w-full pl-10 pr-20 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm transition-all"
+          className="w-full pl-10 pr-20 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm transition-all"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
           {query && (
             <button
               onClick={clearSearch}
-              className="p-1 hover:bg-sage-100 rounded-full transition-colors"
+              className="p-1 hover:bg-[#F8FAF8] rounded-full transition-colors"
             >
               <X className="h-4 w-4 text-sage-400" />
             </button>
           )}
-          <div className="text-xs text-sage-400 border border-sage-200 rounded px-1.5 py-0.5 font-mono">
+          <div className="text-xs text-sage-400 border border-[#DDE4D8] rounded px-1.5 py-0.5 font-mono">
             ⌘K
           </div>
         </div>
       </div>
       {/* Search Results Dropdown */}
       {isOpen && (
-        <ModernCard className="absolute top-full mt-2 w-full z-50 shadow-xl border-sage-200">
+        <ModernCard className="absolute top-full mt-2 w-full z-50 shadow-xl border-[#DDE4D8]">
           <ModernCardContent className="p-0">
             <div className="max-h-96 overflow-y-auto">
               {/* Search Filters */}
               {showFilters && (
-                <div className="p-4 border-b border-sage-200">
+                <div className="p-4 border-b border-[#DDE4D8]">
                   <div className="flex gap-2 flex-wrap">
                     {searchFilters.map(filter => (
                       <button
@@ -173,8 +173,8 @@ export function GlobalSearch({
                         onClick={() => setSelectedFilter(filter.id)}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                           selectedFilter === filter.id 
-                            ? 'bg-sage-100 text-sage-900 border border-sage-300' 
-                            : 'text-sage-600 hover:bg-sage-50'
+                            ? 'bg-[#F8FAF8] text-sage-900 border border-[#DDE4D8]' 
+                            : 'text-[#555555] hover:bg-[#F8FAF8]'
                         }`}
                       >
                         {filter.icon}
@@ -192,16 +192,16 @@ export function GlobalSearch({
                       <button
                         key={result.id}
                         onClick={() => handleResultSelect(result)}
-                        className="w-full text-left p-3 rounded-lg hover:bg-sage-50 transition-colors flex items-start gap-3"
+                        className="w-full text-left p-3 rounded-lg hover:bg-[#F8FAF8] transition-colors flex items-start gap-3"
                       >
-                        <div className="mt-0.5 text-sage-600">
+                        <div className="mt-0.5 text-[#555555]">
                           {result.icon}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-sage-900 truncate">
                             {result.title}
                           </div>
-                          <div className="text-sm text-sage-600 truncate">
+                          <div className="text-sm text-[#555555] truncate">
                             {result.description}
                           </div>
                           {result.metadata && (
@@ -227,7 +227,7 @@ export function GlobalSearch({
                 ) : query.length >= 2 ? (
                   <div className="text-center py-8">
                     <Search className="h-8 w-8 text-sage-400 mx-auto mb-3" />
-                    <p className="text-sage-600 mb-2">No results found</p>
+                    <p className="text-[#555555] mb-2">No results found</p>
                     <p className="text-sm text-sage-500">
                       Try adjusting your search terms or filters
                     </p>
@@ -237,13 +237,13 @@ export function GlobalSearch({
                     {/* Recent Searches */}
                     {recentSearches.length > 0 && (
                       <div className="mb-6">
-                        <div className="text-sm text-sage-600 mb-3 px-3">Recent searches</div>
+                        <div className="text-sm text-[#555555] mb-3 px-3">Recent searches</div>
                         <div className="space-y-1">
                           {recentSearches.map((search, index) => (
                             <button
                               key={index}
                               onClick={() => setQuery(search)}
-                              className="w-full text-left p-2 rounded-lg hover:bg-sage-50 transition-colors flex items-center gap-3 text-sm text-sage-700"
+                              className="w-full text-left p-2 rounded-lg hover:bg-[#F8FAF8] transition-colors flex items-center gap-3 text-sm text-[#555555]"
                             >
                               <Clock className="h-4 w-4 text-sage-400" />
                               {search}
@@ -257,22 +257,22 @@ export function GlobalSearch({
               </div>
               {/* Quick Actions */}
               {query.length < 2 && (
-                <div className="border-t border-sage-200 p-4">
-                  <div className="text-sm text-sage-600 mb-3">Quick actions</div>
+                <div className="border-t border-[#DDE4D8] p-4">
+                  <div className="text-sm text-[#555555] mb-3">Quick actions</div>
                   <div className="grid grid-cols-2 gap-2">
-                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-sage-50 transition-colors text-sm text-sage-700">
+                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm text-[#555555]">
                       <Plus className="h-4 w-4" />
                       Add Farm
                     </button>
-                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-sage-50 transition-colors text-sm text-sage-700">
+                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm text-[#555555]">
                       <BarChart3 className="h-4 w-4" />
                       Analytics
                     </button>
-                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-sage-50 transition-colors text-sm text-sage-700">
+                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm text-[#555555]">
                       <Settings className="h-4 w-4" />
                       Settings
                     </button>
-                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-sage-50 transition-colors text-sm text-sage-700">
+                    <button className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm text-[#555555]">
                       <FileText className="h-4 w-4" />
                       Help
                     </button>

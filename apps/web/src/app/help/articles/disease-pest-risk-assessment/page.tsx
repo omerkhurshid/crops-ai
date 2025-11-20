@@ -14,13 +14,13 @@ export default function DiseasePestRiskAssessmentPage() {
         {/* Article Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Bug className="h-6 w-6 text-sage-700" />
-            <span className="text-sage-600">Disease & Pest Management</span>
+            <Bug className="h-6 w-6 text-[#5E6F5A]" />
+            <span className="text-[#7A8F78]">Disease & Pest Management</span>
           </div>
-          <h1 className="text-3xl font-bold text-sage-800 mb-4">
+          <h1 className="text-3xl font-bold text-[#7A8F78] mb-4">
             Disease & Pest Risk Assessment Logic
           </h1>
-          <div className="flex items-center gap-4 text-sm text-sage-600">
+          <div className="flex items-center gap-4 text-sm text-[#7A8F78]">
             <Badge variant="outline">14 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
@@ -29,7 +29,7 @@ export default function DiseasePestRiskAssessmentPage() {
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
-            <p className="text-lg text-sage-700 leading-relaxed mb-4">
+            <p className="text-lg text-[#5E6F5A] leading-relaxed mb-4">
               Our AI continuously monitors weather conditions, crop growth stages, and historical patterns to predict 
               disease and pest pressure before problems become visible. This gives you time to take preventive action 
               or prepare targeted treatments.
@@ -53,16 +53,16 @@ export default function DiseasePestRiskAssessmentPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Every 6 hours, our AI analyzes multiple factors to calculate disease and pest risk for each field:
               </p>
               <div className="space-y-4">
-                <div className="bg-sage-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-sage-800 mb-3">1. Weather Pattern Analysis</h4>
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">1. Weather Pattern Analysis</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <h5 className="font-medium text-sage-700 mb-2">Current Conditions</h5>
-                      <ul className="text-sm text-sage-600 space-y-1">
+                      <h5 className="font-medium text-[#5E6F5A] mb-2">Current Conditions</h5>
+                      <ul className="text-sm text-[#7A8F78] space-y-1">
                         <li>• Temperature and humidity levels</li>
                         <li>• Rainfall frequency and amount</li>
                         <li>• Wind patterns and air circulation</li>
@@ -70,8 +70,8 @@ export default function DiseasePestRiskAssessmentPage() {
                       </ul>
                     </div>
                     <div>
-                      <h5 className="font-medium text-sage-700 mb-2">7-Day Forecast</h5>
-                      <ul className="text-sm text-sage-600 space-y-1">
+                      <h5 className="font-medium text-[#5E6F5A] mb-2">7-Day Forecast</h5>
+                      <ul className="text-sm text-[#7A8F78] space-y-1">
                         <li>• Optimal growth conditions for pathogens</li>
                         <li>• Extended wet periods favoring disease</li>
                         <li>• Temperature stress promoting pest activity</li>
@@ -92,12 +92,12 @@ export default function DiseasePestRiskAssessmentPage() {
                     <li>• <strong>Grain fill:</strong> Risk of late-season diseases, armyworms</li>
                   </ul>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-green-800 mb-3">3. Historical Pattern Matching</h4>
-                  <p className="text-green-700 mb-2">
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">3. Historical Pattern Matching</h4>
+                  <p className="text-[#7A8F78] mb-2">
                     Our database contains outbreak patterns for your region:
                   </p>
-                  <ul className="text-sm text-green-600 space-y-1">
+                  <ul className="text-sm text-[#7A8F78] space-y-1">
                     <li>• Typical timing of pest emergence in your area</li>
                     <li>• Weather conditions that preceded past outbreaks</li>
                     <li>• Regional disease pressure reports from extension services</li>
@@ -130,7 +130,7 @@ export default function DiseasePestRiskAssessmentPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Each potential threat is scored from 0-100 based on multiple risk factors:
               </p>
               <div className="space-y-4">
@@ -139,7 +139,7 @@ export default function DiseasePestRiskAssessmentPage() {
                     <AlertTriangle className="h-5 w-5 text-red-600" />
                     <Badge className="bg-red-100 text-red-800">High Risk (70-100)</Badge>
                   </div>
-                  <p className="text-sage-700 text-sm mb-2">
+                  <p className="text-[#5E6F5A] text-sm mb-2">
                     <strong>Action Required:</strong> Conditions are ideal for disease/pest development. 
                     Preventive treatments recommended within 24-48 hours.
                   </p>
@@ -152,7 +152,7 @@ export default function DiseasePestRiskAssessmentPage() {
                     <Clock className="h-5 w-5 text-yellow-600" />
                     <Badge className="bg-yellow-100 text-yellow-800">Moderate Risk (40-69)</Badge>
                   </div>
-                  <p className="text-sage-700 text-sm mb-2">
+                  <p className="text-[#5E6F5A] text-sm mb-2">
                     <strong>Monitor Closely:</strong> Conditions are developing for potential problems. 
                     Increase scouting frequency and prepare for treatment if needed.
                   </p>
@@ -160,16 +160,16 @@ export default function DiseasePestRiskAssessmentPage() {
                     <p><strong>Example:</strong> "Aphid pressure: 55/100. Temperature rising, beneficial insects present but declining."</p>
                   </div>
                 </div>
-                <div className="border-l-4 border-green-500 pl-4">
+                <div className="border-l-4 border-[#8FBF7F] pl-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <Badge className="bg-green-100 text-green-800">Low Risk (0-39)</Badge>
+                    <CheckCircle className="h-5 w-5 text-[#7A8F78]" />
+                    <Badge className="bg-[#F8FAF8] text-[#7A8F78]">Low Risk (0-39)</Badge>
                   </div>
-                  <p className="text-sage-700 text-sm mb-2">
+                  <p className="text-[#5E6F5A] text-sm mb-2">
                     <strong>Normal Monitoring:</strong> Conditions are not favorable for disease/pest development. 
                     Continue regular scouting but no immediate action needed.
                   </p>
-                  <div className="text-sm text-green-600">
+                  <div className="text-sm text-[#7A8F78]">
                     <p><strong>Example:</strong> "Gray leaf spot: 25/100. Cool, dry conditions unfavorable for fungal development."</p>
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export default function DiseasePestRiskAssessmentPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Fungal Diseases</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Fungal Diseases</h4>
                   <div className="bg-orange-50 p-4 rounded-lg">
                     <ul className="text-sm text-orange-700 space-y-2">
                       <li>• <strong>Gray Leaf Spot:</strong> Warm, humid conditions</li>
@@ -201,7 +201,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Bacterial Diseases</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Bacterial Diseases</h4>
                   <div className="bg-red-50 p-4 rounded-lg">
                     <ul className="text-sm text-red-700 space-y-2">
                       <li>• <strong>Bacterial Leaf Streak:</strong> Warm, wet conditions</li>
@@ -213,7 +213,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Viral Diseases</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Viral Diseases</h4>
                   <div className="bg-purple-50 p-4 rounded-lg">
                     <ul className="text-sm text-purple-700 space-y-2">
                       <li>• <strong>Maize Dwarf Mosaic:</strong> Vector-transmitted</li>
@@ -225,7 +225,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Soil-Borne Diseases</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Soil-Borne Diseases</h4>
                   <div className="bg-yellow-50 p-4 rounded-lg">
                     <ul className="text-sm text-yellow-700 space-y-2">
                       <li>• <strong>Pythium Root Rot:</strong> Cool, wet soils</li>
@@ -252,9 +252,9 @@ export default function DiseasePestRiskAssessmentPage() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Chewing Insects</h4>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <ul className="text-sm text-green-700 space-y-2">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Chewing Insects</h4>
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <ul className="text-sm text-[#7A8F78] space-y-2">
                       <li>• <strong>Corn Rootworm:</strong> Temperature-driven emergence</li>
                       <li>• <strong>European Corn Borer:</strong> Degree day accumulation</li>
                       <li>• <strong>Fall Armyworm:</strong> Migration patterns + heat</li>
@@ -264,7 +264,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Sucking Insects</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Sucking Insects</h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <ul className="text-sm text-blue-700 space-y-2">
                       <li>• <strong>Aphids:</strong> Warm weather population explosions</li>
@@ -276,7 +276,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Soil-Dwelling Pests</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Soil-Dwelling Pests</h4>
                   <div className="bg-earth-50 p-4 rounded-lg">
                     <ul className="text-sm text-earth-700 space-y-2">
                       <li>• <strong>Wireworms:</strong> Cool spring soil conditions</li>
@@ -288,7 +288,7 @@ export default function DiseasePestRiskAssessmentPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">Disease Vectors</h4>
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">Disease Vectors</h4>
                   <div className="bg-red-50 p-4 rounded-lg">
                     <ul className="text-sm text-red-700 space-y-2">
                       <li>• <strong>Leafhoppers:</strong> Vector for aster yellows</li>
@@ -313,7 +313,7 @@ export default function DiseasePestRiskAssessmentPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Our AI uses research-based weather thresholds to trigger risk alerts:
               </p>
               <div className="space-y-4">
@@ -378,9 +378,9 @@ export default function DiseasePestRiskAssessmentPage() {
                   <li>• Review and update spray schedules</li>
                 </ul>
               </div>
-              <div className="border-l-4 border-green-500 pl-4">
-                <h4 className="font-semibold text-green-800 mb-2">Low Risk (0-39): Normal Operations</h4>
-                <ul className="text-sm text-green-700 space-y-1">
+              <div className="border-l-4 border-[#8FBF7F] pl-4">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">Low Risk (0-39): Normal Operations</h4>
+                <ul className="text-sm text-[#7A8F78] space-y-1">
                   <li>• Continue regular weekly scouting routine</li>
                   <li>• Focus on other field management priorities</li>
                   <li>• Maintain good crop nutrition and plant health</li>

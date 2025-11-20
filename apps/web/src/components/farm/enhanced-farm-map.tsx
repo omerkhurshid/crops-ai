@@ -276,7 +276,7 @@ export function EnhancedFarmMap({ farm }: EnhancedFarmMapProps) {
                               {selectedField.ndvi.toFixed(2)}
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-[#F5F5F5] rounded-full h-2">
                             <div 
                               className="h-2 rounded-full transition-all duration-standard"
                               style={{ 

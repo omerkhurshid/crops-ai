@@ -140,7 +140,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'low': return 'bg-blue-100 text-blue-800 border-blue-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]'
     }
   }
   const dismissAlert = (alertId: string) => {
@@ -165,8 +165,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       <ModernCard>
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sage-600"></div>
-            <span className="ml-3 text-sage-600">Loading alerts...</span>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#7A8F78]"></div>
+            <span className="ml-3 text-[#555555]">Loading alerts...</span>
           </div>
         </ModernCardContent>
       </ModernCard>
@@ -178,7 +178,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <BellRing className="h-6 w-6 text-sage-700" />
+            <BellRing className="h-6 w-6 text-[#555555]" />
             {criticalAlerts.length > 0 && (
               <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                 {criticalAlerts.length}
@@ -186,8 +186,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
             )}
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-sage-800">Smart Alerts</h3>
-            <p className="text-sm text-sage-600">
+            <h3 className="text-lg font-semibold text-[#1A1A1A]">Smart Alerts</h3>
+            <p className="text-sm text-[#555555]">
               {activeAlerts.length} active alert{activeAlerts.length !== 1 ? 's' : ''}
               {criticalAlerts.length > 0 && (
                 <span className="text-red-600 font-medium ml-2">
@@ -225,8 +225,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
           <ModernCard variant="soft">
             <ModernCardContent className="p-6 text-center">
               <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-sage-800 mb-2">All Clear!</h3>
-              <p className="text-sage-600">No active alerts for your farm right now.</p>
+              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Clear!</h3>
+              <p className="text-[#555555]">No active alerts for your farm right now.</p>
             </ModernCardContent>
           </ModernCard>
         ) : (
@@ -242,7 +242,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                   <div className="flex items-start gap-3 flex-1">
                     <div className={`p-2 rounded-lg ${
                       alert.type === 'weather' ? 'bg-blue-100 text-blue-600' :
-                      alert.type === 'crop_health' ? 'bg-green-100 text-green-600' :
+                      alert.type === 'crop_health' ? 'bg-[#F8FAF8] text-green-600' :
                       alert.type === 'pest' ? 'bg-red-100 text-red-600' :
                       alert.type === 'market' ? 'bg-purple-100 text-purple-600' :
                       'bg-yellow-100 text-yellow-600'
@@ -251,7 +251,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-sage-800">{alert.title}</h4>
+                        <h4 className="font-semibold text-[#1A1A1A]">{alert.title}</h4>
                         <Badge className={getSeverityColor(alert.severity)} variant="outline">
                           {alert.severity.toUpperCase()}
                         </Badge>
@@ -259,8 +259,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                           {alert.confidence}% confidence
                         </Badge>
                       </div>
-                      <p className="text-sage-700 mb-3">{alert.message}</p>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-sage-600">
+                      <p className="text-[#555555] mb-3">{alert.message}</p>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-[#555555]">
                         {alert.farmField && (
                           <div className="flex items-center gap-1">
                             <span className="font-medium">Field:</span>
@@ -277,7 +277,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                       </div>
                       {alert.actionRequired && (
                         <div className="mt-3 flex gap-2">
-                          <Button size="sm" className="bg-sage-600 hover:bg-sage-700">
+                          <Button size="sm" className="bg-[#7A8F78] hover:bg-[#5E6F5A]">
                             Take Action
                           </Button>
                           <Button size="sm" variant="outline">
@@ -311,18 +311,18 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-sage-800 mb-2">Alert Types</h4>
+                  <h4 className="font-medium text-[#1A1A1A] mb-2">Alert Types</h4>
                   <div className="space-y-2">
                     {['Weather', 'Crop Health', 'Pest & Disease', 'Market', 'Financial'].map((type) => (
                       <label key={type} className="flex items-center gap-2">
-                        <input type="checkbox" defaultChecked className="rounded border-sage-300" />
-                        <span className="text-sm text-sage-700">{type}</span>
+                        <input type="checkbox" defaultChecked className="rounded border-[#DDE4D8]" />
+                        <span className="text-sm text-[#555555]">{type}</span>
                       </label>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-medium text-sage-800 mb-2">Notification Methods</h4>
+                  <h4 className="font-medium text-[#1A1A1A] mb-2">Notification Methods</h4>
                   <div className="space-y-2">
                     {['In-App', 'Email', 'SMS (Premium)', 'Push Notifications'].map((method) => (
                       <label key={method} className="flex items-center gap-2">
@@ -330,9 +330,9 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                           type="checkbox" 
                           defaultChecked={method !== 'SMS (Premium)' || isPremium}
                           disabled={method === 'SMS (Premium)' && !isPremium}
-                          className="rounded border-sage-300" 
+                          className="rounded border-[#DDE4D8]" 
                         />
-                        <span className={`text-sm ${method === 'SMS (Premium)' && !isPremium ? 'text-sage-400' : 'text-sage-700'}`}>
+                        <span className={`text-sm ${method === 'SMS (Premium)' && !isPremium ? 'text-sage-400' : 'text-[#555555]'}`}>
                           {method}
                         </span>
                       </label>
@@ -340,8 +340,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                   </div>
                 </div>
               </div>
-              <div className="pt-4 border-t border-sage-200">
-                <Button className="bg-sage-600 hover:bg-sage-700">
+              <div className="pt-4 border-t border-[#DDE4D8]">
+                <Button className="bg-[#7A8F78] hover:bg-[#5E6F5A]">
                   Save Settings
                 </Button>
               </div>

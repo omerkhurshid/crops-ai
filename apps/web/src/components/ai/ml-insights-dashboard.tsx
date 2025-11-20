@@ -280,8 +280,8 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">AI Insights</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-semibold text-[#1A1A1A]">AI Insights</h2>
+          <p className="text-[#555555]">
             Powered by {relevantModels.length} ML models analyzing your farm data
           </p>
         </div>
@@ -306,11 +306,11 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
             {relevantModels.map(model => {
               const Icon = getModelIcon(model.category)
               return (
-                <div key={model.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Icon className="h-5 w-5 text-gray-600" />
+                <div key={model.id} className="flex items-center gap-3 p-3 bg-[#FAFAF7] rounded-lg">
+                  <Icon className="h-5 w-5 text-[#555555]" />
                   <div>
                     <p className="font-medium text-sm">{model.name}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-[#555555]">
                       {Math.round((model.performance.confidence || 0.85) * 100)}% accuracy
                     </p>
                   </div>
@@ -349,9 +349,9 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Prediction Data */}
-                  <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="p-4 bg-[#FAFAF7] rounded-lg">
                     <h4 className="font-medium mb-2">Current Analysis</h4>
-                    <pre className="text-sm text-gray-700 whitespace-pre-wrap">
+                    <pre className="text-sm text-[#555555] whitespace-pre-wrap">
                       {JSON.stringify(insight.prediction, null, 2)}
                     </pre>
                   </div>
@@ -392,13 +392,13 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-3 bg-blue-50 rounded-lg">
                   {rec.expectedImpact.yield && (
                     <div className="text-center">
-                      <p className="text-sm text-gray-600">Yield Impact</p>
+                      <p className="text-sm text-[#555555]">Yield Impact</p>
                       <p className="font-semibold text-green-600">+{rec.expectedImpact.yield}%</p>
                     </div>
                   )}
                   {rec.expectedImpact.cost && (
                     <div className="text-center">
-                      <p className="text-sm text-gray-600">Cost Impact</p>
+                      <p className="text-sm text-[#555555]">Cost Impact</p>
                       <p className={`font-semibold ${rec.expectedImpact.cost < 0 ? 'text-green-600' : 'text-orange-600'}`}>
                         ${rec.expectedImpact.cost > 0 ? '+' : ''}${rec.expectedImpact.cost}
                       </p>
@@ -406,7 +406,7 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                   )}
                   {rec.expectedImpact.risk && (
                     <div className="text-center">
-                      <p className="text-sm text-gray-600">Risk Reduction</p>
+                      <p className="text-sm text-[#555555]">Risk Reduction</p>
                       <p className="font-semibold text-blue-600">{rec.expectedImpact.risk}%</p>
                     </div>
                   )}
@@ -429,7 +429,7 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                   </ol>
                 </div>
                 {/* Metadata */}
-                <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t">
+                <div className="flex items-center justify-between text-sm text-[#555555] pt-2 border-t">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     <span>Timeframe: {rec.timeframe}</span>

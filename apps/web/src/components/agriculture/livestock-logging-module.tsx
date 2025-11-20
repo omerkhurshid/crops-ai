@@ -44,9 +44,9 @@ const LOG_TYPES = [
   { id: 'vaccination', label: 'Vaccination', icon: Syringe, color: 'bg-blue-100 text-blue-800' },
   { id: 'treatment', label: 'Treatment', icon: ShieldCheck, color: 'bg-purple-100 text-purple-800' },
   { id: 'breeding', label: 'Breeding', icon: Baby, color: 'bg-pink-100 text-pink-800' },
-  { id: 'feeding', label: 'Feeding', icon: Scale, color: 'bg-green-100 text-green-800' },
+  { id: 'feeding', label: 'Feeding', icon: Scale, color: 'bg-[#F8FAF8] text-green-800' },
   { id: 'production', label: 'Production', icon: Milk, color: 'bg-yellow-100 text-yellow-800' },
-  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-gray-100 text-gray-800' }
+  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-[#1A1A1A]' }
 ]
 export function LivestockLoggingModule({ farmId, livestockType, animalId }: LivestockLoggingModuleProps) {
   const [showAddForm, setShowAddForm] = useState(false)
@@ -188,8 +188,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-sage-800 mb-2">Livestock Activity Log</h2>
-          <p className="text-sage-600">Track health, breeding, feeding, and production activities</p>
+          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Livestock Activity Log</h2>
+          <p className="text-[#555555]">Track health, breeding, feeding, and production activities</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm">
@@ -212,10 +212,10 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
           return (
             <ModernCard key={type.id} className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <type.icon className="h-5 w-5 text-sage-600" />
+                <type.icon className="h-5 w-5 text-[#555555]" />
                 <Badge className={type.color}>{count}</Badge>
               </div>
-              <div className="text-sm font-medium text-sage-800">{type.label}</div>
+              <div className="text-sm font-medium text-[#1A1A1A]">{type.label}</div>
               {totalCost > 0 && (
                 <div className="text-xs text-sage-500 mt-1">${totalCost.toLocaleString()}</div>
               )}
@@ -340,8 +340,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
             </div>
             {/* Vitals Section */}
             {(newLogEntry.type === 'health' || newLogEntry.type === 'treatment') && (
-              <div className="mb-4 p-4 bg-sage-50 rounded-lg">
-                <h4 className="font-medium text-sage-800 mb-3">Vital Signs (Optional)</h4>
+              <div className="mb-4 p-4 bg-[#F8FAF8] rounded-lg">
+                <h4 className="font-medium text-[#1A1A1A] mb-3">Vital Signs (Optional)</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Temperature (°C)</label>
@@ -425,8 +425,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                           <typeConfig.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-sage-800">{entry.title}</h3>
-                          <div className="flex items-center gap-3 text-sm text-sage-600">
+                          <h3 className="font-semibold text-[#1A1A1A]">{entry.title}</h3>
+                          <div className="flex items-center gap-3 text-sm text-[#555555]">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
                               {new Date(entry.date).toLocaleDateString()}
@@ -454,7 +454,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                       </div>
                     </div>
                     <div className="ml-11">
-                      <p className="text-sage-700 mb-3 whitespace-pre-wrap">{entry.description}</p>
+                      <p className="text-[#555555] mb-3 whitespace-pre-wrap">{entry.description}</p>
                       {(entry.quantity || entry.vitals) && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
                           {entry.quantity && (
@@ -512,8 +512,8 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
             <FileText className="h-12 w-12 text-sage-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-sage-800 mb-2">No log entries yet</h3>
-            <p className="text-sage-600 mb-4">Start logging your livestock activities to track health and production.</p>
+            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No log entries yet</h3>
+            <p className="text-[#555555] mb-4">Start logging your livestock activities to track health and production.</p>
             <Button onClick={() => setShowAddForm(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add First Entry

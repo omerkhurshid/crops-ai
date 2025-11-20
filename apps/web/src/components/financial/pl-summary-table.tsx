@@ -148,7 +148,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">P&L Summary</h3>
+        <h3 className="text-lg font-semibold text-[#1A1A1A]">P&L Summary</h3>
         <Button variant="outline" size="sm" onClick={handleExport}>
           <Download className="h-4 w-4 mr-2" />
           Export
@@ -159,17 +159,17 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
         <div className="border rounded-lg">
           <button
             onClick={() => toggleSection('income')}
-            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-[#FAFAF7] transition-colors"
           >
             <div className="flex items-center space-x-3">
               {expandedSections.has('income') ? (
-                <ChevronDown className="h-4 w-4 text-gray-500" />
+                <ChevronDown className="h-4 w-4 text-[#555555]" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-gray-500" />
+                <ChevronRight className="h-4 w-4 text-[#555555]" />
               )}
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="font-medium text-gray-900">Income</span>
+                <div className="w-3 h-3 bg-[#8FBF7F] rounded-full"></div>
+                <span className="font-medium text-[#1A1A1A]">Income</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -185,23 +185,23 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                 <div key={item.category} className="flex items-center justify-between py-2 pl-8 pr-2">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg">{CATEGORY_ICONS[item.category] || '📊'}</span>
-                    <span className="text-gray-700">{CATEGORY_LABELS[item.category] || item.category}</span>
+                    <span className="text-[#555555]">{CATEGORY_LABELS[item.category] || item.category}</span>
                     <Badge variant="outline" className="text-xs">
                       {item.count} {item.count === 1 ? 'transaction' : 'transactions'}
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-[#555555]">
                       {getCategoryPercentage(item.amount, summary.totalIncome).toFixed(1)}%
                     </span>
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-[#1A1A1A]">
                       {formatCurrency(item.amount)}
                     </span>
                   </div>
                 </div>
               ))}
               {breakdown.incomeByCategory.length === 0 && (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-4 text-[#555555]">
                   No income recorded for this period
                 </div>
               )}
@@ -212,17 +212,17 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
         <div className="border rounded-lg">
           <button
             onClick={() => toggleSection('expenses')}
-            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-[#FAFAF7] transition-colors"
           >
             <div className="flex items-center space-x-3">
               {expandedSections.has('expenses') ? (
-                <ChevronDown className="h-4 w-4 text-gray-500" />
+                <ChevronDown className="h-4 w-4 text-[#555555]" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-gray-500" />
+                <ChevronRight className="h-4 w-4 text-[#555555]" />
               )}
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="font-medium text-gray-900">Expenses</span>
+                <span className="font-medium text-[#1A1A1A]">Expenses</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -238,23 +238,23 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                 <div key={item.category} className="flex items-center justify-between py-2 pl-8 pr-2">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg">{CATEGORY_ICONS[item.category] || '📊'}</span>
-                    <span className="text-gray-700">{CATEGORY_LABELS[item.category] || item.category}</span>
+                    <span className="text-[#555555]">{CATEGORY_LABELS[item.category] || item.category}</span>
                     <Badge variant="outline" className="text-xs">
                       {item.count} {item.count === 1 ? 'transaction' : 'transactions'}
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-[#555555]">
                       {getCategoryPercentage(item.amount, summary.totalExpenses).toFixed(1)}%
                     </span>
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-[#1A1A1A]">
                       {formatCurrency(item.amount)}
                     </span>
                   </div>
                 </div>
               ))}
               {breakdown.expensesByCategory.length === 0 && (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-4 text-[#555555]">
                   No expenses recorded for this period
                 </div>
               )}
@@ -262,14 +262,14 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
           )}
         </div>
         {/* Net Profit Section */}
-        <div className="border-2 border-gray-300 rounded-lg bg-gray-50">
+        <div className="border-2 border-[#E6E6E6] rounded-lg bg-[#FAFAF7]">
           <div className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <div className={`w-3 h-3 rounded-full ${
-                  summary.netProfit >= 0 ? 'bg-green-500' : 'bg-red-500'
+                  summary.netProfit >= 0 ? 'bg-[#8FBF7F]' : 'bg-red-500'
                 }`}></div>
-                <span className="font-semibold text-gray-900">Net Profit</span>
+                <span className="font-semibold text-[#1A1A1A]">Net Profit</span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className={`font-bold text-lg ${
@@ -284,7 +284,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                 )}
               </div>
             </div>
-            <div className="mt-2 text-sm text-gray-600">
+            <div className="mt-2 text-sm text-[#555555]">
               Profit margin: {formatPercentage(summary.profitMargin)} • 
               Expense ratio: {formatPercentage(summary.totalIncome > 0 ? (summary.totalExpenses / summary.totalIncome) * 100 : 0)}
             </div>
@@ -294,7 +294,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
         {loading && breakdown === null && (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="text-gray-600 mt-2">Loading detailed breakdown...</p>
+            <p className="text-[#555555] mt-2">Loading detailed breakdown...</p>
           </div>
         )}
       </div>

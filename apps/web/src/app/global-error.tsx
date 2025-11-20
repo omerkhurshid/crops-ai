@@ -19,19 +19,19 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-[#FAFAF7]">
           <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
                 Something went wrong
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-[#555555] mb-6">
                 We're sorry, but something unexpected happened. Our team has been notified.
               </p>
               <div className="space-y-3">
                 <Button
                   onClick={reset}
-                  className="w-full bg-sage-600 hover:bg-sage-700"
+                  className="w-full bg-[#7A8F78] hover:bg-[#5E6F5A]"
                 >
                   Try again
                 </Button>
@@ -44,7 +44,7 @@ export default function GlobalError({
                 </Button>
               </div>
               {error.digest && (
-                <p className="mt-4 text-xs text-gray-400">
+                <p className="mt-4 text-xs text-[#555555]">
                   Error ID: {error.digest}
                 </p>
               )}

@@ -108,7 +108,7 @@ export function HyperlocalWeatherDashboard({
       high: 'text-red-600 bg-red-50 border-red-200',
       extreme: 'text-red-800 bg-red-100 border-red-300'
     }
-    return colorMap[severity] || 'text-gray-600 bg-gray-50 border-gray-200'
+    return colorMap[severity] || 'text-[#555555] bg-[#FAFAF7] border-[#E6E6E6]'
   }
   const formatConfidence = (confidence: number) => {
     return `${Math.round(confidence * 100)}%`
@@ -117,10 +117,10 @@ export function HyperlocalWeatherDashboard({
     return (
       <div className={`p-6 ${className}`}>
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-8 bg-[#F5F5F5] rounded w-1/3"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              <div key={i} className="h-32 bg-[#F5F5F5] rounded"></div>
             ))}
           </div>
         </div>
@@ -148,8 +148,8 @@ export function HyperlocalWeatherDashboard({
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Hyperlocal Weather</h2>
-          <p className="text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-[#1A1A1A]">Hyperlocal Weather</h2>
+          <p className="text-sm text-[#555555]">
             Field-specific forecast • Confidence: {formatConfidence(forecast.metadata.confidence)}
           </p>
         </div>
@@ -160,7 +160,7 @@ export function HyperlocalWeatherDashboard({
       {/* Active Weather Alerts */}
       {forecast.alerts.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-gray-900">Active Weather Alerts</h3>
+          <h3 className="text-lg font-semibold text-[#1A1A1A]">Active Weather Alerts</h3>
           {forecast.alerts.map((alert, index) => (
             <Alert key={index} className={`${getSeverityColor(alert.severity)}`}>
               <div className="flex items-start space-x-3">
@@ -178,7 +178,7 @@ export function HyperlocalWeatherDashboard({
                     <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <p className="font-medium">Affected Crops:</p>
-                        <ul className="list-disc list-inside text-gray-600">
+                        <ul className="list-disc list-inside text-[#555555]">
                           {alert.farmingImpact.crops.map((crop, i) => (
                             <li key={i}>{crop}</li>
                           ))}
@@ -186,7 +186,7 @@ export function HyperlocalWeatherDashboard({
                       </div>
                       <div>
                         <p className="font-medium">Affected Operations:</p>
-                        <ul className="list-disc list-inside text-gray-600">
+                        <ul className="list-disc list-inside text-[#555555]">
                           {alert.farmingImpact.operations.map((operation, i) => (
                             <li key={i}>{operation}</li>
                           ))}
@@ -194,7 +194,7 @@ export function HyperlocalWeatherDashboard({
                       </div>
                       <div>
                         <p className="font-medium">Recommendations:</p>
-                        <ul className="list-disc list-inside text-gray-600">
+                        <ul className="list-disc list-inside text-[#555555]">
                           {alert.farmingImpact.recommendations.map((rec, i) => (
                             <li key={i}>{rec}</li>
                           ))}
@@ -230,10 +230,10 @@ export function HyperlocalWeatherDashboard({
                 <h4 className="font-semibold text-green-700 mb-2">✅ Recommendations</h4>
                 <ul className="space-y-1 text-sm">
                   {cropAdvisory.recommendations.map((rec, i) => (
-                    <li key={i} className="text-gray-700">• {rec}</li>
+                    <li key={i} className="text-[#555555]">• {rec}</li>
                   ))}
                   {cropAdvisory.recommendations.length === 0 && (
-                    <p className="text-gray-500 italic">No specific recommendations at this time</p>
+                    <p className="text-[#555555] italic">No specific recommendations at this time</p>
                   )}
                 </ul>
               </div>
@@ -242,10 +242,10 @@ export function HyperlocalWeatherDashboard({
                 <h4 className="font-semibold text-red-700 mb-2">⚠️ Risks</h4>
                 <ul className="space-y-1 text-sm">
                   {cropAdvisory.risks.map((risk, i) => (
-                    <li key={i} className="text-gray-700">• {risk}</li>
+                    <li key={i} className="text-[#555555]">• {risk}</li>
                   ))}
                   {cropAdvisory.risks.length === 0 && (
-                    <p className="text-gray-500 italic">No significant risks identified</p>
+                    <p className="text-[#555555] italic">No significant risks identified</p>
                   )}
                 </ul>
               </div>
@@ -254,10 +254,10 @@ export function HyperlocalWeatherDashboard({
                 <h4 className="font-semibold text-blue-700 mb-2">🌟 Opportunities</h4>
                 <ul className="space-y-1 text-sm">
                   {cropAdvisory.opportunities.map((opp, i) => (
-                    <li key={i} className="text-gray-700">• {opp}</li>
+                    <li key={i} className="text-[#555555]">• {opp}</li>
                   ))}
                   {cropAdvisory.opportunities.length === 0 && (
-                    <p className="text-gray-500 italic">No special opportunities identified</p>
+                    <p className="text-[#555555] italic">No special opportunities identified</p>
                   )}
                 </ul>
               </div>
@@ -287,7 +287,7 @@ export function HyperlocalWeatherDashboard({
                   <div className="text-3xl font-bold">
                     {Math.round(forecast.current.temperature)}°C
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-[#555555]">
                     Current conditions
                   </div>
                 </div>
@@ -296,37 +296,37 @@ export function HyperlocalWeatherDashboard({
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex items-center space-x-2">
-                  <Gauge className="h-4 w-4 text-gray-500" />
+                  <Gauge className="h-4 w-4 text-[#555555]" />
                   <div>
-                    <p className="text-sm text-gray-600">Humidity</p>
+                    <p className="text-sm text-[#555555]">Humidity</p>
                     <p className="font-semibold">{Math.round(forecast.current.humidity)}%</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Wind className="h-4 w-4 text-gray-500" />
+                  <Wind className="h-4 w-4 text-[#555555]" />
                   <div>
-                    <p className="text-sm text-gray-600">Wind</p>
+                    <p className="text-sm text-[#555555]">Wind</p>
                     <p className="font-semibold">{Math.round(forecast.current.windSpeed)} m/s</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Gauge className="h-4 w-4 text-gray-500" />
+                  <Gauge className="h-4 w-4 text-[#555555]" />
                   <div>
-                    <p className="text-sm text-gray-600">Pressure</p>
+                    <p className="text-sm text-[#555555]">Pressure</p>
                     <p className="font-semibold">{Math.round(forecast.current.pressure)} hPa</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Eye className="h-4 w-4 text-gray-500" />
+                  <Eye className="h-4 w-4 text-[#555555]" />
                   <div>
-                    <p className="text-sm text-gray-600">Visibility</p>
+                    <p className="text-sm text-[#555555]">Visibility</p>
                     <p className="font-semibold">{Math.round(forecast.current.visibility)} km</p>
                   </div>
                 </div>
               </div>
               {/* Data Sources */}
               <div className="mt-6 pt-4 border-t">
-                <p className="text-sm text-gray-600 mb-2">Data Sources:</p>
+                <p className="text-sm text-[#555555] mb-2">Data Sources:</p>
                 <div className="flex flex-wrap gap-2">
                   {forecast.metadata.sources.map((source, i) => (
                     <Badge key={i} variant="secondary" className="text-xs">
@@ -338,10 +338,10 @@ export function HyperlocalWeatherDashboard({
               {/* Topographical Adjustments */}
               {forecast.metadata.adjustments.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Local Adjustments:</p>
+                  <p className="text-sm text-[#555555] mb-2">Local Adjustments:</p>
                   <div className="space-y-1">
                     {forecast.metadata.adjustments.map((adj, i) => (
-                      <p key={i} className="text-xs text-gray-500">
+                      <p key={i} className="text-xs text-[#555555]">
                         {adj.description}
                       </p>
                     ))}
@@ -362,8 +362,8 @@ export function HyperlocalWeatherDashboard({
               <div className="overflow-x-auto">
                 <div className="flex space-x-4 pb-4">
                   {forecast.hourly.slice(0, 24).map((hour, i) => (
-                    <div key={i} className="flex-shrink-0 text-center p-3 bg-gray-50 rounded-lg min-w-[80px]">
-                      <p className="text-xs text-gray-600">
+                    <div key={i} className="flex-shrink-0 text-center p-3 bg-[#FAFAF7] rounded-lg min-w-[80px]">
+                      <p className="text-xs text-[#555555]">
                         {new Date(hour.timestamp).toLocaleTimeString('en-US', { 
                           hour: 'numeric',
                           hour12: true 
@@ -373,7 +373,7 @@ export function HyperlocalWeatherDashboard({
                       <p className="text-sm font-semibold">
                         {Math.round(hour.temperature)}°
                       </p>
-                      <div className="text-xs text-gray-600 mt-1">
+                      <div className="text-xs text-[#555555] mt-1">
                         <div>{Math.round(hour.precipitation)}mm</div>
                         <div>{Math.round(hour.windSpeed)}m/s</div>
                       </div>
@@ -394,7 +394,7 @@ export function HyperlocalWeatherDashboard({
             <CardContent>
               <div className="space-y-4">
                 {forecast.daily.map((day, i) => (
-                  <div key={i} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                  <div key={i} className="flex items-center space-x-4 p-4 bg-[#FAFAF7] rounded-lg">
                     <div className="flex-1">
                       <p className="font-semibold">
                         {new Date(day.date).toLocaleDateString('en-US', { 
@@ -403,7 +403,7 @@ export function HyperlocalWeatherDashboard({
                           day: 'numeric'
                         })}
                       </p>
-                      <p className="text-sm text-gray-600">{day.conditions}</p>
+                      <p className="text-sm text-[#555555]">{day.conditions}</p>
                     </div>
                     <div className="text-2xl">
                       {getWeatherIcon(day.conditions)}
@@ -412,7 +412,7 @@ export function HyperlocalWeatherDashboard({
                       <p className="font-semibold">
                         {Math.round(day.temperatureMax)}° / {Math.round(day.temperatureMin)}°
                       </p>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-[#555555]">
                         <div>{Math.round(day.precipitation.total)}mm ({Math.round(day.precipitation.probability * 100)}%)</div>
                         <div className="text-xs">
                           Confidence: {formatConfidence(day.confidence)}

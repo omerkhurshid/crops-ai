@@ -53,11 +53,11 @@ const months = [
   'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
 ]
 const statusColors = {
-  planned: 'bg-sage-300',
+  planned: 'bg-[#DDE4D8]',
   planted: 'bg-blue-500',
-  growing: 'bg-green-500',
-  harvesting: 'bg-earth-500',
-  completed: 'bg-sage-500'
+  growing: 'bg-[#8FBF7F]',
+  harvesting: 'bg-[#7A8F78]',
+  completed: 'bg-[#7A8F78]'
 }
 const statusIcons = {
   planned: <Calendar className="h-4 w-4" />,
@@ -167,8 +167,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
     return (
       <div className="space-y-6">
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sage-600 mx-auto"></div>
-          <p className="text-sage-600 mt-4">Loading crop planning data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto"></div>
+          <p className="text-[#555555] mt-4">Loading crop planning data...</p>
         </div>
       </div>
     )
@@ -178,8 +178,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-semibold text-sage-800 flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-sage-600" />
+          <h2 className="text-2xl font-semibold text-[#1A1A1A] flex items-center gap-2">
+            <Calendar className="h-6 w-6 text-[#555555]" />
             Crop Planning
           </h2>
           {activeTab === 'timeline' && (
@@ -191,7 +191,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Badge variant="outline" className="px-4 py-2 bg-sage-100 text-sage-800 border-sage-300 font-semibold">
+              <Badge variant="outline" className="px-4 py-2 bg-[#F8FAF8] text-[#1A1A1A] border-[#DDE4D8] font-semibold">
                 {currentYear} Season
               </Badge>
               <Button
@@ -234,7 +234,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <div className="flex gap-2">
             {activeTab === 'timeline' && (
               <Button 
-                className="bg-sage-600 hover:bg-sage-700 text-white rounded-lg flex-1 sm:flex-none"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white rounded-lg flex-1 sm:flex-none"
                 onClick={() => setShowAddForm(true)}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -253,7 +253,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
         </div>
       </div>
       {/* Tab Navigation */}
-      <div className="flex space-x-1 bg-sage-100 p-1 rounded-lg w-fit">
+      <div className="flex space-x-1 bg-[#F8FAF8] p-1 rounded-lg w-fit">
         <Button
           variant={activeTab === 'timeline' ? 'default' : 'ghost'}
           size="sm"
@@ -283,9 +283,9 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <div className="hidden md:block overflow-x-auto">
             <div className="min-w-[800px]">
               {/* Header Row */}
-              <div className="grid grid-cols-12 gap-0 border-b border-sage-200/30 bg-white">
-                <div className="col-span-5 p-4 border-r border-sage-200/30">
-                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-sage-800">
+              <div className="grid grid-cols-12 gap-0 border-b border-[#DDE4D8]/30 bg-white">
+                <div className="col-span-5 p-4 border-r border-[#DDE4D8]/30">
+                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-[#1A1A1A]">
                     <span className="truncate">Crop</span>
                     <span className="truncate">Location</span>
                     <span className="truncate">Dates</span>
@@ -294,7 +294,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 <div className="col-span-7 p-2">
                   <div className="grid grid-cols-12 gap-0">
                     {months.map((month, index) => (
-                      <div key={month} className="text-center text-xs font-semibold text-sage-700 py-2 px-1">
+                      <div key={month} className="text-center text-xs font-semibold text-[#555555] py-2 px-1">
                         {month}
                       </div>
                     ))}
@@ -306,13 +306,13 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 {filteredPlannings.length > 0 ? filteredPlannings.map((planning) => {
                   const timeline = getTimelinePosition(planning)
                   return (
-                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-sage-50 transition-colors min-h-[80px]">
+                    <div key={planning.id} className="grid grid-cols-12 gap-0 hover:bg-[#F8FAF8] transition-colors min-h-[80px]">
                       {/* Left Info Panel */}
-                      <div className="col-span-5 p-3 border-r border-sage-200/30">
+                      <div className="col-span-5 p-3 border-r border-[#DDE4D8]/30">
                         <div className="grid grid-cols-3 gap-2">
                           {/* Crop Name */}
                           <div className="min-w-0">
-                            <h4 className="font-semibold text-sage-700 text-xs hover:text-sage-800 cursor-pointer truncate">
+                            <h4 className="font-semibold text-[#555555] text-xs hover:text-[#1A1A1A] cursor-pointer truncate">
                               {planning.cropName}
                             </h4>
                             <p className="text-xs text-sage-500 truncate">
@@ -321,14 +321,14 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                           </div>
                           {/* Location */}
                           <div className="min-w-0">
-                            <p className="text-xs font-semibold text-sage-700 truncate">{planning.location}</p>
+                            <p className="text-xs font-semibold text-[#555555] truncate">{planning.location}</p>
                             {planning.bedNumber && (
                               <p className="text-xs text-sage-500 truncate">{planning.bedNumber}</p>
                             )}
                           </div>
                           {/* Key Dates */}
                           <div className="min-w-0">
-                            <div className="text-xs text-sage-600 space-y-1">
+                            <div className="text-xs text-[#555555] space-y-1">
                               <div className="truncate">Start: {formatDate(planning.startDate)}</div>
                               <div className="truncate">Harvest: {formatDate(planning.harvestDate)}</div>
                             </div>
@@ -337,11 +337,11 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                       </div>
                       {/* Timeline Section */}
                       <div className="col-span-7 p-2 relative">
-                        <div className="relative h-16 bg-sage-50/30">
+                        <div className="relative h-16 bg-[#F8FAF8]/30">
                           {/* Month Grid Lines (subtle) */}
                           <div className="absolute inset-0 grid grid-cols-12 gap-0 pointer-events-none opacity-20">
                             {months.map((_, index) => (
-                              <div key={index} className="border-r border-sage-200/20"></div>
+                              <div key={index} className="border-r border-[#DDE4D8]/20"></div>
                             ))}
                           </div>
                           {/* Timeline Bar - FieldKit Enhanced */}
@@ -370,7 +370,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 }) : (
                   <div className="text-center py-12">
                     <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
-                    <h3 className="text-lg font-semibold mb-2 text-sage-600">No crop planning data available yet</h3>
+                    <h3 className="text-lg font-semibold mb-2 text-[#555555]">No crop planning data available yet</h3>
                     <p className="text-sage-500">Start planning your crops to see them on the timeline.</p>
                   </div>
                 )}
@@ -382,11 +382,11 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             {filteredPlannings.length > 0 ? (
               <div className="divide-y divide-sage-200/30">
                 {filteredPlannings.map((planning) => (
-                  <div key={planning.id} className="p-4 hover:bg-sage-50 transition-colors">
+                  <div key={planning.id} className="p-4 hover:bg-[#F8FAF8] transition-colors">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-sage-800 text-sm">{planning.cropName}</h4>
-                        <p className="text-xs text-sage-600">{planning.location}</p>
+                        <h4 className="font-semibold text-[#1A1A1A] text-sm">{planning.cropName}</h4>
+                        <p className="text-xs text-[#555555]">{planning.location}</p>
                         {planning.bedNumber && (
                           <p className="text-xs text-sage-500">{planning.bedNumber}</p>
                         )}
@@ -399,19 +399,19 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <div>
                         <span className="text-sage-500">Planted:</span>
-                        <span className="ml-1 text-sage-700">{formatDate(planning.startDate)}</span>
+                        <span className="ml-1 text-[#555555]">{formatDate(planning.startDate)}</span>
                       </div>
                       <div>
                         <span className="text-sage-500">Harvest:</span>
-                        <span className="ml-1 text-sage-700">{formatDate(planning.harvestDate)}</span>
+                        <span className="ml-1 text-[#555555]">{formatDate(planning.harvestDate)}</span>
                       </div>
                       <div>
                         <span className="text-sage-500">Quantity:</span>
-                        <span className="ml-1 text-sage-700">{formatQuantity(planning.plantedQuantity, planning.unit)}</span>
+                        <span className="ml-1 text-[#555555]">{formatQuantity(planning.plantedQuantity, planning.unit)}</span>
                       </div>
                       <div>
                         <span className="text-sage-500">Expected Yield:</span>
-                        <span className="ml-1 text-sage-700">{planning.estimatedYield.toLocaleString()}</span>
+                        <span className="ml-1 text-[#555555]">{planning.estimatedYield.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -420,7 +420,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             ) : (
               <div className="text-center py-12">
                 <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
-                <h3 className="text-lg font-semibold mb-2 text-sage-600">No crop planning data available yet</h3>
+                <h3 className="text-lg font-semibold mb-2 text-[#555555]">No crop planning data available yet</h3>
                 <p className="text-sage-500">Start planning your crops to see them here.</p>
               </div>
             )}
@@ -433,8 +433,8 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-semibold text-sage-600">Total Plantings</p>
-                <p className="text-lg sm:text-2xl font-bold text-sage-800">{filteredPlannings.length}</p>
+                <p className="text-xs sm:text-sm font-semibold text-[#555555]">Total Plantings</p>
+                <p className="text-lg sm:text-2xl font-bold text-[#1A1A1A]">{filteredPlannings.length}</p>
               </div>
               <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
             </div>
@@ -444,7 +444,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-semibold text-sage-600">Growing Now</p>
+                <p className="text-xs sm:text-sm font-semibold text-[#555555]">Growing Now</p>
                 <p className="text-lg sm:text-2xl font-bold text-green-600">
                   {filteredPlannings.filter(p => p.status === 'growing').length}
                 </p>
@@ -457,12 +457,12 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-semibold text-sage-600">Ready to Harvest</p>
-                <p className="text-lg sm:text-2xl font-bold text-earth-600">
+                <p className="text-xs sm:text-sm font-semibold text-[#555555]">Ready to Harvest</p>
+                <p className="text-lg sm:text-2xl font-bold text-[#7A8F78]">
                   {filteredPlannings.filter(p => p.status === 'harvesting').length}
                 </p>
               </div>
-              <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-earth-600" />
+              <Scissors className="h-6 w-6 sm:h-8 sm:w-8 text-[#7A8F78]" />
             </div>
           </ModernCardContent>
         </ModernCard>
@@ -470,7 +470,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
           <ModernCardContent className="p-3 sm:p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-semibold text-sage-600">Planned Yield</p>
+                <p className="text-xs sm:text-sm font-semibold text-[#555555]">Planned Yield</p>
                 <p className="text-lg sm:text-2xl font-bold text-blue-600">
                   {filteredPlannings.reduce((sum, p) => sum + p.estimatedYield, 0).toLocaleString()}
                 </p>
@@ -490,7 +490,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             {Object.entries(statusColors).map(([status, color]) => (
               <div key={status} className="flex items-center gap-2">
                 <div className={`w-4 h-4 rounded-lg ${color}`}></div>
-                <span className="text-sm capitalize font-medium text-sage-700">{status}</span>
+                <span className="text-sm capitalize font-medium text-[#555555]">{status}</span>
               </div>
             ))}
           </div>
@@ -508,7 +508,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             </ModernCardHeader>
             <ModernCardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-sage-700 mb-1">
+                <label className="block text-sm font-medium text-[#555555] mb-1">
                   Crop Type
                 </label>
                 <Select value={selectedCropId} onValueChange={(value) => {
@@ -535,7 +535,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 </Select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-sage-700 mb-1">
+                <label className="block text-sm font-medium text-[#555555] mb-1">
                   Variety
                 </label>
                 <Input 
@@ -545,7 +545,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Field
                   </label>
                   <Select value={selectedFieldId} onValueChange={setSelectedFieldId}>
@@ -562,7 +562,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   </Select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Block/Section
                   </label>
                   <Input 
@@ -575,7 +575,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Plant Date
                   </label>
                   <Input 
@@ -598,7 +598,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Expected Harvest
                   </label>
                   <Input 
@@ -611,7 +611,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Area/Quantity
                   </label>
                   <Input 
@@ -623,7 +623,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-1">
+                  <label className="block text-sm font-medium text-[#555555] mb-1">
                     Unit
                   </label>
                   <Select value={unit} onValueChange={setUnit}>
@@ -640,7 +640,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-sage-700 mb-1">
+                <label className="block text-sm font-medium text-[#555555] mb-1">
                   Notes (Optional)
                 </label>
                 <Input 
@@ -666,7 +666,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                       return (
                         <div>
                           <div className={`inline-flex px-2 py-1 rounded text-xs font-medium mb-2 ${
-                            recommendation.recommendation === 'plant_now' ? 'bg-green-100 text-green-800' :
+                            recommendation.recommendation === 'plant_now' ? 'bg-[#F8FAF8] text-green-800' :
                             recommendation.recommendation === 'wait' ? 'bg-yellow-100 text-yellow-800' :
                             'bg-red-100 text-red-800'
                           }`}>
@@ -692,7 +692,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   Cancel
                 </Button>
                 <Button 
-                  className="flex-1 bg-sage-600 hover:bg-sage-700 text-white"
+                  className="flex-1 bg-[#7A8F78] hover:bg-[#5E6F5A] text-white"
                   onClick={async () => {
                     if (!selectedCropId || !selectedFieldId || !plantingDate || !quantity) {
                       alert('Please fill in all required fields')

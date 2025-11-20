@@ -49,8 +49,8 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent 
           transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2
           ${checked 
-            ? 'bg-sage-600' 
-            : 'bg-sage-200'
+            ? 'bg-[#7A8F78]' 
+            : 'bg-[#DDE4D8]'
           }
           ${disabled 
             ? 'opacity-50 cursor-not-allowed' 

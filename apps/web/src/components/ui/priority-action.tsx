@@ -66,8 +66,8 @@ const statusConfig = {
   pending: {
     icon: Clock,
     label: 'Not started',
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-100'
+    color: 'text-[#555555]',
+    bgColor: 'bg-[#F5F5F5]'
   },
   in_progress: {
     icon: ArrowRight,
@@ -79,7 +79,7 @@ const statusConfig = {
     icon: CheckCircle2,
     label: 'Completed',
     color: 'text-green-600',
-    bgColor: 'bg-green-100'
+    bgColor: 'bg-[#F8FAF8]'
   }
 }
 export function PriorityActionCard({
@@ -115,7 +115,7 @@ export function PriorityActionCard({
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/70 rounded-xl">
-              <CategoryIcon className="h-5 w-5 text-sage-700" />
+              <CategoryIcon className="h-5 w-5 text-[#555555]" />
             </div>
             <div>
               <TrafficLightStatus 
@@ -125,20 +125,20 @@ export function PriorityActionCard({
               />
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-sage-600">
+          <div className="flex items-center gap-2 text-sm text-[#555555]">
             <StatusIcon className={cn('h-4 w-4', statusInfo.color)} />
             <span className={statusInfo.color}>{statusInfo.label}</span>
           </div>
         </div>
         {/* Content */}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-sage-800 mb-2">
+          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
             {action.title}
           </h3>
-          <p className="text-sm text-sage-700 leading-relaxed mb-3">
+          <p className="text-sm text-[#555555] leading-relaxed mb-3">
             {action.description}
           </p>
-          <div className="flex items-center justify-between text-xs text-sage-600">
+          <div className="flex items-center justify-between text-xs text-[#555555]">
             <span>Complete within: {action.timeframe}</span>
             <span>{action.confidence}% confidence</span>
           </div>
@@ -152,8 +152,8 @@ export function PriorityActionCard({
               'flex items-center justify-center gap-2 touch-manipulation',
               'min-h-[48px] text-base sm:text-sm sm:py-3 sm:min-h-[auto]',
               action.status === 'pending' 
-                ? 'bg-sage-700 hover:bg-sage-800 active:bg-sage-900 text-white'
-                : 'bg-white hover:bg-sage-50 active:bg-sage-100 text-sage-700 border border-sage-200'
+                ? 'bg-[#5E6F5A] hover:bg-[#7A8F78] active:bg-sage-900 text-white'
+                : 'bg-white hover:bg-[#F8FAF8] active:bg-[#F8FAF8] text-[#555555] border border-[#DDE4D8]'
             )}
           >
             {action.status === 'pending' ? (
@@ -170,7 +170,7 @@ export function PriorityActionCard({
           </button>
         )}
         {action.status === 'completed' && (
-          <div className="w-full py-3 px-4 rounded-xl bg-green-100 text-green-800 font-medium text-center">
+          <div className="w-full py-3 px-4 rounded-xl bg-[#F8FAF8] text-green-800 font-medium text-center">
             ✓ Action Completed
           </div>
         )}
@@ -206,10 +206,10 @@ export function PriorityActionsList({
       <ModernCard variant="soft" className={className}>
         <ModernCardContent className="p-8 text-center">
           <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-sage-800 mb-2">
+          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
             All caught up!
           </h3>
-          <p className="text-sage-600">
+          <p className="text-[#555555]">
             No urgent actions needed right now. Keep monitoring your crops.
           </p>
         </ModernCardContent>
@@ -228,9 +228,9 @@ export function PriorityActionsList({
       ))}
       {actions.length > maxActions && (
         <div className="text-center pt-4">
-          <p className="text-sm text-sage-600">
+          <p className="text-sm text-[#555555]">
             Showing top {maxActions} priority actions. 
-            <button className="ml-1 text-sage-700 font-medium hover:text-sage-800">
+            <button className="ml-1 text-[#555555] font-medium hover:text-[#1A1A1A]">
               View all {actions.length} recommendations →
             </button>
           </p>

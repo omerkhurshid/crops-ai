@@ -78,7 +78,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
         {[1,2,3,4].map(i => (
-          <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+          <div key={i} className="h-32 bg-[#F5F5F5] rounded-lg"></div>
         ))}
       </div>
     )
@@ -89,8 +89,8 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       <div className="space-y-6">
         <ModernCard variant="floating">
           <ModernCardContent className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-            <p className="text-sage-600 mt-4">Loading financial data...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78] mx-auto"></div>
+            <p className="text-[#555555] mt-4">Loading financial data...</p>
           </ModernCardContent>
         </ModernCard>
       </div>
@@ -102,8 +102,8 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
         <ModernCard variant="floating">
           <ModernCardContent className="text-center py-12">
             <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
-            <h3 className="text-lg font-semibold mb-2 text-sage-700">No financial data available yet</h3>
-            <p className="text-sage-600">Connect your financial records to see your farm's metrics.</p>
+            <h3 className="text-lg font-semibold mb-2 text-[#555555]">No financial data available yet</h3>
+            <p className="text-[#555555]">Connect your financial records to see your farm's metrics.</p>
           </ModernCardContent>
         </ModernCard>
       </div>
@@ -116,12 +116,12 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
         <ModernCardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2 bg-[#F8FAF8] rounded-lg">
                 <Calculator className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <ModernCardTitle className="text-sage-800">Farm Financial Health</ModernCardTitle>
-                <p className="text-sm text-sage-600 mt-1">Simple metrics that matter to your bottom line</p>
+                <ModernCardTitle className="text-[#1A1A1A]">Farm Financial Health</ModernCardTitle>
+                <p className="text-sm text-[#555555] mt-1">Simple metrics that matter to your bottom line</p>
               </div>
             </div>
             {/* Overall Health Status */}
@@ -191,12 +191,12 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
       <ModernCard variant="soft">
         <ModernCardContent className="p-6">
           <div className="flex items-start gap-4">
-            <div className="p-2 bg-sage-100 rounded-lg">
-              <PiggyBank className="h-5 w-5 text-sage-600" />
+            <div className="p-2 bg-[#F8FAF8] rounded-lg">
+              <PiggyBank className="h-5 w-5 text-[#555555]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sage-800 mb-2">What This Means for Your Farm</h3>
-              <div className="space-y-2 text-sm text-sage-600">
+              <h3 className="font-semibold text-[#1A1A1A] mb-2">What This Means for Your Farm</h3>
+              <div className="space-y-2 text-sm text-[#555555]">
                 {metrics.isAboveBreakeven ? (
                   <p className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600" />

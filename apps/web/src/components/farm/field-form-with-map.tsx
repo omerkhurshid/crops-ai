@@ -177,20 +177,20 @@ export function FieldFormWithMap({
             <div key={step} className="flex items-center">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
                 currentStep >= step 
-                  ? 'bg-sage-600 text-white' 
-                  : 'bg-gray-200 text-gray-500'
+                  ? 'bg-[#7A8F78] text-white' 
+                  : 'bg-[#F5F5F5] text-[#555555]'
               }`}>
                 {currentStep > step ? <CheckCircle className="h-5 w-5" /> : step}
               </div>
               {step < 2 && (
                 <ChevronRight className={`mx-2 h-5 w-5 ${
-                  currentStep > step ? 'text-sage-600' : 'text-gray-300'
+                  currentStep > step ? 'text-[#555555]' : 'text-gray-300'
                 }`} />
               )}
             </div>
           ))}
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-[#555555]">
           {currentStep === 1 ? 'Select Fields' : 'Field Details'}
         </div>
       </div>
@@ -237,9 +237,9 @@ export function FieldFormWithMap({
               </div>
             )}
             {/* Instructions */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-medium text-gray-900 mb-2">How to select fields:</h4>
-              <ul className="text-sm text-gray-700 space-y-1">
+            <div className="bg-[#FAFAF7] rounded-lg p-4">
+              <h4 className="font-medium text-[#1A1A1A] mb-2">How to select fields:</h4>
+              <ul className="text-sm text-[#555555] space-y-1">
                 <li>• Click &quot;Auto-detect Fields&quot; to find field boundaries automatically</li>
                 <li>• Or click the pin icon and draw boundaries manually</li>
                 <li>• Click on detected fields below to select them</li>
@@ -249,7 +249,7 @@ export function FieldFormWithMap({
             {/* Detected Fields List */}
             {detectedFields.length > 0 && (
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Detected Fields</h4>
+                <h4 className="font-medium text-[#1A1A1A] mb-3">Detected Fields</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {detectedFields.map((field, index) => (
                     <button
@@ -257,13 +257,13 @@ export function FieldFormWithMap({
                       onClick={() => toggleFieldSelection(field)}
                       className={`p-4 rounded-lg border-2 transition-all ${
                         selectedFields.find(f => f.id === field.id)
-                          ? 'border-sage-600 bg-sage-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-[#7A8F78] bg-[#F8FAF8]'
+                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
                       }`}
                     >
                       <div className="text-sm font-medium">Field {index + 1}</div>
                       <div className="text-lg font-semibold">{field.area.toFixed(1)} ha</div>
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         {(field.area * 2.47).toFixed(1)} acres
                       </div>
                     </button>
@@ -273,12 +273,12 @@ export function FieldFormWithMap({
             )}
             {/* Manual Field */}
             {manualBoundary.length >= 3 && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <p className="font-medium text-green-900">Manually Drawn Field</p>
-                      <Badge className="bg-green-100 text-green-700 border-green-300 text-xs">
+                      <Badge className="bg-[#F8FAF8] text-green-700 border-green-300 text-xs">
                         {selectedFields[0]?.confidence || 100}% Confidence
                       </Badge>
                     </div>
@@ -308,7 +308,7 @@ export function FieldFormWithMap({
               <Button
                 onClick={() => setCurrentStep(2)}
                 disabled={selectedFields.length === 0}
-                className="bg-sage-600 hover:bg-sage-700"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
               >
                 Continue ({selectedFields.length} field{selectedFields.length !== 1 ? 's' : ''} selected)
                 <ChevronRight className="h-4 w-4 ml-2" />
@@ -399,11 +399,11 @@ export function FieldFormWithMap({
               </div>
             )}
             {selectedFields.map((field, index) => (
-              <div key={field.id} className="p-4 border-2 border-sage-200 rounded-xl space-y-6 bg-gradient-to-br from-sage-50 to-cream-50">
+              <div key={field.id} className="p-4 border-2 border-[#DDE4D8] rounded-xl space-y-6 bg-gradient-to-br from-sage-50 to-#FAFAF7">
                 {/* Field Header with Visual Card */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-sage-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-12 h-12 bg-[#7A8F78] rounded-lg flex items-center justify-center text-white font-bold text-lg">
                       {index + 1}
                     </div>
                     <div>
@@ -411,10 +411,10 @@ export function FieldFormWithMap({
                         {fieldDetails[field.id]?.name || `Field ${index + 1}`}
                       </h3>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-sage-600">
+                        <span className="text-sm text-[#555555]">
                           {field.area.toFixed(1)} ha ({(field.area * 2.47).toFixed(1)} acres)
                         </span>
-                        <Badge className="bg-green-100 text-green-700 border-green-300 text-xs">
+                        <Badge className="bg-[#F8FAF8] text-green-700 border-green-300 text-xs">
                           {field.confidence}% confident
                         </Badge>
                       </div>
@@ -423,7 +423,7 @@ export function FieldFormWithMap({
                   <CheckCircle className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-gray-900">
+                  <h4 className="font-medium text-[#1A1A1A]">
                     {field.id === 'manual-field' ? 'Manually Drawn Field' : `Detected Field ${index + 1}`}
                   </h4>
                   <Badge variant="secondary">
@@ -496,7 +496,7 @@ export function FieldFormWithMap({
               <Button 
                 onClick={handleSubmit} 
                 disabled={loading}
-                className="bg-sage-600 hover:bg-sage-700"
+                className="bg-[#7A8F78] hover:bg-[#5E6F5A]"
               >
                 {loading ? (
                   <>

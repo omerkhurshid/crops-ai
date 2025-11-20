@@ -105,8 +105,8 @@ export default function WeightPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading weight tracking data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading weight tracking data...</p>
         </div>
       </DashboardLayout>
     )
@@ -120,11 +120,11 @@ export default function WeightPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
-            <p className="text-gray-600 mb-6">You need to create a farm before tracking animal weights.</p>
+            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <p className="text-[#555555] mb-6">You need to create a farm before tracking animal weights.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=weight')}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              className="bg-[#7A8F78] text-white px-4 py-2 rounded-lg"
             >
               Create Farm
             </button>
@@ -139,8 +139,8 @@ export default function WeightPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Weight Tracking</h1>
-            <p className="text-gray-600">Monitor growth and body condition of your livestock</p>
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Weight Tracking</h1>
+            <p className="text-[#555555]">Monitor growth and body condition of your livestock</p>
           </div>
           <div className="flex gap-3">
             <ClientFloatingButton
@@ -157,8 +157,8 @@ export default function WeightPage() {
               <div className="flex items-center">
                 <Weight className="h-8 w-8 text-indigo-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Records</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalRecords}</p>
+                  <p className="text-sm font-medium text-[#555555]">Total Records</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.totalRecords}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -168,8 +168,8 @@ export default function WeightPage() {
               <div className="flex items-center">
                 <Target className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Animals Tracked</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.animalsTracked}</p>
+                  <p className="text-sm font-medium text-[#555555]">Animals Tracked</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.animalsTracked}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -177,10 +177,10 @@ export default function WeightPage() {
           <ModernCard>
             <ModernCardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-green-600" />
+                <TrendingUp className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Growth (lbs/month)</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.avgGrowthRate.toFixed(1)}</p>
+                  <p className="text-sm font-medium text-[#555555]">Avg Growth (lbs/month)</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.avgGrowthRate.toFixed(1)}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -190,8 +190,8 @@ export default function WeightPage() {
               <div className="flex items-center">
                 <Activity className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Recent Measurements</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.recentMeasurements}</p>
+                  <p className="text-sm font-medium text-[#555555]">Recent Measurements</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.recentMeasurements}</p>
                 </div>
               </div>
             </ModernCardContent>

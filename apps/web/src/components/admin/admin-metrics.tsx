@@ -58,7 +58,7 @@ export function AdminMetrics({
   const getChangeColor = (change: number) => {
     if (change > 0) return 'text-green-600'
     if (change < 0) return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#555555]'
   }
   const businessMetrics = [
     {
@@ -83,7 +83,7 @@ export function AdminMetrics({
       title: 'Growth Rate',
       value: `${userGrowthRate > 0 ? '+' : ''}${userGrowthRate.toFixed(1)}%`,
       description: 'Month-over-month growth',
-      icon: <TrendingUp className="h-5 w-5 text-sage-600" />
+      icon: <TrendingUp className="h-5 w-5 text-[#555555]" />
     }
   ]
   return (
@@ -104,18 +104,18 @@ export function AdminMetrics({
           <TabsContent value="business" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {businessMetrics.map((metric, index) => (
-                <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                <div key={index} className="p-4 bg-[#FAFAF7] rounded-lg">
                   <div className="flex items-center gap-3 mb-2">
                     {metric.icon}
                     <h4 className="font-semibold">{metric.title}</h4>
                   </div>
                   <div className="text-2xl font-bold mb-1">{metric.value}</div>
-                  <div className="text-sm text-gray-600">{metric.description}</div>
+                  <div className="text-sm text-[#555555]">{metric.description}</div>
                 </div>
               ))}
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Key Performance Indicators</h4>
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Key Performance Indicators</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white border rounded-lg">
                   <span>Customer Acquisition Cost</span>
@@ -148,10 +148,10 @@ export function AdminMetrics({
             </div>
             <div className="space-y-3">
               {metrics.map((metric, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-4 bg-[#FAFAF7] rounded-lg">
                   <div>
                     <div className="font-medium">{metric.label}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-[#555555]">
                       {getChangeColor(metric.change) === 'text-green-600' ? '↗' : 
                        getChangeColor(metric.change) === 'text-red-600' ? '↘' : '→'} 
                       <span className={getChangeColor(metric.change)}>
@@ -166,7 +166,7 @@ export function AdminMetrics({
           </TabsContent>
           <TabsContent value="technical" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-[#FAFAF7] rounded-lg">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <Globe className="h-4 w-4" />
                   API Performance
@@ -186,7 +186,7 @@ export function AdminMetrics({
                   </div>
                 </div>
               </div>
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-[#FAFAF7] rounded-lg">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   System Resources
@@ -208,7 +208,7 @@ export function AdminMetrics({
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Database Statistics</h4>
+              <h4 className="font-semibold text-[#1A1A1A] mb-3">Database Statistics</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white border rounded-lg">
                   <span>Total Database Size</span>

@@ -57,20 +57,20 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-[#F5F5F5]'}`}>
               1
             </div>
             <ArrowRight className="h-4 w-4 text-gray-400" />
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 2 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 2 ? 'bg-blue-500 text-white' : 'bg-[#F5F5F5]'}`}>
               2
             </div>
             <ArrowRight className="h-4 w-4 text-gray-400" />
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 3 ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 3 ? 'bg-[#8FBF7F] text-white' : 'bg-[#F5F5F5]'}`}>
               3
             </div>
           </div>
           <Progress value={(currentStep - 1) * 50} className="mb-4" />
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-[#555555]">
             Step {currentStep}: {currentStep === 1 ? 'Draw Field Boundaries' : currentStep === 2 ? 'Satellite Analysis' : 'View Results'}
           </p>
         </CardContent>
@@ -88,7 +88,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                 onFieldsDetected={handleFieldsDetected}
               />
               <div className="pt-4 border-t">
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-[#555555] mb-3">
                   Or try the quick demo with pre-defined fields:
                 </p>
                 <Button 
@@ -142,19 +142,19 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                   <Satellite className="h-12 w-12 mx-auto text-blue-600" />
                 </div>
                 <p className="text-lg font-semibold">Processing Satellite Data</p>
-                <p className="text-gray-600">Analyzing {definedFields.length} fields with Sentinel Hub</p>
+                <p className="text-[#555555]">Analyzing {definedFields.length} fields with Sentinel Hub</p>
                 <Progress value={75} className="max-w-md mx-auto" />
               </div>
             ) : analysisComplete ? (
               <div className="space-y-4">
                 <CheckCircle className="h-12 w-12 mx-auto text-green-600" />
                 <p className="text-lg font-semibold text-green-800">Analysis Complete!</p>
-                <Button onClick={() => setCurrentStep(3)} className="bg-sage-600 hover:bg-sage-700">
+                <Button onClick={() => setCurrentStep(3)} className="bg-[#7A8F78] hover:bg-[#5E6F5A]">
                   View Results
                 </Button>
               </div>
             ) : (
-              <p className="text-gray-600">Waiting for field definition...</p>
+              <p className="text-[#555555]">Waiting for field definition...</p>
             )}
           </CardContent>
         </Card>
@@ -167,7 +167,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
               <CardTitle>Step 3: Field Health Monitoring</CardTitle>
             </CardHeader>
             <CardContent>
-              <Alert className="border-green-200 bg-green-50 mb-6">
+              <Alert className="border-[#DDE4D8] bg-[#F8FAF8] mb-6">
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <AlertDescription className="text-green-800">
                   <strong>Success!</strong> Your {definedFields.length} fields are now being monitored with AI-powered satellite analysis.
@@ -177,9 +177,9 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
                 {definedFields.map((field) => (
                   <div key={field.id} className="p-4 border rounded-lg">
                     <h4 className="font-semibold">{field.name}</h4>
-                    <p className="text-sm text-gray-600">{field.area.toFixed(1)} acres</p>
+                    <p className="text-sm text-[#555555]">{field.area.toFixed(1)} acres</p>
                     <div className="mt-2 flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#8FBF7F] rounded-full"></div>
                       <span className="text-sm">Analysis Complete</span>
                     </div>
                   </div>

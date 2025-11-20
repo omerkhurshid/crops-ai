@@ -74,17 +74,17 @@ export default function SettingsPage() {
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse space-y-6">
             <div className="space-y-2">
-              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-8 bg-[#F5F5F5] rounded w-1/3"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-2/3"></div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-sage-200 p-8">
+            <div className="bg-white rounded-lg shadow-sm border border-[#DDE4D8] p-8">
               <div className="space-y-4">
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                <div className="h-10 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                <div className="h-10 bg-gray-200 rounded"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                <div className="h-10 bg-gray-200 rounded"></div>
+                <div className="h-4 bg-[#F5F5F5] rounded w-1/4"></div>
+                <div className="h-10 bg-[#F5F5F5] rounded"></div>
+                <div className="h-4 bg-[#F5F5F5] rounded w-1/4"></div>
+                <div className="h-10 bg-[#F5F5F5] rounded"></div>
+                <div className="h-4 bg-[#F5F5F5] rounded w-1/4"></div>
+                <div className="h-10 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
           </div>
@@ -116,12 +116,12 @@ export default function SettingsPage() {
     <DashboardLayout>
       <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <h1 className="text-4xl font-light text-sage-800 mb-3">Account Settings</h1>
-          <p className="text-lg text-sage-600 leading-relaxed">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-3">Account Settings</h1>
+          <p className="text-lg text-[#7A8F78] leading-relaxed">
             Manage your account preferences and system settings
           </p>
         </div>
-        <div className="bg-white rounded-lg shadow-sm border border-sage-200">
+        <div className="bg-white rounded-lg shadow-sm border border-[#DDE4D8]">
           <SettingsForm user={user} />
         </div>
       </div>

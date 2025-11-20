@@ -39,7 +39,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
       {/* Search Results */}
       {searchResults.length > 0 && (
         <div>
-          <Label className="text-sm font-medium text-sage-700 mb-2 block">
+          <Label className="text-sm font-medium text-[#555555] mb-2 block">
             Search Results ({searchResults.length} found)
           </Label>
           <Select value={selectedCrop || ''} onValueChange={onCropSelect}>
@@ -61,7 +61,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                   <div className="flex items-center justify-between w-full">
                     <div>
                       <div className="font-medium">{crop.name}</div>
-                      <div className="text-xs text-gray-500 italic">{crop.scientificName}</div>
+                      <div className="text-xs text-[#555555] italic">{crop.scientificName}</div>
                     </div>
                     <div className="text-right ml-4">
                       <Badge variant="outline" className="text-xs">
@@ -78,7 +78,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
       {/* Category Dropdown */}
       {searchTerm.length <= 2 && (
         <div>
-          <Label className="text-sm font-medium text-sage-700 mb-2 block">
+          <Label className="text-sm font-medium text-[#555555] mb-2 block">
             1. Select Category
           </Label>
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -100,7 +100,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                   <div className="flex items-center justify-between w-full">
                     <div>
                       <div className="font-medium">{category.name}</div>
-                      <div className="text-xs text-gray-500">{category.description}</div>
+                      <div className="text-xs text-[#555555]">{category.description}</div>
                     </div>
                     <Badge variant="outline" className="ml-4 text-xs">
                       {cropsByCategory[key]?.length || 0}
@@ -115,7 +115,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
       {/* Crop Dropdown */}
       {selectedCategory && cropsByCategory[selectedCategory] && searchTerm.length <= 2 && (
         <div>
-          <Label className="text-sm font-medium text-sage-700 mb-2 block">
+          <Label className="text-sm font-medium text-[#555555] mb-2 block">
             2. Select Specific Crop
           </Label>
           <Select value={selectedCrop || ''} onValueChange={onCropSelect}>
@@ -137,10 +137,10 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                   <div className="flex items-center justify-between w-full">
                     <div className="flex-1">
                       <div className="font-medium">{crop.name}</div>
-                      <div className="text-xs text-gray-500 italic">{crop.scientificName}</div>
+                      <div className="text-xs text-[#555555] italic">{crop.scientificName}</div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         {crop.yield?.typical} {crop.yield?.unit}/acre
                       </div>
                       <div className="text-xs font-medium text-green-600">
@@ -164,7 +164,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 {selectedCropData.category}
               </Badge>
             </ModernCardTitle>
-            <p className="text-sm text-gray-600 italic">{selectedCropData.scientificName}</p>
+            <p className="text-sm text-[#555555] italic">{selectedCropData.scientificName}</p>
             <p className="text-xs text-blue-600 font-medium">
               Family: {selectedCropData.botanicalFamily}
             </p>
@@ -172,60 +172,60 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
           <ModernCardContent className="space-y-4">
             {/* Key Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-3 bg-sage-50 rounded-lg">
-                <Clock className="h-5 w-5 text-sage-600 mx-auto mb-1" />
-                <div className="text-sm font-medium text-sage-800">
+              <div className="text-center p-3 bg-[#F8FAF8] rounded-lg">
+                <Clock className="h-5 w-5 text-[#555555] mx-auto mb-1" />
+                <div className="text-sm font-medium text-[#1A1A1A]">
                   {selectedCropData.harvestWindow.duration} days
                 </div>
-                <div className="text-xs text-gray-600">Growing Season</div>
+                <div className="text-xs text-[#555555]">Growing Season</div>
               </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
+              <div className="text-center p-3 bg-[#F8FAF8] rounded-lg">
                 <TrendingUp className="h-5 w-5 text-green-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-green-800">
                   {selectedCropData.yield.typical} {selectedCropData.yield.unit}
                 </div>
-                <div className="text-xs text-gray-600">Expected Yield/acre</div>
+                <div className="text-xs text-[#555555]">Expected Yield/acre</div>
               </div>
               <div className="text-center p-3 bg-blue-50 rounded-lg">
                 <Droplets className="h-5 w-5 text-blue-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-blue-800 capitalize">
                   {selectedCropData.waterRequirements}
                 </div>
-                <div className="text-xs text-gray-600">Water Needs</div>
+                <div className="text-xs text-[#555555]">Water Needs</div>
               </div>
               <div className="text-center p-3 bg-yellow-50 rounded-lg">
                 <MapPin className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
                 <div className="text-sm font-medium text-yellow-800">
                   ${selectedCropData.marketValue.avgPrice}
                 </div>
-                <div className="text-xs text-gray-600">Market Price</div>
+                <div className="text-xs text-[#555555]">Market Price</div>
               </div>
             </div>
             {/* Growing Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700">Best Planting:</span>
-                <p className="text-sage-800">{selectedCropData.plantingWindow.optimal}</p>
+                <span className="font-medium text-[#555555]">Best Planting:</span>
+                <p className="text-[#1A1A1A]">{selectedCropData.plantingWindow.optimal}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Climate Zones:</span>
-                <p className="text-sage-800">{selectedCropData.climateZones.slice(0, 3).join(', ')}</p>
+                <span className="font-medium text-[#555555]">Climate Zones:</span>
+                <p className="text-[#1A1A1A]">{selectedCropData.climateZones.slice(0, 3).join(', ')}</p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Soil Needs:</span>
-                <p className="text-sage-800 capitalize">
+                <span className="font-medium text-[#555555]">Soil Needs:</span>
+                <p className="text-[#1A1A1A] capitalize">
                   {selectedCropData.soilRequirements.fertility} fertility, pH {selectedCropData.soilRequirements.ph.min}-{selectedCropData.soilRequirements.ph.max}
                 </p>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Market Demand:</span>
-                <p className="text-sage-800 capitalize">{selectedCropData.marketValue.demand}</p>
+                <span className="font-medium text-[#555555]">Market Demand:</span>
+                <p className="text-[#1A1A1A] capitalize">{selectedCropData.marketValue.demand}</p>
               </div>
             </div>
             {/* Benefits */}
             {selectedCropData.benefits.length > 0 && (
               <div>
-                <span className="font-medium text-gray-700 block mb-2">Key Benefits:</span>
+                <span className="font-medium text-[#555555] block mb-2">Key Benefits:</span>
                 <div className="flex flex-wrap gap-2">
                   {selectedCropData.benefits.slice(0, 4).map((benefit, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">

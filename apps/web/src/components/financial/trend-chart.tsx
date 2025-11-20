@@ -85,8 +85,8 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
     return (
       <Card className="p-6">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
+          <div className="h-4 bg-[#F5F5F5] rounded w-1/3 mb-4"></div>
+          <div className="h-64 bg-[#F5F5F5] rounded"></div>
         </div>
       </Card>
     );
@@ -94,10 +94,10 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
   if (data.length === 0) {
     return (
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Financial Trends</h3>
+        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Financial Trends</h3>
         <div className="text-center py-12">
           <div className="text-gray-400 mb-2">📊</div>
-          <p className="text-gray-600">No trend data available for the selected period.</p>
+          <p className="text-[#555555]">No trend data available for the selected period.</p>
         </div>
       </Card>
     );
@@ -105,7 +105,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Financial Trends</h3>
+        <h3 className="text-lg font-semibold text-[#1A1A1A]">Financial Trends</h3>
         <div className="flex items-center space-x-2">
           <Badge 
             variant={chartType === 'line' ? 'default' : 'outline'}
@@ -193,19 +193,19 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t">
         <div className="text-center">
-          <p className="text-sm text-gray-600">Total Income</p>
+          <p className="text-sm text-[#555555]">Total Income</p>
           <p className="text-lg font-semibold text-green-600">
             {formatCurrency(data.reduce((sum, item) => sum + item.income, 0))}
           </p>
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-600">Total Expenses</p>
+          <p className="text-sm text-[#555555]">Total Expenses</p>
           <p className="text-lg font-semibold text-red-600">
             {formatCurrency(data.reduce((sum, item) => sum + item.expenses, 0))}
           </p>
         </div>
         <div className="text-center">
-          <p className="text-sm text-gray-600">Net Profit</p>
+          <p className="text-sm text-[#555555]">Net Profit</p>
           <p className={`text-lg font-semibold ${
             data.reduce((sum, item) => sum + item.profit, 0) >= 0 
               ? 'text-green-600' 

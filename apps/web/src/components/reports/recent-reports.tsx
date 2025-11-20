@@ -44,19 +44,19 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   };
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
+      case 'completed': return 'bg-[#F8FAF8] text-green-800';
       case 'processing': return 'bg-yellow-100 text-yellow-800';
       case 'failed': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
     }
   };
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'performance': return 'bg-blue-100 text-blue-800';
       case 'weather': return 'bg-purple-100 text-purple-800';
-      case 'health': return 'bg-green-100 text-green-800';
+      case 'health': return 'bg-[#F8FAF8] text-green-800';
       case 'financial': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
     }
   };
   if (loading) {
@@ -65,8 +65,8 @@ export function RecentReports({ farmId }: RecentReportsProps) {
         {[...Array(3)].map((_, i) => (
           <Card key={i} className="p-4">
             <div className="animate-pulse space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-[#F5F5F5] rounded w-2/3"></div>
+              <div className="h-3 bg-[#F5F5F5] rounded w-1/2"></div>
             </div>
           </Card>
         ))}
@@ -77,8 +77,8 @@ export function RecentReports({ farmId }: RecentReportsProps) {
     return (
       <Card className="p-8 text-center">
         <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No Reports Generated Yet</h3>
-        <p className="text-gray-600">
+        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Reports Generated Yet</h3>
+        <p className="text-[#555555]">
           Generate your first report using one of the options above. Reports will appear here for easy access and download.
         </p>
       </Card>
@@ -92,7 +92,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
             <div className="flex items-start gap-3">
               <FileText className="h-5 w-5 text-blue-600 mt-1" />
               <div>
-                <h4 className="font-medium text-gray-900">{report.name}</h4>
+                <h4 className="font-medium text-[#1A1A1A]">{report.name}</h4>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge className={getTypeColor(report.type)}>
                     {report.type}
@@ -100,11 +100,11 @@ export function RecentReports({ farmId }: RecentReportsProps) {
                   <Badge className={getStatusColor(report.status)}>
                     {report.status}
                   </Badge>
-                  <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <span className="text-xs text-[#555555] flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {new Date(report.createdAt).toLocaleDateString()}
                   </span>
-                  <span className="text-xs text-gray-500">{report.size}</span>
+                  <span className="text-xs text-[#555555]">{report.size}</span>
                 </div>
               </div>
             </div>

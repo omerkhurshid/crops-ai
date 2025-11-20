@@ -64,8 +64,8 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading AI insights...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading AI insights...</p>
         </div>
       </DashboardLayout>
     )
@@ -85,11 +85,11 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-light text-sage-800 mb-2 flex items-center gap-3">
-                <Brain className="h-10 w-10 text-sage-600" />
+              <h1 className="text-4xl font-light text-[#7A8F78] mb-2 flex items-center gap-3">
+                <Brain className="h-10 w-10 text-[#7A8F78]" />
                 AI Insights
               </h1>
-              <p className="text-lg text-sage-600">
+              <p className="text-lg text-[#7A8F78]">
                 Intelligent crop management and yield optimization powered by machine learning
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
           </ModernCard>
           <ModernCard variant="floating">
             <ModernCardContent className="p-6 text-center">
-              <TrendingUp className="h-12 w-12 text-green-600 mx-auto mb-4" />
+              <TrendingUp className="h-12 w-12 text-[#7A8F78] mx-auto mb-4" />
               <ModernCardTitle className="text-lg mb-2">Optimization Engine</ModernCardTitle>
               <ModernCardDescription>
                 Maximize efficiency with AI-driven recommendations for irrigation, fertilization, and resource allocation
@@ -180,26 +180,26 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
         </Tabs>
         {/* Additional AI Tools */}
         <div className="mt-12">
-          <h2 className="text-2xl font-light text-sage-800 mb-6">AI-Powered Tools</h2>
+          <h2 className="text-2xl font-light text-[#7A8F78] mb-6">AI-Powered Tools</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ModernCard variant="floating" className="cursor-pointer hover:shadow-lg transition-shadow">
               <ModernCardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Brain className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-sage-800 mb-2">Crop Health AI</h3>
-                <p className="text-sage-600 text-sm">
+                <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">Crop Health AI</h3>
+                <p className="text-[#7A8F78] text-sm">
                   Detect diseases and pests early using computer vision and satellite imagery analysis
                 </p>
               </ModernCardContent>
             </ModernCard>
             <ModernCard variant="floating" className="cursor-pointer hover:shadow-lg transition-shadow">
               <ModernCardContent className="p-6 text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-green-600" />
+                <div className="w-16 h-16 bg-[#F8FAF8] rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8 text-[#7A8F78]" />
                 </div>
-                <h3 className="text-lg font-semibold text-sage-800 mb-2">Yield Predictor</h3>
-                <p className="text-sage-600 text-sm">
+                <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">Yield Predictor</h3>
+                <p className="text-[#7A8F78] text-sm">
                   Forecast harvest yields with 90%+ accuracy using weather, soil, and historical data
                 </p>
               </ModernCardContent>
@@ -209,8 +209,8 @@ export default function AIInsightsPage({ searchParams }: { searchParams: { farmI
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Target className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-sage-800 mb-2">Resource Optimizer</h3>
-                <p className="text-sage-600 text-sm">
+                <h3 className="text-lg font-semibold text-[#7A8F78] mb-2">Resource Optimizer</h3>
+                <p className="text-[#7A8F78] text-sm">
                   Optimize water, fertilizer, and energy usage with AI-driven efficiency recommendations
                 </p>
               </ModernCardContent>

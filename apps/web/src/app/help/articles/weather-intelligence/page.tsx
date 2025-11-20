@@ -28,13 +28,13 @@ export default function WeatherIntelligencePage() {
         {/* Article Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <CloudRain className="h-6 w-6 text-sage-700" />
-            <span className="text-sage-600">Weather Intelligence</span>
+            <CloudRain className="h-6 w-6 text-[#5E6F5A]" />
+            <span className="text-[#7A8F78]">Weather Intelligence</span>
           </div>
-          <h1 className="text-3xl font-bold text-sage-800 mb-4">
+          <h1 className="text-3xl font-bold text-[#7A8F78] mb-4">
             Weather Data Integration & Smart Alerts
           </h1>
-          <div className="flex items-center gap-4 text-sm text-sage-600">
+          <div className="flex items-center gap-4 text-sm text-[#7A8F78]">
             <Badge variant="outline">10 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
@@ -43,7 +43,7 @@ export default function WeatherIntelligencePage() {
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
-            <p className="text-lg text-sage-700 leading-relaxed mb-4">
+            <p className="text-lg text-[#5E6F5A] leading-relaxed mb-4">
               Cropple.ai combines weather data from multiple sources to give you
               hyperlocal forecasts for each field, plus intelligent alerts that
               help you make better farming decisions before weather events
@@ -69,16 +69,16 @@ export default function WeatherIntelligencePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Your weather forecasts combine data from multiple sources for
                 maximum accuracy:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Real-Time Sources
                   </h4>
-                  <ul className="text-sm text-sage-700 space-y-2">
+                  <ul className="text-sm text-[#5E6F5A] space-y-2">
                     <li>
                       • <strong>Weather Stations:</strong> Local meteorological
                       data
@@ -97,10 +97,10 @@ export default function WeatherIntelligencePage() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Forecast Models
                   </h4>
-                  <ul className="text-sm text-sage-700 space-y-2">
+                  <ul className="text-sm text-[#5E6F5A] space-y-2">
                     <li>
                       • <strong>GFS Model:</strong> Global weather patterns
                     </li>
@@ -119,11 +119,11 @@ export default function WeatherIntelligencePage() {
                   </ul>
                 </div>
               </div>
-              <div className="bg-sage-50 p-6 rounded-lg">
-                <h4 className="font-semibold text-sage-800 mb-3">
+              <div className="bg-[#F8FAF8] p-6 rounded-lg">
+                <h4 className="font-semibold text-[#7A8F78] mb-3">
                   Precision by Field
                 </h4>
-                <p className="text-sage-700 text-sm">
+                <p className="text-[#5E6F5A] text-sm">
                   Each of your fields gets its own forecast considering
                   elevation, slope, proximity to water bodies, and local
                   topography. A field in a valley may have different frost risk
@@ -147,11 +147,11 @@ export default function WeatherIntelligencePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Droplets className="h-5 w-5 text-blue-600" />
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Precipitation
                     </h4>
                   </div>
-                  <ul className="text-sm text-sage-700 space-y-1">
+                  <ul className="text-sm text-[#5E6F5A] space-y-1">
                     <li>• Amount and intensity</li>
                     <li>• Rainfall probability</li>
                     <li>• Hail risk assessment</li>
@@ -161,9 +161,9 @@ export default function WeatherIntelligencePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Thermometer className="h-5 w-5 text-red-600" />
-                    <h4 className="font-semibold text-sage-800">Temperature</h4>
+                    <h4 className="font-semibold text-[#7A8F78]">Temperature</h4>
                   </div>
-                  <ul className="text-sm text-sage-700 space-y-1">
+                  <ul className="text-sm text-[#5E6F5A] space-y-1">
                     <li>• Daily high/low temperatures</li>
                     <li>• Growing degree days (GDD)</li>
                     <li>• Frost/freeze warnings</li>
@@ -172,12 +172,12 @@ export default function WeatherIntelligencePage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <Wind className="h-5 w-5 text-gray-600" />
-                    <h4 className="font-semibold text-sage-800">
+                    <Wind className="h-5 w-5 text-[#555555]" />
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Wind Conditions
                     </h4>
                   </div>
-                  <ul className="text-sm text-sage-700 space-y-1">
+                  <ul className="text-sm text-[#5E6F5A] space-y-1">
                     <li>• Wind speed and direction</li>
                     <li>• Spray drift potential</li>
                     <li>• Crop lodging risk</li>
@@ -187,11 +187,11 @@ export default function WeatherIntelligencePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Eye className="h-5 w-5 text-yellow-600" />
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Atmospheric Conditions
                     </h4>
                   </div>
-                  <ul className="text-sm text-sage-700 space-y-1">
+                  <ul className="text-sm text-[#5E6F5A] space-y-1">
                     <li>• Humidity levels</li>
                     <li>• Atmospheric pressure</li>
                     <li>• Solar radiation</li>
@@ -212,7 +212,7 @@ export default function WeatherIntelligencePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 Our AI doesn't just tell you the weather - it tells you what to
                 do about it:
               </p>
@@ -288,13 +288,13 @@ export default function WeatherIntelligencePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-6">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Weather data is integrated into every recommendation our AI
                 makes:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Irrigation Decisions
                   </h4>
                   <div className="bg-blue-50 p-4 rounded-lg">
@@ -307,11 +307,11 @@ export default function WeatherIntelligencePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Spray Applications
                   </h4>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <ul className="text-sm text-green-700 space-y-1">
+                  <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                    <ul className="text-sm text-[#7A8F78] space-y-1">
                       <li>• Wind speed determines drift risk</li>
                       <li>• Temperature affects chemical efficacy</li>
                       <li>• Humidity influences absorption</li>
@@ -320,7 +320,7 @@ export default function WeatherIntelligencePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Field Operations
                   </h4>
                   <div className="bg-yellow-50 p-4 rounded-lg">
@@ -333,7 +333,7 @@ export default function WeatherIntelligencePage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sage-800 mb-3">
+                  <h4 className="font-semibold text-[#7A8F78] mb-3">
                     Harvest Timing
                   </h4>
                   <div className="bg-orange-50 p-4 rounded-lg">
@@ -359,18 +359,18 @@ export default function WeatherIntelligencePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Different forecast timeframes have different accuracy levels:
               </p>
               <div className="space-y-4">
-                <div className="border-l-4 border-green-500 pl-4">
+                <div className="border-l-4 border-[#8FBF7F] pl-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <Badge className="bg-green-100 text-green-800">
+                    <CheckCircle className="h-5 w-5 text-[#7A8F78]" />
+                    <Badge className="bg-[#F8FAF8] text-[#7A8F78]">
                       0-24 Hours: 90-95% Accurate
                     </Badge>
                   </div>
-                  <p className="text-sage-700 text-sm">
+                  <p className="text-[#5E6F5A] text-sm">
                     <strong>Very Reliable:</strong> Make critical decisions
                     based on these forecasts. Good for immediate spray decisions
                     and urgent operations.
@@ -383,7 +383,7 @@ export default function WeatherIntelligencePage() {
                       1-3 Days: 80-85% Accurate
                     </Badge>
                   </div>
-                  <p className="text-sage-700 text-sm">
+                  <p className="text-[#5E6F5A] text-sm">
                     <strong>Generally Reliable:</strong> Good for planning field
                     operations and scheduling work. Monitor for updates as time
                     approaches.
@@ -396,7 +396,7 @@ export default function WeatherIntelligencePage() {
                       4-7 Days: 70-75% Accurate
                     </Badge>
                   </div>
-                  <p className="text-sage-700 text-sm">
+                  <p className="text-[#5E6F5A] text-sm">
                     <strong>Planning Guidance:</strong> Use for general planning
                     and resource allocation. Check daily for updates and
                     changes.
@@ -409,7 +409,7 @@ export default function WeatherIntelligencePage() {
                       7+ Days: 60-65% Accurate
                     </Badge>
                   </div>
-                  <p className="text-sage-700 text-sm">
+                  <p className="text-[#5E6F5A] text-sm">
                     <strong>Trend Awareness:</strong> Shows general weather
                     patterns but specifics may change. Use for strategic
                     planning only.
@@ -426,53 +426,53 @@ export default function WeatherIntelligencePage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <p className="text-sage-700 mb-4">
+              <p className="text-[#5E6F5A] mb-4">
                 Tailor weather alerts to your specific crops and operations:
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-sage-400">1.</span>
+                  <span className="text-[#7A8F78]">1.</span>
                   <div>
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Set Temperature Thresholds
                     </h4>
-                    <p className="text-sage-700 text-sm">
+                    <p className="text-[#5E6F5A] text-sm">
                       Define frost, heat stress, and optimal temperature ranges
                       for your specific crops.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-sage-400">2.</span>
+                  <span className="text-[#7A8F78]">2.</span>
                   <div>
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Configure Wind Limits
                     </h4>
-                    <p className="text-sage-700 text-sm">
+                    <p className="text-[#5E6F5A] text-sm">
                       Set maximum wind speeds for spray applications and other
                       sensitive operations.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-sage-400">3.</span>
+                  <span className="text-[#7A8F78]">3.</span>
                   <div>
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Choose Alert Timing
                     </h4>
-                    <p className="text-sage-700 text-sm">
+                    <p className="text-[#5E6F5A] text-sm">
                       Receive alerts 2-48 hours before events, depending on the
                       action needed.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-sage-400">4.</span>
+                  <span className="text-[#7A8F78]">4.</span>
                   <div>
-                    <h4 className="font-semibold text-sage-800">
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Field-Specific Settings
                     </h4>
-                    <p className="text-sage-700 text-sm">
+                    <p className="text-[#5E6F5A] text-sm">
                       Different fields can have different alert thresholds based
                       on crop type and growth stage.
                     </p>

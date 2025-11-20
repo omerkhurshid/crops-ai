@@ -71,7 +71,7 @@ function DashboardContent({
     <div className="space-y-6">
       {/* Loading Indicator */}
       {loading && (
-        <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-[#555555] bg-blue-50 p-3 rounded-lg">
           <RefreshCw className="h-4 w-4 animate-spin" />
           Loading latest data...
         </div>
@@ -79,23 +79,23 @@ function DashboardContent({
       {/* Quick Stats Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total fields count">
-          <div className="text-2xl font-bold text-sage-600" aria-label={`${totalFields} fields`}>{totalFields}</div>
-          <div className="text-sm text-gray-600">Fields</div>
+          <div className="text-2xl font-bold text-[#555555]" aria-label={`${totalFields} fields`}>{totalFields}</div>
+          <div className="text-sm text-[#555555]">Fields</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total farm area">
           <div className="text-2xl font-bold text-green-600" aria-label={`${totalArea.toFixed(1)} hectares`}>{totalArea.toFixed(1)}</div>
-          <div className="text-sm text-gray-600">Hectares</div>
+          <div className="text-sm text-[#555555]">Hectares</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total crops count">
           <div className="text-2xl font-bold text-blue-600" aria-label={`${crops?.length || 0} crops`}>{crops?.length || 0}</div>
-          <div className="text-sm text-gray-600">Crops</div>
+          <div className="text-sm text-[#555555]">Crops</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4">
           <div className="flex items-center gap-2">
             <div className="text-2xl font-bold text-orange-600">{activeAlerts}</div>
             {activeAlerts === 0 && <CheckCircle className="h-5 w-5 text-green-600" />}
           </div>
-          <div className="text-sm text-gray-600">Active Alerts</div>
+          <div className="text-sm text-[#555555]">Active Alerts</div>
         </div>
       </div>
       {/* Morning Briefing - Only show core weather data initially */}
@@ -171,10 +171,10 @@ function DashboardContent({
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-sage-800 mb-2">
+            <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">
               Farm Overview
             </h2>
-            <p className="text-sage-600">
+            <p className="text-[#555555]">
               Interactive map showing your farm location and health status
             </p>
           </div>

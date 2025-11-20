@@ -40,7 +40,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
         {filteredCategories.map((category) => (
           <Card key={category.id} className="overflow-hidden">
             <CardHeader 
-              className="cursor-pointer hover:bg-gray-50 transition-colors"
+              className="cursor-pointer hover:bg-[#FAFAF7] transition-colors"
               onClick={() => setSelectedCategory(
                 selectedCategory === category.id ? null : category.id
               )}
@@ -50,7 +50,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                   <span className="text-2xl">{category.icon}</span>
                   <div>
                     <CardTitle className="text-lg">{category.name}</CardTitle>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-[#555555] mt-1">
                       {category.description}
                     </p>
                   </div>
@@ -75,20 +75,20 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                       key={livestock.id}
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
                         selectedLivestock === livestock.id
-                          ? 'bg-sage-50 border-sage-300 ring-1 ring-sage-500'
-                          : 'bg-white hover:bg-gray-50 border-gray-200'
+                          ? 'bg-[#F8FAF8] border-[#DDE4D8] ring-1 ring-sage-500'
+                          : 'bg-white hover:bg-[#FAFAF7] border-[#E6E6E6]'
                       }`}
                       onClick={() => onSelect(livestock, category)}
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{livestock.name}</h4>
+                        <h4 className="font-medium text-[#1A1A1A]">{livestock.name}</h4>
                         <InfoTooltip
                           title={livestock.name}
                           description={`${livestock.scientificName ? `Scientific: ${livestock.scientificName}. ` : ''}${livestock.typicalHerdSize ? `Typical size: ${livestock.typicalHerdSize}. ` : ''}${livestock.housingRequirements ? `Housing: ${livestock.housingRequirements}. ` : ''}Purpose: ${livestock.primaryPurpose.join(', ')}`}
                         />
                       </div>
                       {livestock.scientificName && (
-                        <p className="text-xs text-gray-500 italic mb-2">
+                        <p className="text-xs text-[#555555] italic mb-2">
                           {livestock.scientificName}
                         </p>
                       )}
@@ -100,15 +100,15 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                         ))}
                       </div>
                       {livestock.typicalHerdSize && (
-                        <p className="text-xs text-gray-600 mb-2">
+                        <p className="text-xs text-[#555555] mb-2">
                           <strong>Size:</strong> {livestock.typicalHerdSize}
                         </p>
                       )}
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-[#555555]">
                         <p className="mb-1"><strong>Monitors:</strong></p>
                         <p>{livestock.monitoringParameters.slice(0, 3).join(', ')}</p>
                         {livestock.monitoringParameters.length > 3 && (
-                          <p className="text-gray-500">+{livestock.monitoringParameters.length - 3} more</p>
+                          <p className="text-[#555555]">+{livestock.monitoringParameters.length - 3} more</p>
                         )}
                       </div>
                     </div>
@@ -120,7 +120,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
         ))}
       </div>
       {filteredCategories.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-[#555555]">
           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
           <h3 className="text-lg font-medium mb-2">No livestock found</h3>
           <p>Try adjusting your search terms or browse categories above.</p>

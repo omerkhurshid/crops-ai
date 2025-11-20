@@ -72,15 +72,15 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
   const getPriceColor = (changePercent: number) => {
     if (changePercent > 0) return 'text-green-600'
     if (changePercent < 0) return 'text-red-600'
-    return 'text-gray-600'
+    return 'text-[#555555]'
   }
   const getBadgeColor = (changePercent: number) => {
-    if (changePercent > 0) return 'bg-green-100 text-green-800'
+    if (changePercent > 0) return 'bg-[#F8FAF8] text-green-800'
     if (changePercent < 0) return 'bg-red-100 text-red-800'
-    return 'bg-gray-100 text-gray-800'
+    return 'bg-[#F5F5F5] text-[#1A1A1A]'
   }
   const getInsightColor = (type: string, impact: string) => {
-    if (type === 'opportunity') return 'border-l-4 border-l-green-500 bg-green-50'
+    if (type === 'opportunity') return 'border-l-4 border-l-green-500 bg-[#F8FAF8]'
     if (type === 'warning') return 'border-l-4 border-l-red-500 bg-red-50'
     return 'border-l-4 border-l-blue-500 bg-blue-50'
   }
@@ -95,7 +95,7 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-lg font-semibold">Market Intelligence</h3>
-          <p className="text-sm text-gray-600">Live commodity prices and market insights</p>
+          <p className="text-sm text-[#555555]">Live commodity prices and market insights</p>
         </div>
         <Button onClick={refreshPrices} disabled={loading} size="sm" variant="outline">
           <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
@@ -134,7 +134,7 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                     </span>
                   </div>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-[#555555]">
                   <div className="flex justify-between">
                     <span>Week High:</span>
                     <span>${price.weekHigh.toFixed(price.unit.includes('lb') ? 4 : 2)}</span>
@@ -211,21 +211,21 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
             <Button className="h-auto p-4 flex flex-col items-start text-left">
               <DollarSign className="h-6 w-6 mb-2" />
               <span className="font-medium">Price Alerts</span>
-              <span className="text-sm text-gray-600 mt-1">
+              <span className="text-sm text-[#555555] mt-1">
                 Set up notifications for target prices
               </span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex flex-col items-start text-left">
               <BarChart3 className="h-6 w-6 mb-2" />
               <span className="font-medium">Market Analysis</span>
-              <span className="text-sm text-gray-600 mt-1">
+              <span className="text-sm text-[#555555] mt-1">
                 Detailed charts and historical data
               </span>
             </Button>
             <Button variant="outline" className="h-auto p-4 flex flex-col items-start text-left">
               <TrendingUp className="h-6 w-6 mb-2" />
               <span className="font-medium">Contract Opportunities</span>
-              <span className="text-sm text-gray-600 mt-1">
+              <span className="text-sm text-[#555555] mt-1">
                 Find forward contract options
               </span>
             </Button>

@@ -245,11 +245,11 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       {[1, 2, 3, 4].map(step => (
         <div key={step} className="flex items-center">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-            step <= activeStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+            step <= activeStep ? 'bg-blue-600 text-white' : 'bg-[#F5F5F5] text-[#555555]'
           }`}>
             {step}
           </div>
-          <div className={`ml-2 text-sm ${step <= activeStep ? 'text-blue-600 font-medium' : 'text-gray-600'}`}>
+          <div className={`ml-2 text-sm ${step <= activeStep ? 'text-blue-600 font-medium' : 'text-[#555555]'}`}>
             {step === 1 ? 'Template' : step === 2 ? 'Metrics' : step === 3 ? 'Settings' : 'Review'}
           </div>
           {step < 4 && <div className="ml-4 w-8 h-px bg-gray-300" />}
@@ -263,7 +263,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold">Custom Report Builder</h3>
-          <p className="text-sm text-gray-600">Create personalized reports with your choice of metrics and formats</p>
+          <p className="text-sm text-[#555555]">Create personalized reports with your choice of metrics and formats</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={previewReport} disabled={previewing || config.metrics.length === 0} variant="outline" size="sm">
@@ -296,8 +296,8 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                 {templates.map(template => (
                   <div key={template.id} className="p-4 border rounded-lg hover:border-blue-300 cursor-pointer transition-colors" onClick={() => applyTemplate(template)}>
                     <h4 className="font-semibold mb-2">{template.name}</h4>
-                    <p className="text-sm text-gray-600 mb-2">{template.description}</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <p className="text-sm text-[#555555] mb-2">{template.description}</p>
+                    <div className="flex items-center gap-2 text-xs text-[#555555]">
                       <span>{template.metrics.length} metrics</span>
                       <span>•</span>
                       <span>{template.format.toUpperCase()}</span>
@@ -332,10 +332,10 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
               <div className="space-y-6">
                 {['Financial', 'Production', 'Environmental', 'Crop Health', 'Weather'].map(category => (
                   <div key={category}>
-                    <h4 className="font-semibold mb-3 text-gray-900">{category}</h4>
+                    <h4 className="font-semibold mb-3 text-[#1A1A1A]">{category}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {getMetricsByCategory(category).map(metric => (
-                        <div key={metric.id} className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-gray-50">
+                        <div key={metric.id} className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-[#FAFAF7]">
                           <Checkbox 
                             checked={config.metrics.includes(metric.id)}
                             onCheckedChange={() => toggleMetric(metric.id)}
@@ -345,10 +345,10 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                             <Label className={`font-medium ${!metric.available ? 'text-gray-400' : ''}`}>
                               {metric.name}
                             </Label>
-                            <p className={`text-sm ${!metric.available ? 'text-gray-400' : 'text-gray-600'}`}>
+                            <p className={`text-sm ${!metric.available ? 'text-gray-400' : 'text-[#555555]'}`}>
                               {metric.description}
                             </p>
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-[#555555] mt-1">
                               Unit: {metric.unit}
                             </div>
                           </div>
@@ -423,7 +423,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                 <Label>Date Range</Label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                   <div>
-                    <Label className="text-sm text-gray-600">Start Date</Label>
+                    <Label className="text-sm text-[#555555]">Start Date</Label>
                     <DatePicker 
                       date={config.dateRange.start}
                       onDateChange={(date) => setConfig(prev => ({ 
@@ -433,7 +433,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                     />
                   </div>
                   <div>
-                    <Label className="text-sm text-gray-600">End Date</Label>
+                    <Label className="text-sm text-[#555555]">End Date</Label>
                     <DatePicker 
                       date={config.dateRange.end}
                       onDateChange={(date) => setConfig(prev => ({ 
@@ -443,7 +443,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                     />
                   </div>
                   <div>
-                    <Label className="text-sm text-gray-600">Preset</Label>
+                    <Label className="text-sm text-[#555555]">Preset</Label>
                     <Select value={config.dateRange.preset} onValueChange={(value) => setConfig(prev => ({ ...prev, dateRange: { ...prev.dateRange, preset: value } }))}>
                       <SelectTrigger>
                         <SelectValue />
@@ -549,26 +549,26 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Report Summary */}
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-[#FAFAF7] rounded-lg">
                 <h4 className="font-semibold mb-2">{config.name || 'Untitled Report'}</h4>
                 {config.description && (
-                  <p className="text-sm text-gray-600 mb-3">{config.description}</p>
+                  <p className="text-sm text-[#555555] mb-3">{config.description}</p>
                 )}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-500">Metrics:</span>
+                    <span className="text-[#555555]">Metrics:</span>
                     <span className="ml-2 font-medium">{config.metrics.length} selected</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Format:</span>
+                    <span className="text-[#555555]">Format:</span>
                     <span className="ml-2 font-medium">{config.format.toUpperCase()}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Group by:</span>
+                    <span className="text-[#555555]">Group by:</span>
                     <span className="ml-2 font-medium">{config.groupBy}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Filters:</span>
+                    <span className="text-[#555555]">Filters:</span>
                     <span className="ml-2 font-medium">{config.filters.length} applied</span>
                   </div>
                 </div>
@@ -590,7 +590,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
               {/* Date Range */}
               <div>
                 <h4 className="font-semibold mb-2">Date Range</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#555555]">
                   {config.dateRange.start?.toLocaleDateString()} to {config.dateRange.end?.toLocaleDateString()}
                 </p>
               </div>

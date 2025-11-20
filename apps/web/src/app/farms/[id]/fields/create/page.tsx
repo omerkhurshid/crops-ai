@@ -39,8 +39,8 @@ export default function CreateFieldPage({ params }: { params: { id: string } }) 
     return (
       <div className="minimal-page">
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading farm data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading farm data...</p>
         </div>
       </div>
     )
@@ -53,12 +53,12 @@ export default function CreateFieldPage({ params }: { params: { id: string } }) 
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <div className="mb-8">
-          <Link href={`/farms/${farm.id}`} className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
+          <Link href={`/farms/${farm.id}`} className="inline-flex items-center text-sm text-[#555555] hover:text-[#1A1A1A] mb-4">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to {farm.name}
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Add New Field</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">Add New Field</h1>
+          <p className="text-[#555555] mt-2">
             Create a new field for monitoring and management
           </p>
         </div>

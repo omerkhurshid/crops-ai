@@ -154,10 +154,10 @@ export function SmartAgricultureSelector({
       {/* Header with recommendations toggle */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-[#1A1A1A]">
             Select Your {selectedFarmType === 'crops' ? 'Crops' : selectedFarmType === 'livestock' ? 'Livestock' : 'Agriculture'}
           </h3>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#555555]">
             Choose what you're growing or raising to get personalized insights
           </p>
         </div>
@@ -216,7 +216,7 @@ export function SmartAgricultureSelector({
           <select
             value={activeCategory}
             onChange={(e) => setActiveCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Categories</option>
             {availableCategories.map(category => (
@@ -229,7 +229,7 @@ export function SmartAgricultureSelector({
       </div>
       {/* Selected Items Summary */}
       {selectedItems.length > 0 && (
-        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+        <div className="p-4 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
           <div className="flex items-center gap-2 mb-2">
             <span className="font-medium text-green-900">
               Selected ({selectedItems.length})
@@ -240,7 +240,7 @@ export function SmartAgricultureSelector({
               <Badge
                 key={item.id}
                 variant="secondary"
-                className="bg-green-100 text-green-800 hover:bg-green-200"
+                className="bg-[#F8FAF8] text-green-800 hover:bg-[#DDE4D8]"
               >
                 {getItemIcon(item)}
                 <span className="ml-1">{item.name}</span>
@@ -263,8 +263,8 @@ export function SmartAgricultureSelector({
             className={cn(
               "border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md",
               isSelected(item.id)
-                ? "border-green-500 bg-green-50"
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-[#8FBF7F] bg-[#F8FAF8]"
+                : "border-[#E6E6E6] hover:border-[#E6E6E6]"
             )}
             onClick={() => toggleItemSelection(item)}
           >
@@ -272,9 +272,9 @@ export function SmartAgricultureSelector({
               <div className="flex items-center gap-2">
                 {getItemIcon(item)}
                 <div>
-                  <h4 className="font-medium text-gray-900">{item.name}</h4>
+                  <h4 className="font-medium text-[#1A1A1A]">{item.name}</h4>
                   {item.scientificName && (
-                    <p className="text-xs text-gray-500 italic">{item.scientificName}</p>
+                    <p className="text-xs text-[#555555] italic">{item.scientificName}</p>
                   )}
                 </div>
               </div>
@@ -300,7 +300,7 @@ export function SmartAgricultureSelector({
               </Badge>
             </div>
             {/* Quick Info */}
-            <div className="space-y-1 text-xs text-gray-600">
+            <div className="space-y-1 text-xs text-[#555555]">
               {item.additionalInfo?.growingSeasonDays && (
                 <div className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
@@ -322,9 +322,9 @@ export function SmartAgricultureSelector({
             </div>
             {/* Expandable Details */}
             {showCropDetails[item.id] && (
-              <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+              <div className="mt-3 pt-3 border-t border-[#E6E6E6] space-y-2">
                 <div>
-                  <h5 className="text-xs font-medium text-gray-700 mb-1">Monitoring Parameters:</h5>
+                  <h5 className="text-xs font-medium text-[#555555] mb-1">Monitoring Parameters:</h5>
                   <div className="flex flex-wrap gap-1">
                     {item.monitoringParameters.slice(0, 3).map(param => (
                       <Badge key={param} variant="outline" className="text-xs">
@@ -340,8 +340,8 @@ export function SmartAgricultureSelector({
                 </div>
                 {item.additionalInfo?.primaryHarvestSeason && (
                   <div>
-                    <h5 className="text-xs font-medium text-gray-700 mb-1">Harvest Season:</h5>
-                    <p className="text-xs text-gray-600">
+                    <h5 className="text-xs font-medium text-[#555555] mb-1">Harvest Season:</h5>
+                    <p className="text-xs text-[#555555]">
                       {item.additionalInfo.primaryHarvestSeason.join(', ')}
                     </p>
                   </div>
@@ -352,7 +352,7 @@ export function SmartAgricultureSelector({
         ))}
       </div>
       {filteredItems.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-[#555555]">
           <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />
           <p className="font-medium">No items found</p>
           <p className="text-sm">Try adjusting your search or filter</p>

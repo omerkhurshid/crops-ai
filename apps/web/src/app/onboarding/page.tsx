@@ -46,8 +46,8 @@ export default function OnboardingPage() {
       <div className="minimal-page">
         <Navbar />
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading...</p>
         </div>
       </div>
     )
@@ -60,18 +60,18 @@ export default function OnboardingPage() {
       <Navbar />
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-light text-sage-800 mb-4 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-light text-[#7A8F78] mb-4 tracking-tight">
             Let's Increase Your Farm Profits
           </h1>
-          <p className="text-xl text-sage-600 font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-[#7A8F78] font-light max-w-2xl mx-auto leading-relaxed">
             In just 5 minutes, we'll show you personalized recommendations to boost your yields and profits
           </p>
           {/* Value proposition callout */}
-          <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-8 max-w-xl mx-auto">
-            <div className="text-2xl font-bold text-green-700 mb-2">
+          <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-xl p-6 mt-8 max-w-xl mx-auto">
+            <div className="text-2xl font-bold text-[#7A8F78] mb-2">
               Average farmer saves $15,000+ per season
             </div>
-            <p className="text-green-600">
+            <p className="text-[#7A8F78]">
               With better timing decisions and early problem detection
             </p>
           </div>

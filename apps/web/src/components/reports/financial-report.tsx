@@ -123,7 +123,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
     return (
       <div className="text-center py-8">
         <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-600">Unable to load financial data</p>
+        <p className="text-[#555555]">Unable to load financial data</p>
       </div>
     );
   }
@@ -133,7 +133,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold">Financial Analysis Report</h3>
-          <p className="text-sm text-gray-600">Comprehensive financial overview and profitability analysis</p>
+          <p className="text-sm text-[#555555]">Comprehensive financial overview and profitability analysis</p>
         </div>
         <Button onClick={generateReport} disabled={generating} size="sm">
           {generating ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
@@ -142,35 +142,35 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       </div>
       {/* Key Metrics Summary */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        <div className="text-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
+        <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border-2 border-[#DDE4D8]">
           <DollarSign className="h-6 w-6 text-green-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-green-600">{formatCurrency(data.summary.totalRevenue)}</div>
-          <p className="text-xs text-gray-600">Total Revenue</p>
+          <p className="text-xs text-[#555555]">Total Revenue</p>
         </div>
         <div className="text-center p-4 bg-red-50 rounded-lg border-2 border-red-200">
           <TrendingDown className="h-6 w-6 text-red-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-red-600">{formatCurrency(data.summary.totalExpenses)}</div>
-          <p className="text-xs text-gray-600">Total Expenses</p>
+          <p className="text-xs text-[#555555]">Total Expenses</p>
         </div>
         <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
           <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-blue-600">{formatCurrency(data.summary.netProfit)}</div>
-          <p className="text-xs text-gray-600">Net Profit</p>
+          <p className="text-xs text-[#555555]">Net Profit</p>
         </div>
         <div className="text-center p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
           <Target className="h-6 w-6 text-purple-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-purple-600">{data.summary.profitMargin.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">Profit Margin</p>
+          <p className="text-xs text-[#555555]">Profit Margin</p>
         </div>
         <div className="text-center p-4 bg-orange-50 rounded-lg border-2 border-orange-200">
           <Calculator className="h-6 w-6 text-orange-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-orange-600">{data.summary.roi.toFixed(1)}%</div>
-          <p className="text-xs text-gray-600">ROI</p>
+          <p className="text-xs text-[#555555]">ROI</p>
         </div>
         <div className="text-center p-4 bg-teal-50 rounded-lg border-2 border-teal-200">
           <Wallet className="h-6 w-6 text-teal-600 mx-auto mb-2" />
           <div className="text-xl font-bold text-teal-600">{formatCurrency(data.summary.cashFlow)}</div>
-          <p className="text-xs text-gray-600">Cash Flow</p>
+          <p className="text-xs text-[#555555]">Cash Flow</p>
         </div>
       </div>
       {/* Detailed Analysis Tabs */}
@@ -196,7 +196,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     <div key={index} className="flex justify-between items-center">
                       <div>
                         <span className="text-sm font-medium">{item.category}</span>
-                        <div className="text-xs text-gray-500">{item.percentage.toFixed(1)}%</div>
+                        <div className="text-xs text-[#555555]">{item.percentage.toFixed(1)}%</div>
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">{formatCurrency(item.amount)}</div>
@@ -220,7 +220,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     <div key={index} className="flex justify-between items-center">
                       <div>
                         <span className="text-sm font-medium">{item.category}</span>
-                        <div className="text-xs text-gray-500">{item.percentage.toFixed(1)}%</div>
+                        <div className="text-xs text-[#555555]">{item.percentage.toFixed(1)}%</div>
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">{formatCurrency(item.amount)}</div>
@@ -242,18 +242,18 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {(data.profitability?.byField || []).map((field, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <span className="font-medium">{field.field}</span>
-                          <div className="text-sm text-gray-600">{field.area.toFixed(1)} acres</div>
+                          <div className="text-sm text-[#555555]">{field.area.toFixed(1)} acres</div>
                         </div>
                         <div className="text-right">
                           <div className="font-semibold">{formatCurrency(field.profit)}</div>
-                          <div className="text-sm text-gray-600">{formatCurrency(field.profitPerAcre)}/acre</div>
+                          <div className="text-sm text-[#555555]">{formatCurrency(field.profitPerAcre)}/acre</div>
                         </div>
                       </div>
-                      <div className="text-sm text-gray-600">Revenue: {formatCurrency(field.revenue)}</div>
+                      <div className="text-sm text-[#555555]">Revenue: {formatCurrency(field.revenue)}</div>
                     </div>
                   ))}
                 </div>
@@ -266,14 +266,14 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
               <CardContent>
                 <div className="space-y-3">
                   {(data.profitability?.byCrop || []).map((crop, index) => (
-                    <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex justify-between items-center p-3 bg-[#FAFAF7] rounded-lg">
                       <div>
                         <span className="font-medium">{crop.crop}</span>
-                        <div className="text-sm text-gray-600">{crop.margin.toFixed(1)}% margin</div>
+                        <div className="text-sm text-[#555555]">{crop.margin.toFixed(1)}% margin</div>
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">{formatCurrency(crop.profit)}</div>
-                        <div className="text-sm text-gray-600">Revenue: {formatCurrency(crop.revenue)}</div>
+                        <div className="text-sm text-[#555555]">Revenue: {formatCurrency(crop.revenue)}</div>
                       </div>
                     </div>
                   ))}
@@ -292,25 +292,25 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
                   <div className="text-lg font-bold text-green-600">{formatCurrency(data.cashFlow.operational)}</div>
-                  <p className="text-sm text-gray-600">Operational</p>
+                  <p className="text-sm text-[#555555]">Operational</p>
                 </div>
                 <div className="text-center p-4 bg-red-50 rounded-lg">
                   <div className="text-lg font-bold text-red-600">{formatCurrency(data.cashFlow.investment)}</div>
-                  <p className="text-sm text-gray-600">Investment</p>
+                  <p className="text-sm text-[#555555]">Investment</p>
                 </div>
                 <div className="text-center p-4 bg-orange-50 rounded-lg">
                   <div className="text-lg font-bold text-orange-600">{formatCurrency(data.cashFlow.financing)}</div>
-                  <p className="text-sm text-gray-600">Financing</p>
+                  <p className="text-sm text-[#555555]">Financing</p>
                 </div>
                 <div className="text-center p-4 bg-blue-50 rounded-lg">
                   <div className="text-lg font-bold text-blue-600">{formatCurrency(data.cashFlow.net)}</div>
-                  <p className="text-sm text-gray-600">Net Cash Flow</p>
+                  <p className="text-sm text-[#555555]">Net Cash Flow</p>
                 </div>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm text-gray-700 mb-2">
+                <p className="text-sm text-[#555555] mb-2">
                   <strong>Cash Flow Summary:</strong> Strong operational cash flow indicates healthy day-to-day operations. 
                   Investment outflows represent equipment purchases and farm improvements. 
                   Net positive cash flow of {formatCurrency(data.cashFlow.net)} provides good liquidity.
@@ -329,7 +329,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAFAF7] rounded-lg">
                   <h4 className="font-semibold mb-3 text-center">Next Quarter Projection</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -346,7 +346,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAFAF7] rounded-lg">
                   <h4 className="font-semibold mb-3 text-center">Year-End Projection</h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -364,8 +364,8 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                <p className="text-sm text-gray-700">
+              <div className="mt-4 p-4 bg-[#F8FAF8] rounded-lg">
+                <p className="text-sm text-[#555555]">
                   <strong>Projection Summary:</strong> Based on current trends and seasonal patterns, 
                   we project continued profitability growth. Year-end profit is expected to reach 
                   {formatCurrency(data.projections.yearEnd.profit)}, representing a 

@@ -206,21 +206,21 @@ export function OnboardingTooltips({
   const themeColors = {
     sage: {
       bg: 'from-sage-50 to-white',
-      border: 'border-sage-200',
-      text: 'text-sage-800',
-      accent: 'text-sage-600'
+      border: 'border-[#DDE4D8]',
+      text: 'text-[#1A1A1A]',
+      accent: 'text-[#555555]'
     },
     earth: {
-      bg: 'from-earth-50 to-white',
-      border: 'border-earth-200', 
-      text: 'text-earth-800',
-      accent: 'text-earth-600'
+      bg: 'from-[#F8FAF8] to-white',
+      border: 'border-[#DDE4D8]', 
+      text: 'text-[#7A8F78]',
+      accent: 'text-[#7A8F78]'
     },
     cream: {
-      bg: 'from-cream-50 to-white',
-      border: 'border-cream-200',
-      text: 'text-sage-800', 
-      accent: 'text-sage-600'
+      bg: 'from-[#FAFAF7] to-white',
+      border: 'border-[#DDE4D8]',
+      text: 'text-[#1A1A1A]', 
+      accent: 'text-[#555555]'
     }
   }
   const colors = themeColors[theme]
@@ -243,8 +243,8 @@ export function OnboardingTooltips({
           <ModernCardContent className={`p-6 bg-gradient-to-br ${colors.bg}`}>
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-sage-100 to-earth-100 rounded-lg">
-                  <Lightbulb className="h-4 w-4 text-sage-700" />
+                <div className="p-2 bg-gradient-to-br from-sage-100 to-#F8FAF8 rounded-lg">
+                  <Lightbulb className="h-4 w-4 text-[#555555]" />
                 </div>
                 <div>
                   <h3 className={`font-semibold ${colors.text}`}>
@@ -266,7 +266,7 @@ export function OnboardingTooltips({
               </div>
               <button
                 onClick={handleSkip}
-                className={`p-1 hover:bg-sage-100 rounded-full transition-colors ${colors.accent}`}
+                className={`p-1 hover:bg-[#F8FAF8] rounded-full transition-colors ${colors.accent}`}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -315,13 +315,13 @@ export function OnboardingTooltips({
             </div>
             {/* Progress indicator */}
             {showProgress && (
-              <div className="mt-4 pt-4 border-t border-sage-200">
+              <div className="mt-4 pt-4 border-t border-[#DDE4D8]">
                 <div className="flex gap-1">
                   {steps.map((_, index) => (
                     <div
                       key={index}
                       className={`h-1 flex-1 rounded-full transition-colors ${
-                        index <= currentStep ? 'bg-sage-500' : 'bg-sage-200'
+                        index <= currentStep ? 'bg-[#7A8F78]' : 'bg-[#DDE4D8]'
                       }`}
                     />
                   ))}

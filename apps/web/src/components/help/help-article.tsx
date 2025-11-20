@@ -67,21 +67,21 @@ export function HelpArticle({
               The main dashboard provides:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-              <div className="p-4 border border-sage-200 rounded-lg">
+              <div className="p-4 border border-[#DDE4D8] rounded-lg">
                 <h4 className="font-semibold mb-2">Farm Overview</h4>
-                <p className="text-sm text-sage-600">Summary of your farms and fields</p>
+                <p className="text-sm text-[#555555]">Summary of your farms and fields</p>
               </div>
-              <div className="p-4 border border-sage-200 rounded-lg">
+              <div className="p-4 border border-[#DDE4D8] rounded-lg">
                 <h4 className="font-semibold mb-2">Health Alerts</h4>
-                <p className="text-sm text-sage-600">Recent crop health notifications</p>
+                <p className="text-sm text-[#555555]">Recent crop health notifications</p>
               </div>
-              <div className="p-4 border border-sage-200 rounded-lg">
+              <div className="p-4 border border-[#DDE4D8] rounded-lg">
                 <h4 className="font-semibold mb-2">Weather Updates</h4>
-                <p className="text-sm text-sage-600">Local weather and agricultural forecasts</p>
+                <p className="text-sm text-[#555555]">Local weather and agricultural forecasts</p>
               </div>
-              <div className="p-4 border border-sage-200 rounded-lg">
+              <div className="p-4 border border-[#DDE4D8] rounded-lg">
                 <h4 className="font-semibold mb-2">AI Recommendations</h4>
-                <p className="text-sm text-sage-600">Personalized farming insights</p>
+                <p className="text-sm text-[#555555]">Personalized farming insights</p>
               </div>
             </div>
             <Alert className="my-6">
@@ -116,7 +116,7 @@ export function HelpArticle({
               <li>You&apos;ll be redirected to the farm creation wizard</li>
             </ol>
             <h3>Step 2: Basic Farm Information</h3>
-            <div className="bg-sage-50 p-4 rounded-lg my-6">
+            <div className="bg-[#F8FAF8] p-4 rounded-lg my-6">
               <h4 className="font-semibold mb-3">Required Fields:</h4>
               <ul className="space-y-2">
                 <li><strong>Farm Name:</strong> Choose a descriptive name for easy identification</li>
@@ -176,7 +176,7 @@ export function HelpArticle({
               indicates vegetation health and vigor. It&apos;s calculated using near-infrared and red light 
               reflectance from satellite imagery.
             </p>
-            <div className="bg-earth-50 p-4 rounded-lg my-6">
+            <div className="bg-[#F8FAF8] p-4 rounded-lg my-6">
               <h4 className="font-semibold mb-3">NDVI Scale Interpretation:</h4>
               <ul className="space-y-2">
                 <li><strong>0.8 - 1.0:</strong> Dense, healthy vegetation</li>
@@ -255,7 +255,7 @@ export function HelpArticle({
               {onBack && (
                 <button
                   onClick={onBack}
-                  className="flex items-center gap-2 text-sage-600 hover:text-sage-800 mb-4 text-sm"
+                  className="flex items-center gap-2 text-[#555555] hover:text-[#1A1A1A] mb-4 text-sm"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back to Help Center
@@ -268,7 +268,7 @@ export function HelpArticle({
                   {readTime}
                 </span>
               </div>
-              <ModernCardTitle className="text-3xl text-sage-800 mb-3">
+              <ModernCardTitle className="text-3xl text-[#1A1A1A] mb-3">
                 {title}
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
@@ -283,11 +283,11 @@ export function HelpArticle({
               </div>
             </div>
             <div className="flex gap-2 ml-4">
-              <button className="p-2 hover:bg-sage-100 rounded-lg transition-colors">
-                <Bookmark className="h-4 w-4 text-sage-600" />
+              <button className="p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors">
+                <Bookmark className="h-4 w-4 text-[#555555]" />
               </button>
-              <button className="p-2 hover:bg-sage-100 rounded-lg transition-colors">
-                <Share2 className="h-4 w-4 text-sage-600" />
+              <button className="p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors">
+                <Share2 className="h-4 w-4 text-[#555555]" />
               </button>
             </div>
           </div>
@@ -304,13 +304,13 @@ export function HelpArticle({
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-sm text-sage-600">Was this article helpful?</span>
+              <span className="text-sm text-[#555555]">Was this article helpful?</span>
               <div className="flex gap-2">
-                <button className="flex items-center gap-2 px-3 py-1 hover:bg-sage-100 rounded-lg transition-colors text-sm">
+                <button className="flex items-center gap-2 px-3 py-1 hover:bg-[#F8FAF8] rounded-lg transition-colors text-sm">
                   <ThumbsUp className="h-4 w-4" />
                   Yes
                 </button>
-                <button className="flex items-center gap-2 px-3 py-1 hover:bg-sage-100 rounded-lg transition-colors text-sm">
+                <button className="flex items-center gap-2 px-3 py-1 hover:bg-[#F8FAF8] rounded-lg transition-colors text-sm">
                   <ThumbsDown className="h-4 w-4" />
                   No
                 </button>
@@ -322,12 +322,12 @@ export function HelpArticle({
               </span>
             )}
           </div>
-          <div className="mt-4 pt-4 border-t border-sage-200">
+          <div className="mt-4 pt-4 border-t border-[#DDE4D8]">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-sage-600">
-                Need more help? <button className="text-sage-800 hover:underline">Contact Support</button>
+              <span className="text-[#555555]">
+                Need more help? <button className="text-[#1A1A1A] hover:underline">Contact Support</button>
               </span>
-              <button className="flex items-center gap-1 text-sage-600 hover:text-sage-800">
+              <button className="flex items-center gap-1 text-[#555555] hover:text-[#1A1A1A]">
                 View related articles <ExternalLink className="h-3 w-3" />
               </button>
             </div>

@@ -34,7 +34,7 @@ interface SimpleFieldHealth {
   }
 }
 const healthColors = {
-  healthy: 'bg-green-100 text-green-800 border-green-200',
+  healthy: 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]',
   watch: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   action_needed: 'bg-red-100 text-red-800 border-red-200'
 }
@@ -105,14 +105,14 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
   const getYieldIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="h-4 w-4 text-green-600" />
     if (change < 0) return <TrendingDown className="h-4 w-4 text-red-600" />
-    return <Activity className="h-4 w-4 text-gray-600" />
+    return <Activity className="h-4 w-4 text-[#555555]" />
   }
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800'
       case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'low': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'low': return 'bg-[#F8FAF8] text-green-800'
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
   const selectedFieldData = fields.find(f => f.fieldId === selectedField) || fields[0]
@@ -137,12 +137,12 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
           <Card className="border-2">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-full">
+                <div className="p-2 bg-[#F8FAF8] rounded-full">
                   <Sprout className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-green-600">{Math.round(avgHealth)}%</div>
-                  <div className="text-sm text-gray-600">Overall Health</div>
+                  <div className="text-sm text-[#555555]">Overall Health</div>
                 </div>
               </div>
             </CardContent>
@@ -155,8 +155,8 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-blue-600">{fields.length}</div>
-                  <div className="text-sm text-gray-600">Fields Monitored</div>
-                  <div className="text-xs text-gray-500">{totalArea.toFixed(1)} ha total</div>
+                  <div className="text-sm text-[#555555]">Fields Monitored</div>
+                  <div className="text-xs text-[#555555]">{totalArea.toFixed(1)} ha total</div>
                 </div>
               </div>
             </CardContent>
@@ -169,7 +169,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-red-600">{fieldsNeedingAction}</div>
-                  <div className="text-sm text-gray-600">Need Attention</div>
+                  <div className="text-sm text-[#555555]">Need Attention</div>
                 </div>
               </div>
             </CardContent>
@@ -182,7 +182,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-orange-600">{urgentTasks}</div>
-                  <div className="text-sm text-gray-600">Urgent Tasks</div>
+                  <div className="text-sm text-[#555555]">Urgent Tasks</div>
                 </div>
               </div>
             </CardContent>
@@ -195,8 +195,8 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               key={field.fieldId} 
               className={`border-2 cursor-pointer transition-all hover:shadow-md ${
                 selectedField === field.fieldId || (selectedField === null && field === fields[0])
-                  ? 'ring-2 ring-sage-500 border-sage-300' 
-                  : 'hover:border-gray-300'
+                  ? 'ring-2 ring-sage-500 border-[#DDE4D8]' 
+                  : 'hover:border-[#E6E6E6]'
               }`}
               onClick={() => setSelectedField(field.fieldId)}
             >
@@ -213,7 +213,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 <div className="space-y-3">
                   {/* Health Score */}
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Health Score</span>
+                    <span className="text-sm text-[#555555]">Health Score</span>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-lg">{field.healthScore}%</span>
                       <Badge className={healthColors[field.stressLevel]}>
@@ -223,21 +223,21 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                   </div>
                   {/* Yield Outlook */}
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Yield Outlook</span>
+                    <span className="text-sm text-[#555555]">Yield Outlook</span>
                     <div className="flex items-center gap-1">
                       {getYieldIcon(field.yieldChange)}
                       <span className={`font-medium ${yieldColors[field.yieldOutlook]}`}>
                         {field.yieldOutlook}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-[#555555]">
                         ({field.yieldChange > 0 ? '+' : ''}{field.yieldChange}%)
                       </span>
                     </div>
                   </div>
                   {/* Next Action */}
-                  <div className="pt-2 border-t border-gray-200">
+                  <div className="pt-2 border-t border-[#E6E6E6]">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Next Action</span>
+                      <span className="text-sm text-[#555555]">Next Action</span>
                       <Badge className={getPriorityColor(field.nextAction.priority)}>
                         {field.nextAction.daysUntil} days
                       </Badge>
@@ -283,7 +283,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                   <div className="text-center py-6">
                     <CheckCircle2 className="h-8 w-8 text-green-600 mx-auto mb-2" />
                     <p className="text-sm text-green-700">No issues detected!</p>
-                    <p className="text-xs text-gray-600">This field is performing well.</p>
+                    <p className="text-xs text-[#555555]">This field is performing well.</p>
                   </div>
                 )}
               </CardContent>
@@ -308,7 +308,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                     </div>
                   ))}
                 </div>
-                <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="mt-4 p-3 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="h-4 w-4 text-green-600" />
                     <span className="font-medium text-green-800">Priority Task</span>

@@ -42,8 +42,8 @@ export default function CropsPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="ml-4 text-gray-600">Loading crops...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+          <p className="ml-4 text-[#555555]">Loading crops...</p>
         </div>
       </DashboardLayout>
     )
@@ -62,36 +62,36 @@ export default function CropsPage() {
       <main className="max-w-7xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8">
           {/* Page Header - Consistent with other pages */}
-          <h1 className="text-4xl font-light text-sage-800 mb-2">Crop Planning</h1>
-          <p className="text-lg text-sage-600 mb-6">
+          <h1 className="text-4xl font-light text-[#7A8F78] mb-2">Crop Planning</h1>
+          <p className="text-lg text-[#7A8F78] mb-6">
             Plan your plantings and track crop progress throughout the season
           </p>
           {/* Getting Started Guide */}
-          <div className="bg-gradient-to-r from-sage-50 to-earth-50 rounded-xl p-4 mb-6 border border-sage-200">
-            <h3 className="font-semibold text-sage-800 mb-2 flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-sage-600" />
+          <div className="bg-gradient-to-r from-#F8FAF8 to-earth-50 rounded-xl p-4 mb-6 border border-[#DDE4D8]">
+            <h3 className="font-semibold text-[#7A8F78] mb-2 flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-[#7A8F78]" />
               New to Crop Planning?
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-sage-700">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-[#5E6F5A]">
               <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">1</div>
+                <div className="w-5 h-5 rounded-full bg-[#DDE4D8] flex items-center justify-center text-xs font-bold text-[#7A8F78] flex-shrink-0 mt-0.5">1</div>
                 <div>
                   <p className="font-medium">Choose Your Crops</p>
-                  <p className="text-sage-600">Select what you want to grow based on your region and soil</p>
+                  <p className="text-[#7A8F78]">Select what you want to grow based on your region and soil</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">2</div>
+                <div className="w-5 h-5 rounded-full bg-[#DDE4D8] flex items-center justify-center text-xs font-bold text-[#7A8F78] flex-shrink-0 mt-0.5">2</div>
                 <div>
                   <p className="font-medium">Plan Timing</p>
-                  <p className="text-sage-600">Set planting and harvest dates for optimal yields</p>
+                  <p className="text-[#7A8F78]">Set planting and harvest dates for optimal yields</p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-xs font-bold text-sage-800 flex-shrink-0 mt-0.5">3</div>
+                <div className="w-5 h-5 rounded-full bg-[#DDE4D8] flex items-center justify-center text-xs font-bold text-[#7A8F78] flex-shrink-0 mt-0.5">3</div>
                 <div>
                   <p className="font-medium">Track Progress</p>
-                  <p className="text-sage-600">Monitor growth stages and get AI recommendations</p>
+                  <p className="text-[#7A8F78]">Monitor growth stages and get AI recommendations</p>
                 </div>
               </div>
             </div>

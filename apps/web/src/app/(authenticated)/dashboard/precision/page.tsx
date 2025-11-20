@@ -35,7 +35,7 @@ export default function PrecisionDashboardPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1A1A1A]"></div>
       </div>
     )
   }
@@ -57,8 +57,8 @@ export default function PrecisionDashboardPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome, {session.user.name}</h1>
-        <p className="text-gray-600">
+        <h1 className="text-2xl font-bold text-[#1A1A1A]">Welcome, {session.user.name}</h1>
+        <p className="text-[#555555]">
           Role: {session.user.role} | Farm: {farmData.name}
         </p>
       </div>

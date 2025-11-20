@@ -27,13 +27,13 @@ export default function UnderstandingPlantHealthScoresPage() {
         {/* Article Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="h-6 w-6 text-sage-700" />
-            <span className="text-sage-600">Crop Health Monitoring</span>
+            <Activity className="h-6 w-6 text-[#5E6F5A]" />
+            <span className="text-[#7A8F78]">Crop Health Monitoring</span>
           </div>
-          <h1 className="text-3xl font-bold text-sage-800 mb-4">
+          <h1 className="text-3xl font-bold text-[#7A8F78] mb-4">
             Understanding Plant Health Scores
           </h1>
-          <div className="flex items-center gap-4 text-sm text-sage-600">
+          <div className="flex items-center gap-4 text-sm text-[#7A8F78]">
             <Badge variant="outline">8 min read</Badge>
             <span>•</span>
             <span>Last updated: January 2025</span>
@@ -42,7 +42,7 @@ export default function UnderstandingPlantHealthScoresPage() {
         {/* Introduction */}
         <ModernCard variant="soft" className="mb-8">
           <ModernCardContent className="p-8">
-            <p className="text-lg text-sage-700 leading-relaxed mb-4">
+            <p className="text-lg text-[#5E6F5A] leading-relaxed mb-4">
               At Cropple.ai, we use satellite technology to monitor your crops'
               health without you having to walk every field every day. Our
               system translates complex satellite data into simple health scores
@@ -69,37 +69,37 @@ export default function UnderstandingPlantHealthScoresPage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-2">
+                <h3 className="font-semibold text-[#7A8F78] mb-2">
                   1. NDVI (Normalized Difference Vegetation Index)
                 </h3>
-                <p className="text-sage-700 mb-4">
+                <p className="text-[#5E6F5A] mb-4">
                   This is our primary measurement. Healthy plants reflect
                   certain light wavelengths differently than stressed plants.
                   Our satellites detect these differences and convert them into
                   a score.
                 </p>
-                <div className="bg-sage-50 p-4 rounded-lg">
-                  <p className="text-sm font-mono text-sage-700">
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
+                  <p className="text-sm font-mono text-[#5E6F5A]">
                     NDVI = (Near Infrared - Red Light) / (Near Infrared + Red
                     Light)
                   </p>
-                  <p className="text-sm text-sage-600 mt-2">
+                  <p className="text-sm text-[#7A8F78] mt-2">
                     Don't worry about the math - we handle it automatically!
                   </p>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-2">
+                <h3 className="font-semibold text-[#7A8F78] mb-2">
                   2. Score Interpretation
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                     <div>
-                      <Badge className="bg-green-100 text-green-800 mb-2">
+                      <Badge className="bg-[#F8FAF8] text-[#7A8F78] mb-2">
                         80-100: Excellent Health
                       </Badge>
-                      <p className="text-sage-700">
+                      <p className="text-[#5E6F5A]">
                         Your crops are thriving! Dense, green vegetation with
                         optimal growth.
                       </p>
@@ -111,7 +111,7 @@ export default function UnderstandingPlantHealthScoresPage() {
                       <Badge className="bg-yellow-100 text-yellow-800 mb-2">
                         60-79: Good Health
                       </Badge>
-                      <p className="text-sage-700">
+                      <p className="text-[#5E6F5A]">
                         Normal growth with some areas that could use attention.
                       </p>
                     </div>
@@ -122,7 +122,7 @@ export default function UnderstandingPlantHealthScoresPage() {
                       <Badge className="bg-orange-100 text-orange-800 mb-2">
                         40-59: Moderate Stress
                       </Badge>
-                      <p className="text-sage-700">
+                      <p className="text-[#5E6F5A]">
                         Your crops are showing signs of stress - investigate
                         soon.
                       </p>
@@ -134,7 +134,7 @@ export default function UnderstandingPlantHealthScoresPage() {
                       <Badge className="bg-red-100 text-red-800 mb-2">
                         0-39: Severe Stress
                       </Badge>
-                      <p className="text-sage-700">
+                      <p className="text-[#5E6F5A]">
                         Immediate attention needed - significant crop stress
                         detected.
                       </p>
@@ -143,34 +143,34 @@ export default function UnderstandingPlantHealthScoresPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-2">
+                <h3 className="font-semibold text-[#7A8F78] mb-2">
                   3. Factors We Consider
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700">
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]">
                       <strong>Growth Stage:</strong> Seedlings naturally have
                       lower scores than mature plants
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700">
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]">
                       <strong>Crop Type:</strong> Corn typically shows higher
                       NDVI than wheat
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700">
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]">
                       <strong>Season:</strong> We adjust expectations based on
                       planting date
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-sage-400">•</span>
-                    <span className="text-sage-700">
+                    <span className="text-[#7A8F78]">•</span>
+                    <span className="text-[#5E6F5A]">
                       <strong>Historical Performance:</strong> We compare
                       against your field's typical patterns
                     </span>
@@ -190,19 +190,19 @@ export default function UnderstandingPlantHealthScoresPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <p className="text-sage-700">
+              <p className="text-[#5E6F5A]">
                 More important than a single score is how your crop health
                 changes over time:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-green-50 p-4 rounded-lg">
+                <div className="bg-[#F8FAF8] p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-5 w-5 text-green-600" />
-                    <h4 className="font-semibold text-green-800">
+                    <TrendingUp className="h-5 w-5 text-[#7A8F78]" />
+                    <h4 className="font-semibold text-[#7A8F78]">
                       Improving Trend
                     </h4>
                   </div>
-                  <p className="text-green-700 text-sm">
+                  <p className="text-[#7A8F78] text-sm">
                     Health scores increasing week-over-week indicate your crops
                     are responding well to conditions or treatments.
                   </p>
@@ -234,15 +234,15 @@ export default function UnderstandingPlantHealthScoresPage() {
           <ModernCardContent className="p-8">
             <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">
+                <h3 className="font-semibold text-[#7A8F78] mb-3">
                   Why Scores Drop:
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sage-700">
+                    <h4 className="font-medium text-[#5E6F5A]">
                       Environmental Stress
                     </h4>
-                    <ul className="text-sm text-sage-600 space-y-1">
+                    <ul className="text-sm text-[#7A8F78] space-y-1">
                       <li>• Drought or water stress</li>
                       <li>• Heat stress</li>
                       <li>• Frost damage</li>
@@ -250,10 +250,10 @@ export default function UnderstandingPlantHealthScoresPage() {
                     </ul>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sage-700">
+                    <h4 className="font-medium text-[#5E6F5A]">
                       Biological Issues
                     </h4>
-                    <ul className="text-sm text-sage-600 space-y-1">
+                    <ul className="text-sm text-[#7A8F78] space-y-1">
                       <li>• Disease outbreak</li>
                       <li>• Pest infestation</li>
                       <li>• Weed competition</li>
@@ -263,27 +263,27 @@ export default function UnderstandingPlantHealthScoresPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-sage-800 mb-3">
+                <h3 className="font-semibold text-[#7A8F78] mb-3">
                   Normal Score Variations:
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-sage-500 mt-0.5" />
-                    <span className="text-sage-700">
+                    <Clock className="h-4 w-4 text-[#7A8F78] mt-0.5" />
+                    <span className="text-[#5E6F5A]">
                       <strong>Early Season:</strong> Lower scores are normal for
                       young plants
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-sage-500 mt-0.5" />
-                    <span className="text-sage-700">
+                    <Clock className="h-4 w-4 text-[#7A8F78] mt-0.5" />
+                    <span className="text-[#5E6F5A]">
                       <strong>Late Season:</strong> Scores naturally decline as
                       crops mature and dry down
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-sage-500 mt-0.5" />
-                    <span className="text-sage-700">
+                    <Clock className="h-4 w-4 text-[#7A8F78] mt-0.5" />
+                    <span className="text-[#5E6F5A]">
                       <strong>After Rain:</strong> Temporary score increases are
                       common after rainfall
                     </span>
@@ -303,38 +303,38 @@ export default function UnderstandingPlantHealthScoresPage() {
           </ModernCardHeader>
           <ModernCardContent className="p-8">
             <div className="space-y-4">
-              <div className="border-l-4 border-green-500 pl-4">
-                <h4 className="font-semibold text-sage-800 mb-2">
+              <div className="border-l-4 border-[#8FBF7F] pl-4">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">
                   Score 80-100 (Excellent)
                 </h4>
-                <p className="text-sage-700">
+                <p className="text-[#5E6F5A]">
                   Keep doing what you're doing! Monitor for any changes but no
                   immediate action needed.
                 </p>
               </div>
               <div className="border-l-4 border-yellow-500 pl-4">
-                <h4 className="font-semibold text-sage-800 mb-2">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">
                   Score 60-79 (Good)
                 </h4>
-                <p className="text-sage-700">
+                <p className="text-[#5E6F5A]">
                   Schedule a field visit within the week. Look for early signs
                   of stress or uneven growth.
                 </p>
               </div>
               <div className="border-l-4 border-orange-500 pl-4">
-                <h4 className="font-semibold text-sage-800 mb-2">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">
                   Score 40-59 (Moderate Stress)
                 </h4>
-                <p className="text-sage-700">
+                <p className="text-[#5E6F5A]">
                   Visit the field within 1-2 days. Check for pests, disease,
                   water stress, or nutrient issues.
                 </p>
               </div>
               <div className="border-l-4 border-red-500 pl-4">
-                <h4 className="font-semibold text-sage-800 mb-2">
+                <h4 className="font-semibold text-[#7A8F78] mb-2">
                   Score 0-39 (Severe Stress)
                 </h4>
-                <p className="text-sage-700">
+                <p className="text-[#5E6F5A]">
                   Immediate action required! Visit the field today to assess
                   damage and determine corrective measures.
                 </p>

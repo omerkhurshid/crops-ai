@@ -109,7 +109,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <select 
                 name="farm"
                 id="farm-select"
-                className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                 required
               >
                 <option value="">Select Farm</option>
@@ -128,7 +128,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
                 <select 
                   name="category"
                   id="category"
-                  className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                  className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                   required
                 >
                   <option value="">Select Category</option>
@@ -150,7 +150,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <Button type="button" variant="outline" onClick={() => setExpenseDialog(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-sage-600 hover:bg-sage-700 text-white">
+              <Button type="submit" className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white">
                 Log Expense
               </Button>
             </div>
@@ -160,7 +160,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
       {/* Log Harvest */}
       <Dialog open={harvestDialog} onOpenChange={setHarvestDialog}>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm" className="text-green-700 border-green-200 hover:bg-green-50">
+          <Button variant="outline" size="sm" className="text-green-700 border-[#DDE4D8] hover:bg-[#F8FAF8]">
             <Sprout className="h-4 w-4 mr-1" />
             Log Harvest
           </Button>
@@ -178,7 +178,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <select 
                 name="farm"
                 id="farm-harvest"
-                className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                 required
               >
                 <option value="">Select Farm</option>
@@ -197,7 +197,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
                 <select 
                   name="cropType"
                   id="crop-type"
-                  className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                  className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                   required
                 >
                   <option value="">Select Crop</option>
@@ -222,7 +222,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <Button type="button" variant="outline" onClick={() => setHarvestDialog(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-sage-600 hover:bg-sage-700 text-white">
+              <Button type="submit" className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white">
                 Log Harvest
               </Button>
             </div>
@@ -250,7 +250,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
               <select 
                 name="farm"
                 id="farm-livestock"
-                className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                 required
               >
                 <option value="">Select Farm</option>
@@ -265,7 +265,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
                 <select 
                   name="livestockType"
                   id="livestock-type"
-                  className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                  className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                   required
                 >
                   <option value="">Select Type</option>
@@ -282,7 +282,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
                 <select 
                   name="eventType"
                   id="event-type"
-                  className="w-full mt-1 p-2 border border-sage-200 rounded-md"
+                  className="w-full mt-1 p-2 border border-[#DDE4D8] rounded-md"
                   required
                 >
                   <option value="">Select Event</option>

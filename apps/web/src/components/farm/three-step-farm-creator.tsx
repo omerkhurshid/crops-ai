@@ -413,16 +413,7 @@ export function ThreeStepFarmCreator() {
           longitude: farm.location.lng,
           address: farm.location.address || '',
           country: 'US',
-          totalArea: farm.totalArea || 0,
-          boundaries: farm.boundaries,
-          fields: farm.fields.map(field => ({
-            name: field.name,
-            area: field.area,
-            boundaries: field.boundaries,
-            color: field.color,
-            cropType: field.cropType,
-            status: 'active'
-          }))
+          totalArea: farm.totalArea || 0
         })
       })
       

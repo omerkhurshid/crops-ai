@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../../lib/prisma'
-import { createSuccessResponse, createErrorResponse } from '../../../../../lib/api/errors'
+import { createSuccessResponse, NotFoundError, ValidationError } from '../../../../../lib/api/errors'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../../lib/api/middleware'
 import { z } from 'zod'
 
@@ -33,7 +33,7 @@ export const GET = apiMiddleware.protected(
       })
 
       if (!farm) {
-        return createErrorResponse('Farm not found or access denied', 404)
+        throw new NotFoundError('Farm not found or access denied')
       }
 
       // Get fields for this farm
@@ -50,7 +50,7 @@ export const GET = apiMiddleware.protected(
       
     } catch (error) {
       console.error('Error fetching fields:', error)
-      return createErrorResponse('Failed to fetch fields', 500)
+      throw error
     }
   })
 )
@@ -80,7 +80,7 @@ export const POST = apiMiddleware.protected(
       })
 
       if (!farm) {
-        return createErrorResponse('Farm not found or access denied', 404)
+        throw new NotFoundError('Farm not found or access denied')
       }
 
       // Prepare field data for database
@@ -113,10 +113,10 @@ export const POST = apiMiddleware.protected(
       
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0]
-        return createErrorResponse(`Validation error: ${firstError.message}`, 400)
+        throw new ValidationError(`Validation error: ${firstError.message}`)
       }
       
-      return createErrorResponse('Failed to create field', 500)
+      throw error
     }
   })
 )

@@ -245,13 +245,26 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   }
   
+  .sage-nav a,
+  .sage-nav button,
+  .sage-nav span {
+    color: #2D3748 !important;
+    font-weight: 600 !important;
+  }
+  
+  .sage-nav a:hover,
+  .sage-nav button:hover {
+    color: #7A8F78 !important;
+  }
+  
   .sage-nav-link {
-    @apply text-[#1A1A1A] hover:text-[#7A8F78];
-    @apply font-medium transition-colors duration-200;
+    @apply text-[#2D3748] hover:text-[#7A8F78];
+    @apply font-semibold transition-colors duration-200;
+    color: #2D3748 !important;
   }
   
   .sage-nav-active {
-    @apply text-[#7A8F78] font-medium;
+    @apply text-[#7A8F78] font-semibold;
   }
 
   /* Form Inputs */

@@ -28,13 +28,6 @@ export const GET = apiMiddleware.protected(
           take: limit,
           orderBy,
           include: {
-            owner: {
-              select: {
-                id: true,
-                name: true,
-                email: true
-              }
-            },
             _count: {
               select: {
                 fields: true
@@ -76,18 +69,12 @@ export const POST = apiMiddleware.protected(
 
       const farmData = validateRequestBody(createFarmSchema, body)
       
-      // Ensure user exists before creating farm
-      const existingUser = await prisma.user.findUnique({
-        where: { id: request.user.id },
-        select: { id: true, email: true, name: true }
+      // User authentication verified by middleware - using Supabase user ID directly
+      console.log('✅ Authenticated Supabase user:', {
+        id: request.user.id,
+        email: request.user.email,
+        name: request.user.name
       })
-      
-      if (!existingUser) {
-        console.error('❌ User not found in database:', request.user.id)
-        throw new Error(`User ${request.user.id} not found in database`)
-      }
-
-      console.log('✅ User found:', existingUser)
 
       // Extract and prepare data - only keep fields that exist in database schema
       const { description, metadata, primaryProduct, ...dbFarmData } = farmData
@@ -111,16 +98,7 @@ export const POST = apiMiddleware.protected(
       const result = await prisma.$transaction(async (tx) => {
         // Create the farm
         const farm = await tx.farm.create({
-          data: finalData,
-          include: {
-            owner: {
-              select: {
-                id: true,
-                name: true,
-                email: true
-              }
-            }
-          }
+          data: finalData
         })
 
         // Create fields if provided in the original request

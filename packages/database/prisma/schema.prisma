@@ -12,12 +12,7 @@ datasource db {
   extensions = [postgis]
 }
 
-enum UserRole {
-  FARM_OWNER
-  FARM_MANAGER
-  AGRONOMIST
-  ADMIN
-}
+// UserRole enum removed - user roles now managed in Supabase auth.users.user_metadata
 
 enum CropStatus {
   PLANNED
@@ -36,33 +31,9 @@ enum StressLevel {
   SEVERE
 }
 
-model User {
-  id              String   @id @default(cuid())
-  email           String   @unique
-  name            String
-  passwordHash    String?
-  role            UserRole @default(FARM_OWNER)
-  emailVerified   DateTime? // Email verification timestamp
-  userType        String?   // Optional farming type (crops, livestock, mixed, etc.)
-  
-  // User preferences
-  currency        String?   @default("USD")
-  landUnit        String?   @default("hectares")
-  temperatureUnit String?   @default("celsius")
-  timezone        String?   @default("UTC")
-  language        String?   @default("en")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  ownedFarms          Farm[]
-  managedFarms        FarmManager[]
-  weatherAlerts       WeatherAlert[]
-  verificationTokens  VerificationToken[]
-
-  @@map("users")
-}
+// User model removed - using Supabase Auth (auth.users table) instead
+// User data now stored in Supabase auth.users.user_metadata
+// User preferences accessible via Supabase user metadata
 
 model VerificationToken {
   id         String   @id @default(cuid())
@@ -70,9 +41,10 @@ model VerificationToken {
   token      String   @unique
   expires    DateTime
   type       String   // email-verify, password-reset, etc.
-  userId     String?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?  // References auth.users.id from Supabase (optional)
   createdAt  DateTime @default(now())
+
+  // Note: userId references Supabase auth.users.id (no foreign key constraint)
 
   @@unique([identifier, token])
   @@map("verification_tokens")
@@ -102,7 +74,7 @@ model Farm {
   updatedAt     DateTime @updatedAt
 
   // Relations
-  owner    User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  // Note: ownerId references Supabase auth.users.id (no foreign key constraint)
   fields   Field[]
   managers FarmManager[]
   budgets  FinancialBudget[]
@@ -113,11 +85,11 @@ model Farm {
 model FarmManager {
   id     String @id @default(cuid())
   farmId String
-  userId String
+  userId String  // References auth.users.id from Supabase
 
   // Relations
   farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Note: userId references Supabase auth.users.id (no foreign key constraint)
 
   @@unique([farmId, userId])
   @@map("farm_managers")
@@ -201,7 +173,7 @@ model WeatherForecast {
 
 model WeatherAlert {
   id          String   @id @default(cuid())
-  userId      String
+  userId      String   // References auth.users.id from Supabase
   alertType   String // frost, storm, drought, etc.
   severity    String // low, medium, high, severe
   message     String
@@ -209,8 +181,7 @@ model WeatherAlert {
   triggeredAt DateTime @default(now())
   expiresAt   DateTime?
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Note: userId references Supabase auth.users.id (no foreign key constraint)
 
   @@map("weather_alerts")
 }

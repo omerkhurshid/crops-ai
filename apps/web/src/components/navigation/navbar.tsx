@@ -44,7 +44,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[#555555] hover:text-[#7A8F78] px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#F8FAF8] transition-colors"
+                  className="text-[#1A1A1A] hover:text-[#7A8F78] px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#F8FAF8] transition-colors"
                 >
                   {link.icon}
                   <span className="hidden lg:inline text-xs xl:text-sm">{link.label}</span>
@@ -60,7 +60,7 @@ export function Navbar() {
             ) : session ? (
               <>
                 <div className="hidden sm:flex items-center space-x-3">
-                  <span className="text-sm text-[#555555] font-medium">
+                  <span className="text-sm text-[#1A1A1A] font-medium">
                     {session.user?.name || 'Farmer'}
                   </span>
                   <button 
@@ -73,7 +73,7 @@ export function Navbar() {
                 {/* Mobile menu button */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="md:hidden p-2 rounded-lg text-[#555555] hover:text-[#7A8F78] hover:bg-[#F8FAF8]"
+                  className="md:hidden p-2 rounded-lg text-[#1A1A1A] hover:text-[#7A8F78] hover:bg-[#F8FAF8]"
                 >
                   {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
@@ -81,7 +81,7 @@ export function Navbar() {
             ) : (
               <div className="flex items-center space-x-3">
                 <Link href="/login">
-                  <button className="text-[#555555] hover:text-[#7A8F78] px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200">
+                  <button className="text-[#1A1A1A] hover:text-[#7A8F78] px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200">
                     Sign In
                   </button>
                 </Link>
@@ -104,7 +104,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center gap-2 text-[#555555] hover:text-[#7A8F78] hover:bg-[#F8FAF8] px-3 py-2 rounded-lg text-sm font-medium"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-[#7A8F78] hover:bg-[#F8FAF8] px-3 py-2 rounded-lg text-sm font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.icon}
@@ -112,12 +112,12 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="pt-3 mt-3 border-t border-[#E6E6E6] sm:hidden">
-                <div className="px-3 py-2 text-sm text-[#555555]">
+                <div className="px-3 py-2 text-sm text-[#1A1A1A]">
                   {session.user?.name || 'User'}
                 </div>
                 <button 
                   onClick={handleSignOut}
-                  className="w-full text-left text-[#555555] hover:text-[#7A8F78] hover:bg-[#F8FAF8] px-3 py-2 rounded-lg text-sm font-medium"
+                  className="w-full text-left text-[#1A1A1A] hover:text-[#7A8F78] hover:bg-[#F8FAF8] px-3 py-2 rounded-lg text-sm font-medium"
                 >
                   Sign Out
                 </button>

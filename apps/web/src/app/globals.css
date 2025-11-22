@@ -239,13 +239,13 @@
   
   /* Navigation */
   .sage-nav {
-    @apply bg-white/90 backdrop-blur-lg;
+    @apply bg-white backdrop-blur-lg;
     @apply border-b border-[#E6E6E6];
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   
   .sage-nav-link {
-    @apply text-[#555555] hover:text-[#7A8F78];
+    @apply text-[#1A1A1A] hover:text-[#7A8F78];
     @apply font-medium transition-colors duration-200;
   }
   

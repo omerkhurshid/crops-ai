@@ -132,12 +132,9 @@ export const POST = apiMiddleware.protected(
                 farmId: farm.id,
                 name: fieldData.name || 'Field',
                 area: fieldData.area || 0,
-                boundary: fieldData.boundaries ? JSON.stringify(fieldData.boundaries) : null,
-                metadata: JSON.stringify({
-                  color: fieldData.color,
-                  cropType: fieldData.cropType,
-                  fieldType: fieldData.fieldType || 'crop'
-                }),
+                color: fieldData.color,
+                cropType: fieldData.cropType,
+                status: fieldData.fieldType || 'crop',
                 soilType: fieldData.soilType
               }
             })

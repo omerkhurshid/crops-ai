@@ -77,7 +77,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200'
       case 'severe': return 'text-red-600 bg-red-50 border-red-200'
-      default: return 'text-[#555555] bg-[#FAFAF7] border-[#E6E6E6]'
+      default: return 'text-[#555555] bg-[#FAFAF7] border-[#F3F4F6]'
     }
   }
   const getRiskIcon = (riskLevel: string) => {

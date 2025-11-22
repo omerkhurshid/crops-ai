@@ -455,7 +455,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                 key={task.id}
                 className={cn(
                   'p-4 rounded-lg border transition-all',
-                  task.isRecommended ? getPriorityColor(task.priority) : 'bg-[#FAFAF7] border-[#E6E6E6]',
+                  task.isRecommended ? getPriorityColor(task.priority) : 'bg-[#FAFAF7] border-[#F3F4F6]',
                   isCompleted && 'opacity-60'
                 )}
               >
@@ -467,7 +467,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                         'mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center',
                         isCompleted 
                           ? 'bg-[#8FBF7F] border-[#8FBF7F] text-white' 
-                          : 'border-[#E6E6E6] hover:border-[#555555]'
+                          : 'border-[#F3F4F6] hover:border-[#555555]'
                       )}
                     >
                       {isCompleted && <CheckSquare className="h-3 w-3" />}

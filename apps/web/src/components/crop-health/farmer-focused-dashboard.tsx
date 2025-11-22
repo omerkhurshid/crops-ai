@@ -196,7 +196,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               className={`border-2 cursor-pointer transition-all hover:shadow-md ${
                 selectedField === field.fieldId || (selectedField === null && field === fields[0])
                   ? 'ring-2 ring-#555555 border-[#DDE4D8]' 
-                  : 'hover:border-[#E6E6E6]'
+                  : 'hover:border-[#F3F4F6]'
               }`}
               onClick={() => setSelectedField(field.fieldId)}
             >
@@ -235,7 +235,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                     </div>
                   </div>
                   {/* Next Action */}
-                  <div className="pt-2 border-t border-[#E6E6E6]">
+                  <div className="pt-2 border-t border-[#F3F4F6]">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-[#555555]">Next Action</span>
                       <Badge className={getPriorityColor(field.nextAction.priority)}>

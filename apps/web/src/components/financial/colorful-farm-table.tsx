@@ -76,7 +76,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
         {/* Mobile Card Layout */}
         <div className="block md:hidden p-4 space-y-4">
           {farms.map((farm) => (
-            <div key={farm.id} className="p-4 border border-[#E6E6E6] rounded-lg bg-white">
+            <div key={farm.id} className="p-4 border border-[#F3F4F6] rounded-lg bg-white">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-[#1A1A1A]">{farm.name}</h3>
                 <Badge 
@@ -125,7 +125,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
         {/* Desktop Table Layout */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#FAFAF7] border-b border-[#E6E6E6]">
+            <thead className="bg-[#FAFAF7] border-b border-[#F3F4F6]">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-medium text-[#555555] uppercase tracking-wider">
                   Farm
@@ -261,7 +261,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
               ))}
             </tbody>
             {/* Summary Footer */}
-            <tfoot className="bg-[#FAFAF7] border-t-2 border-[#E6E6E6]">
+            <tfoot className="bg-[#FAFAF7] border-t-2 border-[#F3F4F6]">
               <tr>
                 <td className="px-6 py-4 text-sm font-medium text-[#1A1A1A]">
                   Total Portfolio
@@ -304,7 +304,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
           </table>
         </div>
         {/* Legend */}
-        <div className="p-4 border-t border-[#E6E6E6] bg-[#FAFAF7]">
+        <div className="p-4 border-t border-[#F3F4F6] bg-[#FAFAF7]">
           <div className="flex flex-wrap items-center gap-4 text-xs">
             <span className="font-medium text-[#555555]">Profit Legend:</span>
             <div className="flex items-center gap-2">

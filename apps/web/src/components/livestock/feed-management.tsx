@@ -81,7 +81,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -91,7 +91,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Animals</option>
           {animals.map(animal => (
@@ -103,7 +103,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={selectedFeedType}
           onChange={(e) => setSelectedFeedType(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Feed Types</option>
           {uniqueFeedTypes.map(feedType => (
@@ -115,7 +115,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>

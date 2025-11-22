@@ -98,7 +98,7 @@ export function Navbar() {
 
         {/* Mobile Navigation Menu */}
         {session && isMobileMenuOpen && (
-          <div className="md:hidden border-t border-[#E6E6E6] py-3 bg-white/95">
+          <div className="md:hidden border-t border-[#F3F4F6] py-3 bg-white/95">
             <div className="space-y-1">
               {navLinks.map((link) => (
                 <Link
@@ -111,7 +111,7 @@ export function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 mt-3 border-t border-[#E6E6E6] sm:hidden">
+              <div className="pt-3 mt-3 border-t border-[#F3F4F6] sm:hidden">
                 <div className="px-3 py-2 text-sm text-[#1A1A1A]">
                   {session.user?.name || 'User'}
                 </div>

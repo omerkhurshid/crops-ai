@@ -145,7 +145,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]';
     }
   };
   const getEventIcon = (type: string) => {

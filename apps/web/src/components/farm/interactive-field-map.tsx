@@ -579,7 +579,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                         selectedField === index
                           ? 'border-crops-green-500 bg-crops-green-50'
-                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                          : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                       }`}
                       onClick={() => selectDetectedField(index)}
                     >

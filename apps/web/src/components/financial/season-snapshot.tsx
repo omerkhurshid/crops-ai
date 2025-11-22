@@ -60,7 +60,7 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
             </div>
           </div>
         {/* Main Profit Display */}
-        <div className="text-center py-6 border-b border-[#E6E6E6]">
+        <div className="text-center py-6 border-b border-[#F3F4F6]">
           <p className="text-sm text-[#555555] mb-2">Net Profit</p>
           <p className={`text-4xl font-bold ${
             summary.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'

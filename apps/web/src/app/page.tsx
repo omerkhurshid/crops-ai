@@ -38,7 +38,7 @@ const InteractiveDemo = () => {
   ]
 
   return (
-    <div className="bg-white rounded-xl border border-[#E6E6E6] p-6 max-w-2xl mx-auto">
+    <div className="bg-white rounded-xl border border-[#F3F4F6] p-6 max-w-2xl mx-auto">
       <div className="space-y-4">
         {questions.map((q, index) => (
           <div 
@@ -46,7 +46,7 @@ const InteractiveDemo = () => {
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeQuestion === index 
                 ? 'border-[#7A8F78] bg-[#F8FAF8]' 
-                : 'border-[#E6E6E6] hover:border-[#DDE4D8]'
+                : 'border-[#F3F4F6] hover:border-[#DDE4D8]'
             }`}
             onClick={() => setActiveQuestion(index)}
           >
@@ -232,7 +232,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonial 1 */}
-            <div className="bg-white border border-[#E6E6E6] rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-[#F3F4F6] rounded-xl p-6 shadow-sm">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-[#7A8F78] rounded-full flex items-center justify-center text-white font-bold mr-4">
                   MP
@@ -252,7 +252,7 @@ export default function Home() {
             </div>
 
             {/* Testimonial 2 */}
-            <div className="bg-white border border-[#E6E6E6] rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-[#F3F4F6] rounded-xl p-6 shadow-sm">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-[#7A8F78] rounded-full flex items-center justify-center text-white font-bold mr-4">
                   SC
@@ -273,7 +273,7 @@ export default function Home() {
             </div>
 
             {/* Testimonial 3 */}
-            <div className="bg-white border border-[#E6E6E6] rounded-xl p-6 shadow-sm">
+            <div className="bg-white border border-[#F3F4F6] rounded-xl p-6 shadow-sm">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-[#7A8F78] rounded-full flex items-center justify-center text-white font-bold mr-4">
                   TH
@@ -394,35 +394,35 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 border border-[#E6E6E6]">
+            <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
               <h3 className="font-bold text-[#1A1A1A] mb-2">Do I need to be tech-savvy?</h3>
               <p className="text-[#555555]">
                 If you can use a weather app, you can use Cropple. Most farmers are up and running in under 15 minutes.
               </p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-[#E6E6E6]">
+            <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
               <h3 className="font-bold text-[#1A1A1A] mb-2">What if I lose cell signal in the field?</h3>
               <p className="text-[#555555]">
                 Cropple works offline and syncs when you're back in range. Download your day's priorities over breakfast.
               </p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-[#E6E6E6]">
+            <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
               <h3 className="font-bold text-[#1A1A1A] mb-2">Does this work for my crops?</h3>
               <p className="text-[#555555]">
                 We support all major row crops, specialty crops, and permanent crops. If we don't support yours yet, let us know—we're always expanding.
               </p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-[#E6E6E6]">
+            <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
               <h3 className="font-bold text-[#1A1A1A] mb-2">Will this replace my agronomist?</h3>
               <p className="text-[#555555]">
                 No. Cropple gives you data to have better conversations with your agronomist. Many of our customers share their Cropple dashboard with their advisors.
               </p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-[#E6E6E6]">
+            <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
               <h3 className="font-bold text-[#1A1A1A] mb-2">What if I have questions or need help?</h3>
               <p className="text-[#555555]">
                 Text or call our farmer support team (all ag backgrounds). Average response time: 12 minutes.

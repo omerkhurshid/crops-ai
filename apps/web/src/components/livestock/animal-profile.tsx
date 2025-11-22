@@ -62,7 +62,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
   return (
     <div className="space-y-6">
       {/* Tab Navigation */}
-      <div className="border-b border-[#E6E6E6]">
+      <div className="border-b border-[#F3F4F6]">
         <nav className="-mb-px flex space-x-8">
           {tabs.map((tab) => {
             const Icon = tab.icon
@@ -73,7 +73,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-[#7A8F78]'
-                    : 'border-transparent text-[#555555] hover:text-[#555555] hover:border-[#E6E6E6]'
+                    : 'border-transparent text-[#555555] hover:text-[#555555] hover:border-[#F3F4F6]'
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -226,7 +226,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.healthRecords && animal.healthRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.healthRecords.map((record: any) => (
-                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
+                  <div key={record.id} className="border border-[#F3F4F6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Badge 
@@ -319,7 +319,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 </div>
                 <div className="space-y-3">
                   {animal.weightRecords.map((record: any) => (
-                    <div key={record.id} className="flex items-center justify-between p-3 border border-[#E6E6E6] rounded">
+                    <div key={record.id} className="flex items-center justify-between p-3 border border-[#F3F4F6] rounded">
                       <div>
                         <p className="font-medium">{record.weight} lbs</p>
                         <p className="text-sm text-[#555555]">
@@ -364,7 +364,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.breedingRecords && animal.breedingRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.breedingRecords.map((record: any) => (
-                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
+                  <div key={record.id} className="border border-[#F3F4F6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Badge className="capitalize">{record.breedingType}</Badge>
@@ -423,7 +423,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             {animal.feedRecords && animal.feedRecords.length > 0 ? (
               <div className="space-y-4">
                 {animal.feedRecords.map((record: any) => (
-                  <div key={record.id} className="border border-[#E6E6E6] rounded-lg p-4">
+                  <div key={record.id} className="border border-[#F3F4F6] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div>
                         <p className="font-medium">{record.feedType}</p>

@@ -67,7 +67,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   IRRIGATION: { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-300' },
   STORAGE: { bg: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-300' },
   INSURANCE: { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-300' },
-  OTHER_EXPENSE: { bg: 'bg-[#F5F5F5]', text: 'text-[#1A1A1A]', border: 'border-[#E6E6E6]' },
+  OTHER_EXPENSE: { bg: 'bg-[#F5F5F5]', text: 'text-[#1A1A1A]', border: 'border-[#F3F4F6]' },
 }
 export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps) {
   const [farmData, setFarmData] = useState<FarmFinancialData | null>(null)

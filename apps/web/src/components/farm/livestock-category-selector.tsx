@@ -76,7 +76,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
                         selectedLivestock === livestock.id
                           ? 'bg-[#F8FAF8] border-[#DDE4D8] ring-1 ring-#555555'
-                          : 'bg-white hover:bg-[#FAFAF7] border-[#E6E6E6]'
+                          : 'bg-white hover:bg-[#FAFAF7] border-[#F3F4F6]'
                       }`}
                       onClick={() => onSelect(livestock, category)}
                     >

@@ -371,7 +371,7 @@ export function GoogleMapsFieldEditor({
                     className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                       selectedField === field.id 
                         ? 'border-orange-500 bg-orange-50' 
-                        : 'border-[#E6E6E6] hover:bg-[#FAFAF7]'
+                        : 'border-[#F3F4F6] hover:bg-[#FAFAF7]'
                     }`}
                     onClick={() => setSelectedField(field.id)}
                   >

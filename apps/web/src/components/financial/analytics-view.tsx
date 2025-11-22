@@ -238,7 +238,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       case 'opportunity': return 'bg-[#F8FAF8] border-[#DDE4D8]';
       case 'risk': return 'bg-red-50 border-red-200';
       case 'achievement': return 'bg-blue-50 border-blue-200';
-      default: return 'bg-[#FAFAF7] border-[#E6E6E6]';
+      default: return 'bg-[#FAFAF7] border-[#F3F4F6]';
     }
   };
   const getPriorityColor = (priority: string) => {

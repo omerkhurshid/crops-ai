@@ -66,7 +66,7 @@ export function FieldStatusToggle({
         className={`text-xs ${
           isActive 
             ? 'bg-[#F8FAF8] text-[#555555] border-[#DDE4D8]' 
-            : 'bg-[#F5F5F5] text-[#555555] border-[#E6E6E6]'
+            : 'bg-[#F5F5F5] text-[#555555] border-[#F3F4F6]'
         }`}
       >
         {isActive ? 'Active' : 'Inactive'}

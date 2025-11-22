@@ -171,7 +171,7 @@ export function SimpleFarmCreator() {
                 className={`p-4 rounded-xl border-2 transition-all text-left ${
                   farm.type === type.id
                     ? type.color
-                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                    : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                 }`}
               >
                 <div className="flex items-center space-x-3">

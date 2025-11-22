@@ -355,7 +355,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           <select
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="flex-1 px-3 py-2 border border-[#E6E6E6] rounded-md text-sm"
+            className="flex-1 px-3 py-2 border border-[#F3F4F6] rounded-md text-sm"
           >
             {availableDates.map(date => (
               <option key={date} value={date}>

@@ -101,7 +101,7 @@ function WeatherPageContent() {
                 <div className="h-16 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-[#E6E6E6] p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-[#F3F4F6] p-6">
               <div className="space-y-4">
                 <div className="h-12 bg-[#F5F5F5] rounded"></div>
                 <div className="h-64 bg-[#F5F5F5] rounded"></div>
@@ -172,12 +172,12 @@ function WeatherPageContent() {
         <div className="space-y-8">
           <ModernCard variant="floating" className="overflow-hidden">
             <Tabs defaultValue="current" className="space-y-0">
-              <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/80 to-[#FAFAF7]/80 border-b border-[#E6E6E6]/30">
+              <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/80 to-[#FAFAF7]/80 border-b border-[#F3F4F6]/30">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <ModernCardTitle className="text-[#1A1A1A]">Weather Data</ModernCardTitle>
                   </div>
-                  <TabsList className="bg-white/60 border border-[#E6E6E6]/50">
+                  <TabsList className="bg-white/60 border border-[#F3F4F6]/50">
                     <TabsTrigger value="current">
                       <div className="flex items-center gap-2">
                         <Thermometer className="h-4 w-4" />
@@ -261,7 +261,7 @@ export default function WeatherPage() {
                 <div className="h-16 bg-[#F5F5F5] rounded"></div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-[#E6E6E6] p-6">
+            <div className="bg-white rounded-lg shadow-sm border border-[#F3F4F6] p-6">
               <div className="space-y-4">
                 <div className="h-12 bg-[#F5F5F5] rounded"></div>
                 <div className="h-64 bg-[#F5F5F5] rounded"></div>

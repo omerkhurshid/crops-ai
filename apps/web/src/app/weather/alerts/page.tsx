@@ -159,7 +159,7 @@ export default function WeatherAlertsPage() {
                     name: e.target.options[e.target.selectedIndex].text
                   })
                 }}
-                className="rounded-md border-[#E6E6E6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
+                className="rounded-md border-[#F3F4F6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
               >
                 <option value="40.7128,-74.0060">New York, NY</option>
                 <option value="39.7391,-104.9847">Denver, CO</option>
@@ -172,7 +172,7 @@ export default function WeatherAlertsPage() {
               <select
                 value={alertType}
                 onChange={(e) => setAlertType(e.target.value as 'basic' | 'advanced' | 'field')}
-                className="rounded-md border-[#E6E6E6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
+                className="rounded-md border-[#F3F4F6] shadow-sm focus:border-crops-#8FBF7F focus:ring-crops-#8FBF7F"
               >
                 <option value="basic">Basic Alerts</option>
                 <option value="advanced">Advanced Monitoring</option>

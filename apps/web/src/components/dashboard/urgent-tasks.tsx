@@ -156,7 +156,7 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
       </div>
       {/* More Tasks Indicator */}
       {tasks.length > 2 && (
-        <button className="w-full p-4 bg-[#FAFAF7] hover:bg-[#F5F5F5] rounded-xl border-2 border-[#E6E6E6] transition-colors">
+        <button className="w-full p-4 bg-[#FAFAF7] hover:bg-[#F5F5F5] rounded-xl border-2 border-[#F3F4F6] transition-colors">
           <div className="flex items-center justify-center gap-2 text-[#555555]">
             <span className="font-medium">View {tasks.length - 2} more urgent tasks</span>
             <ChevronRight className="h-4 w-4" />

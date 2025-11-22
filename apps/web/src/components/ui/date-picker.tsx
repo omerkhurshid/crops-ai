@@ -47,7 +47,7 @@ export function DatePicker({
             value={formatDate(date)}
             onChange={handleDateChange}
             onBlur={() => setIsOpen(false)}
-            className="block w-full rounded-md border border-[#E6E6E6] px-3 py-2 text-sm focus:border-[#7A8F78] focus:outline-none focus:ring-1 focus:ring-sage-600"
+            className="block w-full rounded-md border border-[#F3F4F6] px-3 py-2 text-sm focus:border-[#7A8F78] focus:outline-none focus:ring-1 focus:ring-sage-600"
             autoFocus
           />
         </div>

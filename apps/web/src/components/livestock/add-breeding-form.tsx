@@ -101,7 +101,7 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             name="animalId"
             value={formData.animalId}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="">Select animal...</option>
@@ -119,7 +119,7 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             name="mateId"
             value={formData.mateId}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={!selectedAnimal}
           >
             <option value="">Select mate...</option>
@@ -153,7 +153,7 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             name="breedingType"
             value={formData.breedingType}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           >
             {breedingTypes.map(type => (
@@ -173,7 +173,7 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             name="breedingMethod"
             value={formData.breedingMethod}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select method...</option>
             {breedingMethods.map(method => (
@@ -190,7 +190,7 @@ export function AddBreedingForm({ farms, animals, userId }: AddBreedingFormProps
             name="status"
             value={formData.status}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {statuses.map(status => (
               <option key={status} value={status}>

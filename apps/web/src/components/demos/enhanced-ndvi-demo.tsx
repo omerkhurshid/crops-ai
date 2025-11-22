@@ -177,7 +177,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
           <div className="relative">
             {/* Simulated Field View */}
             <div 
-              className="h-64 rounded-lg border-2 border-[#E6E6E6] relative overflow-hidden"
+              className="h-64 rounded-lg border-2 border-[#F3F4F6] relative overflow-hidden"
               style={{ backgroundColor: currentData.hexColor }}
             >
               {/* Field Pattern */}

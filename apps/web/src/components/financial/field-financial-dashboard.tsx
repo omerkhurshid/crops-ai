@@ -224,7 +224,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               </div>
             </div>
             {/* Profit Margin Badge */}
-            <div className="mt-6 pt-6 border-t border-[#E6E6E6]">
+            <div className="mt-6 pt-6 border-t border-[#F3F4F6]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-[#555555]">Profit Margin:</span>

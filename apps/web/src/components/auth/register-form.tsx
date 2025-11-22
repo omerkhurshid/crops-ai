@@ -296,7 +296,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
             />
           </div>
           {/* Terms & Conditions and Newsletter */}
-          <div className="space-y-3 pt-2 border-t border-[#E6E6E6]">
+          <div className="space-y-3 pt-2 border-t border-[#F3F4F6]">
             <div className="flex items-start space-x-2">
               <input
                 id="acceptTerms"
@@ -306,7 +306,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 onChange={handleChange}
                 required
                 disabled={isLoading}
-                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#E6E6E6] rounded"
+                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#F3F4F6] rounded"
               />
               <label htmlFor="acceptTerms" className="text-sm text-[#555555] leading-tight">
                 I accept the{' '}
@@ -336,7 +336,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 checked={formData.subscribeNewsletter}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#E6E6E6] rounded"
+                className="mt-0.5 h-4 w-4 text-[#7A8F78] focus:ring-[#7A8F78] border-[#F3F4F6] rounded"
               />
               <label htmlFor="subscribeNewsletter" className="text-sm text-[#555555] leading-tight">
                 <span className="font-medium">Join our newsletter</span> for farming tips, feature updates, and insights to maximize your yield{' '}

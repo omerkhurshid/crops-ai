@@ -136,7 +136,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       }
     >
       <div className={`bg-white rounded-lg shadow-sm border ${className}`}>
-        <div className="p-6 border-b border-[#E6E6E6]">
+        <div className="p-6 border-b border-[#F3F4F6]">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-[#1A1A1A]">Next Best Actions</h2>
@@ -206,7 +206,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
               {ensureArray(pendingRecs).slice(0, 5).map((rec) => (
               <div
                 key={rec.id}
-                className="border border-[#E6E6E6] rounded-lg p-4 hover:shadow-md transition-shadow"
+                className="border border-[#F3F4F6] rounded-lg p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
@@ -333,7 +333,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-[#E6E6E6]">
+        <div className="p-6 border-b border-[#F3F4F6]">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-[#1A1A1A]">{recommendation.title}</h2>
             <button
@@ -409,7 +409,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             </div>
           )}
         </div>
-        <div className="p-6 border-t border-[#E6E6E6] flex justify-end gap-3">
+        <div className="p-6 border-t border-[#F3F4F6] flex justify-end gap-3">
           <button
             onClick={() => {
               onReject()

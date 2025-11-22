@@ -303,7 +303,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all whitespace-nowrap ${
               selectedCrop === crop.cropId
                 ? 'border-[#8FBF7F] bg-[#F8FAF8] text-[#7A8F78]'
-                : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
             }`}
           >
             <Sprout className="h-4 w-4" />

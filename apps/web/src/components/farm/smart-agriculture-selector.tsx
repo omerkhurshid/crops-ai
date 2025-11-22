@@ -216,7 +216,7 @@ export function SmartAgricultureSelector({
           <select
             value={activeCategory}
             onChange={(e) => setActiveCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Categories</option>
             {availableCategories.map(category => (
@@ -264,7 +264,7 @@ export function SmartAgricultureSelector({
               "border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md",
               isSelected(item.id)
                 ? "border-[#8FBF7F] bg-[#F8FAF8]"
-                : "border-[#E6E6E6] hover:border-[#E6E6E6]"
+                : "border-[#F3F4F6] hover:border-[#F3F4F6]"
             )}
             onClick={() => toggleItemSelection(item)}
           >
@@ -322,7 +322,7 @@ export function SmartAgricultureSelector({
             </div>
             {/* Expandable Details */}
             {showCropDetails[item.id] && (
-              <div className="mt-3 pt-3 border-t border-[#E6E6E6] space-y-2">
+              <div className="mt-3 pt-3 border-t border-[#F3F4F6] space-y-2">
                 <div>
                   <h5 className="text-xs font-medium text-[#555555] mb-1">Monitoring Parameters:</h5>
                   <div className="flex flex-wrap gap-1">

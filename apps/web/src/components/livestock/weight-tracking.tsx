@@ -102,7 +102,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -112,7 +112,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedAnimal}
           onChange={(e) => setSelectedAnimal(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Animals</option>
           {animals.map(animal => (
@@ -124,7 +124,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -136,7 +136,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <select
           value={dateRange}
           onChange={(e) => setDateRange(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>

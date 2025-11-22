@@ -55,7 +55,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
   return (
     <>
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white border-b border-[#E6E6E6] px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden bg-white border-b border-[#F3F4F6] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center">
           <button
             onClick={toggleMenu}
@@ -92,7 +92,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Menu Header */}
-        <div className="flex items-center justify-between px-4 py-6 border-b border-[#E6E6E6]">
+        <div className="flex items-center justify-between px-4 py-6 border-b border-[#F3F4F6]">
           <div className="flex items-center">
             <div className="h-10 w-10 bg-[#7A8F78] rounded-full flex items-center justify-center">
               <span className="text-white font-semibold">
@@ -143,7 +143,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
           })}
         </nav>
         {/* Quick Actions */}
-        <div className="border-t border-[#E6E6E6] px-4 py-4">
+        <div className="border-t border-[#F3F4F6] px-4 py-4">
           <h3 className="text-xs font-semibold text-[#555555] uppercase tracking-wider mb-3">
             Quick Actions
           </h3>
@@ -163,7 +163,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
           </div>
         </div>
         {/* Menu Footer */}
-        <div className="border-t border-[#E6E6E6] px-4 py-4">
+        <div className="border-t border-[#F3F4F6] px-4 py-4">
           <div className="space-y-2">
             <Link
               href="/profile"

@@ -258,7 +258,7 @@ export function FieldFormWithMap({
                       className={`p-4 rounded-lg border-2 transition-all ${
                         selectedFields.find(f => f.id === field.id)
                           ? 'border-[#7A8F78] bg-[#F8FAF8]'
-                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                          : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                       }`}
                     >
                       <div className="text-sm font-medium">Field {index + 1}</div>

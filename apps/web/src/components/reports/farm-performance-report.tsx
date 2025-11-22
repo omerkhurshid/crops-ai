@@ -116,7 +116,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
+      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]';
     }
   };
   if (loading) {
@@ -305,7 +305,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                   <div className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm",
                     index === 0 && "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
-                    index === 1 && "bg-[#F5F5F5] text-[#555555] border-2 border-[#E6E6E6]",
+                    index === 1 && "bg-[#F5F5F5] text-[#555555] border-2 border-[#F3F4F6]",
                     index === 2 && "bg-orange-100 text-orange-800 border-2 border-orange-300"
                   )}>
                     #{index + 1}

@@ -425,7 +425,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                   </div>
                 </>
               ) : (
-                <div className="p-4 bg-[#FAFAF7] rounded-lg border border-[#E6E6E6]">
+                <div className="p-4 bg-[#FAFAF7] rounded-lg border border-[#F3F4F6]">
                   <p className="text-sm text-[#555555]">
                     Select a field above to view detailed NDVI analysis and recommendations.
                   </p>

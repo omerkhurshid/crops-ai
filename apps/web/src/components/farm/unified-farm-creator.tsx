@@ -481,7 +481,7 @@ export function UnifiedFarmCreator() {
                       className={`p-3 rounded-lg border-2 transition-all text-left ${
                         farm.type === type.id
                           ? 'border-[#8FBF7F] bg-[#F8FAF8]'
-                          : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                          : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
@@ -612,7 +612,7 @@ export function UnifiedFarmCreator() {
           </ModernCardHeader>
           <ModernCardContent>
             {!showMap ? (
-              <div className="h-96 flex items-center justify-center bg-[#FAFAF7] rounded-lg border-2 border-dashed border-[#E6E6E6]">
+              <div className="h-96 flex items-center justify-center bg-[#FAFAF7] rounded-lg border-2 border-dashed border-[#F3F4F6]">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                   <p className="text-[#555555] mb-4">Set your farm location first</p>

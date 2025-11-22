@@ -102,7 +102,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       severe: 'bg-red-100 text-red-800 border-red-200',
       extreme: 'bg-red-200 text-red-900 border-red-300'
     }
-    return colors[severity] || 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]'
+    return colors[severity] || 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]'
   }
   const getUrgencyColor = (urgency: string) => {
     const colors: Record<string, string> = {

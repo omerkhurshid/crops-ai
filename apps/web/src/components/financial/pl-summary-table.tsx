@@ -262,7 +262,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
           )}
         </div>
         {/* Net Profit Section */}
-        <div className="border-2 border-[#E6E6E6] rounded-lg bg-[#FAFAF7]">
+        <div className="border-2 border-[#F3F4F6] rounded-lg bg-[#FAFAF7]">
           <div className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">

@@ -240,7 +240,7 @@ export function RecommendationLoading() {
   return (
     <div className="space-y-4">
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="bg-white border border-[#E6E6E6] rounded-lg p-4 animate-pulse">
+        <div key={i} className="bg-white border border-[#F3F4F6] rounded-lg p-4 animate-pulse">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-start gap-3 flex-1">
               <div className="flex items-center gap-2">
@@ -288,7 +288,7 @@ export function ProgressLoading({
             <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center ${
               index < currentStep ? 'bg-[#8FBF7F] border-[#8FBF7F]' :
               index === currentStep ? 'border-[#7A8F78] animate-pulse' :
-              'border-[#E6E6E6]'
+              'border-[#F3F4F6]'
             }`}>
               {index < currentStep && (
                 <div className="h-2 w-2 bg-white rounded-full" />

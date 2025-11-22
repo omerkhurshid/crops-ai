@@ -84,7 +84,7 @@ export function CommoditySelector({
                 className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                   selected.includes(symbol)
                     ? 'border-[#8FBF7F] bg-[#F8FAF8]'
-                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                    : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                 }`}
                 onClick={() => toggleCommodity(symbol)}
               >
@@ -114,7 +114,7 @@ export function CommoditySelector({
                 className={`p-3 rounded-lg border cursor-pointer transition-all ${
                   selected.includes(symbol)
                     ? 'border-[#8FBF7F] bg-[#F8FAF8]'
-                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                    : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                 } ${selected.length >= 6 && !selected.includes(symbol) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => selected.length < 6 || selected.includes(symbol) ? toggleCommodity(symbol) : null}
               >
@@ -141,7 +141,7 @@ export function CommoditySelector({
                   className={`p-2 rounded border text-xs cursor-pointer ${
                     selected.includes(symbol)
                       ? 'border-[#8FBF7F] bg-[#F8FAF8]'
-                      : 'border-[#E6E6E6]'
+                      : 'border-[#F3F4F6]'
                   }`}
                   onClick={() => toggleCommodity(symbol)}
                 >

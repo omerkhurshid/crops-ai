@@ -129,7 +129,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                   type="number"
                   value={expenseForm.amount || ''}
                   onChange={(e) => setExpenseForm(prev => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))}
-                  className="w-full pl-8 pr-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
+                  className="w-full pl-8 pr-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
                   placeholder="0.00"
                   min="0"
                   step="0.01"
@@ -141,7 +141,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               <select
                 value={expenseForm.category}
                 onChange={(e) => setExpenseForm(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
+                className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
               >
                 <option value="fuel">Fuel</option>
                 <option value="seeds">Seeds</option>
@@ -159,7 +159,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               type="text"
               value={expenseForm.description}
               onChange={(e) => setExpenseForm(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
+              className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-green-500 focus:border-[#8FBF7F]"
               placeholder="e.g., Diesel for harvester"
             />
           </div>
@@ -209,7 +209,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 type="text"
                 value={harvestForm.fieldName}
                 onChange={(e) => setHarvestForm(prev => ({ ...prev, fieldName: e.target.value }))}
-                className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="e.g., North Field"
               />
             </div>
@@ -218,7 +218,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               <select
                 value={harvestForm.cropType}
                 onChange={(e) => setHarvestForm(prev => ({ ...prev, cropType: e.target.value }))}
-                className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="corn">Corn</option>
                 <option value="wheat">Wheat</option>
@@ -236,7 +236,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
                 type="number"
                 value={harvestForm.quantity || ''}
                 onChange={(e) => setHarvestForm(prev => ({ ...prev, quantity: parseFloat(e.target.value) || 0 }))}
-                className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="0"
                 min="0"
                 step="0.1"
@@ -247,7 +247,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               <select
                 value={harvestForm.unit}
                 onChange={(e) => setHarvestForm(prev => ({ ...prev, unit: e.target.value }))}
-                className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="tons">Tons</option>
                 <option value="bushels">Bushels</option>
@@ -262,7 +262,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
               type="text"
               value={harvestForm.qualityNotes}
               onChange={(e) => setHarvestForm(prev => ({ ...prev, qualityNotes: e.target.value }))}
-              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               placeholder="e.g., Excellent quality, 14% moisture"
             />
           </div>

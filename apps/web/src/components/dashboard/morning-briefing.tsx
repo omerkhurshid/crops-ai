@@ -137,7 +137,7 @@ export function MorningBriefing({
               </h3>
               <div className="space-y-4">
                 {/* Health Summary - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#F3F4F6] shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-medium text-[#555555]">Overall Health</span>
                     <TrendIndicator value={healthTrend} />
@@ -279,7 +279,7 @@ export function MorningBriefing({
               </h3>
               <div className="space-y-4">
                 {/* Current Weather - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#F3F4F6] shadow-sm">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-50 rounded-lg">
@@ -354,7 +354,7 @@ export function MorningBriefing({
               </h3>
               <div className="space-y-4">
                 {/* Net Profit - Clean Design */}
-                <div className="p-4 bg-white rounded-lg border border-[#E6E6E6] shadow-sm">
+                <div className="p-4 bg-white rounded-lg border border-[#F3F4F6] shadow-sm">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-[#555555] font-medium">Net Profit YTD</span>
                     <TrendIndicator value={financials.trend} size="sm" />
@@ -407,7 +407,7 @@ export function MorningBriefing({
             </div>
           </div>
           {/* Action Bar */}
-          <div className="mt-6 pt-4 border-t border-[#E6E6E6]">
+          <div className="mt-6 pt-4 border-t border-[#F3F4F6]">
             <div className="flex items-center justify-end">
               <Link href="/crop-health">
                 <button className="text-sm text-[#555555] hover:text-[#1A1A1A] font-medium">

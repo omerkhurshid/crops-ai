@@ -98,7 +98,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {uniqueFarms.map(farm => (
@@ -108,7 +108,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -120,7 +120,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="profitLoss">Sort by Profit/Loss</option>
           <option value="totalCosts">Sort by Total Costs</option>

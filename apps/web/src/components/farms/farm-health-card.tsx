@@ -135,7 +135,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
       case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200'
       case 'high': return 'bg-red-100 text-red-700 border-red-200'
-      default: return 'bg-[#F5F5F5] text-[#555555] border-[#E6E6E6]'
+      default: return 'bg-[#F5F5F5] text-[#555555] border-[#F3F4F6]'
     }
   }
   const getTrendIcon = (trend: string) => {

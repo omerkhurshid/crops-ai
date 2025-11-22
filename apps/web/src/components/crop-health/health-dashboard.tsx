@@ -363,7 +363,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                 className={`p-4 border-2 rounded-lg text-left transition-all ${
                   selectedField === field.fieldId || (selectedField === null && field === fields[0])
                     ? 'border-[#8FBF7F] bg-[#F8FAF8]' 
-                    : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
+                    : 'border-[#F3F4F6] hover:border-[#F3F4F6]'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">

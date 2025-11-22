@@ -120,7 +120,7 @@ export default function AddLivestockEventPage() {
                     id="farmId"
                     value={formData.farmId}
                     onChange={(e) => setFormData(prev => ({ ...prev, farmId: e.target.value }))}
-                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
+                    className="w-full p-2 border border-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     <option value="">Select a farm</option>
@@ -149,7 +149,7 @@ export default function AddLivestockEventPage() {
                     id="livestockType"
                     value={formData.livestockType}
                     onChange={(e) => setFormData(prev => ({ ...prev, livestockType: e.target.value }))}
-                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
+                    className="w-full p-2 border border-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     {livestockTypes.map(type => (
@@ -163,7 +163,7 @@ export default function AddLivestockEventPage() {
                     id="eventType"
                     value={formData.eventType}
                     onChange={(e) => setFormData(prev => ({ ...prev, eventType: e.target.value }))}
-                    className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
+                    className="w-full p-2 border border-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                     required
                   >
                     {eventTypes.map(type => (
@@ -189,7 +189,7 @@ export default function AddLivestockEventPage() {
                   id="notes"
                   value={formData.notes}
                   onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                  className="w-full p-2 border border-[#E6E6E6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
+                  className="w-full p-2 border border-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-#7A8F78 focus:border-transparent"
                   rows={3}
                   placeholder="Add any additional details about this event..."
                 />

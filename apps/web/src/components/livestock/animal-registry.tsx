@@ -89,7 +89,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <select
           value={selectedFarm}
           onChange={(e) => setSelectedFarm(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Farms</option>
           {farms.map(farm => (
@@ -99,7 +99,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <select
           value={selectedSpecies}
           onChange={(e) => setSelectedSpecies(e.target.value)}
-          className="px-3 py-2 border border-[#E6E6E6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 border border-[#F3F4F6] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Species</option>
           {uniqueSpecies.map(species => (
@@ -112,7 +112,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
       {/* Animal Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAnimals.map(animal => (
-          <div key={animal.id} className="bg-white rounded-lg border border-[#E6E6E6] shadow-sm hover:shadow-md transition-shadow">
+          <div key={animal.id} className="bg-white rounded-lg border border-[#F3F4F6] shadow-sm hover:shadow-md transition-shadow">
             <div className="p-6">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">

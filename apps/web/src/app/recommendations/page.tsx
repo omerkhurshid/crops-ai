@@ -139,7 +139,7 @@ function RecommendationsPageContent() {
             <ModernCardContent className="p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#F3F4F6]/30">
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Activity className="h-6 w-6 text-[#7A8F78]" />
                     </div>
@@ -148,7 +148,7 @@ function RecommendationsPageContent() {
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#F3F4F6]/30">
                     <div className="p-3 bg-[#8FBF7F]/30 rounded-xl mx-auto w-fit mb-4">
                       <Zap className="h-6 w-6 text-[#8FBF7F]" />
                     </div>
@@ -157,7 +157,7 @@ function RecommendationsPageContent() {
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8] to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#F3F4F6]/30">
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Brain className="h-6 w-6 text-[#7A8F78]" />
                     </div>
@@ -166,7 +166,7 @@ function RecommendationsPageContent() {
                   </div>
                 </div>
                 <div className="group">
-                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8]/70 to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#E6E6E6]/30">
+                  <div className="text-center p-6 bg-gradient-to-br from-[#F8FAF8]/70 to-[#F8FAF8]/50 rounded-2xl hover:shadow-soft transition-all duration-300 border border-[#F3F4F6]/30">
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Target className="h-6 w-6 text-[#7A8F78]" />
                     </div>

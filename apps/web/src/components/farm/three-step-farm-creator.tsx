@@ -702,7 +702,7 @@ export function ThreeStepFarmCreator() {
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               !farm.isMultiField
                                 ? 'border-[#7A8F78] bg-[#7A8F78] text-white'
-                                : 'border-[#E6E6E6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
+                                : 'border-[#F3F4F6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">
@@ -733,7 +733,7 @@ export function ThreeStepFarmCreator() {
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               farm.isMultiField
                                 ? 'border-[#7A8F78] bg-[#7A8F78] text-white'
-                                : 'border-[#E6E6E6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
+                                : 'border-[#F3F4F6] bg-white text-[#555555] hover:border-[#DDE4D8] hover:bg-[#F8FAF8]'
                             }`}
                           >
                             <div className="flex items-center gap-3 mb-2">

@@ -279,7 +279,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                       className={`flex items-center gap-1 px-3 py-1 rounded-full border-2 text-sm font-medium transition-colors ${
                         isSelected 
                           ? 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]' 
-                          : 'bg-[#FAFAF7] text-[#555555] border-[#E6E6E6] hover:bg-[#F5F5F5]'
+                          : 'bg-[#FAFAF7] text-[#555555] border-[#F3F4F6] hover:bg-[#F5F5F5]'
                       }`}
                     >
                       <Icon className="h-3 w-3" />

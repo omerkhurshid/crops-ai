@@ -366,7 +366,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                       key={field.id}
                       className={`border rounded-lg p-4 transition-all ${
                         visibleFields.has(field.id) 
-                          ? 'border-[#E6E6E6] bg-white' 
+                          ? 'border-[#F3F4F6] bg-white' 
                           : 'border-[#F5F5F5] bg-[#FAFAF7]'
                       }`}
                     >
@@ -374,7 +374,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                         <div className="flex items-center space-x-3">
                           {/* Color indicator */}
                           <div
-                            className="w-6 h-6 rounded-full border-2 border-[#E6E6E6]"
+                            className="w-6 h-6 rounded-full border-2 border-[#F3F4F6]"
                             style={{ backgroundColor: field.color }}
                           />
                           <div className="flex-1">

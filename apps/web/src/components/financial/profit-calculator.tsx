@@ -149,7 +149,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
             <select
               value={inputs.crop}
               onChange={(e) => setInputs(prev => ({ ...prev, crop: e.target.value }))}
-              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="corn">Corn</option>
               <option value="soybeans">Soybeans</option>
@@ -164,7 +164,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               type="number"
               value={inputs.acres}
               onChange={(e) => updateInput('acres', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               min="0"
               step="0.1"
             />
@@ -177,7 +177,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
               type="number"
               value={inputs.expectedYield}
               onChange={(e) => updateInput('expectedYield', parseFloat(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               min="0"
               step="0.1"
             />
@@ -192,7 +192,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
                 type="number"
                 value={inputs.pricePerUnit}
                 onChange={(e) => updateInput('pricePerUnit', parseFloat(e.target.value) || 0)}
-                className="w-full pl-8 pr-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-8 pr-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 min="0"
                 step="0.01"
               />
@@ -288,7 +288,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
                       type="number"
                       value={inputs[key as keyof CalculatorInputs]}
                       onChange={(e) => updateInput(key as keyof CalculatorInputs, parseFloat(e.target.value) || 0)}
-                      className="w-full pl-8 pr-3 py-2 border border-[#E6E6E6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-8 pr-3 py-2 border border-[#F3F4F6] rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="0"
                       step="0.01"
                     />

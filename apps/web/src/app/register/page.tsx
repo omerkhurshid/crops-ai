@@ -33,7 +33,7 @@ export default function RegisterPage() {
       </div>
       
       {/* Footer */}
-      <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-[#E6E6E6]">
+      <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-[#F3F4F6]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-[#555555]">

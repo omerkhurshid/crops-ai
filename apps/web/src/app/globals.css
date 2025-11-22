@@ -15,7 +15,7 @@
     --color-surface: #FFFFFF;
     --color-text-dark: #1A1A1A;
     --color-text-medium: #555555;
-    --color-border: #E6E6E6;
+    --color-border: #F3F4F6;
     --radius: 12px;
     
     /* Sage color variants */
@@ -47,7 +47,7 @@
     --accent-foreground: #FFFFFF;
     --destructive: #DC2626;
     --destructive-foreground: #FFFFFF;
-    --border: #E6E6E6; /* Border light grey */
+    --border: #F3F4F6; /* Softer border grey */
     --input: #FFFFFF;
     --ring: #7A8F78;
     --radius: 12px;
@@ -68,7 +68,7 @@
     --color-surface: #232A23;
     --color-text-dark: #E8F5E8;
     --color-text-medium: #A5B3A5;
-    --color-border: #3A453A;
+    --color-border: #2D342D;
     
     /* Shadcn/UI compatibility for dark mode */
     --background: #1A1F1A;
@@ -87,7 +87,7 @@
     --accent-foreground: #1A1F1A;
     --destructive: #EF4444;
     --destructive-foreground: #E8F5E8;
-    --border: #3A453A;
+    --border: #2D342D;
     --input: #2A352A;
     --ring: #8FBF7F;
     
@@ -138,7 +138,7 @@
   .btn-ghost {
     @apply bg-transparent text-[#7A8F78] font-medium;
     @apply px-6 py-2.5 rounded-[10px];
-    @apply border border-[#E6E6E6];
+    @apply border border-[#F3F4F6];
     @apply transition-all duration-200 ease-in-out;
     @apply hover:bg-[#F8FAF8] hover:border-[#7A8F78];
   }
@@ -146,14 +146,15 @@
   /* Sage Theme Cards */
   .sage-card {
     @apply bg-white rounded-[14px] p-6;
-    @apply border border-[#E6E6E6];
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    @apply border border-[#F3F4F6];
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
     @apply transition-all duration-200 ease-in-out;
   }
   
   .sage-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
     @apply transform -translate-y-0.5;
+    @apply border-[#DDE4D8];
   }
   
   .sage-card-compact {
@@ -229,7 +230,7 @@
 
   /* Section Dividers */
   .sage-divider {
-    @apply border-t border-[#E6E6E6] my-8;
+    @apply border-t border-[#F3F4F6] my-8;
   }
   
   /* Container Styling */
@@ -240,8 +241,8 @@
   /* Navigation */
   .sage-nav {
     @apply bg-white backdrop-blur-lg;
-    @apply border-b border-[#E6E6E6];
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    @apply border-b border-[#F3F4F6];
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   }
   
   .sage-nav-link {
@@ -256,7 +257,7 @@
   /* Form Inputs */
   .sage-input {
     @apply w-full px-4 py-3 rounded-[12px];
-    @apply border border-[#E6E6E6] bg-white;
+    @apply border border-[#F3F4F6] bg-white;
     @apply focus:ring-2 focus:ring-[#7A8F78] focus:ring-opacity-50;
     @apply focus:border-[#7A8F78] outline-none;
     @apply transition-all duration-200;
@@ -320,11 +321,11 @@
   
   .sage-table th {
     @apply bg-[#F8FAF8] text-[#1A1A1A] font-medium;
-    @apply px-4 py-3 text-left border-b border-[#E6E6E6];
+    @apply px-4 py-3 text-left border-b border-[#F3F4F6];
   }
   
   .sage-table td {
-    @apply px-4 py-3 border-b border-[#E6E6E6];
+    @apply px-4 py-3 border-b border-[#F3F4F6];
     @apply text-[#555555];
   }
   
@@ -529,7 +530,7 @@
   
   /* Border utilities */
   .border-sage {
-    border-color: #E6E6E6;
+    border-color: #F3F4F6;
   }
   
   .border-sage-primary {

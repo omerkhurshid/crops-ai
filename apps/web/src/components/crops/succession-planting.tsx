@@ -201,7 +201,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                       className={`p-4 rounded-lg border-2 transition-all ${
                         index === recommendations.bestOption 
                           ? 'border-[#7A8F78] bg-[#F8FAF8]' 
-                          : 'border-[#E6E6E6] bg-white'
+                          : 'border-[#F3F4F6] bg-white'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">

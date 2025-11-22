@@ -196,7 +196,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         }
       default:
         return {
-          color: 'bg-[#F5F5F5] border-[#E6E6E6] text-[#1A1A1A]',
+          color: 'bg-[#F5F5F5] border-[#F3F4F6] text-[#1A1A1A]',
           icon: Calendar,
           urgency: 'Monitor',
           urgencyColor: 'text-[#555555]'

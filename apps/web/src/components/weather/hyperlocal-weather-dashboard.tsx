@@ -108,7 +108,7 @@ export function HyperlocalWeatherDashboard({
       high: 'text-red-600 bg-red-50 border-red-200',
       extreme: 'text-red-800 bg-red-100 border-red-300'
     }
-    return colorMap[severity] || 'text-[#555555] bg-[#FAFAF7] border-[#E6E6E6]'
+    return colorMap[severity] || 'text-[#555555] bg-[#FAFAF7] border-[#F3F4F6]'
   }
   const formatConfidence = (confidence: number) => {
     return `${Math.round(confidence * 100)}%`

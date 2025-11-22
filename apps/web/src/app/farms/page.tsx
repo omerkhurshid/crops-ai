@@ -175,7 +175,7 @@ export default function FarmsPage() {
 
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
-            <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7] border-b border-[#E6E6E6]/30">
+            <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7] border-b border-[#F3F4F6]/30">
               <ModernCardTitle className="text-[#1A1A1A]">Your Farms</ModernCardTitle>
               <ModernCardDescription>
                 Manage and monitor your agricultural operations
@@ -187,7 +187,7 @@ export default function FarmsPage() {
                 <div className="block md:hidden p-4 space-y-4">
                   {userFarms.map((farm: any) => (
                     <Link key={farm.id} href={`/farms/${farm.id}`}>
-                      <div className="p-4 border border-[#E6E6E6] rounded-lg hover:shadow-md transition-shadow bg-white">
+                      <div className="p-4 border border-[#F3F4F6] rounded-lg hover:shadow-md transition-shadow bg-white">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-semibold text-[#1A1A1A]">{farm.name}</h3>
                           <Badge variant="outline" className="text-xs">
@@ -217,7 +217,7 @@ export default function FarmsPage() {
                 /* Desktop Table Layout */
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-[#F8FAF8]/50 border-b border-[#E6E6E6]/30">
+                    <thead className="bg-[#F8FAF8]/50 border-b border-[#F3F4F6]/30">
                       <tr>
                         <th className="text-left p-4 text-sm font-semibold text-[#555555]">Farm Name</th>
                         <th className="text-left p-4 text-sm font-semibold text-[#555555]">Location</th>

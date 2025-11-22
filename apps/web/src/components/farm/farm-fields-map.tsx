@@ -101,7 +101,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
           </div>
         </div>
         {/* Visual Map Representation */}
-        <div className="bg-[#FAFAF7] rounded-lg p-6 border border-[#E6E6E6] mb-6">
+        <div className="bg-[#FAFAF7] rounded-lg p-6 border border-[#F3F4F6] mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {fields.map((field) => (
               <div

@@ -222,7 +222,7 @@ export function RecommendationsWidget({
           {recommendations.map((rec) => (
             <div 
               key={rec.id} 
-              className="border border-[#E6E6E6] rounded-lg p-4 hover:shadow-sm transition-shadow"
+              className="border border-[#F3F4F6] rounded-lg p-4 hover:shadow-sm transition-shadow"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-3">

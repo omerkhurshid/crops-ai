@@ -105,6 +105,7 @@ model Field {
   color       String?                   // Field color for map visualization
   cropType    String?                   // Current crop type in field
   status      String?                   // Field status (crop, fallow, etc.)
+  isActive    Boolean                    @default(true) // Field active status
   createdAt   DateTime                   @default(now())
   updatedAt   DateTime                   @updatedAt
 

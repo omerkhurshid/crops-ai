@@ -59,6 +59,7 @@ export const POST = apiMiddleware.protected(
     let finalData: any = null
     
     try {
+      // Parse request body once and store it
       body = await request.json()
       console.log('🚜 Farm Creation Request:', {
         userId: request.user?.id,
@@ -113,7 +114,8 @@ export const POST = apiMiddleware.protected(
                 color: fieldData.color,
                 cropType: fieldData.cropType,
                 status: fieldData.fieldType || 'crop',
-                soilType: fieldData.soilType
+                soilType: fieldData.soilType,
+                isActive: true
               }
             })
             fields.push(field)

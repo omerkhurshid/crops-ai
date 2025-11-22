@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { prisma } from '../../../../lib/prisma';
 import { createSuccessResponse, handleApiError, ValidationError } from '../../../../lib/api/errors';
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../../lib/api/middleware';
+import { createClient } from '../../../../lib/supabase/server';
 const preferencesSchema = z.object({
   currency: z.string().optional(),
   landUnit: z.enum(['hectares', 'acres', 'square_meters']).optional(),
@@ -15,37 +15,24 @@ export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
     try {
       const user = request.user;
-      // Get user preferences from database with error handling for missing columns
-      let userPreferences = null;
-      try {
-        userPreferences = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: {
-            currency: true,
-            landUnit: true,
-            temperatureUnit: true,
-            timezone: true,
-            language: true
-          }
-        });
-      } catch (dbError) {
-        console.error('Database preferences error:', dbError);
-        // If preferences columns don't exist, fall back to basic user data
-        userPreferences = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: { id: true }
-        });
+      // Get user preferences from Supabase user metadata
+      const supabase = createClient();
+      const { data: { user: supabaseUser }, error } = await supabase.auth.getUser();
+      
+      if (error || !supabaseUser) {
+        throw new Error('Unable to fetch user data');
       }
-      // Return preferences with defaults
-      const preferences = {
-        currency: (userPreferences && 'currency' in userPreferences) ? userPreferences.currency : 'USD',
-        landUnit: (userPreferences && 'landUnit' in userPreferences) ? userPreferences.landUnit : 'hectares',
-        temperatureUnit: (userPreferences && 'temperatureUnit' in userPreferences) ? userPreferences.temperatureUnit : 'celsius',
-        timezone: (userPreferences && 'timezone' in userPreferences) ? userPreferences.timezone : 'UTC',
-        language: (userPreferences && 'language' in userPreferences) ? userPreferences.language : 'en'
+
+      const userPreferences = {
+        currency: supabaseUser.user_metadata?.currency || 'USD',
+        landUnit: supabaseUser.user_metadata?.landUnit || 'hectares',
+        temperatureUnit: supabaseUser.user_metadata?.temperatureUnit || 'celsius',
+        timezone: supabaseUser.user_metadata?.timezone || 'UTC',
+        language: supabaseUser.user_metadata?.language || 'en'
       };
+
       return createSuccessResponse({
-        preferences,
+        preferences: userPreferences,
         message: 'User preferences retrieved successfully'
       });
     } catch (error) {
@@ -65,26 +52,20 @@ export const PUT = apiMiddleware.protected(
         throw new ValidationError('Invalid preferences data');
       }
       const preferences = validation.data;
-      // Update user preferences in database
-      const updatedUser = await prisma.user.update({
-        where: { id: user.id },
+      // Update user preferences in Supabase user metadata
+      const supabase = createClient();
+      const { error } = await supabase.auth.updateUser({
         data: {
-          ...(preferences.currency && { currency: preferences.currency }),
-          ...(preferences.landUnit && { landUnit: preferences.landUnit }),
-          ...(preferences.temperatureUnit && { temperatureUnit: preferences.temperatureUnit }),
-          ...(preferences.timezone && { timezone: preferences.timezone }),
-          ...(preferences.language && { language: preferences.language })
-        },
-        select: {
-          currency: true,
-          landUnit: true,
-          temperatureUnit: true,
-          timezone: true,
-          language: true
+          ...preferences
         }
       });
+
+      if (error) {
+        throw new Error(`Failed to update user preferences: ${error.message}`);
+      }
+
       return createSuccessResponse({
-        preferences: updatedUser,
+        preferences: preferences,
         message: 'User preferences updated successfully'
       });
     } catch (error) {

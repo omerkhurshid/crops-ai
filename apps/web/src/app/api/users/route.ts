@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import { prisma } from '../../../lib/prisma'
-import { createSuccessResponse } from '../../../lib/api/errors'
-import { validateRequestBody, validateQueryParams, createUserSchema, paginationSchema } from '../../../lib/api/validation'
+import { createSuccessResponse, handleApiError } from '../../../lib/api/errors'
 import { apiMiddleware, withMethods, AuthenticatedRequest } from '../../../lib/api/middleware'
-// GET /api/users - List users with pagination
+
+// DEPRECATED: Users now managed via Supabase Auth only
 export const GET = apiMiddleware.protected(
   withMethods(['GET'], async (request: AuthenticatedRequest) => {
+    return handleApiError(new Error('User management moved to Supabase Auth. This endpoint is deprecated.'))
     const { searchParams } = new URL(request.url)
     const pagination = validateQueryParams(
       paginationSchema,

@@ -130,6 +130,9 @@ model Field {
   area        Float // in hectares
   boundary    Unsupported("geography")? // PostGIS geography type
   soilType    String?
+  color       String?                   // Field color for map visualization
+  cropType    String?                   // Current crop type in field
+  status      String?                   // Field status (crop, fallow, etc.)
   createdAt   DateTime                   @default(now())
   updatedAt   DateTime                   @updatedAt
 

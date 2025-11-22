@@ -17,6 +17,16 @@ export const updateUserSchema = z.object({
   name: z.string().min(1, 'Name is required').optional(),
   role: z.enum(['FARM_OWNER', 'FARM_MANAGER', 'AGRONOMIST', 'ADMIN']).optional()
 })
+// Field schema for farm creation
+export const farmFieldSchema = z.object({
+  name: z.string().min(1, 'Field name is required'),
+  area: z.number().min(0, 'Area must be non-negative'),
+  color: z.string().optional(),
+  cropType: z.string().optional(),
+  fieldType: z.string().optional(), // Maps to status in database
+  soilType: z.string().optional()
+})
+
 // Farm validation schemas
 export const createFarmSchema = z.object({
   name: z.string().min(1, 'Farm name is required'),
@@ -29,7 +39,8 @@ export const createFarmSchema = z.object({
   address: z.string().optional(),
   region: z.string().optional(),
   country: z.string().min(2, 'Country code is required'),
-  totalArea: z.number().min(0, 'Total area must be non-negative')
+  totalArea: z.number().min(0, 'Total area must be non-negative'),
+  fields: z.array(farmFieldSchema).optional()
 })
 export const updateFarmSchema = z.object({
   name: z.string().min(1, 'Farm name is required').optional(),
@@ -45,6 +56,9 @@ export const createFieldSchema = z.object({
   farmId: z.string().cuid('Invalid farm ID'),
   name: z.string().min(1, 'Field name is required'),
   area: z.number().positive('Area must be positive'),
+  color: z.string().optional(),
+  cropType: z.string().optional(),
+  status: z.string().optional(),
   soilType: z.string().optional(),
   boundary: z.string().optional() // JSON string representation of geometry
 })

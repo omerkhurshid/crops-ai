@@ -164,7 +164,7 @@ function UnifiedLoginFormContent({ callbackUrl = '/dashboard' }: UnifiedLoginFor
             />
           </div>
           {successMessage && (
-            <div className="text-green-600 text-xs sm:text-sm bg-[#F8FAF8] p-3 rounded-md border border-[#DDE4D8]">
+            <div className="text-[#8FBF7F] text-xs sm:text-sm bg-[#F8FAF8] p-3 rounded-md border border-[#DDE4D8]">
               {successMessage}
             </div>
           )}

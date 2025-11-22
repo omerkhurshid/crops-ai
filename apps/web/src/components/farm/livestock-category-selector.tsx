@@ -27,7 +27,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
     <div className="space-y-6">
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-3 h-4 w-4 text-[#555555]" />
         <Input
           placeholder="Search livestock (e.g., cattle, chickens, sheep)..."
           value={searchTerm}
@@ -75,7 +75,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                       key={livestock.id}
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
                         selectedLivestock === livestock.id
-                          ? 'bg-[#F8FAF8] border-[#DDE4D8] ring-1 ring-sage-500'
+                          ? 'bg-[#F8FAF8] border-[#DDE4D8] ring-1 ring-#555555'
                           : 'bg-white hover:bg-[#FAFAF7] border-[#E6E6E6]'
                       }`}
                       onClick={() => onSelect(livestock, category)}

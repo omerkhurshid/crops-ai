@@ -82,8 +82,8 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       case 'critical': return 'bg-red-500';
       case 'high': return 'bg-red-400';
       case 'medium': return 'bg-yellow-400';
-      case 'low': return 'bg-green-400';
-      default: return 'bg-gray-400';
+      case 'low': return 'bg-[#8FBF7F]';
+      default: return 'bg-[#555555]';
     }
   };
   const getSeverityColor = (severity: string) => {
@@ -91,7 +91,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]';
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
@@ -99,7 +99,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
     switch (type) {
       case 'stress_detected': return <Zap className="h-4 w-4 text-orange-600" />;
       case 'health_decline': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      case 'improvement': return <TrendingUp className="h-4 w-4 text-green-600" />;
+      case 'improvement': return <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />;
       case 'threshold_breach': return <Target className="h-4 w-4 text-red-600" />;
       default: return <Activity className="h-4 w-4 text-[#555555]" />;
     }
@@ -123,7 +123,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
   if (!data) {
     return (
       <div className="text-center py-12">
-        <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <Activity className="h-12 w-12 text-[#555555] mx-auto mb-4" />
         <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Visualization Data Unavailable</h3>
         <p className="text-[#555555]">Unable to load advanced visualization data.</p>
       </div>
@@ -202,7 +202,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                       {['ndvi', 'evi', 'savi'].map((index) => (
                         <div key={index} className="p-3 bg-[#FAFAF7] rounded-lg">
                           <div className="text-center mb-2">
-                            <div className="text-lg font-bold text-blue-600">
+                            <div className="text-lg font-bold text-[#7A8F78]">
                               {field.data[field.data.length - 1][index].toFixed(3)}
                             </div>
                             <div className="text-xs text-[#555555] uppercase">{index}</div>
@@ -217,7 +217,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                                   <div className="flex items-center gap-1">
                                     <span>{point[index].toFixed(3)}</span>
                                     {idx > 0 && (
-                                      <span className={`text-xs ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                      <span className={`text-xs ${change >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'}`}>
                                         {change >= 0 ? '+' : ''}{change.toFixed(1)}%
                                       </span>
                                     )}
@@ -298,7 +298,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div className="p-4 bg-blue-50 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-[#7A8F78]">
                       {data.comparisonData.thisYear[data.comparisonData.thisYear.length - 1]?.health}%
                     </div>
                     <p className="text-sm text-[#555555]">This Year</p>
@@ -310,7 +310,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                     <p className="text-sm text-[#555555]">Last Year</p>
                   </div>
                   <div className="p-4 bg-[#F8FAF8] rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">{data.comparisonData.benchmark}%</div>
+                    <div className="text-2xl font-bold text-[#8FBF7F]">{data.comparisonData.benchmark}%</div>
                     <p className="text-sm text-[#555555]">Industry Benchmark</p>
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                           <div className="text-sm text-[#555555]">
                             Last year: <span className="font-semibold">{lastYearValue}%</span>
                           </div>
-                          <div className={`text-sm font-semibold ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          <div className={`text-sm font-semibold ${change >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'}`}>
                             {change >= 0 ? '+' : ''}{change.toFixed(1)}%
                           </div>
                         </div>
@@ -364,7 +364,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                           {alert.severity}
                         </Badge>
                         {alert.resolved && (
-                          <Badge className="bg-[#F8FAF8] text-green-800">
+                          <Badge className="bg-[#F8FAF8] text-[#7A8F78]">
                             Resolved
                           </Badge>
                         )}
@@ -397,7 +397,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
                 <h4 className="font-semibold capitalize mb-2">{season}</h4>
                 <div className="space-y-2">
                   <div>
-                    <div className="text-lg font-bold text-green-600">{pattern.avgNdvi.toFixed(2)}</div>
+                    <div className="text-lg font-bold text-[#8FBF7F]">{pattern.avgNdvi.toFixed(2)}</div>
                     <p className="text-xs text-[#555555]">Avg NDVI</p>
                   </div>
                   <div>

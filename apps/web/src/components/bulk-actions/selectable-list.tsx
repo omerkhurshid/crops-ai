@@ -153,7 +153,7 @@ export function SelectableFarmItem({ farm, isSelected, onToggle }: FarmItemProps
               {farm.location && (
                 <p className="text-sm text-[#555555] mb-2">📍 {farm.location}</p>
               )}
-              <div className="flex items-center gap-4 text-sm text-sage-500">
+              <div className="flex items-center gap-4 text-sm text-#555555">
                 {farm.totalArea && (
                   <span>{farm.totalArea} hectares</span>
                 )}
@@ -191,8 +191,8 @@ interface FieldItemProps {
 }
 export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemProps) {
   const getHealthScoreColor = (score?: number) => {
-    if (!score) return 'text-sage-500'
-    if (score >= 80) return 'text-green-600'
+    if (!score) return 'text-#555555'
+    if (score >= 80) return 'text-[#8FBF7F]'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
@@ -211,7 +211,7 @@ export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemPr
                   <span>📐 {field.area} ha</span>
                 )}
               </div>
-              <div className="flex items-center gap-4 text-sm text-sage-500">
+              <div className="flex items-center gap-4 text-sm text-#555555">
                 {field.healthScore !== undefined && (
                   <span className={getHealthScoreColor(field.healthScore)}>
                     Health: {field.healthScore}%
@@ -259,7 +259,7 @@ export function SelectableTransactionItem({ transaction, isSelected, onToggle }:
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <h3 className="font-medium text-[#1A1A1A] mb-1">{transaction.description}</h3>
-              <div className="flex items-center gap-4 text-sm text-sage-500">
+              <div className="flex items-center gap-4 text-sm text-#555555">
                 <span>{new Date(transaction.date).toLocaleDateString()}</span>
                 {transaction.category && (
                   <Badge variant="outline">{transaction.category}</Badge>
@@ -268,7 +268,7 @@ export function SelectableTransactionItem({ transaction, isSelected, onToggle }:
             </div>
             <div className="text-right">
               <div className={`font-semibold ${
-                transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                transaction.type === 'income' ? 'text-[#8FBF7F]' : 'text-red-600'
               }`}>
                 {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount).toLocaleString()}
               </div>

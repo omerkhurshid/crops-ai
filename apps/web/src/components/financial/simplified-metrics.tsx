@@ -117,7 +117,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-[#F8FAF8] rounded-lg">
-                <Calculator className="h-5 w-5 text-green-600" />
+                <Calculator className="h-5 w-5 text-[#8FBF7F]" />
               </div>
               <div>
                 <ModernCardTitle className="text-[#1A1A1A]">Farm Financial Health</ModernCardTitle>
@@ -199,7 +199,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
               <div className="space-y-2 text-sm text-[#555555]">
                 {metrics.isAboveBreakeven ? (
                   <p className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
                     <span>Good news! Current market prices are above your break-even point.</span>
                   </p>
                 ) : (

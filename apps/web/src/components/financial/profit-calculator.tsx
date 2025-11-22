@@ -111,13 +111,13 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
     return cropDefaults[crop]?.unit || 'bu'
   }
   const getProfitColor = (profit: number) => {
-    if (profit > 0) return 'text-green-600'
+    if (profit > 0) return 'text-[#8FBF7F]'
     if (profit < 0) return 'text-red-600'
     return 'text-[#555555]'
   }
   const getProfitIndicator = (profit: number, margin: number) => {
-    if (profit > 0 && margin > 15) return { icon: TrendingUp, text: 'Excellent', color: 'text-green-600' }
-    if (profit > 0 && margin > 5) return { icon: TrendingUp, text: 'Good', color: 'text-green-600' }
+    if (profit > 0 && margin > 15) return { icon: TrendingUp, text: 'Excellent', color: 'text-[#8FBF7F]' }
+    if (profit > 0 && margin > 5) return { icon: TrendingUp, text: 'Good', color: 'text-[#8FBF7F]' }
     if (profit > 0) return { icon: TrendingUp, text: 'Modest', color: 'text-yellow-600' }
     if (profit < 0) return { icon: TrendingDown, text: 'Loss', color: 'text-red-600' }
     return { icon: Minus, text: 'Break Even', color: 'text-[#555555]' }
@@ -129,7 +129,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <ModernCardTitle className="flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-blue-600" />
+            <Calculator className="h-5 w-5 text-[#7A8F78]" />
             Profit Calculator
           </ModernCardTitle>
           <Button 
@@ -204,10 +204,10 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <DollarSign className="h-5 w-5 text-green-600" />
+                <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
                 <span className="text-sm font-medium text-[#555555]">Total Revenue</span>
               </div>
-              <div className="text-2xl font-bold text-green-700">
+              <div className="text-2xl font-bold text-[#7A8F78]">
                 ${results.totalRevenue.toLocaleString()}
               </div>
             </div>
@@ -317,10 +317,10 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
         {results.profitMargin > 15 && (
           <div className="bg-[#F8FAF8] border border-[#DDE4D8] p-4 rounded-lg">
             <div className="flex items-start gap-3">
-              <TrendingUp className="h-5 w-5 text-green-600 mt-0.5" />
+              <TrendingUp className="h-5 w-5 text-[#8FBF7F] mt-0.5" />
               <div>
-                <h4 className="font-semibold text-green-800 mb-1">Great Profit Potential!</h4>
-                <p className="text-sm text-green-700">
+                <h4 className="font-semibold text-[#7A8F78] mb-1">Great Profit Potential!</h4>
+                <p className="text-sm text-[#7A8F78]">
                   This operation shows strong profitability. Consider expanding acreage or similar crops.
                 </p>
               </div>

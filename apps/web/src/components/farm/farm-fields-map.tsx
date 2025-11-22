@@ -57,7 +57,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     if (field.stressLevel === 'severe') return 'bg-red-500'
     if (field.stressLevel === 'high') return 'bg-orange-500'
     if (field.stressLevel === 'moderate') return 'bg-yellow-500'
-    if (field.stressLevel === 'low') return 'bg-green-400'
+    if (field.stressLevel === 'low') return 'bg-[#8FBF7F]'
     return 'bg-[#7A8F78]'
   }
   const getFieldBorderColor = (field: Field) => {
@@ -65,7 +65,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
     if (field.stressLevel === 'high') return 'border-orange-600'
     if (field.stressLevel === 'moderate') return 'border-yellow-600'
     if (field.stressLevel === 'low') return 'border-[#8FBF7F]'
-    return 'border-green-700'
+    return 'border-[#7A8F78]'
   }
   // Calculate summary stats
   const totalFields = fields.length
@@ -88,8 +88,8 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
             <div className="text-sm text-[#555555]">Total Fields</div>
           </div>
           <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
-            <div className="text-2xl font-bold text-green-700">{healthyFields}</div>
-            <div className="text-sm text-green-600">Healthy</div>
+            <div className="text-2xl font-bold text-[#7A8F78]">{healthyFields}</div>
+            <div className="text-sm text-[#8FBF7F]">Healthy</div>
           </div>
           <div className="bg-orange-50 rounded-lg p-3 border border-orange-200">
             <div className="text-2xl font-bold text-orange-700">{stressedFields}</div>
@@ -97,7 +97,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
           </div>
           <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
             <div className="text-2xl font-bold text-blue-700">{totalArea.toFixed(1)} ha</div>
-            <div className="text-sm text-blue-600">Total Area</div>
+            <div className="text-sm text-[#7A8F78]">Total Area</div>
           </div>
         </div>
         {/* Visual Map Representation */}
@@ -147,7 +147,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
             <span className="text-[#555555]">Excellent (80-100%)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-400 rounded"></div>
+            <div className="w-4 h-4 bg-[#8FBF7F] rounded"></div>
             <span className="text-[#555555]">Good (70-79%)</span>
           </div>
           <div className="flex items-center gap-2">

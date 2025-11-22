@@ -151,10 +151,10 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
         <ModernCardHeader className="bg-gradient-to-r from-green-50/80 to-emerald-50/80">
           <div className="flex items-center justify-between">
             <div>
-              <ModernCardTitle className="text-2xl text-green-800 mb-2">
+              <ModernCardTitle className="text-2xl text-[#7A8F78] mb-2">
                 {farm.name} Financial Overview
               </ModernCardTitle>
-              <ModernCardDescription className="flex items-center gap-2 text-green-700">
+              <ModernCardDescription className="flex items-center gap-2 text-[#7A8F78]">
                 <MapPin className="h-4 w-4" />
                 {farm.totalArea.toFixed(1)} hectares • {fields.length} fields
               </ModernCardDescription>
@@ -172,21 +172,21 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-green-600" />
+                  <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
                   <span className="text-sm font-medium text-[#555555]">Total Revenue</span>
                 </div>
-                <p className="text-2xl font-bold text-green-700">
+                <p className="text-2xl font-bold text-[#7A8F78]">
                   {formatCurrency(summary.totalRevenue)}
                 </p>
                 {summary.profitChange !== 0 && (
                   <div className="flex items-center gap-1">
                     {summary.profitChange > 0 ? (
-                      <TrendingUp className="h-4 w-4 text-green-500" />
+                      <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
                     ) : (
                       <TrendingDown className="h-4 w-4 text-red-500" />
                     )}
                     <span className={`text-sm ${
-                      summary.profitChange > 0 ? 'text-green-600' : 'text-red-600'
+                      summary.profitChange > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                     }`}>
                       {formatPercentage(summary.profitChange)}
                     </span>
@@ -204,11 +204,11 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
+                  <Target className="h-5 w-5 text-[#7A8F78]" />
                   <span className="text-sm font-medium text-[#555555]">Net Profit</span>
                 </div>
                 <p className={`text-2xl font-bold ${
-                  summary.netProfit >= 0 ? 'text-green-700' : 'text-red-700'
+                  summary.netProfit >= 0 ? 'text-[#7A8F78]' : 'text-red-700'
                 }`}>
                   {formatCurrency(summary.netProfit)}
                 </p>
@@ -244,7 +244,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
         <ModernCardContent>
           {fields.length === 0 ? (
             <div className="text-center py-12">
-              <Sprout className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <Sprout className="h-12 w-12 text-[#555555] mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Fields Found</h3>
               <p className="text-[#555555] mb-4">
                 Add fields to your farm to start tracking field-level financial performance.
@@ -284,7 +284,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                           </div>
                           <div>
                             <span className="text-[#555555]">Revenue:</span>
-                            <p className="font-medium text-green-600">
+                            <p className="font-medium text-[#8FBF7F]">
                               {formatCurrency(field.totalRevenue)}
                             </p>
                           </div>
@@ -297,7 +297,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                           <div>
                             <span className="text-[#555555]">Net Profit:</span>
                             <p className={`font-medium ${
-                              field.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                              field.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                             }`}>
                               {formatCurrency(field.netProfit)}
                             </p>
@@ -316,7 +316,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                           <Eye className="h-4 w-4 mr-1" />
                           View Details
                         </Button>
-                        <ArrowRight className="h-4 w-4 text-gray-400" />
+                        <ArrowRight className="h-4 w-4 text-[#555555]" />
                       </div>
                     </div>
                   </ModernCardContent>

@@ -528,7 +528,7 @@ export function ThreeStepFarmCreator() {
           <ModernCard variant="soft">
             <ModernCardHeader>
               <ModernCardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-blue-600" />
+                <MapPin className="h-5 w-5 text-[#7A8F78]" />
                 Farm Location
               </ModernCardTitle>
               <ModernCardDescription>Where is {farm.name} located?</ModernCardDescription>
@@ -744,7 +744,7 @@ export function ThreeStepFarmCreator() {
                                 <Satellite className={`h-3 w-3 ${
                                   farm.isMultiField 
                                     ? 'text-white' 
-                                    : 'text-blue-600'
+                                    : 'text-[#7A8F78]'
                                 }`} />
                               </div>
                               <span className="font-medium text-sm">Multiple Fields</span>
@@ -800,8 +800,8 @@ export function ThreeStepFarmCreator() {
                           <div className="mt-4">
                             {farm.fields.length === 0 ? (
                               <Alert className="border-blue-200 bg-blue-50">
-                                <AlertCircle className="h-4 w-4 text-blue-600" />
-                                <AlertDescription className="text-blue-800">
+                                <AlertCircle className="h-4 w-4 text-[#7A8F78]" />
+                                <AlertDescription className="text-[#7A8F78]">
                                   Use the polygon tool above to draw individual field boundaries within your farm.
                                 </AlertDescription>
                               </Alert>
@@ -847,8 +847,8 @@ export function ThreeStepFarmCreator() {
 
                   {(!farm.boundaries || farm.boundaries.length === 0) && (
                     <Alert className="border-blue-200 bg-blue-50">
-                      <AlertCircle className="h-4 w-4 text-blue-600" />
-                      <AlertDescription className="text-blue-800">
+                      <AlertCircle className="h-4 w-4 text-[#7A8F78]" />
+                      <AlertDescription className="text-[#7A8F78]">
                         Click the polygon tool (📐) above the map, then click around your farm perimeter to draw boundaries.
                       </AlertDescription>
                     </Alert>
@@ -1005,7 +1005,7 @@ export function ThreeStepFarmCreator() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <Satellite className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
                   <h3 className="font-medium text-[#555555] mb-2">No fields created yet</h3>
                   <p className="text-sm text-[#555555] mb-4">Go back to step 2 to draw your field boundaries</p>
                   <Button onClick={prevStep} variant="outline">

@@ -131,7 +131,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
         <ModernCardHeader className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80">
           <div className="flex items-center justify-between">
             <div>
-              <ModernCardTitle className="text-xl text-blue-800 mb-2">
+              <ModernCardTitle className="text-xl text-[#7A8F78] mb-2">
                 Field Financial Performance
               </ModernCardTitle>
               <ModernCardDescription className="flex items-center gap-2 text-blue-700">
@@ -156,10 +156,10 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-green-600" />
+                  <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
                   <span className="text-sm font-medium text-[#555555]">Total Income</span>
                 </div>
-                <p className="text-2xl font-bold text-green-700">
+                <p className="text-2xl font-bold text-[#7A8F78]">
                   {formatCurrency(summary.totalIncome)}
                 </p>
                 <div className="text-sm text-[#555555]">
@@ -180,11 +180,11 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
+                  <Target className="h-5 w-5 text-[#7A8F78]" />
                   <span className="text-sm font-medium text-[#555555]">Net Profit</span>
                 </div>
                 <p className={`text-2xl font-bold ${
-                  summary.netProfit >= 0 ? 'text-green-700' : 'text-red-700'
+                  summary.netProfit >= 0 ? 'text-[#7A8F78]' : 'text-red-700'
                 }`}>
                   {formatCurrency(summary.netProfit)}
                 </p>
@@ -195,12 +195,12 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   {summary.profitChange !== 0 && (
                     <div className="flex items-center gap-1">
                       {summary.profitChange > 0 ? (
-                        <TrendingUp className="h-3 w-3 text-green-500" />
+                        <TrendingUp className="h-3 w-3 text-[#8FBF7F]" />
                       ) : (
                         <TrendingDown className="h-3 w-3 text-red-500" />
                       )}
                       <span className={`text-xs ${
-                        summary.profitChange > 0 ? 'text-green-600' : 'text-red-600'
+                        summary.profitChange > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                       }`}>
                         {formatPercentage(summary.profitChange)}
                       </span>
@@ -284,7 +284,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-12">
-                <PieChart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <PieChart className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                   Advanced Analytics Coming Soon
                 </h3>
@@ -305,7 +305,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             </ModernCardHeader>
             <ModernCardContent>
               <div className="text-center py-12">
-                <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <TrendingUp className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                   Field-Specific Trends Coming Soon
                 </h3>
@@ -330,7 +330,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <h4 className="font-medium text-[#555555]">Income</h4>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-2xl font-bold text-[#8FBF7F]">
                         {formatCurrency(summary.totalIncome)}
                       </p>
                       <p className="text-sm text-[#555555]">
@@ -349,7 +349,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
                     <div className="space-y-2">
                       <h4 className="font-medium text-[#555555]">Net Profit</h4>
                       <p className={`text-2xl font-bold ${
-                        summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                        summary.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                       }`}>
                         {formatCurrency(summary.netProfit)}
                       </p>

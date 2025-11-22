@@ -28,7 +28,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
     <div className="space-y-6">
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-3 h-4 w-4 text-[#555555]" />
         <Input
           placeholder="Search crops, livestock, or scientific names..."
           value={searchTerm}
@@ -143,7 +143,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                       <div className="text-xs text-[#555555]">
                         {crop.yield?.typical} {crop.yield?.unit}/acre
                       </div>
-                      <div className="text-xs font-medium text-green-600">
+                      <div className="text-xs font-medium text-[#8FBF7F]">
                         ${crop.marketValue?.avgPrice}
                       </div>
                     </div>
@@ -165,7 +165,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
               </Badge>
             </ModernCardTitle>
             <p className="text-sm text-[#555555] italic">{selectedCropData.scientificName}</p>
-            <p className="text-xs text-blue-600 font-medium">
+            <p className="text-xs text-[#7A8F78] font-medium">
               Family: {selectedCropData.botanicalFamily}
             </p>
           </ModernCardHeader>
@@ -180,15 +180,15 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
                 <div className="text-xs text-[#555555]">Growing Season</div>
               </div>
               <div className="text-center p-3 bg-[#F8FAF8] rounded-lg">
-                <TrendingUp className="h-5 w-5 text-green-600 mx-auto mb-1" />
-                <div className="text-sm font-medium text-green-800">
+                <TrendingUp className="h-5 w-5 text-[#8FBF7F] mx-auto mb-1" />
+                <div className="text-sm font-medium text-[#7A8F78]">
                   {selectedCropData.yield.typical} {selectedCropData.yield.unit}
                 </div>
                 <div className="text-xs text-[#555555]">Expected Yield/acre</div>
               </div>
               <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <Droplets className="h-5 w-5 text-blue-600 mx-auto mb-1" />
-                <div className="text-sm font-medium text-blue-800 capitalize">
+                <Droplets className="h-5 w-5 text-[#7A8F78] mx-auto mb-1" />
+                <div className="text-sm font-medium text-[#7A8F78] capitalize">
                   {selectedCropData.waterRequirements}
                 </div>
                 <div className="text-xs text-[#555555]">Water Needs</div>

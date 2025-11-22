@@ -262,7 +262,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                   <p className={`font-semibold capitalize ${
                     agricultureData.frostRisk === 'high' ? 'text-red-600' :
                     agricultureData.frostRisk === 'moderate' ? 'text-orange-600' :
-                    agricultureData.frostRisk === 'low' ? 'text-yellow-600' : 'text-green-600'
+                    agricultureData.frostRisk === 'low' ? 'text-yellow-600' : 'text-[#8FBF7F]'
                   }`}>
                     {agricultureData.frostRisk}
                   </p>
@@ -275,7 +275,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
                     agricultureData.heatStress === 'severe' ? 'text-red-800' :
                     agricultureData.heatStress === 'high' ? 'text-red-600' :
                     agricultureData.heatStress === 'moderate' ? 'text-orange-600' :
-                    agricultureData.heatStress === 'low' ? 'text-yellow-600' : 'text-green-600'
+                    agricultureData.heatStress === 'low' ? 'text-yellow-600' : 'text-[#8FBF7F]'
                   }`}>
                     {agricultureData.heatStress}
                   </p>

@@ -108,14 +108,14 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
   };
   const getTrendIcon = (change: number) => {
     return change >= 0 ? 
-      <TrendingUp className="h-4 w-4 text-green-600" /> : 
+      <TrendingUp className="h-4 w-4 text-[#8FBF7F]" /> : 
       <TrendingDown className="h-4 w-4 text-red-600" />;
   };
   const getImpactColor = (impact: string) => {
     switch (impact) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]';
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
@@ -212,7 +212,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
               value={`${data.yieldEfficiency}%`}
               subtitle="How much you're growing"
               status={getScoreStatus(data.yieldEfficiency)}
-              icon={<Leaf className="h-5 w-5 text-green-600" />}
+              icon={<Leaf className="h-5 w-5 text-[#8FBF7F]" />}
             />
             <FarmerMetricCard
               title="Resource Efficiency"
@@ -246,7 +246,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
               <div className="flex items-center justify-center gap-2 mb-3">
-                <Leaf className="h-5 w-5 text-green-600" />
+                <Leaf className="h-5 w-5 text-[#8FBF7F]" />
                 <span className="font-medium text-[#1A1A1A]">Crop Yield</span>
                 {getTrendIcon(data.trends.yield.change)}
               </div>

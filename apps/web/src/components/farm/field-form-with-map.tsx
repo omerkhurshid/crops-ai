@@ -207,7 +207,7 @@ export function FieldFormWithMap({
             {/* Farm Info */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
+                <MapPin className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-blue-900">{farmName}</p>
                   <p className="text-sm text-blue-700">
@@ -216,7 +216,7 @@ export function FieldFormWithMap({
                     Available: {remainingArea.toFixed(1)} ha
                   </p>
                   {existingFields.length > 0 && (
-                    <p className="text-xs text-blue-600 mt-1">
+                    <p className="text-xs text-[#7A8F78] mt-1">
                       Existing fields: {existingFields.map(f => f.name).join(', ')}
                     </p>
                   )}
@@ -278,15 +278,15 @@ export function FieldFormWithMap({
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <p className="font-medium text-green-900">Manually Drawn Field</p>
-                      <Badge className="bg-[#F8FAF8] text-green-700 border-green-300 text-xs">
+                      <Badge className="bg-[#F8FAF8] text-[#7A8F78] border-green-300 text-xs">
                         {selectedFields[0]?.confidence || 100}% Confidence
                       </Badge>
                     </div>
-                    <p className="text-sm text-green-700">
+                    <p className="text-sm text-[#7A8F78]">
                       Area: {selectedFields[0]?.area.toFixed(1)} ha ({(selectedFields[0]?.area * 2.47).toFixed(1)} acres)
                     </p>
                   </div>
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <CheckCircle className="h-5 w-5 text-[#8FBF7F]" />
                 </div>
               </div>
             )}
@@ -333,7 +333,7 @@ export function FieldFormWithMap({
                 <h3 className="text-lg font-semibold text-blue-900 mb-3">Quick Setup - Apply to All Fields</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label className="text-sm font-medium text-blue-800">Same Crop for All</Label>
+                    <Label className="text-sm font-medium text-[#7A8F78]">Same Crop for All</Label>
                     <select
                       className="flex h-10 w-full rounded-md border border-blue-300 bg-white px-3 py-2 text-sm"
                       onChange={(e) => {
@@ -354,7 +354,7 @@ export function FieldFormWithMap({
                     </select>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-blue-800">Same Soil Type</Label>
+                    <Label className="text-sm font-medium text-[#7A8F78]">Same Soil Type</Label>
                     <select
                       className="flex h-10 w-full rounded-md border border-blue-300 bg-white px-3 py-2 text-sm"
                       onChange={(e) => {
@@ -375,7 +375,7 @@ export function FieldFormWithMap({
                     </select>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-blue-800">Auto-Name Fields</Label>
+                    <Label className="text-sm font-medium text-[#7A8F78]">Auto-Name Fields</Label>
                     <Button
                       type="button"
                       variant="outline"
@@ -399,7 +399,7 @@ export function FieldFormWithMap({
               </div>
             )}
             {selectedFields.map((field, index) => (
-              <div key={field.id} className="p-4 border-2 border-[#DDE4D8] rounded-xl space-y-6 bg-gradient-to-br from-sage-50 to-#FAFAF7">
+              <div key={field.id} className="p-4 border-2 border-[#DDE4D8] rounded-xl space-y-6 bg-gradient-to-br from-[#F8FAF8] to-[#FAFAF7]">
                 {/* Field Header with Visual Card */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -407,20 +407,20 @@ export function FieldFormWithMap({
                       {index + 1}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-sage-900">
+                      <h3 className="text-lg font-semibold text-[#1A1A1A]">
                         {fieldDetails[field.id]?.name || `Field ${index + 1}`}
                       </h3>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-[#555555]">
                           {field.area.toFixed(1)} ha ({(field.area * 2.47).toFixed(1)} acres)
                         </span>
-                        <Badge className="bg-[#F8FAF8] text-green-700 border-green-300 text-xs">
+                        <Badge className="bg-[#F8FAF8] text-[#7A8F78] border-green-300 text-xs">
                           {field.confidence}% confident
                         </Badge>
                       </div>
                     </div>
                   </div>
-                  <CheckCircle className="h-6 w-6 text-green-600" />
+                  <CheckCircle className="h-6 w-6 text-[#8FBF7F]" />
                 </div>
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-medium text-[#1A1A1A]">

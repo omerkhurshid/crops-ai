@@ -113,14 +113,14 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
   // Removed mock data function - only show real data from API
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'positive': return 'text-green-600 bg-[#F8FAF8]';
+      case 'positive': return 'text-[#8FBF7F] bg-[#F8FAF8]';
       case 'negative': return 'text-red-600 bg-red-50';
       default: return 'text-yellow-600 bg-yellow-50';
     }
   };
   const getEffectColor = (effect: string) => {
     switch (effect) {
-      case 'beneficial': return 'text-green-600';
+      case 'beneficial': return 'text-[#8FBF7F]';
       case 'harmful': return 'text-red-600';
       default: return 'text-yellow-600';
     }
@@ -136,7 +136,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
     switch (severity) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-[#F8FAF8] text-green-800';
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78]';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
     }
   };
@@ -144,14 +144,14 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
   const getEventIcon = (type: string) => {
     switch (type) {
       case 'drought': return <Sun className="h-4 w-4 text-orange-600" />;
-      case 'flood': return <Droplets className="h-4 w-4 text-blue-600" />;
+      case 'flood': return <Droplets className="h-4 w-4 text-[#7A8F78]" />;
       case 'frost': return <Thermometer className="h-4 w-4 text-blue-400" />;
       case 'heat': return <Zap className="h-4 w-4 text-red-600" />;
       case 'storm': return <Wind className="h-4 w-4 text-[#555555]" />;
@@ -162,7 +162,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-center h-32">
-          <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
+          <RefreshCw className="h-6 w-6 animate-spin text-[#555555]" />
         </div>
       </div>
     );
@@ -170,7 +170,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
   if (!data) {
     return (
       <div className="text-center py-8">
-        <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+        <AlertTriangle className="h-8 w-8 text-[#555555] mx-auto mb-2" />
         <p className="text-[#555555]">Unable to load weather impact data</p>
       </div>
     );
@@ -208,7 +208,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-blue-600">{data.summary.impactScore}%</div>
+              <div className="text-2xl font-bold text-[#7A8F78]">{data.summary.impactScore}%</div>
               <p className="text-xs text-[#555555]">Impact Score</p>
             </div>
             <div>
@@ -216,11 +216,11 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
               <p className="text-xs text-[#555555]">Critical Events</p>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-600">{data.summary.avgTemperature}°C</div>
+              <div className="text-2xl font-bold text-[#8FBF7F]">{data.summary.avgTemperature}°C</div>
               <p className="text-xs text-[#555555]">Avg Temperature</p>
             </div>
             <div>
-              <div className="text-2xl font-bold text-blue-600">{data.summary.totalRainfall}mm</div>
+              <div className="text-2xl font-bold text-[#7A8F78]">{data.summary.totalRainfall}mm</div>
               <p className="text-xs text-[#555555]">Total Rainfall</p>
             </div>
             <div>
@@ -300,7 +300,7 @@ export function WeatherImpactReport({ farmId }: WeatherImpactReportProps) {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className={`font-semibold ${event.yieldEffect >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`font-semibold ${event.yieldEffect >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'}`}>
                       {event.yieldEffect >= 0 ? '+' : ''}{event.yieldEffect.toFixed(1)}%
                     </div>
                     <p className="text-xs text-[#555555]">Yield impact</p>

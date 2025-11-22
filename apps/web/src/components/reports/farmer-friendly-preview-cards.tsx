@@ -47,7 +47,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
     return (
       <div className="space-y-4 text-center py-8">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
-          <BarChart3 className="h-6 w-6 text-gray-400" />
+          <BarChart3 className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
           <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Performance Data</p>
@@ -67,7 +67,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#F8FAF8] rounded-full flex items-center justify-center">
-            <BarChart3 className="h-5 w-5 text-green-600" />
+            <BarChart3 className="h-5 w-5 text-[#8FBF7F]" />
           </div>
           <div>
             <p className="text-lg font-semibold text-[#1A1A1A]">Farm Performance</p>
@@ -77,7 +77,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       </div>
       <div className="grid grid-cols-3 gap-3 text-center">
         <div className="bg-white rounded-lg p-3 border">
-          <div className="text-xl font-bold text-green-600">{performanceData.yieldPerAcre || 'N/A'}</div>
+          <div className="text-xl font-bold text-[#8FBF7F]">{performanceData.yieldPerAcre || 'N/A'}</div>
           <div className="text-xs text-[#555555]">yield per acre</div>
         </div>
         <div className="bg-white rounded-lg p-3 border">
@@ -85,7 +85,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           <div className="text-xs text-[#555555]">cost per acre</div>
         </div>
         <div className="bg-white rounded-lg p-3 border">
-          <div className="text-xl font-bold text-blue-600">{performanceData.profitPerAcre || 'N/A'}</div>
+          <div className="text-xl font-bold text-[#7A8F78]">{performanceData.profitPerAcre || 'N/A'}</div>
           <div className="text-xs text-[#555555]">profit per acre</div>
         </div>
       </div>
@@ -131,7 +131,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
     return (
       <div className="space-y-4 text-center py-8">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
-          <CloudRain className="h-6 w-6 text-gray-400" />
+          <CloudRain className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
           <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Weather Data</p>
@@ -150,7 +150,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <CloudRain className="h-8 w-8 text-blue-600" />
+          <CloudRain className="h-8 w-8 text-[#7A8F78]" />
           <div>
             <p className="text-lg font-semibold text-[#1A1A1A]">Weather Impact</p>
             <p className="text-sm text-[#555555]">Last 30 days analysis</p>
@@ -162,7 +162,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#1A1A1A]">Rainfall Impact</span>
             <span className={`text-sm ${
-              weatherData.rainfallImpact === 'positive' ? 'text-green-600' : 
+              weatherData.rainfallImpact === 'positive' ? 'text-[#8FBF7F]' : 
               weatherData.rainfallImpact === 'negative' ? 'text-red-600' : 'text-yellow-600'
             }`}>
               {weatherData.rainfallAmount} mm
@@ -171,7 +171,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#1A1A1A]">Temperature Stress</span>
             <span className={`text-sm ${
-              weatherData.temperatureStress === 'low' ? 'text-green-600' : 
+              weatherData.temperatureStress === 'low' ? 'text-[#8FBF7F]' : 
               weatherData.temperatureStress === 'high' ? 'text-red-600' : 'text-yellow-600'
             }`}>
               {weatherData.temperatureStress}
@@ -180,7 +180,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-[#1A1A1A]">Growth Conditions</span>
             <span className={`text-sm ${
-              weatherData.growthConditions === 'optimal' ? 'text-green-600' : 
+              weatherData.growthConditions === 'optimal' ? 'text-[#8FBF7F]' : 
               weatherData.growthConditions === 'poor' ? 'text-red-600' : 'text-yellow-600'
             }`}>
               {weatherData.growthConditions}
@@ -230,7 +230,7 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
     return (
       <div className="space-y-4 text-center py-8">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
-          <Leaf className="h-6 w-6 text-gray-400" />
+          <Leaf className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
           <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Crop Health Data</p>
@@ -339,7 +339,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
     return (
       <div className="space-y-4 text-center py-8">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
-          <DollarSign className="h-6 w-6 text-gray-400" />
+          <DollarSign className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
           <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Financial Data</p>
@@ -358,7 +358,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <DollarSign className="h-8 w-8 text-green-600" />
+          <DollarSign className="h-8 w-8 text-[#8FBF7F]" />
           <div>
             <p className="text-lg font-semibold text-[#1A1A1A]">Financial Summary</p>
             <p className="text-sm text-[#555555]">Current year performance</p>
@@ -367,19 +367,19 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
       </div>
       <div className="text-center bg-white border border-[#DDE4D8] rounded-lg p-4">
         <div className={`text-3xl font-bold mb-1 ${
-          financialData.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+          financialData.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
         }`}>
           {formatCurrency(financialData.netProfit)}
         </div>
         <div className="text-sm text-[#555555] mb-2">Net profit this year</div>
-        <div className="text-xs text-sage-500">
+        <div className="text-xs text-#555555">
           {financialData.transactionCount} transactions recorded
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3 text-center">
-          <div className="text-lg font-bold text-green-700">{formatCurrency(financialData.income)}</div>
-          <div className="text-xs text-green-600 mb-1">Income</div>
+          <div className="text-lg font-bold text-[#7A8F78]">{formatCurrency(financialData.income)}</div>
+          <div className="text-xs text-[#8FBF7F] mb-1">Income</div>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
           <div className="text-lg font-bold text-red-700">{formatCurrency(financialData.expenses)}</div>
@@ -431,7 +431,7 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
     return (
       <div className="space-y-4 text-center py-8">
         <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto">
-          <TreePine className="h-6 w-6 text-gray-400" />
+          <TreePine className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
           <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Sustainability Data</p>
@@ -450,14 +450,14 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <TreePine className="h-8 w-8 text-green-600" />
+          <TreePine className="h-8 w-8 text-[#8FBF7F]" />
           <div>
             <p className="text-lg font-semibold text-[#1A1A1A]">Sustainability Score</p>
             <p className="text-sm text-[#555555]">Environmental impact metrics</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-green-600">{sustainabilityData.score || 'N/A'}</span>
+          <span className="text-2xl font-bold text-[#8FBF7F]">{sustainabilityData.score || 'N/A'}</span>
           <InfoTooltip
             title="Sustainability Score"
             description="Track water use, soil health, and carbon footprint compared to similar farms."
@@ -468,8 +468,8 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
         {sustainabilityData.waterUsage && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-blue-800">Water Usage</span>
-              <span className="text-sm text-blue-600">{sustainabilityData.waterUsage.efficiency}% efficient</span>
+              <span className="text-sm font-medium text-[#7A8F78]">Water Usage</span>
+              <span className="text-sm text-[#7A8F78]">{sustainabilityData.waterUsage.efficiency}% efficient</span>
             </div>
             <div className="w-full bg-blue-200 rounded-full h-2">
               <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${sustainabilityData.waterUsage.efficiency}%` }}></div>
@@ -479,8 +479,8 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
         {sustainabilityData.carbonFootprint && (
           <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-green-800">Carbon Footprint</span>
-              <span className="text-sm text-green-600">{sustainabilityData.carbonFootprint.rating}</span>
+              <span className="text-sm font-medium text-[#7A8F78]">Carbon Footprint</span>
+              <span className="text-sm text-[#8FBF7F]">{sustainabilityData.carbonFootprint.rating}</span>
             </div>
             <div className="w-full bg-[#DDE4D8] rounded-full h-2">
               <div className="bg-[#8FBF7F] h-2 rounded-full" style={{ width: `${sustainabilityData.carbonFootprint.score}%` }}></div>

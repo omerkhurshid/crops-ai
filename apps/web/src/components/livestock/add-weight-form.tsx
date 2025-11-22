@@ -168,7 +168,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
                     ({change >= 0 ? '+' : ''}{percentage.toFixed(1)}%)
                   </span>
                   {change >= 0 ? (
-                    <span className="text-green-600 font-medium">Weight Gain</span>
+                    <span className="text-[#8FBF7F] font-medium">Weight Gain</span>
                   ) : (
                     <span className="text-red-600 font-medium">Weight Loss</span>
                   )}

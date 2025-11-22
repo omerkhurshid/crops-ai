@@ -208,7 +208,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
           {/* Right: Farming Actions */}
           <div className="space-y-4">
             <h4 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <Target className="h-4 w-4 text-green-600" />
+              <Target className="h-4 w-4 text-[#8FBF7F]" />
               Weather-Based Actions
             </h4>
             {weather.farmingActions.map((action) => (
@@ -218,15 +218,15 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
                     {action.urgency.toUpperCase()}
                   </Badge>
                   {action.timeWindow && (
-                    <span className="text-xs text-sage-500 flex items-center gap-1">
+                    <span className="text-xs text-#555555 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {action.timeWindow}
                     </span>
                   )}
                 </div>
-                <h5 className="font-medium text-sage-900 mb-1">{action.action}</h5>
+                <h5 className="font-medium text-#1A1A1A mb-1">{action.action}</h5>
                 <p className="text-xs text-[#555555] mb-2">{action.reason}</p>
-                <div className="bg-[#F8FAF8] p-2 rounded text-xs text-green-800">
+                <div className="bg-[#F8FAF8] p-2 rounded text-xs text-[#7A8F78]">
                   <strong>Impact:</strong> {action.impact}
                 </div>
               </div>

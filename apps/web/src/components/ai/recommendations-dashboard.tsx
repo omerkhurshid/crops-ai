@@ -50,7 +50,7 @@ const priorityColors = {
   critical: 'bg-red-100 text-red-800 border-red-200',
   high: 'bg-orange-100 text-orange-800 border-orange-200',
   medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  low: 'bg-blue-100 text-blue-800 border-blue-200'
+  low: 'bg-blue-100 text-[#7A8F78] border-blue-200'
 }
 export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsProps) {
   const [loading, setLoading] = useState(true)
@@ -192,7 +192,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
     })
   }
   const getImpactColor = (value: number) => {
-    if (value >= 15) return 'text-green-600'
+    if (value >= 15) return 'text-[#8FBF7F]'
     if (value >= 5) return 'text-yellow-600'
     return 'text-red-600'
   }
@@ -201,7 +201,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
       <div className="space-y-6">
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-3" />
+            <RefreshCw className="h-8 w-8 animate-spin text-[#555555] mx-auto mb-3" />
             <p className="text-[#555555]">Generating AI recommendations...</p>
           </div>
         </div>
@@ -278,7 +278,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                       }}
                       className={`flex items-center gap-1 px-3 py-1 rounded-full border-2 text-sm font-medium transition-colors ${
                         isSelected 
-                          ? 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]' 
+                          ? 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]' 
                           : 'bg-[#FAFAF7] text-[#555555] border-[#E6E6E6] hover:bg-[#F5F5F5]'
                       }`}
                     >
@@ -310,7 +310,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
           <Card className="border-2">
             <CardContent className="flex items-center justify-center h-32">
               <div className="text-center">
-                <Lightbulb className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                <Lightbulb className="h-8 w-8 text-[#555555] mx-auto mb-2" />
                 <p className="text-[#555555]">No recommendations available</p>
                 <p className="text-sm text-[#555555] mt-1">Try adjusting your settings and regenerate</p>
               </div>
@@ -324,7 +324,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex items-start gap-3">
-                      <Icon className="h-6 w-6 text-green-600 mt-1" />
+                      <Icon className="h-6 w-6 text-[#8FBF7F] mt-1" />
                       <div>
                         <CardTitle className="text-lg">{recommendation.title}</CardTitle>
                         <CardDescription>{recommendation.description}</CardDescription>
@@ -347,7 +347,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                       </div>
                       <div>
                         <div className="text-sm text-[#555555]">Cost Impact</div>
-                        <div className={`text-lg font-semibold ${recommendation.impact.cost > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                        <div className={`text-lg font-semibold ${recommendation.impact.cost > 0 ? 'text-red-600' : 'text-[#8FBF7F]'}`}>
                           ${Math.abs(recommendation.impact.cost).toFixed(0)}
                           {recommendation.impact.cost > 0 ? ' cost' : ' savings'}
                         </div>
@@ -388,7 +388,7 @@ export function RecommendationsDashboard({ farmId, fieldId }: RecommendationsPro
                             </div>
                           ))}
                           {recommendation.actions.length > 2 && (
-                            <button className="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                            <button className="text-sm text-[#7A8F78] hover:text-[#7A8F78] flex items-center">
                               View {recommendation.actions.length - 2} more actions
                               <ChevronRight className="h-3 w-3 ml-1" />
                             </button>

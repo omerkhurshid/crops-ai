@@ -133,7 +133,7 @@ export function GlobalSearch({
     <div ref={containerRef} className={`relative ${className}`}>
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-sage-500" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-#555555" />
         <input
           ref={inputRef}
           type="text"
@@ -142,7 +142,7 @@ export function GlobalSearch({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           data-global-search
-          className="w-full pl-10 pr-20 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm transition-all"
+          className="w-full pl-10 pr-20 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-#555555 focus:border-transparent bg-white/80 backdrop-blur-sm transition-all"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
           {query && (
@@ -173,7 +173,7 @@ export function GlobalSearch({
                         onClick={() => setSelectedFilter(filter.id)}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                           selectedFilter === filter.id 
-                            ? 'bg-[#F8FAF8] text-sage-900 border border-[#DDE4D8]' 
+                            ? 'bg-[#F8FAF8] text-#1A1A1A border border-[#DDE4D8]' 
                             : 'text-[#555555] hover:bg-[#F8FAF8]'
                         }`}
                       >
@@ -198,14 +198,14 @@ export function GlobalSearch({
                           {result.icon}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-sage-900 truncate">
+                          <div className="font-medium text-#1A1A1A truncate">
                             {result.title}
                           </div>
                           <div className="text-sm text-[#555555] truncate">
                             {result.description}
                           </div>
                           {result.metadata && (
-                            <div className="flex items-center gap-3 mt-1 text-xs text-sage-500">
+                            <div className="flex items-center gap-3 mt-1 text-xs text-#555555">
                               {result.metadata.location && (
                                 <span className="flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
@@ -228,7 +228,7 @@ export function GlobalSearch({
                   <div className="text-center py-8">
                     <Search className="h-8 w-8 text-sage-400 mx-auto mb-3" />
                     <p className="text-[#555555] mb-2">No results found</p>
-                    <p className="text-sm text-sage-500">
+                    <p className="text-sm text-#555555">
                       Try adjusting your search terms or filters
                     </p>
                   </div>

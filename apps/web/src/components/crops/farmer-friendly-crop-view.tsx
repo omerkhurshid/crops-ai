@@ -314,7 +314,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       <div className="text-[#555555]">Planted</div>
                     </div>
                     <div>
-                      <div className="font-semibold text-green-600">
+                      <div className="font-semibold text-[#8FBF7F]">
                         {crop.expectedYield.toLocaleString()} {crop.yieldUnit}
                       </div>
                       <div className="text-[#555555]">Expected</div>
@@ -331,7 +331,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                     <div className="mt-3 pt-3 border-t border-[#F5F5F5]">
                       <div className="flex items-center justify-between text-sm">
                         <span className="flex items-center gap-2">
-                          <span className={crop.healthScore >= 90 ? 'text-green-600' : crop.healthScore >= 70 ? 'text-yellow-600' : 'text-red-600'}>
+                          <span className={crop.healthScore >= 90 ? 'text-[#8FBF7F]' : crop.healthScore >= 70 ? 'text-yellow-600' : 'text-red-600'}>
                             {crop.healthScore >= 90 ? '💚' : crop.healthScore >= 70 ? '💛' : '❤️'}
                           </span>
                           Crop Health
@@ -379,7 +379,7 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       <p className="text-sm text-[#555555]">{crop.location}</p>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-green-600">
+                      <div className="font-semibold text-[#8FBF7F]">
                         {formatCurrency(crop.expectedRevenue)}
                       </div>
                       {crop.daysToHarvest && crop.daysToHarvest > 0 && (

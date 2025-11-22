@@ -25,7 +25,7 @@ const farmTypes = [
     name: 'Row Crops',
     description: 'Corn, soybeans, wheat, etc.',
     icon: <Wheat className="h-8 w-8" />,
-    color: 'border-[#8FBF7F] bg-[#F8FAF8] text-green-700'
+    color: 'border-[#8FBF7F] bg-[#F8FAF8] text-[#7A8F78]'
   },
   {
     id: 'livestock',
@@ -175,7 +175,7 @@ export function SimpleFarmCreator() {
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={farm.type === type.id ? '' : 'text-gray-400'}>
+                  <div className={farm.type === type.id ? '' : 'text-[#555555]'}>
                     {type.icon}
                   </div>
                   <div>
@@ -231,15 +231,15 @@ export function SimpleFarmCreator() {
           {farm.location.lat !== 0 && (
             <div className="mt-3 p-3 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
               <div className="flex items-start space-x-2">
-                <MapPin className="h-4 w-4 text-green-600 mt-0.5" />
+                <MapPin className="h-4 w-4 text-[#8FBF7F] mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-green-800">
+                  <p className="text-sm font-medium text-[#7A8F78]">
                     Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
                   </p>
                   {farm.location.address && (
-                    <p className="text-sm text-green-700">{farm.location.address}</p>
+                    <p className="text-sm text-[#7A8F78]">{farm.location.address}</p>
                   )}
-                  <p className="text-xs text-green-600 mt-1">
+                  <p className="text-xs text-[#8FBF7F] mt-1">
                     You can add field boundaries and details later from your dashboard
                   </p>
                 </div>
@@ -255,19 +255,19 @@ export function SimpleFarmCreator() {
             </h4>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="flex items-center space-x-1">
-                <CheckCircle className="h-3 w-3 text-green-600" />
+                <CheckCircle className="h-3 w-3 text-[#8FBF7F]" />
                 <span>Satellite monitoring</span>
               </div>
               <div className="flex items-center space-x-1">
-                <CheckCircle className="h-3 w-3 text-green-600" />
+                <CheckCircle className="h-3 w-3 text-[#8FBF7F]" />
                 <span>Weather alerts</span>
               </div>
               <div className="flex items-center space-x-1">
-                <CheckCircle className="h-3 w-3 text-green-600" />
+                <CheckCircle className="h-3 w-3 text-[#8FBF7F]" />
                 <span>AI recommendations</span>
               </div>
               <div className="flex items-center space-x-1">
-                <CheckCircle className="h-3 w-3 text-green-600" />
+                <CheckCircle className="h-3 w-3 text-[#8FBF7F]" />
                 <span>Financial tracking</span>
               </div>
             </div>

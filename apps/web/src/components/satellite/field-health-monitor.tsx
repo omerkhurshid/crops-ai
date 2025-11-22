@@ -99,9 +99,9 @@ export function FieldHealthMonitor({
   // Get health status color and icon
   const getHealthStatus = (healthScore: number) => {
     if (healthScore >= 80) {
-      return { color: 'text-green-600', bg: 'bg-[#F8FAF8]', icon: CheckCircle, label: 'Excellent' }
+      return { color: 'text-[#8FBF7F]', bg: 'bg-[#F8FAF8]', icon: CheckCircle, label: 'Excellent' }
     } else if (healthScore >= 60) {
-      return { color: 'text-blue-600', bg: 'bg-blue-50', icon: Activity, label: 'Good' }
+      return { color: 'text-[#7A8F78]', bg: 'bg-blue-50', icon: Activity, label: 'Good' }
     } else if (healthScore >= 40) {
       return { color: 'text-yellow-600', bg: 'bg-yellow-50', icon: AlertTriangle, label: 'Fair' }
     } else {
@@ -111,7 +111,7 @@ export function FieldHealthMonitor({
   // Get trend icon
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />
+      case 'improving': return <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
       case 'declining': return <TrendingDown className="h-4 w-4 text-red-600" />
       default: return <Minus className="h-4 w-4 text-[#555555]" />
     }
@@ -167,7 +167,7 @@ export function FieldHealthMonitor({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Satellite className="h-6 w-6 text-blue-600" />
+          <Satellite className="h-6 w-6 text-[#7A8F78]" />
           <div>
             <h2 className="text-xl font-semibold">Field Health Monitor</h2>
             <p className="text-sm text-[#555555]">
@@ -249,7 +249,7 @@ export function FieldHealthMonitor({
                     <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Droplets className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.drought > 0.6 ? 'text-red-500' : 
-                        field.vegetationHealth.stressIndicators.drought > 0.3 ? 'text-yellow-500' : 'text-green-500'
+                        field.vegetationHealth.stressIndicators.drought > 0.3 ? 'text-yellow-500' : 'text-[#8FBF7F]'
                       }`} />
                       <span className="text-[#555555]">Drought</span>
                       <span className="font-semibold">
@@ -259,7 +259,7 @@ export function FieldHealthMonitor({
                     <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Bug className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.disease > 0.6 ? 'text-red-500' : 
-                        field.vegetationHealth.stressIndicators.disease > 0.3 ? 'text-yellow-500' : 'text-green-500'
+                        field.vegetationHealth.stressIndicators.disease > 0.3 ? 'text-yellow-500' : 'text-[#8FBF7F]'
                       }`} />
                       <span className="text-[#555555]">Disease</span>
                       <span className="font-semibold">
@@ -269,7 +269,7 @@ export function FieldHealthMonitor({
                     <div className="flex flex-col items-center p-2 bg-[#FAFAF7] rounded">
                       <Zap className={`h-4 w-4 mb-1 ${
                         field.vegetationHealth.stressIndicators.nutrient > 0.6 ? 'text-red-500' : 
-                        field.vegetationHealth.stressIndicators.nutrient > 0.3 ? 'text-yellow-500' : 'text-green-500'
+                        field.vegetationHealth.stressIndicators.nutrient > 0.3 ? 'text-yellow-500' : 'text-[#8FBF7F]'
                       }`} />
                       <span className="text-[#555555]">Nutrient</span>
                       <span className="font-semibold">
@@ -339,7 +339,7 @@ export function FieldHealthMonitor({
                     <div className="flex items-center space-x-1">
                       {getTrendIcon(field.comparisonToPrevious.trend)}
                       <span className={`font-semibold ${
-                        field.comparisonToPrevious.trend === 'improving' ? 'text-green-600' :
+                        field.comparisonToPrevious.trend === 'improving' ? 'text-[#8FBF7F]' :
                         field.comparisonToPrevious.trend === 'declining' ? 'text-red-600' : 'text-[#555555]'
                       }`}>
                         {(field.comparisonToPrevious.change > 0 ? '+' : '')}
@@ -360,7 +360,7 @@ export function FieldHealthMonitor({
       {/* Loading State */}
       {isLoading && healthData.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 space-y-4">
-          <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
+          <RefreshCw className="h-8 w-8 animate-spin text-[#7A8F78]" />
           <div className="text-center">
             <p className="text-lg font-medium">Analyzing Fields</p>
             <p className="text-sm text-[#555555]">
@@ -372,7 +372,7 @@ export function FieldHealthMonitor({
       {/* Empty State */}
       {!isLoading && healthData.length === 0 && !error && (
         <div className="text-center py-12">
-          <Satellite className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+          <Satellite className="h-12 w-12 mx-auto text-[#555555] mb-4" />
           <p className="text-lg font-medium text-[#555555]">No Field Data</p>
           <p className="text-sm text-[#555555]">
             Start analyzing your fields to see health monitoring data here.

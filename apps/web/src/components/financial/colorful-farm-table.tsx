@@ -42,12 +42,12 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
     return 'bg-red-500'
   }
   const getProfitTextColor = (profit: number) => {
-    if (profit >= 0) return 'text-green-600'
+    if (profit >= 0) return 'text-[#8FBF7F]'
     return 'text-red-600'
   }
   const getMarginBadgeColor = (margin: number) => {
     if (margin > 30) return 'bg-emerald-100 text-emerald-800 border-emerald-200'
-    if (margin > 20) return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
+    if (margin > 20) return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
     if (margin > 10) return 'bg-lime-100 text-lime-800 border-lime-200'
     if (margin > 0) return 'bg-yellow-100 text-yellow-800 border-yellow-200'
     return 'bg-red-100 text-red-800 border-red-200'
@@ -82,7 +82,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                 <Badge 
                   variant="outline" 
                   className={cn(
-                    farm.profitMargin >= 0 ? 'text-green-700 border-[#DDE4D8]' : 'text-red-700 border-red-200'
+                    farm.profitMargin >= 0 ? 'text-[#7A8F78] border-[#DDE4D8]' : 'text-red-700 border-red-200'
                   )}
                 >
                   {farm.profitMargin >= 0 ? '+' : ''}{farm.profitMargin.toFixed(1)}%
@@ -105,7 +105,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                   <span className="text-[#555555]">Net Profit:</span>
                   <span className={cn(
                     'font-medium ml-1',
-                    farm.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                    farm.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                   )}>
                     ${farm.netProfit.toLocaleString()}
                   </span>

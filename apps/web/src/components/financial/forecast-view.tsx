@@ -106,15 +106,15 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
   const getScenarioColor = (scenario: string) => {
     switch (scenario) {
       case 'optimistic':
-        return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]';
+        return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
       case 'pessimistic':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-100 text-[#7A8F78] border-blue-200';
     }
   };
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'text-green-600';
+    if (confidence >= 80) return 'text-[#8FBF7F]';
     if (confidence >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
@@ -205,11 +205,11 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#555555]">Predicted Revenue</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-[#8FBF7F]">
                   {formatCurrency(totalPredictedRevenue)}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-500" />
+              <TrendingUp className="h-8 w-8 text-[#8FBF7F]" />
             </div>
             <p className="text-xs text-[#555555] mt-2">Next 3 months</p>
           </Card>
@@ -230,13 +230,13 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
               <div>
                 <p className="text-sm text-[#555555]">Net Profit</p>
                 <p className={`text-2xl font-bold ${
-                  predictedProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                  predictedProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                 }`}>
                   {formatCurrency(predictedProfit)}
                 </p>
               </div>
               <BarChart3 className={`h-8 w-8 ${
-                predictedProfit >= 0 ? 'text-green-500' : 'text-red-500'
+                predictedProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-500'
               }`} />
             </div>
             <p className="text-xs text-[#555555] mt-2">Projected profit</p>
@@ -247,7 +247,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {revenueForecasts.length > 0 && (
         <Card className="p-6">
           <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center">
-            <DollarSign className="h-5 w-5 mr-2 text-green-600" />
+            <DollarSign className="h-5 w-5 mr-2 text-[#8FBF7F]" />
             Revenue Forecasts
           </h4>
           <div className="space-y-3">
@@ -279,7 +279,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-semibold text-green-600">
+                  <p className="text-lg font-semibold text-[#8FBF7F]">
                     {formatCurrency(forecast.predictedRevenue || 0)}
                   </p>
                   {forecast.predictedYield && (
@@ -332,7 +332,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {/* No Forecasts State */}
       {revenueForecasts.length === 0 && costForecasts.length === 0 && (
         <Card className="p-12 text-center">
-          <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <Brain className="h-12 w-12 text-[#555555] mx-auto mb-4" />
           <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Forecasts Available</h3>
           <p className="text-[#555555] mb-6">
             Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.

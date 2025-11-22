@@ -142,9 +142,9 @@ export function SmartAgricultureSelector({
   }
   const getItemIcon = (item: SelectedItem) => {
     if (item.type === 'crop') {
-      return <Sprout className="h-4 w-4 text-green-600" />
+      return <Sprout className="h-4 w-4 text-[#8FBF7F]" />
     } else {
-      return <Users className="h-4 w-4 text-blue-600" />
+      return <Users className="h-4 w-4 text-[#7A8F78]" />
     }
   }
   const isSelected = (itemId: string) => selectedItems.some(item => item.id === itemId)
@@ -176,7 +176,7 @@ export function SmartAgricultureSelector({
       {showRecommendationPanel && recommendations.length > 0 && (
         <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
           <div className="flex items-center gap-2 mb-3">
-            <Target className="h-4 w-4 text-blue-600" />
+            <Target className="h-4 w-4 text-[#7A8F78]" />
             <span className="font-medium text-blue-900">Recommended for your farm type</span>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -203,7 +203,7 @@ export function SmartAgricultureSelector({
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
             <Input
               placeholder="Search crops, livestock, or scientific names..."
               value={searchTerm}
@@ -240,13 +240,13 @@ export function SmartAgricultureSelector({
               <Badge
                 key={item.id}
                 variant="secondary"
-                className="bg-[#F8FAF8] text-green-800 hover:bg-[#DDE4D8]"
+                className="bg-[#F8FAF8] text-[#7A8F78] hover:bg-[#DDE4D8]"
               >
                 {getItemIcon(item)}
                 <span className="ml-1">{item.name}</span>
                 <button
                   onClick={() => toggleItemSelection(item)}
-                  className="ml-1 hover:text-green-600"
+                  className="ml-1 hover:text-[#8FBF7F]"
                 >
                   ×
                 </button>
@@ -353,7 +353,7 @@ export function SmartAgricultureSelector({
       </div>
       {filteredItems.length === 0 && (
         <div className="text-center py-8 text-[#555555]">
-          <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <Search className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
           <p className="font-medium">No items found</p>
           <p className="text-sm">Try adjusting your search or filter</p>
         </div>

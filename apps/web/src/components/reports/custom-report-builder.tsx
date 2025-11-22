@@ -249,7 +249,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
           }`}>
             {step}
           </div>
-          <div className={`ml-2 text-sm ${step <= activeStep ? 'text-blue-600 font-medium' : 'text-[#555555]'}`}>
+          <div className={`ml-2 text-sm ${step <= activeStep ? 'text-[#7A8F78] font-medium' : 'text-[#555555]'}`}>
             {step === 1 ? 'Template' : step === 2 ? 'Metrics' : step === 3 ? 'Settings' : 'Review'}
           </div>
           {step < 4 && <div className="ml-4 w-8 h-px bg-gray-300" />}
@@ -342,10 +342,10 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
                             disabled={!metric.available}
                           />
                           <div className="flex-1">
-                            <Label className={`font-medium ${!metric.available ? 'text-gray-400' : ''}`}>
+                            <Label className={`font-medium ${!metric.available ? 'text-[#555555]' : ''}`}>
                               {metric.name}
                             </Label>
-                            <p className={`text-sm ${!metric.available ? 'text-gray-400' : 'text-[#555555]'}`}>
+                            <p className={`text-sm ${!metric.available ? 'text-[#555555]' : 'text-[#555555]'}`}>
                               {metric.description}
                             </p>
                             <div className="text-xs text-[#555555] mt-1">

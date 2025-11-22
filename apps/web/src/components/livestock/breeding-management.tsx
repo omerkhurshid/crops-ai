@@ -37,9 +37,9 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
   })
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'breeding': return 'bg-blue-100 text-blue-800'
+      case 'breeding': return 'bg-blue-100 text-[#7A8F78]'
       case 'pregnant': return 'bg-pink-100 text-pink-800'
-      case 'completed': return 'bg-[#F8FAF8] text-green-800'
+      case 'completed': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'failed': return 'bg-red-100 text-red-800'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
@@ -65,7 +65,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
   if (breedingRecords.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <Heart className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Breeding Records Yet</h3>
@@ -81,7 +81,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by animal tag number or name..."
             value={searchTerm}
@@ -164,7 +164,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                         {record.animal.name && (
                           <div className="text-sm text-[#555555]">{record.animal.name}</div>
                         )}
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-[#555555]">
                           {record.animal.species} • {record.animal.farm?.name}
                         </div>
                       </div>
@@ -181,7 +181,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                         )}
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-400">No mate specified</span>
+                      <span className="text-sm text-[#555555]">No mate specified</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -212,7 +212,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                         )}
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-400">Not calculated</span>
+                      <span className="text-sm text-[#555555]">Not calculated</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

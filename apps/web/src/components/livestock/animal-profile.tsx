@@ -72,7 +72,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
+                    ? 'border-blue-500 text-[#7A8F78]'
                     : 'border-transparent text-[#555555] hover:text-[#555555] hover:border-[#E6E6E6]'
                 }`}
               >
@@ -263,7 +263,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Heart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Heart className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <p className="text-[#555555] mb-4">No health records yet</p>
                 <Button>Add First Health Record</Button>
               </div>
@@ -288,13 +288,13 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-blue-800">Current Weight</p>
+                    <p className="text-sm font-medium text-[#7A8F78]">Current Weight</p>
                     <p className="text-2xl font-bold text-blue-900">
                       {animal.weightRecords[0]?.weight || 'N/A'} lbs
                     </p>
                   </div>
                   <div className="bg-[#F8FAF8] p-4 rounded-lg">
-                    <p className="text-sm font-medium text-green-800">Birth Weight</p>
+                    <p className="text-sm font-medium text-[#7A8F78]">Birth Weight</p>
                     <p className="text-2xl font-bold text-green-900">
                       {animal.birthWeight || 'N/A'} lbs
                     </p>
@@ -304,7 +304,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                     weightTrend.trend === 'down' ? 'bg-red-50' : 'bg-[#FAFAF7]'
                   }`}>
                     <p className={`text-sm font-medium ${
-                      weightTrend.trend === 'up' ? 'text-green-800' : 
+                      weightTrend.trend === 'up' ? 'text-[#7A8F78]' : 
                       weightTrend.trend === 'down' ? 'text-red-800' : 'text-[#1A1A1A]'
                     }`}>
                       Recent Change
@@ -340,7 +340,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Weight className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Weight className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <p className="text-[#555555] mb-4">No weight records yet</p>
                 <Button>Record First Weight</Button>
               </div>
@@ -399,7 +399,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <p className="text-[#555555] mb-4">No breeding records yet</p>
                 <Button>Add First Breeding Record</Button>
               </div>
@@ -446,7 +446,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Activity className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                 <p className="text-[#555555] mb-4">No feed records yet</p>
                 <Button>Record First Feeding</Button>
               </div>

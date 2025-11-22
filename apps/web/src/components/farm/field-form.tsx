@@ -261,7 +261,7 @@ export function FieldForm({ farmId, farmName, farmLatitude, farmLongitude, farmT
             <div className="p-4 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Lightbulb className="h-4 w-4 text-[#555555]" />
-                <span className="font-medium text-sage-900">Quick Start Tips</span>
+                <span className="font-medium text-[#1A1A1A]">Quick Start Tips</span>
               </div>
               <div className="space-y-2 text-sm text-[#555555]">
                 <div>• Field names can be simple: "North Field", "Field A", or "Back 40"</div>

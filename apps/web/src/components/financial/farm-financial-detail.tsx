@@ -53,10 +53,10 @@ interface FarmFinancialDetailProps {
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   // Income categories
   CROP_SALES: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
-  LIVESTOCK_SALES: { bg: 'bg-[#F8FAF8]', text: 'text-green-800', border: 'border-green-300' },
+  LIVESTOCK_SALES: { bg: 'bg-[#F8FAF8]', text: 'text-[#7A8F78]', border: 'border-green-300' },
   SUBSIDIES: { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
   LEASE_INCOME: { bg: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-300' },
-  OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' },
+  OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-[#7A8F78]', border: 'border-blue-300' },
   // Expense categories
   SEEDS: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300' },
   FERTILIZER: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
@@ -121,7 +121,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
   if (!farmData) {
     return (
       <div className="text-center py-12">
-        <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <BarChart3 className="h-12 w-12 text-[#555555] mx-auto mb-4" />
         <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Financial Data Unavailable</h3>
         <p className="text-[#555555] mb-4">No financial transactions found for this farm.</p>
         <Button onClick={() => handleAddTransaction('INCOME')} className="mr-2">
@@ -173,12 +173,12 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#555555]">Total Income</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-[#8FBF7F]">
                   {formatCurrency(farmData.income)}
                 </p>
               </div>
               <div className="p-3 bg-[#F8FAF8] rounded-full">
-                <TrendingUp className="h-6 w-6 text-green-600" />
+                <TrendingUp className="h-6 w-6 text-[#8FBF7F]" />
               </div>
             </div>
           </ModernCardContent>
@@ -205,7 +205,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                 <p className="text-sm text-[#555555]">Net Profit</p>
                 <p className={cn(
                   "text-2xl font-bold",
-                  farmData.netProfit >= 0 ? "text-green-600" : "text-red-600"
+                  farmData.netProfit >= 0 ? "text-[#8FBF7F]" : "text-red-600"
                 )}>
                   {formatCurrency(farmData.netProfit)}
                 </p>
@@ -216,7 +216,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
               )}>
                 <DollarSign className={cn(
                   "h-6 w-6",
-                  farmData.netProfit >= 0 ? "text-green-600" : "text-red-600"
+                  farmData.netProfit >= 0 ? "text-[#8FBF7F]" : "text-red-600"
                 )} />
               </div>
             </div>
@@ -227,12 +227,12 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-[#555555]">Profit Margin</p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-2xl font-bold text-[#7A8F78]">
                   {farmData.profitMargin.toFixed(1)}%
                 </p>
               </div>
               <div className="p-3 bg-blue-100 rounded-full">
-                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <BarChart3 className="h-6 w-6 text-[#7A8F78]" />
               </div>
             </div>
           </ModernCardContent>
@@ -358,7 +358,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
                       </div>
                       <div className={cn(
                         "text-lg font-bold",
-                        transaction.type === 'INCOME' ? "text-green-700" : "text-red-700"
+                        transaction.type === 'INCOME' ? "text-[#7A8F78]" : "text-red-700"
                       )}>
                         {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </div>

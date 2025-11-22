@@ -55,11 +55,11 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-[#F8FAF8] rounded-full flex items-center justify-center">
-            <TrendingUp className="h-4 w-4 text-green-600" />
+            <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
           </div>
           <span className="text-2xl font-bold text-[#1A1A1A]">{performanceData.overallScore || 'N/A'}%</span>
         </div>
-        <Badge variant="outline" className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
+        <Badge variant="outline" className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
           {performanceData.monthlyChange || 'No data'}
         </Badge>
       </div>
@@ -135,7 +135,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CloudRain className="h-6 w-6 text-blue-600" />
+          <CloudRain className="h-6 w-6 text-[#7A8F78]" />
           <span className="text-lg font-semibold text-[#1A1A1A]">Weather Impact</span>
         </div>
         <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
@@ -156,7 +156,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-[#555555]">Frost Risk</span>
-          <span className="font-medium text-green-600">{weatherData.frostRisk || 'N/A'}</span>
+          <span className="font-medium text-[#8FBF7F]">{weatherData.frostRisk || 'N/A'}</span>
         </div>
       </div>
       <Link href={`/reports/weather/${farmId}`} className="block">
@@ -175,11 +175,11 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-[#F8FAF8] rounded-full flex items-center justify-center">
-            <Leaf className="h-4 w-4 text-green-600" />
+            <Leaf className="h-4 w-4 text-[#8FBF7F]" />
           </div>
           <span className="text-2xl font-bold text-[#1A1A1A]">84%</span>
         </div>
-        <Badge variant="outline" className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
+        <Badge variant="outline" className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
           Healthy
         </Badge>
       </div>
@@ -216,15 +216,15 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           <DollarSign className="h-6 w-6 text-[#555555]" />
           <span className="text-lg font-semibold text-[#1A1A1A]">Financial Health</span>
         </div>
-        <Badge variant="outline" className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
+        <Badge variant="outline" className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
           Profitable
         </Badge>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-[#F8FAF8] p-3 rounded-lg">
-          <div className="text-xs text-green-600 mb-1">Revenue</div>
-          <div className="text-lg font-bold text-green-700">$187,500</div>
-          <div className="text-xs text-green-600 flex items-center gap-1">
+          <div className="text-xs text-[#8FBF7F] mb-1">Revenue</div>
+          <div className="text-lg font-bold text-[#7A8F78]">$187,500</div>
+          <div className="text-xs text-[#8FBF7F] flex items-center gap-1">
             <TrendingUp className="h-3 w-3" />
             +12% YTD
           </div>
@@ -257,10 +257,10 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TreePine className="h-6 w-6 text-green-600" />
+          <TreePine className="h-6 w-6 text-[#8FBF7F]" />
           <span className="text-lg font-semibold text-[#1A1A1A]">Sustainability</span>
         </div>
-        <Badge variant="outline" className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
+        <Badge variant="outline" className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
           B+ Score
         </Badge>
       </div>

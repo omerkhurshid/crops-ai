@@ -118,7 +118,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
     if (value < 0.3) return { status: 'Poor', color: 'text-red-600', bg: 'bg-red-50' }
     if (value < 0.5) return { status: 'Developing', color: 'text-orange-600', bg: 'bg-orange-50' }
     if (value < 0.7) return { status: 'Good', color: 'text-yellow-600', bg: 'bg-yellow-50' }
-    return { status: 'Excellent', color: 'text-green-600', bg: 'bg-[#F8FAF8]' }
+    return { status: 'Excellent', color: 'text-[#8FBF7F]', bg: 'bg-[#F8FAF8]' }
   }
   const interpretation = getNDVIInterpretation(currentData.value)
   const handleTimePointChange = (index: number) => {
@@ -145,11 +145,11 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Satellite className="h-5 w-5 text-green-600" />
+            <Satellite className="h-5 w-5 text-[#8FBF7F]" />
             <ModernCardTitle className="text-lg">Live Satellite NDVI Analysis</ModernCardTitle>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-[#F8FAF8] text-green-800">Real Field Data</Badge>
+            <Badge className="bg-[#F8FAF8] text-[#7A8F78]">Real Field Data</Badge>
             <Button
               variant="outline"
               size="sm"
@@ -186,7 +186,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
                   {Array.from({ length: 32 }).map((_, i) => (
                     <div 
                       key={i}
-                      className="border-r border-gray-400/20"
+                      className="border-r border-[#555555]/20"
                       style={{ 
                         backgroundColor: i % 3 === 0 ? currentData.color : 'transparent',
                         opacity: 0.3 + (currentData.value * 0.4)
@@ -258,35 +258,35 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
         {/* Current NDVI Analysis */}
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-            <div className="text-3xl font-bold text-green-600">{currentData.value.toFixed(2)}</div>
+            <div className="text-3xl font-bold text-[#8FBF7F]">{currentData.value.toFixed(2)}</div>
             <div className="text-sm text-[#555555] mb-1">NDVI Value</div>
             <Badge className={`${interpretation.color} ${interpretation.bg}`}>
               {interpretation.status}
             </Badge>
           </div>
           <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-            <div className="text-lg font-bold text-blue-600">{currentData.stage}</div>
+            <div className="text-lg font-bold text-[#7A8F78]">{currentData.stage}</div>
             <div className="text-sm text-[#555555] mb-1">Growth Stage</div>
-            <div className="text-xs text-blue-600">{currentData.date}</div>
+            <div className="text-xs text-[#7A8F78]">{currentData.date}</div>
           </div>
         </div>
         {/* Current Stage Description */}
         <div className="bg-blue-50 p-3 rounded-lg">
           <div className="flex items-start gap-2">
-            <Info className="h-4 w-4 text-blue-600 mt-0.5" />
+            <Info className="h-4 w-4 text-[#7A8F78] mt-0.5" />
             <div>
-              <div className="font-medium text-blue-800 text-sm mb-1">Agricultural Insight</div>
+              <div className="font-medium text-[#7A8F78] text-sm mb-1">Agricultural Insight</div>
               <div className="text-sm text-blue-700">{currentData.description}</div>
             </div>
           </div>
         </div>
         {/* Real-time Insights */}
         <div className="bg-[#F8FAF8] p-3 rounded-lg">
-          <h5 className="font-medium text-green-800 mb-2 flex items-center gap-2">
+          <h5 className="font-medium text-[#7A8F78] mb-2 flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Real-time Analysis
           </h5>
-          <div className="space-y-1 text-sm text-green-700">
+          <div className="space-y-1 text-sm text-[#7A8F78]">
             <div>• Field uniformity: 92% (excellent)</div>
             <div>• Estimated yield: 185 bu/acre (+8% vs county avg)</div>
             <div>• Stress areas: 3% (minimal, monitored)</div>

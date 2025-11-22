@@ -63,13 +63,13 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
         <div className="text-center py-6 border-b border-[#E6E6E6]">
           <p className="text-sm text-[#555555] mb-2">Net Profit</p>
           <p className={`text-4xl font-bold ${
-            summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+            summary.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
           }`}>
             {formatCurrency(summary.netProfit)}
           </p>
           {summary.profitChange !== 0 && (
             <div className={`flex items-center justify-center mt-2 ${
-              summary.profitChange > 0 ? 'text-green-600' : 'text-red-600'
+              summary.profitChange > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
             }`}>
               {summary.profitChange > 0 ? (
                 <TrendingUp className="h-4 w-4 mr-1" />

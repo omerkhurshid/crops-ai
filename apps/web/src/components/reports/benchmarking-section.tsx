@@ -138,9 +138,9 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
   }
   const getCategoryColor = (category: string): string => {
     switch (category) {
-      case 'yield': return 'text-green-600'
+      case 'yield': return 'text-[#8FBF7F]'
       case 'cost': return 'text-orange-600'
-      case 'profit': return 'text-blue-600'
+      case 'profit': return 'text-[#7A8F78]'
       case 'efficiency': return 'text-purple-600'
       default: return 'text-[#555555]'
     }
@@ -152,7 +152,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           <ModernCardHeader>
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-[#7A8F78]" />
               </div>
               <div>
                 <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
@@ -174,7 +174,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
         <ModernCardHeader>
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-100 rounded-lg">
-              <Users className="h-5 w-5 text-blue-600" />
+              <Users className="h-5 w-5 text-[#7A8F78]" />
             </div>
             <div>
               <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
@@ -184,7 +184,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
         </ModernCardHeader>
         <ModernCardContent>
           <div className="text-center py-8">
-            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <BarChart3 className="h-12 w-12 text-[#555555] mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
               No Benchmark Data Available
             </h3>
@@ -204,7 +204,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-[#7A8F78]" />
               </div>
               <div>
                 <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
@@ -231,11 +231,11 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               <div className="text-center">
-                <div className="text-xl font-bold text-green-600 mb-1">4/6</div>
+                <div className="text-xl font-bold text-[#8FBF7F] mb-1">4/6</div>
                 <div className="text-xs text-[#555555]">Metrics Above Average</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-blue-600 mb-1">2/6</div>
+                <div className="text-xl font-bold text-[#7A8F78] mb-1">2/6</div>
                 <div className="text-xs text-[#555555]">Top Quartile</div>
               </div>
               <div className="text-center">
@@ -376,15 +376,15 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               <h3 className="font-semibold text-[#1A1A1A] mb-2">Opportunities to Improve</h3>
               <div className="space-y-2 text-sm text-[#555555]">
                 <p className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-green-600" />
+                  <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
                   <span><strong>Reduce fuel costs:</strong> You're using 0.6 gal/acre more than the top quartile. Consider upgrading equipment or optimizing field patterns.</span>
                 </p>
                 <p className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-green-600" />
+                  <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
                   <span><strong>Boost yields:</strong> You're 10 bushels away from top quartile. Consider soil testing and variable rate applications.</span>
                 </p>
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-[#7A8F78]">
                     <strong>Potential Impact:</strong> Reaching top quartile performance could add <strong>$75/acre</strong> or <strong>${(75 * farm.totalArea * 2.47).toLocaleString()}</strong> total to your profit.
                   </p>
                 </div>

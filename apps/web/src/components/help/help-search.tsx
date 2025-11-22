@@ -157,21 +157,21 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
     <div className="relative">
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-sage-500" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-#555555" />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => searchTerm.length >= 2 && setShowResults(true)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-sage-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
+          className="w-full pl-10 pr-10 py-3 border border-[#DDE4D8] rounded-xl focus:ring-2 focus:ring-#555555 focus:border-transparent bg-white/80 backdrop-blur-sm"
         />
         {searchTerm && (
           <button
             onClick={clearSearch}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-[#F8FAF8] rounded-full transition-colors"
           >
-            <X className="h-4 w-4 text-sage-500" />
+            <X className="h-4 w-4 text-#555555" />
           </button>
         )}
       </div>
@@ -192,7 +192,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                       className="w-full text-left p-3 rounded-lg hover:bg-[#F8FAF8] transition-colors group"
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-[#1A1A1A] group-hover:text-sage-900">
+                        <h3 className="font-semibold text-[#1A1A1A] group-hover:text-#1A1A1A">
                           {article.title}
                         </h3>
                         <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-[#555555] transition-colors flex-shrink-0 ml-2" />
@@ -211,7 +211,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                             </Badge>
                           ))}
                         </div>
-                        <span className="text-xs text-sage-500 flex items-center gap-1">
+                        <span className="text-xs text-#555555 flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {article.readTime}
                         </span>
@@ -223,7 +223,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                 <div className="text-center py-6">
                   <Search className="h-8 w-8 text-sage-400 mx-auto mb-3" />
                   <p className="text-[#555555] mb-2">No articles found</p>
-                  <p className="text-sm text-sage-500">
+                  <p className="text-sm text-#555555">
                     Try different keywords or browse our help sections below
                   </p>
                 </div>

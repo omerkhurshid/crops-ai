@@ -75,7 +75,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
   if (weightRecords.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <Weight className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Weight Records Yet</h3>
@@ -91,7 +91,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by animal tag number or name..."
             value={searchTerm}
@@ -187,7 +187,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                         {record.animal.name && (
                           <div className="text-sm text-[#555555]">{record.animal.name}</div>
                         )}
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-[#555555]">
                           {record.animal.species} • {record.animal.farm?.name}
                         </div>
                       </div>
@@ -202,8 +202,8 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                     <div className="flex items-center gap-2">
                       {trend.trend === 'up' && (
                         <>
-                          <TrendingUp className="h-4 w-4 text-green-500" />
-                          <span className="text-sm text-green-600">
+                          <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
+                          <span className="text-sm text-[#8FBF7F]">
                             +{trend.change.toFixed(1)} lbs ({trend.percentage.toFixed(1)}%)
                           </span>
                         </>
@@ -218,7 +218,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                       )}
                       {trend.trend === 'stable' && (
                         <>
-                          <Minus className="h-4 w-4 text-gray-400" />
+                          <Minus className="h-4 w-4 text-[#555555]" />
                           <span className="text-sm text-[#555555]">Stable</span>
                         </>
                       )}
@@ -238,7 +238,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                         </span>
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-400">Not recorded</span>
+                      <span className="text-sm text-[#555555]">Not recorded</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

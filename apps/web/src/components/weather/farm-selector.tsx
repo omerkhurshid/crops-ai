@@ -27,7 +27,7 @@ export function FarmSelector({ farms, currentFarmId }: FarmSelectorProps) {
       <select
         value={currentFarmId}
         onChange={(e) => handleFarmChange(e.target.value)}
-        className="bg-transparent text-sage-900 border-0 focus:outline-none focus:ring-0 cursor-pointer font-medium"
+        className="bg-transparent text-#1A1A1A border-0 focus:outline-none focus:ring-0 cursor-pointer font-medium"
       >
         {farms.map((farm) => (
           <option key={farm.id} value={farm.id} className="text-[#1A1A1A] bg-white">

@@ -51,7 +51,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Satellite className="h-5 w-5 text-blue-600" />
+            <Satellite className="h-5 w-5 text-[#7A8F78]" />
             Interactive Farm-to-Satellite Workflow
           </CardTitle>
         </CardHeader>
@@ -60,11 +60,11 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 1 ? 'bg-blue-500 text-white' : 'bg-[#F5F5F5]'}`}>
               1
             </div>
-            <ArrowRight className="h-4 w-4 text-gray-400" />
+            <ArrowRight className="h-4 w-4 text-[#555555]" />
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 2 ? 'bg-blue-500 text-white' : 'bg-[#F5F5F5]'}`}>
               2
             </div>
-            <ArrowRight className="h-4 w-4 text-gray-400" />
+            <ArrowRight className="h-4 w-4 text-[#555555]" />
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${currentStep >= 3 ? 'bg-[#8FBF7F] text-white' : 'bg-[#F5F5F5]'}`}>
               3
             </div>
@@ -139,7 +139,7 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
             {isAnalyzing ? (
               <div className="space-y-4">
                 <div className="animate-pulse">
-                  <Satellite className="h-12 w-12 mx-auto text-blue-600" />
+                  <Satellite className="h-12 w-12 mx-auto text-[#7A8F78]" />
                 </div>
                 <p className="text-lg font-semibold">Processing Satellite Data</p>
                 <p className="text-[#555555]">Analyzing {definedFields.length} fields with Sentinel Hub</p>
@@ -147,8 +147,8 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
               </div>
             ) : analysisComplete ? (
               <div className="space-y-4">
-                <CheckCircle className="h-12 w-12 mx-auto text-green-600" />
-                <p className="text-lg font-semibold text-green-800">Analysis Complete!</p>
+                <CheckCircle className="h-12 w-12 mx-auto text-[#8FBF7F]" />
+                <p className="text-lg font-semibold text-[#7A8F78]">Analysis Complete!</p>
                 <Button onClick={() => setCurrentStep(3)} className="bg-[#7A8F78] hover:bg-[#5E6F5A]">
                   View Results
                 </Button>
@@ -168,8 +168,8 @@ const WorkflowDemo: React.FC<WorkflowDemoProps> = ({ farmLocation, onComplete })
             </CardHeader>
             <CardContent>
               <Alert className="border-[#DDE4D8] bg-[#F8FAF8] mb-6">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800">
+                <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
+                <AlertDescription className="text-[#7A8F78]">
                   <strong>Success!</strong> Your {definedFields.length} fields are now being monitored with AI-powered satellite analysis.
                 </AlertDescription>
               </Alert>

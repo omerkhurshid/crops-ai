@@ -255,7 +255,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
       case 'critical': return 'text-red-600'
       case 'high': return 'text-orange-600'
       case 'moderate': return 'text-yellow-600'
-      default: return 'text-green-600'
+      default: return 'text-[#8FBF7F]'
     }
   }
   const formatCurrency = (amount: number) => {
@@ -331,7 +331,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Target className="h-8 w-8 text-green-600" />
+                <Target className="h-8 w-8 text-[#8FBF7F]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Fields Monitored</p>
                   <p className="text-2xl font-bold">{farmMetrics.farmOverview.totalFields}</p>
@@ -455,10 +455,10 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                 <CardContent>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-                      <div className="text-2xl font-bold text-green-700">
+                      <div className="text-2xl font-bold text-[#7A8F78]">
                         {farmMetrics.farmOverview.healthDistribution.excellent}
                       </div>
-                      <div className="text-sm text-green-600">Excellent</div>
+                      <div className="text-sm text-[#8FBF7F]">Excellent</div>
                     </div>
                     <div className="text-center p-4 bg-blue-50 rounded-lg">
                       <div className="text-2xl font-bold text-blue-700">
@@ -540,7 +540,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-[#555555]">Expected Return</p>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-2xl font-bold text-[#8FBF7F]">
                         {formatCurrency(farmMetrics.precisionMetrics.expectedReturn)}
                       </p>
                       <p className="text-sm text-[#555555]">Increased yield value</p>
@@ -555,12 +555,12 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                   </div>
                   <div className="mt-6 p-4 bg-[#F8FAF8] rounded-lg">
                     <div className="flex items-center">
-                      <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                      <CheckCircle className="h-5 w-5 text-[#8FBF7F] mr-2" />
                       <div>
-                        <p className="font-medium text-green-800">
+                        <p className="font-medium text-[#7A8F78]">
                           Strong ROI Justification
                         </p>
-                        <p className="text-sm text-green-700">
+                        <p className="text-sm text-[#7A8F78]">
                           Sustainability Score: {farmMetrics.precisionMetrics.sustainabilityScore.toFixed(1)}/100
                         </p>
                       </div>
@@ -590,7 +590,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                   <div className="bg-[#FAFAF7] p-4 rounded-lg">
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
-                        <p className="text-2xl font-bold text-green-600">0.687</p>
+                        <p className="text-2xl font-bold text-[#8FBF7F]">0.687</p>
                         <p className="text-sm text-[#555555]">Average NDVI</p>
                       </div>
                       <div>
@@ -628,7 +628,7 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                       </div>
                     </div>
                     <div className="flex items-center p-3 bg-[#F8FAF8] rounded-lg">
-                      <Droplets className="h-6 w-6 text-green-600 mr-2" />
+                      <Droplets className="h-6 w-6 text-[#8FBF7F] mr-2" />
                       <div>
                         <p className="font-medium">0.2"</p>
                         <p className="text-xs text-[#555555]">Soil Moisture</p>
@@ -684,9 +684,9 @@ export function UnifiedFarmDashboard({ farmId, farmLocation }: UnifiedFarmDashbo
                         <p className="text-sm text-blue-600">Cost: {formatCurrency(rec.recommendation.estimatedCost)}</p>
                       </div>
                       <div className="bg-[#F8FAF8] p-3 rounded-lg">
-                        <p className="text-sm font-medium text-green-800">Expected Yield Increase</p>
-                        <p className="text-lg font-bold text-green-600">+{rec.expectedOutcome.yieldIncrease.toFixed(1)}%</p>
-                        <p className="text-sm text-green-600">Savings: {formatCurrency(rec.expectedOutcome.costSavings)}</p>
+                        <p className="text-sm font-medium text-[#7A8F78]">Expected Yield Increase</p>
+                        <p className="text-lg font-bold text-[#8FBF7F]">+{rec.expectedOutcome.yieldIncrease.toFixed(1)}%</p>
+                        <p className="text-sm text-[#8FBF7F]">Savings: {formatCurrency(rec.expectedOutcome.costSavings)}</p>
                       </div>
                       <div className="bg-purple-50 p-3 rounded-lg">
                         <p className="text-sm font-medium text-purple-800">ROI</p>

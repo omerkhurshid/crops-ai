@@ -15,7 +15,7 @@ export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorPro
           key={option.id}
           className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
             selectedType === option.id 
-              ? 'ring-2 ring-sage-500 bg-[#F8FAF8]' 
+              ? 'ring-2 ring-#555555 bg-[#F8FAF8]' 
               : 'hover:ring-1 hover:ring-gray-300'
           }`}
           onClick={() => onSelect(option.id)}

@@ -244,15 +244,15 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
     return icons[category as keyof typeof icons] || BarChart3
   }
   const getPercentileColor = (percentile: number) => {
-    if (percentile >= 75) return 'text-green-600 bg-[#F8FAF8]'
-    if (percentile >= 50) return 'text-blue-600 bg-blue-100'
+    if (percentile >= 75) return 'text-[#8FBF7F] bg-[#F8FAF8]'
+    if (percentile >= 50) return 'text-[#7A8F78] bg-blue-100'
     if (percentile >= 25) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
   const getTrendIcon = (trend: string) => {
-    if (trend === 'up') return <TrendingUp className="h-3 w-3 text-green-600" />
+    if (trend === 'up') return <TrendingUp className="h-3 w-3 text-[#8FBF7F]" />
     if (trend === 'down') return <TrendingDown className="h-3 w-3 text-red-600" />
-    return <div className="w-3 h-0.5 bg-gray-400 rounded"></div>
+    return <div className="w-3 h-0.5 bg-[#555555] rounded"></div>
   }
   const filteredMetrics = selectedCategory === 'all' 
     ? comparison?.metrics 
@@ -262,7 +262,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
       <ModernCard variant="soft" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-blue-600 animate-pulse" />
+            <Users className="h-5 w-5 text-[#7A8F78] animate-pulse" />
             Regional Comparison
           </ModernCardTitle>
         </ModernCardHeader>
@@ -286,7 +286,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         </ModernCardHeader>
         <ModernCardContent>
           <div className="text-center py-6">
-            <MapPin className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+            <MapPin className="h-8 w-8 mx-auto text-[#555555] mb-2" />
             <p className="text-sm text-[#555555]">Regional data not available</p>
             <p className="text-xs text-[#555555]">Set farm location to enable regional benchmarking</p>
           </div>
@@ -300,7 +300,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         <div className="flex items-center justify-between">
           <div>
             <ModernCardTitle className="flex items-center gap-2 mb-2">
-              <Users className="h-5 w-5 text-blue-600" />
+              <Users className="h-5 w-5 text-[#7A8F78]" />
               Regional Benchmarking
               <Badge className={cn('text-xs', getPercentileColor(comparison.ranking.overall))}>
                 #{comparison.ranking.overall} of {comparison.ranking.totalFarms}
@@ -343,7 +343,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         {/* Performance Overview */}
         <div className="grid grid-cols-2 gap-3 p-3 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
-            <div className="text-lg font-bold text-blue-600">{comparison.ranking.category}</div>
+            <div className="text-lg font-bold text-[#7A8F78]">{comparison.ranking.category}</div>
             <div className="text-xs text-[#555555]">Overall Rating</div>
           </div>
           <div className="text-center">
@@ -388,7 +388,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
                   </div>
                   <div>
                     <span className="text-[#555555] block">Difference</span>
-                    <span className={cn('font-medium', isGoodDiff ? 'text-green-600' : 'text-red-600')}>
+                    <span className={cn('font-medium', isGoodDiff ? 'text-[#8FBF7F]' : 'text-red-600')}>
                       {isGoodDiff ? '+' : ''}{performanceDiff.toFixed(metric.unit.includes('$') ? 0 : 1)}
                     </span>
                   </div>
@@ -436,7 +436,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
             </h4>
             {comparison.insights.map((insight, idx) => (
               <div key={idx} className="flex items-start gap-2 text-sm text-[#555555] p-2 bg-blue-50 rounded">
-                <span className="text-blue-600 mt-0.5">•</span>
+                <span className="text-[#7A8F78] mt-0.5">•</span>
                 <span>{insight}</span>
               </div>
             ))}

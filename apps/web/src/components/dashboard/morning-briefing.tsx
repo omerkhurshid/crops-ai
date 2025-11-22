@@ -166,7 +166,7 @@ export function MorningBriefing({
                           strokeDashoffset={`${2 * Math.PI * 40 * (1 - overallHealth / 100)}`}
                           className={cn(
                             "transition-all duration-300 ease-out",
-                            overallHealth >= 80 ? 'text-green-500' : 
+                            overallHealth >= 80 ? 'text-[#8FBF7F]' : 
                             overallHealth >= 60 ? 'text-amber-500' : 'text-red-500'
                           )}
                           strokeLinecap="round"
@@ -175,7 +175,7 @@ export function MorningBriefing({
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className={cn(
                           'text-sm font-bold',
-                          overallHealth >= 80 ? 'text-green-700' : 
+                          overallHealth >= 80 ? 'text-[#7A8F78]' : 
                           overallHealth >= 60 ? 'text-amber-700' : 'text-red-700'
                         )}>
                           {overallHealth}%
@@ -185,7 +185,7 @@ export function MorningBriefing({
                     <div className="flex-1">
                       <div className={cn(
                         'text-base font-medium mb-1',
-                        overallHealth >= 80 ? 'text-green-700' : 
+                        overallHealth >= 80 ? 'text-[#7A8F78]' : 
                         overallHealth >= 60 ? 'text-amber-700' : 'text-red-700'
                       )}>
                         {overallHealth >= 80 ? 'Excellent' : 
@@ -209,14 +209,14 @@ export function MorningBriefing({
                       </span>
                       <span className={cn(
                         'text-xs font-medium px-2 py-1 rounded-full',
-                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-green-700' :
+                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                         livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' :
                         'bg-red-100 text-red-700'
                       )}>
                         {livestockCount} animals
                       </span>
                     </div>
-                    <div className="text-xs text-blue-600">
+                    <div className="text-xs text-[#7A8F78]">
                       {getLivestockHealthExplanation(livestockHealthStatus)}
                     </div>
                   </div>
@@ -228,7 +228,7 @@ export function MorningBriefing({
                     <div className="text-xs text-[#555555] font-medium">Planned</div>
                   </div>
                   <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
-                    <div className="text-xl font-bold text-green-700">{growingCount}</div>
+                    <div className="text-xl font-bold text-[#7A8F78]">{growingCount}</div>
                     <div className="text-xs text-[#555555] font-medium">Growing</div>
                   </div>
                   <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
@@ -262,7 +262,7 @@ export function MorningBriefing({
                       <span className="font-semibold text-[#1A1A1A]">{livestockCount} head</span>
                       <span className={cn(
                         'text-xs px-2 py-0.5 rounded-full',
-                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-green-700' :
+                        livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                         livestockHealthStatus === 'warning' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                       )}>
                         {livestockHealthStatus}
@@ -283,7 +283,7 @@ export function MorningBriefing({
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-50 rounded-lg">
-                        <WeatherIcon className="h-8 w-8 text-blue-600" />
+                        <WeatherIcon className="h-8 w-8 text-[#7A8F78]" />
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-[#1A1A1A]">
@@ -323,7 +323,7 @@ export function MorningBriefing({
                             {day.high}°/{day.low}°
                           </div>
                           <div className="text-xs text-[#555555] capitalize">{day.condition}</div>
-                          <div className="text-xs text-blue-600">{day.precipitation}%</div>
+                          <div className="text-xs text-[#7A8F78]">{day.precipitation}%</div>
                         </div>
                       ))}
                     </div>
@@ -366,13 +366,13 @@ export function MorningBriefing({
                     )}>
                       <DollarSign className={cn(
                         'h-6 w-6',
-                        financials.netYTD >= 0 ? 'text-green-600' : 'text-red-600'
+                        financials.netYTD >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                       )} />
                     </div>
                     <div className="flex-1">
                       <div className={cn(
                         'text-2xl font-bold',
-                        financials.netYTD >= 0 ? 'text-green-700' : 'text-red-700'
+                        financials.netYTD >= 0 ? 'text-[#7A8F78]' : 'text-red-700'
                       )}>
                         {financials.netYTD >= 0 ? '' : '-'}{formatCurrency(Math.abs(financials.netYTD), preferences)}
                       </div>
@@ -431,7 +431,7 @@ function TrendIndicator({
 }) {
   if (value === 0) return null
   const Icon = value > 0 ? TrendingUp : TrendingDown
-  const color = value > 0 ? 'text-green-600' : 'text-red-600'
+  const color = value > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
   const iconSize = size === 'sm' ? 'h-3 w-3' : 'h-4 w-4'
   const textSize = size === 'sm' ? 'text-xs' : 'text-sm'
   return (

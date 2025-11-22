@@ -96,7 +96,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       <Card className="p-6">
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Financial Trends</h3>
         <div className="text-center py-12">
-          <div className="text-gray-400 mb-2">📊</div>
+          <div className="text-[#555555] mb-2">📊</div>
           <p className="text-[#555555]">No trend data available for the selected period.</p>
         </div>
       </Card>
@@ -194,7 +194,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t">
         <div className="text-center">
           <p className="text-sm text-[#555555]">Total Income</p>
-          <p className="text-lg font-semibold text-green-600">
+          <p className="text-lg font-semibold text-[#8FBF7F]">
             {formatCurrency(data.reduce((sum, item) => sum + item.income, 0))}
           </p>
         </div>
@@ -208,7 +208,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
           <p className="text-sm text-[#555555]">Net Profit</p>
           <p className={`text-lg font-semibold ${
             data.reduce((sum, item) => sum + item.profit, 0) >= 0 
-              ? 'text-green-600' 
+              ? 'text-[#8FBF7F]' 
               : 'text-red-600'
           }`}>
             {formatCurrency(data.reduce((sum, item) => sum + item.profit, 0))}

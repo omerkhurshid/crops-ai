@@ -364,7 +364,7 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                     <ul className="space-y-1">
                       {insight.actionableInsights.map((insight, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-sm">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle2 className="h-4 w-4 text-[#8FBF7F] mt-0.5 flex-shrink-0" />
                           {insight}
                         </li>
                       ))}
@@ -393,13 +393,13 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
                   {rec.expectedImpact.yield && (
                     <div className="text-center">
                       <p className="text-sm text-[#555555]">Yield Impact</p>
-                      <p className="font-semibold text-green-600">+{rec.expectedImpact.yield}%</p>
+                      <p className="font-semibold text-[#8FBF7F]">+{rec.expectedImpact.yield}%</p>
                     </div>
                   )}
                   {rec.expectedImpact.cost && (
                     <div className="text-center">
                       <p className="text-sm text-[#555555]">Cost Impact</p>
-                      <p className={`font-semibold ${rec.expectedImpact.cost < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+                      <p className={`font-semibold ${rec.expectedImpact.cost < 0 ? 'text-[#8FBF7F]' : 'text-orange-600'}`}>
                         ${rec.expectedImpact.cost > 0 ? '+' : ''}${rec.expectedImpact.cost}
                       </p>
                     </div>

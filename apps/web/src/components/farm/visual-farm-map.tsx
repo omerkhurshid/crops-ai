@@ -184,9 +184,9 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
   }
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-[#F8FAF8] text-green-800'
+      case 'active': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'fallow': return 'bg-yellow-100 text-yellow-800'
-      case 'preparation': return 'bg-blue-100 text-blue-800'
+      case 'preparation': return 'bg-blue-100 text-[#7A8F78]'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
@@ -219,7 +219,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
             {!showMap ? (
               <div className="h-96 flex items-center justify-center bg-[#F5F5F5]">
                 <div className="text-center">
-                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <MapPin className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                     Interactive Farm Map
                   </h3>
@@ -355,7 +355,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                 </div>
               ) : fields.length === 0 ? (
                 <div className="text-center py-8 text-[#555555]">
-                  <Sprout className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <Sprout className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
                   <p>No fields found for this farm</p>
                   <p className="text-sm">Create fields in the farm creation flow</p>
                 </div>
@@ -457,7 +457,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
                             <div className="flex items-center space-x-4">
                               <span>NDVI: {field.lastAnalysis.ndvi.toFixed(2)}</span>
                               <span className={`px-2 py-1 rounded text-xs ${
-                                field.lastAnalysis.stressLevel === 'low' ? 'bg-[#F8FAF8] text-green-800' :
+                                field.lastAnalysis.stressLevel === 'low' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                                 field.lastAnalysis.stressLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-red-100 text-red-800'
                               }`}>

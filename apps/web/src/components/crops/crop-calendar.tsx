@@ -315,7 +315,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                             <h4 className="font-semibold text-[#555555] text-xs hover:text-[#1A1A1A] cursor-pointer truncate">
                               {planning.cropName}
                             </h4>
-                            <p className="text-xs text-sage-500 truncate">
+                            <p className="text-xs text-#555555 truncate">
                               {formatQuantity(planning.plantedQuantity, planning.unit)}
                             </p>
                           </div>
@@ -323,7 +323,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                           <div className="min-w-0">
                             <p className="text-xs font-semibold text-[#555555] truncate">{planning.location}</p>
                             {planning.bedNumber && (
-                              <p className="text-xs text-sage-500 truncate">{planning.bedNumber}</p>
+                              <p className="text-xs text-#555555 truncate">{planning.bedNumber}</p>
                             )}
                           </div>
                           {/* Key Dates */}
@@ -371,7 +371,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   <div className="text-center py-12">
                     <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
                     <h3 className="text-lg font-semibold mb-2 text-[#555555]">No crop planning data available yet</h3>
-                    <p className="text-sage-500">Start planning your crops to see them on the timeline.</p>
+                    <p className="text-#555555">Start planning your crops to see them on the timeline.</p>
                   </div>
                 )}
               </div>
@@ -388,7 +388,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         <h4 className="font-semibold text-[#1A1A1A] text-sm">{planning.cropName}</h4>
                         <p className="text-xs text-[#555555]">{planning.location}</p>
                         {planning.bedNumber && (
-                          <p className="text-xs text-sage-500">{planning.bedNumber}</p>
+                          <p className="text-xs text-#555555">{planning.bedNumber}</p>
                         )}
                       </div>
                       <div className={`px-2 py-1 rounded-lg ${statusColors[planning.status]} text-white text-xs font-medium flex items-center gap-1`}>
@@ -398,19 +398,19 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                     </div>
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <div>
-                        <span className="text-sage-500">Planted:</span>
+                        <span className="text-#555555">Planted:</span>
                         <span className="ml-1 text-[#555555]">{formatDate(planning.startDate)}</span>
                       </div>
                       <div>
-                        <span className="text-sage-500">Harvest:</span>
+                        <span className="text-#555555">Harvest:</span>
                         <span className="ml-1 text-[#555555]">{formatDate(planning.harvestDate)}</span>
                       </div>
                       <div>
-                        <span className="text-sage-500">Quantity:</span>
+                        <span className="text-#555555">Quantity:</span>
                         <span className="ml-1 text-[#555555]">{formatQuantity(planning.plantedQuantity, planning.unit)}</span>
                       </div>
                       <div>
-                        <span className="text-sage-500">Expected Yield:</span>
+                        <span className="text-#555555">Expected Yield:</span>
                         <span className="ml-1 text-[#555555]">{planning.estimatedYield.toLocaleString()}</span>
                       </div>
                     </div>
@@ -421,7 +421,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               <div className="text-center py-12">
                 <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50 text-sage-400" />
                 <h3 className="text-lg font-semibold mb-2 text-[#555555]">No crop planning data available yet</h3>
-                <p className="text-sage-500">Start planning your crops to see them here.</p>
+                <p className="text-#555555">Start planning your crops to see them here.</p>
               </div>
             )}
           </div>
@@ -436,7 +436,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                 <p className="text-xs sm:text-sm font-semibold text-[#555555]">Total Plantings</p>
                 <p className="text-lg sm:text-2xl font-bold text-[#1A1A1A]">{filteredPlannings.length}</p>
               </div>
-              <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+              <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-[#8FBF7F]" />
             </div>
           </ModernCardContent>
         </ModernCard>
@@ -445,11 +445,11 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-semibold text-[#555555]">Growing Now</p>
-                <p className="text-lg sm:text-2xl font-bold text-green-600">
+                <p className="text-lg sm:text-2xl font-bold text-[#8FBF7F]">
                   {filteredPlannings.filter(p => p.status === 'growing').length}
                 </p>
               </div>
-              <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+              <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-[#8FBF7F]" />
             </div>
           </ModernCardContent>
         </ModernCard>
@@ -471,11 +471,11 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-semibold text-[#555555]">Planned Yield</p>
-                <p className="text-lg sm:text-2xl font-bold text-blue-600">
+                <p className="text-lg sm:text-2xl font-bold text-[#7A8F78]">
                   {filteredPlannings.reduce((sum, p) => sum + p.estimatedYield, 0).toLocaleString()}
                 </p>
               </div>
-              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-[#7A8F78]" />
             </div>
           </ModernCardContent>
         </ModernCard>
@@ -653,7 +653,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               {/* Weather-based recommendations */}
               {selectedCropId && weatherData && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <h4 className="text-sm font-semibold text-blue-800 mb-2">Weather Recommendations</h4>
+                  <h4 className="text-sm font-semibold text-[#7A8F78] mb-2">Weather Recommendations</h4>
                   <div className="text-xs text-blue-700">
                     {(() => {
                       const crop = getCropById(selectedCropId)
@@ -666,7 +666,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                       return (
                         <div>
                           <div className={`inline-flex px-2 py-1 rounded text-xs font-medium mb-2 ${
-                            recommendation.recommendation === 'plant_now' ? 'bg-[#F8FAF8] text-green-800' :
+                            recommendation.recommendation === 'plant_now' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                             recommendation.recommendation === 'wait' ? 'bg-yellow-100 text-yellow-800' :
                             'bg-red-100 text-red-800'
                           }`}>

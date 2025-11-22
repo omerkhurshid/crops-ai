@@ -101,14 +101,14 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
     return <div>Livestock data not found</div>
   }
   const getHealthStatusColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 bg-[#F8FAF8]'
+    if (score >= 90) return 'text-[#8FBF7F] bg-[#F8FAF8]'
     if (score >= 80) return 'text-yellow-600 bg-yellow-100'
     if (score >= 70) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
   const getRiskSeverityColor = (severity: 'low' | 'moderate' | 'high') => {
     switch (severity) {
-      case 'low': return 'text-green-600 bg-[#F8FAF8]'
+      case 'low': return 'text-[#8FBF7F] bg-[#F8FAF8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-100'
       case 'high': return 'text-red-600 bg-red-100'
     }
@@ -205,7 +205,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               <div className="text-sm text-[#555555]">Average Litter Size</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-[#8FBF7F]">
                 {selectedLivestockData.breeding.gestationPeriod}
               </div>
               <div className="text-sm text-[#555555]">Gestation (days)</div>
@@ -241,10 +241,10 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   {currentLivestockPerformance.healthScore}%
                 </div>
                 <div className="text-[#555555]">Overall Health Score</div>
-                <div className="text-sm text-sage-500 mt-2">
+                <div className="text-sm text-[#555555] mt-2">
                   Herd Size: <span className="font-medium">{currentLivestockPerformance.animalCount} animals</span>
                 </div>
-                <div className="text-sm text-sage-500">
+                <div className="text-sm text-[#555555]">
                   Stage: <span className="font-medium capitalize">{currentLivestockPerformance.productionStage}</span>
                 </div>
               </div>
@@ -271,7 +271,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                 {currentLivestockPerformance.actualProduction && (
                   <div className="flex justify-between items-center">
                     <span className="text-[#555555]">Actual:</span>
-                    <span className="font-bold text-green-600">
+                    <span className="font-bold text-[#8FBF7F]">
                       {currentLivestockPerformance.actualProduction.toLocaleString()}
                       {selectedLivestockData.primaryProduct === 'milk' ? ' L/day' : 
                        selectedLivestockData.primaryProduct === 'eggs' ? ' eggs/day' : ' kg'}
@@ -284,7 +284,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                     "font-medium",
                     currentLivestockPerformance.actualProduction && 
                     currentLivestockPerformance.actualProduction > currentLivestockPerformance.expectedProduction
-                      ? "text-green-600" : "text-orange-600"
+                      ? "text-[#8FBF7F]" : "text-orange-600"
                   )}>
                     {currentLivestockPerformance.actualProduction ? 
                       `${Math.round((currentLivestockPerformance.actualProduction / currentLivestockPerformance.expectedProduction) * 100)}%` : 
@@ -293,7 +293,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   </span>
                 </div>
                 <div className="pt-2 border-t">
-                  <div className="text-sm text-sage-500">
+                  <div className="text-sm text-[#555555]">
                     Est. Revenue: <span className="font-medium text-[#1A1A1A]">
                       ${LivestockAnalytics.calculateProductionForecast(
                         selectedLivestockId, 
@@ -329,7 +329,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-green-600">
+                  <div className="text-center text-[#8FBF7F]">
                     <div className="text-2xl mb-2">
                       <ShieldCheck className="h-8 w-8 mx-auto" />
                     </div>
@@ -357,7 +357,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                 <div key={index} className="border-l-4 border-pink-300 pl-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-[#1A1A1A]">{stage.stage}</h4>
-                    <span className="text-sm text-sage-500">Day {stage.daysFromBreeding}</span>
+                    <span className="text-sm text-[#555555]">Day {stage.daysFromBreeding}</span>
                   </div>
                   <div className="space-y-1">
                     <div className="text-sm text-[#555555]">
@@ -376,7 +376,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
         <ModernCard>
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-green-600" />
+              <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
               Economic Analysis
             </ModernCardTitle>
           </ModernCardHeader>
@@ -388,14 +388,14 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                   <div className="text-xl font-bold text-[#1A1A1A]">
                     ${selectedLivestockData.economics.initialInvestment.animal}
                   </div>
-                  <div className="text-xs text-sage-500">per animal</div>
+                  <div className="text-xs text-[#555555]">per animal</div>
                 </div>
                 <div>
                   <div className="text-sm text-[#555555]">Annual Operating Cost</div>
                   <div className="text-xl font-bold text-red-600">
                     ${selectedLivestockData.economics.operatingCosts.total}
                   </div>
-                  <div className="text-xs text-sage-500">per animal</div>
+                  <div className="text-xs text-[#555555]">per animal</div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -436,7 +436,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                     {selectedLivestockData.economics.profitabilityIndex}/10
                   </span>
                 </div>
-                <div className="text-sm text-sage-500">
+                <div className="text-sm text-[#555555]">
                   Break-even: {selectedLivestockData.economics.breakEven.timeframe} months 
                   with {selectedLivestockData.economics.breakEven.animalCount} animals minimum
                 </div>
@@ -462,13 +462,13 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                     <div className="p-2 bg-[#DDE4D8] rounded-full">
                       {treatment.type === 'vaccination' && <ShieldCheck className="h-4 w-4 text-blue-600" />}
                       {treatment.type === 'medication' && <Activity className="h-4 w-4 text-red-600" />}
-                      {treatment.type === 'nutrition' && <Scale className="h-4 w-4 text-green-600" />}
+                      {treatment.type === 'nutrition' && <Scale className="h-4 w-4 text-[#8FBF7F]" />}
                       {treatment.type === 'breeding' && <Baby className="h-4 w-4 text-pink-600" />}
                     </div>
                     <div>
                       <div className="font-medium text-sm capitalize">{treatment.type}</div>
                       <div className="text-xs text-[#555555]">{treatment.description}</div>
-                      <div className="text-xs text-sage-500">
+                      <div className="text-xs text-[#555555]">
                         {new Date(treatment.date).toLocaleDateString()}
                       </div>
                     </div>

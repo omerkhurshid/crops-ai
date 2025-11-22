@@ -55,7 +55,7 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
             {description && <CardDescription>{description}</CardDescription>}
           </div>
           {showTrend && (
-            <Badge className={`${change >= 0 ? 'bg-[#F8FAF8] text-green-800' : 'bg-red-100 text-red-800'}`}>
+            <Badge className={`${change >= 0 ? 'bg-[#F8FAF8] text-[#7A8F78]' : 'bg-red-100 text-red-800'}`}>
               {change >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
               {change >= 0 ? '+' : ''}{change.toFixed(1)}%
             </Badge>
@@ -128,7 +128,7 @@ export function SimpleLineChart({ title, description, data, color = '#10b981', u
 }
 export function MetricCard({ title, value, change, unit = '', trend, description, icon }: MetricCardProps) {
   const getTrendColor = () => {
-    if (trend === 'up') return 'text-green-600'
+    if (trend === 'up') return 'text-[#8FBF7F]'
     if (trend === 'down') return 'text-red-600'
     return 'text-[#555555]'
   }
@@ -295,7 +295,7 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           change={5.2}
           trend="up"
           description="Vegetation health index"
-          icon={<TrendingUp className="h-5 w-5 text-green-600" />}
+          icon={<TrendingUp className="h-5 w-5 text-[#8FBF7F]" />}
         />
         <MetricCard
           title="Field Coverage"
@@ -313,7 +313,7 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
           change={3.1}
           trend="up"
           description="Overall crop health"
-          icon={<TrendingUp className="h-5 w-5 text-green-600" />}
+          icon={<TrendingUp className="h-5 w-5 text-[#8FBF7F]" />}
         />
         <MetricCard
           title="Stressed Areas"
@@ -371,9 +371,9 @@ export function AnalyticsDashboard({ farmId, timeRange = '30d' }: AnalyticsDashb
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-              <div className="text-2xl font-bold text-green-800 mb-2">{Math.round(farmMetrics.dataAccuracy)}%</div>
-              <div className="text-sm font-medium text-green-700">Data Accuracy</div>
-              <div className="text-xs text-green-600 mt-1">
+              <div className="text-2xl font-bold text-[#7A8F78] mb-2">{Math.round(farmMetrics.dataAccuracy)}%</div>
+              <div className="text-sm font-medium text-[#7A8F78]">Data Accuracy</div>
+              <div className="text-xs text-[#8FBF7F] mt-1">
                 High-quality satellite data coverage
               </div>
             </div>

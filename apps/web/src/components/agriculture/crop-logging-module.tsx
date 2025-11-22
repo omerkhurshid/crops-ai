@@ -39,8 +39,8 @@ interface CropLoggingModuleProps {
   cropId?: string
 }
 const LOG_TYPES = [
-  { id: 'planting', label: 'Planting', icon: Sprout, color: 'bg-[#F8FAF8] text-green-800' },
-  { id: 'irrigation', label: 'Irrigation', icon: Droplets, color: 'bg-blue-100 text-blue-800' },
+  { id: 'planting', label: 'Planting', icon: Sprout, color: 'bg-[#F8FAF8] text-[#7A8F78]' },
+  { id: 'irrigation', label: 'Irrigation', icon: Droplets, color: 'bg-blue-100 text-[#7A8F78]' },
   { id: 'fertilization', label: 'Fertilization', icon: Beaker, color: 'bg-purple-100 text-purple-800' },
   { id: 'pest_control', label: 'Pest Control', icon: Bug, color: 'bg-red-100 text-red-800' },
   { id: 'cultivation', label: 'Cultivation', icon: Activity, color: 'bg-orange-100 text-orange-800' },
@@ -191,7 +191,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
               </div>
               <div className="text-sm font-medium text-[#1A1A1A]">{type.label}</div>
               {totalCost > 0 && (
-                <div className="text-xs text-sage-500 mt-1">${totalCost.toLocaleString()}</div>
+                <div className="text-xs text-[#555555] mt-1">${totalCost.toLocaleString()}</div>
               )}
             </ModernCard>
           )
@@ -342,7 +342,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                             </div>
                             {entry.cost && (
                               <div className="flex items-center gap-1">
-                                <span className="text-green-600 font-medium">{formatCost(entry.cost)}</span>
+                                <span className="text-[#8FBF7F] font-medium">{formatCost(entry.cost)}</span>
                               </div>
                             )}
                           </div>
@@ -361,22 +361,22 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
                           {entry.quantity && (
                             <div>
-                              <span className="text-sage-500">Quantity:</span>
+                              <span className="text-[#555555]">Quantity:</span>
                               <span className="ml-2 font-medium">{entry.quantity} {entry.unit}</span>
                             </div>
                           )}
                           {entry.weather && (
                             <>
                               <div>
-                                <span className="text-sage-500">Temperature:</span>
+                                <span className="text-[#555555]">Temperature:</span>
                                 <span className="ml-2 font-medium">{entry.weather.temperature}°C</span>
                               </div>
                               <div>
-                                <span className="text-sage-500">Humidity:</span>
+                                <span className="text-[#555555]">Humidity:</span>
                                 <span className="ml-2 font-medium">{entry.weather.humidity}%</span>
                               </div>
                               <div>
-                                <span className="text-sage-500">Rainfall:</span>
+                                <span className="text-[#555555]">Rainfall:</span>
                                 <span className="ml-2 font-medium">{entry.weather.rainfall}mm</span>
                               </div>
                             </>
@@ -401,7 +401,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
         })}
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
-            <FileText className="h-12 w-12 text-sage-300 mx-auto mb-4" />
+            <FileText className="h-12 w-12 text-[#DDE4D8] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No log entries yet</h3>
             <p className="text-[#555555] mb-4">Start logging your farming activities to track progress and improvements.</p>
             <Button onClick={() => setShowAddForm(true)}>

@@ -76,8 +76,8 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
     switch (recommendation) {
       case 'immediate': return 'bg-red-100 text-red-800 border-red-200'
       case 'soon': return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'monitor': return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'delay': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
+      case 'monitor': return 'bg-blue-100 text-[#7A8F78] border-blue-200'
+      case 'delay': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]'
     }
   }
@@ -85,7 +85,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
     switch (risk) {
       case 'high': return 'text-red-600'
       case 'moderate': return 'text-orange-600'
-      case 'low': return 'text-green-600'
+      case 'low': return 'text-[#8FBF7F]'
       default: return 'text-[#555555]'
     }
   }
@@ -214,7 +214,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                       <div>
                         <p className="text-sm text-[#555555]">Quality</p>
                         <Badge variant="outline" className={
-                          hourlyData.summary.dataQuality === 'excellent' ? 'bg-[#F8FAF8] text-green-700' :
+                          hourlyData.summary.dataQuality === 'excellent' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                           hourlyData.summary.dataQuality === 'good' ? 'bg-blue-50 text-blue-700' :
                           hourlyData.summary.dataQuality === 'fair' ? 'bg-yellow-50 text-yellow-700' :
                           'bg-red-50 text-red-700'
@@ -242,7 +242,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           ) : (
             <div className="text-center py-12">
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Thermometer className="h-6 w-6 text-gray-400" />
+                <Thermometer className="h-6 w-6 text-[#555555]" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                 No Weather Analytics Data
@@ -311,7 +311,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           ) : (
             <div className="text-center py-12">
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-6 w-6 text-gray-400" />
+                <TrendingUp className="h-6 w-6 text-[#555555]" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                 No Trend Data Available
@@ -331,11 +331,11 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   <CardDescription>Heat accumulation that drives crop growth and development</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600 mb-3">
+                  <div className="text-3xl font-bold text-[#8FBF7F] mb-3">
                     {Math.round(aggregatedData.agricultureMetrics.growingDegreeDays)}
                   </div>
                   <div className="text-sm text-[#555555] bg-[#F8FAF8] p-3 rounded border-l-4 border-green-400">
-                    <p className="font-medium text-green-800 mb-2">What this means:</p>
+                    <p className="font-medium text-[#7A8F78] mb-2">What this means:</p>
                     <p>• Each crop needs a specific amount of heat to mature</p>
                     <p>• Corn needs ~2,700 GDD, Soybeans need ~2,500 GDD</p>
                     <p>• Higher numbers = faster crop development</p>
@@ -349,11 +349,11 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   <CardDescription>Cold hours needed for fruit trees and perennial crops</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600 mb-3">
+                  <div className="text-3xl font-bold text-[#7A8F78] mb-3">
                     {aggregatedData.agricultureMetrics.chillHours}
                   </div>
                   <div className="text-sm text-[#555555] bg-blue-50 p-3 rounded border-l-4 border-blue-400">
-                    <p className="font-medium text-blue-800 mb-2">What this means:</p>
+                    <p className="font-medium text-[#7A8F78] mb-2">What this means:</p>
                     <p>• Many fruit trees need winter cold to produce fruit</p>
                     <p>• Apples need 800-1,200 hours, Peaches need 150-1,000</p>
                     <p>• Not enough chill = poor fruit production</p>
@@ -388,7 +388,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                   <div className="space-y-2 mb-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-[#555555]">Wet Days</span>
-                      <span className="font-semibold text-blue-600">{aggregatedData.agricultureMetrics.wetDays}</span>
+                      <span className="font-semibold text-[#7A8F78]">{aggregatedData.agricultureMetrics.wetDays}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-[#555555]">Dry Days</span>
@@ -415,7 +415,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                     </Badge>
                   </div>
                   <div className="text-sm text-[#555555] bg-blue-50 p-3 rounded border-l-4 border-blue-400">
-                    <p className="font-medium text-blue-800 mb-2">Action needed:</p>
+                    <p className="font-medium text-[#7A8F78] mb-2">Action needed:</p>
                     {aggregatedData.agricultureMetrics.irrigationNeeded ? (
                       <>
                         <p>• Check soil moisture in your fields</p>
@@ -445,15 +445,15 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-[#F8FAF8] p-4 rounded border border-[#DDE4D8]">
-                      <h4 className="font-medium text-green-800 mb-2">📊 For Crop Planning:</h4>
-                      <ul className="text-sm text-green-700 space-y-1">
+                      <h4 className="font-medium text-[#7A8F78] mb-2">📊 For Crop Planning:</h4>
+                      <ul className="text-sm text-[#7A8F78] space-y-1">
                         <li>• Use GDD to time herbicide and fertilizer applications</li>
                         <li>• Plan harvest timing based on heat accumulation</li>
                         <li>• Choose varieties based on your typical GDD totals</li>
                       </ul>
                     </div>
                     <div className="bg-blue-50 p-4 rounded border border-blue-200">
-                      <h4 className="font-medium text-blue-800 mb-2">💧 For Water Management:</h4>
+                      <h4 className="font-medium text-[#7A8F78] mb-2">💧 For Water Management:</h4>
                       <ul className="text-sm text-blue-700 space-y-1">
                         <li>• Monitor wet/dry patterns for irrigation scheduling</li>
                         <li>• Use heat stress data to time irrigation during hot periods</li>
@@ -483,7 +483,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           ) : (
             <div className="text-center py-12">
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sprout className="h-6 w-6 text-gray-400" />
+                <Sprout className="h-6 w-6 text-[#555555]" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                 No Agriculture Data Available
@@ -520,7 +520,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
                 {irrigationRec.irrigationAmount && (
                   <div>
                     <h4 className="font-semibold mb-2">Recommended Amount</h4>
-                    <p className="text-2xl font-bold text-blue-600">
+                    <p className="text-2xl font-bold text-[#7A8F78]">
                       {Math.round(irrigationRec.irrigationAmount)} mm
                     </p>
                   </div>
@@ -536,7 +536,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
           ) : (
             <div className="text-center py-12">
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Droplets className="h-6 w-6 text-gray-400" />
+                <Droplets className="h-6 w-6 text-[#555555]" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
                 No Irrigation Data Available

@@ -32,7 +32,7 @@ export function FloatingButton({
   return (
     <button
       className={cn(
-        'rounded-full border-0 font-medium transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-sage-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center',
+        'rounded-full border-0 font-medium transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#DDE4D8] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center',
         variants[variant],
         sizes[size],
         isFloating && 'hover:scale-110 hover:-translate-y-1 active:scale-95',

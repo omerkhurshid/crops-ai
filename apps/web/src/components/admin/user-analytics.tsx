@@ -30,9 +30,9 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
   const [activeTab, setActiveTab] = useState('demographics')
   const getUserTypeIcon = (type: string | null) => {
     switch (type) {
-      case 'CROPS': return <Sprout className="h-4 w-4 text-green-600" />
+      case 'CROPS': return <Sprout className="h-4 w-4 text-[#8FBF7F]" />
       case 'LIVESTOCK': return <Heart className="h-4 w-4 text-red-600" />
-      case 'ORCHARD': return <TreePine className="h-4 w-4 text-green-700" />
+      case 'ORCHARD': return <TreePine className="h-4 w-4 text-[#7A8F78]" />
       case 'MIXED': return <Target className="h-4 w-4 text-blue-600" />
       default: return <User className="h-4 w-4 text-[#555555]" />
     }
@@ -40,7 +40,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'FARM_OWNER': return <Shield className="h-4 w-4 text-blue-600" />
-      case 'FARM_MANAGER': return <UserCheck className="h-4 w-4 text-green-600" />
+      case 'FARM_MANAGER': return <UserCheck className="h-4 w-4 text-[#8FBF7F]" />
       case 'AGRONOMIST': return <User className="h-4 w-4 text-purple-600" />
       default: return <User className="h-4 w-4 text-[#555555]" />
     }
@@ -128,7 +128,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
                   recentActivity.map((activity) => (
                     <div key={activity.id} className="flex items-start justify-between p-3 bg-[#FAFAF7] rounded-lg">
                       <div className="flex items-start gap-3">
-                        <MapPin className="h-4 w-4 text-green-600 mt-1" />
+                        <MapPin className="h-4 w-4 text-[#8FBF7F] mt-1" />
                         <div>
                           <div className="font-medium">{activity.name}</div>
                           <div className="text-sm text-[#555555]">

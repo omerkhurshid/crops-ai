@@ -255,16 +255,16 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     }
   }
   const getHealthScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600'
+    if (score >= 80) return 'text-[#8FBF7F]'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'good': return <CheckCircle2 className="h-4 w-4 text-green-600" />
+      case 'good': return <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
       case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-600" />
       case 'critical': return <AlertTriangle className="h-4 w-4 text-red-600" />
-      default: return <CheckCircle2 className="h-4 w-4 text-gray-400" />
+      default: return <CheckCircle2 className="h-4 w-4 text-[#555555]" />
     }
   }
   const selectedCropData = cropHealthData.find(crop => crop.cropId === selectedCrop)
@@ -280,7 +280,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
     return (
       <Card>
         <CardContent className="p-8 text-center">
-          <Sprout className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <Sprout className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
           <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Crops Selected</h3>
           <p className="text-[#555555] mb-4">
             Add crops to your farm to get detailed health monitoring and insights
@@ -302,7 +302,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
             onClick={() => setSelectedCrop(crop.cropId)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all whitespace-nowrap ${
               selectedCrop === crop.cropId
-                ? 'border-[#8FBF7F] bg-[#F8FAF8] text-green-800'
+                ? 'border-[#8FBF7F] bg-[#F8FAF8] text-[#7A8F78]'
                 : 'border-[#E6E6E6] hover:border-[#E6E6E6]'
             }`}
           >
@@ -327,7 +327,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                       {selectedCropData.healthScore}%
                     </p>
                   </div>
-                  <Activity className="h-8 w-8 text-gray-400" />
+                  <Activity className="h-8 w-8 text-[#555555]" />
                 </div>
                 <Progress value={selectedCropData.healthScore} className="mt-2" />
               </CardContent>
@@ -341,7 +341,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                       {selectedCropData.currentStage}
                     </p>
                   </div>
-                  <Leaf className="h-8 w-8 text-green-400" />
+                  <Leaf className="h-8 w-8 text-[#8FBF7F]" />
                 </div>
               </CardContent>
             </Card>
@@ -453,7 +453,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                     {selectedCropData.optimalConditions.nutrients.map((nutrient, idx) => (
                       <div key={idx} className="text-center p-3 bg-[#FAFAF7] rounded-lg">
                         <p className="font-medium">{nutrient.name}</p>
-                        <p className="text-2xl font-bold text-green-600">{Math.round(nutrient.level)}</p>
+                        <p className="text-2xl font-bold text-[#8FBF7F]">{Math.round(nutrient.level)}</p>
                         <p className="text-xs text-[#555555]">{nutrient.status}</p>
                       </div>
                     ))}
@@ -475,7 +475,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                     <ul className="space-y-2">
                       {selectedCropData.seasonalGuidance.upcomingTasks.map((task, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
+                          <CheckCircle2 className="h-4 w-4 text-[#8FBF7F] mt-0.5" />
                           <span className="text-sm">{task}</span>
                         </li>
                       ))}
@@ -513,7 +513,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                         risk.severity === 'critical' ? 'bg-red-100 text-red-800' :
                         risk.severity === 'high' ? 'bg-orange-100 text-orange-800' :
                         risk.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-blue-100 text-blue-800'
+                        'bg-blue-100 text-[#7A8F78]'
                       }>
                         {risk.severity}
                       </Badge>
@@ -526,7 +526,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
                       <ul className="space-y-1">
                         {risk.recommendations.map((rec, recIdx) => (
                           <li key={recIdx} className="flex items-start gap-2 text-sm">
-                            <ChevronRight className="h-4 w-4 text-gray-400 mt-0.5" />
+                            <ChevronRight className="h-4 w-4 text-[#555555] mt-0.5" />
                             {rec}
                           </li>
                         ))}

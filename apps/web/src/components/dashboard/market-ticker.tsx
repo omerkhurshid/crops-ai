@@ -79,12 +79,12 @@ export function MarketTicker({ className }: MarketTickerProps) {
         {[...ensureArray(prices), ...ensureArray(prices)].map((price, index) => (
           <div key={index} className="flex items-center gap-2 whitespace-nowrap">
             <span className="font-medium text-[#1A1A1A]">{price.commodity}:</span>
-            <span className="font-semibold text-sage-900">
+            <span className="font-semibold text-#1A1A1A">
               ${price.price.toFixed(2)}/{price.unit}
             </span>
             <span className={cn(
               'flex items-center gap-0.5 font-medium',
-              price.change > 0 ? 'text-green-600' : 'text-red-600'
+              price.change > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
             )}>
               {price.change > 0 ? (
                 <TrendingUp className="h-3 w-3" />
@@ -140,12 +140,12 @@ export function MobileMarketTicker({ className }: MarketTickerProps) {
     )}>
       <div className="flex items-center gap-2">
         <span className="font-medium text-[#555555]">{currentPrice.commodity}:</span>
-        <span className="font-semibold text-sage-900">
+        <span className="font-semibold text-#1A1A1A">
           ${currentPrice.price.toFixed(2)}
         </span>
         <span className={cn(
           'flex items-center gap-0.5',
-          currentPrice.change > 0 ? 'text-green-600' : 'text-red-600'
+          currentPrice.change > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
         )}>
           {currentPrice.change > 0 ? '↑' : '↓'}
           {Math.abs(currentPrice.change).toFixed(1)}%

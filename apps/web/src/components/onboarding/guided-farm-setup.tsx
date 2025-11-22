@@ -214,20 +214,20 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </div>
           </div>
           <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-4 mb-6">
-            <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
-              <Target className="h-4 w-4 text-blue-600" />
+            <h4 className="font-semibold text-[#7A8F78] mb-2 flex items-center gap-2">
+              <Target className="h-4 w-4 text-[#7A8F78]" />
               Field Mapping Options
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="bg-white rounded-lg p-3 border">
                 <h5 className="font-medium text-[#1A1A1A] mb-1">Quick Start</h5>
                 <p className="text-sm text-[#555555]">Add 1-3 fields with estimated boundaries</p>
-                <p className="text-xs text-green-600 mt-1">✓ 5 minutes • Good for beginners</p>
+                <p className="text-xs text-[#8FBF7F] mt-1">✓ 5 minutes • Good for beginners</p>
               </div>
               <div className="bg-white rounded-lg p-3 border">
                 <h5 className="font-medium text-[#1A1A1A] mb-1">Detailed Mapping</h5>
                 <p className="text-sm text-[#555555]">Draw exact field shapes on the map</p>
-                <p className="text-xs text-blue-600 mt-1">✓ 15 minutes • Most accurate</p>
+                <p className="text-xs text-[#7A8F78] mt-1">✓ 15 minutes • Most accurate</p>
               </div>
             </div>
           </div>
@@ -331,19 +331,19 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
               <div className="flex items-center gap-2 text-[#555555]">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
                 Check crop health anytime
               </div>
               <div className="flex items-center gap-2 text-[#555555]">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
                 Weekly weather forecasts for your fields
               </div>
               <div className="flex items-center gap-2 text-[#555555]">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
                 Smart suggestions for best timing
               </div>
               <div className="flex items-center gap-2 text-[#555555]">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
                 Financial tracking and profitability analysis
               </div>
             </div>

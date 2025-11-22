@@ -62,7 +62,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
   if (animals.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <Heart className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Animals Yet</h3>
@@ -78,7 +78,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by tag number or name..."
             value={searchTerm}
@@ -131,8 +131,8 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
                   }`} />
                   {/* Weight Trend */}
                   <TrendingUp className={`h-4 w-4 ${
-                    getWeightTrend(animal) === 'up' ? 'text-green-500' : 
-                    getWeightTrend(animal) === 'down' ? 'text-red-500' : 'text-gray-400'
+                    getWeightTrend(animal) === 'up' ? 'text-[#8FBF7F]' : 
+                    getWeightTrend(animal) === 'down' ? 'text-red-500' : 'text-[#555555]'
                   }`} />
                 </div>
               </div>

@@ -175,14 +175,14 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
     switch (status) {
       case 'ready':
         return {
-          color: 'bg-[#F8FAF8] border-[#DDE4D8] text-green-800',
+          color: 'bg-[#F8FAF8] border-[#DDE4D8] text-[#7A8F78]',
           icon: CheckCircle,
           urgency: 'Ready Now',
-          urgencyColor: 'text-green-700'
+          urgencyColor: 'text-[#7A8F78]'
         }
       case 'optimal':
         return {
-          color: 'bg-blue-100 border-blue-200 text-blue-800',
+          color: 'bg-blue-100 border-blue-200 text-[#7A8F78]',
           icon: Clock,
           urgency: 'Optimal Window',
           urgencyColor: 'text-blue-700'
@@ -205,7 +205,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
   }
   const getWeatherImpactColor = (impact: string) => {
     switch (impact) {
-      case 'favorable': return 'text-green-600'
+      case 'favorable': return 'text-[#8FBF7F]'
       case 'concerning': return 'text-red-600'
       default: return 'text-[#555555]'
     }
@@ -336,7 +336,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                     <div className="flex items-center gap-2">
                       <span className="font-bold">{alert.estimatedYield}</span>
                       <span className="text-sm text-[#555555]">{getCropUnit(alert.cropType)}</span>
-                      <TrendingUp className="h-3 w-3 text-green-600" />
+                      <TrendingUp className="h-3 w-3 text-[#8FBF7F]" />
                     </div>
                   </div>
                   <div className="text-right">
@@ -355,7 +355,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
                 </h5>
                 {alert.recommendations.map((rec, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-sm">
-                    <span className="text-gray-400">•</span>
+                    <span className="text-[#555555]">•</span>
                     <span className="text-[#555555]">{rec}</span>
                   </div>
                 ))}
@@ -366,13 +366,13 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-3 pt-4 border-t">
           <div className="text-center">
-            <div className="text-lg font-bold text-green-600">
+            <div className="text-lg font-bold text-[#8FBF7F]">
               {alerts.filter(a => a.status === 'ready').length}
             </div>
             <div className="text-xs text-[#555555]">Ready Now</div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-bold text-blue-600">
+            <div className="text-lg font-bold text-[#7A8F78]">
               {alerts.filter(a => a.status === 'optimal').length}
             </div>
             <div className="text-xs text-[#555555]">Optimal Window</div>

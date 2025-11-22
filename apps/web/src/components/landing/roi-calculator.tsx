@@ -64,7 +64,7 @@ export function ROICalculator() {
                   type="number"
                   value={farmSize}
                   onChange={(e) => setFarmSize(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-[#7A8F78]"
+                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-[#7A8F78]"
                   min="1"
                   max="10000"
                 />
@@ -77,7 +77,7 @@ export function ROICalculator() {
                   type="number"
                   value={currentYield}
                   onChange={(e) => setCurrentYield(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-[#7A8F78]"
+                  className="w-full px-3 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-[#7A8F78]"
                   min="50"
                   max="300"
                 />
@@ -99,17 +99,17 @@ export function ROICalculator() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
-                    <div className="text-2xl font-bold text-green-700">
+                    <div className="text-2xl font-bold text-[#7A8F78]">
                       {results.yieldIncrease.toLocaleString()} bu
                     </div>
-                    <div className="text-sm text-green-600">Additional Yield</div>
-                    <div className="text-xs text-green-500 mt-1">8% improvement</div>
+                    <div className="text-sm text-[#8FBF7F]">Additional Yield</div>
+                    <div className="text-xs text-[#8FBF7F] mt-1">8% improvement</div>
                   </div>
                   <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="text-2xl font-bold text-blue-700">
                       ${results.costSavings.toLocaleString()}
                     </div>
-                    <div className="text-sm text-blue-600">Cost Savings</div>
+                    <div className="text-sm text-[#7A8F78]">Cost Savings</div>
                     <div className="text-xs text-blue-500 mt-1">Efficiency gains</div>
                   </div>
                   <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
@@ -141,7 +141,7 @@ export function ROICalculator() {
                     <Target className="h-4 w-4 mr-2" />
                     Start Your Free Trial
                   </Button>
-                  <p className="text-xs text-sage-500 mt-2">
+                  <p className="text-xs text-#555555 mt-2">
                     No credit card required • See results in your first season
                   </p>
                 </div>

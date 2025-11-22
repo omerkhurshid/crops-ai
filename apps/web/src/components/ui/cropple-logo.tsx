@@ -6,7 +6,7 @@ interface CroppleLogoProps {
   showText?: boolean
   textColor?: string
 }
-export function CroppleLogo({ className = '', size = 'md', showText = true, textColor = 'text-green-700' }: CroppleLogoProps) {
+export function CroppleLogo({ className = '', size = 'md', showText = true, textColor = 'text-[#7A8F78]' }: CroppleLogoProps) {
   const sizes = {
     sm: { icon: 32, text: 'text-lg' },
     md: { icon: 40, text: 'text-2xl' },

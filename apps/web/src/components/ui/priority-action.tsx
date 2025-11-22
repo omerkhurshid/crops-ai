@@ -78,7 +78,7 @@ const statusConfig = {
   completed: {
     icon: CheckCircle2,
     label: 'Completed',
-    color: 'text-green-600',
+    color: 'text-[#8FBF7F]',
     bgColor: 'bg-[#F8FAF8]'
   }
 }
@@ -152,7 +152,7 @@ export function PriorityActionCard({
               'flex items-center justify-center gap-2 touch-manipulation',
               'min-h-[48px] text-base sm:text-sm sm:py-3 sm:min-h-[auto]',
               action.status === 'pending' 
-                ? 'bg-[#5E6F5A] hover:bg-[#7A8F78] active:bg-sage-900 text-white'
+                ? 'bg-[#5E6F5A] hover:bg-[#7A8F78] active:bg-#1A1A1A text-white'
                 : 'bg-white hover:bg-[#F8FAF8] active:bg-[#F8FAF8] text-[#555555] border border-[#DDE4D8]'
             )}
           >
@@ -170,7 +170,7 @@ export function PriorityActionCard({
           </button>
         )}
         {action.status === 'completed' && (
-          <div className="w-full py-3 px-4 rounded-xl bg-[#F8FAF8] text-green-800 font-medium text-center">
+          <div className="w-full py-3 px-4 rounded-xl bg-[#F8FAF8] text-[#7A8F78] font-medium text-center">
             ✓ Action Completed
           </div>
         )}
@@ -205,7 +205,7 @@ export function PriorityActionsList({
     return (
       <ModernCard variant="soft" className={className}>
         <ModernCardContent className="p-8 text-center">
-          <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-4" />
+          <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
             All caught up!
           </h3>

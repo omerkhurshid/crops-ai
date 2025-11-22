@@ -48,9 +48,9 @@ export function ExpandableFarmRow({ farm }: ExpandableFarmRowProps) {
                 <div className="h-4 w-4" />
               )}
             </button>
-            <Link href={`/farms/${farm.id}`} className="block hover:text-sage-900 transition-colors">
-              <div className="font-medium text-[#1A1A1A] hover:text-sage-900">{farm.name}</div>
-              <div className="text-sm text-sage-500 capitalize">{farm.location || 'No location'}</div>
+            <Link href={`/farms/${farm.id}`} className="block hover:text-#1A1A1A transition-colors">
+              <div className="font-medium text-[#1A1A1A] hover:text-#1A1A1A">{farm.name}</div>
+              <div className="text-sm text-#555555 capitalize">{farm.location || 'No location'}</div>
             </Link>
           </div>
         </td>
@@ -61,13 +61,13 @@ export function ExpandableFarmRow({ farm }: ExpandableFarmRowProps) {
         </td>
         <td className="p-4">
           <div className="text-sm font-medium text-[#1A1A1A]">
-            {farm.totalArea?.toFixed(1) || '0.0'} <span className="text-sage-500">ha</span>
+            {farm.totalArea?.toFixed(1) || '0.0'} <span className="text-#555555">ha</span>
           </div>
         </td>
         <td className="p-4">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-[#1A1A1A]">{farm.fieldsCount || 0}</span>
-            <span className="text-xs text-sage-500">fields</span>
+            <span className="text-xs text-#555555">fields</span>
           </div>
         </td>
         <td className="p-4">
@@ -94,7 +94,7 @@ export function ExpandableFarmRow({ farm }: ExpandableFarmRowProps) {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="font-medium text-[#1A1A1A] text-sm">{field.name}</div>
-                          <div className="text-xs text-sage-500 mt-1 flex items-center gap-1">
+                          <div className="text-xs text-#555555 mt-1 flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
                             {field.area.toFixed(1)} ha
                           </div>

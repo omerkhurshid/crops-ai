@@ -45,7 +45,7 @@ export function InfoTooltip({
         className={`transition-colors duration-200 focus:outline-none focus:ring-2 rounded-full p-1 ${
           variant === 'light' 
             ? 'text-white/70 hover:text-white focus:ring-white/50' 
-            : 'text-sage-500 hover:text-[#555555] focus:ring-sage-300'
+            : 'text-#555555 hover:text-[#555555] focus:ring-sage-300'
         }`}
         type="button"
         aria-label={`Information about ${title}`}

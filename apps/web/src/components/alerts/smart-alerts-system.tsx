@@ -139,7 +139,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       case 'critical': return 'bg-red-100 text-red-800 border-red-200'
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200'
+      case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]'
     }
   }
@@ -224,7 +224,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
         {activeAlerts.length === 0 ? (
           <ModernCard variant="soft">
             <ModernCardContent className="p-6 text-center">
-              <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-3" />
+              <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
               <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Clear!</h3>
               <p className="text-[#555555]">No active alerts for your farm right now.</p>
             </ModernCardContent>
@@ -241,8 +241,8 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3 flex-1">
                     <div className={`p-2 rounded-lg ${
-                      alert.type === 'weather' ? 'bg-blue-100 text-blue-600' :
-                      alert.type === 'crop_health' ? 'bg-[#F8FAF8] text-green-600' :
+                      alert.type === 'weather' ? 'bg-blue-100 text-[#7A8F78]' :
+                      alert.type === 'crop_health' ? 'bg-[#F8FAF8] text-[#8FBF7F]' :
                       alert.type === 'pest' ? 'bg-red-100 text-red-600' :
                       alert.type === 'market' ? 'bg-purple-100 text-purple-600' :
                       'bg-yellow-100 text-yellow-600'

@@ -72,7 +72,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
       case 'URGENT': return 'bg-red-100 text-red-800 border-red-200'
       case 'HIGH': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'MEDIUM': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'LOW': return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
+      case 'LOW': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
     }
   }
   const formatCurrency = (amount: number | undefined) => {
@@ -166,7 +166,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
               <span className="text-sm text-[#555555]">
                 {highValueRecs.length} high-value
               </span>
@@ -192,7 +192,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
           emptyState={
             <div className="p-6">
               <div className="text-center py-12">
-                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <CheckCircle className="h-12 w-12 text-[#8FBF7F] mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">All caught up!</h3>
                 <p className="text-[#555555]">
                   No urgent actions needed right now. Check back later or generate new recommendations.
@@ -259,14 +259,14 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => setSelectedRecommendation(rec)}
-                      className="p-2 text-gray-400 hover:text-[#555555] transition-colors"
+                      className="p-2 text-[#555555] hover:text-[#555555] transition-colors"
                       title="View details"
                     >
                       <Eye className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleAcceptRecommendation(rec.id)}
-                      className="p-2 text-green-400 hover:text-green-600 transition-colors"
+                      className="p-2 text-[#8FBF7F] hover:text-[#8FBF7F] transition-colors"
                       title="Accept recommendation"
                     >
                       <ThumbsUp className="h-4 w-4" />
@@ -280,7 +280,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                     </button>
                     <button
                       onClick={() => dismissRecommendation(rec.id)}
-                      className="p-2 text-gray-400 hover:text-[#555555] transition-colors"
+                      className="p-2 text-[#555555] hover:text-[#555555] transition-colors"
                       title="Dismiss"
                     >
                       <X className="h-4 w-4" />
@@ -338,7 +338,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             <h2 className="text-xl font-semibold text-[#1A1A1A]">{recommendation.title}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-[#555555] transition-colors"
+              className="text-[#555555] hover:text-[#555555] transition-colors"
             >
               <X className="h-6 w-6" />
             </button>
@@ -356,7 +356,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {recommendation.estimatedImpact.revenue && (
                 <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
-                  <div className="text-green-800 font-medium">Revenue</div>
+                  <div className="text-[#7A8F78] font-medium">Revenue</div>
                   <div className="text-2xl font-bold text-green-900">
                     {formatCurrency(recommendation.estimatedImpact.revenue)}
                   </div>
@@ -364,7 +364,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
               )}
               {recommendation.estimatedImpact.costSavings && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <div className="text-blue-800 font-medium">Cost Savings</div>
+                  <div className="text-[#7A8F78] font-medium">Cost Savings</div>
                   <div className="text-2xl font-bold text-blue-900">
                     {formatCurrency(recommendation.estimatedImpact.costSavings)}
                   </div>
@@ -372,7 +372,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
               )}
               <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
                 <div className="text-[#1A1A1A] font-medium">Confidence</div>
-                <div className="text-2xl font-bold text-sage-900">
+                <div className="text-2xl font-bold text-#1A1A1A">
                   {recommendation.confidence}%
                 </div>
               </div>

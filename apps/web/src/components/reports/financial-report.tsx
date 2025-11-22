@@ -114,7 +114,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-center h-32">
-          <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
+          <RefreshCw className="h-6 w-6 animate-spin text-[#555555]" />
         </div>
       </div>
     );
@@ -122,7 +122,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
   if (!data) {
     return (
       <div className="text-center py-8">
-        <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+        <AlertTriangle className="h-8 w-8 text-[#555555] mx-auto mb-2" />
         <p className="text-[#555555]">Unable to load financial data</p>
       </div>
     );
@@ -143,8 +143,8 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
       {/* Key Metrics Summary */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border-2 border-[#DDE4D8]">
-          <DollarSign className="h-6 w-6 text-green-600 mx-auto mb-2" />
-          <div className="text-xl font-bold text-green-600">{formatCurrency(data.summary.totalRevenue)}</div>
+          <DollarSign className="h-6 w-6 text-[#8FBF7F] mx-auto mb-2" />
+          <div className="text-xl font-bold text-[#8FBF7F]">{formatCurrency(data.summary.totalRevenue)}</div>
           <p className="text-xs text-[#555555]">Total Revenue</p>
         </div>
         <div className="text-center p-4 bg-red-50 rounded-lg border-2 border-red-200">
@@ -153,8 +153,8 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           <p className="text-xs text-[#555555]">Total Expenses</p>
         </div>
         <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-          <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-          <div className="text-xl font-bold text-blue-600">{formatCurrency(data.summary.netProfit)}</div>
+          <TrendingUp className="h-6 w-6 text-[#7A8F78] mx-auto mb-2" />
+          <div className="text-xl font-bold text-[#7A8F78]">{formatCurrency(data.summary.netProfit)}</div>
           <p className="text-xs text-[#555555]">Net Profit</p>
         </div>
         <div className="text-center p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
@@ -185,7 +185,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-green-600 flex items-center gap-2">
+                <CardTitle className="text-[#8FBF7F] flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
                   Revenue Breakdown
                 </CardTitle>
@@ -293,7 +293,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-                  <div className="text-lg font-bold text-green-600">{formatCurrency(data.cashFlow.operational)}</div>
+                  <div className="text-lg font-bold text-[#8FBF7F]">{formatCurrency(data.cashFlow.operational)}</div>
                   <p className="text-sm text-[#555555]">Operational</p>
                 </div>
                 <div className="text-center p-4 bg-red-50 rounded-lg">
@@ -305,7 +305,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   <p className="text-sm text-[#555555]">Financing</p>
                 </div>
                 <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-lg font-bold text-blue-600">{formatCurrency(data.cashFlow.net)}</div>
+                  <div className="text-lg font-bold text-[#7A8F78]">{formatCurrency(data.cashFlow.net)}</div>
                   <p className="text-sm text-[#555555]">Net Cash Flow</p>
                 </div>
               </div>
@@ -334,7 +334,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Expected Revenue:</span>
-                      <span className="font-semibold text-green-600">{formatCurrency(data.projections.nextQuarter.revenue)}</span>
+                      <span className="font-semibold text-[#8FBF7F]">{formatCurrency(data.projections.nextQuarter.revenue)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Projected Expenses:</span>
@@ -342,7 +342,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     </div>
                     <div className="flex justify-between border-t pt-2">
                       <span className="font-semibold">Net Profit:</span>
-                      <span className="font-bold text-blue-600">{formatCurrency(data.projections.nextQuarter.profit)}</span>
+                      <span className="font-bold text-[#7A8F78]">{formatCurrency(data.projections.nextQuarter.profit)}</span>
                     </div>
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Expected Revenue:</span>
-                      <span className="font-semibold text-green-600">{formatCurrency(data.projections.yearEnd.revenue)}</span>
+                      <span className="font-semibold text-[#8FBF7F]">{formatCurrency(data.projections.yearEnd.revenue)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Projected Expenses:</span>
@@ -359,7 +359,7 @@ export function FinancialReport({ farmId }: FinancialReportProps) {
                     </div>
                     <div className="flex justify-between border-t pt-2">
                       <span className="font-semibold">Net Profit:</span>
-                      <span className="font-bold text-blue-600">{formatCurrency(data.projections.yearEnd.profit)}</span>
+                      <span className="font-bold text-[#7A8F78]">{formatCurrency(data.projections.yearEnd.profit)}</span>
                     </div>
                   </div>
                 </div>

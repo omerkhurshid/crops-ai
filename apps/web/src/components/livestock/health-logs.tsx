@@ -17,7 +17,7 @@ export function HealthLogs({ farmId }: HealthLogsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-center py-12">
-            <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Activity className="h-12 w-12 text-[#555555] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">
               No Health Records
             </h3>

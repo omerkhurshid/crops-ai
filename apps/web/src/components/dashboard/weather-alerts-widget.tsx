@@ -162,18 +162,18 @@ export const WeatherAlertsWidget = memo(function WeatherAlertsWidget({ farmData,
       <ModernCard variant="soft" data-tour="weather-section" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <Sun className="h-5 w-5 text-green-600" />
+            <Sun className="h-5 w-5 text-[#8FBF7F]" />
             Weather Outlook
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent>
           <div className="flex items-center gap-3 p-4 bg-[#F8FAF8] rounded-lg">
             <div className="p-2 bg-[#F8FAF8] rounded-full">
-              <Sun className="h-5 w-5 text-green-600" />
+              <Sun className="h-5 w-5 text-[#8FBF7F]" />
             </div>
             <div>
-              <p className="font-medium text-green-800">All Clear</p>
-              <p className="text-sm text-green-600">No weather concerns for your farm</p>
+              <p className="font-medium text-[#7A8F78]">All Clear</p>
+              <p className="text-sm text-[#8FBF7F]">No weather concerns for your farm</p>
             </div>
           </div>
         </ModernCardContent>

@@ -35,10 +35,10 @@ interface ColoredTransactionListProps {
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   // Income categories
   CROP_SALES: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' },
-  LIVESTOCK_SALES: { bg: 'bg-[#F8FAF8]', text: 'text-green-800', border: 'border-green-300' },
+  LIVESTOCK_SALES: { bg: 'bg-[#F8FAF8]', text: 'text-[#7A8F78]', border: 'border-green-300' },
   SUBSIDIES: { bg: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-300' },
   LEASE_INCOME: { bg: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-300' },
-  OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' },
+  OTHER_INCOME: { bg: 'bg-blue-100', text: 'text-[#7A8F78]', border: 'border-blue-300' },
   // Expense categories
   SEEDS: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300' },
   FERTILIZER: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' },
@@ -182,10 +182,10 @@ export function ColoredTransactionList({
         <div className="grid grid-cols-2 gap-3 mt-3">
           <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-green-600">Income</span>
-              <ArrowUpRight className="h-3 w-3 text-green-600" />
+              <span className="text-xs text-[#8FBF7F]">Income</span>
+              <ArrowUpRight className="h-3 w-3 text-[#8FBF7F]" />
             </div>
-            <div className="text-sm font-bold text-green-800 mt-1">
+            <div className="text-sm font-bold text-[#7A8F78] mt-1">
               {formatCurrency(totalIncome)}
             </div>
           </div>
@@ -259,7 +259,7 @@ export function ColoredTransactionList({
                     <div className="text-right">
                       <div className={cn(
                         "text-sm font-bold",
-                        transaction.type === 'INCOME' ? "text-green-700" : "text-red-700"
+                        transaction.type === 'INCOME' ? "text-[#7A8F78]" : "text-red-700"
                       )}>
                         {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </div>

@@ -223,9 +223,9 @@ export function DataPendingState({
   return (
     <div className={`flex flex-col items-center justify-center py-8 ${className}`}>
       <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-        <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
+        <RefreshCw className="h-8 w-8 text-[#7A8F78] animate-spin" />
       </div>
-      <p className="text-blue-600 font-medium">{message}</p>
+      <p className="text-[#7A8F78] font-medium">{message}</p>
       <p className="text-[#555555] text-sm mt-1">This may take a few moments</p>
     </div>
   )

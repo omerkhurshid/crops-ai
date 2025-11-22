@@ -133,7 +133,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       case 'critical': return 'bg-red-100 text-red-800 border-red-200';
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#E6E6E6]';
     }
   };
@@ -196,7 +196,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       <ModernCard variant="glow" className="overflow-hidden">
         <ModernCardHeader className="bg-gradient-to-r from-green-50 to-emerald-50">
           <div className="flex items-center gap-3">
-            <Leaf className="h-6 w-6 text-green-700" />
+            <Leaf className="h-6 w-6 text-[#7A8F78]" />
             <div>
               <ModernCardTitle className="text-[#1A1A1A]">
                 Overall Crop Health
@@ -225,7 +225,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-[#555555]">
               {data.summary.improvementTrend > 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
+                <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
               ) : (
                 <TrendingDown className="h-4 w-4 text-red-600" />
               )}
@@ -241,7 +241,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               value={`${data.summary.healthyArea}%`}
               subtitle="Of your fields look good"
               status="excellent"
-              icon={<Leaf className="h-5 w-5 text-green-600" />}
+              icon={<Leaf className="h-5 w-5 text-[#8FBF7F]" />}
             />
             <FarmerMetricCard
               title="Stressed Areas"
@@ -255,7 +255,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
               value={data.summary.avgNDVI.toFixed(2)}
               subtitle="Satellite vegetation index"
               status={data.summary.avgNDVI > 0.7 ? 'excellent' : data.summary.avgNDVI > 0.5 ? 'good' : 'warning'}
-              icon={<Satellite className="h-5 w-5 text-blue-600" />}
+              icon={<Satellite className="h-5 w-5 text-[#7A8F78]" />}
             />
           </div>
         </ModernCardContent>

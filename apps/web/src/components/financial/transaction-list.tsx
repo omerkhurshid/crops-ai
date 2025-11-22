@@ -172,7 +172,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#555555] h-4 w-4" />
               <Input
                 placeholder="Search transactions..."
                 value={searchTerm}
@@ -208,7 +208,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
       <div className="space-y-3">
         {filteredTransactions.length === 0 ? (
           <Card className="p-8 text-center">
-            <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <DollarSign className="h-12 w-12 text-[#555555] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No transactions found</h3>
             <p className="text-[#555555]">Start by adding your first income or expense transaction.</p>
           </Card>
@@ -220,7 +220,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                   <div className="flex items-center space-x-3 mb-2">
                     <Badge 
                       variant={transaction.type === 'INCOME' ? 'default' : 'secondary'}
-                      className={transaction.type === 'INCOME' ? 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]' : 'bg-red-100 text-red-800 border-red-200'}
+                      className={transaction.type === 'INCOME' ? 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]' : 'bg-red-100 text-red-800 border-red-200'}
                     >
                       {transaction.type === 'INCOME' ? '↗' : '↙'} {CATEGORY_LABELS[transaction.category] || transaction.category}
                     </Badge>
@@ -265,7 +265,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
                 </div>
                 <div className="flex items-center space-x-3 ml-4">
                   <span className={`text-lg font-semibold ${
-                    transaction.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
+                    transaction.type === 'INCOME' ? 'text-[#8FBF7F]' : 'text-red-600'
                   }`}>
                     {transaction.type === 'INCOME' ? '+' : '-'}{formatCurrency(transaction.amount)}
                   </span>

@@ -137,7 +137,7 @@ export default function PestDiseaseAlerts({
   }
   const getRiskLevelColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-600 bg-[#F8FAF8]'
+      case 'low': return 'text-[#8FBF7F] bg-[#F8FAF8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-100'
       case 'high': return 'text-orange-600 bg-orange-100'
       case 'extreme': return 'text-red-600 bg-red-100'
@@ -561,7 +561,7 @@ export default function PestDiseaseAlerts({
                     <h4 className="font-medium text-sm">Growth Stage Actions</h4>
                     {prediction.cropStageRisk.recommendedActions.map((action, i) => (
                       <div key={i} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-[#8FBF7F] mt-0.5 flex-shrink-0" />
                         <span>{action}</span>
                       </div>
                     ))}
@@ -600,7 +600,7 @@ export default function PestDiseaseAlerts({
               <div className="text-sm text-muted-foreground space-y-2">
                 <p>
                   Based on current field conditions and weather patterns, your {cropType} crop shows{' '}
-                  <strong className={prediction.overallRiskLevel === 'high' || prediction.overallRiskLevel === 'extreme' ? 'text-orange-600' : 'text-green-600'}>
+                  <strong className={prediction.overallRiskLevel === 'high' || prediction.overallRiskLevel === 'extreme' ? 'text-orange-600' : 'text-[#8FBF7F]'}>
                     {prediction.overallRiskLevel} risk
                   </strong>{' '}
                   for pest and disease outbreaks.

@@ -228,14 +228,14 @@ export function DataExport({
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`${selectedFormat.id === format.id ? 'text-[#555555]' : 'text-sage-500'}`}>
+                      <div className={`${selectedFormat.id === format.id ? 'text-[#555555]' : 'text-#555555'}`}>
                         {format.icon}
                       </div>
                       <div className="flex-1">
                         <div className="font-medium text-[#1A1A1A] text-sm">{format.label}</div>
                         <div className="text-xs text-[#555555] mt-1">{format.description}</div>
                         {format.fileSize && (
-                          <div className="text-xs text-sage-500 mt-1">~{format.fileSize}</div>
+                          <div className="text-xs text-#555555 mt-1">~{format.fileSize}</div>
                         )}
                       </div>
                       {selectedFormat.id === format.id && (
@@ -261,9 +261,9 @@ export function DataExport({
                         ...prev,
                         dateRange: { ...prev.dateRange!, start: e.target.value }
                       }))}
-                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-#555555 focus:border-transparent"
                     />
-                    <span className="text-sage-500">to</span>
+                    <span className="text-#555555">to</span>
                     <input
                       type="date"
                       value={exportOptions.dateRange?.end || ''}
@@ -271,7 +271,7 @@ export function DataExport({
                         ...prev,
                         dateRange: { ...prev.dateRange!, end: e.target.value }
                       }))}
-                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                      className="flex-1 p-2 border border-[#DDE4D8] rounded-lg text-sm focus:ring-2 focus:ring-#555555 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -285,7 +285,7 @@ export function DataExport({
                         ...prev,
                         includeMetadata: e.target.checked
                       }))}
-                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
+                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                     />
                     <div>
                       <div className="text-sm font-medium text-[#1A1A1A]">Include Metadata</div>
@@ -301,7 +301,7 @@ export function DataExport({
                           ...prev,
                           includeCharts: e.target.checked
                         }))}
-                        className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
+                        className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                       />
                       <div>
                         <div className="text-sm font-medium text-[#1A1A1A]">Include Charts</div>
@@ -317,7 +317,7 @@ export function DataExport({
                         ...prev,
                         includeRawData: e.target.checked
                       }))}
-                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-sage-500"
+                      className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                     />
                     <div>
                       <div className="text-sm font-medium text-[#1A1A1A]">Include Raw Data</div>
@@ -332,8 +332,8 @@ export function DataExport({
               <div className="mt-4">
                 {exportStatus === 'success' && (
                   <Alert className="border-[#DDE4D8] bg-[#F8FAF8]">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
+                    <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
+                    <AlertDescription className="text-[#7A8F78]">
                       Export completed successfully! Your file should download automatically.
                     </AlertDescription>
                   </Alert>

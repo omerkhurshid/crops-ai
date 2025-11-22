@@ -54,7 +54,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
   if (feedRecords.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <Wheat className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Feed Records Yet</h3>
@@ -70,7 +70,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by animal, feed type, or brand..."
             value={searchTerm}
@@ -129,7 +129,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
-              <DollarSign className="h-5 w-5 text-green-600 mr-2" />
+              <DollarSign className="h-5 w-5 text-[#8FBF7F] mr-2" />
               <span className="font-medium text-[#555555]">Total Cost</span>
             </div>
             <p className="text-2xl font-bold text-[#1A1A1A]">${totalCost.toFixed(2)}</p>
@@ -189,7 +189,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                       {record.animal.name && (
                         <div className="text-sm text-[#555555]">{record.animal.name}</div>
                       )}
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-[#555555]">
                         {record.animal.species} • {record.animal.farm?.name}
                       </div>
                     </div>

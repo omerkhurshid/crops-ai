@@ -60,7 +60,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-sage-400 mx-auto mb-4" />
                   <p className="text-[#555555] font-medium">No Farms to Display</p>
-                  <p className="text-sage-500 text-sm mt-2">
+                  <p className="text-#555555 text-sm mt-2">
                     Add your first farm to see it on the map
                   </p>
                 </div>
@@ -88,7 +88,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                         <div className="absolute bottom-4 left-4 w-20 h-12 bg-blue-200 rounded-lg opacity-70" />
                         {/* Forested areas */}
                         <div className="absolute top-4 right-4 w-16 h-16 bg-[#7A8F78] rounded-full opacity-40" />
-                        <div className="absolute bottom-8 right-8 w-12 h-12 bg-green-700 rounded-full opacity-40" />
+                        <div className="absolute bottom-8 right-8 w-12 h-12 bg-[#7A8F78] rounded-full opacity-40" />
                       </div>
                     </div>
                   ) : (
@@ -179,7 +179,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                         </div>
                         <div className={cn(
                           'flex items-center gap-0.5 text-xs',
-                          farm.healthTrend > 0 ? 'text-green-600' : 'text-red-600'
+                          farm.healthTrend > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                         )}>
                           {farm.healthTrend > 0 ? (
                             <TrendingUp className="h-3 w-3" />
@@ -217,7 +217,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
               onClick={() => setMapType(mapType === 'satellite' ? 'terrain' : 'satellite')}
               className={cn(
                 "p-2 rounded-lg shadow-md hover:shadow-lg transition-all",
-                mapType === 'satellite' ? 'bg-[#F8FAF8] text-green-700' : 'bg-amber-100 text-amber-700'
+                mapType === 'satellite' ? 'bg-[#F8FAF8] text-[#7A8F78]' : 'bg-amber-100 text-amber-700'
               )}
               title={`Switch to ${mapType === 'satellite' ? 'terrain' : 'satellite'} view`}
             >
@@ -276,7 +276,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                   <span className="font-medium">{farms.reduce((sum, farm) => sum + farm.totalArea, 0).toFixed(1)} ha</span>
                 </div>
                 <div className="border-t pt-2 mt-2">
-                  <div className="text-xs text-sage-500">
+                  <div className="text-xs text-#555555">
                     💡 Click farm markers to view details
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export function FarmKPICard({
             <div className="text-xs text-[#555555] mb-1">7-day trend</div>
             <div className={cn(
               'flex items-center gap-0.5 font-semibold',
-              farm.healthTrend > 0 ? 'text-green-600' : 'text-red-600'
+              farm.healthTrend > 0 ? 'text-[#8FBF7F]' : 'text-red-600'
             )}>
               {farm.healthTrend > 0 ? (
                 <TrendingUp className="h-3 w-3" />

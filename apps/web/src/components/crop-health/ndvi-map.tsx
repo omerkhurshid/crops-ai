@@ -224,7 +224,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
             ) : fields.length === 0 ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <Satellite className="h-12 w-12 mx-auto mb-4 opacity-50 text-gray-400" />
+                  <Satellite className="h-12 w-12 mx-auto mb-4 opacity-50 text-[#555555]" />
                   <h3 className="text-lg font-semibold mb-2 text-[#555555]">No Fields Available</h3>
                   <p className="text-[#555555]">Add fields to your farm to see crop health data.</p>
                 </div>
@@ -254,8 +254,8 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                             <div className="absolute top-1/3 left-1/3 w-1/3 h-1/3 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg opacity-90" />
                           )}
                           {/* Field roads/paths */}
-                          <div className="absolute top-1/2 left-0 right-0 h-2 bg-gray-400 opacity-60" />
-                          <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-gray-400 opacity-60" />
+                          <div className="absolute top-1/2 left-0 right-0 h-2 bg-[#555555] opacity-60" />
+                          <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-[#555555] opacity-60" />
                           {/* Field name label */}
                           <div className="absolute top-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-[#1A1A1A]">
                             {currentFieldData.fieldName}
@@ -307,13 +307,13 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-[#555555]">Overall Status:</span>
-                          <span className={cn("font-medium", currentFieldData.healthAverage > 0.6 ? "text-green-600" : "text-yellow-600")}>
+                          <span className={cn("font-medium", currentFieldData.healthAverage > 0.6 ? "text-[#8FBF7F]" : "text-yellow-600")}>
                             {getHealthLabel(currentFieldData.healthAverage)}
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-[#555555]">Trend:</span>
-                          <span className={cn("font-medium flex items-center gap-1", currentFieldData.trend > 0 ? "text-green-600" : "text-red-600")}>
+                          <span className={cn("font-medium flex items-center gap-1", currentFieldData.trend > 0 ? "text-[#8FBF7F]" : "text-red-600")}>
                             {currentFieldData.trend > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                             {Math.abs(currentFieldData.trend)}%
                           </span>
@@ -328,7 +328,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                         <h4 className="text-xs font-semibold">Plant Health Guide</h4>
                         <button
                           onClick={() => setShowLegend(false)}
-                          className="text-gray-400 hover:text-[#555555]"
+                          className="text-[#555555] hover:text-[#555555]"
                         >
                           ×
                         </button>
@@ -371,7 +371,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                   <span className="text-sm font-medium text-green-900">Healthy Areas</span>
                   <Badge className="bg-[#8FBF7F] text-white">{currentFieldData.zones?.healthyAreas?.percentage || 0}%</Badge>
                 </div>
-                <p className="text-xs text-green-700">{(currentFieldData.zones?.healthyAreas?.area || 0).toFixed(1)} ha</p>
+                <p className="text-xs text-[#7A8F78]">{(currentFieldData.zones?.healthyAreas?.area || 0).toFixed(1)} ha</p>
               </div>
               <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
                 <div className="flex items-center justify-between mb-2">
@@ -409,7 +409,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                   )}
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <h4 className="font-medium text-blue-900 mb-2">Trend Analysis</h4>
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-[#7A8F78]">
                       Current Plant Health ({currentFieldData.healthAverage.toFixed(2)}) is {Math.abs(currentFieldData.trend)}% 
                       {currentFieldData.trend > 0 ? 'higher' : 'lower'} than the previous period, 
                       {currentFieldData.trend > 0 ? 'indicating improved crop health' : 'suggesting attention may be needed'}.
@@ -417,7 +417,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                   </div>
                   <div className="p-4 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
                     <h4 className="font-medium text-green-900 mb-2">Field Performance</h4>
-                    <p className="text-sm text-green-800">
+                    <p className="text-sm text-[#7A8F78]">
                       {((currentFieldData.zones?.healthyAreas?.percentage || 0) + (currentFieldData.zones?.thrivingAreas?.percentage || 0)).toFixed(0)}% 
                       of your field ({((currentFieldData.zones?.healthyAreas?.area || 0) + (currentFieldData.zones?.thrivingAreas?.area || 0)).toFixed(1)} ha) 
                       shows good to excellent vegetation health.

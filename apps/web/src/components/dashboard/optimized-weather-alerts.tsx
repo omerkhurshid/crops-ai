@@ -114,7 +114,7 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
           </div>
         ) : (
           <div className="text-center py-6">
-            <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+            <CheckCircle className="h-8 w-8 text-[#8FBF7F] mx-auto mb-2" />
             <p className="text-sm text-[#555555]">No active weather alerts</p>
           </div>
         )}

@@ -173,10 +173,10 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="font-semibold text-green-600">
+              <span className="font-semibold text-[#8FBF7F]">
                 {formatCurrency(summary.totalIncome)}
               </span>
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
             </div>
           </button>
           {expandedSections.has('income') && breakdown && (
@@ -273,12 +273,12 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               </div>
               <div className="flex items-center space-x-2">
                 <span className={`font-bold text-lg ${
-                  summary.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
+                  summary.netProfit >= 0 ? 'text-[#8FBF7F]' : 'text-red-600'
                 }`}>
                   {formatCurrency(summary.netProfit)}
                 </span>
                 {summary.netProfit >= 0 ? (
-                  <TrendingUp className="h-5 w-5 text-green-500" />
+                  <TrendingUp className="h-5 w-5 text-[#8FBF7F]" />
                 ) : (
                   <TrendingDown className="h-5 w-5 text-red-500" />
                 )}

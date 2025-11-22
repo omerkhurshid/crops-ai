@@ -12,7 +12,7 @@ interface TrafficLightStatusProps {
 const statusConfig = {
   excellent: {
     color: 'bg-[#8FBF7F]',
-    textColor: 'text-green-700',
+    textColor: 'text-[#7A8F78]',
     icon: CheckCircle2,
     label: 'Excellent',
     description: 'Your crops are thriving!'

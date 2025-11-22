@@ -31,13 +31,13 @@ const priorityConfig = {
     label: 'Medium'
   },
   low: {
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    color: 'bg-blue-100 text-[#7A8F78] border-blue-200',
     label: 'Low'
   }
 }
 const categoryIcons = {
-  crop: <Sprout className="h-4 w-4 text-green-600" />,
-  livestock: <Users className="h-4 w-4 text-blue-600" />,
+  crop: <Sprout className="h-4 w-4 text-[#8FBF7F]" />,
+  livestock: <Users className="h-4 w-4 text-[#7A8F78]" />,
   equipment: <Tractor className="h-4 w-4 text-orange-600" />,
   general: <AlertTriangle className="h-4 w-4 text-[#555555]" />
 }
@@ -69,7 +69,7 @@ const TaskCard = ({ task }: { task: Task }) => {
           {categoryIcons[task.category as keyof typeof categoryIcons] || categoryIcons.general}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-sage-900 text-sm mb-1 truncate">
+          <h4 className="font-medium text-#1A1A1A text-sm mb-1 truncate">
             {task.title}
           </h4>
           <div className="flex items-center gap-2 mb-1">
@@ -77,10 +77,10 @@ const TaskCard = ({ task }: { task: Task }) => {
               {priorityConfig[task.priority as keyof typeof priorityConfig]?.label || task.priority}
             </Badge>
             {task.assignedToName && (
-              <span className="text-xs text-sage-500">{task.assignedToName}</span>
+              <span className="text-xs text-#555555">{task.assignedToName}</span>
             )}
           </div>
-          <div className="flex items-center gap-3 text-xs text-sage-500">
+          <div className="flex items-center gap-3 text-xs text-#555555">
             {task.dueDate && (
               <span className={
                 getDaysUntilDue(task.dueDate).includes('Overdue') ? 'text-red-600 font-medium' : ''
@@ -227,7 +227,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
           </div>
           {tomorrowsTasks.length === 0 ? (
             <div className="text-center py-6">
-              <Calendar className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+              <Calendar className="h-8 w-8 mx-auto text-[#555555] mb-2" />
               <p className="text-sm text-[#555555]">No tasks scheduled for tomorrow</p>
               <p className="text-xs text-[#555555]">You're all set for tomorrow!</p>
             </div>

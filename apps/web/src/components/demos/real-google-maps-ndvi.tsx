@@ -315,13 +315,13 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Satellite className="h-5 w-5 text-green-600" />
+            <Satellite className="h-5 w-5 text-[#8FBF7F]" />
             <ModernCardTitle className="text-lg">Live Satellite NDVI Analysis</ModernCardTitle>
           </div>
           <div className="flex items-center gap-2">
             <Badge className={
-              cacheStatus === 'live' ? 'bg-[#F8FAF8] text-green-800' :
-              cacheStatus === 'cached' ? 'bg-blue-100 text-blue-800' :
+              cacheStatus === 'live' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
+              cacheStatus === 'cached' ? 'bg-blue-100 text-[#7A8F78]' :
               'bg-yellow-100 text-yellow-800'
             }>
               {cacheStatus === 'live' ? 'Live Data' :
@@ -411,7 +411,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span>Average NDVI:</span>
-                          <span className="font-medium text-green-600">
+                          <span className="font-medium text-[#8FBF7F]">
                             {(ndviData.averageNDVI || 0.82).toFixed(2)}
                           </span>
                         </div>
@@ -435,12 +435,12 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           ) : (
             <div className="h-96 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300">
               <div className="text-center p-6">
-                <Satellite className="h-12 w-12 text-green-600 mx-auto mb-3" />
-                <div className="text-lg font-semibold text-green-800 mb-2">NDVI Satellite Analysis</div>
-                <div className="text-sm text-green-700 mb-4">
+                <Satellite className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
+                <div className="text-lg font-semibold text-[#7A8F78] mb-2">NDVI Satellite Analysis</div>
+                <div className="text-sm text-[#7A8F78] mb-4">
                   Interactive satellite mapping available with Google Maps API
                 </div>
-                <div className="bg-[#F8FAF8] p-3 rounded-lg text-xs text-green-600 border border-[#DDE4D8]">
+                <div className="bg-[#F8FAF8] p-3 rounded-lg text-xs text-[#8FBF7F] border border-[#DDE4D8]">
                   <div className="font-semibold mb-1">Current Analysis:</div>
                   <div>• Field: {DEMO_FIELD_LOCATION.name}</div>
                   <div>• NDVI: {(ndviData?.averageNDVI || 0.82).toFixed(2)} (Excellent)</div>
@@ -455,13 +455,13 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-[#8FBF7F]">
                   {ndviData.averageNDVI.toFixed(2)}
                 </div>
                 <div className="text-xs text-[#555555]">Avg NDVI</div>
               </div>
               <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-[#7A8F78]">
                   {ndviData.maxNDVI.toFixed(2)}
                 </div>
                 <div className="text-xs text-[#555555]">Max NDVI</div>
@@ -491,23 +491,23 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           <div className="space-y-4">
             {/* Field Performance Analysis */}
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-[#DDE4D8]">
-              <h5 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+              <h5 className="font-semibold text-[#7A8F78] mb-3 flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 Field Performance Analysis
               </h5>
               <div className="grid grid-cols-2 gap-4 mb-3">
                 <div className="bg-white/60 p-3 rounded-lg">
                   <div className="text-sm text-[#555555] mb-1">Health Status</div>
-                  <div className="font-semibold text-green-700">{ndviData.healthStatus}</div>
+                  <div className="font-semibold text-[#7A8F78]">{ndviData.healthStatus}</div>
                 </div>
                 <div className="bg-white/60 p-3 rounded-lg">
                   <div className="text-sm text-[#555555] mb-1">Projected Revenue</div>
-                  <div className="font-semibold text-green-700">
+                  <div className="font-semibold text-[#7A8F78]">
                     ${((ndviData.yieldProjection * 4.25 * 160) / 1000).toFixed(0)}k
                   </div>
                 </div>
               </div>
-              <div className="text-sm text-green-700">
+              <div className="text-sm text-[#7A8F78]">
                 <div className="flex justify-between items-center">
                   <span>Field uniformity benchmark:</span>
                   <span className="font-medium">{ndviData.uniformity}% (Above average)</span>
@@ -517,7 +517,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
             {/* Actionable Recommendations */}
             {ndviData.recommendations && ndviData.recommendations.length > 0 && (
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                <h5 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                <h5 className="font-semibold text-[#7A8F78] mb-3 flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   Priority Actions - Next 7 Days
                 </h5>
@@ -528,8 +528,8 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                         <span className="text-xs font-medium text-blue-700">{idx + 1}</span>
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm font-medium text-blue-800">{rec}</div>
-                        <div className="text-xs text-blue-600 mt-1">
+                        <div className="text-sm font-medium text-[#7A8F78]">{rec}</div>
+                        <div className="text-xs text-[#7A8F78] mt-1">
                           {idx === 0 && "Critical timing for optimal yield"}
                           {idx === 1 && "Recommended within 5-7 days"}
                           {idx === 2 && "Weather-dependent activity"}
@@ -549,7 +549,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
               <div className="space-y-2">
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Disease Pressure</span>
-                  <Badge className="bg-[#F8FAF8] text-green-800 text-xs">Low</Badge>
+                  <Badge className="bg-[#F8FAF8] text-[#7A8F78] text-xs">Low</Badge>
                 </div>
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Moisture Stress</span>
@@ -557,7 +557,7 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
                 </div>
                 <div className="flex items-center justify-between bg-white/60 p-2 rounded">
                   <span className="text-sm text-orange-700">Pest Activity</span>
-                  <Badge className="bg-[#F8FAF8] text-green-800 text-xs">Normal</Badge>
+                  <Badge className="bg-[#F8FAF8] text-[#7A8F78] text-xs">Normal</Badge>
                 </div>
               </div>
             </div>

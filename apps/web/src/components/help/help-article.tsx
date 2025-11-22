@@ -263,7 +263,7 @@ export function HelpArticle({
               )}
               <div className="flex items-center gap-2 mb-3">
                 <Badge variant="outline">{section}</Badge>
-                <span className="text-sm text-sage-500 flex items-center gap-1">
+                <span className="text-sm text-#555555 flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {readTime}
                 </span>
@@ -317,7 +317,7 @@ export function HelpArticle({
               </div>
             </div>
             {lastUpdated && (
-              <span className="text-xs text-sage-500">
+              <span className="text-xs text-#555555">
                 Last updated: {lastUpdated}
               </span>
             )}

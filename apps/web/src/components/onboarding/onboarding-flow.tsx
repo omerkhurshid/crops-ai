@@ -173,13 +173,13 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
             key={step.id} 
             variant={step.status === 'completed' ? 'soft' : step.status === 'in_progress' ? 'floating' : 'default'}
             className={`transition-all duration-300 ${
-              step.status === 'in_progress' ? 'ring-2 ring-sage-200' : ''
+              step.status === 'in_progress' ? 'ring-2 ring-[#DDE4D8]' : ''
             }`}
           >
             <ModernCardHeader>
               <div className="flex items-start gap-4">
                 <div className={`p-3 rounded-xl ${
-                  step.status === 'completed' ? 'bg-[#F8FAF8] text-green-700' :
+                  step.status === 'completed' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                   step.status === 'in_progress' ? 'bg-[#F8FAF8] text-[#555555]' :
                   'bg-[#F5F5F5] text-[#555555]'
                 }`}>
@@ -202,7 +202,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
                     {step.description}
                   </ModernCardDescription>
                   {step.estimatedTime && (
-                    <div className="flex items-center gap-1 mt-2 text-xs text-sage-500">
+                    <div className="flex items-center gap-1 mt-2 text-xs text-#555555">
                       <Clock className="h-3 w-3" />
                       <span>{step.estimatedTime}</span>
                     </div>

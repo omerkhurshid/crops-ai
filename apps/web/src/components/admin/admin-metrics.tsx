@@ -51,12 +51,12 @@ export function AdminMetrics({
     return Math.round((userRetention + growthScore + adoptionScore) / 3)
   }
   const getHealthColor = (score: number) => {
-    if (score >= 80) return 'text-green-600'
+    if (score >= 80) return 'text-[#8FBF7F]'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
   const getChangeColor = (change: number) => {
-    if (change > 0) return 'text-green-600'
+    if (change > 0) return 'text-[#8FBF7F]'
     if (change < 0) return 'text-red-600'
     return 'text-[#555555]'
   }
@@ -71,7 +71,7 @@ export function AdminMetrics({
       title: 'Farm Adoption',
       value: `${Math.round((totalFarms / totalUsers) * 100)}%`,
       description: 'Users who created farms',
-      icon: <MapPin className="h-5 w-5 text-green-600" />
+      icon: <MapPin className="h-5 w-5 text-[#8FBF7F]" />
     },
     {
       title: 'Platform Health',
@@ -152,7 +152,7 @@ export function AdminMetrics({
                   <div>
                     <div className="font-medium">{metric.label}</div>
                     <div className="text-sm text-[#555555]">
-                      {getChangeColor(metric.change) === 'text-green-600' ? '↗' : 
+                      {getChangeColor(metric.change) === 'text-[#8FBF7F]' ? '↗' : 
                        getChangeColor(metric.change) === 'text-red-600' ? '↘' : '→'} 
                       <span className={getChangeColor(metric.change)}>
                         {metric.change > 0 ? '+' : ''}{metric.change}%
@@ -178,7 +178,7 @@ export function AdminMetrics({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Success Rate</span>
-                    <span className="font-medium text-green-600">99.8%</span>
+                    <span className="font-medium text-[#8FBF7F]">99.8%</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Requests/min</span>
@@ -220,7 +220,7 @@ export function AdminMetrics({
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white border rounded-lg">
                   <span>Query Performance</span>
-                  <Badge variant="outline" className="text-green-600">Excellent</Badge>
+                  <Badge variant="outline" className="text-[#8FBF7F]">Excellent</Badge>
                 </div>
               </div>
             </div>

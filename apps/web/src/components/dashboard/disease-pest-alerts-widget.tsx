@@ -66,8 +66,8 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
   }, [farmId])
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
-      case 'very_low': return 'text-green-600 bg-[#F8FAF8] border-[#DDE4D8]'
-      case 'low': return 'text-green-600 bg-[#F8FAF8] border-[#DDE4D8]'
+      case 'very_low': return 'text-[#8FBF7F] bg-[#F8FAF8] border-[#DDE4D8]'
+      case 'low': return 'text-[#8FBF7F] bg-[#F8FAF8] border-[#DDE4D8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
       case 'high': return 'text-orange-600 bg-orange-50 border-orange-200'
       case 'severe': return 'text-red-600 bg-red-50 border-red-200'
@@ -145,7 +145,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
               <div className="text-sm text-[#555555]">Fields Monitored</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-[#8FBF7F]">
                 {threats.length}
               </div>
               <div className="text-sm text-[#555555]">Active Threats</div>
@@ -201,7 +201,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                         {threat.riskLevel.replace('_', ' ').toUpperCase()}
                       </span>
                     </Badge>
-                    <div className="text-xs text-sage-500 flex items-center gap-1">
+                    <div className="text-xs text-#555555 flex items-center gap-1">
                       <DollarSign className="h-3 w-3" />
                       ${threat.economicImpact}
                     </div>
@@ -258,7 +258,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {/* No Data State */}
         {threats.length === 0 && !loading && (
           <div className="text-center py-8">
-            <Shield className="h-12 w-12 mx-auto mb-4 text-green-500" />
+            <Shield className="h-12 w-12 mx-auto mb-4 text-[#8FBF7F]" />
             <h3 className="font-medium text-[#1A1A1A] mb-2">All Clear!</h3>
             <p className="text-[#555555] text-sm">
               No immediate disease or pest threats detected. Continue monitoring.

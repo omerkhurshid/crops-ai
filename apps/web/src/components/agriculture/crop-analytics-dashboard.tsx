@@ -66,14 +66,14 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
     return <div>Crop data not found</div>
   }
   const getHealthStatusColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 bg-[#F8FAF8]'
+    if (score >= 90) return 'text-[#8FBF7F] bg-[#F8FAF8]'
     if (score >= 75) return 'text-yellow-600 bg-yellow-100'
     if (score >= 60) return 'text-orange-600 bg-orange-100'
     return 'text-red-600 bg-red-100'
   }
   const getRiskSeverityColor = (severity: 'low' | 'moderate' | 'high') => {
     switch (severity) {
-      case 'low': return 'text-green-600 bg-[#F8FAF8]'
+      case 'low': return 'text-[#8FBF7F] bg-[#F8FAF8]'
       case 'moderate': return 'text-yellow-600 bg-yellow-100'
       case 'high': return 'text-red-600 bg-red-100'
     }
@@ -130,7 +130,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
         <ModernCardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Sprout className="h-8 w-8 text-green-600" />
+              <Sprout className="h-8 w-8 text-[#8FBF7F]" />
               <div>
                 <ModernCardTitle className="text-xl">{selectedCropData.name}</ModernCardTitle>
                 <p className="text-[#555555] italic">{selectedCropData.scientificName}</p>
@@ -151,7 +151,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               </div>
               <div className="text-sm text-[#555555]">Typical Yield ({selectedCropData.yield.typical.unit})</div>
             </div>
-            <div className="text-2xl font-bold text-green-600 text-center">
+            <div className="text-2xl font-bold text-[#8FBF7F] text-center">
               {selectedCropData.soil.pH.optimal}
             </div>
             <div className="text-sm text-[#555555] text-center">Optimal pH</div>
@@ -169,7 +169,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
           <ModernCard>
             <ModernCardHeader>
               <ModernCardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-green-600" />
+                <Activity className="h-5 w-5 text-[#8FBF7F]" />
                 Crop Health
               </ModernCardTitle>
             </ModernCardHeader>
@@ -182,7 +182,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                   {currentCropPerformance.healthScore}%
                 </div>
                 <div className="text-[#555555]">Overall Health Score</div>
-                <div className="text-sm text-sage-500 mt-2">
+                <div className="text-sm text-[#555555] mt-2">
                   Growth Stage: <span className="font-medium">{currentCropPerformance.growthStage}</span>
                 </div>
               </div>
@@ -207,7 +207,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 {currentCropPerformance.actualYield && (
                   <div className="flex justify-between items-center">
                     <span className="text-[#555555]">Actual:</span>
-                    <span className="font-bold text-green-600">
+                    <span className="font-bold text-[#8FBF7F]">
                       {currentCropPerformance.actualYield.toFixed(1)} {selectedCropData.yield.typical.unit}
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                   <span className="font-medium">{currentCropPerformance.plantedArea} ha</span>
                 </div>
                 <div className="pt-2 border-t">
-                  <div className="text-sm text-sage-500">
+                  <div className="text-sm text-[#555555]">
                     Estimated Revenue: <span className="font-medium text-[#1A1A1A]">
                       ${(currentCropPerformance.expectedYield * currentCropPerformance.plantedArea * 
                         selectedCropData.economics.market_price.current).toLocaleString()}
@@ -250,7 +250,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-green-600">
+                  <div className="text-center text-[#8FBF7F]">
                     <div className="text-2xl mb-2">✓</div>
                     <div className="text-sm">No current risk factors detected</div>
                   </div>
@@ -276,7 +276,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 <div key={index} className="border-l-4 border-[#DDE4D8] pl-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-[#1A1A1A]">{stage.stage}</h4>
-                    <span className="text-sm text-sage-500">Day {stage.daysFromPlanting}</span>
+                    <span className="text-sm text-[#555555]">Day {stage.daysFromPlanting}</span>
                   </div>
                   <div className="space-y-1">
                     <div className="text-sm text-[#555555]">
@@ -295,7 +295,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
         <ModernCard>
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-green-600" />
+              <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
               Economic Analysis
             </ModernCardTitle>
           </ModernCardHeader>
@@ -310,7 +310,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 </div>
                 <div>
                   <div className="text-sm text-[#555555]">Market Price</div>
-                  <div className="text-xl font-bold text-green-600">
+                  <div className="text-xl font-bold text-[#8FBF7F]">
                     ${selectedCropData.economics.market_price.current}
                   </div>
                 </div>
@@ -373,7 +373,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 <div key={index} className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-[#DDE4D8] rounded-full">
-                      {intervention.type === 'fertilizer' && <Leaf className="h-4 w-4 text-green-600" />}
+                      {intervention.type === 'fertilizer' && <Leaf className="h-4 w-4 text-[#8FBF7F]" />}
                       {intervention.type === 'pesticide' && <Bug className="h-4 w-4 text-red-600" />}
                       {intervention.type === 'irrigation' && <Droplets className="h-4 w-4 text-blue-600" />}
                       {intervention.type === 'cultivation' && <Activity className="h-4 w-4 text-brown-600" />}
@@ -381,7 +381,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                     <div>
                       <div className="font-medium text-sm capitalize">{intervention.type}</div>
                       <div className="text-xs text-[#555555]">{intervention.description}</div>
-                      <div className="text-xs text-sage-500">
+                      <div className="text-xs text-[#555555]">
                         {new Date(intervention.date).toLocaleDateString()}
                       </div>
                     </div>

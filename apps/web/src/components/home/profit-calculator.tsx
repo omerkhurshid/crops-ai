@@ -18,7 +18,7 @@ export function ProfitCalculator() {
         <span className="text-[#555555]">×</span>
         <span className="text-[#1A1A1A] font-medium">${profitPerAcre}/acre</span>
         <span className="text-[#555555]">=</span>
-        <div className="text-2xl font-bold text-green-600">
+        <div className="text-2xl font-bold text-[#8FBF7F]">
           ${totalProfit.toLocaleString()}/year
         </div>
       </div>

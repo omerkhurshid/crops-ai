@@ -109,13 +109,13 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
       <ModernCard variant="soft">
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-green-600" />
+            <DollarSign className="h-5 w-5 text-[#8FBF7F]" />
             Record Farm Expense
           </ModernCardTitle>
         </ModernCardHeader>
         <ModernCardContent className="space-y-4">
           {success === 'expense' && (
-            <div className="flex items-center gap-2 p-3 bg-[#F8FAF8] rounded-lg text-green-700">
+            <div className="flex items-center gap-2 p-3 bg-[#F8FAF8] rounded-lg text-[#7A8F78]">
               <CheckCircle className="h-4 w-4" />
               <span className="text-sm font-medium">Expense recorded successfully!</span>
             </div>
@@ -197,7 +197,7 @@ export const QuickActions = memo(function QuickActions({ farmId, className }: Qu
         </ModernCardHeader>
         <ModernCardContent className="space-y-4">
           {success === 'harvest' && (
-            <div className="flex items-center gap-2 p-3 bg-[#F8FAF8] rounded-lg text-green-700">
+            <div className="flex items-center gap-2 p-3 bg-[#F8FAF8] rounded-lg text-[#7A8F78]">
               <CheckCircle className="h-4 w-4" />
               <span className="text-sm font-medium">Harvest recorded successfully!</span>
             </div>

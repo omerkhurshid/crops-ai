@@ -41,10 +41,10 @@ interface LivestockLoggingModuleProps {
 }
 const LOG_TYPES = [
   { id: 'health', label: 'Health Check', icon: Heart, color: 'bg-red-100 text-red-800' },
-  { id: 'vaccination', label: 'Vaccination', icon: Syringe, color: 'bg-blue-100 text-blue-800' },
+  { id: 'vaccination', label: 'Vaccination', icon: Syringe, color: 'bg-blue-100 text-[#7A8F78]' },
   { id: 'treatment', label: 'Treatment', icon: ShieldCheck, color: 'bg-purple-100 text-purple-800' },
   { id: 'breeding', label: 'Breeding', icon: Baby, color: 'bg-pink-100 text-pink-800' },
-  { id: 'feeding', label: 'Feeding', icon: Scale, color: 'bg-[#F8FAF8] text-green-800' },
+  { id: 'feeding', label: 'Feeding', icon: Scale, color: 'bg-[#F8FAF8] text-[#7A8F78]' },
   { id: 'production', label: 'Production', icon: Milk, color: 'bg-yellow-100 text-yellow-800' },
   { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-[#1A1A1A]' }
 ]
@@ -217,7 +217,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
               </div>
               <div className="text-sm font-medium text-[#1A1A1A]">{type.label}</div>
               {totalCost > 0 && (
-                <div className="text-xs text-sage-500 mt-1">${totalCost.toLocaleString()}</div>
+                <div className="text-xs text-[#555555] mt-1">${totalCost.toLocaleString()}</div>
               )}
             </ModernCard>
           )
@@ -437,7 +437,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                             </div>
                             {entry.cost && (
                               <div className="flex items-center gap-1">
-                                <span className="text-green-600 font-medium">{formatCost(entry.cost)}</span>
+                                <span className="text-[#8FBF7F] font-medium">{formatCost(entry.cost)}</span>
                               </div>
                             )}
                           </div>
@@ -459,7 +459,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
                           {entry.quantity && (
                             <div>
-                              <span className="text-sage-500">Quantity:</span>
+                              <span className="text-[#555555]">Quantity:</span>
                               <span className="ml-2 font-medium">{entry.quantity} {entry.unit}</span>
                             </div>
                           )}
@@ -467,19 +467,19 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                             <>
                               {entry.vitals.temperature && (
                                 <div>
-                                  <span className="text-sage-500">Temperature:</span>
+                                  <span className="text-[#555555]">Temperature:</span>
                                   <span className="ml-2 font-medium">{entry.vitals.temperature}°C</span>
                                 </div>
                               )}
                               {entry.vitals.weight && (
                                 <div>
-                                  <span className="text-sage-500">Weight:</span>
+                                  <span className="text-[#555555]">Weight:</span>
                                   <span className="ml-2 font-medium">{entry.vitals.weight}kg</span>
                                 </div>
                               )}
                               {entry.vitals.heartRate && (
                                 <div>
-                                  <span className="text-sage-500">Heart Rate:</span>
+                                  <span className="text-[#555555]">Heart Rate:</span>
                                   <span className="ml-2 font-medium">{entry.vitals.heartRate} bpm</span>
                                 </div>
                               )}
@@ -489,7 +489,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                       )}
                       {entry.animalIds.length > 0 && (
                         <div className="mb-3">
-                          <span className="text-sm text-sage-500">Animals: </span>
+                          <span className="text-sm text-[#555555]">Animals: </span>
                           <span className="text-sm font-medium">{entry.animalIds.join(', ')}</span>
                         </div>
                       )}
@@ -511,7 +511,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
         })}
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
-            <FileText className="h-12 w-12 text-sage-300 mx-auto mb-4" />
+            <FileText className="h-12 w-12 text-[#DDE4D8] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No log entries yet</h3>
             <p className="text-[#555555] mb-4">Start logging your livestock activities to track health and production.</p>
             <Button onClick={() => setShowAddForm(true)}>

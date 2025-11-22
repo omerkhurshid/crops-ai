@@ -52,9 +52,9 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
           </ModernCardDescription>
         </ModernCardHeader>
         <ModernCardContent className="text-center py-8">
-          <Cat className="h-12 w-12 text-sage-300 mx-auto mb-4" />
+          <Cat className="h-12 w-12 text-[#DDE4D8] mx-auto mb-4" />
           <h3 className="font-medium text-[#555555] mb-2">No Livestock Registered</h3>
-          <p className="text-sage-500 text-sm mb-4">
+          <p className="text-#555555 text-sm mb-4">
             Add your livestock to track health, breeding, and production
           </p>
           <Button className="bg-[#7A8F78] hover:bg-[#5E6F5A] text-white">
@@ -84,12 +84,12 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
               <div className="text-sm text-amber-600">Total Animals</div>
             </div>
             <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-800">{data.healthMetrics.avgWeight}kg</div>
-              <div className="text-sm text-blue-600">Avg Weight</div>
+              <div className="text-2xl font-bold text-[#7A8F78]">{data.healthMetrics.avgWeight}kg</div>
+              <div className="text-sm text-[#7A8F78]">Avg Weight</div>
             </div>
             <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-              <div className="text-2xl font-bold text-green-800">{data.healthMetrics.birthsThisMonth}</div>
-              <div className="text-sm text-green-600">Births (MTD)</div>
+              <div className="text-2xl font-bold text-[#7A8F78]">{data.healthMetrics.birthsThisMonth}</div>
+              <div className="text-sm text-[#8FBF7F]">Births (MTD)</div>
             </div>
             <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
               <div className="text-2xl font-bold text-[#1A1A1A]">98%</div>
@@ -108,7 +108,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
                   </div>
                 </div>
                 <Badge className={`${
-                  species.health === 'excellent' ? 'bg-[#F8FAF8] text-green-700' :
+                  species.health === 'excellent' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
                   species.health === 'good' ? 'bg-blue-100 text-blue-700' :
                   'bg-yellow-100 text-yellow-700'
                 }`}>
@@ -146,7 +146,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
                     <div>
                       <div className="font-medium text-[#1A1A1A]">{alert.type}</div>
                       <div className="text-sm text-[#555555] mb-2">{alert.message}</div>
-                      <div className="flex items-center gap-2 text-xs text-sage-500">
+                      <div className="flex items-center gap-2 text-xs text-#555555">
                         <Calendar className="h-3 w-3" />
                         Due: {new Date(alert.dueDate).toLocaleDateString()}
                       </div>
@@ -173,16 +173,16 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
             {ensureArray(data.recentEvents).map((event: any) => (
               <div key={event.id} className="flex items-center gap-3 p-3 bg-[#F8FAF8] rounded-lg">
                 <div className="p-2 bg-[#F8FAF8] rounded-lg">
-                  <Heart className="h-4 w-4 text-green-600" />
+                  <Heart className="h-4 w-4 text-[#8FBF7F]" />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium text-[#1A1A1A]">{event.type}</div>
                   <div className="text-sm text-[#555555]">{event.description}</div>
-                  <div className="text-xs text-sage-500">
+                  <div className="text-xs text-#555555">
                     {new Date(event.date).toLocaleDateString()}
                   </div>
                 </div>
-                <Badge className="bg-[#F8FAF8] text-green-700">
+                <Badge className="bg-[#F8FAF8] text-[#7A8F78]">
                   {event.status}
                 </Badge>
               </div>

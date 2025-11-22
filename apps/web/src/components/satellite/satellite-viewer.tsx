@@ -53,7 +53,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
     }
   }
   const getHealthColor = (ndvi: number) => {
-    if (ndvi >= 0.7) return 'text-green-600'
+    if (ndvi >= 0.7) return 'text-[#8FBF7F]'
     if (ndvi >= 0.5) return 'text-yellow-600'
     if (ndvi >= 0.3) return 'text-orange-600'
     return 'text-red-600'
@@ -61,9 +61,9 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
   const getHealthBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'excellent':
-        return 'bg-[#F8FAF8] text-green-800'
+        return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'good':
-        return 'bg-[#F8FAF8] text-green-800'
+        return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'moderate':
         return 'bg-yellow-100 text-yellow-800'
       case 'stressed':
@@ -79,7 +79,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       <Card className="border-2">
         <CardContent className="flex items-center justify-center h-96">
           <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-3" />
+            <RefreshCw className="h-8 w-8 animate-spin text-[#555555] mx-auto mb-3" />
             <p className="text-[#555555]">Loading satellite data...</p>
           </div>
         </CardContent>
@@ -108,7 +108,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       <Card className="border-2">
         <CardContent className="flex items-center justify-center h-96">
           <div className="text-center">
-            <Satellite className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+            <Satellite className="h-12 w-12 text-[#555555] mx-auto mb-3" />
             <p className="text-[#555555]">No satellite data available</p>
             <p className="text-sm text-[#555555] mt-1">Data will be available soon</p>
           </div>

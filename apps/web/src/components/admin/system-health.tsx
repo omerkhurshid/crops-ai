@@ -55,7 +55,7 @@ export function SystemHealth() {
   const getStatusIcon = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return <CheckCircle className="h-4 w-4 text-green-600" />
+        return <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
       case 'warning':
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />
       case 'error':
@@ -65,7 +65,7 @@ export function SystemHealth() {
   const getStatusColor = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
+        return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
       case 'warning':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'error':
@@ -146,7 +146,7 @@ export function SystemHealth() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-medium">Uptime</span>
-                <span className="text-sm font-bold text-green-600">{systemStatus.uptime}%</span>
+                <span className="text-sm font-bold text-[#8FBF7F]">{systemStatus.uptime}%</span>
               </div>
               <Progress value={systemStatus.uptime} className="h-2" />
             </div>

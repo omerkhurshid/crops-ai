@@ -289,7 +289,7 @@ export function SatelliteMapViewer({
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center bg-[#FAFAF7]">
                 <div className="text-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-gray-400 mx-auto mb-2" />
+                  <Loader2 className="h-8 w-8 animate-spin text-[#555555] mx-auto mb-2" />
                   <p className="text-sm text-[#555555]">Loading satellite imagery...</p>
                 </div>
               </div>
@@ -314,7 +314,7 @@ export function SatelliteMapViewer({
                       className="absolute w-6 h-6 -ml-3 -mt-3 cursor-pointer"
                       style={{ left: `${x}%`, top: `${y}%` }}
                     >
-                      <div className="w-6 h-6 bg-green-700 border-2 border-white rounded-full flex items-center justify-center shadow-lg">
+                      <div className="w-6 h-6 bg-[#7A8F78] border-2 border-white rounded-full flex items-center justify-center shadow-lg">
                         <span className="text-white text-xs font-bold">{index + 1}</span>
                       </div>
                     </div>
@@ -372,7 +372,7 @@ export function SatelliteMapViewer({
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-[#FAFAF7]">
                 <div className="text-center">
-                  <MapIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                  <MapIcon className="h-8 w-8 text-[#555555] mx-auto mb-2" />
                   <p className="text-sm text-[#555555]">Unable to load imagery</p>
                 </div>
               </div>
@@ -453,17 +453,17 @@ export function SatelliteMapViewer({
                   {location.lat.toFixed(6)}, {location.lng.toFixed(6)} • Zoom: {zoom}
                 </div>
                 {detectedFields.length > 0 && (
-                  <div className="text-xs text-green-600">
+                  <div className="text-xs text-[#8FBF7F]">
                     {(detectedFields || []).length} fields detected • {(detectedFields || []).reduce((sum, f) => sum + f.area, 0).toFixed(1)} acres
                   </div>
                 )}
                 {boundaryPins.length > 0 && (
-                  <div className="text-xs text-green-700">
+                  <div className="text-xs text-[#7A8F78]">
                     {boundaryPins.length} boundary pins • {isMarkingBoundary ? 'Click to add more' : 'Boundary marked'}
                   </div>
                 )}
                 {isMarkingBoundary && (
-                  <div className="text-xs text-green-800 bg-[#F8FAF8] px-2 py-1 rounded border border-[#DDE4D8]">
+                  <div className="text-xs text-[#7A8F78] bg-[#F8FAF8] px-2 py-1 rounded border border-[#DDE4D8]">
                     Click on the map to drop boundary pins
                   </div>
                 )}

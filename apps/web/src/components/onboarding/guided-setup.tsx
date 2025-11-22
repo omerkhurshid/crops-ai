@@ -70,7 +70,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
           id: 'add-fields',
           title: 'Define Your Fields',
           description: 'Map out your field boundaries for precise monitoring',
-          icon: <Sprout className="h-6 w-6 text-green-600" />,
+          icon: <Sprout className="h-6 w-6 text-[#8FBF7F]" />,
           href: hasFarms ? '/farms' : undefined,
           completed: hasFields,
           priority: 'essential'
@@ -97,7 +97,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
           id: 'explore-analytics',
           title: 'Explore Analytics',
           description: 'See how your farm compares and track performance',
-          icon: <BarChart3 className="h-6 w-6 text-blue-600" />,
+          icon: <BarChart3 className="h-6 w-6 text-[#7A8F78]" />,
           href: '/reports',
           completed: false,
           priority: 'helpful'
@@ -178,7 +178,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
               <Target className="h-5 w-5 text-[#555555]" />
               Welcome to Crops.AI
               {completedEssentialSteps === totalEssentialSteps && (
-                <Badge className="bg-[#F8FAF8] text-green-700 border-[#DDE4D8]">
+                <Badge className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Setup Complete!
                 </Badge>
@@ -251,7 +251,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                     step.completed ? 'bg-[#F8FAF8]' : 'bg-white'
                   }`}>
                     {step.completed ? (
-                      <CheckCircle className="h-6 w-6 text-green-600" />
+                      <CheckCircle className="h-6 w-6 text-[#8FBF7F]" />
                     ) : (
                       step.icon
                     )}
@@ -259,7 +259,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className={`font-semibold ${
-                        step.completed ? 'text-green-800' : 'text-[#1A1A1A]'
+                        step.completed ? 'text-[#7A8F78]' : 'text-[#1A1A1A]'
                       }`}>
                         {step.title}
                       </h4>
@@ -274,14 +274,14 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                       </Badge>
                     </div>
                     <p className={`text-sm ${
-                      step.completed ? 'text-green-700' : 'text-[#555555]'
+                      step.completed ? 'text-[#7A8F78]' : 'text-[#555555]'
                     }`}>
                       {step.description}
                     </p>
                   </div>
                 </div>
                 {!step.completed && (step.href || step.action) && (
-                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                  <ArrowRight className="h-4 w-4 text-[#555555]" />
                 )}
               </div>
             </div>
@@ -291,16 +291,16 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
         {completedEssentialSteps === totalEssentialSteps && (
           <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-[#DDE4D8] rounded-lg p-4">
             <div className="text-center">
-              <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
-              <h4 className="font-semibold text-green-800 mb-2">
+              <CheckCircle className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
+              <h4 className="font-semibold text-[#7A8F78] mb-2">
                 Great job! Your farm is set up
               </h4>
-              <p className="text-green-700 text-sm mb-4">
+              <p className="text-[#7A8F78] text-sm mb-4">
                 You&apos;re now ready to get personalized insights and recommendations for your farm
               </p>
               <Button 
                 onClick={onComplete}
-                className="bg-[#7A8F78] hover:bg-green-700 text-white"
+                className="bg-[#7A8F78] hover:bg-[#7A8F78] text-white"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
                 Start Farming Smarter

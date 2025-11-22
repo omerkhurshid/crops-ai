@@ -28,8 +28,8 @@ const speciesIcons: Record<string, string> = {
   chickens: '🐓'
 }
 const activityTypeIcons: Record<string, any> = {
-  vaccination: <Heart className="h-4 w-4 text-blue-600" />,
-  health_check: <Activity className="h-4 w-4 text-green-600" />,
+  vaccination: <Heart className="h-4 w-4 text-[#7A8F78]" />,
+  health_check: <Activity className="h-4 w-4 text-[#8FBF7F]" />,
   treatment: <AlertTriangle className="h-4 w-4 text-orange-600" />,
   birth: <TrendingUp className="h-4 w-4 text-purple-600" />
 }
@@ -70,7 +70,7 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
       <div className="space-y-6">
         <Card>
           <CardContent className="text-center py-12">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Livestock Data</h3>
             <p className="text-[#555555] mb-6">Start by adding your first livestock events to track your animals.</p>
             <a 
@@ -141,7 +141,7 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
               {livestockData.events.slice(0, 5).map((event, index) => (
                 <div key={event.id || index} className="flex items-center gap-4 p-3 bg-[#FAFAF7] rounded-lg">
                   <div className="flex-shrink-0">
-                    <Activity className="h-4 w-4 text-blue-600" />
+                    <Activity className="h-4 w-4 text-[#7A8F78]" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">

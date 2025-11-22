@@ -70,12 +70,12 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
     await fetchMarketData()
   }
   const getPriceColor = (changePercent: number) => {
-    if (changePercent > 0) return 'text-green-600'
+    if (changePercent > 0) return 'text-[#8FBF7F]'
     if (changePercent < 0) return 'text-red-600'
     return 'text-[#555555]'
   }
   const getBadgeColor = (changePercent: number) => {
-    if (changePercent > 0) return 'bg-[#F8FAF8] text-green-800'
+    if (changePercent > 0) return 'bg-[#F8FAF8] text-[#7A8F78]'
     if (changePercent < 0) return 'bg-red-100 text-red-800'
     return 'bg-[#F5F5F5] text-[#1A1A1A]'
   }
@@ -85,9 +85,9 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
     return 'border-l-4 border-l-blue-500 bg-blue-50'
   }
   const getInsightIcon = (type: string) => {
-    if (type === 'opportunity') return <TrendingUp className="h-5 w-5 text-green-600" />
+    if (type === 'opportunity') return <TrendingUp className="h-5 w-5 text-[#8FBF7F]" />
     if (type === 'warning') return <AlertCircle className="h-5 w-5 text-red-600" />
-    return <BarChart3 className="h-5 w-5 text-blue-600" />
+    return <BarChart3 className="h-5 w-5 text-[#7A8F78]" />
   }
   return (
     <div className="space-y-6">
@@ -125,7 +125,7 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
                   </span>
                   <div className="flex items-center">
                     {price.change > 0 ? (
-                      <ArrowUp className="h-4 w-4 text-green-600" />
+                      <ArrowUp className="h-4 w-4 text-[#8FBF7F]" />
                     ) : price.change < 0 ? (
                       <ArrowDown className="h-4 w-4 text-red-600" />
                     ) : null}

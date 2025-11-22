@@ -360,7 +360,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       case 'urgent': return 'bg-red-100 border-red-200 text-red-800'
       case 'high': return 'bg-orange-100 border-orange-200 text-orange-800'
       case 'medium': return 'bg-yellow-100 border-yellow-200 text-yellow-800'
-      default: return 'bg-blue-100 border-blue-200 text-blue-800'
+      default: return 'bg-blue-100 border-blue-200 text-[#7A8F78]'
     }
   }
   const toggleTaskComplete = (taskId: string) => {
@@ -378,7 +378,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       <ModernCard variant="soft" className={className}>
         <ModernCardHeader>
           <ModernCardTitle className="flex items-center gap-2">
-            <CloudRain className="h-5 w-5 text-blue-600 animate-pulse" />
+            <CloudRain className="h-5 w-5 text-[#7A8F78] animate-pulse" />
             Weather-Based Tasks
           </ModernCardTitle>
         </ModernCardHeader>
@@ -396,10 +396,10 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       <ModernCardHeader>
         <div className="flex items-center justify-between">
           <ModernCardTitle className="flex items-center gap-2">
-            <CloudRain className="h-5 w-5 text-blue-600" />
+            <CloudRain className="h-5 w-5 text-[#7A8F78]" />
             Weather-Based Tasks
             {recommendedTasks.length > 0 && (
-              <Badge className="bg-blue-100 text-blue-800">
+              <Badge className="bg-blue-100 text-[#7A8F78]">
                 {recommendedTasks.length} Recommended
               </Badge>
             )}
@@ -433,7 +433,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
       <ModernCardContent className="space-y-3">
         {tasks.length === 0 ? (
           <div className="text-center py-6">
-            <Sun className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+            <Sun className="h-8 w-8 mx-auto text-[#555555] mb-2" />
             <p className="text-sm text-[#555555]">No weather-based tasks available</p>
             <p className="text-xs text-[#555555]">Our analytical models haven't identified any weather-related actions at this time</p>
             <Button 
@@ -467,7 +467,7 @@ export function WeatherTasksGenerator({ farmData, crops, className }: WeatherTas
                         'mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center',
                         isCompleted 
                           ? 'bg-[#8FBF7F] border-[#8FBF7F] text-white' 
-                          : 'border-[#E6E6E6] hover:border-gray-400'
+                          : 'border-[#E6E6E6] hover:border-[#555555]'
                       )}
                     >
                       {isCompleted && <CheckSquare className="h-3 w-3" />}

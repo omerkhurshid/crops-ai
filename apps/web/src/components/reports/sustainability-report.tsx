@@ -126,7 +126,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     }
   };
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
+    if (score >= 80) return 'text-[#8FBF7F]';
     if (score >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
@@ -139,7 +139,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-700';
       case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'low': return 'bg-[#F8FAF8] text-green-700';
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78]';
       default: return 'bg-[#F5F5F5] text-[#555555]';
     }
   };
@@ -147,7 +147,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-center h-32">
-          <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
+          <RefreshCw className="h-6 w-6 animate-spin text-[#555555]" />
         </div>
       </div>
     );
@@ -155,7 +155,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
   if (!data) {
     return (
       <div className="text-center py-8">
-        <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+        <AlertTriangle className="h-8 w-8 text-[#555555] mx-auto mb-2" />
         <p className="text-[#555555]">Unable to load sustainability data</p>
       </div>
     );
@@ -182,13 +182,13 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
             </h4>
             <p className="text-sm text-[#555555]">Overall Sustainability Score</p>
             <div className="flex items-center gap-2 mt-2">
-              <Award className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium text-green-600">{data.benchmarks.industry.rating}</span>
+              <Award className="h-4 w-4 text-[#8FBF7F]" />
+              <span className="text-sm font-medium text-[#8FBF7F]">{data.benchmarks.industry.rating}</span>
               <span className="text-sm text-[#555555]">• {data.benchmarks.regional.rank} regionally</span>
             </div>
           </div>
           <div className="text-right">
-            <Leaf className="h-12 w-12 text-green-600 mx-auto mb-2" />
+            <Leaf className="h-12 w-12 text-[#8FBF7F] mx-auto mb-2" />
             <div className="text-xs text-[#555555]">Certified Sustainable</div>
           </div>
         </div>
@@ -196,13 +196,13 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
       {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-          <Droplets className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-          <div className="text-xl font-bold text-blue-600">{data.overview.waterEfficiency.toFixed(1)}%</div>
+          <Droplets className="h-6 w-6 text-[#7A8F78] mx-auto mb-2" />
+          <div className="text-xl font-bold text-[#7A8F78]">{data.overview.waterEfficiency.toFixed(1)}%</div>
           <p className="text-xs text-[#555555]">Water Efficiency</p>
         </div>
         <div className="text-center p-4 bg-[#F8FAF8] rounded-lg border-2 border-[#DDE4D8]">
-          <TreePine className="h-6 w-6 text-green-600 mx-auto mb-2" />
-          <div className="text-xl font-bold text-green-600">{data.overview.carbonReduction.toFixed(1)}%</div>
+          <TreePine className="h-6 w-6 text-[#8FBF7F] mx-auto mb-2" />
+          <div className="text-xl font-bold text-[#8FBF7F]">{data.overview.carbonReduction.toFixed(1)}%</div>
           <p className="text-xs text-[#555555]">Carbon Reduction</p>
         </div>
         <div className="text-center p-4 bg-amber-50 rounded-lg border-2 border-amber-200">
@@ -228,7 +228,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-blue-600 flex items-center gap-2">
+                <CardTitle className="text-[#7A8F78] flex items-center gap-2">
                   <Droplets className="h-5 w-5" />
                   Water Management
                 </CardTitle>
@@ -245,18 +245,18 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Efficiency:</span>
-                    <span className="font-semibold text-green-600">{data.environmental.waterUsage.efficiency.toFixed(1)}%</span>
+                    <span className="font-semibold text-[#8FBF7F]">{data.environmental.waterUsage.efficiency.toFixed(1)}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Savings:</span>
-                    <span className="font-semibold text-blue-600">{data.environmental.waterUsage.savings.toLocaleString()} L</span>
+                    <span className="font-semibold text-[#7A8F78]">{data.environmental.waterUsage.savings.toLocaleString()} L</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-green-600 flex items-center gap-2">
+                <CardTitle className="text-[#8FBF7F] flex items-center gap-2">
                   <Wind className="h-5 w-5" />
                   Carbon Footprint
                 </CardTitle>
@@ -269,11 +269,11 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Sequestration:</span>
-                    <span className="font-semibold text-green-600">{data.environmental.carbon.sequestration} tCO₂</span>
+                    <span className="font-semibold text-[#8FBF7F]">{data.environmental.carbon.sequestration} tCO₂</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Net Impact:</span>
-                    <span className="font-semibold text-green-600">{data.environmental.carbon.netEmissions} tCO₂</span>
+                    <span className="font-semibold text-[#8FBF7F]">{data.environmental.carbon.netEmissions} tCO₂</span>
                   </div>
                   <div className="text-xs text-[#555555] bg-[#F8FAF8] p-2 rounded">
                     Carbon negative! Exceeding offset target by {Math.abs(data.environmental.carbon.netEmissions + data.environmental.carbon.offsetTarget).toFixed(1)} tCO₂
@@ -296,7 +296,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Erosion Rate:</span>
-                    <span className="font-semibold text-green-600">{data.environmental.soil.erosionRate} t/ha/yr</span>
+                    <span className="font-semibold text-[#8FBF7F]">{data.environmental.soil.erosionRate} t/ha/yr</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">Compaction:</span>
@@ -328,7 +328,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="text-sm font-semibold">{practice.impact}%</div>
-                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
                         </div>
                       </div>
                       <p className="text-xs text-[#555555]">{practice.description}</p>
@@ -381,7 +381,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                         <span className="font-medium">{cert.name}</span>
                         <div className="text-sm text-[#555555]">Expires: {cert.expiry}</div>
                       </div>
-                      <Badge className={cert.status === 'Active' ? 'bg-[#F8FAF8] text-green-700' : 'bg-yellow-100 text-yellow-700'}>
+                      <Badge className={cert.status === 'Active' ? 'bg-[#F8FAF8] text-[#7A8F78]' : 'bg-yellow-100 text-yellow-700'}>
                         {cert.status}
                       </Badge>
                     </div>
@@ -404,7 +404,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                       <div className="text-sm text-[#555555] mt-1">
                         Requirements: {cert.requirements}
                       </div>
-                      <div className="text-sm text-green-600 mt-1">
+                      <div className="text-sm text-[#8FBF7F] mt-1">
                         Benefit: {cert.benefit}
                       </div>
                     </div>
@@ -422,7 +422,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   <CardTitle className="text-center">Regional Ranking</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">
+                  <div className="text-3xl font-bold text-[#8FBF7F] mb-2">
                     {data.benchmarks.regional.rank}
                   </div>
                   <p className="text-sm text-[#555555]">Among regional farms</p>
@@ -436,7 +436,7 @@ export function SustainabilityReport({ farmId }: SustainabilityReportProps) {
                   <CardTitle className="text-center">National Percentile</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">
+                  <div className="text-3xl font-bold text-[#7A8F78] mb-2">
                     {data.benchmarks.national.percentile}th
                   </div>
                   <p className="text-sm text-[#555555]">Percentile nationally</p>

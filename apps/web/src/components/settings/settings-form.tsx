@@ -188,7 +188,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
                 className="mt-1"
                 disabled
               />
-              <p className="text-xs text-sage-500 mt-1">Contact support to change your name</p>
+              <p className="text-xs text-#555555 mt-1">Contact support to change your name</p>
             </div>
             <div>
               <Label htmlFor="email">Email</Label>
@@ -199,7 +199,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
                 className="mt-1"
                 disabled
               />
-              <p className="text-xs text-sage-500 mt-1">Contact support to change your email</p>
+              <p className="text-xs text-#555555 mt-1">Contact support to change your email</p>
             </div>
           </div>
         </ModernCardContent>
@@ -300,7 +300,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-sage-500 mt-1">
+            <p className="text-xs text-#555555 mt-1">
               Selected: {currencies.find(c => c.value === preferences.currency)?.label}
             </p>
           </div>
@@ -327,13 +327,13 @@ export function SettingsForm({ user }: SettingsFormProps) {
                   <SelectItem key={unit.value} value={unit.value}>
                     <div>
                       <div className="font-medium">{unit.label}</div>
-                      <div className="text-xs text-sage-500">{unit.description}</div>
+                      <div className="text-xs text-#555555">{unit.description}</div>
                     </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-sage-500 mt-1">
+            <p className="text-xs text-#555555 mt-1">
               {landUnits.find(u => u.value === preferences.landUnit)?.description}
             </p>
           </div>
@@ -360,7 +360,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
                   <SelectItem key={unit.value} value={unit.value}>
                     <div>
                       <div className="font-medium">{unit.label}</div>
-                      <div className="text-xs text-sage-500">{unit.description}</div>
+                      <div className="text-xs text-#555555">{unit.description}</div>
                     </div>
                   </SelectItem>
                 ))}
@@ -383,20 +383,20 @@ export function SettingsForm({ user }: SettingsFormProps) {
         <ModernCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-xs text-sage-500 uppercase tracking-wide">Currency</p>
+              <p className="text-xs text-#555555 uppercase tracking-wide">Currency</p>
               <Badge className="mt-1">{preferences.currency}</Badge>
             </div>
             <div>
-              <p className="text-xs text-sage-500 uppercase tracking-wide">Land Unit</p>
+              <p className="text-xs text-#555555 uppercase tracking-wide">Land Unit</p>
               <Badge className="mt-1">{landUnits.find(u => u.value === preferences.landUnit)?.label}</Badge>
             </div>
             <div>
-              <p className="text-xs text-sage-500 uppercase tracking-wide">Temperature</p>
+              <p className="text-xs text-#555555 uppercase tracking-wide">Temperature</p>
               <Badge className="mt-1">{temperatureUnits.find(u => u.value === preferences.temperatureUnit)?.label}</Badge>
             </div>
             <div>
-              <p className="text-xs text-sage-500 uppercase tracking-wide">Account</p>
-              <Badge className="mt-1 bg-[#F8FAF8] text-green-700">Active</Badge>
+              <p className="text-xs text-#555555 uppercase tracking-wide">Account</p>
+              <Badge className="mt-1 bg-[#F8FAF8] text-[#7A8F78]">Active</Badge>
             </div>
           </div>
         </ModernCardContent>
@@ -404,8 +404,8 @@ export function SettingsForm({ user }: SettingsFormProps) {
       {/* Status Messages */}
       {saveStatus === 'success' && (
         <div className="flex items-center gap-2 p-4 bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg">
-          <CheckCircle className="h-5 w-5 text-green-600" />
-          <span className="text-green-800">Settings saved successfully!</span>
+          <CheckCircle className="h-5 w-5 text-[#8FBF7F]" />
+          <span className="text-[#7A8F78]">Settings saved successfully!</span>
         </div>
       )}
       {saveStatus === 'error' && (

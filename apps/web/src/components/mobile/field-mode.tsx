@@ -407,7 +407,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
         </button>
         <div className="bg-white rounded-2xl px-6 py-4 shadow-lg">
           <div className="text-center">
-            <div className="text-lg font-bold text-green-800">Field Mode</div>
+            <div className="text-lg font-bold text-[#7A8F78]">Field Mode</div>
             <div className="text-sm text-[#555555] flex items-center gap-1">
               <MapPin className="h-4 w-4" />
               {currentLocation}
@@ -450,7 +450,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       {/* Today's Priority - Simplified view */}
       <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
         <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-          <Home className="h-6 w-6 text-green-600" />
+          <Home className="h-6 w-6 text-[#8FBF7F]" />
           Today's Priority
         </h2>
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
@@ -465,8 +465,8 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       {/* Weather Alert - Simple and clear */}
       <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 shadow-lg">
         <div className="flex items-center gap-3 mb-3">
-          <Sun className="h-6 w-6 text-blue-600" />
-          <span className="text-lg font-semibold text-blue-800">Weather Today</span>
+          <Sun className="h-6 w-6 text-[#7A8F78]" />
+          <span className="text-lg font-semibold text-[#7A8F78]">Weather Today</span>
         </div>
         <div className="text-2xl font-bold text-blue-900 mb-1">78°F Sunny</div>
         <div className="text-blue-700">

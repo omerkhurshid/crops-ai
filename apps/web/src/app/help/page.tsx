@@ -332,7 +332,7 @@ export default function HelpPage() {
                   <ModernCard key={index} variant="soft" className="group hover:shadow-soft transition-all duration-300">
                     <ModernCardContent className="p-6">
                       <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-[#7A8F78] group-hover:text-sage-900">
+                        <h3 className="font-semibold text-[#7A8F78] group-hover:text-[#1A1A1A]">
                           {article.title}
                         </h3>
                         <ChevronRight className="h-4 w-4 text-[#7A8F78] group-hover:text-[#7A8F78] transition-colors" />

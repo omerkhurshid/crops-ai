@@ -160,7 +160,7 @@ export function QuickActions({ farms }: QuickActionsProps) {
       {/* Log Harvest */}
       <Dialog open={harvestDialog} onOpenChange={setHarvestDialog}>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm" className="text-green-700 border-[#DDE4D8] hover:bg-[#F8FAF8]">
+          <Button variant="outline" size="sm" className="text-[#7A8F78] border-[#DDE4D8] hover:bg-[#F8FAF8]">
             <Sprout className="h-4 w-4 mr-1" />
             Log Harvest
           </Button>

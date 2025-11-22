@@ -121,7 +121,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     }
   }
   const getHealthColor = (score: number) => {
-    if (score >= 80) return 'text-green-600'
+    if (score >= 80) return 'text-[#8FBF7F]'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
@@ -132,7 +132,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
   }
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'bg-[#F8FAF8] text-green-700 border-[#DDE4D8]'
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
       case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200'
       case 'high': return 'bg-red-100 text-red-700 border-red-200'
       default: return 'bg-[#F5F5F5] text-[#555555] border-[#E6E6E6]'
@@ -140,7 +140,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
   }
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />
+      case 'improving': return <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
       case 'declining': return <TrendingDown className="h-4 w-4 text-red-600" />
       default: return <Activity className="h-4 w-4 text-[#555555]" />
     }
@@ -158,7 +158,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     if (compact) {
       return (
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8FAF8]">
-          <Activity className="h-4 w-4 text-sage-500" />
+          <Activity className="h-4 w-4 text-#555555" />
           <span className="text-sm text-[#555555]">Analyzing...</span>
         </div>
       )
@@ -166,7 +166,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
     return (
       <ModernCard variant="soft">
         <ModernCardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <XCircle className="h-8 w-8 text-gray-400 mb-2" />
+          <XCircle className="h-8 w-8 text-[#555555] mb-2" />
           <p className="text-[#555555]">Health data unavailable</p>
           <p className="text-sm text-[#555555]">Add fields and satellite data to monitor health</p>
         </ModernCardContent>
@@ -238,10 +238,10 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
           </div>
           <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
             <div className="flex items-center gap-2">
-              <Droplets className="h-4 w-4 text-blue-600" />
+              <Droplets className="h-4 w-4 text-[#7A8F78]" />
               <span className="text-sm text-blue-700">Moisture</span>
             </div>
-            <span className="font-semibold text-blue-800">{metrics.soilMoisture}%</span>
+            <span className="font-semibold text-[#7A8F78]">{metrics.soilMoisture}%</span>
           </div>
           <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg">
             <div className="flex items-center gap-2">
@@ -295,7 +295,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
                 <span>Schedule irrigation within 24-48 hours</span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-sm text-green-700">
+              <div className="flex items-center gap-2 text-sm text-[#7A8F78]">
                 <CheckCircle className="h-4 w-4" />
                 <span>Irrigation levels optimal</span>
               </div>
@@ -311,14 +311,14 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
                 <span>Monitor for pest activity</span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-sm text-green-700">
+              <div className="flex items-center gap-2 text-sm text-[#7A8F78]">
                 <CheckCircle className="h-4 w-4" />
                 <span>No pest threats detected</span>
               </div>
             )}
           </div>
         </div>
-        <div className="text-xs text-sage-500 text-center">
+        <div className="text-xs text-#555555 text-center">
           Last updated: {new Date(metrics.lastUpdated).toLocaleString()}
         </div>
       </ModernCardContent>

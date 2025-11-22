@@ -205,7 +205,7 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
                   {task.timeframe} • {task.field}
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 text-gray-400" />
+              <ArrowRight className="h-4 w-4 text-[#555555]" />
             </div>
           </button>
         )

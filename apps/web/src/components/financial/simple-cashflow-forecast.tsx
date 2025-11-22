@@ -189,7 +189,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 </div>
                 <div>
                   <p className="text-[#555555] mb-1">Net Change</p>
-                  <p className={`text-xl font-bold ${isPositiveCashFlow ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`text-xl font-bold ${isPositiveCashFlow ? 'text-[#8FBF7F]' : 'text-red-600'}`}>
                     {isPositiveCashFlow ? '+' : ''}{formatCurrency(currentForecast.netCashFlow)}
                   </p>
                 </div>
@@ -232,7 +232,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                     event.type === 'income' ? 'bg-[#F8FAF8]' : 'bg-red-100'
                   }`}>
                     {event.type === 'income' ? (
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
                     ) : (
                       <TrendingDown className="h-4 w-4 text-red-600" />
                     )}
@@ -242,7 +242,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                     <p className="text-sm text-[#555555]">{event.date}</p>
                   </div>
                 </div>
-                <div className={`font-bold ${event.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`font-bold ${event.type === 'income' ? 'text-[#8FBF7F]' : 'text-red-600'}`}>
                   {event.type === 'income' ? '+' : '-'}{formatCurrency(Math.abs(event.amount))}
                 </div>
               </div>

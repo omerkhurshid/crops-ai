@@ -64,14 +64,14 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
     return ((animal.currentValue || 0) - animal.totalCosts) / animal.totalCosts * 100
   }
   const getProfitabilityColor = (profitLoss: number) => {
-    if (profitLoss > 0) return 'text-green-600'
+    if (profitLoss > 0) return 'text-[#8FBF7F]'
     if (profitLoss < 0) return 'text-red-600'
     return 'text-[#555555]'
   }
   if (animals.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <DollarSign className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Financial Data Yet</h3>
@@ -87,7 +87,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by animal tag number or name..."
             value={searchTerm}
@@ -132,14 +132,14 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-[#FAFAF7] rounded-lg">
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
-              <DollarSign className="h-5 w-5 text-blue-600 mr-2" />
+              <DollarSign className="h-5 w-5 text-[#7A8F78] mr-2" />
               <span className="font-medium text-[#555555]">Total Investment</span>
             </div>
             <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalInvestment.toLocaleString()}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
-              <Calculator className="h-5 w-5 text-green-600 mr-2" />
+              <Calculator className="h-5 w-5 text-[#8FBF7F] mr-2" />
               <span className="font-medium text-[#555555]">Current Value</span>
             </div>
             <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalValue.toLocaleString()}</p>
@@ -147,7 +147,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               {summaryStats.totalProfitLoss >= 0 ? (
-                <TrendingUp className="h-5 w-5 text-green-600 mr-2" />
+                <TrendingUp className="h-5 w-5 text-[#8FBF7F] mr-2" />
               ) : (
                 <TrendingDown className="h-5 w-5 text-red-600 mr-2" />
               )}
@@ -210,7 +210,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                         {animal.name && (
                           <div className="text-sm text-[#555555]">{animal.name}</div>
                         )}
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-[#555555]">
                           {animal.species} • {animal.farm?.name}
                         </div>
                       </div>
@@ -241,10 +241,10 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {roi >= 20 && (
-                      <Badge className="bg-[#F8FAF8] text-green-800">Excellent</Badge>
+                      <Badge className="bg-[#F8FAF8] text-[#7A8F78]">Excellent</Badge>
                     )}
                     {roi >= 10 && roi < 20 && (
-                      <Badge className="bg-blue-100 text-blue-800">Good</Badge>
+                      <Badge className="bg-blue-100 text-[#7A8F78]">Good</Badge>
                     )}
                     {roi >= 0 && roi < 10 && (
                       <Badge className="bg-yellow-100 text-yellow-800">Fair</Badge>

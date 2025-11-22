@@ -227,7 +227,7 @@ export function HyperlocalWeatherDashboard({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Recommendations */}
               <div>
-                <h4 className="font-semibold text-green-700 mb-2">✅ Recommendations</h4>
+                <h4 className="font-semibold text-[#7A8F78] mb-2">✅ Recommendations</h4>
                 <ul className="space-y-1 text-sm">
                   {cropAdvisory.recommendations.map((rec, i) => (
                     <li key={i} className="text-[#555555]">• {rec}</li>

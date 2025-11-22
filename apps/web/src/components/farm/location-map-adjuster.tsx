@@ -149,7 +149,7 @@ export function LocationMapAdjuster({
                     <div
                       key={i}
                       className={`border border-green-300 ${
-                        Math.random() > 0.7 ? 'bg-green-400' : 'bg-green-300'
+                        Math.random() > 0.7 ? 'bg-[#8FBF7F]' : 'bg-green-300'
                       }`}
                     />
                   ))}
@@ -178,8 +178,8 @@ export function LocationMapAdjuster({
               {showHelp && (
                 <div className="absolute top-4 left-4 bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-xs">
                   <div className="flex items-start space-x-2">
-                    <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div className="text-xs text-blue-800">
+                    <Info className="h-4 w-4 text-[#7A8F78] mt-0.5 flex-shrink-0" />
+                    <div className="text-xs text-[#7A8F78]">
                       <p className="font-medium mb-1">Quick Tips:</p>
                       <ul className="space-y-0.5">
                         <li>• Click and drag to pan the map</li>
@@ -190,7 +190,7 @@ export function LocationMapAdjuster({
                     </div>
                     <button
                       onClick={() => setShowHelp(false)}
-                      className="text-blue-600 hover:text-blue-800 -mt-1"
+                      className="text-[#7A8F78] hover:text-[#7A8F78] -mt-1"
                     >
                       ×
                     </button>

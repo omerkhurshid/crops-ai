@@ -38,7 +38,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
   const sortedAnimals = [...filteredAnimals].sort((a, b) => b.readinessScore - a.readinessScore)
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ready': return 'bg-[#F8FAF8] text-green-800'
+      case 'ready': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'approaching': return 'bg-yellow-100 text-yellow-800'
       case 'not_ready': return 'bg-[#F5F5F5] text-[#1A1A1A]'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
@@ -46,17 +46,17 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
   }
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'ready': return <CheckCircle className="h-4 w-4 text-green-600" />
+      case 'ready': return <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
       case 'approaching': return <AlertCircle className="h-4 w-4 text-yellow-600" />
       case 'not_ready': return <Calendar className="h-4 w-4 text-[#555555]" />
       default: return <Calendar className="h-4 w-4 text-[#555555]" />
     }
   }
   const getGrowthTrendIcon = (growthRate: number) => {
-    if (growthRate > 0.5) return <TrendingUp className="h-4 w-4 text-green-500" />
+    if (growthRate > 0.5) return <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
     if (growthRate > 0) return <TrendingUp className="h-4 w-4 text-blue-500" />
     if (growthRate < -0.5) return <TrendingDown className="h-4 w-4 text-red-500" />
-    return <TrendingDown className="h-4 w-4 text-gray-400" />
+    return <TrendingDown className="h-4 w-4 text-[#555555]" />
   }
   // Get unique values for filters
   const uniqueFarms = Array.from(new Set(animals.map(animal => animal.farm?.name).filter(Boolean)))
@@ -65,7 +65,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
   if (animals.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-[#555555] mb-4">
           <Target className="h-16 w-16 mx-auto mb-4" />
         </div>
         <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Market Data Available</h3>
@@ -81,7 +81,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#555555]" />
           <Input
             placeholder="Search by animal tag number or name..."
             value={searchTerm}
@@ -167,7 +167,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                       {animal.name && (
                         <div className="text-sm text-[#555555]">{animal.name}</div>
                       )}
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-[#555555]">
                         {animal.species} • {animal.farm?.name}
                       </div>
                     </div>
@@ -206,7 +206,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                       className={`h-2 rounded-full ${
                         animal.readinessScore >= 90 ? 'bg-[#8FBF7F]' :
                         animal.readinessScore >= 70 ? 'bg-yellow-500' :
-                        'bg-gray-400'
+                        'bg-[#555555]'
                       }`}
                       style={{ width: `${Math.min(100, animal.readinessScore)}%` }}
                     ></div>
@@ -225,7 +225,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {animal.readinessStatus === 'ready' ? (
-                    <span className="text-sm font-medium text-green-600">Ready Now</span>
+                    <span className="text-sm font-medium text-[#8FBF7F]">Ready Now</span>
                   ) : animal.daysToOptimal > 0 ? (
                     <div>
                       <div className="text-sm text-[#1A1A1A]">

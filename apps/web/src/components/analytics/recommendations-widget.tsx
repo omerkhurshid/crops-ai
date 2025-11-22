@@ -58,7 +58,7 @@ const typeIcons = {
 const confidenceColors = {
   low: 'text-[#555555]',
   medium: 'text-blue-500',
-  high: 'text-green-500'
+  high: 'text-[#8FBF7F]'
 }
 export function RecommendationsWidget({ 
   farmId, 
@@ -203,7 +203,7 @@ export function RecommendationsWidget({
         )}
         {recommendations.length === 0 && !error && (
           <div className="text-center py-8">
-            <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <Target className="h-12 w-12 text-[#555555] mx-auto mb-4" />
             <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Recommendations Yet</h3>
             <p className="text-[#555555] mb-4">
               Generate personalized farming insights based on your data
@@ -249,7 +249,7 @@ export function RecommendationsWidget({
                     variant="ghost"
                     size="sm"
                     onClick={() => updateRecommendation(rec.id, 'complete')}
-                    className="p-1 h-6 w-6 text-green-600 hover:bg-[#F8FAF8]"
+                    className="p-1 h-6 w-6 text-[#8FBF7F] hover:bg-[#F8FAF8]"
                     title="Mark as completed"
                   >
                     <CheckCircle className="h-3 w-3" />
@@ -258,7 +258,7 @@ export function RecommendationsWidget({
                     variant="ghost"
                     size="sm"
                     onClick={() => updateRecommendation(rec.id, 'dismiss')}
-                    className="p-1 h-6 w-6 text-gray-400 hover:bg-[#FAFAF7]"
+                    className="p-1 h-6 w-6 text-[#555555] hover:bg-[#FAFAF7]"
                     title="Dismiss"
                   >
                     <X className="h-3 w-3" />
@@ -280,8 +280,8 @@ export function RecommendationsWidget({
                 </div>
                 {rec.potentialImpact && (
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="h-3 w-3 text-green-600" />
-                    <p className="text-xs text-green-600 font-medium">
+                    <TrendingUp className="h-3 w-3 text-[#8FBF7F]" />
+                    <p className="text-xs text-[#8FBF7F] font-medium">
                       {rec.potentialImpact}
                     </p>
                   </div>
@@ -302,7 +302,7 @@ export function RecommendationsWidget({
                   )}
                   {rec.estimatedRoi && (
                     <div className="flex items-center gap-1">
-                      <TrendingUp className="h-3 w-3 text-green-500" />
+                      <TrendingUp className="h-3 w-3 text-[#8FBF7F]" />
                       {formatCurrency(rec.estimatedRoi)} potential return
                     </div>
                   )}
@@ -311,7 +311,7 @@ export function RecommendationsWidget({
                   <span className={`text-xs font-medium ${confidenceColors[rec.confidenceLevel]}`}>
                     {rec.confidenceLevel} confidence
                   </span>
-                  <ChevronRight className="h-3 w-3 text-gray-400" />
+                  <ChevronRight className="h-3 w-3 text-[#555555]" />
                 </div>
               </div>
             </div>

@@ -453,7 +453,7 @@ export function UnifiedFarmCreator() {
         <ModernCard variant="soft">
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-green-600" />
+              <Sprout className="h-5 w-5 text-[#8FBF7F]" />
               Farm Information
             </ModernCardTitle>
             <ModernCardDescription>Basic details about your farming operation</ModernCardDescription>
@@ -500,7 +500,7 @@ export function UnifiedFarmCreator() {
         <ModernCard variant="soft">
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-green-600" />
+              <Sprout className="h-5 w-5 text-[#8FBF7F]" />
               What Are You Growing or Raising?
             </ModernCardTitle>
             <ModernCardDescription>
@@ -519,7 +519,7 @@ export function UnifiedFarmCreator() {
         <ModernCard variant="soft">
           <ModernCardHeader>
             <ModernCardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-blue-600" />
+              <MapPin className="h-5 w-5 text-[#7A8F78]" />
               Farm Location
             </ModernCardTitle>
             <ModernCardDescription>Where is your farm located?</ModernCardDescription>
@@ -561,11 +561,11 @@ export function UnifiedFarmCreator() {
             </div>
             {farm.location.lat !== 0 && (
               <div className="flex items-center justify-between p-3 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
-                <div className="flex items-center gap-2 text-sm text-green-600">
+                <div className="flex items-center gap-2 text-sm text-[#8FBF7F]">
                   <CheckCircle className="h-4 w-4" />
                   Location set: {farm.location.lat.toFixed(4)}, {farm.location.lng.toFixed(4)}
                   {farm.location.address && (
-                    <span className="text-green-700 font-medium">({farm.location.address})</span>
+                    <span className="text-[#7A8F78] font-medium">({farm.location.address})</span>
                   )}
                 </div>
                 <Button
@@ -587,7 +587,7 @@ export function UnifiedFarmCreator() {
             <div className="flex items-center justify-between">
               <div>
                 <ModernCardTitle className="flex items-center gap-2">
-                  <Satellite className="h-5 w-5 text-green-600" />
+                  <Satellite className="h-5 w-5 text-[#8FBF7F]" />
                   Farm Mapping {hasValidBoundaries && <Badge variant="secondary" className="ml-2">Boundaries Set</Badge>}
                 </ModernCardTitle>
                 <ModernCardDescription>
@@ -614,7 +614,7 @@ export function UnifiedFarmCreator() {
             {!showMap ? (
               <div className="h-96 flex items-center justify-center bg-[#FAFAF7] rounded-lg border-2 border-dashed border-[#E6E6E6]">
                 <div className="text-center">
-                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <MapPin className="h-12 w-12 text-[#555555] mx-auto mb-4" />
                   <p className="text-[#555555] mb-4">Set your farm location first</p>
                   <Button
                     onClick={() => setShowMap(true)}
@@ -725,7 +725,7 @@ export function UnifiedFarmCreator() {
                           </div>
                         </div>
                         <div className="flex-grow">
-                          <AlertDescription className="text-green-800">
+                          <AlertDescription className="text-[#7A8F78]">
                             <strong>Click the Polygon Tool</strong> (📐) on the map above, then click around your farm perimeter to draw boundaries. Click your first point again to close the shape.
                           </AlertDescription>
                         </div>
@@ -738,8 +738,8 @@ export function UnifiedFarmCreator() {
                     </Alert>
                   ) : (
                     <Alert className="border-blue-200 bg-blue-50">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <AlertDescription className="text-blue-800">
+                      <CheckCircle className="h-4 w-4 text-[#8FBF7F]" />
+                      <AlertDescription className="text-[#7A8F78]">
                         <strong>✅ Farm boundaries complete!</strong> Now you can optionally use the polygon tool to draw individual field boundaries within your farm.
                       </AlertDescription>
                     </Alert>
@@ -747,7 +747,7 @@ export function UnifiedFarmCreator() {
                   {farm.totalArea && (
                     <div className="text-center p-3 bg-[#FAFAF7] rounded-lg">
                       <p className="text-sm text-[#555555]">
-                        Farm Area: <span className="font-semibold text-green-600">{farm.totalArea} acres</span>
+                        Farm Area: <span className="font-semibold text-[#8FBF7F]">{farm.totalArea} acres</span>
                       </p>
                     </div>
                   )}
@@ -814,7 +814,7 @@ export function UnifiedFarmCreator() {
                 </div>
               ) : (
                 <div className="text-center py-8 text-[#555555]">
-                  <Satellite className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <Satellite className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
                   <p className="font-medium">No fields created yet</p>
                   <p className="text-sm">Use the polygon tool on the map above to draw field boundaries</p>
                 </div>

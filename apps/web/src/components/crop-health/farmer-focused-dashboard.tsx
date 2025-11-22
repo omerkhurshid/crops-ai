@@ -34,13 +34,13 @@ interface SimpleFieldHealth {
   }
 }
 const healthColors = {
-  healthy: 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]',
+  healthy: 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]',
   watch: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   action_needed: 'bg-red-100 text-red-800 border-red-200'
 }
 const yieldColors = {
-  excellent: 'text-green-600',
-  good: 'text-blue-600',
+  excellent: 'text-[#8FBF7F]',
+  good: 'text-[#7A8F78]',
   concerning: 'text-orange-600',
   poor: 'text-red-600'
 }
@@ -96,14 +96,14 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
   }
   const getHealthIcon = (stressLevel: string) => {
     switch (stressLevel) {
-      case 'healthy': return <CheckCircle2 className="h-5 w-5 text-green-600" />
+      case 'healthy': return <CheckCircle2 className="h-5 w-5 text-[#8FBF7F]" />
       case 'watch': return <Eye className="h-5 w-5 text-yellow-600" />
       case 'action_needed': return <AlertTriangle className="h-5 w-5 text-red-600" />
-      default: return <MinusCircle className="h-5 w-5 text-gray-400" />
+      default: return <MinusCircle className="h-5 w-5 text-[#555555]" />
     }
   }
   const getYieldIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="h-4 w-4 text-green-600" />
+    if (change > 0) return <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
     if (change < 0) return <TrendingDown className="h-4 w-4 text-red-600" />
     return <Activity className="h-4 w-4 text-[#555555]" />
   }
@@ -111,7 +111,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800'
       case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'low': return 'bg-[#F8FAF8] text-green-800'
+      case 'low': return 'bg-[#F8FAF8] text-[#7A8F78]'
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
     }
   }
@@ -138,10 +138,10 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-[#F8FAF8] rounded-full">
-                  <Sprout className="h-5 w-5 text-green-600" />
+                  <Sprout className="h-5 w-5 text-[#8FBF7F]" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{Math.round(avgHealth)}%</div>
+                  <div className="text-2xl font-bold text-[#8FBF7F]">{Math.round(avgHealth)}%</div>
                   <div className="text-sm text-[#555555]">Overall Health</div>
                 </div>
               </div>
@@ -151,10 +151,10 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-full">
-                  <MapPin className="h-5 w-5 text-blue-600" />
+                  <MapPin className="h-5 w-5 text-[#7A8F78]" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{fields.length}</div>
+                  <div className="text-2xl font-bold text-[#7A8F78]">{fields.length}</div>
                   <div className="text-sm text-[#555555]">Fields Monitored</div>
                   <div className="text-xs text-[#555555]">{totalArea.toFixed(1)} ha total</div>
                 </div>
@@ -195,7 +195,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
               key={field.fieldId} 
               className={`border-2 cursor-pointer transition-all hover:shadow-md ${
                 selectedField === field.fieldId || (selectedField === null && field === fields[0])
-                  ? 'ring-2 ring-sage-500 border-[#DDE4D8]' 
+                  ? 'ring-2 ring-#555555 border-[#DDE4D8]' 
                   : 'hover:border-[#E6E6E6]'
               }`}
               onClick={() => setSelectedField(field.fieldId)}
@@ -281,8 +281,8 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                   </div>
                 ) : (
                   <div className="text-center py-6">
-                    <CheckCircle2 className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                    <p className="text-sm text-green-700">No issues detected!</p>
+                    <CheckCircle2 className="h-8 w-8 text-[#8FBF7F] mx-auto mb-2" />
+                    <p className="text-sm text-[#7A8F78]">No issues detected!</p>
                     <p className="text-xs text-[#555555]">This field is performing well.</p>
                   </div>
                 )}
@@ -292,7 +292,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
             <Card className="border-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
+                  <Target className="h-5 w-5 text-[#7A8F78]" />
                   Action Plan - {selectedFieldData.fieldName}
                 </CardTitle>
                 <CardDescription>
@@ -303,17 +303,17 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 <div className="space-y-3">
                   {selectedFieldData.simpleRecommendations.map((rec, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <CheckCircle2 className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                       <span className="text-sm">{rec}</span>
                     </div>
                   ))}
                 </div>
                 <div className="mt-4 p-3 bg-[#F8FAF8] rounded-lg border border-[#DDE4D8]">
                   <div className="flex items-center gap-2 mb-2">
-                    <Calendar className="h-4 w-4 text-green-600" />
-                    <span className="font-medium text-green-800">Priority Task</span>
+                    <Calendar className="h-4 w-4 text-[#8FBF7F]" />
+                    <span className="font-medium text-[#7A8F78]">Priority Task</span>
                   </div>
-                  <p className="text-sm text-green-700">
+                  <p className="text-sm text-[#7A8F78]">
                     {selectedFieldData.nextAction.task} - 
                     <span className="font-medium"> Due in {selectedFieldData.nextAction.daysUntil} days</span>
                   </p>
@@ -336,7 +336,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
           <CardContent>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                <Droplets className="h-6 w-6 text-blue-600" />
+                <Droplets className="h-6 w-6 text-[#7A8F78]" />
                 <span className="text-sm">Schedule Irrigation</span>
               </Button>
               <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
@@ -344,7 +344,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
                 <span className="text-sm">Report Pest Issue</span>
               </Button>
               <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                <Leaf className="h-6 w-6 text-green-600" />
+                <Leaf className="h-6 w-6 text-[#8FBF7F]" />
                 <span className="text-sm">Log Field Notes</span>
               </Button>
               <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">

@@ -54,7 +54,7 @@ interface FieldHealth {
   }
 }
 const stressLevelColors = {
-  none: 'bg-[#F8FAF8] text-green-800',
+  none: 'bg-[#F8FAF8] text-[#7A8F78]',
   low: 'bg-yellow-100 text-yellow-800',
   moderate: 'bg-orange-100 text-orange-800',
   high: 'bg-red-100 text-red-800',
@@ -185,13 +185,13 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
     ]
   }
   const getHealthColor = (score: number) => {
-    if (score >= 85) return 'text-green-600'
+    if (score >= 85) return 'text-[#8FBF7F]'
     if (score >= 70) return 'text-yellow-600'
     if (score >= 50) return 'text-orange-600'
     return 'text-red-600'
   }
   const getStressIcon = (severity: number) => {
-    if (severity <= 10) return <CheckCircle2 className="h-4 w-4 text-green-600" />
+    if (severity <= 10) return <CheckCircle2 className="h-4 w-4 text-[#8FBF7F]" />
     if (severity <= 30) return <MinusCircle className="h-4 w-4 text-yellow-600" />
     return <XCircle className="h-4 w-4 text-red-600" />
   }
@@ -291,7 +291,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-[#8FBF7F]">
               {Math.round((fields || []).reduce((sum, f) => sum + f.healthScore, 0) / (fields || []).length)}%
             </div>
             <p className="text-xs text-[#555555] mt-1">
@@ -323,7 +323,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-[#8FBF7F]">
               {((fields || []).reduce((sum, f) => sum + f.indices?.ndvi || 0, 0) / (fields || []).length).toFixed(2)}
             </div>
             <p className="text-xs text-[#555555] mt-1">
@@ -478,7 +478,7 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                         <div className="flex justify-between text-sm">
                           <span>Severity:</span>
                           <span className={`font-medium ${
-                            data.severity <= 10 ? 'text-green-600' :
+                            data.severity <= 10 ? 'text-[#8FBF7F]' :
                             data.severity <= 30 ? 'text-yellow-600' :
                             'text-red-600'
                           }`}>
@@ -531,10 +531,10 @@ export function HealthDashboard({ farmId }: HealthDashboardProps) {
                   </div>
                 </div>
                 <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-                  <div className="text-2xl font-bold text-green-800">
+                  <div className="text-2xl font-bold text-[#7A8F78]">
                     {selectedFieldData.yieldPrediction.potential}
                   </div>
-                  <div className="flex items-center justify-center gap-1 text-sm text-green-600">
+                  <div className="flex items-center justify-center gap-1 text-sm text-[#8FBF7F]">
                     <span>Potential Yield</span>
                     <InfoTooltip {...TOOLTIP_CONTENT.potentialYield} size="sm" />
                   </div>

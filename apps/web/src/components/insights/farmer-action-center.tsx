@@ -35,8 +35,8 @@ const urgencyConfig = {
 const categoryConfig = {
   water: { icon: Droplets, color: 'text-blue-600' },
   pests: { icon: Bug, color: 'text-red-600' },
-  growth: { icon: Sprout, color: 'text-green-600' },
-  money: { icon: DollarSign, color: 'text-green-700' },
+  growth: { icon: Sprout, color: 'text-[#8FBF7F]' },
+  money: { icon: DollarSign, color: 'text-[#7A8F78]' },
   timing: { icon: Timer, color: 'text-purple-600' }
 }
 export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProps) {
@@ -85,7 +85,7 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
     <ModernCard variant="soft" className={className}>
       <ModernCardHeader>
         <ModernCardTitle className="flex items-center gap-2">
-          <Target className="h-5 w-5 text-green-600" />
+          <Target className="h-5 w-5 text-[#8FBF7F]" />
           Your Action Plan
           <InfoTooltip 
             title="Action Plan" 
@@ -124,7 +124,7 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
         )}
         {actions.length === 0 && (
           <div className="text-center py-8">
-            <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
+            <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
             <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Caught Up!</h3>
             <p className="text-[#555555]">No urgent actions needed right now. Check back tomorrow.</p>
           </div>
@@ -147,7 +147,7 @@ function ActionCard({ action }: { action: FarmerAction }) {
             {urgencyInfo.label}
           </Badge>
           {action.field && (
-            <span className="text-xs text-sage-500 flex items-center gap-1">
+            <span className="text-xs text-#555555 flex items-center gap-1">
               <MapPin className="h-3 w-3" />
               {action.field}
             </span>
@@ -156,12 +156,12 @@ function ActionCard({ action }: { action: FarmerAction }) {
         {/* Prominent Dollar Impact */}
         {action.savings && (
           <div className="text-right">
-            <div className="text-2xl font-bold text-green-600">${action.savings}</div>
-            <div className="text-xs text-green-700">potential savings</div>
+            <div className="text-2xl font-bold text-[#8FBF7F]">${action.savings}</div>
+            <div className="text-xs text-[#7A8F78]">potential savings</div>
           </div>
         )}
       </div>
-      <h4 className="font-semibold text-sage-900 mb-2 text-base">
+      <h4 className="font-semibold text-#1A1A1A mb-2 text-base">
         {action.action}
       </h4>
       <p className="text-sm text-[#555555] mb-3">{action.reason}</p>
@@ -177,7 +177,7 @@ function ActionCard({ action }: { action: FarmerAction }) {
           </div>
         )}
         {action.savings && (
-          <div className="flex items-center gap-1 text-green-600">
+          <div className="flex items-center gap-1 text-[#8FBF7F]">
             <TrendingUp className="h-3 w-3" />
             Save ${action.savings}
             <InfoTooltip 
@@ -192,7 +192,7 @@ function ActionCard({ action }: { action: FarmerAction }) {
         <p className="text-sm font-medium text-[#1A1A1A]">{action.impact}</p>
       </div>
       <div className="flex gap-2">
-        <Button size="sm" className="bg-[#7A8F78] hover:bg-green-700 text-white flex-1">
+        <Button size="sm" className="bg-[#7A8F78] hover:bg-[#7A8F78] text-white flex-1">
           <CheckCircle2 className="h-3 w-3 mr-1" />
           Mark Done
         </Button>

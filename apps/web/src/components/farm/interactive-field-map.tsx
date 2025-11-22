@@ -333,7 +333,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
               <h4 className="font-medium mb-4">1. Set Map Location (Optional)</h4>
               {/* Location helpers */}
               <div className="mb-4 p-3 bg-blue-50 rounded-lg flex items-start space-x-2">
-                <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <Info className="h-4 w-4 text-[#7A8F78] mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-blue-700">
                   <p className="font-medium mb-1">Skip coordinates and draw directly!</p>
                   <p className="text-xs">Just select &quot;Manual Drawing&quot; below and start creating your field boundaries.</p>

@@ -59,7 +59,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
         <div className="flex items-center">
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-sage-500"
+            className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-#555555"
             aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
@@ -110,7 +110,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-md text-gray-400 hover:text-[#555555] hover:bg-[#F5F5F5]"
+            className="p-2 rounded-md text-[#555555] hover:text-[#555555] hover:bg-[#F5F5F5]"
             aria-label="Close menu"
           >
             <X className="h-6 w-6" />
@@ -128,7 +128,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
                 className={`
                   flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
                   ${isActive 
-                    ? 'bg-[#F8FAF8] text-sage-900 border-l-4 border-[#7A8F78]' 
+                    ? 'bg-[#F8FAF8] text-#1A1A1A border-l-4 border-[#7A8F78]' 
                     : 'text-[#555555] hover:bg-[#F5F5F5] hover:text-[#1A1A1A]'
                   }
                 `}

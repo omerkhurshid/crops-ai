@@ -61,7 +61,7 @@ export function AdvancedFilters({
       case 'search':
         return (
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-sage-500" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-#555555" />
             <input
               type="text"
               placeholder={filter.placeholder || `Search ${filter.label.toLowerCase()}...`}
@@ -70,7 +70,7 @@ export function AdvancedFilters({
                 setSearchValues(prev => ({ ...prev, [filter.id]: e.target.value }))
                 onFilterChange(filter.id, e.target.value)
               }}
-              className="w-full pl-10 pr-4 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-transparent text-sm"
             />
           </div>
         )
@@ -81,7 +81,7 @@ export function AdvancedFilters({
               onClick={() => toggleDropdown(filter.id)}
               className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={filter.value ? 'text-[#1A1A1A]' : 'text-sage-500'}>
+              <span className={filter.value ? 'text-[#1A1A1A]' : 'text-#555555'}>
                 {filter.value 
                   ? filter.options?.find(opt => opt.value === filter.value)?.label 
                   : `Select ${filter.label.toLowerCase()}`
@@ -125,7 +125,7 @@ export function AdvancedFilters({
               onClick={() => toggleDropdown(filter.id)}
               className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={selectedValues.length ? 'text-[#1A1A1A]' : 'text-sage-500'}>
+              <span className={selectedValues.length ? 'text-[#1A1A1A]' : 'text-#555555'}>
                 {selectedValues.length 
                   ? `${selectedValues.length} selected`
                   : `Select ${filter.label.toLowerCase()}`
@@ -192,9 +192,9 @@ export function AdvancedFilters({
                   ...filter.value, 
                   min: e.target.value ? Number(e.target.value) : undefined 
                 })}
-                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-transparent text-sm"
               />
-              <span className="text-sage-500">to</span>
+              <span className="text-#555555">to</span>
               <input
                 type="number"
                 placeholder={filter.max?.toString() || "Max"}
@@ -205,7 +205,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   max: e.target.value ? Number(e.target.value) : undefined 
                 })}
-                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-transparent text-sm"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   start: e.target.value 
                 })}
-                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-transparent text-sm"
               />
               <input
                 type="date"
@@ -230,7 +230,7 @@ export function AdvancedFilters({
                   ...filter.value, 
                   end: e.target.value 
                 })}
-                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-[#DDE4D8] rounded-lg focus:ring-2 focus:ring-#555555 focus:border-transparent text-sm"
               />
             </div>
           </div>

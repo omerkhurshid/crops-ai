@@ -43,11 +43,11 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
       case 'urgent': return 'bg-red-100 text-red-800 border-red-200'
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      default: return 'bg-[#F8FAF8] text-green-800 border-[#DDE4D8]'
+      default: return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
     }
   }
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 80) return 'text-green-600'
+    if (confidence >= 80) return 'text-[#8FBF7F]'
     if (confidence >= 60) return 'text-yellow-600'
     return 'text-red-600'
   }
@@ -129,7 +129,7 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
                         )}
                       </div>
                       {rec.estimatedImpact && (
-                        <div className="text-sm font-medium text-green-600">
+                        <div className="text-sm font-medium text-[#8FBF7F]">
                           {rec.estimatedImpact}
                         </div>
                       )}
@@ -141,7 +141,7 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
           </div>
         ) : (
           <div className="text-center py-6">
-            <Brain className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+            <Brain className="h-8 w-8 text-[#555555] mx-auto mb-2" />
             <p className="text-sm text-[#555555]">No recommendations available</p>
             <p className="text-xs text-[#555555] mt-1">
               Add field data to get personalized insights

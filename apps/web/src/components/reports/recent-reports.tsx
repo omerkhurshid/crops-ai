@@ -44,7 +44,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   };
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-[#F8FAF8] text-green-800';
+      case 'completed': return 'bg-[#F8FAF8] text-[#7A8F78]';
       case 'processing': return 'bg-yellow-100 text-yellow-800';
       case 'failed': return 'bg-red-100 text-red-800';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
@@ -52,9 +52,9 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   };
   const getTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
-      case 'performance': return 'bg-blue-100 text-blue-800';
+      case 'performance': return 'bg-blue-100 text-[#7A8F78]';
       case 'weather': return 'bg-purple-100 text-purple-800';
-      case 'health': return 'bg-[#F8FAF8] text-green-800';
+      case 'health': return 'bg-[#F8FAF8] text-[#7A8F78]';
       case 'financial': return 'bg-orange-100 text-orange-800';
       default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
     }
@@ -76,7 +76,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
   if (reports.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <FileText className="h-12 w-12 text-[#555555] mx-auto mb-4" />
         <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Reports Generated Yet</h3>
         <p className="text-[#555555]">
           Generate your first report using one of the options above. Reports will appear here for easy access and download.
@@ -90,7 +90,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
         <Card key={report.id} className="p-4 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="flex items-start gap-3">
-              <FileText className="h-5 w-5 text-blue-600 mt-1" />
+              <FileText className="h-5 w-5 text-[#7A8F78] mt-1" />
               <div>
                 <h4 className="font-medium text-[#1A1A1A]">{report.name}</h4>
                 <div className="flex items-center gap-2 mt-1">

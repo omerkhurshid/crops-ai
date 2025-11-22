@@ -67,7 +67,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       tier: 'premium'
     },
     {
-      icon: <DollarSign className="h-6 w-6 text-green-600" />,
+      icon: <DollarSign className="h-6 w-6 text-[#8FBF7F]" />,
       title: 'Market Intelligence',
       description: 'Know exactly when to sell for maximum profit with AI market analysis',
       value: 'Increase revenue 10-20%',
@@ -121,8 +121,8 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       </div>
       {/* ROI Calculator */}
       <Alert className="bg-[#F8FAF8] border-[#DDE4D8]">
-        <TrendingUp className="h-4 w-4 text-green-600" />
-        <AlertDescription className="text-green-800">
+        <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />
+        <AlertDescription className="text-[#7A8F78]">
           <strong>Return on Investment:</strong> Premium users typically see 15-30% yield increases and 20-40% cost reductions, 
           paying for the subscription 10x over in the first season.
         </AlertDescription>
@@ -161,7 +161,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
         {/* Premium Tier */}
         <ModernCard 
           variant={selectedTier === 'premium' ? 'floating' : 'soft'} 
-          className={`relative ${selectedTier === 'premium' ? 'ring-2 ring-sage-500' : ''}`}
+          className={`relative ${selectedTier === 'premium' ? 'ring-2 ring-#555555' : ''}`}
         >
           {selectedTier === 'premium' && (
             <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#7A8F78] text-white">
@@ -185,7 +185,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
             <ul className="space-y-3">
               {features.premium.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[#8FBF7F] flex-shrink-0" />
                   <span className="text-[#555555]">{feature}</span>
                 </li>
               ))}
@@ -224,7 +224,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
             <ul className="space-y-3">
               {features.pro.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-[#8FBF7F] flex-shrink-0" />
                   <span className="text-[#555555]">{feature}</span>
                 </li>
               ))}
@@ -294,11 +294,11 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       {/* Money Back Guarantee */}
       <div className="text-center">
         <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-4 inline-block">
-          <div className="flex items-center gap-2 text-green-800 font-semibold">
+          <div className="flex items-center gap-2 text-[#7A8F78] font-semibold">
             <Shield className="h-5 w-5" />
             30-Day Money-Back Guarantee
           </div>
-          <p className="text-green-700 text-sm mt-1">
+          <p className="text-[#7A8F78] text-sm mt-1">
             Not satisfied? Get a full refund within 30 days, no questions asked.
           </p>
         </div>

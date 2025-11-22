@@ -157,7 +157,7 @@ export function BulkActionsToolbar({
                             <div>
                               <div>{action.label}</div>
                               {action.description && (
-                                <div className="text-xs text-sage-500 mt-0.5">
+                                <div className="text-xs text-#555555 mt-0.5">
                                   {action.description}
                                 </div>
                               )}
@@ -172,7 +172,7 @@ export function BulkActionsToolbar({
               {/* Clear Selection */}
               <button
                 onClick={onDeselectAll}
-                className="p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors text-sage-500 hover:text-[#555555]"
+                className="p-2 hover:bg-[#F8FAF8] rounded-lg transition-colors text-#555555 hover:text-[#555555]"
                 title="Clear selection"
               >
                 <X className="h-4 w-4" />

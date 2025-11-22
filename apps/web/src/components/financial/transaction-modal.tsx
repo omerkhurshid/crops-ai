@@ -249,7 +249,7 @@ export function TransactionModal({
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <div className={`p-2 rounded-full ${
-              type === 'INCOME' ? 'bg-[#F8FAF8] text-green-600' : 'bg-red-100 text-red-600'
+              type === 'INCOME' ? 'bg-[#F8FAF8] text-[#8FBF7F]' : 'bg-red-100 text-red-600'
             }`}>
               <DollarSign className="h-5 w-5" />
             </div>
@@ -457,7 +457,7 @@ export function TransactionModal({
             <Button
               type="submit"
               disabled={loading}
-              className={type === 'INCOME' ? 'bg-[#7A8F78] hover:bg-green-700' : ''}
+              className={type === 'INCOME' ? 'bg-[#7A8F78] hover:bg-[#7A8F78]' : ''}
             >
               {loading ? 'Saving...' : editTransaction ? 'Update' : 'Add'} {type === 'INCOME' ? 'Income' : 'Expense'}
             </Button>

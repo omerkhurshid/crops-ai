@@ -83,7 +83,7 @@ function DashboardContent({
           <div className="text-sm text-[#555555]">Fields</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total farm area">
-          <div className="text-2xl font-bold text-green-600" aria-label={`${totalArea.toFixed(1)} hectares`}>{totalArea.toFixed(1)}</div>
+          <div className="text-2xl font-bold text-[#8FBF7F]" aria-label={`${totalArea.toFixed(1)} hectares`}>{totalArea.toFixed(1)}</div>
           <div className="text-sm text-[#555555]">Hectares</div>
         </div>
         <div className="bg-white rounded-lg shadow-sm border p-4" role="region" aria-label="Total crops count">
@@ -93,7 +93,7 @@ function DashboardContent({
         <div className="bg-white rounded-lg shadow-sm border p-4">
           <div className="flex items-center gap-2">
             <div className="text-2xl font-bold text-orange-600">{activeAlerts}</div>
-            {activeAlerts === 0 && <CheckCircle className="h-5 w-5 text-green-600" />}
+            {activeAlerts === 0 && <CheckCircle className="h-5 w-5 text-[#8FBF7F]" />}
           </div>
           <div className="text-sm text-[#555555]">Active Alerts</div>
         </div>

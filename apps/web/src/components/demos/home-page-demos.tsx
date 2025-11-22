@@ -416,7 +416,7 @@ export function HomePageDemos() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-fk-text mb-3 sm:mb-4">
-            See Crops.AI in Action
+            See Cropple.AI in Action
           </h2>
           <p className="text-lg sm:text-xl text-fk-text-muted max-w-3xl mx-auto px-2">
             Experience real data from an Iowa corn farm. These are actual insights generated from satellite imagery, weather data, and market intelligence.
@@ -438,7 +438,7 @@ export function HomePageDemos() {
             onClick={() => window.location.href = '/register'}
           >
             <Eye className="h-4 w-4 mr-2" />
-            Try Crops.AI Free
+            Try Cropple.AI Free
           </Button>
         </div>
       </div>

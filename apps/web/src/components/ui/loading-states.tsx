@@ -134,7 +134,7 @@ export function FullPageLoading() {
           <Spinner size="large" className="text-[#555555]" />
         </div>
         <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">
-          Crops.AI
+          Cropple.AI
         </h2>
         <p className="text-[#555555]">Loading your farm data...</p>
       </div>

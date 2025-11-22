@@ -2,7 +2,7 @@
  * MLOps Pipeline for Model Management
  * 
  * Provides infrastructure for training, versioning, deploying, and monitoring
- * machine learning models in the Crops.AI platform.
+ * machine learning models in the Cropple.AI platform.
  */
 import { auditLogger } from '../logging/audit-logger'
 // Note: File system operations are handled server-side only

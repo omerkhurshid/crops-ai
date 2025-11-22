@@ -18,7 +18,7 @@ const helpArticles: HelpArticle[] = [
   {
     id: 'account-setup',
     title: 'Account Setup & First Login',
-    description: 'Complete guide to setting up your Crops.AI account and first-time login',
+    description: 'Complete guide to setting up your Cropple.AI account and first-time login',
     content: 'Step-by-step guide to creating and configuring your account...',
     tags: ['Setup', 'Account'],
     section: 'Getting Started',

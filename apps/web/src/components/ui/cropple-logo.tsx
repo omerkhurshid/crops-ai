@@ -18,7 +18,7 @@ export function CroppleLogo({ className = '', size = 'md', showText = true, text
     <div className={`flex items-center gap-2 ${className}`}>
       <Image
         src="/crops-ai-logo.png"
-        alt="Crops.AI Logo"
+        alt="Cropple.AI Logo"
         width={iconSize}
         height={iconSize}
         className="object-contain"

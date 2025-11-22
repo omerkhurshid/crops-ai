@@ -93,7 +93,7 @@ class AlertManager {
       const color = this.getAlertColor(alert.type)
       const payload = {
         channel: this.config.slackChannel,
-        username: 'Crops.AI Monitor',
+        username: 'Cropple.AI Monitor',
         icon_emoji: this.getAlertEmoji(alert.type),
         attachments: [{
           color,

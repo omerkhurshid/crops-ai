@@ -176,7 +176,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
           <div>
             <ModernCardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5 text-[#555555]" />
-              Welcome to Crops.AI
+              Welcome to Cropple.AI
               {completedEssentialSteps === totalEssentialSteps && (
                 <Badge className="bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]">
                   <CheckCircle className="h-3 w-3 mr-1" />
@@ -215,7 +215,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                   Want to explore first?
                 </h4>
                 <p className="text-purple-700 text-sm mt-1">
-                  Try our demo mode to see what Crops.AI can do with sample farm data
+                  Try our demo mode to see what Cropple.AI can do with sample farm data
                 </p>
               </div>
               <Button

@@ -2,7 +2,7 @@
  * Automated Model Training Service
  * 
  * Handles data preparation, model training, evaluation, and deployment
- * for Crops.AI machine learning models.
+ * for Cropple.AI machine learning models.
  */
 import { mlOpsPipeline, TrainingConfig, ModelMetrics } from './mlops-pipeline'
 import { modelRegistry } from './model-registry'

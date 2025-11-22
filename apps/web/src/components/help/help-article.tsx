@@ -33,12 +33,12 @@ export function HelpArticle({
         return (
           <div className="prose prose-sage max-w-none">
             <p className="lead">
-              Welcome to Crops.AI! This comprehensive guide will walk you through setting up your account 
+              Welcome to Cropple.AI! This comprehensive guide will walk you through setting up your account 
               and getting started with precision agriculture monitoring.
             </p>
             <h3>Step 1: Creating Your Account</h3>
             <ol>
-              <li>Visit the Crops.AI registration page</li>
+              <li>Visit the Cropple.AI registration page</li>
               <li>Enter your email address and create a secure password</li>
               <li>Verify your email address by clicking the link we send you</li>
               <li>Complete your profile with basic information about your farming operation</li>
@@ -97,7 +97,7 @@ export function HelpArticle({
         return (
           <div className="prose prose-sage max-w-none">
             <p className="lead">
-              Adding your first farm is the foundation of using Crops.AI effectively. 
+              Adding your first farm is the foundation of using Cropple.AI effectively. 
               This guide covers everything you need to know about farm setup and configuration.
             </p>
             <h3>Before You Start</h3>

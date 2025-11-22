@@ -1,5 +1,5 @@
 /**
- * Additional Jest setup for Crops.AI tests
+ * Additional Jest setup for Cropple.AI tests
  */
 // Global test utilities and additional mocks
 // Mock ResizeObserver for components that use it

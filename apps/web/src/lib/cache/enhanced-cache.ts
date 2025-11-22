@@ -1,5 +1,5 @@
 /**
- * Enhanced Caching System for Crops.AI
+ * Enhanced Caching System for Cropple.AI
  * Provides intelligent caching for different types of data with appropriate TTLs
  */
 interface CacheEntry<T> {

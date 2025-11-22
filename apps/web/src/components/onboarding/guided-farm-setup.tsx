@@ -29,7 +29,7 @@ export function GuidedFarmSetup({ onComplete, onSkip }: GuidedFarmSetupProps) {
   const steps: SetupStep[] = [
     {
       id: 'welcome',
-      title: 'Welcome to Crops.AI',
+      title: 'Welcome to Cropple.AI',
       description: 'Let\'s set up your agricultural management system',
       icon: <Sprout className="h-6 w-6" />,
       estimatedTime: '1 minute',

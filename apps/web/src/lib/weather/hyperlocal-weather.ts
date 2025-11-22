@@ -287,7 +287,7 @@ class HyperlocalWeatherService {
       features: ['temperature', 'humidity', 'pressure', 'clouds']
     })
     this.models.set('crops_ai_local', {
-      name: 'Crops.AI Hyperlocal Model',
+      name: 'Cropple.AI Hyperlocal Model',
       weight: 0.25,
       accuracy: 0.90,
       lastTrained: new Date('2024-02-10'),

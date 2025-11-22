@@ -145,7 +145,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
           <div className="flex items-center justify-between">
             <div>
               <ModernCardTitle className="text-2xl text-[#1A1A1A] mb-2">
-                Welcome to Crops.AI!
+                Welcome to Cropple.AI!
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
                 Let&apos;s set up your farm in just a few simple steps

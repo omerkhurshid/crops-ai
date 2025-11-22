@@ -2,7 +2,7 @@
  * Database Migration Manager
  * 
  * Provides automated database migration, data seeding, and maintenance
- * operations for the Crops.AI platform.
+ * operations for the Cropple.AI platform.
  */
 import { prisma } from '../prisma'
 import { auditLogger } from '../logging/audit-logger'

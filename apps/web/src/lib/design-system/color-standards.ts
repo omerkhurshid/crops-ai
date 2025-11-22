@@ -1,7 +1,7 @@
 /**
  * FieldKit Design System - Color Usage Standards
  * 
- * This file defines the standard color usage patterns for the Crops.AI application.
+ * This file defines the standard color usage patterns for the Cropple.AI application.
  * Use these utilities to ensure consistent color application across components.
  */
 export const ColorStandards = {

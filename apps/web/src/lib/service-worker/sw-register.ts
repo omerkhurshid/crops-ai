@@ -1,6 +1,6 @@
 /**
  * Service Worker Registration and Management
- * Handles offline capabilities and background sync for Crops.AI
+ * Handles offline capabilities and background sync for Cropple.AI
  */
 // Logger replaced with console for local development
 // Removed getConfig import - using process.env directly for client-side access

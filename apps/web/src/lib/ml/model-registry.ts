@@ -1,5 +1,5 @@
 /**
- * Model Registry for Crops.AI ML Models
+ * Model Registry for Cropple.AI ML Models
  * 
  * Central registry for all machine learning models used in the platform,
  * including pre-configured models for agricultural applications.

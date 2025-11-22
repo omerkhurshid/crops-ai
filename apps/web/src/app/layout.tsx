@@ -85,7 +85,7 @@ export default function RootLayout({
               style: {
                 background: '#FFFFFF',
                 color: '#1A1A1A',
-                border: '1px solid #E6E6E6',
+                border: '1px solid #F3F4F6',
                 borderRadius: '12px',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
                 fontSize: '14px',

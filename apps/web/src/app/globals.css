@@ -238,33 +238,37 @@
     @apply max-w-[1180px] mx-auto px-4;
   }
   
-  /* Navigation */
+  /* Navigation - Force dark text with maximum specificity */
   .sage-nav {
     @apply bg-white backdrop-blur-lg;
     @apply border-b border-[#F3F4F6];
     box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   }
   
-  .sage-nav a,
-  .sage-nav button,
-  .sage-nav span {
-    color: #2D3748 !important;
-    font-weight: 600 !important;
+  nav.sage-nav *,
+  nav.sage-nav a,
+  nav.sage-nav button,
+  nav.sage-nav span,
+  nav.sage-nav .sage-nav-link {
+    color: #000000 !important;
+    font-weight: 700 !important;
   }
   
-  .sage-nav a:hover,
-  .sage-nav button:hover {
+  nav.sage-nav a:hover,
+  nav.sage-nav button:hover,
+  nav.sage-nav .sage-nav-link:hover {
     color: #7A8F78 !important;
   }
   
   .sage-nav-link {
-    @apply text-[#2D3748] hover:text-[#7A8F78];
-    @apply font-semibold transition-colors duration-200;
-    color: #2D3748 !important;
+    color: #000000 !important;
+    font-weight: 700 !important;
+    @apply transition-colors duration-200;
   }
   
   .sage-nav-active {
-    @apply text-[#7A8F78] font-semibold;
+    @apply text-[#7A8F78] font-bold;
+    color: #7A8F78 !important;
   }
 
   /* Form Inputs */

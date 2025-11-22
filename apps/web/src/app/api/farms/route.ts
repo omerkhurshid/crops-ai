@@ -59,8 +59,20 @@ export const POST = apiMiddleware.protected(
     let finalData: any = null
     
     try {
-      // Parse request body once and store it
-      body = await request.json()
+      // Check if body is already parsed by middleware
+      if ((request as any).validatedData) {
+        body = (request as any).validatedData
+      } else {
+        // Parse request body safely
+        try {
+          body = await request.json()
+        } catch (error) {
+          // If body already consumed, try to get from clone or fail gracefully
+          console.error('Failed to parse request body:', error)
+          throw new Error('Invalid request body')
+        }
+      }
+      
       console.log('🚜 Farm Creation Request:', {
         userId: request.user?.id,
         email: request.user?.email,
@@ -115,7 +127,8 @@ export const POST = apiMiddleware.protected(
                 cropType: fieldData.cropType,
                 status: fieldData.fieldType || 'crop',
                 soilType: fieldData.soilType,
-                isActive: true
+                isActive: true,
+                boundary: null // Explicitly set boundary to NULL to avoid constraint violation
               }
             })
             fields.push(field)

@@ -218,6 +218,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section 3.5: Live Demo Features */}
+      <HomePageDemos />
+
       {/* Section 4: Real Impact (Social Proof) */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">

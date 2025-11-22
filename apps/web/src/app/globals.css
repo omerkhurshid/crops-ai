@@ -271,6 +271,28 @@
     color: #7A8F78 !important;
   }
 
+  /* Sidebar - Force visible text */
+  .bg-sidebar {
+    background: #1A1F1A !important;
+  }
+  
+  .sidebar-text-fix,
+  .sidebar-text-fix *,
+  .sidebar-text-fix a,
+  .sidebar-text-fix button,
+  .sidebar-text-fix span,
+  .sidebar-text-fix p {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+  }
+  
+  .sidebar-text-fix .text-white\/90,
+  .sidebar-text-fix .text-white\/80,
+  .sidebar-text-fix .text-white\/70 {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+
   /* Form Inputs */
   .sage-input {
     @apply w-full px-4 py-3 rounded-[12px];

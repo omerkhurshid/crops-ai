@@ -92,9 +92,9 @@ export function Sidebar({ collapsed: propCollapsed = false, onClose }: SidebarPr
     return null
   }
   return (
-    <div className={`fixed left-0 top-0 h-full bg-sidebar border-r border-white/20 shadow-fk-md z-40 transition-all duration-standard ease-fk hidden lg:block ${
+    <div className={`sidebar-text-fix fixed left-0 top-0 h-full bg-sidebar border-r border-white/20 shadow-fk-md z-40 transition-all duration-standard ease-fk hidden lg:block ${
       collapsed ? 'w-18' : 'w-64'
-    }`} style={{ width: collapsed ? '72px' : '256px' }}>
+    }`} style={{ width: collapsed ? '72px' : '256px', backgroundColor: '#1A1F1A' }}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
         {!collapsed && (

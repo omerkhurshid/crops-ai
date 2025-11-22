@@ -170,6 +170,40 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
     }
     return seasonalData[date] || seasonalData['2024-08-01']
   }, [])
+
+  // Load NDVI data from live API with fallback
+  const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
+    setIsLoading(true)
+    setCacheStatus('refreshing')
+    
+    try {
+      // Call our new demo API that tries live data first
+      const response = await fetch(`/api/demo/live-ndvi?date=${date}`)
+      const result = await response.json()
+      
+      if (result.success) {
+        setNdviData(result.data)
+        setCacheStatus(result.source === 'live' ? 'live' : 'cached')
+        setLastUpdate(new Date())
+      } else {
+        throw new Error('API request failed')
+      }
+    } catch (error) {
+      console.error('Error loading NDVI data:', error)
+      // Use local fallback data
+      const fallbackData = getNDVIDataForDate(date)
+      setNdviData({
+        ...fallbackData,
+        date: date,
+        source: 'fallback',
+        location: DEMO_FIELD_LOCATION.address
+      })
+      setCacheStatus('cached')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [getNDVIDataForDate])
+
   // Initialize map and field boundary
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
@@ -203,38 +237,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       })
     }
   }, [fieldPolygon, ndviData, showNDVIOverlay])
-  // Load NDVI data from live API with fallback
-  const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
-    setIsLoading(true)
-    setCacheStatus('refreshing')
-    
-    try {
-      // Call our new demo API that tries live data first
-      const response = await fetch(`/api/demo/live-ndvi?date=${date}`)
-      const result = await response.json()
-      
-      if (result.success) {
-        setNdviData(result.data)
-        setCacheStatus(result.source === 'live' ? 'live' : 'cached')
-        setLastUpdate(new Date())
-      } else {
-        throw new Error('API request failed')
-      }
-    } catch (error) {
-      console.error('Error loading NDVI data:', error)
-      // Use local fallback data
-      const fallbackData = getNDVIDataForDate(date)
-      setNdviData({
-        ...fallbackData,
-        date: date,
-        source: 'fallback',
-        location: DEMO_FIELD_LOCATION.address
-      })
-      setCacheStatus('cached')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [getNDVIDataForDate])
 
   // Update NDVI data when date changes
   useEffect(() => {

@@ -8,8 +8,18 @@ interface DashboardLayoutProps {
   children: React.ReactNode
 }
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  
+  // Show loading state to prevent navbar flash
+  if (status === 'loading') {
+    return (
+      <div className="bg-canvas min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7A8F78]"></div>
+      </div>
+    )
+  }
+  
   // For unauthenticated users, show full-width layout with navbar
   if (!session) {
     return (

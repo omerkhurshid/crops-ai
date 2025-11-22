@@ -388,25 +388,15 @@ export function ThreeStepFarmCreator() {
       await refreshSessionAndValidate()
       console.log('Session validated successfully')
 
-      // Get the current session token for Authorization header
-      let authToken = null
-      try {
-        const supabase = createClient()
-        const { data: { session: currentSession } } = await supabase.auth.getSession()
-        authToken = currentSession?.access_token
-      } catch (error) {
-        console.error('Error getting session:', error)
-      }
-
-      console.log('Using auth token:', authToken ? 'Token available' : 'No token')
+      // Use NextAuth session (cookies are automatically included)
+      console.log('Making farm creation request with NextAuth session')
 
       const response = await fetch('/api/farms', {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+          'Content-Type': 'application/json'
         },
-        credentials: 'include', // Ensure cookies are included
+        credentials: 'include', // Ensure NextAuth cookies are included
         body: JSON.stringify({
           name: farm.name,
           latitude: farm.location.lat,

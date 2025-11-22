@@ -183,7 +183,7 @@ export default function DashboardPage() {
 
         {/* Use the new farmer-friendly dashboard */}
         <FarmerDashboard 
-          farmId={farms[0]?.id || 'default'}
+          farmId={farms[0]?.id}
           farmData={farms[0]}
           allFarms={farms}
           financialData={dashboardStats?.financialData || []}

@@ -96,6 +96,18 @@ interface FarmerDashboardProps {
   }
 }
 export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData: passedFarmData, allFarms, financialData: passedFinancialData, weatherAlerts: passedWeatherAlerts, crops: passedCrops, livestock: passedLivestock, user }: FarmerDashboardProps) {
+  // Don't render anything if no farmId is provided
+  if (!farmId) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <Leaf className="h-12 w-12 mx-auto mb-4 opacity-50 text-[#555555]" />
+          <h3 className="text-lg font-semibold mb-2 text-[#555555]">No farms available</h3>
+          <p className="text-[#555555]">Create your first farm to see your dashboard.</p>
+        </div>
+      </div>
+    )
+  }
   const [farmData, setFarmData] = useState<FarmSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDetailedView, setShowDetailedView] = useState(false)

@@ -107,21 +107,52 @@ export const POST = apiMiddleware.protected(
 
       console.log('🏗️ Creating farm with data:', finalData)
 
-      const farm = await prisma.farm.create({
-        data: finalData,
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              email: true
+      // Create farm and fields in a transaction
+      const result = await prisma.$transaction(async (tx) => {
+        // Create the farm
+        const farm = await tx.farm.create({
+          data: finalData,
+          include: {
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
             }
           }
+        })
+
+        // Create fields if provided in the original request
+        const fields = []
+        if (body.fields && Array.isArray(body.fields)) {
+          for (const fieldData of body.fields) {
+            const field = await tx.field.create({
+              data: {
+                farmId: farm.id,
+                name: fieldData.name || 'Field',
+                area: fieldData.area || 0,
+                boundary: fieldData.boundaries ? JSON.stringify(fieldData.boundaries) : null,
+                metadata: JSON.stringify({
+                  color: fieldData.color,
+                  cropType: fieldData.cropType,
+                  fieldType: fieldData.fieldType || 'crop'
+                }),
+                soilType: fieldData.soilType
+              }
+            })
+            fields.push(field)
+          }
         }
+
+        return { farm, fields }
       })
 
-      console.log('✅ Farm created successfully:', farm.id)
-      return createSuccessResponse({ farm }, 201)
+      console.log('✅ Farm and fields created successfully:', result.farm.id, `with ${result.fields.length} fields`)
+      return createSuccessResponse({ 
+        farm: result.farm, 
+        fields: result.fields 
+      }, 201)
 
     } catch (error) {
       console.error('❌ Farm creation error details:', {

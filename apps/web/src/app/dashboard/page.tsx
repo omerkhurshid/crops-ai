@@ -62,7 +62,7 @@ export default function DashboardPage() {
         
         if (farmResponse.ok) {
           const farmData = await farmResponse.json()
-          setFarms(farmData)
+          setFarms(farmData.farms || [])
         } else {
           console.error('Failed to fetch farms:', farmResponse.status)
           if (farmResponse.status === 401) {

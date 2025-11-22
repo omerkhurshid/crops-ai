@@ -39,15 +39,15 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           {session && (
-            <div className="hidden lg:flex lg:items-center lg:space-x-1">
+            <div className="hidden lg:flex lg:items-center lg:space-x-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="sage-nav-link px-3 py-2 rounded-lg text-sm flex items-center gap-2"
+                  className="sage-nav-link px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 whitespace-nowrap"
                 >
                   {link.icon}
-                  {link.label}
+                  <span className="hidden xl:inline">{link.label}</span>
                 </Link>
               ))}
             </div>

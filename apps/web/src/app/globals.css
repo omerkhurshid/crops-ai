@@ -123,6 +123,7 @@
     @apply transition-all duration-200 ease-in-out;
     @apply hover:bg-[#5E6F5A] hover:shadow-md;
     @apply focus:ring-2 focus:ring-[#7A8F78] focus:ring-opacity-50;
+    color: #FFFFFF !important;
     @apply active:transform active:scale-[0.98];
   }
   
@@ -273,7 +274,7 @@
 
   /* Sidebar - Force visible text */
   .bg-sidebar {
-    background: #1A1F1A !important;
+    background: #7A8F78 !important;
   }
   
   .sidebar-text-fix,

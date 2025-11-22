@@ -170,76 +170,6 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
     }
     return seasonalData[date] || seasonalData['2024-08-01']
   }, [])
-  // Load NDVI data with simplified caching
-  const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
-    setIsLoading(true)
-    setCacheStatus('refreshing')
-    // Check if we're in browser environment
-    const isClient = typeof window !== 'undefined'
-    // Simplified cache check - only use cache for very recent data
-    let cachedData: string | null = null
-    let cacheTime: string | null = null
-    if (isClient && !forceRefresh) {
-      try {
-        const cacheKey = `ndvi-${date}`
-        cachedData = sessionStorage.getItem(cacheKey) // Use sessionStorage instead
-        cacheTime = sessionStorage.getItem(`${cacheKey}-time`)
-        // Use cache if less than 30 minutes old
-        if (cachedData && cacheTime) {
-          const age = Date.now() - parseInt(cacheTime)
-          if (age < 30 * 60 * 1000) { // 30 minutes
-            setTimeout(() => {
-              setNdviData(JSON.parse(cachedData!))
-              setLastUpdate(new Date(parseInt(cacheTime!)))
-              setCacheStatus('cached')
-              setIsLoading(false)
-            }, 300) // Faster loading for UX
-            return
-          }
-        }
-      } catch (error) {}
-    }
-    // Simplified loading - use demo data directly for now
-    setTimeout(() => {
-      try {
-        // Use enhanced realistic data directly
-        const data = {
-          ...getNDVIDataForDate(date),
-          date: date,
-          source: 'demo',
-          location: DEMO_FIELD_LOCATION.address
-        }
-        // Cache the demo data if in browser
-        if (isClient) {
-          try {
-            const now = Date.now()
-            const cacheKey = `ndvi-${date}`
-            sessionStorage.setItem(cacheKey, JSON.stringify(data))
-            sessionStorage.setItem(`${cacheKey}-time`, now.toString())
-            setLastUpdate(new Date(now))
-          } catch (error) {}
-        }
-        setCacheStatus('cached')
-        setNdviData(data)
-      } catch (error) {
-        console.error('Error loading NDVI data:', error)
-        // Fallback to basic data
-        setNdviData({
-          averageNDVI: 0.82,
-          maxNDVI: 0.95,
-          minNDVI: 0.65,
-          uniformity: 85,
-          stage: 'R3 - Milk Stage',
-          yieldProjection: 185,
-          healthStatus: 'Excellent',
-          source: 'fallback'
-        })
-        setCacheStatus('cached')
-      } finally {
-        setIsLoading(false)
-      }
-    }, 800) // Reduced delay
-  }, [getNDVIDataForDate])
   // Initialize map and field boundary
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map)
@@ -273,6 +203,39 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
       })
     }
   }, [fieldPolygon, ndviData, showNDVIOverlay])
+  // Load NDVI data from live API with fallback
+  const loadNDVIData = useCallback(async (date: string, forceRefresh = false) => {
+    setIsLoading(true)
+    setCacheStatus('refreshing')
+    
+    try {
+      // Call our new demo API that tries live data first
+      const response = await fetch(`/api/demo/live-ndvi?date=${date}`)
+      const result = await response.json()
+      
+      if (result.success) {
+        setNdviData(result.data)
+        setCacheStatus(result.source === 'live' ? 'live' : 'cached')
+        setLastUpdate(new Date())
+      } else {
+        throw new Error('API request failed')
+      }
+    } catch (error) {
+      console.error('Error loading NDVI data:', error)
+      // Use local fallback data
+      const fallbackData = getNDVIDataForDate(date)
+      setNdviData({
+        ...fallbackData,
+        date: date,
+        source: 'fallback',
+        location: DEMO_FIELD_LOCATION.address
+      })
+      setCacheStatus('cached')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [getNDVIDataForDate])
+
   // Update NDVI data when date changes
   useEffect(() => {
     if (map) {
@@ -320,12 +283,12 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           </div>
           <div className="flex items-center gap-2">
             <Badge className={
-              cacheStatus === 'live' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
-              cacheStatus === 'cached' ? 'bg-blue-100 text-[#7A8F78]' :
+              cacheStatus === 'live' ? 'bg-green-100 text-green-800' :
+              cacheStatus === 'cached' ? 'bg-blue-100 text-blue-800' :
               'bg-yellow-100 text-yellow-800'
             }>
-              {cacheStatus === 'live' ? 'Live Data' :
-               cacheStatus === 'cached' ? 'Cached Data' : 'Updating...'}
+              {cacheStatus === 'live' ? 'Live Satellite Data' :
+               cacheStatus === 'cached' ? 'Enhanced Demo Data' : 'Loading...'}
             </Badge>
             <Button
               variant="outline"
@@ -568,7 +531,9 @@ export function RealGoogleMapsNDVI({ className = '' }: RealGoogleMapsNDVIProps) 
           <div className="flex items-center justify-between text-xs text-[#555555]">
             <div className="flex items-center gap-2">
               <Eye className="h-3 w-3" />
-              <span>Google Earth Engine • 10m resolution • {ndviData?.source === 'live' ? 'Live API' : 'Enhanced Demo'}</span>
+              <span>
+                {cacheStatus === 'live' ? 'Live Copernicus/Google Earth Engine Data' : 'Enhanced Demo with Real Patterns'} • 10m resolution
+              </span>
             </div>
             {lastUpdate && (
               <div className="text-right">

@@ -115,7 +115,7 @@ export function PageLoading({ title = "Loading page...", description }: {
     <div className="min-h-[400px] flex items-center justify-center">
       <div className="text-center">
         <Spinner size="large" className="text-[#555555] mb-4" />
-        <h2 className="text-lg font-semibold text-[#1A1A1A] mb-2">{title}</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">{title}</h2>
         {description && (
           <p className="text-[#555555] text-sm">{description}</p>
         )}
@@ -133,7 +133,7 @@ export function FullPageLoading() {
           <div className="h-16 w-16 bg-[#7A8F78] rounded-full mx-auto mb-4 animate-pulse" />
           <Spinner size="large" className="text-[#555555]" />
         </div>
-        <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">
           Cropple.AI
         </h2>
         <p className="text-[#555555]">Loading your farm data...</p>
@@ -280,7 +280,7 @@ export function ProgressLoading({
     <div className="bg-white rounded-lg border p-6">
       <div className="text-center mb-6">
         <Spinner size="large" className="text-[#555555] mb-4" />
-        <h3 className="text-lg font-semibold text-[#1A1A1A]">Processing...</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Processing...</h3>
       </div>
       <div className="space-y-3">
         {steps.map((step, index) => (
@@ -295,7 +295,7 @@ export function ProgressLoading({
               )}
             </div>
             <span className={`text-sm ${
-              index <= currentStep ? 'text-[#1A1A1A] font-medium' : 'text-[#555555]'
+              index <= currentStep ? 'text-gray-900 font-medium' : 'text-[#555555]'
             }`}>
               {step}
             </span>

@@ -208,7 +208,7 @@ export function MobileFAB({ className, role = 'farmer' }: GlobalFABProps) {
               </div>
               {/* Actions */}
               <div className="p-6 pb-8">
-                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Quick Actions
                 </h3>
                 <div className="grid grid-cols-2 gap-4">

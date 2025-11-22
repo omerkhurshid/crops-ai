@@ -144,7 +144,7 @@ export function MetricCard({ title, value, change, unit = '', trend, description
           <div className="flex-1">
             <p className="text-sm font-medium text-[#555555] mb-1">{title}</p>
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold text-[#1A1A1A]">
+              <p className="text-2xl font-bold text-gray-900">
                 {typeof value === 'number' ? value.toLocaleString() : value}{unit}
               </p>
               {change !== undefined && (

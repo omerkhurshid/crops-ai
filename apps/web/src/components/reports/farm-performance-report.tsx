@@ -116,7 +116,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       case 'high': return 'bg-red-100 text-red-800 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]';
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]';
     }
   };
   if (loading) {
@@ -154,7 +154,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
             How Your Farm is Performing
           </h3>
           <p className="text-[#555555]">
@@ -180,7 +180,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
           <div className="flex items-center gap-3">
             <Award className="h-6 w-6 text-[#555555]" />
             <div>
-              <ModernCardTitle className="text-[#1A1A1A]">
+              <ModernCardTitle className="text-gray-900">
                 Overall Farm Score
               </ModernCardTitle>
               <ModernCardDescription>
@@ -198,7 +198,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                 showIcon={true}
                 showText={false}
               />
-              <div className="text-4xl font-bold text-[#1A1A1A]">
+              <div className="text-4xl font-bold text-gray-900">
                 {data.overallScore}%
               </div>
             </div>
@@ -247,10 +247,10 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
             <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <Leaf className="h-5 w-5 text-[#8FBF7F]" />
-                <span className="font-medium text-[#1A1A1A]">Crop Yield</span>
+                <span className="font-medium text-gray-900">Crop Yield</span>
                 {getTrendIcon(data.trends.yield.change)}
               </div>
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">
+              <div className="text-2xl font-bold text-gray-900 mb-1">
                 {data.trends.yield.current} bu/acre
               </div>
               <div className="text-sm text-[#555555]">
@@ -260,10 +260,10 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
             <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-100">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <DollarSign className="h-5 w-5 text-orange-600" />
-                <span className="font-medium text-[#1A1A1A]">Operating Costs</span>
+                <span className="font-medium text-gray-900">Operating Costs</span>
                 {getTrendIcon(-data.trends.costs.change)} {/* Negative because lower costs are better */}
               </div>
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">
+              <div className="text-2xl font-bold text-gray-900 mb-1">
                 {formatCurrency(data.trends.costs.current)}/acre
               </div>
               <div className="text-sm text-[#555555]">
@@ -273,10 +273,10 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
             <div className="text-center p-4 bg-gradient-to-br from-sage-50 to-green-50 rounded-xl border border-[#F8FAF8]">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <Target className="h-5 w-5 text-[#555555]" />
-                <span className="font-medium text-[#1A1A1A]">Profit per Acre</span>
+                <span className="font-medium text-gray-900">Profit per Acre</span>
                 {getTrendIcon(data.trends.profit.change)}
               </div>
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">
+              <div className="text-2xl font-bold text-gray-900 mb-1">
                 {formatCurrency(data.trends.profit.current)}
               </div>
               <div className="text-sm text-[#555555]">
@@ -311,12 +311,12 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
                     #{index + 1}
                   </div>
                   <div>
-                    <div className="font-semibold text-[#1A1A1A]">{field.name}</div>
+                    <div className="font-semibold text-gray-900">{field.name}</div>
                     <div className="text-sm text-[#555555]">{field.cropType}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-lg text-[#1A1A1A]">
+                  <div className="font-bold text-lg text-gray-900">
                     {formatCurrency(field.profitPerAcre)}<span className="text-sm font-normal">/acre</span>
                   </div>
                   <div className="text-sm text-[#555555]">{field.efficiency}% efficient</div>
@@ -342,7 +342,7 @@ export function FarmPerformanceReport({ farmId }: FarmPerformanceReportProps) {
             {ensureArray(data.improvementAreas).map((area, index) => (
               <div key={index} className="p-4 bg-white rounded-xl border border-[#F8FAF8]">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="font-semibold text-[#1A1A1A]">{area.area}</div>
+                  <div className="font-semibold text-gray-900">{area.area}</div>
                   <Badge className={cn("border", getImpactColor(area.impact))}>
                     {area.impact === 'high' ? '🔥 High Impact' : 
                      area.impact === 'medium' ? '⚡ Medium Impact' : 

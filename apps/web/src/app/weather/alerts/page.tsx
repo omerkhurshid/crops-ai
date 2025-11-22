@@ -109,7 +109,7 @@ export default function WeatherAlertsPage() {
       case 'moderate': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'severe': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'extreme': return 'bg-red-100 text-red-800 border-red-200'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F5F5F5]'
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F5F5F5]'
     }
   }
   const getUrgencyColor = (urgency: string) => {
@@ -142,7 +142,7 @@ export default function WeatherAlertsPage() {
         <div className="px-4 py-6 sm:px-0">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Weather Alerts</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Weather Alerts</h1>
             <p className="text-[#555555]">Advanced weather monitoring and extreme event alerts</p>
           </div>
           {/* Controls */}
@@ -201,7 +201,7 @@ export default function WeatherAlertsPage() {
                   <div className="flex items-center">
                     <div className="flex-1">
                       <p className="text-sm font-medium text-[#555555]">Total Alerts</p>
-                      <div className="text-2xl font-bold text-[#1A1A1A]">{summary.totalAlerts}</div>
+                      <div className="text-2xl font-bold text-gray-900">{summary.totalAlerts}</div>
                     </div>
                     <AlertTriangle className="h-8 w-8 text-[#555555]" />
                   </div>
@@ -249,7 +249,7 @@ export default function WeatherAlertsPage() {
             <ModernCard>
               <ModernCardContent className="pt-6">
                 <div className="text-center text-[#555555] py-8">
-                  <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-[#E6E6E6]" />
+                  <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-[#F3F4F6]" />
                   <p className="text-lg font-medium">No weather alerts</p>
                   <p className="text-sm">Current conditions are normal for your area</p>
                 </div>
@@ -309,7 +309,7 @@ export default function WeatherAlertsPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {/* Farm Impact */}
                       <div>
-                        <h4 className="font-medium text-[#1A1A1A] mb-3">Farm Impact Assessment</h4>
+                        <h4 className="font-medium text-gray-900 mb-3">Farm Impact Assessment</h4>
                         <div className="space-y-2">
                           <div>
                             <span className="text-sm font-medium text-[#555555]">Estimated Damage:</span>
@@ -338,7 +338,7 @@ export default function WeatherAlertsPage() {
                       </div>
                       {/* Action Required */}
                       <div>
-                        <h4 className="font-medium text-[#1A1A1A] mb-3">Required Actions</h4>
+                        <h4 className="font-medium text-gray-900 mb-3">Required Actions</h4>
                         {alert.actionRequired.immediate.length > 0 && (
                           <div className="mb-3">
                             <h5 className="text-sm font-medium text-red-600 mb-1">🚨 Immediate</h5>
@@ -383,7 +383,7 @@ export default function WeatherAlertsPage() {
                     {/* Recommendations */}
                     {alert.recommendations.length > 0 && (
                       <div className="mt-4 pt-4 border-t">
-                        <h4 className="font-medium text-[#1A1A1A] mb-2">General Recommendations</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">General Recommendations</h4>
                         <ul className="text-sm text-[#555555] space-y-1">
                           {alert.recommendations.map((rec, idx) => (
                             <li key={idx} className="flex items-start space-x-1">

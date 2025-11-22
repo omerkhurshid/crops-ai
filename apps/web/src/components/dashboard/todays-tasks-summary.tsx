@@ -173,13 +173,13 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ModernCard>
           <ModernCardContent className="p-6">
-            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Today's Tasks</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Today's Tasks</h3>
             <DataPendingState message="Loading today's tasks..." />
           </ModernCardContent>
         </ModernCard>
         <ModernCard>
           <ModernCardContent className="p-6">
-            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Tomorrow's Tasks</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Tomorrow's Tasks</h3>
             <DataPendingState message="Loading tomorrow's tasks..." />
           </ModernCardContent>
         </ModernCard>
@@ -192,7 +192,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <ModernCard>
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-[#1A1A1A]">Today's Tasks</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Today's Tasks</h3>
             <Link href="/tasks">
               <Button variant="ghost" size="sm">
                 <Plus className="h-4 w-4 mr-1" />
@@ -224,7 +224,7 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
       <ModernCard>
         <ModernCardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-[#1A1A1A]">Tomorrow's Tasks</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Tomorrow's Tasks</h3>
             <Link href="/tasks">
               <Button variant="ghost" size="sm">
                 View All

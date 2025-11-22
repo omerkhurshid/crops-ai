@@ -140,7 +140,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]'
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]'
     }
   }
   const dismissAlert = (alertId: string) => {
@@ -186,7 +186,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
             )}
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-[#1A1A1A]">Smart Alerts</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Smart Alerts</h3>
             <p className="text-sm text-[#555555]">
               {activeAlerts.length} active alert{activeAlerts.length !== 1 ? 's' : ''}
               {criticalAlerts.length > 0 && (
@@ -225,7 +225,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
           <ModernCard variant="soft">
             <ModernCardContent className="p-6 text-center">
               <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Clear!</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">All Clear!</h3>
               <p className="text-[#555555]">No active alerts for your farm right now.</p>
             </ModernCardContent>
           </ModernCard>
@@ -251,7 +251,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold text-[#1A1A1A]">{alert.title}</h4>
+                        <h4 className="font-semibold text-gray-900">{alert.title}</h4>
                         <Badge className={getSeverityColor(alert.severity)} variant="outline">
                           {alert.severity.toUpperCase()}
                         </Badge>
@@ -311,7 +311,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-[#1A1A1A] mb-2">Alert Types</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">Alert Types</h4>
                   <div className="space-y-2">
                     {['Weather', 'Crop Health', 'Pest & Disease', 'Market', 'Financial'].map((type) => (
                       <label key={type} className="flex items-center gap-2">
@@ -322,7 +322,7 @@ export function SmartAlertsSystem({ farmId, userId, isPremium = false }: SmartAl
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-medium text-[#1A1A1A] mb-2">Notification Methods</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">Notification Methods</h4>
                   <div className="space-y-2">
                     {['In-App', 'Email', 'SMS (Premium)', 'Push Notifications'].map((method) => (
                       <label key={method} className="flex items-center gap-2">

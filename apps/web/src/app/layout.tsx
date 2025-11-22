@@ -69,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-[#FAFAF7] text-[#1A1A1A]`}>
+      <body className={`${inter.className} bg-[#FAFAF7] text-gray-900`}>
         <ThemeProvider defaultTheme="system">
           <CacheProvider>
             <AuthProvider>

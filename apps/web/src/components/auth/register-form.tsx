@@ -313,7 +313,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <a 
                   href="/terms" 
                   target="_blank" 
-                  className="text-[#555555] hover:text-[#1A1A1A] underline"
+                  className="text-[#555555] hover:text-gray-900 underline"
                 >
                   Terms & Conditions
                 </a>{' '}
@@ -321,7 +321,7 @@ export function RegisterForm({ callbackUrl = '/dashboard' }: RegisterFormProps) 
                 <a 
                   href="/privacy" 
                   target="_blank" 
-                  className="text-[#555555] hover:text-[#1A1A1A] underline"
+                  className="text-[#555555] hover:text-gray-900 underline"
                 >
                   Privacy Policy
                 </a>

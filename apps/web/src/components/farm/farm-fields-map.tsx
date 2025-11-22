@@ -84,7 +84,7 @@ export function FarmFieldsMap({ farms }: FarmFieldsMapProps) {
         {/* Summary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">
-            <div className="text-2xl font-bold text-[#1A1A1A]">{totalFields}</div>
+            <div className="text-2xl font-bold text-gray-900">{totalFields}</div>
             <div className="text-sm text-[#555555]">Total Fields</div>
           </div>
           <div className="bg-[#F8FAF8] rounded-lg p-3 border border-[#DDE4D8]">

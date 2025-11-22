@@ -59,20 +59,20 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
         <div className="flex items-center">
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-#555555"
+            className="p-2 rounded-md text-[#555555] hover:text-gray-900 hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-#555555"
             aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <Link href="/dashboard" className="ml-4 text-xl font-semibold text-[#1A1A1A]">
+          <Link href="/dashboard" className="ml-4 text-xl font-semibold text-gray-900">
             Cropple.ai
           </Link>
         </div>
         <div className="flex items-center space-x-2">
-          <button className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5]">
+          <button className="p-2 rounded-md text-[#555555] hover:text-gray-900 hover:bg-[#F5F5F5]">
             <Search className="h-5 w-5" />
           </button>
-          <button className="p-2 rounded-md text-[#555555] hover:text-[#1A1A1A] hover:bg-[#F5F5F5] relative">
+          <button className="p-2 rounded-md text-[#555555] hover:text-gray-900 hover:bg-[#F5F5F5] relative">
             <Bell className="h-5 w-5" />
             <div className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></div>
           </button>
@@ -100,7 +100,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
               </span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-[#1A1A1A]">
+              <p className="text-sm font-medium text-gray-900">
                 {user?.name || 'User'}
               </p>
               <p className="text-xs text-[#555555]">
@@ -129,7 +129,7 @@ export function MobileNav({ user, onSignOut }: MobileNavProps) {
                   flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
                   ${isActive 
                     ? 'bg-[#F8FAF8] text-#1A1A1A border-l-4 border-[#7A8F78]' 
-                    : 'text-[#555555] hover:bg-[#F5F5F5] hover:text-[#1A1A1A]'
+                    : 'text-[#555555] hover:bg-[#F5F5F5] hover:text-gray-900'
                   }
                 `}
               >

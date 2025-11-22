@@ -246,7 +246,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78]';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
+      default: return 'bg-[#F5F5F5] text-gray-900';
     }
   };
   const getBenchmarkColor = (value: number, benchmark: number) => {
@@ -271,7 +271,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
     return (
       <div className="text-center py-12">
         <AlertCircle className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Analytics Unavailable</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Analytics Unavailable</h3>
         <p className="text-[#555555]">Unable to load analytics data. Please try again.</p>
       </div>
     );
@@ -302,7 +302,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
                 </div>
                 <p className="text-[#555555] mb-2">{insight.description}</p>
                 <div className="text-sm">
-                  <p className="font-medium text-[#1A1A1A] mb-1">Impact: {insight.impact}</p>
+                  <p className="font-medium text-gray-900 mb-1">Impact: {insight.impact}</p>
                   <p className="text-[#555555]">Recommended Action: {insight.action}</p>
                 </div>
               </div>
@@ -519,7 +519,7 @@ export function AnalyticsView({ farmId, dateRange }: AnalyticsViewProps) {
               </div>
             </div>
             <div className="p-4 bg-[#FAFAF7] rounded-lg">
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Regional Average</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Regional Average</h4>
               <div className="space-y-2">
                 <div>
                   <div className="text-xl font-bold text-[#555555]">

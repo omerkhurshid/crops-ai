@@ -149,7 +149,7 @@ export function SelectableFarmItem({ farm, isSelected, onToggle }: FarmItemProps
         <ModernCardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-1">{farm.name}</h3>
+              <h3 className="font-semibold text-gray-900 mb-1">{farm.name}</h3>
               {farm.location && (
                 <p className="text-sm text-[#555555] mb-2">📍 {farm.location}</p>
               )}
@@ -202,7 +202,7 @@ export function SelectableFieldItem({ field, isSelected, onToggle }: FieldItemPr
         <ModernCardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-1">{field.name}</h3>
+              <h3 className="font-semibold text-gray-900 mb-1">{field.name}</h3>
               <div className="flex items-center gap-4 text-sm text-[#555555] mb-2">
                 {field.cropType && (
                   <span>🌱 {field.cropType}</span>
@@ -258,7 +258,7 @@ export function SelectableTransactionItem({ transaction, isSelected, onToggle }:
         <ModernCardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <h3 className="font-medium text-[#1A1A1A] mb-1">{transaction.description}</h3>
+              <h3 className="font-medium text-gray-900 mb-1">{transaction.description}</h3>
               <div className="flex items-center gap-4 text-sm text-#555555">
                 <span>{new Date(transaction.date).toLocaleDateString()}</span>
                 {transaction.category && (

@@ -106,7 +106,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
       <ModernCardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div>
-            <ModernCardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+            <ModernCardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <div className="p-2 bg-red-50 rounded-lg">
                 <Bug className="h-5 w-5 text-red-600" />
               </div>
@@ -133,7 +133,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {riskSummary && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1A1A1A]">
+              <div className="text-2xl font-bold text-gray-900">
                 {riskSummary.highRiskFields.length}
               </div>
               <div className="text-sm text-[#555555]">High Risk Fields</div>
@@ -161,7 +161,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {/* Top Threats */}
         {threats.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-medium text-gray-900 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-orange-500" />
               Top Threats This Week
             </h4>
@@ -186,7 +186,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-[#1A1A1A]">
+                      <div className="font-medium text-gray-900">
                         {threat.name}
                       </div>
                       <div className="text-sm text-[#555555]">
@@ -220,7 +220,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowDetails(!showDetails)}
-                className="w-full text-[#555555] hover:text-[#1A1A1A]"
+                className="w-full text-[#555555] hover:text-gray-900"
               >
                 {showDetails ? 'Show Less' : `Show ${threats.length - 3} More Threats`}
               </Button>
@@ -230,7 +230,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {/* Seasonal Outlook */}
         {seasonalOutlook && (
           <div className="space-y-3">
-            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-medium text-gray-900 flex items-center gap-2">
               <Calendar className="h-4 w-4 text-blue-500" />
               Seasonal Outlook
             </h4>
@@ -265,7 +265,7 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
         {threats.length === 0 && !loading && (
           <div className="text-center py-8">
             <Shield className="h-12 w-12 mx-auto mb-4 text-[#8FBF7F]" />
-            <h3 className="font-medium text-[#1A1A1A] mb-2">All Clear!</h3>
+            <h3 className="font-medium text-gray-900 mb-2">All Clear!</h3>
             <p className="text-[#555555] text-sm">
               No immediate disease or pest threats detected. Continue monitoring.
             </p>

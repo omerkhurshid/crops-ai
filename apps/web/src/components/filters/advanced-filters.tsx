@@ -81,7 +81,7 @@ export function AdvancedFilters({
               onClick={() => toggleDropdown(filter.id)}
               className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={filter.value ? 'text-[#1A1A1A]' : 'text-#555555'}>
+              <span className={filter.value ? 'text-gray-900' : 'text-#555555'}>
                 {filter.value 
                   ? filter.options?.find(opt => opt.value === filter.value)?.label 
                   : `Select ${filter.label.toLowerCase()}`
@@ -125,7 +125,7 @@ export function AdvancedFilters({
               onClick={() => toggleDropdown(filter.id)}
               className="w-full flex items-center justify-between p-2 border border-[#DDE4D8] rounded-lg hover:bg-[#F8FAF8] transition-colors text-sm"
             >
-              <span className={selectedValues.length ? 'text-[#1A1A1A]' : 'text-#555555'}>
+              <span className={selectedValues.length ? 'text-gray-900' : 'text-#555555'}>
                 {selectedValues.length 
                   ? `${selectedValues.length} selected`
                   : `Select ${filter.label.toLowerCase()}`
@@ -248,7 +248,7 @@ export function AdvancedFilters({
             <div className="text-[#555555]">
               {filter.icon}
             </div>
-            <label className="text-sm font-medium text-[#1A1A1A]">
+            <label className="text-sm font-medium text-gray-900">
               {filter.label}
             </label>
           </div>

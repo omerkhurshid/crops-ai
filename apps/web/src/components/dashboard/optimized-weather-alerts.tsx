@@ -92,7 +92,7 @@ export function OptimizedWeatherAlerts({ className, maxAlerts = 3 }: OptimizedWe
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-medium text-[#1A1A1A] truncate">
+                    <h4 className="font-medium text-gray-900 truncate">
                       {alert.title}
                     </h4>
                     <Badge className={getSeverityColor(alert.severity)}>

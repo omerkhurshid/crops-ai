@@ -125,7 +125,7 @@ export default function DashboardPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Something went wrong</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Something went wrong</h1>
             <p className="text-[#555555] mb-6">{error}</p>
             <Button onClick={() => window.location.reload()}>Try again</Button>
           </div>
@@ -155,15 +155,15 @@ export default function DashboardPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">Weather Tracking</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Weather Tracking</h3>
               <p className="text-[#555555] text-sm">Get weather alerts to help you time planting, irrigation, and harvests</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">Crop Health</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Crop Health</h3>
               <p className="text-[#555555] text-sm">Monitor your fields to catch problems early and maximize yields</p>
             </div>
             <div className="p-6 bg-white rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">Financial Reports</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Financial Reports</h3>
               <p className="text-[#555555] text-sm">Track your income and expenses to improve farm profitability</p>
             </div>
           </div>

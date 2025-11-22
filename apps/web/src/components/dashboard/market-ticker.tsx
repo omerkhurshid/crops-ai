@@ -78,7 +78,7 @@ export function MarketTicker({ className }: MarketTickerProps) {
         {/* Duplicate for seamless scroll */}
         {[...ensureArray(prices), ...ensureArray(prices)].map((price, index) => (
           <div key={index} className="flex items-center gap-2 whitespace-nowrap">
-            <span className="font-medium text-[#1A1A1A]">{price.commodity}:</span>
+            <span className="font-medium text-gray-900">{price.commodity}:</span>
             <span className="font-semibold text-#1A1A1A">
               ${price.price.toFixed(2)}/{price.unit}
             </span>

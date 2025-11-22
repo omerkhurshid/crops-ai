@@ -255,7 +255,7 @@ export function HelpArticle({
               {onBack && (
                 <button
                   onClick={onBack}
-                  className="flex items-center gap-2 text-[#555555] hover:text-[#1A1A1A] mb-4 text-sm"
+                  className="flex items-center gap-2 text-[#555555] hover:text-gray-900 mb-4 text-sm"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back to Help Center
@@ -268,7 +268,7 @@ export function HelpArticle({
                   {readTime}
                 </span>
               </div>
-              <ModernCardTitle className="text-3xl text-[#1A1A1A] mb-3">
+              <ModernCardTitle className="text-3xl text-gray-900 mb-3">
                 {title}
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
@@ -325,9 +325,9 @@ export function HelpArticle({
           <div className="mt-4 pt-4 border-t border-[#DDE4D8]">
             <div className="flex items-center justify-between text-sm">
               <span className="text-[#555555]">
-                Need more help? <button className="text-[#1A1A1A] hover:underline">Contact Support</button>
+                Need more help? <button className="text-gray-900 hover:underline">Contact Support</button>
               </span>
-              <button className="flex items-center gap-1 text-[#555555] hover:text-[#1A1A1A]">
+              <button className="flex items-center gap-1 text-[#555555] hover:text-gray-900">
                 View related articles <ExternalLink className="h-3 w-3" />
               </button>
             </div>

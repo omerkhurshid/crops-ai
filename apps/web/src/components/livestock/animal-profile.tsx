@@ -156,7 +156,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
             <ModernCardContent className="space-y-4">
               {(animal.mother || animal.father) && (
                 <div>
-                  <h4 className="font-medium text-[#1A1A1A] mb-2">Parents</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">Parents</h4>
                   <div className="space-y-2">
                     {animal.mother && (
                       <div className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded">
@@ -183,7 +183,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
               )}
               {((animal.motherOffspring && animal.motherOffspring.length > 0) || (animal.fatherOffspring && animal.fatherOffspring.length > 0)) && (
                 <div>
-                  <h4 className="font-medium text-[#1A1A1A] mb-2">Offspring ({(animal.motherOffspring?.length || 0) + (animal.fatherOffspring?.length || 0)})</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">Offspring ({(animal.motherOffspring?.length || 0) + (animal.fatherOffspring?.length || 0)})</h4>
                   <div className="space-y-2">
                     {[...(animal.motherOffspring || []), ...(animal.fatherOffspring || [])].map((offspring: any) => (
                       <div key={offspring.id} className="flex items-center justify-between p-2 bg-[#FAFAF7] rounded">
@@ -305,13 +305,13 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                   }`}>
                     <p className={`text-sm font-medium ${
                       weightTrend.trend === 'up' ? 'text-[#7A8F78]' : 
-                      weightTrend.trend === 'down' ? 'text-red-800' : 'text-[#1A1A1A]'
+                      weightTrend.trend === 'down' ? 'text-red-800' : 'text-gray-900'
                     }`}>
                       Recent Change
                     </p>
                     <p className={`text-2xl font-bold ${
                       weightTrend.trend === 'up' ? 'text-green-900' : 
-                      weightTrend.trend === 'down' ? 'text-red-900' : 'text-[#1A1A1A]'
+                      weightTrend.trend === 'down' ? 'text-red-900' : 'text-gray-900'
                     }`}>
                       {weightTrend.change >= 0 ? '+' : ''}{weightTrend.change.toFixed(1)} lbs
                     </p>
@@ -465,7 +465,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
           <ModernCardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h4 className="font-medium text-[#1A1A1A]">Purchase Information</h4>
+                <h4 className="font-medium text-gray-900">Purchase Information</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-[#555555]">Purchase Price:</span>
@@ -484,7 +484,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                 </div>
               </div>
               <div className="space-y-4">
-                <h4 className="font-medium text-[#1A1A1A]">Cost Summary</h4>
+                <h4 className="font-medium text-gray-900">Cost Summary</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-[#555555]">Total Health Costs:</span>
@@ -499,7 +499,7 @@ export function AnimalProfile({ animal }: AnimalProfileProps) {
                     </span>
                   </div>
                   <div className="flex justify-between pt-2 border-t">
-                    <span className="font-medium text-[#1A1A1A]">Total Investment:</span>
+                    <span className="font-medium text-gray-900">Total Investment:</span>
                     <span className="font-bold">
                       ${(animal.purchasePrice || 0) + 
                         (animal.healthRecords?.reduce((sum: number, record: any) => sum + (record.cost || 0), 0) || 0) +

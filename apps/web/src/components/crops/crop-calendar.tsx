@@ -178,7 +178,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-semibold text-[#1A1A1A] flex items-center gap-2">
+          <h2 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
             <Calendar className="h-6 w-6 text-[#555555]" />
             Crop Planning
           </h2>
@@ -191,7 +191,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <Badge variant="outline" className="px-4 py-2 bg-[#F8FAF8] text-[#1A1A1A] border-[#DDE4D8] font-semibold">
+              <Badge variant="outline" className="px-4 py-2 bg-[#F8FAF8] text-gray-900 border-[#DDE4D8] font-semibold">
                 {currentYear} Season
               </Badge>
               <Button
@@ -285,7 +285,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
               {/* Header Row */}
               <div className="grid grid-cols-12 gap-0 border-b border-[#DDE4D8]/30 bg-white">
                 <div className="col-span-5 p-4 border-r border-[#DDE4D8]/30">
-                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-[#1A1A1A]">
+                  <div className="grid grid-cols-3 gap-2 text-sm font-semibold text-gray-900">
                     <span className="truncate">Crop</span>
                     <span className="truncate">Location</span>
                     <span className="truncate">Dates</span>
@@ -312,7 +312,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                         <div className="grid grid-cols-3 gap-2">
                           {/* Crop Name */}
                           <div className="min-w-0">
-                            <h4 className="font-semibold text-[#555555] text-xs hover:text-[#1A1A1A] cursor-pointer truncate">
+                            <h4 className="font-semibold text-[#555555] text-xs hover:text-gray-900 cursor-pointer truncate">
                               {planning.cropName}
                             </h4>
                             <p className="text-xs text-#555555 truncate">
@@ -385,7 +385,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
                   <div key={planning.id} className="p-4 hover:bg-[#F8FAF8] transition-colors">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-[#1A1A1A] text-sm">{planning.cropName}</h4>
+                        <h4 className="font-semibold text-gray-900 text-sm">{planning.cropName}</h4>
                         <p className="text-xs text-[#555555]">{planning.location}</p>
                         {planning.bedNumber && (
                           <p className="text-xs text-#555555">{planning.bedNumber}</p>
@@ -434,7 +434,7 @@ export function CropCalendar({ farmId, year = 2024 }: CropCalendarProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-semibold text-[#555555]">Total Plantings</p>
-                <p className="text-lg sm:text-2xl font-bold text-[#1A1A1A]">{filteredPlannings.length}</p>
+                <p className="text-lg sm:text-2xl font-bold text-gray-900">{filteredPlannings.length}</p>
               </div>
               <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-[#8FBF7F]" />
             </div>

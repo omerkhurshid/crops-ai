@@ -400,7 +400,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         {/* Benchmark Goals */}
         {showBenchmarks && comparison.benchmarkGoals.length > 0 && (
           <div className="space-y-3 pt-4 border-t">
-            <h4 className="font-medium text-sm text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-medium text-sm text-gray-900 flex items-center gap-2">
               <Target className="h-4 w-4" />
               Improvement Targets
             </h4>
@@ -430,7 +430,7 @@ export function RegionalComparison({ farmData, crops, className }: RegionalCompa
         {/* Insights */}
         {comparison.insights.length > 0 && (
           <div className="space-y-2 pt-4 border-t">
-            <h4 className="font-medium text-sm text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-medium text-sm text-gray-900 flex items-center gap-2">
               <Info className="h-4 w-4" />
               Regional Insights
             </h4>

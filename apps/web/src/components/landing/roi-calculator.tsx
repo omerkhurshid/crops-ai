@@ -36,7 +36,7 @@ export function ROICalculator() {
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[#F8FAF8]/30">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-light text-[#1A1A1A] mb-4">
+          <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
             Calculate Your Potential ROI
           </h2>
           <p className="text-lg text-[#555555] max-w-2xl mx-auto">
@@ -94,7 +94,7 @@ export function ROICalculator() {
             {/* Results Section */}
             {results && (
               <div className="border-t border-[#DDE4D8] pt-6">
-                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4 text-center">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
                   Your Potential Annual Benefits
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -126,7 +126,7 @@ export function ROICalculator() {
                       <DollarSign className="h-5 w-5 text-[#555555]" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-[#1A1A1A] mb-2">
+                      <h4 className="font-semibold text-gray-900 mb-2">
                         Total Annual Value: ${results.totalSavings.toLocaleString()}
                       </h4>
                       <p className="text-sm text-[#555555]">

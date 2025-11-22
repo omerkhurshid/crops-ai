@@ -154,7 +154,7 @@ export function SmartAgricultureSelector({
       {/* Header with recommendations toggle */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-[#1A1A1A]">
+          <h3 className="text-lg font-semibold text-gray-900">
             Select Your {selectedFarmType === 'crops' ? 'Crops' : selectedFarmType === 'livestock' ? 'Livestock' : 'Agriculture'}
           </h3>
           <p className="text-sm text-[#555555]">
@@ -272,7 +272,7 @@ export function SmartAgricultureSelector({
               <div className="flex items-center gap-2">
                 {getItemIcon(item)}
                 <div>
-                  <h4 className="font-medium text-[#1A1A1A]">{item.name}</h4>
+                  <h4 className="font-medium text-gray-900">{item.name}</h4>
                   {item.scientificName && (
                     <p className="text-xs text-[#555555] italic">{item.scientificName}</p>
                   )}

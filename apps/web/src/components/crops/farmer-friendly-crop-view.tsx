@@ -302,13 +302,13 @@ export function FarmerFriendlyCropView({ farmId }: FarmerFriendlyCropViewProps) 
                       <Target className="h-4 w-4 text-[#555555]" />
                       <span className="font-semibold text-sm">Next Step:</span>
                     </div>
-                    <p className="font-medium text-[#1A1A1A]">{crop.nextAction}</p>
+                    <p className="font-medium text-gray-900">{crop.nextAction}</p>
                     <p className="text-sm text-[#555555]">Due: {crop.nextActionDate}</p>
                   </div>
                   {/* Key Stats Row */}
                   <div className="grid grid-cols-3 gap-4 text-center text-sm">
                     <div>
-                      <div className="font-semibold text-[#1A1A1A]">
+                      <div className="font-semibold text-gray-900">
                         {formatArea(crop.plantedArea, crop.unit)}
                       </div>
                       <div className="text-[#555555]">Planted</div>

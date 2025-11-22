@@ -209,7 +209,7 @@ export function TransactionList({ farmId, fieldId, onRefresh }: TransactionListP
         {filteredTransactions.length === 0 ? (
           <Card className="p-8 text-center">
             <DollarSign className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No transactions found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
             <p className="text-[#555555]">Start by adding your first income or expense transaction.</p>
           </Card>
         ) : (

@@ -119,7 +119,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
           Back to Farm Overview
         </Button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-[#1A1A1A]">{field.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{field.name}</h1>
           <p className="text-[#555555]">
             {field.farmName} • {field.area.toFixed(1)} acres
             {field.soilType && ` • ${field.soilType} soil`}
@@ -285,7 +285,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             <ModernCardContent>
               <div className="text-center py-12">
                 <PieChart className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Advanced Analytics Coming Soon
                 </h3>
                 <p className="text-[#555555] max-w-sm mx-auto">
@@ -306,7 +306,7 @@ export function FieldFinancialDashboard({ field, onBack }: FieldFinancialDashboa
             <ModernCardContent>
               <div className="text-center py-12">
                 <TrendingUp className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Field-Specific Trends Coming Soon
                 </h3>
                 <p className="text-[#555555] max-w-sm mx-auto">

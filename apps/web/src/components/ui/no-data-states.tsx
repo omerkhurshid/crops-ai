@@ -137,7 +137,7 @@ export function NoDataState({
       <div className="w-20 h-20 bg-[#F8FAF8] rounded-full flex items-center justify-center mb-6">
         <IconComponent className="h-10 w-10 text-[#555555]" />
       </div>
-      <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2 text-center">
+      <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">
         {title || config.title}
       </h3>
       <p className="text-[#555555] mb-6 text-center max-w-md">
@@ -237,7 +237,7 @@ export function ConnectionErrorState({ onRetry }: { onRetry?: () => void }) {
       <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
         <Wifi className="h-8 w-8 text-orange-600" />
       </div>
-      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">
         Connection Problem
       </h3>
       <p className="text-[#555555] mb-4 text-center max-w-sm">

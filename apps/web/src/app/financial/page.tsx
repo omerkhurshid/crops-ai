@@ -111,7 +111,7 @@ export default function FinancialPage() {
                 <div className="w-20 h-20 bg-gradient-to-br from-[#7A8F78]/20 to-[#8FBF7F]/20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <DollarSign className="h-10 w-10 text-[#7A8F78]" />
                 </div>
-                <ModernCardTitle className="text-3xl mb-4 text-[#1A1A1A]">
+                <ModernCardTitle className="text-3xl mb-4 text-gray-900">
                   Welcome to Financial Management
                 </ModernCardTitle>
                 <ModernCardDescription className="text-lg max-w-lg mx-auto">
@@ -124,7 +124,7 @@ export default function FinancialPage() {
                     <div className="flex items-start space-x-3">
                       <AlertCircle className="h-5 w-5 text-[#7A8F78] mt-0.5" />
                       <div className="text-sm">
-                        <p className="font-medium mb-1 text-[#1A1A1A]">Get Started</p>
+                        <p className="font-medium mb-1 text-gray-900">Get Started</p>
                         <p className="text-[#555555]">
                           You need to set up at least one farm to start tracking your financial data. 
                           Create your first farm to begin managing your agricultural finances.

@@ -215,7 +215,7 @@ export function DataExport({
           {/* Format Selection */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-[#1A1A1A] mb-3">Export Format</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-3">Export Format</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {formats.map((format) => (
                   <button
@@ -232,7 +232,7 @@ export function DataExport({
                         {format.icon}
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium text-[#1A1A1A] text-sm">{format.label}</div>
+                        <div className="font-medium text-gray-900 text-sm">{format.label}</div>
                         <div className="text-xs text-[#555555] mt-1">{format.description}</div>
                         {format.fileSize && (
                           <div className="text-xs text-#555555 mt-1">~{format.fileSize}</div>
@@ -248,7 +248,7 @@ export function DataExport({
             </div>
             {/* Export Options */}
             <div>
-              <h3 className="text-sm font-medium text-[#1A1A1A] mb-3">Export Options</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-3">Export Options</h3>
               <div className="space-y-3">
                 {/* Date Range */}
                 <div>
@@ -288,7 +288,7 @@ export function DataExport({
                       className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                     />
                     <div>
-                      <div className="text-sm font-medium text-[#1A1A1A]">Include Metadata</div>
+                      <div className="text-sm font-medium text-gray-900">Include Metadata</div>
                       <div className="text-xs text-[#555555]">Export date, filters, etc.</div>
                     </div>
                   </label>
@@ -304,7 +304,7 @@ export function DataExport({
                         className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                       />
                       <div>
-                        <div className="text-sm font-medium text-[#1A1A1A]">Include Charts</div>
+                        <div className="text-sm font-medium text-gray-900">Include Charts</div>
                         <div className="text-xs text-[#555555]">Graphs and visualizations</div>
                       </div>
                     </label>
@@ -320,7 +320,7 @@ export function DataExport({
                       className="rounded border-[#DDE4D8] text-[#555555] focus:ring-#555555"
                     />
                     <div>
-                      <div className="text-sm font-medium text-[#1A1A1A]">Include Raw Data</div>
+                      <div className="text-sm font-medium text-gray-900">Include Raw Data</div>
                       <div className="text-xs text-[#555555]">Detailed records and values</div>
                     </div>
                   </label>

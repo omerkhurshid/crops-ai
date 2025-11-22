@@ -71,7 +71,7 @@ export function SatelliteViewer({ fieldId, fieldName }: SatelliteViewerProps) {
       case 'poor':
         return 'bg-red-100 text-red-800'
       default:
-        return 'bg-[#F5F5F5] text-[#1A1A1A]'
+        return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   if (loading) {

@@ -139,7 +139,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
         <div className="p-6 border-b border-[#F3F4F6]">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-[#1A1A1A]">Next Best Actions</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Next Best Actions</h2>
               <p className="text-sm text-[#555555] mt-1">
                 AI-powered farm operation recommendations based on current conditions
               </p>
@@ -193,7 +193,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
             <div className="p-6">
               <div className="text-center py-12">
                 <CheckCircle className="h-12 w-12 text-[#8FBF7F] mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">All caught up!</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">All caught up!</h3>
                 <p className="text-[#555555]">
                   No urgent actions needed right now. Check back later or generate new recommendations.
                 </p>
@@ -221,7 +221,7 @@ const NBARecommendations = memo(function NBARecommendations({ farmId, className 
                     </div>
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-[#1A1A1A] mb-1">{rec.title}</h3>
+                      <h3 className="font-medium text-gray-900 mb-1">{rec.title}</h3>
                       <p className="text-sm text-[#555555] mb-2">{rec.description}</p>
                       {/* Financial Impact */}
                       <div className="flex items-center gap-4 text-xs text-[#555555] mb-2">
@@ -335,7 +335,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-[#F3F4F6]">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-[#1A1A1A]">{recommendation.title}</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{recommendation.title}</h2>
             <button
               onClick={onClose}
               className="text-[#555555] hover:text-[#555555] transition-colors"
@@ -347,12 +347,12 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
         <div className="p-6 space-y-6">
           {/* Description */}
           <div>
-            <h3 className="font-medium text-[#1A1A1A] mb-2">Description</h3>
+            <h3 className="font-medium text-gray-900 mb-2">Description</h3>
             <p className="text-[#555555]">{recommendation.description}</p>
           </div>
           {/* Financial Impact */}
           <div>
-            <h3 className="font-medium text-[#1A1A1A] mb-3">Financial Impact</h3>
+            <h3 className="font-medium text-gray-900 mb-3">Financial Impact</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {recommendation.estimatedImpact.revenue && (
                 <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
@@ -371,7 +371,7 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
                 </div>
               )}
               <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-3">
-                <div className="text-[#1A1A1A] font-medium">Confidence</div>
+                <div className="text-gray-900 font-medium">Confidence</div>
                 <div className="text-2xl font-bold text-#1A1A1A">
                   {recommendation.confidence}%
                 </div>
@@ -380,12 +380,12 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
           </div>
           {/* Explanation */}
           <div>
-            <h3 className="font-medium text-[#1A1A1A] mb-2">Analysis</h3>
+            <h3 className="font-medium text-gray-900 mb-2">Analysis</h3>
             <p className="text-[#555555]">{recommendation.explanation}</p>
           </div>
           {/* Action Steps */}
           <div>
-            <h3 className="font-medium text-[#1A1A1A] mb-3">Action Steps</h3>
+            <h3 className="font-medium text-gray-900 mb-3">Action Steps</h3>
             <ol className="list-decimal list-inside space-y-2">
               {recommendation.actionSteps.map((step, index) => (
                 <li key={index} className="text-[#555555]">{step}</li>
@@ -395,12 +395,12 @@ function RecommendationModal({ recommendation, onClose, onAccept, onReject }: Re
           {/* Resource Requirements */}
           {recommendation.resourceRequirements && recommendation.resourceRequirements.length > 0 && (
             <div>
-              <h3 className="font-medium text-[#1A1A1A] mb-3">Required Resources</h3>
+              <h3 className="font-medium text-gray-900 mb-3">Required Resources</h3>
               <div className="flex flex-wrap gap-2">
                 {recommendation.resourceRequirements.map((resource, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-[#F5F5F5] text-[#1A1A1A] rounded-lg text-sm"
+                    className="px-2 py-1 bg-[#F5F5F5] text-gray-900 rounded-lg text-sm"
                   >
                     {resource}
                   </span>

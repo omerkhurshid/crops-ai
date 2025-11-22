@@ -166,7 +166,7 @@ export function EnhancedNDVIDemo({ className = '' }: EnhancedNDVIDemoProps) {
         <div className="bg-[#F8FAF8] p-3 rounded-lg">
           <div className="flex items-center gap-2 mb-1">
             <MapPin className="h-4 w-4 text-[#555555]" />
-            <span className="font-medium text-[#1A1A1A]">{DEMO_FIELD_LOCATION.name}</span>
+            <span className="font-medium text-gray-900">{DEMO_FIELD_LOCATION.name}</span>
           </div>
           <div className="text-sm text-[#555555]">
             {DEMO_FIELD_LOCATION.address} • {DEMO_FIELD_LOCATION.acres} acres • {DEMO_FIELD_LOCATION.crop}

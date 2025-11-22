@@ -449,7 +449,7 @@ export const FieldMode = memo(function FieldMode({ onExit, className, field }: F
       </div>
       {/* Today's Priority - Simplified view */}
       <div className="bg-white rounded-2xl p-6 shadow-lg mb-6">
-        <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
           <Home className="h-6 w-6 text-[#8FBF7F]" />
           Today's Priority
         </h2>

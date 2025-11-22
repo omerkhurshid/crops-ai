@@ -50,7 +50,7 @@ const InteractiveDemo = () => {
             }`}
             onClick={() => setActiveQuestion(index)}
           >
-            <div className="font-semibold text-[#1A1A1A] mb-2">{q.question}</div>
+            <div className="font-semibold text-gray-900 mb-2">{q.question}</div>
             {activeQuestion === index && (
               <div className="space-y-2">
                 <div className={`inline-flex items-center px-3 py-1 rounded-full text-white text-sm font-medium ${q.color}`}>
@@ -87,7 +87,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Content */}
             <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                 Farm with confidence,<br />
                 <span className="text-[#7A8F78]">not guesswork</span>
               </h1>
@@ -149,7 +149,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               You shouldn't need a meteorology degree to farm
             </h2>
           </div>
@@ -159,7 +159,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Clock className="h-8 w-8 text-red-600" />
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">"Did I miss the window?"</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">"Did I miss the window?"</h3>
               <p className="text-[#555555] leading-relaxed">
                 Checking three weather apps, walking fields twice a day, waking up at 4am wondering 
                 if today's the day to spray—only to have conditions change by noon.
@@ -170,7 +170,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <DollarSign className="h-8 w-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">"Am I leaving money on the table?"</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">"Am I leaving money on the table?"</h3>
               <p className="text-[#555555] leading-relaxed">
                 Harvesting too early costs you yield. Waiting too long risks weather damage. 
                 The optimal 72-hour window is invisible until it's gone.
@@ -181,7 +181,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-yellow-100 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <AlertTriangle className="h-8 w-8 text-yellow-600" />
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">"Where's the fire?"</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">"Where's the fire?"</h3>
               <p className="text-[#555555] leading-relaxed">
                 You've got 2,000 acres and a dozen decisions competing for attention. 
                 Which fields actually need you today? Which can wait?
@@ -201,7 +201,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-[#F8FAF8]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               One question. One answer. Move on with your day.
             </h2>
           </div>
@@ -210,7 +210,7 @@ export default function Home() {
 
           <div className="mt-12 text-center">
             <div className="bg-[#DDE4D8] border border-[#7A8F78] rounded-xl p-6 max-w-3xl mx-auto">
-              <p className="text-[#1A1A1A] font-semibold text-lg">
+              <p className="text-gray-900 font-semibold text-lg">
                 "Cropple isn't trying to replace your judgment—it's giving you the confidence to trust it."
               </p>
             </div>
@@ -225,7 +225,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               What farmers are saying
             </h2>
           </div>
@@ -238,7 +238,7 @@ export default function Home() {
                   MP
                 </div>
                 <div>
-                  <div className="font-bold text-[#1A1A1A]">Mike Patterson</div>
+                  <div className="font-bold text-gray-900">Mike Patterson</div>
                   <div className="text-sm text-[#555555]">850 acres - Wheat & Soy, Kansas</div>
                 </div>
               </div>
@@ -258,7 +258,7 @@ export default function Home() {
                   SC
                 </div>
                 <div>
-                  <div className="font-bold text-[#1A1A1A]">Sarah Chen</div>
+                  <div className="font-bold text-gray-900">Sarah Chen</div>
                   <div className="text-sm text-[#555555]">3,200 acres - Diversified, California</div>
                 </div>
               </div>
@@ -279,7 +279,7 @@ export default function Home() {
                   TH
                 </div>
                 <div>
-                  <div className="font-bold text-[#1A1A1A]">Tom & Rebecca Hoffman</div>
+                  <div className="font-bold text-gray-900">Tom & Rebecca Hoffman</div>
                   <div className="text-sm text-[#555555]">450 acres - Family Farm, Iowa</div>
                 </div>
               </div>
@@ -300,7 +300,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-[#F8FAF8]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Set it up once. Use it every day.
             </h2>
           </div>
@@ -310,7 +310,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-[#7A8F78] text-white rounded-xl flex items-center justify-center mx-auto mb-6 text-xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">Map your operation</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Map your operation</h3>
               <p className="text-[#555555] mb-2 font-medium">(10 minutes)</p>
               <p className="text-[#555555]">
                 Draw your fields, tell us what you're growing. That's it.
@@ -321,7 +321,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-[#7A8F78] text-white rounded-xl flex items-center justify-center mx-auto mb-6 text-xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">Get your daily briefing</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Get your daily briefing</h3>
               <p className="text-[#555555] mb-2 font-medium">Every morning: priorities, windows, alerts</p>
               <p className="text-[#555555]">
                 Like a weather app, but for farming decisions.
@@ -332,7 +332,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-[#7A8F78] text-white rounded-xl flex items-center justify-center mx-auto mb-6 text-xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">Log as you go</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Log as you go</h3>
               <p className="text-[#555555] mb-2 font-medium">Voice logging for expenses, observations, applications</p>
               <p className="text-[#555555]">
                 No paperwork, no data entry.
@@ -352,7 +352,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Trusted by farms from 50 to 15,000 acres
             </h2>
           </div>
@@ -388,42 +388,42 @@ export default function Home() {
       <section className="py-20 px-4 bg-[#F8FAF8]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Common questions from farmers like you
             </h2>
           </div>
 
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
-              <h3 className="font-bold text-[#1A1A1A] mb-2">Do I need to be tech-savvy?</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Do I need to be tech-savvy?</h3>
               <p className="text-[#555555]">
                 If you can use a weather app, you can use Cropple. Most farmers are up and running in under 15 minutes.
               </p>
             </div>
 
             <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
-              <h3 className="font-bold text-[#1A1A1A] mb-2">What if I lose cell signal in the field?</h3>
+              <h3 className="font-bold text-gray-900 mb-2">What if I lose cell signal in the field?</h3>
               <p className="text-[#555555]">
                 Cropple works offline and syncs when you're back in range. Download your day's priorities over breakfast.
               </p>
             </div>
 
             <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
-              <h3 className="font-bold text-[#1A1A1A] mb-2">Does this work for my crops?</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Does this work for my crops?</h3>
               <p className="text-[#555555]">
                 We support all major row crops, specialty crops, and permanent crops. If we don't support yours yet, let us know—we're always expanding.
               </p>
             </div>
 
             <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
-              <h3 className="font-bold text-[#1A1A1A] mb-2">Will this replace my agronomist?</h3>
+              <h3 className="font-bold text-gray-900 mb-2">Will this replace my agronomist?</h3>
               <p className="text-[#555555]">
                 No. Cropple gives you data to have better conversations with your agronomist. Many of our customers share their Cropple dashboard with their advisors.
               </p>
             </div>
 
             <div className="bg-white rounded-xl p-6 border border-[#F3F4F6]">
-              <h3 className="font-bold text-[#1A1A1A] mb-2">What if I have questions or need help?</h3>
+              <h3 className="font-bold text-gray-900 mb-2">What if I have questions or need help?</h3>
               <p className="text-[#555555]">
                 Text or call our farmer support team (all ag backgrounds). Average response time: 12 minutes.
               </p>

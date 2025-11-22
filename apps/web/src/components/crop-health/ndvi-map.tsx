@@ -257,7 +257,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
                           <div className="absolute top-1/2 left-0 right-0 h-2 bg-[#555555] opacity-60" />
                           <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-[#555555] opacity-60" />
                           {/* Field name label */}
-                          <div className="absolute top-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-[#1A1A1A]">
+                          <div className="absolute top-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-900">
                             {currentFieldData.fieldName}
                           </div>
                           {/* Area label */}
@@ -395,7 +395,7 @@ export function NDVIMap({ farmId, fields = [] }: NDVIMapProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <h4 className="font-medium text-[#1A1A1A]">Key Observations</h4>
+              <h4 className="font-medium text-gray-900">Key Observations</h4>
               {currentFieldData ? (
                 <>
                   {(currentFieldData.zones?.problemAreas?.percentage || 0) > 10 && (

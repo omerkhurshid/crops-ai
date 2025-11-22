@@ -130,7 +130,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-[#1A1A1A]">Weather Dashboard</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Weather Dashboard</h2>
         <Button onClick={fetchWeatherData} variant="outline" size="sm">
           Refresh
         </Button>
@@ -138,7 +138,7 @@ export function WeatherDashboard({ latitude, longitude, className }: WeatherDash
       {/* Active Alerts */}
       {alerts.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-[#1A1A1A]">Active Weather Alerts</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Active Weather Alerts</h3>
           {alerts.map(alert => (
             <Card key={alert.id} className={`border-l-4 ${getSeverityColor(alert.severity)}`}>
               <CardContent className="pt-4">

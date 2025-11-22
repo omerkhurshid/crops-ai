@@ -352,7 +352,7 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
               <MapPin className="inline h-6 w-6 mr-2" />
               Your Farms
             </h2>
@@ -419,7 +419,7 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
               What to do today
             </h2>
             <p className="text-[#555555]">
@@ -459,7 +459,7 @@ export const FarmerDashboard = memo(function FarmerDashboard({ farmId, farmData:
       {showDetailedView && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-[#1A1A1A]">
+            <h2 className="text-2xl font-semibold text-gray-900">
               Detailed Analysis
             </h2>
             <Button 

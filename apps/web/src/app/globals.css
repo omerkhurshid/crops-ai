@@ -173,7 +173,7 @@
   }
   
   .sage-hero h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1A1A1A];
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900;
     @apply mb-6 max-w-4xl leading-tight;
     letter-spacing: -0.02em;
   }
@@ -205,7 +205,7 @@
   }
   
   .sage-feature-title {
-    @apply text-lg font-semibold text-[#1A1A1A] mb-3;
+    @apply text-lg font-semibold text-gray-900 mb-3;
     letter-spacing: -0.01em;
   }
   
@@ -337,7 +337,7 @@
   }
   
   .sage-table th {
-    @apply bg-[#F8FAF8] text-[#1A1A1A] font-medium;
+    @apply bg-[#F8FAF8] text-gray-900 font-medium;
     @apply px-4 py-3 text-left border-b border-[#F3F4F6];
   }
   
@@ -356,7 +356,7 @@
   }
   
   .sage-progress {
-    @apply w-full bg-[#E6E6E6] rounded-full h-2;
+    @apply w-full bg-[#F3F4F6] rounded-full h-2;
     overflow: hidden;
   }
   

@@ -49,7 +49,7 @@ export function ErrorFallback({ error, retry }: ErrorFallbackProps) {
         <div className="p-4 bg-red-50 rounded-full w-fit mx-auto mb-6">
           <AlertCircle className="h-8 w-8 text-red-600" />
         </div>
-        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Something went wrong
         </h2>
         <p className="text-[#555555] mb-6 leading-relaxed">
@@ -105,7 +105,7 @@ export function ErrorState({
       <div className="p-3 bg-red-50 rounded-full mb-4">
         <AlertCircle className="h-6 w-6 text-red-600" />
       </div>
-      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 text-center">
+      <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">
         {title}
       </h3>
       <p className="text-[#555555] text-center mb-6 max-w-md leading-relaxed">

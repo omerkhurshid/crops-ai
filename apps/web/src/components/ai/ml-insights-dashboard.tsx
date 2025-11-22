@@ -280,7 +280,7 @@ export function MLInsightsDashboard({ farmId, selectedAgriculture = [], farmLoca
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-[#1A1A1A]">AI Insights</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">AI Insights</h2>
           <p className="text-[#555555]">
             Powered by {relevantModels.length} ML models analyzing your farm data
           </p>

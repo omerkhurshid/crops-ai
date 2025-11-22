@@ -189,7 +189,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
             </p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-[#1A1A1A]">
+            <div className="text-2xl font-bold text-gray-900">
               {completedSteps}/{steps.length}
             </div>
             <div className="text-sm text-[#555555]">steps completed</div>
@@ -259,7 +259,7 @@ export function GuidedSetup({ userId, onComplete, className = '' }: GuidedSetupP
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className={`font-semibold ${
-                        step.completed ? 'text-[#7A8F78]' : 'text-[#1A1A1A]'
+                        step.completed ? 'text-[#7A8F78]' : 'text-gray-900'
                       }`}>
                         {step.title}
                       </h4>

@@ -548,7 +548,7 @@ export function InteractiveFieldMap({ fieldId, onBoundariesDetected, onClose }: 
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-white bg-opacity-90 rounded-lg p-4 text-center">
                         <Shapes className="h-8 w-8 mx-auto mb-2 text-[#555555]" />
-                        <p className="font-medium text-[#1A1A1A]">Click to add points</p>
+                        <p className="font-medium text-gray-900">Click to add points</p>
                         <p className="text-sm text-[#555555]">Create your field boundary</p>
                       </div>
                     </div>

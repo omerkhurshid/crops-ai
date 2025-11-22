@@ -204,7 +204,7 @@ export function RecommendationsWidget({
         {recommendations.length === 0 && !error && (
           <div className="text-center py-8">
             <Target className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Recommendations Yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Recommendations Yet</h3>
             <p className="text-[#555555] mb-4">
               Generate personalized farming insights based on your data
             </p>
@@ -230,7 +230,7 @@ export function RecommendationsWidget({
                   <span className="text-2xl">{typeIcons[rec.type]}</span>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-semibold text-[#1A1A1A] text-sm">
+                      <h4 className="font-semibold text-gray-900 text-sm">
                         {rec.title}
                       </h4>
                       <Badge className={`text-xs ${priorityColors[rec.priority]}`}>
@@ -271,7 +271,7 @@ export function RecommendationsWidget({
                   {rec.description}
                 </p>
                 <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded p-2">
-                  <p className="text-sm font-medium text-[#1A1A1A] mb-1">
+                  <p className="text-sm font-medium text-gray-900 mb-1">
                     Action Required:
                   </p>
                   <p className="text-sm text-[#555555]">

@@ -80,7 +80,7 @@ export function LoadingCard({
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <LoadingSpinner size="md" className="text-[#7A8F78]" />
-          <h3 className="font-semibold text-[#1A1A1A]">{title}</h3>
+          <h3 className="font-semibold text-gray-900">{title}</h3>
         </div>
         <div className="space-y-2">
           <div className="h-2 bg-[#F5F5F5] rounded-full animate-pulse"></div>

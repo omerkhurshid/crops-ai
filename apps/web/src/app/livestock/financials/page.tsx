@@ -183,7 +183,7 @@ export default function LivestockFinancialsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before viewing financial data.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=financials')}
@@ -202,7 +202,7 @@ export default function LivestockFinancialsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Livestock Financials</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Livestock Financials</h1>
             <p className="text-[#555555]">Track costs, profits, and financial performance</p>
           </div>
         </div>
@@ -214,7 +214,7 @@ export default function LivestockFinancialsPage() {
                 <DollarSign className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Total Investment</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">${financialData.totalInvestment.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-gray-900">${financialData.totalInvestment.toLocaleString()}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -225,7 +225,7 @@ export default function LivestockFinancialsPage() {
                 <Calculator className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Current Value</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">${financialData.totalValue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-gray-900">${financialData.totalValue.toLocaleString()}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -255,7 +255,7 @@ export default function LivestockFinancialsPage() {
                 <PieChart className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Monthly Costs</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">
+                  <p className="text-2xl font-bold text-gray-900">
                     ${(financialData.feedCosts30Days + financialData.healthCosts30Days + financialData.breedingCosts30Days).toFixed(0)}
                   </p>
                 </div>

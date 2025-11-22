@@ -78,7 +78,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
           {farms.map((farm) => (
             <div key={farm.id} className="p-4 border border-[#F3F4F6] rounded-lg bg-white">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#1A1A1A]">{farm.name}</h3>
+                <h3 className="font-semibold text-gray-900">{farm.name}</h3>
                 <Badge 
                   variant="outline" 
                   className={cn(
@@ -170,7 +170,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                         {index + 1}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-[#1A1A1A]">{farm.name}</div>
+                        <div className="text-sm font-medium text-gray-900">{farm.name}</div>
                         <div className="text-xs text-[#555555] flex items-center gap-1">
                           <MapPin className="h-3 w-3" />
                           {farm.address || farm.location || 'No location'}
@@ -180,13 +180,13 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                   </td>
                   {/* Area */}
                   <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       {farm.totalArea.toFixed(1)} ha
                     </div>
                   </td>
                   {/* Revenue */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       {formatCurrency(farm.income)}
                     </div>
                     <div className="text-xs text-[#555555]">
@@ -195,7 +195,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                   </td>
                   {/* Expenses */}
                   <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       {formatCurrency(farm.expenses)}
                     </div>
                   </td>
@@ -263,16 +263,16 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
             {/* Summary Footer */}
             <tfoot className="bg-[#FAFAF7] border-t-2 border-[#F3F4F6]">
               <tr>
-                <td className="px-6 py-4 text-sm font-medium text-[#1A1A1A]">
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">
                   Total Portfolio
                 </td>
-                <td className="px-6 py-4 text-center text-sm font-medium text-[#1A1A1A]">
+                <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">
                   {farms.reduce((sum, f) => sum + f.totalArea, 0).toFixed(1)} ha
                 </td>
-                <td className="px-6 py-4 text-right text-sm font-medium text-[#1A1A1A]">
+                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
                   {formatCurrency(farms.reduce((sum, f) => sum + f.income, 0))}
                 </td>
-                <td className="px-6 py-4 text-right text-sm font-medium text-[#1A1A1A]">
+                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
                   {formatCurrency(farms.reduce((sum, f) => sum + f.expenses, 0))}
                 </td>
                 <td className="px-6 py-4 text-right">
@@ -292,7 +292,7 @@ export function ColorfulFarmTable({ farms, onFarmSelect }: ColorfulFarmTableProp
                       farms.reduce((sum, f) => sum + f.income, 0)) * 100).toFixed(1)}%
                   </Badge>
                 </td>
-                <td className="px-6 py-4 text-right text-sm font-medium text-[#1A1A1A]">
+                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
                   {formatCurrency(
                     farms.reduce((sum, f) => sum + f.netProfit, 0) / 
                     farms.reduce((sum, f) => sum + f.totalArea, 0)

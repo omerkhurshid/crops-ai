@@ -113,7 +113,7 @@ export default function LivestockPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before managing livestock.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=livestock')}
@@ -263,7 +263,7 @@ export default function LivestockPage() {
             ) : (
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Livestock Data</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
                 <p className="text-[#555555] mb-6">Start by adding your first livestock event to track your animals.</p>
                 <a 
                   href="/livestock/add-event"

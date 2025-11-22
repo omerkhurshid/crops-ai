@@ -196,7 +196,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
         }
       default:
         return {
-          color: 'bg-[#F5F5F5] border-[#F3F4F6] text-[#1A1A1A]',
+          color: 'bg-[#F5F5F5] border-[#F3F4F6] text-gray-900',
           icon: Calendar,
           urgency: 'Monitor',
           urgencyColor: 'text-[#555555]'
@@ -253,7 +253,7 @@ export function HarvestAlerts({ farmId, className }: HarvestAlertsProps) {
               <Calendar className="h-5 w-5 text-[#555555]" />
             </div>
             <div>
-              <p className="font-medium text-[#1A1A1A]">No Crops Ready</p>
+              <p className="font-medium text-gray-900">No Crops Ready</p>
               <p className="text-sm text-[#555555]">Add crop planting dates to see harvest alerts</p>
             </div>
           </div>

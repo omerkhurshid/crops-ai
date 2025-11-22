@@ -688,7 +688,7 @@ export function ThreeStepFarmCreator() {
                     <div className="space-y-4">
                       <Alert className="border-[#DDE4D8] bg-[#F8FAF8]">
                         <CheckCircle className="h-4 w-4 text-[#7A8F78]" />
-                        <AlertDescription className="text-[#1A1A1A]">
+                        <AlertDescription className="text-gray-900">
                           <strong>Farm boundaries complete!</strong> Total area: {farm.totalArea} acres
                         </AlertDescription>
                       </Alert>

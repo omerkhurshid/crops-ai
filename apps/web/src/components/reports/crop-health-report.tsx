@@ -134,7 +134,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-blue-100 text-[#7A8F78] border-blue-200';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]';
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]';
     }
   };
   if (loading) {
@@ -172,7 +172,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
             How Healthy Your Crops Are
           </h3>
           <p className="text-[#555555]">
@@ -198,7 +198,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           <div className="flex items-center gap-3">
             <Leaf className="h-6 w-6 text-[#7A8F78]" />
             <div>
-              <ModernCardTitle className="text-[#1A1A1A]">
+              <ModernCardTitle className="text-gray-900">
                 Overall Crop Health
               </ModernCardTitle>
               <ModernCardDescription>
@@ -216,7 +216,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                 showIcon={true}
                 showText={false}
               />
-              <div className="text-4xl font-bold text-[#1A1A1A]">
+              <div className="text-4xl font-bold text-gray-900">
                 {data.summary.overallHealth}%
               </div>
             </div>
@@ -283,19 +283,19 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                       showText={false}
                     />
                     <div>
-                      <h4 className="font-semibold text-[#1A1A1A]">{field.fieldName}</h4>
+                      <h4 className="font-semibold text-gray-900">{field.fieldName}</h4>
                       <p className="text-sm text-[#555555]">{field.cropType}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold text-[#1A1A1A]">{field.healthScore}%</div>
+                    <div className="text-lg font-bold text-gray-900">{field.healthScore}%</div>
                     <div className="text-sm text-[#555555]">Health Score</div>
                   </div>
                 </div>
                 {/* Stress Factors */}
                 {field.stressFactors.length > 0 && (
                   <div className="mb-4">
-                    <h5 className="text-sm font-medium text-[#1A1A1A] mb-2">Issues Found:</h5>
+                    <h5 className="text-sm font-medium text-gray-900 mb-2">Issues Found:</h5>
                     <div className="space-y-2">
                       {field.stressFactors.map((stress, index) => (
                         <div key={index} className="flex items-center gap-2 text-sm">
@@ -313,7 +313,7 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
                 )}
                 {/* Recommendations */}
                 <div>
-                  <h5 className="text-sm font-medium text-[#1A1A1A] mb-2">What to do:</h5>
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">What to do:</h5>
                   <ul className="space-y-1">
                     {field.recommendations.map((rec, index) => (
                       <li key={index} className="text-sm text-[#555555] flex items-start gap-2">
@@ -376,19 +376,19 @@ export function CropHealthReport({ farmId }: CropHealthReportProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-[#F8FAF8] rounded-xl border border-green-100">
               <div className="text-sm font-medium text-[#555555] mb-1">Spring</div>
-              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.spring}%</div>
+              <div className="text-xl font-bold text-gray-900">{data.trends.seasonalPattern.spring}%</div>
             </div>
             <div className="text-center p-4 bg-yellow-50 rounded-xl border border-yellow-100">
               <div className="text-sm font-medium text-[#555555] mb-1">Summer</div>
-              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.summer}%</div>
+              <div className="text-xl font-bold text-gray-900">{data.trends.seasonalPattern.summer}%</div>
             </div>
             <div className="text-center p-4 bg-orange-50 rounded-xl border border-orange-100">
               <div className="text-sm font-medium text-[#555555] mb-1">Fall</div>
-              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.fall}%</div>
+              <div className="text-xl font-bold text-gray-900">{data.trends.seasonalPattern.fall}%</div>
             </div>
             <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
               <div className="text-sm font-medium text-[#555555] mb-1">Winter</div>
-              <div className="text-xl font-bold text-[#1A1A1A]">{data.trends.seasonalPattern.winter}%</div>
+              <div className="text-xl font-bold text-gray-900">{data.trends.seasonalPattern.winter}%</div>
             </div>
           </div>
         </ModernCardContent>

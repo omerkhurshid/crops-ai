@@ -192,7 +192,7 @@ export default function LivestockMarketPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before viewing market analysis.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=market')}
@@ -211,7 +211,7 @@ export default function LivestockMarketPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Market Analysis</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Market Analysis</h1>
             <p className="text-[#555555]">Optimize timing for livestock sales and market performance</p>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function LivestockMarketPage() {
                 <Target className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Ready for Sale</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{marketData.readyForSale}</p>
+                  <p className="text-2xl font-bold text-gray-900">{marketData.readyForSale}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -234,7 +234,7 @@ export default function LivestockMarketPage() {
                 <TrendingUp className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">At Optimal Weight</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{marketData.optimalWeight}</p>
+                  <p className="text-2xl font-bold text-gray-900">{marketData.optimalWeight}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -245,7 +245,7 @@ export default function LivestockMarketPage() {
                 <DollarSign className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Est. Market Value</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">${marketData.totalValue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-gray-900">${marketData.totalValue.toLocaleString()}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -256,7 +256,7 @@ export default function LivestockMarketPage() {
                 <Calendar className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Avg Days to Market</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{Math.round(marketData.avgDaysToMarket)}</p>
+                  <p className="text-2xl font-bold text-gray-900">{Math.round(marketData.avgDaysToMarket)}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -269,7 +269,7 @@ export default function LivestockMarketPage() {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="h-6 w-6 text-orange-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-[#1A1A1A] mb-2">Market Opportunities</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">Market Opportunities</h3>
                   <p className="text-[#555555]">
                     You have {marketData.readyForSale} animal{marketData.readyForSale !== 1 ? 's' : ''} ready for sale. 
                     Consider market conditions and timing for optimal pricing.

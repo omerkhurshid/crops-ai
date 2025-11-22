@@ -115,7 +115,7 @@ export function AdminMetrics({
               ))}
             </div>
             <div>
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Key Performance Indicators</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Key Performance Indicators</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white border rounded-lg">
                   <span>Customer Acquisition Cost</span>
@@ -208,7 +208,7 @@ export function AdminMetrics({
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Database Statistics</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Database Statistics</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white border rounded-lg">
                   <span>Total Database Size</span>

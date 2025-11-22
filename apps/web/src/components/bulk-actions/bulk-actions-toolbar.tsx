@@ -98,13 +98,13 @@ export function BulkActionsToolbar({
                   ) : (
                     <Square className="h-5 w-5 text-[#555555]" />
                   )}
-                  <span className="text-sm font-medium text-[#1A1A1A]">
+                  <span className="text-sm font-medium text-gray-900">
                     {allSelected ? 'Deselect all' : 'Select all'}
                   </span>
                 </button>
               )}
               <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="bg-[#F8FAF8] text-[#1A1A1A]">
+                <Badge variant="secondary" className="bg-[#F8FAF8] text-gray-900">
                   {selectedItems.length} selected
                 </Badge>
                 <span className="text-sm text-[#555555]">

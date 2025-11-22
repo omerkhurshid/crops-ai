@@ -102,7 +102,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       severe: 'bg-red-100 text-red-800 border-red-200',
       extreme: 'bg-red-200 text-red-900 border-red-300'
     }
-    return colors[severity] || 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]'
+    return colors[severity] || 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]'
   }
   const getUrgencyColor = (urgency: string) => {
     const colors: Record<string, string> = {
@@ -110,7 +110,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
       today: 'bg-orange-100 text-orange-800',
       'this-week': 'bg-blue-100 text-blue-800'
     }
-    return colors[urgency] || 'bg-[#F5F5F5] text-[#1A1A1A]'
+    return colors[urgency] || 'bg-[#F5F5F5] text-gray-900'
   }
   if (loading) {
     return (
@@ -207,7 +207,7 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
           </div>
           {/* Right: Farming Actions */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-semibold text-gray-900 flex items-center gap-2">
               <Target className="h-4 w-4 text-[#8FBF7F]" />
               Weather-Based Actions
             </h4>
@@ -235,14 +235,14 @@ export function IntegratedWeatherDashboard({ latitude, longitude, className }: I
         </div>
         {/* 4-Day Forecast */}
         <div>
-          <h4 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
+          <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             4-Day Outlook
           </h4>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {weather.forecast.map((day) => (
               <div key={day.date} className="bg-white border border-[#DDE4D8] rounded-lg p-3 text-center">
-                <div className="text-sm font-medium text-[#1A1A1A] mb-1">{day.day}</div>
+                <div className="text-sm font-medium text-gray-900 mb-1">{day.day}</div>
                 <div className="text-2xl mb-2">{day.icon}</div>
                 <div className="text-sm text-[#555555] mb-1">{day.condition}</div>
                 <div className="text-sm font-medium">

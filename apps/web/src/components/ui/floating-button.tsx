@@ -9,7 +9,7 @@ interface FloatingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 }
 const variants = {
   primary: 'bg-[#7A8F78] hover:bg-[#5E6F5A] text-white shadow-glow hover:shadow-soft-lg',
-  secondary: 'bg-[#DDE4D8] hover:bg-[#DDE4D8] text-[#1A1A1A] shadow-soft hover:shadow-floating',
+  secondary: 'bg-[#DDE4D8] hover:bg-[#DDE4D8] text-gray-900 shadow-soft hover:shadow-floating',
   ghost: 'bg-white/70 hover:bg-white/90 text-[#555555] backdrop-blur-sm shadow-soft',
   success: 'bg-crops-green-500 hover:bg-crops-green-600 text-white shadow-glow',
   warning: 'bg-[#7A8F78] hover:bg-[#7A8F78] text-white shadow-soft'

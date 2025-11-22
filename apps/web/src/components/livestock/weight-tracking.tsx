@@ -78,7 +78,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
         <div className="text-[#555555] mb-4">
           <Weight className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Weight Records Yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Weight Records Yet</h3>
         <p className="text-[#555555] mb-6">Start tracking growth by recording your first weight measurement.</p>
         <Link href="/livestock/weight/add">
           <Button>Record First Weight</Button>
@@ -181,7 +181,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-[#1A1A1A]">
+                        <div className="text-sm font-medium text-gray-900">
                           #{record.animal.tagNumber}
                         </div>
                         {record.animal.name && (
@@ -194,7 +194,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       {record.weight} lbs
                     </div>
                   </td>
@@ -233,7 +233,7 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                           record.bodyConditionScore <= 4 ? 'bg-[#8FBF7F]' :
                           'bg-blue-500'
                         }`} />
-                        <span className="text-sm text-[#1A1A1A]">
+                        <span className="text-sm text-gray-900">
                           {record.bodyConditionScore}/5
                         </span>
                       </div>
@@ -242,12 +242,12 @@ export function WeightTracking({ weightRecords, farms, animals }: WeightTracking
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-[#1A1A1A]">
+                    <div className="text-sm text-gray-900">
                       {calculateAge(record.animal.birthDate)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-[#1A1A1A]">
+                    <div className="text-sm text-gray-900">
                       {new Date(record.weighDate).toLocaleDateString()}
                     </div>
                     {record.notes && (

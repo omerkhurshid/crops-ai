@@ -67,7 +67,7 @@ export default function AddWeightPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before tracking animal weights.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=weight')}
@@ -87,14 +87,14 @@ export default function AddWeightPage() {
         <div className="flex items-center gap-4">
           <Link 
             href="/livestock/weight"
-            className="flex items-center text-[#555555] hover:text-[#1A1A1A] transition-colors"
+            className="flex items-center text-[#555555] hover:text-gray-900 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Weight Tracking
           </Link>
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Record Weight</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Record Weight</h1>
           <p className="text-[#555555]">Track animal weight and body condition</p>
         </div>
         {/* Add Weight Form */}

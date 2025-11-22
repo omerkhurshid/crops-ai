@@ -130,7 +130,7 @@ function RecommendationsPageContent() {
           <ModernCard variant="glow" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/90 to-[#FAFAF7]/90">
               <div className="flex items-center gap-3">
-                <ModernCardTitle className="text-[#1A1A1A]">AI Analysis Overview</ModernCardTitle>
+                <ModernCardTitle className="text-gray-900">AI Analysis Overview</ModernCardTitle>
               </div>
               <ModernCardDescription>
                 Smart recommendations based on your farm data and conditions
@@ -143,7 +143,7 @@ function RecommendationsPageContent() {
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Activity className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Active</div>
+                    <div className="text-2xl font-bold text-gray-900 mb-2">Active</div>
                     <div className="text-sm text-[#555555]">Farm Status</div>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ function RecommendationsPageContent() {
                     <div className="p-3 bg-[#8FBF7F]/30 rounded-xl mx-auto w-fit mb-4">
                       <Zap className="h-6 w-6 text-[#8FBF7F]" />
                     </div>
-                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Real-time</div>
+                    <div className="text-2xl font-bold text-gray-900 mb-2">Real-time</div>
                     <div className="text-sm text-earth-600">Data Sources</div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@ function RecommendationsPageContent() {
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Brain className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Smart</div>
+                    <div className="text-2xl font-bold text-gray-900 mb-2">Smart</div>
                     <div className="text-sm text-[#555555]">Analysis</div>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ function RecommendationsPageContent() {
                     <div className="p-3 bg-[#DDE4D8] rounded-xl mx-auto w-fit mb-4">
                       <Target className="h-6 w-6 text-[#7A8F78]" />
                     </div>
-                    <div className="text-2xl font-bold text-[#1A1A1A] mb-2">Actionable</div>
+                    <div className="text-2xl font-bold text-gray-900 mb-2">Actionable</div>
                     <div className="text-sm text-[#555555]">Insights</div>
                   </div>
                 </div>

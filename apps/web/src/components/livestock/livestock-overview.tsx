@@ -43,7 +43,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
     return (
       <ModernCard>
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
+          <ModernCardTitle className="text-gray-900 flex items-center gap-2">
             <Cat className="h-5 w-5" />
             Livestock Management
           </ModernCardTitle>
@@ -69,7 +69,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
     <div className="space-y-6">
       <ModernCard>
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
+          <ModernCardTitle className="text-gray-900 flex items-center gap-2">
             <Cat className="h-5 w-5" />
             Herd Overview
           </ModernCardTitle>
@@ -92,18 +92,18 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
               <div className="text-sm text-[#8FBF7F]">Births (MTD)</div>
             </div>
             <div className="text-center p-4 bg-[#F8FAF8] rounded-lg">
-              <div className="text-2xl font-bold text-[#1A1A1A]">98%</div>
+              <div className="text-2xl font-bold text-gray-900">98%</div>
               <div className="text-sm text-[#555555]">Health Score</div>
             </div>
           </div>
           <div className="space-y-3">
-            <h4 className="font-semibold text-[#1A1A1A]">Species Breakdown</h4>
+            <h4 className="font-semibold text-gray-900">Species Breakdown</h4>
             {ensureArray(data.species).map((species: any, index: number) => (
               <div key={index} className="flex justify-between items-center p-3 bg-[#F8FAF8] rounded-lg">
                 <div className="flex items-center gap-3">
                   <Cat className="h-5 w-5 text-[#555555]" />
                   <div>
-                    <div className="font-medium text-[#1A1A1A]">{species.type}</div>
+                    <div className="font-medium text-gray-900">{species.type}</div>
                     <div className="text-sm text-[#555555]">{species.count} animals</div>
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
       </ModernCard>
       <ModernCard>
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
+          <ModernCardTitle className="text-gray-900 flex items-center gap-2">
             <Heart className="h-5 w-5" />
             Health & Breeding Alerts
             <Badge className="bg-red-100 text-red-700 ml-2">
@@ -144,7 +144,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
                       alert.priority === 'high' ? 'text-red-500' : 'text-orange-500'
                     }`} />
                     <div>
-                      <div className="font-medium text-[#1A1A1A]">{alert.type}</div>
+                      <div className="font-medium text-gray-900">{alert.type}</div>
                       <div className="text-sm text-[#555555] mb-2">{alert.message}</div>
                       <div className="flex items-center gap-2 text-xs text-#555555">
                         <Calendar className="h-3 w-3" />
@@ -163,7 +163,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
       </ModernCard>
       <ModernCard>
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A]">Recent Activity</ModernCardTitle>
+          <ModernCardTitle className="text-gray-900">Recent Activity</ModernCardTitle>
           <ModernCardDescription>
             Latest livestock events and health records
           </ModernCardDescription>
@@ -176,7 +176,7 @@ export function LivestockOverview({ farmId }: LivestockOverviewProps) {
                   <Heart className="h-4 w-4 text-[#8FBF7F]" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-[#1A1A1A]">{event.type}</div>
+                  <div className="font-medium text-gray-900">{event.type}</div>
                   <div className="text-sm text-[#555555]">{event.description}</div>
                   <div className="text-xs text-#555555">
                     {new Date(event.date).toLocaleDateString()}

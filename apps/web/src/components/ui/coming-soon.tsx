@@ -29,7 +29,7 @@ export function ComingSoon({
       <div className={`p-4 bg-gradient-to-br from-sage-50 to-#FAFAF7 rounded-xl border-2 border-[#F8FAF8] ${className}`}>
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="h-4 w-4 text-[#555555]" />
-          <span className="text-sm font-medium text-[#1A1A1A]">{title}</span>
+          <span className="text-sm font-medium text-gray-900">{title}</span>
         </div>
         <p className="text-xs text-[#555555] leading-relaxed">{description}</p>
       </div>
@@ -43,7 +43,7 @@ export function ComingSoon({
             <Clock className="h-12 w-12 text-[#555555]" />
           </div>
         </div>
-        <h3 className="text-2xl font-light text-[#1A1A1A] mb-3">{title}</h3>
+        <h3 className="text-2xl font-light text-gray-900 mb-3">{title}</h3>
         <p className="text-[#555555] leading-relaxed max-w-md mx-auto mb-6">
           {description}
         </p>

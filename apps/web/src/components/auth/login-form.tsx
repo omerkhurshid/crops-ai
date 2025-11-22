@@ -114,7 +114,7 @@ function LoginFormContent({ callbackUrl = '/dashboard' }: LoginFormProps) {
               <Label htmlFor="password" className="text-sm font-medium">Password</Label>
               <Link 
                 href="/forgot-password" 
-                className="text-xs sm:text-sm text-[#555555] hover:text-[#1A1A1A] underline"
+                className="text-xs sm:text-sm text-[#555555] hover:text-gray-900 underline"
               >
                 Forgot password?
               </Link>

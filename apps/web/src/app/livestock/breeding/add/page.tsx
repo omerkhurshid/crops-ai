@@ -67,7 +67,7 @@ export default function AddBreedingPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before adding breeding records.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=breeding')}
@@ -87,14 +87,14 @@ export default function AddBreedingPage() {
         <div className="flex items-center gap-4">
           <Link 
             href="/livestock/breeding"
-            className="flex items-center text-[#555555] hover:text-[#1A1A1A] transition-colors"
+            className="flex items-center text-[#555555] hover:text-gray-900 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Breeding Management
           </Link>
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Add Breeding Record</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Add Breeding Record</h1>
           <p className="text-[#555555]">Record a new breeding event or pregnancy</p>
         </div>
         {/* Add Breeding Form */}

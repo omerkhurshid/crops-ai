@@ -120,7 +120,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
                 <Calculator className="h-5 w-5 text-[#8FBF7F]" />
               </div>
               <div>
-                <ModernCardTitle className="text-[#1A1A1A]">Farm Financial Health</ModernCardTitle>
+                <ModernCardTitle className="text-gray-900">Farm Financial Health</ModernCardTitle>
                 <p className="text-sm text-[#555555] mt-1">Simple metrics that matter to your bottom line</p>
               </div>
             </div>
@@ -195,7 +195,7 @@ export function SimplifiedFinancialMetrics({ farm }: SimplifiedFinancialMetricsP
               <PiggyBank className="h-5 w-5 text-[#555555]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">What This Means for Your Farm</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">What This Means for Your Farm</h3>
               <div className="space-y-2 text-sm text-[#555555]">
                 {metrics.isAboveBreakeven ? (
                   <p className="flex items-center gap-2">

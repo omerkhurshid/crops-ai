@@ -118,7 +118,7 @@ export function SystemHealth() {
       <ModernCardContent className="space-y-6">
         {/* Service Status */}
         <div>
-          <h4 className="font-semibold text-[#1A1A1A] mb-3">Service Status</h4>
+          <h4 className="font-semibold text-gray-900 mb-3">Service Status</h4>
           <div className="space-y-3">
             {services.map((service) => (
               <div key={service.name} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
@@ -141,7 +141,7 @@ export function SystemHealth() {
         </div>
         {/* Performance Metrics */}
         <div>
-          <h4 className="font-semibold text-[#1A1A1A] mb-3">Performance Metrics</h4>
+          <h4 className="font-semibold text-gray-900 mb-3">Performance Metrics</h4>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between items-center mb-2">

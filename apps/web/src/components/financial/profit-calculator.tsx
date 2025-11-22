@@ -237,25 +237,25 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
         {/* Key Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-            <div className="text-lg font-bold text-[#1A1A1A]">
+            <div className="text-lg font-bold text-gray-900">
               ${results.profitPerAcre.toFixed(0)}
             </div>
             <div className="text-sm text-[#555555]">Profit per Acre</div>
           </div>
           <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-            <div className="text-lg font-bold text-[#1A1A1A]">
+            <div className="text-lg font-bold text-gray-900">
               {results.breakEvenYield.toFixed(1)}
             </div>
             <div className="text-sm text-[#555555]">Break-even Yield</div>
           </div>
           <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-            <div className="text-lg font-bold text-[#1A1A1A]">
+            <div className="text-lg font-bold text-gray-900">
               ${results.breakEvenPrice.toFixed(2)}
             </div>
             <div className="text-sm text-[#555555]">Break-even Price</div>
           </div>
           <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-            <div className="text-lg font-bold text-[#1A1A1A]">
+            <div className="text-lg font-bold text-gray-900">
               {results.profitMargin.toFixed(1)}%
             </div>
             <div className="text-sm text-[#555555]">Profit Margin</div>
@@ -264,7 +264,7 @@ export function ProfitCalculator({ farmId, className }: ProfitCalculatorProps) {
         {/* Detailed Cost Breakdown */}
         {showDetails && (
           <div className="space-y-4">
-            <h4 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
+            <h4 className="font-semibold text-gray-900 flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Cost Breakdown (per acre)
             </h4>

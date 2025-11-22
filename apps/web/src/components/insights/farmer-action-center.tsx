@@ -125,7 +125,7 @@ export function FarmerActionCenter({ farmId, className }: FarmerActionCenterProp
         {actions.length === 0 && (
           <div className="text-center py-8">
             <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">All Caught Up!</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">All Caught Up!</h3>
             <p className="text-[#555555]">No urgent actions needed right now. Check back tomorrow.</p>
           </div>
         )}
@@ -189,7 +189,7 @@ function ActionCard({ action }: { action: FarmerAction }) {
         )}
       </div>
       <div className="bg-[#F8FAF8] p-3 rounded-lg mb-3">
-        <p className="text-sm font-medium text-[#1A1A1A]">{action.impact}</p>
+        <p className="text-sm font-medium text-gray-900">{action.impact}</p>
       </div>
       <div className="flex gap-2">
         <Button size="sm" className="bg-[#7A8F78] hover:bg-[#7A8F78] text-white flex-1">

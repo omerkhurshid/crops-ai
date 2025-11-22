@@ -22,7 +22,7 @@ export default function GlobalError({
         <div className="min-h-screen flex items-center justify-center bg-[#FAFAF7]">
           <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                 Something went wrong
               </h2>
               <p className="text-[#555555] mb-6">

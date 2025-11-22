@@ -120,7 +120,7 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
                   )}
                 </div>
                 {/* Task Details */}
-                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2 leading-tight">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
                   {task.title}
                 </h3>
                 {task.field && (
@@ -142,7 +142,7 @@ export function UrgentTasks({ tasks, onTaskClick, className }: UrgentTasksProps)
                 </div>
                 {/* Action Button */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-[#1A1A1A] group-hover:text-[#555555]">
+                  <span className="text-sm font-semibold text-gray-900 group-hover:text-[#555555]">
                     Start Task
                   </span>
                   <div className="p-2 bg-white rounded-lg shadow-sm group-hover:shadow-md transition-all">
@@ -198,7 +198,7 @@ export function UrgentTasksMobile({ tasks, onTaskClick, className }: UrgentTasks
                 <Icon className="h-4 w-4 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-[#1A1A1A] text-sm leading-tight">
+                <h3 className="font-bold text-gray-900 text-sm leading-tight">
                   {task.title}
                 </h3>
                 <p className="text-xs text-[#555555] mt-1">

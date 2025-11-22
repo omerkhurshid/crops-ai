@@ -57,7 +57,7 @@ export default function PrecisionDashboardPage() {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Welcome, {session.user.name}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Welcome, {session.user.name}</h1>
         <p className="text-[#555555]">
           Role: {session.user.role} | Farm: {farmData.name}
         </p>

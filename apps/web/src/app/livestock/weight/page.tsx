@@ -120,7 +120,7 @@ export default function WeightPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before tracking animal weights.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=weight')}
@@ -139,7 +139,7 @@ export default function WeightPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Weight Tracking</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Weight Tracking</h1>
             <p className="text-[#555555]">Monitor growth and body condition of your livestock</p>
           </div>
           <div className="flex gap-3">
@@ -158,7 +158,7 @@ export default function WeightPage() {
                 <Weight className="h-8 w-8 text-indigo-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Total Records</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.totalRecords}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalRecords}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -169,7 +169,7 @@ export default function WeightPage() {
                 <Target className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Animals Tracked</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.animalsTracked}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.animalsTracked}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -180,7 +180,7 @@ export default function WeightPage() {
                 <TrendingUp className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Avg Growth (lbs/month)</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.avgGrowthRate.toFixed(1)}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.avgGrowthRate.toFixed(1)}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -191,7 +191,7 @@ export default function WeightPage() {
                 <Activity className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Recent Measurements</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.recentMeasurements}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.recentMeasurements}</p>
                 </div>
               </div>
             </ModernCardContent>

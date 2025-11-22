@@ -245,7 +245,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
           {fields.length === 0 ? (
             <div className="text-center py-12">
               <Sprout className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Fields Found</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Fields Found</h3>
               <p className="text-[#555555] mb-4">
                 Add fields to your farm to start tracking field-level financial performance.
               </p>
@@ -267,7 +267,7 @@ export function FarmFinancialOverview({ farm, onFieldSelect, onAddTransaction }:
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-lg text-[#1A1A1A]">
+                          <h3 className="font-semibold text-lg text-gray-900">
                             {field.name}
                           </h3>
                           <Badge variant={field.netProfit >= 0 ? 'default' : 'destructive'}>

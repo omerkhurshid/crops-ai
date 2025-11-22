@@ -93,7 +93,7 @@ export default function FieldsPage() {
       case 'Good': return 'bg-blue-100 text-blue-800'
       case 'Fair': return 'bg-yellow-100 text-yellow-800'
       case 'Poor': return 'bg-red-100 text-red-800'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   return (
@@ -104,7 +104,7 @@ export default function FieldsPage() {
           {/* Header */}
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-[#1A1A1A]">Field Management</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Field Management</h1>
               <p className="text-[#555555]">Monitor and analyze individual field performance</p>
             </div>
             <FieldsHeaderActions />
@@ -190,7 +190,7 @@ export default function FieldsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Crop Info */}
                     <div>
-                      <h4 className="font-medium text-[#1A1A1A] mb-2">Crop Information</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">Crop Information</h4>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-[#555555]">Crop:</span>
@@ -208,7 +208,7 @@ export default function FieldsPage() {
                     </div>
                     {/* Health Metrics */}
                     <div>
-                      <h4 className="font-medium text-[#1A1A1A] mb-2">Health Metrics</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">Health Metrics</h4>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-[#555555]">NDVI:</span>
@@ -230,7 +230,7 @@ export default function FieldsPage() {
                     </div>
                     {/* Progress Bar */}
                     <div>
-                      <h4 className="font-medium text-[#1A1A1A] mb-2">Growing Season</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">Growing Season</h4>
                       {field.plantingDate && field.expectedHarvest ? (
                         (() => {
                           const planted = new Date(field.plantingDate)

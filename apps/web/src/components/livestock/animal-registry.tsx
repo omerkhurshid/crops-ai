@@ -65,7 +65,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
         <div className="text-[#555555] mb-4">
           <Heart className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Animals Yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Animals Yet</h3>
         <p className="text-[#555555] mb-6">Start building your herd by adding your first animal.</p>
         <Link href="/livestock/animals/add">
           <Button>Add Your First Animal</Button>
@@ -117,7 +117,7 @@ export function AnimalRegistry({ animals, farms }: AnimalRegistryProps) {
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#1A1A1A]">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     #{animal.tagNumber}
                   </h3>
                   {animal.name && (

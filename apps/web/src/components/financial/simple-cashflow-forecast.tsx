@@ -104,7 +104,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 <Calendar className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <ModernCardTitle className="text-[#1A1A1A]">Cash Flow Forecast</ModernCardTitle>
+                <ModernCardTitle className="text-gray-900">Cash Flow Forecast</ModernCardTitle>
                 <p className="text-sm text-[#555555] mt-1">Projected income and expenses for your farm</p>
               </div>
             </div>
@@ -181,11 +181,11 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
               <DollarSign className="h-5 w-5 text-[#555555]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-3">Account Balance Projection</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Account Balance Projection</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
                   <p className="text-[#555555] mb-1">Starting Balance</p>
-                  <p className="text-xl font-bold text-[#1A1A1A]">{formatCurrency(currentForecast.startingBalance)}</p>
+                  <p className="text-xl font-bold text-gray-900">{formatCurrency(currentForecast.startingBalance)}</p>
                 </div>
                 <div>
                   <p className="text-[#555555] mb-1">Net Change</p>
@@ -195,7 +195,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                 </div>
                 <div>
                   <p className="text-[#555555] mb-1">Projected Balance</p>
-                  <p className={`text-xl font-bold ${cashFlowHealthy ? 'text-[#1A1A1A]' : 'text-red-600'}`}>
+                  <p className={`text-xl font-bold ${cashFlowHealthy ? 'text-gray-900' : 'text-red-600'}`}>
                     {formatCurrency(currentForecast.endingBalance)}
                   </p>
                 </div>
@@ -218,7 +218,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
       {/* Key Upcoming Events */}
       <ModernCard variant="floating">
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
+          <ModernCardTitle className="text-gray-900 flex items-center gap-2">
             <Clock className="h-5 w-5" />
             Key Financial Events
           </ModernCardTitle>
@@ -238,7 +238,7 @@ export function SimpleCashFlowForecast({ farm }: SimpleCashFlowForecastProps) {
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-[#1A1A1A]">{event.description}</p>
+                    <p className="font-medium text-gray-900">{event.description}</p>
                     <p className="text-sm text-[#555555]">{event.date}</p>
                   </div>
                 </div>

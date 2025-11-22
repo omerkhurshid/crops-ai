@@ -74,7 +74,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
         <div className="text-[#555555] mb-4">
           <DollarSign className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Financial Data Yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Financial Data Yet</h3>
         <p className="text-[#555555] mb-6">Add animals and track costs to see financial performance.</p>
         <Link href="/livestock/animals/add">
           <Button>Add Your First Animal</Button>
@@ -135,14 +135,14 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
               <DollarSign className="h-5 w-5 text-[#7A8F78] mr-2" />
               <span className="font-medium text-[#555555]">Total Investment</span>
             </div>
-            <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalInvestment.toLocaleString()}</p>
+            <p className="text-xl font-bold text-gray-900">${summaryStats.totalInvestment.toLocaleString()}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <Calculator className="h-5 w-5 text-[#8FBF7F] mr-2" />
               <span className="font-medium text-[#555555]">Current Value</span>
             </div>
-            <p className="text-xl font-bold text-[#1A1A1A]">${summaryStats.totalValue.toLocaleString()}</p>
+            <p className="text-xl font-bold text-gray-900">${summaryStats.totalValue.toLocaleString()}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
@@ -204,7 +204,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-[#1A1A1A]">
+                        <div className="text-sm font-medium text-gray-900">
                           #{animal.tagNumber}
                         </div>
                         {animal.name && (
@@ -217,7 +217,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       ${animal.totalCosts.toLocaleString()}
                     </div>
                     <div className="text-xs text-[#555555]">
@@ -225,7 +225,7 @@ export function LivestockFinancials({ animals, farms }: LivestockFinancialsProps
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-[#1A1A1A]">
+                    <div className="text-sm font-medium text-gray-900">
                       ${(animal.currentValue || 0).toLocaleString()}
                     </div>
                   </td>

@@ -101,7 +101,7 @@ export function LivestockDashboard({ farmId, showAddButtons = true }: LivestockD
             <TabsContent value="breeding" className="space-y-6 mt-6">
               <div className="text-center py-12">
                 <Award className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Breeding Program Coming Soon
                 </h3>
                 <p className="text-[#555555] max-w-sm mx-auto">

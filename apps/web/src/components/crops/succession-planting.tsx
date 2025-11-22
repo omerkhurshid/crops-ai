@@ -74,8 +74,8 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
       case 'planted': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'growing': return 'bg-yellow-100 text-yellow-800'
       case 'harvesting': return 'bg-orange-100 text-orange-800'
-      case 'completed': return 'bg-[#F5F5F5] text-[#1A1A1A]'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      case 'completed': return 'bg-[#F5F5F5] text-gray-900'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   const getRiskColor = (risk: 'low' | 'moderate' | 'high') => {
@@ -100,7 +100,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-[#1A1A1A] flex items-center gap-2">
+          <h2 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
             <Calendar className="h-6 w-6 text-[#555555]" />
             Succession Planting
           </h2>
@@ -205,7 +205,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-[#1A1A1A] capitalize">
+                        <h4 className="font-semibold text-gray-900 capitalize">
                           {rec.type} Planting
                         </h4>
                         {index === recommendations.bestOption && (
@@ -261,25 +261,25 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
             <ModernCardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#1A1A1A]">
+                  <div className="text-2xl font-bold text-gray-900">
                     {successionPlan.numberOfSuccessions}
                   </div>
                   <div className="text-sm text-[#555555]">Plantings</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#1A1A1A]">
+                  <div className="text-2xl font-bold text-gray-900">
                     {successionPlan.intervalDays}
                   </div>
                   <div className="text-sm text-[#555555]">Day Interval</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#1A1A1A]">
+                  <div className="text-2xl font-bold text-gray-900">
                     {Math.round(successionPlan.harvestSchedule.totalSeasonYield)}
                   </div>
                   <div className="text-sm text-[#555555]">Total Yield (lbs)</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#1A1A1A]">
+                  <div className="text-2xl font-bold text-gray-900">
                     {formatDate(successionPlan.startDate)} - {formatDate(successionPlan.endDate)}
                   </div>
                   <div className="text-sm text-[#555555]">Season</div>
@@ -305,7 +305,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                           {planting.sequenceNumber}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-[#1A1A1A]">
+                          <h4 className="font-semibold text-gray-900">
                             Planting #{planting.sequenceNumber}
                           </h4>
                           <p className="text-sm text-[#555555]">
@@ -362,7 +362,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                     <Zap className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#1A1A1A]">Seeds</h4>
+                    <h4 className="font-semibold text-gray-900">Seeds</h4>
                     <p className="text-sm text-[#555555]">
                       {successionPlan.resourceRequirements.totalSeeds.toLocaleString()} total
                     </p>
@@ -376,7 +376,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                     <Clock className="h-6 w-6 text-[#8FBF7F]" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#1A1A1A]">Labor</h4>
+                    <h4 className="font-semibold text-gray-900">Labor</h4>
                     <p className="text-sm text-[#555555]">
                       {successionPlan.resourceRequirements.laborHours} hours total
                     </p>
@@ -390,7 +390,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                     <Droplets className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-[#1A1A1A]">Irrigation</h4>
+                    <h4 className="font-semibold text-gray-900">Irrigation</h4>
                     <p className="text-sm text-[#555555]">
                       {successionPlan.resourceRequirements.irrigationSchedule.length} events scheduled
                     </p>
@@ -431,7 +431,7 @@ export function SuccessionPlanning({ farmId, availableFields, weatherData }: Suc
                           )}
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="text-sm font-bold text-[#1A1A1A]">
+                          <div className="text-sm font-bold text-gray-900">
                             {Math.round(week.estimatedYield)} lbs
                           </div>
                           <div 

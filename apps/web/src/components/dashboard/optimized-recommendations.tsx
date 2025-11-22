@@ -104,7 +104,7 @@ export function OptimizedRecommendations({ className, limit = 4 }: OptimizedReco
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-medium text-[#1A1A1A] line-clamp-1">
+                      <h4 className="font-medium text-gray-900 line-clamp-1">
                         {rec.title}
                       </h4>
                       <Badge className={getPriorityColor(rec.priority)}>

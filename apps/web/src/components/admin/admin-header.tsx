@@ -40,7 +40,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
               <Shield className="h-6 w-6 text-red-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-[#1A1A1A]">Admin Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
               <p className="text-[#555555]">System analytics and user management</p>
             </div>
           </div>

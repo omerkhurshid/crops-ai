@@ -94,7 +94,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
   if (data.length === 0) {
     return (
       <Card className="p-6">
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Financial Trends</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Financial Trends</h3>
         <div className="text-center py-12">
           <div className="text-[#555555] mb-2">📊</div>
           <p className="text-[#555555]">No trend data available for the selected period.</p>
@@ -105,7 +105,7 @@ export function TrendChart({ farmId, dateRange }: TrendChartProps) {
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-[#1A1A1A]">Financial Trends</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Financial Trends</h3>
         <div className="flex items-center space-x-2">
           <Badge 
             variant={chartType === 'line' ? 'default' : 'outline'}

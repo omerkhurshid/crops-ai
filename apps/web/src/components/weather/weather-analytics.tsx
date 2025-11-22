@@ -78,7 +78,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
       case 'soon': return 'bg-orange-100 text-orange-800 border-orange-200'
       case 'monitor': return 'bg-blue-100 text-[#7A8F78] border-blue-200'
       case 'delay': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]'
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]'
     }
   }
   const getRiskColor = (risk: string) => {
@@ -123,7 +123,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
   return (
     <div className={`p-6 space-y-6 ${className}`}>
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-[#1A1A1A]">Weather Analytics</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Weather Analytics</h2>
         <Button onClick={fetchAnalyticsData} variant="outline" size="sm">
           Refresh Data
         </Button>
@@ -244,7 +244,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Thermometer className="h-6 w-6 text-[#555555]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No Weather Analytics Data
               </h3>
               <p className="text-[#555555] max-w-sm mx-auto mb-4">
@@ -313,7 +313,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="h-6 w-6 text-[#555555]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No Trend Data Available
               </h3>
               <p className="text-[#555555] max-w-sm mx-auto">
@@ -485,7 +485,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sprout className="h-6 w-6 text-[#555555]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No Agriculture Data Available
               </h3>
               <p className="text-[#555555] max-w-sm mx-auto mb-4">
@@ -538,7 +538,7 @@ export function WeatherAnalytics({ latitude, longitude, className }: WeatherAnal
               <div className="w-12 h-12 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Droplets className="h-6 w-6 text-[#555555]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No Irrigation Data Available
               </h3>
               <p className="text-[#555555] max-w-sm mx-auto mb-4">

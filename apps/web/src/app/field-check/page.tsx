@@ -108,7 +108,7 @@ export default function FieldCheckPage() {
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-xl font-semibold text-[#1A1A1A]">Field Check</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Field Check</h1>
             <div className="flex items-center gap-2 text-sm text-[#555555]">
               <MapPin className="h-3 w-3" />
               <span>North Field • Corn</span>
@@ -234,7 +234,7 @@ export default function FieldCheckPage() {
         </div>
         {/* Quick Action Logging */}
         <div className="border-t border-[#F5F5F5] p-4">
-          <h3 className="font-semibold text-[#1A1A1A] mb-3">Log Field Activity</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Log Field Activity</h3>
           <div className="grid grid-cols-2 gap-3">
             {quickActions.map((action, index) => (
               <Button
@@ -253,7 +253,7 @@ export default function FieldCheckPage() {
         </div>
         {/* Voice Notes */}
         <div className="border-t border-[#F5F5F5] p-4">
-          <h3 className="font-semibold text-[#1A1A1A] mb-3">Voice Notes</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Voice Notes</h3>
           <Button
             variant="outline"
             className="w-full h-12 flex items-center justify-center gap-2"

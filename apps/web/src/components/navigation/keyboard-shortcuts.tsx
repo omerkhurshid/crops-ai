@@ -283,7 +283,7 @@ export function KeyboardShortcuts({ customShortcuts = [], onShortcutExecuted }: 
                       <div className="text-[#555555]">
                         {categoryIcons[category as keyof typeof categoryIcons]}
                       </div>
-                      <h3 className="font-semibold text-[#1A1A1A]">
+                      <h3 className="font-semibold text-gray-900">
                         {categoryLabels[category as keyof typeof categoryLabels]}
                       </h3>
                     </div>

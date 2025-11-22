@@ -77,7 +77,7 @@ export function MarketDashboard({ cropTypes = [] }: MarketDashboardProps) {
   const getBadgeColor = (changePercent: number) => {
     if (changePercent > 0) return 'bg-[#F8FAF8] text-[#7A8F78]'
     if (changePercent < 0) return 'bg-red-100 text-red-800'
-    return 'bg-[#F5F5F5] text-[#1A1A1A]'
+    return 'bg-[#F5F5F5] text-gray-900'
   }
   const getInsightColor = (type: string, impact: string) => {
     if (type === 'opportunity') return 'border-l-4 border-l-green-500 bg-[#F8FAF8]'

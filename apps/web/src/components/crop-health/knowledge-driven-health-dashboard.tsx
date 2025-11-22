@@ -281,7 +281,7 @@ export function KnowledgeDrivenHealthDashboard({ farmId, selectedCrops, fieldDat
       <Card>
         <CardContent className="p-8 text-center">
           <Sprout className="h-12 w-12 mx-auto mb-4 text-[#555555]" />
-          <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Crops Selected</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No Crops Selected</h3>
           <p className="text-[#555555] mb-4">
             Add crops to your farm to get detailed health monitoring and insights
           </p>

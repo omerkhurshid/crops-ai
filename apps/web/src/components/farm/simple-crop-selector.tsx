@@ -174,7 +174,7 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center p-3 bg-[#F8FAF8] rounded-lg">
                 <Clock className="h-5 w-5 text-[#555555] mx-auto mb-1" />
-                <div className="text-sm font-medium text-[#1A1A1A]">
+                <div className="text-sm font-medium text-gray-900">
                   {selectedCropData.harvestWindow.duration} days
                 </div>
                 <div className="text-xs text-[#555555]">Growing Season</div>
@@ -205,21 +205,21 @@ export function SimpleCropSelector({ selectedCrop, onCropSelect, showDetails = t
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="font-medium text-[#555555]">Best Planting:</span>
-                <p className="text-[#1A1A1A]">{selectedCropData.plantingWindow.optimal}</p>
+                <p className="text-gray-900">{selectedCropData.plantingWindow.optimal}</p>
               </div>
               <div>
                 <span className="font-medium text-[#555555]">Climate Zones:</span>
-                <p className="text-[#1A1A1A]">{selectedCropData.climateZones.slice(0, 3).join(', ')}</p>
+                <p className="text-gray-900">{selectedCropData.climateZones.slice(0, 3).join(', ')}</p>
               </div>
               <div>
                 <span className="font-medium text-[#555555]">Soil Needs:</span>
-                <p className="text-[#1A1A1A] capitalize">
+                <p className="text-gray-900 capitalize">
                   {selectedCropData.soilRequirements.fertility} fertility, pH {selectedCropData.soilRequirements.ph.min}-{selectedCropData.soilRequirements.ph.max}
                 </p>
               </div>
               <div>
                 <span className="font-medium text-[#555555]">Market Demand:</span>
-                <p className="text-[#1A1A1A] capitalize">{selectedCropData.marketValue.demand}</p>
+                <p className="text-gray-900 capitalize">{selectedCropData.marketValue.demand}</p>
               </div>
             </div>
             {/* Benefits */}

@@ -24,7 +24,7 @@ export function FarmTypeSelector({ selectedType, onSelect }: FarmTypeSelectorPro
             <div className="text-center">
               <div className="text-4xl mb-3">{option.icon}</div>
               <div className="flex items-center justify-center mb-2">
-                <h3 className="text-lg font-semibold text-[#1A1A1A]">
+                <h3 className="text-lg font-semibold text-gray-900">
                   {option.name}
                 </h3>
                 {selectedType === option.id && (

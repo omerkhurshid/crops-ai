@@ -192,7 +192,7 @@ export function HelpSearch({ onArticleSelect, placeholder = "Search help article
                       className="w-full text-left p-3 rounded-lg hover:bg-[#F8FAF8] transition-colors group"
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-[#1A1A1A] group-hover:text-#1A1A1A">
+                        <h3 className="font-semibold text-gray-900 group-hover:text-#1A1A1A">
                           {article.title}
                         </h3>
                         <ChevronRight className="h-4 w-4 text-sage-400 group-hover:text-[#555555] transition-colors flex-shrink-0 ml-2" />

@@ -80,7 +80,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsList>
           <TabsContent value="demographics" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Users by Interest Type</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Users by Interest Type</h4>
               <div className="space-y-3">
                 {usersByType.map((type) => (
                   <div key={type.userType || 'unspecified'} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
@@ -101,7 +101,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsContent>
           <TabsContent value="roles" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Users by Role</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Users by Role</h4>
               <div className="space-y-3">
                 {usersByRole.map((role) => (
                   <div key={role.role} className="flex items-center justify-between p-3 bg-[#FAFAF7] rounded-lg">
@@ -122,7 +122,7 @@ export function UserAnalytics({ usersByType, usersByRole, recentActivity }: User
           </TabsContent>
           <TabsContent value="activity" className="space-y-4">
             <div>
-              <h4 className="font-semibold text-[#1A1A1A] mb-3">Recent Farm Registrations</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">Recent Farm Registrations</h4>
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {recentActivity.length > 0 ? (
                   recentActivity.map((activity) => (

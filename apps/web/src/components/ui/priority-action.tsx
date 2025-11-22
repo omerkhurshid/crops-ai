@@ -132,7 +132,7 @@ export function PriorityActionCard({
         </div>
         {/* Content */}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
             {action.title}
           </h3>
           <p className="text-sm text-[#555555] leading-relaxed mb-3">
@@ -206,7 +206,7 @@ export function PriorityActionsList({
       <ModernCard variant="soft" className={className}>
         <ModernCardContent className="p-8 text-center">
           <CheckCircle2 className="h-12 w-12 text-[#8FBF7F] mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
             All caught up!
           </h3>
           <p className="text-[#555555]">
@@ -230,7 +230,7 @@ export function PriorityActionsList({
         <div className="text-center pt-4">
           <p className="text-sm text-[#555555]">
             Showing top {maxActions} priority actions. 
-            <button className="ml-1 text-[#555555] font-medium hover:text-[#1A1A1A]">
+            <button className="ml-1 text-[#555555] font-medium hover:text-gray-900">
               View all {actions.length} recommendations →
             </button>
           </p>

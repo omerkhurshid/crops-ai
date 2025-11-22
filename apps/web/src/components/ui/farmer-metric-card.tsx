@@ -69,7 +69,7 @@ export function FarmerMetricCard({
               </div>
             )}
             <div>
-              <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">
+              <h3 className="text-base font-semibold text-gray-900 mb-1">
                 {title}
               </h3>
               {status && (
@@ -89,7 +89,7 @@ export function FarmerMetricCard({
         {/* Main Value */}
         <div className="mb-4">
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-3xl font-bold text-[#1A1A1A]">
+            <span className="text-3xl font-bold text-gray-900">
               {typeof value === 'number' ? value.toLocaleString() : value}
             </span>
             {unit && (

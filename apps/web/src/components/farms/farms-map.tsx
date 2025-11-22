@@ -166,7 +166,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                       'opacity-0 group-hover:opacity-100 transition-opacity',
                       'pointer-events-none'
                     )}>
-                      <div className="text-sm font-semibold text-[#1A1A1A]">
+                      <div className="text-sm font-semibold text-gray-900">
                         {farm.name}
                       </div>
                       <div className="text-xs text-[#555555] mt-1">
@@ -236,7 +236,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           </div>
           {/* Legend */}
           <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-lg p-3">
-            <h4 className="text-xs font-semibold text-[#1A1A1A] mb-2">Health Status</h4>
+            <h4 className="text-xs font-semibold text-gray-900 mb-2">Health Status</h4>
             <div className="space-y-1">
               {['excellent', 'good', 'warning', 'critical'].map((status) => (
                 <div key={status} className="flex items-center gap-2">
@@ -254,7 +254,7 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
           {/* Navigation Info Panel */}
           {showNavigation && (
             <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur rounded-lg p-3 max-w-xs">
-              <h4 className="text-xs font-semibold text-[#1A1A1A] mb-2 flex items-center gap-1">
+              <h4 className="text-xs font-semibold text-gray-900 mb-2 flex items-center gap-1">
                 <Navigation className="h-3 w-3" />
                 Navigation Info
               </h4>
@@ -291,13 +291,13 @@ export function FarmsMap({ farms, onFarmSelect, selectedFarmId, className }: Far
                 if (!farm) return null
                 return (
                   <>
-                    <h3 className="font-semibold text-[#1A1A1A] mb-1">{farm.name}</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">{farm.name}</h3>
                     <div className="text-sm text-[#555555] space-y-1">
                       <div>Area: {farm.totalArea.toFixed(1)} ha</div>
                       <div>Fields: {farm.fieldsCount}</div>
                       <div>Stressed areas: {farm.stressedAreas}%</div>
                     </div>
-                    <button className="mt-3 flex items-center gap-1 text-sm font-medium text-[#555555] hover:text-[#1A1A1A]">
+                    <button className="mt-3 flex items-center gap-1 text-sm font-medium text-[#555555] hover:text-gray-900">
                       <Eye className="h-4 w-4" />
                       View Details
                     </button>
@@ -327,7 +327,7 @@ export function FarmKPICard({
       <ModernCardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-[#1A1A1A]">
+            <h3 className="text-lg font-semibold text-gray-900">
               {farm.name}
             </h3>
             <p className="text-sm text-[#555555] mt-1">
@@ -344,7 +344,7 @@ export function FarmKPICard({
             <div className="text-xs text-[#555555] mb-1">Health</div>
             <div className="flex items-center gap-1">
               <TrafficLightStatus status={healthStatus} size="sm" showIcon={false} />
-              <span className="font-semibold text-[#1A1A1A]">{farm.health}%</span>
+              <span className="font-semibold text-gray-900">{farm.health}%</span>
             </div>
           </div>
           <div>

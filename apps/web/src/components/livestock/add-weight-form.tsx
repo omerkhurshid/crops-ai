@@ -181,7 +181,7 @@ export function AddWeightForm({ farms, animals, userId }: AddWeightFormProps) {
       {/* Age Information */}
       {selectedAnimal?.birthDate && (
         <div className="bg-[#FAFAF7] p-4 rounded-lg">
-          <h4 className="font-medium text-[#1A1A1A] mb-2">Animal Information</h4>
+          <h4 className="font-medium text-gray-900 mb-2">Animal Information</h4>
           <div className="text-[#555555]">
             <div className="grid grid-cols-2 gap-4">
               <div>

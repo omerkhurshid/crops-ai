@@ -18,7 +18,7 @@ export function HerdRegistry({ farmId }: HerdRegistryProps) {
         <CardContent>
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
               No Animals Registered
             </h3>
             <p className="text-[#555555] mb-6 max-w-sm mx-auto">

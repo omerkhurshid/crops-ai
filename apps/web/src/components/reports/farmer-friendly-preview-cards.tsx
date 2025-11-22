@@ -50,7 +50,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
           <BarChart3 className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Performance Data</p>
+          <p className="text-lg font-medium text-gray-900 mb-1">No Performance Data</p>
           <p className="text-sm text-[#555555]">Add crop yields and expenses to track performance</p>
         </div>
         <Link href={`/reports/performance/${farmId}`} className="block">
@@ -70,7 +70,7 @@ export function FarmPerformancePreview({ farmId }: { farmId: string }) {
             <BarChart3 className="h-5 w-5 text-[#8FBF7F]" />
           </div>
           <div>
-            <p className="text-lg font-semibold text-[#1A1A1A]">Farm Performance</p>
+            <p className="text-lg font-semibold text-gray-900">Farm Performance</p>
             <p className="text-sm text-[#555555]">Current season metrics</p>
           </div>
         </div>
@@ -134,7 +134,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
           <CloudRain className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Weather Data</p>
+          <p className="text-lg font-medium text-gray-900 mb-1">No Weather Data</p>
           <p className="text-sm text-[#555555]">Enable weather tracking for insights</p>
         </div>
         <Link href={`/weather`} className="block">
@@ -152,7 +152,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <CloudRain className="h-8 w-8 text-[#7A8F78]" />
           <div>
-            <p className="text-lg font-semibold text-[#1A1A1A]">Weather Impact</p>
+            <p className="text-lg font-semibold text-gray-900">Weather Impact</p>
             <p className="text-sm text-[#555555]">Last 30 days analysis</p>
           </div>
         </div>
@@ -160,7 +160,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
       <div className="bg-white border border-[#DDE4D8] rounded-lg p-4">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#1A1A1A]">Rainfall Impact</span>
+            <span className="text-sm font-medium text-gray-900">Rainfall Impact</span>
             <span className={`text-sm ${
               weatherData.rainfallImpact === 'positive' ? 'text-[#8FBF7F]' : 
               weatherData.rainfallImpact === 'negative' ? 'text-red-600' : 'text-yellow-600'
@@ -169,7 +169,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#1A1A1A]">Temperature Stress</span>
+            <span className="text-sm font-medium text-gray-900">Temperature Stress</span>
             <span className={`text-sm ${
               weatherData.temperatureStress === 'low' ? 'text-[#8FBF7F]' : 
               weatherData.temperatureStress === 'high' ? 'text-red-600' : 'text-yellow-600'
@@ -178,7 +178,7 @@ export function WeatherImpactPreview({ farmId }: { farmId: string }) {
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#1A1A1A]">Growth Conditions</span>
+            <span className="text-sm font-medium text-gray-900">Growth Conditions</span>
             <span className={`text-sm ${
               weatherData.growthConditions === 'optimal' ? 'text-[#8FBF7F]' : 
               weatherData.growthConditions === 'poor' ? 'text-red-600' : 'text-yellow-600'
@@ -233,7 +233,7 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
           <Leaf className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Crop Health Data</p>
+          <p className="text-lg font-medium text-gray-900 mb-1">No Crop Health Data</p>
           <p className="text-sm text-[#555555]">Add fields and crops to monitor health</p>
         </div>
         <Link href={`/crop-health`} className="block">
@@ -259,7 +259,7 @@ export function CropHealthPreview({ farmId }: { farmId: string }) {
             <Leaf className={`h-5 w-5 text-${healthColor}-600`} />
           </div>
           <div>
-            <p className="text-lg font-semibold text-[#1A1A1A]">Crop Health</p>
+            <p className="text-lg font-semibold text-gray-900">Crop Health</p>
             <p className="text-sm text-[#555555]">{cropHealthData.fieldCount} fields monitored</p>
           </div>
         </div>
@@ -342,7 +342,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
           <DollarSign className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Financial Data</p>
+          <p className="text-lg font-medium text-gray-900 mb-1">No Financial Data</p>
           <p className="text-sm text-[#555555]">Add transactions to track income and expenses</p>
         </div>
         <Link href={`/financial`} className="block">
@@ -360,7 +360,7 @@ export function FinancialSummaryPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <DollarSign className="h-8 w-8 text-[#8FBF7F]" />
           <div>
-            <p className="text-lg font-semibold text-[#1A1A1A]">Financial Summary</p>
+            <p className="text-lg font-semibold text-gray-900">Financial Summary</p>
             <p className="text-sm text-[#555555]">Current year performance</p>
           </div>
         </div>
@@ -434,7 +434,7 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
           <TreePine className="h-6 w-6 text-[#555555]" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[#1A1A1A] mb-1">No Sustainability Data</p>
+          <p className="text-lg font-medium text-gray-900 mb-1">No Sustainability Data</p>
           <p className="text-sm text-[#555555]">Add environmental tracking to monitor sustainability</p>
         </div>
         <Link href={`/reports/sustainability/${farmId}`} className="block">
@@ -452,7 +452,7 @@ export function SustainabilityPreview({ farmId }: { farmId: string }) {
         <div className="flex items-center gap-3">
           <TreePine className="h-8 w-8 text-[#8FBF7F]" />
           <div>
-            <p className="text-lg font-semibold text-[#1A1A1A]">Sustainability Score</p>
+            <p className="text-lg font-semibold text-gray-900">Sustainability Score</p>
             <p className="text-sm text-[#555555]">Environmental impact metrics</p>
           </div>
         </div>
@@ -516,7 +516,7 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
         <div className="w-12 h-12 bg-[#F8FAF8] rounded-full flex items-center justify-center mx-auto mb-3">
           <BarChart3 className="h-6 w-6 text-[#555555]" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
           Create Your Own Report
         </h3>
         <p className="text-sm text-[#555555]">
@@ -524,7 +524,7 @@ export function CustomReportPreview({ farmId }: { farmId: string }) {
         </p>
       </div>
       <div className="bg-[#F8FAF8] border border-[#DDE4D8] rounded-lg p-4">
-        <p className="text-sm font-medium text-[#1A1A1A] mb-3">Popular combinations:</p>
+        <p className="text-sm font-medium text-gray-900 mb-3">Popular combinations:</p>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm text-[#555555]">
             <Target className="h-4 w-4 text-[#555555]" />

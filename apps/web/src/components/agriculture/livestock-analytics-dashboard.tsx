@@ -140,7 +140,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
       {/* Header and Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Livestock Analytics Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Livestock Analytics Dashboard</h1>
           <p className="text-[#555555]">Comprehensive livestock performance analysis and production forecasting</p>
         </div>
         <div className="flex items-center gap-3">
@@ -185,7 +185,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge className="bg-[#F8FAF8] text-[#1A1A1A]">{selectedLivestockData.category}</Badge>
+              <Badge className="bg-[#F8FAF8] text-gray-900">{selectedLivestockData.category}</Badge>
               <Badge className="bg-blue-100 text-blue-800 capitalize">{selectedLivestockData.primaryProduct}</Badge>
             </div>
           </div>
@@ -193,7 +193,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
         <ModernCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1A1A1A]">
+              <div className="text-2xl font-bold text-gray-900">
                 {selectedLivestockData.physicalCharacteristics.matureAge}
               </div>
               <div className="text-sm text-[#555555]">Mature Age (months)</div>
@@ -294,7 +294,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                 </div>
                 <div className="pt-2 border-t">
                   <div className="text-sm text-[#555555]">
-                    Est. Revenue: <span className="font-medium text-[#1A1A1A]">
+                    Est. Revenue: <span className="font-medium text-gray-900">
                       ${LivestockAnalytics.calculateProductionForecast(
                         selectedLivestockId, 
                         currentLivestockPerformance.animalCount, 
@@ -356,7 +356,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               {LivestockAnalytics.getBreedingCalendar(selectedLivestockId).map((stage, index) => (
                 <div key={index} className="border-l-4 border-pink-300 pl-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-[#1A1A1A]">{stage.stage}</h4>
+                    <h4 className="font-medium text-gray-900">{stage.stage}</h4>
                     <span className="text-sm text-[#555555]">Day {stage.daysFromBreeding}</span>
                   </div>
                   <div className="space-y-1">
@@ -385,7 +385,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-[#555555]">Initial Investment</div>
-                  <div className="text-xl font-bold text-[#1A1A1A]">
+                  <div className="text-xl font-bold text-gray-900">
                     ${selectedLivestockData.economics.initialInvestment.animal}
                   </div>
                   <div className="text-xs text-[#555555]">per animal</div>
@@ -474,14 +474,14 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-medium text-[#1A1A1A]">${treatment.cost}</div>
+                    <div className="font-medium text-gray-900">${treatment.cost}</div>
                   </div>
                 </div>
               ))}
               <div className="pt-3 border-t">
                 <div className="flex justify-between items-center">
                   <span className="text-[#555555]">Total Treatment Costs:</span>
-                  <span className="font-bold text-[#1A1A1A]">
+                  <span className="font-bold text-gray-900">
                     ${currentLivestockPerformance.recentTreatments.reduce((sum, t) => sum + t.cost, 0)}
                   </span>
                 </div>
@@ -501,7 +501,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
         <ModernCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Thermometer className="h-4 w-4" />
                 Temperature
               </h4>
@@ -521,7 +521,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               </div>
             </div>
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Space Requirements
               </h4>
@@ -537,7 +537,7 @@ export function LivestockAnalyticsDashboard({ farmId, selectedLivestock }: Lives
               </div>
             </div>
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Activity className="h-4 w-4" />
                 Ventilation & Flooring
               </h4>

@@ -113,7 +113,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Crown className="h-8 w-8 text-yellow-600" />
-          <h2 className="text-3xl font-bold text-[#1A1A1A]">Unlock Premium Features</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Unlock Premium Features</h2>
         </div>
         <p className="text-lg text-[#555555] max-w-2xl mx-auto">
           Take your farming to the next level with AI-powered insights, advanced analytics, and personalized recommendations.
@@ -149,7 +149,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               <div className="bg-[#F8FAF8] rounded-lg p-3">
                 <div className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-yellow-600" />
-                  <span className="font-semibold text-[#1A1A1A]">{benefit.value}</span>
+                  <span className="font-semibold text-gray-900">{benefit.value}</span>
                 </div>
               </div>
             </ModernCardContent>
@@ -173,7 +173,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               <Crown className="h-6 w-6 text-yellow-600" />
               Premium
             </ModernCardTitle>
-            <div className="text-4xl font-bold text-[#1A1A1A] my-4">
+            <div className="text-4xl font-bold text-gray-900 my-4">
               ${pricing.premium.monthly}
               <span className="text-lg font-normal text-[#555555]">/month</span>
             </div>
@@ -212,7 +212,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
               <Zap className="h-6 w-6 text-purple-600" />
               Professional
             </ModernCardTitle>
-            <div className="text-4xl font-bold text-[#1A1A1A] my-4">
+            <div className="text-4xl font-bold text-gray-900 my-4">
               ${pricing.pro.monthly}
               <span className="text-lg font-normal text-[#555555]">/month</span>
             </div>
@@ -275,7 +275,7 @@ export function PremiumFeatures({ userTier = 'free', onUpgrade }: PremiumFeature
       )}
       {/* Testimonials */}
       <div className="bg-[#F8FAF8] rounded-xl p-6">
-        <h3 className="text-xl font-semibold text-[#1A1A1A] mb-4 text-center">What Farmers Are Saying</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">What Farmers Are Saying</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg p-4">
             <p className="text-[#555555] italic mb-2">

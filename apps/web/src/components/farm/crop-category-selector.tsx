@@ -117,7 +117,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                       onClick={() => onSelect(crop, category)}
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-medium text-[#1A1A1A]">{crop.name}</h4>
+                        <h4 className="font-medium text-gray-900">{crop.name}</h4>
                         <InfoTooltip
                           title={crop.name}
                           description={`${crop.scientificName ? `Scientific: ${crop.scientificName}. ` : ''}${crop.growingSeasonDays ? `Growing season: ${crop.growingSeasonDays} days. ` : ''}${crop.primaryHarvestSeason ? `Harvest: ${crop.primaryHarvestSeason.join(', ')}. ` : ''}${crop.commonVarieties ? `Varieties: ${crop.commonVarieties.slice(0, 3).join(', ')}` : ''}`}
@@ -202,7 +202,7 @@ export function CropCategorySelector({ selectedCrop, onSelect, useComprehensiveD
                   }}
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-[#1A1A1A]">{crop.name}</h4>
+                    <h4 className="font-medium text-gray-900">{crop.name}</h4>
                     <InfoTooltip
                       title={crop.name}
                       description={`Scientific: ${crop.scientific_name}. Type: ${crop.crop_type}. Maturity: ${crop.days_to_maturity_min}-${crop.days_to_maturity_max} days. ${crop.varieties?.length ? `${crop.varieties.length} varieties available.` : ''}`}

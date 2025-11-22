@@ -49,7 +49,7 @@ export function SeasonSnapshot({ summary, farm, dateRange, onDateRangeChange }: 
       <ModernCard variant="floating" className="overflow-hidden">
         <ModernCardContent className="p-8 bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-light text-[#1A1A1A]">Financial Overview</h2>
+            <h2 className="text-2xl font-light text-gray-900">Financial Overview</h2>
             <div className="flex items-center space-x-2">
               <Badge className="bg-[#F8FAF8] text-[#555555] border-[#DDE4D8]">
                 {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}

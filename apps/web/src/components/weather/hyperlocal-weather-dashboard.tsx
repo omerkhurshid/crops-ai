@@ -148,7 +148,7 @@ export function HyperlocalWeatherDashboard({
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A]">Hyperlocal Weather</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Hyperlocal Weather</h2>
           <p className="text-sm text-[#555555]">
             Field-specific forecast • Confidence: {formatConfidence(forecast.metadata.confidence)}
           </p>
@@ -160,7 +160,7 @@ export function HyperlocalWeatherDashboard({
       {/* Active Weather Alerts */}
       {forecast.alerts.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-[#1A1A1A]">Active Weather Alerts</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Active Weather Alerts</h3>
           {forecast.alerts.map((alert, index) => (
             <Alert key={index} className={`${getSeverityColor(alert.severity)}`}>
               <div className="flex items-start space-x-3">

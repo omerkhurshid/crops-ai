@@ -40,8 +40,8 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
     switch (status) {
       case 'ready': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'approaching': return 'bg-yellow-100 text-yellow-800'
-      case 'not_ready': return 'bg-[#F5F5F5] text-[#1A1A1A]'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      case 'not_ready': return 'bg-[#F5F5F5] text-gray-900'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   const getStatusIcon = (status: string) => {
@@ -68,7 +68,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
         <div className="text-[#555555] mb-4">
           <Target className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Market Data Available</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Market Data Available</h3>
         <p className="text-[#555555] mb-6">Add animals and weight records to see market analysis.</p>
         <Link href="/livestock/animals/add">
           <Button>Add Your First Animal</Button>
@@ -161,7 +161,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div>
-                      <div className="text-sm font-medium text-[#1A1A1A]">
+                      <div className="text-sm font-medium text-gray-900">
                         #{animal.tagNumber}
                       </div>
                       {animal.name && (
@@ -174,12 +174,12 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-[#1A1A1A]">
+                  <div className="text-sm font-medium text-gray-900">
                     {animal.currentWeight || 0} lbs
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-[#1A1A1A]">
+                  <div className="text-sm text-gray-900">
                     {animal.marketTarget.optimal} lbs
                   </div>
                   <div className="text-xs text-[#555555]">
@@ -189,7 +189,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     {getGrowthTrendIcon(animal.growthRate)}
-                    <span className="text-sm text-[#1A1A1A]">
+                    <span className="text-sm text-gray-900">
                       {animal.growthRate > 0 ? '+' : ''}{animal.growthRate.toFixed(2)} lbs/day
                     </span>
                   </div>
@@ -216,7 +216,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-[#1A1A1A]">
+                  <div className="text-sm font-medium text-gray-900">
                     ${animal.projectedValue.toFixed(0)}
                   </div>
                   <div className="text-xs text-[#555555]">
@@ -228,7 +228,7 @@ export function MarketAnalysis({ animals, farms }: MarketAnalysisProps) {
                     <span className="text-sm font-medium text-[#8FBF7F]">Ready Now</span>
                   ) : animal.daysToOptimal > 0 ? (
                     <div>
-                      <div className="text-sm text-[#1A1A1A]">
+                      <div className="text-sm text-gray-900">
                         {animal.daysToOptimal} days
                       </div>
                       <div className="text-xs text-[#555555]">

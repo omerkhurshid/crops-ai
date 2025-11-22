@@ -238,7 +238,7 @@ export function FieldFormWithMap({
             )}
             {/* Instructions */}
             <div className="bg-[#FAFAF7] rounded-lg p-4">
-              <h4 className="font-medium text-[#1A1A1A] mb-2">How to select fields:</h4>
+              <h4 className="font-medium text-gray-900 mb-2">How to select fields:</h4>
               <ul className="text-sm text-[#555555] space-y-1">
                 <li>• Click &quot;Auto-detect Fields&quot; to find field boundaries automatically</li>
                 <li>• Or click the pin icon and draw boundaries manually</li>
@@ -249,7 +249,7 @@ export function FieldFormWithMap({
             {/* Detected Fields List */}
             {detectedFields.length > 0 && (
               <div>
-                <h4 className="font-medium text-[#1A1A1A] mb-3">Detected Fields</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Detected Fields</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {detectedFields.map((field, index) => (
                     <button
@@ -407,7 +407,7 @@ export function FieldFormWithMap({
                       {index + 1}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-[#1A1A1A]">
+                      <h3 className="text-lg font-semibold text-gray-900">
                         {fieldDetails[field.id]?.name || `Field ${index + 1}`}
                       </h3>
                       <div className="flex items-center gap-2">
@@ -423,7 +423,7 @@ export function FieldFormWithMap({
                   <CheckCircle className="h-6 w-6 text-[#8FBF7F]" />
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-[#1A1A1A]">
+                  <h4 className="font-medium text-gray-900">
                     {field.id === 'manual-field' ? 'Manually Drawn Field' : `Detected Field ${index + 1}`}
                   </h4>
                   <Badge variant="secondary">

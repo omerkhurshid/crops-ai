@@ -93,7 +93,7 @@ export default function FeedPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Farms Available</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">No Farms Available</h2>
             <p className="text-[#555555] mb-6">You need to create a farm before managing feed records.</p>
             <button 
               onClick={() => router.push('/farms/create-unifiedfrom=feed')}
@@ -112,7 +112,7 @@ export default function FeedPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Feed Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Feed Management</h1>
             <p className="text-[#555555]">Track feed costs and nutrition for your livestock</p>
           </div>
           <div className="flex gap-3">
@@ -131,7 +131,7 @@ export default function FeedPage() {
                 <Wheat className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Total Feed Records</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.totalRecords}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalRecords}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -142,7 +142,7 @@ export default function FeedPage() {
                 <DollarSign className="h-8 w-8 text-[#7A8F78]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Feed Cost (30 days)</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">${stats.totalCost30Days.toFixed(0)}</p>
+                  <p className="text-2xl font-bold text-gray-900">${stats.totalCost30Days.toFixed(0)}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -153,7 +153,7 @@ export default function FeedPage() {
                 <TrendingUp className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Daily Avg Cost</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">${stats.avgCostPerDay.toFixed(0)}</p>
+                  <p className="text-2xl font-bold text-gray-900">${stats.avgCostPerDay.toFixed(0)}</p>
                 </div>
               </div>
             </ModernCardContent>
@@ -164,7 +164,7 @@ export default function FeedPage() {
                 <Activity className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-[#555555]">Total Quantity (30d)</p>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{stats.totalQuantity30Days.toFixed(0)} lbs</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.totalQuantity30Days.toFixed(0)} lbs</p>
                 </div>
               </div>
             </ModernCardContent>

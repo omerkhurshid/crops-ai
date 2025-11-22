@@ -81,7 +81,7 @@ export function LivestockCategorySelector({ selectedLivestock, onSelect }: Lives
                       onClick={() => onSelect(livestock, category)}
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-medium text-[#1A1A1A]">{livestock.name}</h4>
+                        <h4 className="font-medium text-gray-900">{livestock.name}</h4>
                         <InfoTooltip
                           title={livestock.name}
                           description={`${livestock.scientificName ? `Scientific: ${livestock.scientificName}. ` : ''}${livestock.typicalHerdSize ? `Typical size: ${livestock.typicalHerdSize}. ` : ''}${livestock.housingRequirements ? `Housing: ${livestock.housingRequirements}. ` : ''}Purpose: ${livestock.primaryPurpose.join(', ')}`}

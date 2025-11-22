@@ -41,7 +41,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
       case 'pregnant': return 'bg-pink-100 text-pink-800'
       case 'completed': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'failed': return 'bg-red-100 text-red-800'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   const getDaysUntilDue = (expectedDueDate: string) => {
@@ -68,7 +68,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
         <div className="text-[#555555] mb-4">
           <Heart className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Breeding Records Yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Breeding Records Yet</h3>
         <p className="text-[#555555] mb-6">Start tracking your breeding program by adding your first breeding record.</p>
         <Link href="/livestock/breeding/add">
           <Button>Add First Breeding Record</Button>
@@ -158,7 +158,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
-                        <div className="text-sm font-medium text-[#1A1A1A]">
+                        <div className="text-sm font-medium text-gray-900">
                           #{record.animal.tagNumber}
                         </div>
                         {record.animal.name && (
@@ -173,7 +173,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                   <td className="px-6 py-4 whitespace-nowrap">
                     {record.mate ? (
                       <div>
-                        <div className="text-sm font-medium text-[#1A1A1A]">
+                        <div className="text-sm font-medium text-gray-900">
                           #{record.mate.tagNumber}
                         </div>
                         {record.mate.name && (
@@ -185,7 +185,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-[#1A1A1A]">
+                    <div className="text-sm text-gray-900">
                       {new Date(record.breedingDate).toLocaleDateString()}
                     </div>
                     <div className="text-xs text-[#555555] capitalize">
@@ -195,7 +195,7 @@ export function BreedingManagement({ breedingRecords, farms, animals }: Breeding
                   <td className="px-6 py-4 whitespace-nowrap">
                     {record.expectedDueDate ? (
                       <div>
-                        <div className="text-sm text-[#1A1A1A]">
+                        <div className="text-sm text-gray-900">
                           {new Date(record.expectedDueDate).toLocaleDateString()}
                         </div>
                         {daysUntilDue !== null && (

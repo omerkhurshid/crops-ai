@@ -9,7 +9,7 @@ export default function LoginPage() {
       <div className="min-h-screen flex items-center justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-6 sm:space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-semibold text-[#1A1A1A] mb-3 sm:mb-4">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-3 sm:mb-4">
               Welcome Back
             </h1>
             <p className="text-[#555555] text-base sm:text-lg">

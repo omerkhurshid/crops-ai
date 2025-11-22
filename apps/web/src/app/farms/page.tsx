@@ -94,7 +94,7 @@ export default function FarmsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Component Error</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Component Error</h1>
             <p className="text-[#555555] mb-6">{componentError}</p>
             <button 
               onClick={() => {
@@ -116,7 +116,7 @@ export default function FarmsPage() {
       <DashboardLayout>
         <div className="max-w-4xl mx-auto pt-8 pb-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-4">Something went wrong</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Something went wrong</h1>
             <p className="text-[#555555] mb-6">{error}</p>
             <button 
               onClick={() => window.location.reload()}
@@ -176,7 +176,7 @@ export default function FarmsPage() {
           {/* Modern Farms Table */}
           <ModernCard variant="floating" className="overflow-hidden">
             <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8] to-[#FAFAF7] border-b border-[#F3F4F6]/30">
-              <ModernCardTitle className="text-[#1A1A1A]">Your Farms</ModernCardTitle>
+              <ModernCardTitle className="text-gray-900">Your Farms</ModernCardTitle>
               <ModernCardDescription>
                 Manage and monitor your agricultural operations
               </ModernCardDescription>
@@ -189,7 +189,7 @@ export default function FarmsPage() {
                     <Link key={farm.id} href={`/farms/${farm.id}`}>
                       <div className="p-4 border border-[#F3F4F6] rounded-lg hover:shadow-md transition-shadow bg-white">
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold text-[#1A1A1A]">{farm.name}</h3>
+                          <h3 className="font-semibold text-gray-900">{farm.name}</h3>
                           <Badge variant="outline" className="text-xs">
                             {farm.fieldsCount || 0} fields
                           </Badge>
@@ -226,7 +226,7 @@ export default function FarmsPage() {
                         <th className="text-left p-4 text-sm font-semibold text-[#555555]">Health Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E6E6E6]/30">
+                    <tbody className="divide-y divide-[#F3F4F6]/30">
                       {userFarms.map((farm: any) => {
                         try {
                           return (

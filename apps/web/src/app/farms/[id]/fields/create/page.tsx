@@ -53,11 +53,11 @@ export default function CreateFieldPage({ params }: { params: { id: string } }) 
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <div className="mb-8">
-          <Link href={`/farms/${farm.id}`} className="inline-flex items-center text-sm text-[#555555] hover:text-[#1A1A1A] mb-4">
+          <Link href={`/farms/${farm.id}`} className="inline-flex items-center text-sm text-[#555555] hover:text-gray-900 mb-4">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to {farm.name}
           </Link>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Add New Field</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Add New Field</h1>
           <p className="text-[#555555] mt-2">
             Create a new field for monitoring and management
           </p>

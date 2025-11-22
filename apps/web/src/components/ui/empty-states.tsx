@@ -44,11 +44,11 @@ export function EmptyState({
         </div>
         <div className="absolute inset-0 bg-[#F8FAF8] rounded-2xl opacity-20 animate-pulse"></div>
       </div>
-      <h3 className="text-xl font-semibold text-[#1A1A1A] mb-3">{title}</h3>
+      <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
       <p className="text-[#555555] max-w-md mx-auto leading-relaxed mb-6">{description}</p>
       {suggestions && (
         <div className="mb-6">
-          <p className="text-sm font-medium text-[#1A1A1A] mb-3">What you can do:</p>
+          <p className="text-sm font-medium text-gray-900 mb-3">What you can do:</p>
           <ul className="text-sm text-[#555555] space-y-1 text-left">
             {suggestions.map((suggestion, index) => (
               <li key={index} className="flex items-start gap-2">

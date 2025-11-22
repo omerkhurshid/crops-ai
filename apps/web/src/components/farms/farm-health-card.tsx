@@ -205,7 +205,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
       <ModernCardHeader className="bg-gradient-to-r from-sage-50 to-#FAFAF7">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <ModernCardTitle className="text-[#1A1A1A]">Farm Health Overview</ModernCardTitle>
+            <ModernCardTitle className="text-gray-900">Farm Health Overview</ModernCardTitle>
             <InfoTooltip {...TOOLTIP_CONTENT.healthScore} />
           </div>
           <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
               <span className="text-sm text-[#555555]">NDVI</span>
               <InfoTooltip {...TOOLTIP_CONTENT.ndvi} size="sm" />
             </div>
-            <span className="font-semibold text-[#1A1A1A]">{metrics.ndviScore.toFixed(2)}</span>
+            <span className="font-semibold text-gray-900">{metrics.ndviScore.toFixed(2)}</span>
           </div>
           <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
             <div className="flex items-center gap-2">
@@ -265,7 +265,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
         {/* Critical Alerts */}
         {metrics.criticalAlerts.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-[#1A1A1A]">Active Alerts</h4>
+            <h4 className="text-sm font-semibold text-gray-900">Active Alerts</h4>
             {metrics.criticalAlerts.map((alert, index) => (
               <div 
                 key={index}
@@ -287,7 +287,7 @@ export function FarmHealthCard({ farmId, farmName, compact = false }: FarmHealth
         )}
         {/* Action Items */}
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-[#1A1A1A]">Recommended Actions</h4>
+          <h4 className="text-sm font-semibold text-gray-900">Recommended Actions</h4>
           <div className="space-y-2">
             {metrics.irrigationNeeded ? (
               <div className="flex items-center gap-2 text-sm text-blue-700">

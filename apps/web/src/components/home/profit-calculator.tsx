@@ -6,7 +6,7 @@ export function ProfitCalculator() {
   const totalProfit = acres * profitPerAcre
   return (
     <div className="bg-gradient-to-r from-green-50 to-sage-50 p-6 rounded-xl border border-[#DDE4D8] mb-6 max-w-2xl mx-auto">
-      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">Your Potential Additional Profit:</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-3">Your Potential Additional Profit:</h3>
       <div className="flex items-center justify-center gap-4 mb-3">
         <input 
           type="number" 
@@ -16,7 +16,7 @@ export function ProfitCalculator() {
           onChange={(e) => setAcres(parseInt(e.target.value) || 0)}
         />
         <span className="text-[#555555]">×</span>
-        <span className="text-[#1A1A1A] font-medium">${profitPerAcre}/acre</span>
+        <span className="text-gray-900 font-medium">${profitPerAcre}/acre</span>
         <span className="text-[#555555]">=</span>
         <div className="text-2xl font-bold text-[#8FBF7F]">
           ${totalProfit.toLocaleString()}/year

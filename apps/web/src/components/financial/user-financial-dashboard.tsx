@@ -129,7 +129,7 @@ export function UserFinancialDashboard({ onFarmSelect, onAddTransaction }: UserF
       {/* Header with Add Transaction */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-2">Portfolio Overview</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">Portfolio Overview</h2>
           <p className="text-[#555555]">Financial summary across all your farms</p>
         </div>
         <InlineFloatingButton

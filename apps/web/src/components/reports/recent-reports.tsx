@@ -47,7 +47,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
       case 'completed': return 'bg-[#F8FAF8] text-[#7A8F78]';
       case 'processing': return 'bg-yellow-100 text-yellow-800';
       case 'failed': return 'bg-red-100 text-red-800';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
+      default: return 'bg-[#F5F5F5] text-gray-900';
     }
   };
   const getTypeColor = (type: string) => {
@@ -56,7 +56,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
       case 'weather': return 'bg-purple-100 text-purple-800';
       case 'health': return 'bg-[#F8FAF8] text-[#7A8F78]';
       case 'financial': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]';
+      default: return 'bg-[#F5F5F5] text-gray-900';
     }
   };
   if (loading) {
@@ -77,7 +77,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
     return (
       <Card className="p-8 text-center">
         <FileText className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Reports Generated Yet</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">No Reports Generated Yet</h3>
         <p className="text-[#555555]">
           Generate your first report using one of the options above. Reports will appear here for easy access and download.
         </p>
@@ -92,7 +92,7 @@ export function RecentReports({ farmId }: RecentReportsProps) {
             <div className="flex items-start gap-3">
               <FileText className="h-5 w-5 text-[#7A8F78] mt-1" />
               <div>
-                <h4 className="font-medium text-[#1A1A1A]">{report.name}</h4>
+                <h4 className="font-medium text-gray-900">{report.name}</h4>
                 <div className="flex items-center gap-2 mt-1">
                   <Badge className={getTypeColor(report.type)}>
                     {report.type}

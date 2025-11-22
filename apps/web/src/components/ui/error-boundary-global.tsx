@@ -78,7 +78,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
                 <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
                   <AlertTriangle className="w-10 h-10 text-red-600" />
                 </div>
-                <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">
                   Oops! Something went wrong
                 </h1>
                 <p className="text-[#555555] mb-8">

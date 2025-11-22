@@ -45,7 +45,7 @@ const LOG_TYPES = [
   { id: 'pest_control', label: 'Pest Control', icon: Bug, color: 'bg-red-100 text-red-800' },
   { id: 'cultivation', label: 'Cultivation', icon: Activity, color: 'bg-orange-100 text-orange-800' },
   { id: 'harvest', label: 'Harvest', icon: Scissors, color: 'bg-yellow-100 text-yellow-800' },
-  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-[#1A1A1A]' }
+  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-gray-900' }
 ]
 export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModuleProps) {
   const [showAddForm, setShowAddForm] = useState(false)
@@ -162,7 +162,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Crop Activity Log</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Crop Activity Log</h2>
           <p className="text-[#555555]">Track all farming activities, treatments, and observations</p>
         </div>
         <div className="flex items-center gap-3">
@@ -189,7 +189,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                 <type.icon className="h-5 w-5 text-[#555555]" />
                 <Badge className={type.color}>{count}</Badge>
               </div>
-              <div className="text-sm font-medium text-[#1A1A1A]">{type.label}</div>
+              <div className="text-sm font-medium text-gray-900">{type.label}</div>
               {totalCost > 0 && (
                 <div className="text-xs text-[#555555] mt-1">${totalCost.toLocaleString()}</div>
               )}
@@ -330,7 +330,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
                           <typeConfig.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-[#1A1A1A]">{entry.title}</h3>
+                          <h3 className="font-semibold text-gray-900">{entry.title}</h3>
                           <div className="flex items-center gap-3 text-sm text-[#555555]">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
@@ -402,7 +402,7 @@ export function CropLoggingModule({ farmId, fieldId, cropId }: CropLoggingModule
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
             <FileText className="h-12 w-12 text-[#DDE4D8] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No log entries yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No log entries yet</h3>
             <p className="text-[#555555] mb-4">Start logging your farming activities to track progress and improvements.</p>
             <Button onClick={() => setShowAddForm(true)}>
               <Plus className="h-4 w-4 mr-2" />

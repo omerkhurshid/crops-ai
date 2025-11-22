@@ -92,7 +92,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
       case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78] border-[#DDE4D8]';
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A] border-[#F3F4F6]';
+      default: return 'bg-[#F5F5F5] text-gray-900 border-[#F3F4F6]';
     }
   };
   const getAlertIcon = (type: string) => {
@@ -124,7 +124,7 @@ export function AdvancedVisualizations({ farmId }: AdvancedVisualizationsProps) 
     return (
       <div className="text-center py-12">
         <Activity className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Visualization Data Unavailable</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Visualization Data Unavailable</h3>
         <p className="text-[#555555]">Unable to load advanced visualization data.</p>
       </div>
     );

@@ -132,7 +132,7 @@ export function MorningBriefing({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-200">
             {/* Farm Status */}
             <div className="pb-6 md:pb-0 md:pr-6">
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
                 Farm Status
               </h3>
               <div className="space-y-4">
@@ -224,7 +224,7 @@ export function MorningBriefing({
                 {/* Crop Stats - Clean Professional Layout */}
                 <div className="grid grid-cols-3 gap-2">
                   <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
-                    <div className="text-xl font-bold text-[#1A1A1A]">{plantingsCount}</div>
+                    <div className="text-xl font-bold text-gray-900">{plantingsCount}</div>
                     <div className="text-xs text-[#555555] font-medium">Planned</div>
                   </div>
                   <div className="text-center p-3 bg-[#FAFAF7] rounded-lg border border-[#F5F5F5]">
@@ -259,7 +259,7 @@ export function MorningBriefing({
                   <div className="flex items-center justify-between pt-2 border-t border-[#DDE4D8]">
                     <span className="text-sm text-[#555555]">Livestock</span>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-[#1A1A1A]">{livestockCount} head</span>
+                      <span className="font-semibold text-gray-900">{livestockCount} head</span>
                       <span className={cn(
                         'text-xs px-2 py-0.5 rounded-full',
                         livestockHealthStatus === 'good' ? 'bg-[#F8FAF8] text-[#7A8F78]' :
@@ -274,7 +274,7 @@ export function MorningBriefing({
             </div>
             {/* Weather Conditions */}
             <div className="py-6 md:py-0 md:px-6">
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
                 Weather Conditions
               </h3>
               <div className="space-y-4">
@@ -286,7 +286,7 @@ export function MorningBriefing({
                         <WeatherIcon className="h-8 w-8 text-[#7A8F78]" />
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-[#1A1A1A]">
+                        <div className="text-2xl font-bold text-gray-900">
                           {formatTemperature(weather.current.temp, preferences)}
                         </div>
                         <div className="text-sm text-[#555555] capitalize">{weather.current.condition}</div>
@@ -319,7 +319,7 @@ export function MorningBriefing({
                           <div className="text-xs text-[#555555] mb-1">
                             {new Date(day.date).toLocaleDateString('en', { weekday: 'short' })}
                           </div>
-                          <div className="text-sm font-medium text-[#1A1A1A]">
+                          <div className="text-sm font-medium text-gray-900">
                             {day.high}°/{day.low}°
                           </div>
                           <div className="text-xs text-[#555555] capitalize">{day.condition}</div>
@@ -340,7 +340,7 @@ export function MorningBriefing({
                       <AlertTriangle className="h-4 w-4 text-orange-600" />
                       <span className="text-xs font-medium text-orange-700">Weather Alert</span>
                     </div>
-                    <div className="text-xs text-[#1A1A1A]">
+                    <div className="text-xs text-gray-900">
                       {weather.alerts[0].type}: {weather.alerts[0].message}
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export function MorningBriefing({
             </div>
             {/* Financial Performance */}
             <div className="pt-6 md:pt-0 md:pl-6">
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
                 Financial Performance
               </h3>
               <div className="space-y-4">
@@ -410,7 +410,7 @@ export function MorningBriefing({
           <div className="mt-6 pt-4 border-t border-[#F3F4F6]">
             <div className="flex items-center justify-end">
               <Link href="/crop-health">
-                <button className="text-sm text-[#555555] hover:text-[#1A1A1A] font-medium">
+                <button className="text-sm text-[#555555] hover:text-gray-900 font-medium">
                   View detailed analytics →
                 </button>
               </Link>

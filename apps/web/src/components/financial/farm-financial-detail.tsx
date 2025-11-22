@@ -67,7 +67,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
   IRRIGATION: { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-300' },
   STORAGE: { bg: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-300' },
   INSURANCE: { bg: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-300' },
-  OTHER_EXPENSE: { bg: 'bg-[#F5F5F5]', text: 'text-[#1A1A1A]', border: 'border-[#F3F4F6]' },
+  OTHER_EXPENSE: { bg: 'bg-[#F5F5F5]', text: 'text-gray-900', border: 'border-[#F3F4F6]' },
 }
 export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps) {
   const [farmData, setFarmData] = useState<FarmFinancialData | null>(null)
@@ -122,7 +122,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
     return (
       <div className="text-center py-12">
         <BarChart3 className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">Financial Data Unavailable</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Financial Data Unavailable</h3>
         <p className="text-[#555555] mb-4">No financial transactions found for this farm.</p>
         <Button onClick={() => handleAddTransaction('INCOME')} className="mr-2">
           <Plus className="h-4 w-4 mr-2" />
@@ -151,7 +151,7 @@ export function FarmFinancialDetail({ farmId, onBack }: FarmFinancialDetailProps
             Back to Overview
           </Button>
           <div>
-            <h2 className="text-2xl font-semibold text-[#1A1A1A]">{farmData.name}</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">{farmData.name}</h2>
             <p className="text-[#555555]">{farmData.totalArea.toFixed(1)} hectares</p>
           </div>
         </div>

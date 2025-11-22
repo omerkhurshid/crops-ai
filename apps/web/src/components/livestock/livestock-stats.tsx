@@ -71,7 +71,7 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
         <Card>
           <CardContent className="text-center py-12">
             <Users className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Livestock Data</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Livestock Data</h3>
             <p className="text-[#555555] mb-6">Start by adding your first livestock events to track your animals.</p>
             <a 
               href="/livestock/add-event"
@@ -100,17 +100,17 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">{livestockData.totalAnimals}</div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">{livestockData.totalAnimals}</div>
               <div className="text-sm text-[#555555]">Total Animal Events</div>
               <div className="text-xs text-[#555555] mt-1">Recorded in system</div>
             </div>
             <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">{livestockData.events.length}</div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">{livestockData.events.length}</div>
               <div className="text-sm text-[#555555]">Health Events</div>
               <div className="text-xs text-[#555555] mt-1">Total recorded</div>
             </div>
             <div className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-              <div className="text-2xl font-bold text-[#1A1A1A] mb-1">
+              <div className="text-2xl font-bold text-gray-900 mb-1">
                 {livestockData.events.filter(e => {
                   const eventDate = new Date(e.eventDate)
                   const thirtyDaysAgo = new Date()
@@ -145,7 +145,7 @@ export function LivestockStats({ farmId }: LivestockStatsProps) {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-[#1A1A1A]">
+                      <span className="font-medium text-gray-900">
                         {event.eventType || 'Livestock Event'}
                       </span>
                       <Badge variant="outline" className="text-xs">

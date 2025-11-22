@@ -175,7 +175,7 @@ function WeatherPageContent() {
               <ModernCardHeader className="bg-gradient-to-r from-[#F8FAF8]/80 to-[#FAFAF7]/80 border-b border-[#F3F4F6]/30">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ModernCardTitle className="text-[#1A1A1A]">Weather Data</ModernCardTitle>
+                    <ModernCardTitle className="text-gray-900">Weather Data</ModernCardTitle>
                   </div>
                   <TabsList className="bg-white/60 border border-[#F3F4F6]/50">
                     <TabsTrigger value="current">
@@ -214,7 +214,7 @@ function WeatherPageContent() {
                 <div className="p-6">
                   <div className="space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Active Weather Alerts</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Active Weather Alerts</h3>
                       <p className="text-[#555555] text-sm mb-4">
                         Real-time weather alerts and farming recommendations for {farm.name}
                       </p>

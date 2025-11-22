@@ -187,7 +187,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
       case 'active': return 'bg-[#F8FAF8] text-[#7A8F78]'
       case 'fallow': return 'bg-yellow-100 text-yellow-800'
       case 'preparation': return 'bg-blue-100 text-[#7A8F78]'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   if (!apiKey) {
@@ -220,7 +220,7 @@ export function VisualFarmMap({ farm, onFieldUpdate }: VisualFarmMapProps) {
               <div className="h-96 flex items-center justify-center bg-[#F5F5F5]">
                 <div className="text-center">
                   <MapPin className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     Interactive Farm Map
                   </h3>
                   <p className="text-[#555555] mb-4 max-w-sm">

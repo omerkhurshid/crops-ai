@@ -205,7 +205,7 @@ export default function FarmDetailsPage({ params }: { params: { id: string } }) 
                           <div className="flex justify-between items-start">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
-                                <h4 className="font-semibold text-[#7A8F78] group-hover:text-[#1A1A1A]">{field.name}</h4>
+                                <h4 className="font-semibold text-[#7A8F78] group-hover:text-gray-900">{field.name}</h4>
                                 <InfoTooltip {...TOOLTIP_CONTENT.field} size="sm" />
                               </div>
                               <div className="flex items-center gap-4 text-sm text-[#7A8F78] mb-2">

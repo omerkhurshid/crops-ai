@@ -148,7 +148,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-[#1A1A1A]">P&L Summary</h3>
+        <h3 className="text-lg font-semibold text-gray-900">P&L Summary</h3>
         <Button variant="outline" size="sm" onClick={handleExport}>
           <Download className="h-4 w-4 mr-2" />
           Export
@@ -169,7 +169,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               )}
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-[#8FBF7F] rounded-full"></div>
-                <span className="font-medium text-[#1A1A1A]">Income</span>
+                <span className="font-medium text-gray-900">Income</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -194,7 +194,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                     <span className="text-sm text-[#555555]">
                       {getCategoryPercentage(item.amount, summary.totalIncome).toFixed(1)}%
                     </span>
-                    <span className="font-medium text-[#1A1A1A]">
+                    <span className="font-medium text-gray-900">
                       {formatCurrency(item.amount)}
                     </span>
                   </div>
@@ -222,7 +222,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
               )}
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="font-medium text-[#1A1A1A]">Expenses</span>
+                <span className="font-medium text-gray-900">Expenses</span>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -247,7 +247,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                     <span className="text-sm text-[#555555]">
                       {getCategoryPercentage(item.amount, summary.totalExpenses).toFixed(1)}%
                     </span>
-                    <span className="font-medium text-[#1A1A1A]">
+                    <span className="font-medium text-gray-900">
                       {formatCurrency(item.amount)}
                     </span>
                   </div>
@@ -269,7 +269,7 @@ export function PLSummaryTable({ summary, farmId, dateRange }: PLSummaryTablePro
                 <div className={`w-3 h-3 rounded-full ${
                   summary.netProfit >= 0 ? 'bg-[#8FBF7F]' : 'bg-red-500'
                 }`}></div>
-                <span className="font-semibold text-[#1A1A1A]">Net Profit</span>
+                <span className="font-semibold text-gray-900">Net Profit</span>
               </div>
               <div className="flex items-center space-x-2">
                 <span className={`font-bold text-lg ${

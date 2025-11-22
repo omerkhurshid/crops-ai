@@ -86,7 +86,7 @@ export default function NotFound() {
         <div className="text-center mt-8">
           <p className="text-[#7A8F78] text-sm">
             If you believe this is an error, please{' '}
-            <Link href="/contact" className="text-[#5E6F5A] hover:text-[#1A1A1A] underline">
+            <Link href="/contact" className="text-[#5E6F5A] hover:text-gray-900 underline">
               contact our support team
             </Link>
           </p>

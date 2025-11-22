@@ -97,7 +97,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
       {/* Header and Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Crop Analytics Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Crop Analytics Dashboard</h1>
           <p className="text-[#555555]">Comprehensive crop performance analysis and yield forecasting</p>
         </div>
         <div className="flex items-center gap-3">
@@ -136,13 +136,13 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 <p className="text-[#555555] italic">{selectedCropData.scientificName}</p>
               </div>
             </div>
-            <Badge className="bg-[#F8FAF8] text-[#1A1A1A]">{selectedCropData.category}</Badge>
+            <Badge className="bg-[#F8FAF8] text-gray-900">{selectedCropData.category}</Badge>
           </div>
         </ModernCardHeader>
         <ModernCardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#1A1A1A]">{selectedCropData.growingPeriod.optimal}</div>
+              <div className="text-2xl font-bold text-gray-900">{selectedCropData.growingPeriod.optimal}</div>
               <div className="text-sm text-[#555555]">Growing Days</div>
             </div>
             <div className="text-center">
@@ -218,7 +218,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                 </div>
                 <div className="pt-2 border-t">
                   <div className="text-sm text-[#555555]">
-                    Estimated Revenue: <span className="font-medium text-[#1A1A1A]">
+                    Estimated Revenue: <span className="font-medium text-gray-900">
                       ${(currentCropPerformance.expectedYield * currentCropPerformance.plantedArea * 
                         selectedCropData.economics.market_price.current).toLocaleString()}
                     </span>
@@ -275,7 +275,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               {CropAnalytics.getGrowingCalendar(selectedCropId).map((stage, index) => (
                 <div key={index} className="border-l-4 border-[#DDE4D8] pl-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-[#1A1A1A]">{stage.stage}</h4>
+                    <h4 className="font-medium text-gray-900">{stage.stage}</h4>
                     <span className="text-sm text-[#555555]">Day {stage.daysFromPlanting}</span>
                   </div>
                   <div className="space-y-1">
@@ -304,7 +304,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-[#555555]">Production Cost/ha</div>
-                  <div className="text-xl font-bold text-[#1A1A1A]">
+                  <div className="text-xl font-bold text-gray-900">
                     ${selectedCropData.economics.cost_per_hectare.total}
                   </div>
                 </div>
@@ -387,14 +387,14 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-medium text-[#1A1A1A]">${intervention.cost}</div>
+                    <div className="font-medium text-gray-900">${intervention.cost}</div>
                   </div>
                 </div>
               ))}
               <div className="pt-3 border-t">
                 <div className="flex justify-between items-center">
                   <span className="text-[#555555]">Total Interventions Cost:</span>
-                  <span className="font-bold text-[#1A1A1A]">
+                  <span className="font-bold text-gray-900">
                     ${currentCropPerformance.interventions.reduce((sum, i) => sum + i.cost, 0)}
                   </span>
                 </div>
@@ -414,7 +414,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
         <ModernCardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Thermometer className="h-4 w-4" />
                 Temperature
               </h4>
@@ -434,7 +434,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               </div>
             </div>
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Droplets className="h-4 w-4" />
                 Water
               </h4>
@@ -452,7 +452,7 @@ export function CropAnalyticsDashboard({ farmId, selectedCrop }: CropAnalyticsDa
               </div>
             </div>
             <div className="space-y-3">
-              <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2">
                 <Scale className="h-4 w-4" />
                 Soil
               </h4>

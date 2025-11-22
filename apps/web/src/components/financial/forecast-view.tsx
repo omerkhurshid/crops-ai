@@ -147,7 +147,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       <Card className="p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Financial Forecast</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Financial Forecast</h3>
             <p className="text-[#555555]">
               AI-powered predictions based on satellite data, weather patterns, and market trends
             </p>
@@ -246,7 +246,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {/* Detailed Forecasts */}
       {revenueForecasts.length > 0 && (
         <Card className="p-6">
-          <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <DollarSign className="h-5 w-5 mr-2 text-[#8FBF7F]" />
             Revenue Forecasts
           </h4>
@@ -296,7 +296,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {/* Cost Forecasts */}
       {costForecasts.length > 0 && (
         <Card className="p-6">
-          <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center">
+          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
             <TrendingDown className="h-5 w-5 mr-2 text-red-600" />
             Cost Forecasts
           </h4>
@@ -333,7 +333,7 @@ export function ForecastView({ farmId, onRefresh }: ForecastViewProps) {
       {revenueForecasts.length === 0 && costForecasts.length === 0 && (
         <Card className="p-12 text-center">
           <Brain className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No Forecasts Available</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No Forecasts Available</h3>
           <p className="text-[#555555] mb-6">
             Generate AI-powered financial forecasts based on your farm data, satellite imagery, and market trends.
           </p>

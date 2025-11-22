@@ -112,7 +112,7 @@ export function FarmerFocusedDashboard({ farmId }: FarmerFocusedDashboardProps) 
       case 'high': return 'bg-red-100 text-red-800'
       case 'medium': return 'bg-yellow-100 text-yellow-800'
       case 'low': return 'bg-[#F8FAF8] text-[#7A8F78]'
-      default: return 'bg-[#F5F5F5] text-[#1A1A1A]'
+      default: return 'bg-[#F5F5F5] text-gray-900'
     }
   }
   const selectedFieldData = fields.find(f => f.fieldId === selectedField) || fields[0]

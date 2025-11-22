@@ -155,7 +155,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                 <Users className="h-5 w-5 text-[#7A8F78]" />
               </div>
               <div>
-                <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
+                <ModernCardTitle className="text-gray-900">How Do You Stack Up?</ModernCardTitle>
                 <p className="text-sm text-[#555555] mt-1">Loading regional comparison data...</p>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               <Users className="h-5 w-5 text-[#7A8F78]" />
             </div>
             <div>
-              <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
+              <ModernCardTitle className="text-gray-900">How Do You Stack Up?</ModernCardTitle>
               <p className="text-sm text-[#555555] mt-1">Compare your farm to similar farms in your area</p>
             </div>
           </div>
@@ -185,7 +185,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
         <ModernCardContent>
           <div className="text-center py-8">
             <BarChart3 className="h-12 w-12 text-[#555555] mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
               No Benchmark Data Available
             </h3>
             <p className="text-[#555555] max-w-sm mx-auto">
@@ -207,7 +207,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                 <Users className="h-5 w-5 text-[#7A8F78]" />
               </div>
               <div>
-                <ModernCardTitle className="text-[#1A1A1A]">How Do You Stack Up?</ModernCardTitle>
+                <ModernCardTitle className="text-gray-900">How Do You Stack Up?</ModernCardTitle>
                 <p className="text-sm text-[#555555] mt-1">Compare your farm to {farm.region || 'similar farms in your area'}</p>
               </div>
             </div>
@@ -225,7 +225,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
             <div className="inline-flex items-center gap-3 mb-4">
               <Award className="h-8 w-8 text-yellow-600" />
               <div>
-                <h3 className="text-2xl font-bold text-[#1A1A1A]">You're in the Top 25%</h3>
+                <h3 className="text-2xl font-bold text-gray-900">You're in the Top 25%</h3>
                 <p className="text-[#555555]">of farms in your region</p>
               </div>
             </div>
@@ -253,7 +253,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
       {/* Detailed Benchmarks */}
       <ModernCard variant="floating">
         <ModernCardHeader>
-          <ModernCardTitle className="text-[#1A1A1A] flex items-center gap-2">
+          <ModernCardTitle className="text-gray-900 flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
             Detailed Comparison
           </ModernCardTitle>
@@ -274,14 +274,14 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                         showText={false}
                       />
                       <div>
-                        <h4 className="font-semibold text-[#1A1A1A]">{benchmark.metric}</h4>
+                        <h4 className="font-semibold text-gray-900">{benchmark.metric}</h4>
                         <p className={`text-sm ${getCategoryColor(benchmark.category)}`}>
                           {comparisonText}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-[#1A1A1A]">
+                      <div className="text-lg font-bold text-gray-900">
                         {formatValue(benchmark.yourValue, benchmark.unit)}
                       </div>
                       <Badge className="bg-blue-100 text-blue-700 border-blue-200 text-xs">
@@ -341,19 +341,19 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
                     <div className="grid grid-cols-3 gap-2 text-xs text-center mt-3">
                       <div>
                         <div className="text-[#555555]">Your Farm</div>
-                        <div className="font-semibold text-[#1A1A1A]">
+                        <div className="font-semibold text-gray-900">
                           {formatValue(benchmark.yourValue, benchmark.unit)}
                         </div>
                       </div>
                       <div>
                         <div className="text-[#555555]">Area Average</div>
-                        <div className="font-semibold text-[#1A1A1A]">
+                        <div className="font-semibold text-gray-900">
                           {formatValue(benchmark.regionAverage, benchmark.unit)}
                         </div>
                       </div>
                       <div>
                         <div className="text-[#555555]">Top 25%</div>
-                        <div className="font-semibold text-[#1A1A1A]">
+                        <div className="font-semibold text-gray-900">
                           {formatValue(benchmark.topQuartile, benchmark.unit)}
                         </div>
                       </div>
@@ -373,7 +373,7 @@ export function BenchmarkingSection({ farm }: BenchmarkingSectionProps) {
               <Target className="h-5 w-5 text-yellow-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">Opportunities to Improve</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Opportunities to Improve</h3>
               <div className="space-y-2 text-sm text-[#555555]">
                 <p className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-[#8FBF7F]" />

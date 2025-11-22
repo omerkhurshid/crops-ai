@@ -57,7 +57,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
         <div className="text-[#555555] mb-4">
           <Wheat className="h-16 w-16 mx-auto mb-4" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">No Feed Records Yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Feed Records Yet</h3>
         <p className="text-[#555555] mb-6">Start tracking feed costs and nutrition by recording your first feeding.</p>
         <Link href="/livestock/feed/add">
           <Button>Record First Feeding</Button>
@@ -132,20 +132,20 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
               <DollarSign className="h-5 w-5 text-[#8FBF7F] mr-2" />
               <span className="font-medium text-[#555555]">Total Cost</span>
             </div>
-            <p className="text-2xl font-bold text-[#1A1A1A]">${totalCost.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-gray-900">${totalCost.toFixed(2)}</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <Wheat className="h-5 w-5 text-orange-600 mr-2" />
               <span className="font-medium text-[#555555]">Total Quantity</span>
             </div>
-            <p className="text-2xl font-bold text-[#1A1A1A]">{totalQuantity.toFixed(1)} lbs</p>
+            <p className="text-2xl font-bold text-gray-900">{totalQuantity.toFixed(1)} lbs</p>
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-2">
               <span className="font-medium text-[#555555]">Avg Cost/lb</span>
             </div>
-            <p className="text-2xl font-bold text-[#1A1A1A]">${avgCostPerPound.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-gray-900">${avgCostPerPound.toFixed(2)}</p>
           </div>
         </div>
       )}
@@ -183,7 +183,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div>
-                      <div className="text-sm font-medium text-[#1A1A1A]">
+                      <div className="text-sm font-medium text-gray-900">
                         #{record.animal.tagNumber}
                       </div>
                       {record.animal.name && (
@@ -197,7 +197,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-[#1A1A1A] capitalize">
+                    <div className="text-sm font-medium text-gray-900 capitalize">
                       {record.feedType.replace('_', ' ')}
                     </div>
                     {record.brand && (
@@ -206,14 +206,14 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-[#1A1A1A]">
+                  <div className="text-sm text-gray-900">
                     {record.quantity} {record.unit}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     {record.totalCost && (
-                      <div className="text-sm font-medium text-[#1A1A1A]">
+                      <div className="text-sm font-medium text-gray-900">
                         ${record.totalCost.toFixed(2)}
                       </div>
                     )}
@@ -238,7 +238,7 @@ export function FeedManagement({ feedRecords, farms, animals }: FeedManagementPr
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-[#1A1A1A]">
+                  <div className="text-sm text-gray-900">
                     {new Date(record.feedDate).toLocaleDateString()}
                   </div>
                 </td>

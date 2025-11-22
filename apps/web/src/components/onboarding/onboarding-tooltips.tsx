@@ -207,7 +207,7 @@ export function OnboardingTooltips({
     sage: {
       bg: 'from-sage-50 to-white',
       border: 'border-[#DDE4D8]',
-      text: 'text-[#1A1A1A]',
+      text: 'text-gray-900',
       accent: 'text-[#555555]'
     },
     earth: {
@@ -219,7 +219,7 @@ export function OnboardingTooltips({
     cream: {
       bg: 'from-[#FAFAF7] to-white',
       border: 'border-[#DDE4D8]',
-      text: 'text-[#1A1A1A]', 
+      text: 'text-gray-900', 
       accent: 'text-[#555555]'
     }
   }

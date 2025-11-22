@@ -46,7 +46,7 @@ const LOG_TYPES = [
   { id: 'breeding', label: 'Breeding', icon: Baby, color: 'bg-pink-100 text-pink-800' },
   { id: 'feeding', label: 'Feeding', icon: Scale, color: 'bg-[#F8FAF8] text-[#7A8F78]' },
   { id: 'production', label: 'Production', icon: Milk, color: 'bg-yellow-100 text-yellow-800' },
-  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-[#1A1A1A]' }
+  { id: 'observation', label: 'Observation', icon: Eye, color: 'bg-[#F5F5F5] text-gray-900' }
 ]
 export function LivestockLoggingModule({ farmId, livestockType, animalId }: LivestockLoggingModuleProps) {
   const [showAddForm, setShowAddForm] = useState(false)
@@ -188,7 +188,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Livestock Activity Log</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Livestock Activity Log</h2>
           <p className="text-[#555555]">Track health, breeding, feeding, and production activities</p>
         </div>
         <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                 <type.icon className="h-5 w-5 text-[#555555]" />
                 <Badge className={type.color}>{count}</Badge>
               </div>
-              <div className="text-sm font-medium text-[#1A1A1A]">{type.label}</div>
+              <div className="text-sm font-medium text-gray-900">{type.label}</div>
               {totalCost > 0 && (
                 <div className="text-xs text-[#555555] mt-1">${totalCost.toLocaleString()}</div>
               )}
@@ -341,7 +341,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
             {/* Vitals Section */}
             {(newLogEntry.type === 'health' || newLogEntry.type === 'treatment') && (
               <div className="mb-4 p-4 bg-[#F8FAF8] rounded-lg">
-                <h4 className="font-medium text-[#1A1A1A] mb-3">Vital Signs (Optional)</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Vital Signs (Optional)</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">Temperature (°C)</label>
@@ -425,7 +425,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
                           <typeConfig.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-[#1A1A1A]">{entry.title}</h3>
+                          <h3 className="font-semibold text-gray-900">{entry.title}</h3>
                           <div className="flex items-center gap-3 text-sm text-[#555555]">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
@@ -512,7 +512,7 @@ export function LivestockLoggingModule({ farmId, livestockType, animalId }: Live
         {filteredEntries.length === 0 && (
           <ModernCard className="text-center py-12">
             <FileText className="h-12 w-12 text-[#DDE4D8] mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">No log entries yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No log entries yet</h3>
             <p className="text-[#555555] mb-4">Start logging your livestock activities to track health and production.</p>
             <Button onClick={() => setShowAddForm(true)}>
               <Plus className="h-4 w-4 mr-2" />

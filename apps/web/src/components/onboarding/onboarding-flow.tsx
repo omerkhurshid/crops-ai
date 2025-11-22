@@ -144,7 +144,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
         <ModernCardHeader className="bg-gradient-to-r from-sage-50/90 to-#F8FAF8/90">
           <div className="flex items-center justify-between">
             <div>
-              <ModernCardTitle className="text-2xl text-[#1A1A1A] mb-2">
+              <ModernCardTitle className="text-2xl text-gray-900 mb-2">
                 Welcome to Cropple.AI!
               </ModernCardTitle>
               <ModernCardDescription className="text-lg">
@@ -152,7 +152,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
               </ModernCardDescription>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-[#1A1A1A]">{completedCount}/{totalSteps}</div>
+              <div className="text-3xl font-bold text-gray-900">{completedCount}/{totalSteps}</div>
               <div className="text-sm text-[#555555]">Steps Complete</div>
             </div>
           </div>
@@ -213,7 +213,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
             {step.benefits && (
               <ModernCardContent className="pt-0">
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-[#1A1A1A] mb-2 flex items-center gap-2">
+                  <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
                     <Target className="h-4 w-4" />
                     What you&apos;ll unlock:
                   </h4>
@@ -261,7 +261,7 @@ export function OnboardingFlow({ userStats, onStepComplete }: OnboardingFlowProp
               <HelpCircle className="h-6 w-6 text-blue-700" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1A1A1A] mb-2">Need Help Getting Started?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Need Help Getting Started?</h3>
               <p className="text-[#555555] text-sm mb-4 leading-relaxed">
                 Our team is here to help you get the most from your farm. Check our help guides, 
                 watch tutorial videos, or contact support.

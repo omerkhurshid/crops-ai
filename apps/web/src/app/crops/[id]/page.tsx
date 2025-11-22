@@ -106,7 +106,7 @@ export default function CropDetailPage() {
     return (
       <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-4">Crop Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Crop Not Found</h1>
           <p className="text-[#555555] mb-6">{error || 'The requested crop could not be found.'}</p>
           <Link href="/dashboard">
             <Button>
@@ -132,7 +132,7 @@ export default function CropDetailPage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-3xl font-bold text-[#1A1A1A]">{crop.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{crop.name}</h1>
                 <p className="text-lg text-[#555555] italic">{crop.scientific_name}</p>
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function CropDetailPage() {
                     <Calendar className="h-5 w-5 text-[#7A8F78]" />
                     <div>
                       <p className="text-sm font-medium text-[#555555]">Maturity</p>
-                      <p className="text-2xl font-bold text-[#1A1A1A]">
+                      <p className="text-2xl font-bold text-gray-900">
                         {crop.days_to_maturity_min}-{crop.days_to_maturity_max} days
                       </p>
                     </div>
@@ -173,7 +173,7 @@ export default function CropDetailPage() {
                     <TrendingUp className="h-5 w-5 text-[#7A8F78]" />
                     <div>
                       <p className="text-sm font-medium text-[#555555]">Avg. Yield</p>
-                      <p className="text-2xl font-bold text-[#1A1A1A]">
+                      <p className="text-2xl font-bold text-gray-900">
                         {(crop.average_yield_kg_per_hectare / 1000).toFixed(1)} t/ha
                       </p>
                     </div>
@@ -186,7 +186,7 @@ export default function CropDetailPage() {
                     <Droplets className="h-5 w-5 text-[#7A8F78]" />
                     <div>
                       <p className="text-sm font-medium text-[#555555]">Water Needs</p>
-                      <p className="text-2xl font-bold text-[#1A1A1A] capitalize">
+                      <p className="text-2xl font-bold text-gray-900 capitalize">
                         {crop.water_requirements}
                       </p>
                     </div>
@@ -199,7 +199,7 @@ export default function CropDetailPage() {
                     <Thermometer className="h-5 w-5 text-[#7A8F78]" />
                     <div>
                       <p className="text-sm font-medium text-[#555555]">pH Range</p>
-                      <p className="text-2xl font-bold text-[#1A1A1A]">
+                      <p className="text-2xl font-bold text-gray-900">
                         {crop.soil_ph_min}-{crop.soil_ph_max}
                       </p>
                     </div>
@@ -405,7 +405,7 @@ export default function CropDetailPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {crop.major_producing_countries.map((country, index) => (
                     <div key={index} className="text-center p-4 bg-[#FAFAF7] rounded-lg">
-                      <p className="font-medium text-[#1A1A1A]">{country}</p>
+                      <p className="font-medium text-gray-900">{country}</p>
                       <p className="text-sm text-[#555555]">#{index + 1} Producer</p>
                     </div>
                   ))}
@@ -426,7 +426,7 @@ export default function CropDetailPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#555555] mb-2">Global Production</p>
-                    <p className="text-lg font-bold text-[#1A1A1A]">
+                    <p className="text-lg font-bold text-gray-900">
                       {(crop.global_production_tonnes / 1000000).toFixed(0)}M tonnes/year
                     </p>
                   </div>

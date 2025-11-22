@@ -332,7 +332,7 @@ export function CustomReportBuilder({ farmId }: CustomReportBuilderProps) {
               <div className="space-y-6">
                 {['Financial', 'Production', 'Environmental', 'Crop Health', 'Weather'].map(category => (
                   <div key={category}>
-                    <h4 className="font-semibold mb-3 text-[#1A1A1A]">{category}</h4>
+                    <h4 className="font-semibold mb-3 text-gray-900">{category}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {getMetricsByCategory(category).map(metric => (
                         <div key={metric.id} className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-[#FAFAF7]">

@@ -45,6 +45,12 @@ export function DiseasePestAlertsWidget({ farmId, className }: DiseasePestAlerts
   } | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   useEffect(() => {
+    // Don't make API calls if no valid farmId is provided
+    if (!farmId || farmId === 'default') {
+      setLoading(false)
+      return
+    }
+
     const fetchDiseasePestData = async () => {
       try {
         const response = await fetch(`/api/crop-health/disease-pest-analysis?farmId=${farmId}`)

@@ -118,6 +118,12 @@ export function TodaysTasksSummary({ farmId }: TodaysTasksSummaryProps) {
   const [tomorrowsTasks, setTomorrowsTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   useEffect(() => {
+    // Don't make API calls if no valid farmId is provided
+    if (!farmId || farmId === 'default') {
+      setLoading(false)
+      return
+    }
+
     async function fetchTasks() {
       try {
         const response = await fetch(`/api/tasks?farmId=${farmId}`)
